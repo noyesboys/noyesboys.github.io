@@ -457,9 +457,19 @@
                 </div>
 </div>
 </div>
-</div>
-<div>
-<body><script type="application/json" data-ajax-cart-initial-state >{{ cart | json }}</script>
+<body></body>
+{% comment %}
+  Put this code within <body> tag —
+  in a place where you want the ajax-cart section to appear
+{% endcomment %}
+
+{% section 'my-cart' %}
+
+<script type="application/json" data-ajax-cart-initial-state >{{ cart | json }}</script>
+<script type="module">
+  import '{{ 'liquid-ajax-cart.js' | asset_url }}';
+</script>
+</body>
 </div>
 {% comment %} sections/my-cart.liquid {% endcomment %}
 
