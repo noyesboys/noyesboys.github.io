@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://liquid-ajax-cart.js.org/sitemap.xml
