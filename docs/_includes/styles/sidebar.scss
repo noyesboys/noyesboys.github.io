@@ -1,0 +1,75 @@
+.page-sidebar {
+    overflow: auto;
+    top: 20px;
+    
+    scrollbar-width: 2px;
+    scrollbar-color: #dee2e6 #ebebeb;
+    &::-webkit-scrollbar {
+      width: 2px;
+      height: 2px;
+    }
+    &::-webkit-scrollbar-track {
+      background: #ebebeb;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #dee2e6;
+    }
+
+    a {
+        color: #777;
+        border-bottom: 0;
+        padding: 4px 0;
+    }
+
+    > ul {
+        padding-left: 0;
+        list-style: none;
+
+        > li {
+            margin-bottom: 10px;
+        }
+    }
+
+    ul {
+
+        & ul {
+            padding-left: 15px;
+            font-size: 80%;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        a {
+            border-bottom: 0;
+            display: block;
+            // font-weight: 500;
+            position: relative;
+
+            &:focus,
+            &:hover {
+                color: #5e8e3e;
+                background-color: transparent;
+            }
+
+            &.active,
+            &.active:focus,
+            &.active:hover {
+                color: #5e8e3e;
+                // background-color: rgba(#bfea52, .2);
+
+                font-weight: 700;
+            }
+
+            // Unhide any nested ULs when this TOC section is active
+            &.active + ul {
+                display: block;
+            }
+        }
+    }
+
+    &#page-toc {
+        position: sticky;
+    }
+}

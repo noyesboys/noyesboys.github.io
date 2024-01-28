@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% assign canonical_url = page.url %}
+  {% if page.redirect_url %}
+    {% assign canonical_url = page.redirect_url %}
+    <script>
+      window.location.replace("{{ page.redirect_url }}");
+    </script>
+  {% endif %}
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  {% assign page_title = page.title | default: site.name %}
+  {% if page.homepage != true %}
+    {% assign page_title = page_title | append: ' — ' | append: site.name %}
+  {% endif %}
+  {% assign page_description = page.description | default: site.description %}
+
+  <title>{{ page_title | escape }}</title>
+  <meta name="description"
+        content="{{ page_description | strip_html | normalize_whitespace | truncate: 160 | escape }}">
+
+  <link rel="canonical" href="{{ canonical_url | replace: 'index.html', '' | absolute_url }}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=JetBrains+Mono&family=Roboto+Mono&display=swap"
+        rel="stylesheet">
+
+  <link
+    rel="stylesheet"
+    href="{{ '/assets/css/prism.css' | relative_url }}?v=1"
+  />
+
+  <style>
+    {% capture critical_css %}
+    {% include v2/styles/reset.scss %}
+    {% include v2/styles/critical.scss %}
+    {% include v2/styles/header-nav.scss %}
+    {% include v2/styles/highlight.scss %}
+    {% include v2/styles/codeblock.scss %}
+    {% include v2/styles/footer.scss %}
+    {% endcapture %}
+    {{ critical_css | scssify }}
+  </style>
+
+</head>
+
+<body class="layout-{{ page.layout }}">
+{% include v2/navigation.html is_dark=page.homepage %}
+
+{% if page.redirect_url %}
+  <div class="redirect-message">
+    This page is moved to <a href="{{ page.redirect_url }}">here</a>
+  </div>
+{% endif %}
+
+<div>{{ content }}</div>
+
+{% comment %}{% include footer/full.html %}{% endcomment %}
+
+<script src="{{ '/assets/js/prism.js' | relative_url }}"></script>
+<!-- Yandex.Metrika counter --> <script type="text/javascript" > (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}; m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}) (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(85946437, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); </script> <noscript><div><img src="https://mc.yandex.ru/watch/85946437" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
+</body>
+</html>

@@ -1,0 +1,17 @@
+{% assign reference_url = '/v1/reference/' %}
+{% assign page_url_reference_slice = page.url | slice: 0, reference_url.size %}
+
+{% if page_url_reference_slice == reference_url and page.url.size > reference_url.size %}
+    <hr class="mt-0 mb-3" />
+{% else %}
+
+    <div class="{%- if page.homepage -%} container-fluid {% endif %}">
+        <div class="site-masthead">
+            <div class="container">
+                {% include masthead/title.html %}
+                {% include masthead/buttons.html %}
+            </div>
+        </div>
+    </div>
+
+{% endif %}
