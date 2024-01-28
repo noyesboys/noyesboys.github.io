@@ -458,11 +458,11 @@
 </div>
 </div>
 </div>
-</div>
+<div>
 <body><script type="application/json" data-ajax-cart-initial-state >{{ cart | json }}</script>
-    <script type="module">
-      import '{{ 'liquid-ajax-cart.js' | asset_url }}';
-    </script></body>
+</div>
+{% comment %} sections/my-cart.liquid {% endcomment %}
+
 <form action="{{ routes.cart_url }}" method="post" class="my-cart">
   
   <!-- Add the data-ajax-cart-section attribute 
@@ -472,6 +472,8 @@
     <h2>Cart</h2>
     
     <div class="my-cart__items" data-ajax-cart-section-scroll>
+      {% for item in cart.items %}
+        {% assign item_index = forloop.index %}
         <hr />  
         <div><a href="{{ item.url }}">{{ item.title }}</a></div>
         <div>Price: {{ item.final_price | money }}</div>
@@ -497,11 +499,18 @@
             </a>
           </ajax-cart-quantity>
         </div>
+        
         <!-- Place a data-ajax-cart-errors container for error messages -->
         <div data-ajax-cart-errors="{{ item.key }}"></div>
-        <div>Total: <strong></strong></div>
-        </div>
-        <button type="submit" name="checkout">  
-        </button> 
-        </div>
-        </form>
+
+        <div>Total: <strong>{{ item.final_line_price | money }}</strong></div>
+      {% endfor %}
+    </div>
+    
+    <button type="submit" name="checkout">
+      Checkout — {{ cart.total_price | money_with_currency }}
+    </button> 
+  </div>
+</form>
+
+{% schema %} { "name": "My Cart" } {% endschema %}
