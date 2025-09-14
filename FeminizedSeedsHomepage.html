@@ -375,9 +375,7 @@
             z-index: 9999;
         }
         
-        .age-verification.hidden {
-            display: none;
-        }
+
         
         .age-modal {
             background: #1e293b;
@@ -669,4 +667,39 @@
             rootMargin: '0px 0px -50px 0px'
         };
         
-        const observer = new IntersectionObser
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.feature-card, .category-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(card);
+        });
+        
+        // Mobile menu toggle (basic implementation)
+        const mobileMenuToggle = document.createElement('button');
+        mobileMenuToggle.innerHTML = '☰';
+        mobileMenuToggle.style.cssText = `
+            display: none;
+            background: none;
+            border: none;
+            color: #4ade80;
+            font-size: 1.5rem;
+            cursor: pointer;
+        `;
+        
+        // Add mobile menu functionality for small screens
+        if (window.innerWidth <= 768) {
+            document.querySelector('nav').appendChild(mobileMenuToggle);
+            mobileMenuToggle.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
