@@ -50,11 +50,20 @@
         }
         
         .logo {
+            display: flex;
+            align-items: center;
             font-size: 1.8rem;
             font-weight: bold;
             color: #4ade80;
             text-decoration: none;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+            border-radius: 50%;
         }
         
         .nav-links {
@@ -83,6 +92,40 @@
             text-align: center;
             color: white;
             padding-top: 120px;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 5%;
+            width: 120px;
+            height: 120px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NSIgZmlsbD0iIzFhNGQzYSIgc3Ryb2tlPSIjNGFkZTgwIiBzdHJva2Utd2lkdGg9IjMiLz4KICA8dGV4dCB4PSI1MCIgeT0iNTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM0YWRlODAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIzNiIgZm9udC13ZWlnaHQ9ImJvbGQiPkxPPC90ZXh0Pgo8L3N2Zz4=');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.2;
+            z-index: 1;
+        }
+        
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 60%;
+            right: 8%;
+            width: 80px;
+            height: 80px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NSIgZmlsbD0iIzFhNGQzYSIgc3Ryb2tlPSIjNGFkZTgwIiBzdHJva2Utd2lkdGg9IjMiLz4KICA8dGV4dCB4PSI1MCIgeT0iNTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM0YWRlODAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIzNiIgZm9udC13ZWlnaHQ9ImJvbGQiPkxPPC90ZXh0Pgo8L3N2Zz4=');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.15;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
         }
         
         .hero-content h1 {
@@ -294,6 +337,11 @@
             justify-content: center;
             font-size: 4rem;
             color: #4ade80;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NSIgZmlsbD0iIzFhNGQzYSIgc3Ryb2tlPSIjNGFkZTgwIiBzdHJva2Utd2lkdGg9IjMiLz4KICA8dGV4dCB4PSI1MCIgeT0iNTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM0YWRlODAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIzNiIgZm9udC13ZWlnaHQ9ImJvbGQiPkxPPC90ZXh0Pgo8L3N2Zz4=');
+            background-size: 60%;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.9;
         }
         
         /* Trust Indicators */
@@ -361,48 +409,6 @@
             color: #64748b;
         }
         
-        /* Age Verification Modal */
-        .age-verification {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
-        
-
-        
-        .age-modal {
-            background: #1e293b;
-            padding: 3rem;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 500px;
-            margin: 20px;
-        }
-        
-        .age-modal h2 {
-            color: #4ade80;
-            margin-bottom: 1rem;
-        }
-        
-        .age-modal p {
-            color: #cbd5e1;
-            margin-bottom: 2rem;
-            line-height: 1.6;
-        }
-        
-        .age-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-        }
-        
         /* Responsive */
         @media (max-width: 768px) {
             .hero-content h1 {
@@ -420,30 +426,17 @@
             .nav-links {
                 display: none;
             }
-            
-            .age-buttons {
-                flex-direction: column;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Age Verification Modal -->
-    <div class="age-verification" id="ageVerification">
-        <div class="age-modal">
-            <h2>Age Verification Required</h2>
-            <p>You must be 18 years or older to enter this website. Cannabis products are for adults only.</p>
-            <div class="age-buttons">
-                <button class="btn btn-primary" onclick="confirmAge()">I am 18+</button>
-                <button class="btn btn-secondary" onclick="window.location.href='https://www.google.com'">Under 18</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Header -->
     <header>
         <nav class="container">
-            <a href="#" class="logo">The Noyes Boys</a>
+            <a href="#" class="logo">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NSIgZmlsbD0iIzFhNGQzYSIgc3Ryb2tlPSIjNGFkZTgwIiBzdHJva2Utd2lkdGg9IjMiLz4KICA8dGV4dCB4PSI1MCIgeT0iNTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM0YWRlODAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIzNiIgZm9udC13ZWlnaHQ9ImJvbGQiPkxPPC90ZXh0Pgo8L3N2Zz4=" alt="Noyes Boys Logo" class="logo-img">
+                The Noyes Boys
+            </a>
             <ul class="nav-links">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#seeds">Seeds</a></li>
@@ -559,7 +552,7 @@
                     <p>Our breeding program focuses on plant structure and resilience first, knowing that potency and flavor naturally follow when you work with the right genetics. Every strain in our collection has been carefully selected and bred for Canadian growing conditions.</p>
                     <p>We breed for Canadian Purples, dense but well-spaced internoding, mildew resistance, and ease of growth. Our goal is to provide genetics that perform consistently, whether you're a first-time grower or a seasoned cultivator.</p>
                 </div>
-                <div class="about-image">🧬</div>
+                <div class="about-image"></div>
             </div>
         </div>
     </section>
@@ -594,6 +587,10 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>The Noyes Boys Seed Bank</h3>
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NSIgZmlsbD0iIzFhNGQzYSIgc3Ryb2tlPSIjNGFkZTgwIiBzdHJva2Utd2lkdGg9IjMiLz4KICA8dGV4dCB4PSI1MCIgeT0iNTUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM0YWRlODAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIzNiIgZm9udC13ZWlnaHQ9ImJvbGQiPkxPPC90ZXh0Pgo8L3N2Zz4=" alt="Logo" style="width: 40px; height: 40px; margin-right: 10px;">
+                        <span style="color: #4ade80; font-weight: bold;">Est. 2015</span>
+                    </div>
                     <p>Premium Canadian cannabis seeds hand-bred for quality, structure, and resilience. Serving growers across Canada with exceptional genetics.</p>
                 </div>
                 <div class="footer-section">
@@ -608,98 +605,4 @@
                     <p><a href="#">Contact Us</a></p>
                     <p><a href="#">Shipping Info</a></p>
                     <p><a href="#">Germination Guarantee</a></p>
-                    <p><a href="#">Returns Policy</a></p>
-                </div>
-                <div class="footer-section">
-                    <h3>Legal</h3>
-                    <p><a href="#">Privacy Policy</a></p>
-                    <p><a href="#">Terms of Service</a></p>
-                    <p><a href="#">Age Verification</a></p>
-                    <p>Licensed Cannabis Retailer</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 The Noyes Boys Seed Bank. All rights reserved. | Premium Cannabis Seeds Canada</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Age verification with session storage (GitHub Pages compatible)
-        let ageVerified = false;
-        
-        function confirmAge() {
-            ageVerified = true;
-            document.getElementById('ageVerification').classList.add('hidden');
-        }
-        
-        // Check if page was just loaded - age verification will show by default
-        // In a real implementation, you might want to use cookies or session storage
-        // For GitHub Pages demo, we'll just use the session variable
-        
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-        
-        // Add scroll effect to header
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.style.background = 'linear-gradient(135deg, rgba(26, 77, 58, 0.95) 0%, rgba(45, 90, 39, 0.95) 100%)';
-            } else {
-                header.style.background = 'linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%)';
-            }
-        });
-        
-        // Animate feature cards on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-        
-        document.querySelectorAll('.feature-card, .category-card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(card);
-        });
-        
-        // Mobile menu toggle (basic implementation)
-        const mobileMenuToggle = document.createElement('button');
-        mobileMenuToggle.innerHTML = '☰';
-        mobileMenuToggle.style.cssText = `
-            display: none;
-            background: none;
-            border: none;
-            color: #4ade80;
-            font-size: 1.5rem;
-            cursor: pointer;
-        `;
-        
-        // Add mobile menu functionality for small screens
-        if (window.innerWidth <= 768) {
-            document.querySelector('nav').appendChild(mobileMenuToggle);
-            mobileMenuToggle.style.display = 'block';
-        }
-    </script>
-</body>
-</html>
+                    <p
