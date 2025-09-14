@@ -1,149 +1,4 @@
-<script>
-        // Cart functionality
-        let cart = [];
-        let cartTotal = 0;
-        
-        // Product data
-        const products = {
-            'noyes-kush-f8': {
-                name: 'Noyes Kush (F8)',
-                genetics: 'IBL | Indica Dominant | 62-70 days flowering',
-                image: '🌸'
-            },
-            'line1-original': {
-                name: 'Line 1 - Original Genetics',
-                genetics: 'Various ratios | 62-70 days flowering',
-                image: '1️⃣'
-            },
-            'line2-lottery': {
-                name: 'Line 2 - Genetic Lottery',
-                genetics: 'Mixed genetics | 62 days flowering',
-                image: '🎲'
-            },
-            'line3-oldschool': {
-                name: 'Line 3 - Old School',
-                genetics: 'Various ratios | 62-68 days flowering',
-                image: '👴'
-            },
-            'line4-skunk': {
-                name: 'Line 4 - Skunk Genetics',
-                genetics: 'Indica dominant | 62-68 days flowering',
-                image: '🦨'
-            }
-        };
-        
-        // Age verification
-        function confirmAge() {
-            document.getElementById('ageVerification').style.display = 'none';
-        }
-        
-        // Check if age already verified
-        if (localStorage.getItem('ageVerified') === 'true') {
-            document.getElementById('ageVerification').style.display = 'none';
-        }
-        
-        // Cart functions
-        function toggleCart() {
-            const cartOverlay = document.getElementById('cartOverlay');
-            const cartBackdrop = document.getElementById('cartBackdrop');
-            
-            cartOverlay.classList.toggle('active');
-            cartBackdrop.classList.toggle('active');
-        }
-        
-        function updateCartCount() {
-            const cartCount = document.getElementById('cartCount');
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            cartCount.textContent = totalItems;
-        }
-        
-        function updateCartDisplay() {
-            const cartContent = document.getElementById('cartContent');
-            const cartEmpty = document.getElementById('cartEmpty');
-            const cartTotal = document.getElementById('cartTotal');
-            const cartTotalAmount = document.getElementById('cartTotalAmount');
-            
-            if (cart.length === 0) {
-                cartEmpty.style.display = 'block';
-                cartTotal.style.display = 'none';
-                cartContent.innerHTML = '<div class="cart-empty" id="cartEmpty"><p>Your cart is empty</p><p>Add some premium seeds to get started!</p></div>';
-                return;
-            }
-            
-            cartEmpty.style.display = 'none';
-            cartTotal.style.display = 'block';
-            
-            let cartHTML = '';
-            let total = 0;
-            
-            cart.forEach((item, index) => {
-                const itemTotal = item.price * item.quantity;
-                total += itemTotal;
-                
-                cartHTML += `
-                    <div class="cart-item">
-                        <div class="cart-item-info">
-                            <h4>${item.name} (${item.seedCount} seeds)</h4>
-                            <p>${item.price.toFixed(2)} each</p>
-                        </div>
-                        <div class="cart-item-controls">
-                            <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
-                            <span class="quantity-display">${item.quantity}</span>
-                            <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
-                            <button class="remove-item" onclick="removeFromCart(${index})">Remove</button>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            cartContent.innerHTML = cartHTML;
-            cartTotalAmount.textContent = total.toFixed(2);
-        }
-        
-        function addToCart(productId, buttonElement) {
-            const productCard = buttonElement.closest('.product-card');
-            const selectedOption = productCard.querySelector('.seed-count-option.selected');
-            const seedCount = selectedOption.dataset.count;
-            const price = parseFloat(selectedOption.dataset.price);
-            
-            const product = products[productId];
-            
-            // Check if item already exists in cart
-            const existingItemIndex = cart.findIndex(item => 
-                item.id === productId && item.seedCount === seedCount
-            );
-            
-            if (existingItemIndex !== -1) {
-                cart[existingItemIndex].quantity += 1;
-            } else {
-                cart.push({
-                    id: productId,
-                    name: product.name,
-                    genetics: product.genetics,
-                    image: product.image,
-                    seedCount: seedCount,
-                    price: price,
-                    quantity: 1
-                });
-            }
-            
-            updateCartCount();
-            updateCartDisplay();
-            
-            // Show success message
-            buttonElement.textContent = 'Added!';
-            buttonElement.style.background = '#22c55e';
-            setTimeout(() => {
-                buttonElement.textContent = 'Add to Cart';
-                buttonElement.style.background = 'linear-gradient(135deg, #4ade80 0%, #22c55e 100%)';
-            }, 1500);
-        }
-        
-        function updateQuantity(index, change) {
-            cart[index].quantity += change;
-            
-            if (cart[index].quantity <= 0) {
-                cart.<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -506,25 +361,7 @@
             color: #64748b;
         }
         
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero-content h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero-content .subtitle {
-                font-size: 1.2rem;
-            }
-            
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-        }
-        
+        /* Age Verification Modal */
         .age-verification {
             position: fixed;
             top: 0;
@@ -536,6 +373,10 @@
             align-items: center;
             justify-content: center;
             z-index: 9999;
+        }
+        
+        .age-verification.hidden {
+            display: none;
         }
         
         .age-modal {
@@ -562,6 +403,29 @@
             display: flex;
             gap: 1rem;
             justify-content: center;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-content .subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .age-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -763,16 +627,17 @@
     </footer>
 
     <script>
-        // Age verification
+        // Age verification with session storage (GitHub Pages compatible)
+        let ageVerified = false;
+        
         function confirmAge() {
-            localStorage.setItem('ageVerified', 'true');
-            document.getElementById('ageVerification').style.display = 'none';
+            ageVerified = true;
+            document.getElementById('ageVerification').classList.add('hidden');
         }
         
-        // Check if age already verified
-        if (localStorage.getItem('ageVerified') === 'true') {
-            document.getElementById('ageVerification').style.display = 'none';
-        }
+        // Check if page was just loaded - age verification will show by default
+        // In a real implementation, you might want to use cookies or session storage
+        // For GitHub Pages demo, we'll just use the session variable
         
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -804,21 +669,4 @@
             rootMargin: '0px 0px -50px 0px'
         };
         
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-        
-        document.querySelectorAll('.feature-card, .category-card').forEach(card => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(30px)';
-            card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(card);
-        });
-    </script>
-</body>
-</html>
+        const observer = new IntersectionObser
