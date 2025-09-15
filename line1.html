@@ -10,7 +10,7 @@
     <meta name="author" content="The Noyes Boys" />
     <meta name="google-site-verification" content="YY_2bRKlUVENWoR4yrdYMGOvZ_lVOzdR85k5ZEeW518" />
     <meta name="facebook-domain-verification" content="x0rc7jo1d4rlw8uo12q3nzaav9m0id" />
-    <title>Line 1 - The Noyes Boys Genetics</title>
+    <title>Noyes Boys Line 1 - Premium Canadian Cannabis Genetics</title>
     <link rel="icon" type="image/x-icon" href="assets/img/noyes boys logo.png" />
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -75,7 +75,7 @@
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 1.5rem;
+            gap: 1rem;
             flex-wrap: wrap;
         }
         
@@ -85,6 +85,7 @@
             transition: color 0.3s ease;
             font-weight: 500;
             font-size: 0.9rem;
+            padding: 0.5rem;
         }
         
         .nav-links a:hover {
@@ -94,7 +95,7 @@
         /* Masthead Banner */
         .masthead {
             height: 100vh;
-            min-height: 600px;
+            min-height: 500px;
             background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
                         url('assets/img/bg-masthead.jpg');
             background-position: center;
@@ -132,8 +133,8 @@
         .masthead h2 {
             font-size: 1rem;
             color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 3rem;
-            max-width: 30rem;
+            margin-bottom: 2rem;
+            max-width: 20rem;
             margin-left: auto;
             margin-right: auto;
         }
@@ -143,22 +144,19 @@
             gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
-            margin-bottom: 3rem;
         }
         
         .btn {
-            padding: 12px 24px;
+            padding: 15px 30px;
             border: none;
             border-radius: 50px;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: bold;
             text-decoration: none;
             transition: all 0.3s ease;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 1px;
-            display: inline-block;
-            text-align: center;
         }
         
         .btn-primary {
@@ -172,128 +170,110 @@
             box-shadow: 0 6px 20px rgba(74, 222, 128, 0.6);
         }
         
-        .btn-secondary {
-            background: transparent;
-            color: #4ade80;
-            border: 2px solid #4ade80;
-        }
-        
-        .btn-secondary:hover {
-            background: #4ade80;
-            color: #0a0a0a;
+        /* Elfsight Widgets */
+        .elfsight-widget {
+            margin: 2rem 0;
         }
         
         /* About Section */
         .about-section {
             padding: 100px 0;
             background: #111;
+        }
+        
+        .section-title {
             text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #4ade80;
         }
         
         .logo-section {
+            text-align: center;
             margin-bottom: 4rem;
         }
         
         .logo-section img {
             max-width: 200px;
-            margin-bottom: 1.5rem;
+            margin-bottom: 20px;
+            border-radius: 10px;
         }
         
         .logo-section h3 {
             color: #4ade80;
-            font-size: 1.8rem;
             margin-bottom: 2rem;
+            font-size: 1.5rem;
         }
         
         .legend {
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 2rem;
             border-radius: 15px;
-            padding: 2.5rem;
-            margin: 0 auto 4rem;
-            max-width: 800px;
-            text-align: left;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .legend h5 {
             color: #4ade80;
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
         }
         
         .legend p {
             color: #cbd5e1;
-            margin-bottom: 1rem;
-            line-height: 1.7;
-        }
-        
-        .legend strong {
-            color: #4ade80;
-        }
-        
-        /* Section Title */
-        .section-title {
-            color: #4ade80;
-            font-size: 2rem;
-            margin-bottom: 3rem;
-            text-align: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
         }
         
         /* Strain Cards */
+        .strain-grid {
+            display: grid;
+            gap: 4rem;
+        }
+        
         .strain-card {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0;
-            margin-bottom: 4rem;
+            gap: 2rem;
+            align-items: center;
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 2rem;
         }
         
-        .strain-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(74, 222, 128, 0.15);
-        }
-        
-        .strain-card.reverse {
+        .strain-card:nth-child(even) {
             direction: rtl;
         }
         
-        .strain-card.reverse > * {
+        .strain-card:nth-child(even) .strain-content {
             direction: ltr;
+            text-align: left;
         }
         
         .strain-image {
-            background: linear-gradient(45deg, #1a4d3a, #2d5a27);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .strain-image img {
             width: 100%;
-            height: 100%;
+            height: 400px;
             object-fit: cover;
         }
         
         .strain-content {
-            padding: 2.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            padding: 2rem;
+            color: white;
         }
         
-        .strain-content h4 {
+        .strain-title {
             color: #4ade80;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             margin-bottom: 1rem;
+            font-weight: bold;
         }
         
         .strain-genetics {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
         
         .strain-genetics a {
@@ -307,161 +287,97 @@
         
         .availability {
             display: flex;
-            flex-wrap: wrap;
             gap: 1rem;
-            align-items: center;
-            margin-bottom: 1.5rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
         }
         
         .availability-item {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-        }
-        
-        .availability-label {
-            color: #cbd5e1;
-            font-weight: 600;
-        }
-        
-        .availability-status {
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
             font-weight: bold;
         }
         
         .available {
-            background: #22c55e;
-            color: white;
+            color: #22c55e;
         }
         
         .sold-out {
-            background: #ef4444;
-            color: white;
+            color: #ef4444;
         }
         
         .almost-available {
-            background: #f59e0b;
-            color: white;
+            color: #f59e0b;
         }
         
         .strain-details {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 0.5rem;
-            margin-bottom: 1.5rem;
+            margin: 1.5rem 0;
         }
         
-        .strain-details p {
+        .strain-detail {
             color: #cbd5e1;
-            font-size: 0.9rem;
-            margin: 0;
+            font-size: 0.95rem;
         }
         
-        .strain-details strong {
+        .strain-detail strong {
             color: #4ade80;
-        }
-        
-        .strain-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 1rem;
         }
         
         .read-more {
-            align-self: flex-start;
-        }
-        
-        .read-more a {
             color: #4ade80;
             text-decoration: none;
-            font-weight: 600;
+            font-weight: bold;
+            margin: 1rem 0;
+            display: inline-block;
         }
         
-        .read-more a:hover {
+        .read-more:hover {
             text-decoration: underline;
         }
         
-        /* Widget Sections */
-        .widget-container {
-            margin: 2rem 0;
-        }
-        
-        /* Disclaimers */
-        .disclaimers {
-            padding: 80px 0;
-            background: #1e293b;
+        /* Disclaimer Section */
+        .disclaimer-section {
+            background: #111;
+            padding: 50px 0;
+            border-top: 1px solid #334155;
         }
         
         .disclaimer-content {
-            max-width: 1000px;
+            text-align: center;
+            max-width: 800px;
             margin: 0 auto;
-            text-align: center;
         }
         
-        .disclaimer-content h2 {
-            color: #4ade80;
-            margin-bottom: 2rem;
-            font-size: 1.8rem;
-        }
-        
-        .disclaimer-content h4,
-        .disclaimer-content p {
+        .disclaimer-content h2,
+        .disclaimer-content h4 {
             color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
             line-height: 1.6;
-            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            font-weight: normal;
         }
         
-        /* SEO Keywords (hidden) */
-        .seo-text {
+        .hidden-keywords {
+            color: #0a0a0a;
+            font-size: 1px;
+            line-height: 1px;
+            opacity: 0.01;
             position: absolute;
-            left: -10000px;
-            top: auto;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
+            left: -9999px;
         }
         
-        /* Footer */
-        footer {
-            background: #0a0a0a;
-            padding: 50px 0 20px;
-            border-top: 1px solid #334155;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-section h3 {
-            color: #4ade80;
-            margin-bottom: 1rem;
-        }
-        
-        .footer-section p, .footer-section a {
-            color: #cbd5e1;
-            text-decoration: none;
-            line-height: 1.8;
-        }
-        
-        .footer-section a:hover {
-            color: #4ade80;
-        }
-        
-        .footer-bottom {
+        /* Form Button Styles */
+        .form-section {
+            background: #1e293b;
+            padding: 3rem 0;
             text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid #334155;
-            color: #64748b;
         }
         
-        /* Responsive */
+        /* Responsive Design */
         @media (max-width: 768px) {
             .masthead h1 {
                 font-size: 2rem;
@@ -476,13 +392,12 @@
                 grid-template-columns: 1fr;
             }
             
-            .strain-details {
-                grid-template-columns: 1fr;
+            .strain-card:nth-child(even) {
+                direction: ltr;
             }
             
             .nav-links {
-                flex-direction: column;
-                gap: 0.5rem;
+                display: none;
             }
         }
         
@@ -493,6 +408,7 @@
             }
             
             .masthead h2 {
+                max-width: 30rem;
                 font-size: 1.25rem;
             }
         }
@@ -508,42 +424,46 @@
     </script>
 </head>
 
-<body id="page-top">
+<body>
     <!-- Header -->
     <header>
         <nav class="container">
-            <a href="FeminizedSeedsHomepage.html" class="logo">
+            <a href="assets/img/noyes boys logo.png" class="logo">
                 <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
                 The Noyes Boys
             </a>
             <ul class="nav-links">
-                <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
-                <li><a href="genetics.html">Genetics</a></li>
-                <li><a href="deals.html">Deals</a></li>
-                <li><a href="order_now.html">Order Now</a></li>
-                <li><a href="contact_us.html">Contact</a></li>
+                <li><a href="#about">Pricing</a></li>
+                <li><a href="#projects">Strains & Future Projects</a></li>
+                <li><a href="contact_us.html">Order Now!</a></li>
+                <li><a href="#signup">Contact us</a></li>
+                <li><a href="https://g.page/r/CZr0a3kuQ81AEAI/review">Reviews</a></li>
+                <li><a href="line1.html">line 1</a></li>
+                <li><a href="line2.html">line 2</a></li>
+                <li><a href="line3.html">line 3</a></li>
+                <li><a href="line4.html">line 4</a></li>
+                <li><a href="#reviews">reviews</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Masthead Banner -->
+    <!-- Masthead -->
     <section class="masthead" id="home">
         <div class="container">
             <div class="masthead-content">
                 <h1>NOYES BOYS GENETICS</h1>
                 <h2>Feminized Canadian Craft Cannabis Seeds</h2>
                 <div class="cta-buttons">
-                    <a class="btn btn-secondary" href="FeminizedSeedsHomepage.html">Home</a>
-                    <a class="btn btn-secondary" href="genetics.html">Genetic Lineups</a>
+                    <a href="FeminizedSeedsHomepage.html" class="btn btn-primary">Home</a>
+                    <a href="genetics.html" class="btn btn-primary">Genetic Lineups</a>
                 </div>
                 
-                <!-- Original widget -->
-                <div class="widget-container">
+                <div class="elfsight-widget">
                     <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
                     <div class="elfsight-app-8dabc9c4-2112-442c-aa73-efa37382f500" data-elfsight-app-lazy></div>
                 </div>
                 
-                <div class="widget-container">
+                <div class="elfsight-widget">
                     <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
                     <div class="elfsight-app-f376e010-c0cf-4d4f-9e58-39e2b04e5335" data-elfsight-app-lazy></div>
                 </div>
@@ -554,6 +474,7 @@
     <!-- About Section -->
     <section class="about-section" id="about">
         <div class="container">
+            <!-- Logo Section -->
             <div class="logo-section">
                 <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo">
                 <h3>Noyes Boys Logo Of Authenticity</h3>
@@ -568,153 +489,606 @@
                 </div>
             </div>
 
-            <h4 class="section-title">Noyes Boys Genetic Line 1 - (5 Noyes Boys Originals & 5 of our starting genetics)</h4>
+            <h2 class="section-title">Noyes Boys Genetic Line 1</h2>
+            <p style="text-align: center; color: #cbd5e1; margin-bottom: 3rem; font-size: 1.1rem;">5 Noyes Boys Originals & 5 of our starting genetics</p>
 
-            <!-- Purple Rainbow -->
-            <div class="strain-card">
-                <div class="strain-image">
-                    <img src="assets/logos/new logos/purple rainbow.png" alt="Purple Rainbow strain">
-                </div>
-                <div class="strain-content">
-                    <h4>PURPLE RAINBOW</h4>
-                    <div class="strain-genetics">
-                        <p><a href="https://www.comparethestrain.ca/alien-dawg/">Alien Tech</a> x <a href="https://www.comparethestrain.ca/rainbow/">Rainbow Belts</a> x <a href="https://www.comparethestrain.ca/wedding-cake/">Wedding Cake</a></p>
-                    </div>
-                    
-                    <div class="availability">
-                        <div class="availability-item">
-                            <span class="availability-label">BX1</span>
-                            <span class="availability-status sold-out">SOLD OUT</span>
-                        </div>
-                        <div class="availability-item">
-                            <span class="availability-label">BX2</span>
-                            <span class="availability-status available">AVAILABLE</span>
-                        </div>
-                    </div>
-                    
-                    <div class="strain-details">
-                        <p><strong>Sex:</strong> Feminized</p>
-                        <p><strong>Variety:</strong> 25% Sativa / 75% Indica</p>
-                        <p><strong>Flowering Time:</strong> 62 Days</p>
-                        <p><strong>Plant Height:</strong> Medium</p>
-                        <p><strong>CBD Content:</strong> >2%</p>
-                        <p><strong>THC Content:</strong> 25-27%</p>
-                        <p><strong>Effect:</strong> Motivated, Energetic, Happy, uplifted</p>
-                        <p><strong>Taste / Flavour:</strong> Gas, Earthy, Citrus</p>
-                        <p><strong>Terpenes:</strong> Humulene (gassy/earthy) / Limonene (citrus)</p>
-                        <p><strong>Breeder:</strong> Noyes Boys Genetics</p>
-                    </div>
-                    
-                    <div class="strain-actions">
-                        <div class="read-more">
-                            <a href="https://app.jointcommerce.com/blog/category/cannabis-101/purple-rainbow-by-noyes-boys-genetics-a-comprehensive-strain-guide/">READ MORE</a>
+            <!-- Strain Grid -->
+            <div class="strain-grid">
+                <!-- Purple Rainbow -->
+                <div class="strain-card">
+                    <img src="assets/logos/new logos/purple rainbow.png" alt="Purple Rainbow" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">PURPLE RAINBOW</h4>
+                        <div class="strain-genetics">
+                            <a href="https://www.comparethestrain.ca/alien-dawg/">Alien Tech</a> x 
+                            <a href="https://www.comparethestrain.ca/rainbow/">Rainbow Belts</a> x 
+                            <a href="https://www.comparethestrain.ca/wedding-cake/">Wedding Cake</a>
                         </div>
                         
-                        <div class="widget-container">
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span>BX1</span>
+                                <span class="sold-out">SOLD OUT</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX2</span>
+                                <span class="available">AVAILABLE</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 25% Sativa / 75% Indica</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Medium</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 25-27%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Motivated, Energetic, Happy, uplifted</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Gas, Earthy, Citrus</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Limonene</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="https://app.jointcommerce.com/blog/category/cannabis-101/purple-rainbow-by-noyes-boys-genetics-a-comprehensive-strain-guide/" class="read-more">READ MORE</a>
+                        
+                        <div class="elfsight-widget">
                             <script src="https://elfsightcdn.com/platform.js" async></script>
                             <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
                         </div>
                         
-                        <div class="widget-container">
-                            <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                            <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
-                        </div>
-                        
-                        <div class="widget-container">
-                            <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                            <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
-                        </div>
-                        
-                        <div class="widget-container">
-                            <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                            <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
-                        </div>
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Rainbow Cakes -->
-            <div class="strain-card reverse">
-                <div class="strain-image">
-                    <img src="assets/logos/new logos/rainbow cakes.png" alt="Rainbow Cakes strain">
-                </div>
-                <div class="strain-content">
-                    <h4>RAINBOW CAKES</h4>
-                    <div class="strain-genetics">
-                        <p><a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Breath</a> x <a href="https://www.comparethestrain.ca/biscotti/">Biscotti</a> x <a href="https://www.comparethestrain.ca/wedding-cake/">Wedding Cake</a></p>
-                    </div>
-                    
-                    <div class="availability">
-                        <div class="availability-item">
-                            <span class="availability-label">BX1</span>
-                            <span class="availability-status available">AVAILABLE</span>
-                        </div>
-                        <div class="availability-item">
-                            <span class="availability-label">BX2</span>
-                            <span class="availability-status available">AVAILABLE</span>
-                        </div>
-                    </div>
-                    
-                    <div class="strain-details">
-                        <p><strong>Sex:</strong> Feminized</p>
-                        <p><strong>Variety:</strong> 70% Sativa / 30% Indica</p>
-                        <p><strong>Flowering Time:</strong> 68 Days</p>
-                        <p><strong>Plant Height:</strong> Medium</p>
-                        <p><strong>CBD Content:</strong> >2%</p>
-                        <p><strong>THC Content:</strong> 24-26%</p>
-                        <p><strong>Effect:</strong> Motivated, Energetic, Happy, Confident</p>
-                        <p><strong>Taste / Flavour:</strong> Grapes, Citrus</p>
-                        <p><strong>Terpenes:</strong> Linalool (floral) / Valencene (sweet citrus) / Limonene (citrus)</p>
-                        <p><strong>Breeder:</strong> Noyes Boys Genetics</p>
-                    </div>
-                    
-                    <div class="strain-actions">
-                        <div class="read-more">
-                            <a href="https://app.jointcommerce.com/blog/category/cannabis-101/rainbow-cakes-by-noyes-boys-genetics-a-comprehensive-strain-guide/">READ MORE</a>
+                <!-- Alienoyes Kush -->
+                <div class="strain-card">
+                    <img src="assets/logos/new logos/alienoyes kush.png" alt="Alienoyes Kush" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">ALIENOYES KUSH</h4>
+                        <div class="strain-genetics">
+                            <a href="https://www.comparethestrain.ca/alien-dawg/">Alien Tech</a> x 
+                            <a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Kush</a>
                         </div>
                         
-                        <div class="widget-container">
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span>BX1</span>
+                                <span class="sold-out">SOLD OUT</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX2</span>
+                                <span class="sold-out">SOLD OUT</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX3</span>
+                                <span class="available">AVAILABLE</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 25% Sativa / 75% Indica</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Short</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 27-28%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> comfy, Restful, Happy, Relaxed, "Chill"</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Gas, Earthy, Citrus</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Limonene</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="https://app.jointcommerce.com/blog/category/cannabis-101/alienoyes-kush-a-comprehensive-strain-guide/" class="read-more">READ MORE</a>
+                        
+                        <div class="elfsight-widget">
                             <script src="https://elfsightcdn.com/platform.js" async></script>
                             <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
                         </div>
                         
-                        <div class="widget-container">
-                            <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                            <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
-                        </div>
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
                         
-                        <div class="widget-container">
-                            <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                            <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
-                        </div>
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
                         
-                        <div class="widget-container">
-                            <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                            <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
-                        </div>
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Cake Breath -->
-            <div class="strain-card">
-                <div class="strain-image">
-                    <img src="assets/logos/new logos/cakebreath.png" alt="Cake Breath strain">
-                </div>
-                <div class="strain-content">
-                    <h4>CAKE BREATH (pheno1)</h4>
-                    <div class="strain-genetics">
-                        <p><a href="https://www.comparethestrain.ca/wedding-cake/">Wedding Cake</a> x <a href="https://www.comparethestrain.ca/dragons-breath/">Meatbreath</a></p>
+                <!-- Mangonoyes Kush -->
+                <div class="strain-card">
+                    <img src="assets/logos/new logos/mangonoyes kush.png" alt="Mangonoyes Kush" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">MANGONOYES KUSH</h4>
+                        <div class="strain-genetics">
+                            <a href="https://www.comparethestrain.ca/mango-kush/">Mango Kush</a> x 
+                            <a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Kush</a>
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span>BX1</span>
+                                <span class="sold-out">SOLD OUT</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX2</span>
+                                <span class="sold-out">SOLD OUT</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX3</span>
+                                <span class="available">AVAILABLE</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX4</span>
+                                <span class="almost-available">ALMOST AVAILABLE</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 50% Sativa / 50% Indica</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 65 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Short</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 25-26%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Motivated, Energetic, Happy, Productive</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Mango, Fruity, Citrus</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Linalool, Valencene, Limonene</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="https://seedfinder.eu/en/strain-info/mangonoyes-kush/noyes-boys-genetics" class="read-more">READ MORE</a>
+                        
+                        <div class="elfsight-widget">
+                            <script src="https://elfsightcdn.com/platform.js" async></script>
+                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        </div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
                     </div>
-                    
-                    <div class="availability">
-                        <div class="availability-item">
-                            <span class="availability-label">BX1</span>
-                            <span class="availability-status available">AVAILABLE</span>
+                </div>
+
+                <!-- Citronoyes Haze -->
+                <div class="strain-card">
+                    <img src="assets/logos/new logos/citronoyes haze.png" alt="Citronoyes Haze" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">CITRONOYES HAZE</h4>
+                        <div class="strain-genetics">
+                            <a href="https://www.comparethestrain.ca/lemon-og-haze/">Noyes Haze</a> x 
+                            <a href="https://www.comparethestrain.ca/lemon-og-haze/">Lemon Haze</a> x 
+                            <a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Kush</a>
                         </div>
-                        <div class="availability-item">
-                            <span class="availability-label">BX2</span>
-                            <span class="availability-status available">AVAILABLE</span>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span>BX1</span>
+                                <span class="sold-out">SOLD OUT</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX2</span>
+                                <span class="sold-out">SOLD OUT</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX3</span>
+                                <span class="available">AVAILABLE</span>
+                            </div>
                         </div>
-                        <div class="availability-item">
-                            <span class
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 75% Sativa / 25% Indica</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 62-70 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Tall</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> >3%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 24-26%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Motivated, Energetic, Happy</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Lemons, Fruit, Citrus</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Linalool, Limonene, Valencene</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="https://app.jointcommerce.com/blog/category/cannabis-101/citronoyes-haze-by-noyes-boys-genetics-a-comprehensive-strain-guide/" class="read-more">READ MORE</a>
+                        
+                        <div class="elfsight-widget">
+                            <script src="https://elfsightcdn.com/platform.js" async></script>
+                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        </div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
+                    </div>
+                </div>
+
+                <!-- Noyes Haze -->
+                <div class="strain-card">
+                    <img src="assets/logos/new logos/noyes haze.png" alt="Noyes Haze" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">NOYES HAZE</h4>
+                        <div class="strain-genetics">
+                            <a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Kush</a> x 
+                            <a href="https://www.comparethestrain.ca/lemon-og-haze/">Lemon Haze</a>
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span>BX1</span>
+                                <span class="sold-out">SOLD OUT</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX2</span>
+                                <span class="sold-out">SOLD OUT</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX3</span>
+                                <span class="available">AVAILABLE</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 90% Sativa / 10% Indica</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 68 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Tall</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> >5%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 25-28%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Motivated, Energetic, Happy</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Lemon, Citrus</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Limonene</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="https://app.jointcommerce.com/blog/category/cannabis-101/noyes-haze-by-noyes-boys-genetics-a-comprehensive-strain-guide/" class="read-more">READ MORE</a>
+                        
+                        <div class="elfsight-widget">
+                            <script src="https://elfsightcdn.com/platform.js" async></script>
+                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        </div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
+                    </div>
+                </div>
+
+                <!-- Noyes Breath -->
+                <div class="strain-card">
+                    <img src="assets/logos/new logos/noyes breath.png" alt="Noyes Breath" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">NOYES BREATH</h4>
+                        <div class="strain-genetics">
+                            <a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Kush</a> x 
+                            <a href="https://www.comparethestrain.ca/dragons-breath/">Meatbreath</a>
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span>BX1</span>
+                                <span class="sold-out">SOLD OUT</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX2</span>
+                                <span class="sold-out">SOLD OUT</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 10% Sativa / 90% Indica</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Short</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 25-28%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Relaxed, "Chill"</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Gas, Earthy</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="https://app.jointcommerce.com/blog/category/cannabis-101/noyes-breath-by-noyes-boys-genetics-a-comprehensive-strain-guide/" class="read-more">READ MORE</a>
+                        
+                        <div class="elfsight-widget">
+                            <script src="https://elfsightcdn.com/platform.js" async></script>
+                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        </div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
+                    </div>
+                </div>
+
+                <!-- Meat Cakes -->
+                <div class="strain-card">
+                    <img src="assets/logos/new logos/meatcakes.png" alt="Meat Cakes" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">MEAT CAKES (pheno2)</h4>
+                        <div class="strain-genetics">
+                            <a href="https://www.comparethestrain.ca/dragons-breath/">Meatbreath</a> x 
+                            <a href="https://www.comparethestrain.ca/wedding-cake/">Wedding Cake</a>
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span>BX1</span>
+                                <span class="sold-out">SOLD OUT</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX2</span>
+                                <span class="available">AVAILABLE</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX3</span>
+                                <span class="almost-available">ALMOST AVAILABLE</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 20% Sativa / 80% Indica</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Short</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 25-28%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> "Chill", Relaxed, Tired</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Gas, Earthy, Citrus</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Limonene</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="https://seedfinder.eu/en/strain-info/meat-cakes/noyes-boys-genetics" class="read-more">READ MORE</a>
+                        
+                        <div class="elfsight-widget">
+                            <script src="https://elfsightcdn.com/platform.js" async></script>
+                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        </div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
+                    </div>
+                </div>
+
+                <!-- Biscotti Rocks -->
+                <div class="strain-card">
+                    <img src="assets/logos/new logos/biscotti rocks.png" alt="Biscotti Rocks" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">BISCOTTI ROCKS</h4>
+                        <div class="strain-genetics">
+                            <a href="https://www.comparethestrain.ca/rainbow/">Rainbow Belts</a> x 
+                            <a href="https://www.comparethestrain.ca/gelato/">Biscotti</a> x 
+                            <a href="https://www.comparethestrain.ca/dragons-breath/">Meatbreath</a>
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span>BX1</span>
+                                <span class="sold-out">SOLD OUT</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX2</span>
+                                <span class="available">AVAILABLE</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX3</span>
+                                <span class="available">AVAILABLE</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 25% Sativa / 75% Indica</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Short</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 24-25%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Tired, "Couch-lock"</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Gas, Citrus</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Valencene, Humulene, Limonene</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="https://app.jointcommerce.com/blog/category/cannabis-101/biscotti-rocks-by-noyes-boys-genetics-a-comprehensive-strain-guide/" class="read-more">READ MORE</a>
+                        
+                        <div class="elfsight-widget">
+                            <script src="https://elfsightcdn.com/platform.js" async></script>
+                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        </div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
+                    </div>
+                </div>
+                <!-- Rainbow Cakes -->
+                <div class="strain-card">
+                    <img src="assets/logos/new logos/rainbow cakes.png" alt="Rainbow Cakes" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">RAINBOW CAKES</h4>
+                        <div class="strain-genetics">
+                            <a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Breath</a> x 
+                            <a href="https://www.comparethestrain.ca/biscotti/">Biscotti</a> x 
+                            <a href="https://www.comparethestrain.ca/wedding-cake/">Wedding Cake</a>
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span>BX1</span>
+                                <span class="available">AVAILABLE</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX2</span>
+                                <span class="available">AVAILABLE</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 70% Sativa / 30% Indica</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 68 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Medium</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 24-26%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Motivated, Energetic, Happy, Confident</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Grapes, Citrus</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Linalool, Valencene, Limonene</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="https://app.jointcommerce.com/blog/category/cannabis-101/rainbow-cakes-by-noyes-boys-genetics-a-comprehensive-strain-guide/" class="read-more">READ MORE</a>
+                        
+                        <div class="elfsight-widget">
+                            <script src="https://elfsightcdn.com/platform.js" async></script>
+                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        </div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
+                    </div>
+                </div>
+
+                <!-- Cake Breath -->
+                <div class="strain-card">
+                    <img src="assets/logos/new logos/cakebreath.png" alt="Cake Breath" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">CAKE BREATH (pheno1)</h4>
+                        <div class="strain-genetics">
+                            <a href="https://www.comparethestrain.ca/wedding-cake/">Wedding Cake</a> x 
+                            <a href="https://www.comparethestrain.ca/dragons-breath/">Meatbreath</a>
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span>BX1</span>
+                                <span class="available">AVAILABLE</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX2</span>
+                                <span class="available">AVAILABLE</span>
+                            </div>
+                            <div class="availability-item">
+                                <span>BX3</span>
+                                <span class="almost-available">ALMOST AVAILABLE</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 15% Sativa / 85% Indica</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Short</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 27-28%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Tired, Sleepy, "Couch-lock"</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Gas, Earthy, Pungent</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Limonene, Terpinolene</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="https://app.jointcommerce.com/blog/category/cannabis-101/cake-breath-by-noyes-boys-genetics-a-comprehensive-strain-guide/" class="read-more">READ MORE</a>
+                        
+                        <div class="elfsight-widget">
+                            <script src="https://elfsightcdn.com/platform.js" async></script>
+                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        </div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+            </div>
+        </div>
+    </section>
+
+    <!-- Disclaimer Section -->
+    <section class="disclaimer-section" id="disclaimers">
+        <div class="container">
+            <div class="disclaimer-content">
+                <h2>Disclaimer: By ordering from this site you affirm to be at least 19 year of age. Seeds are sold for genetic preservation and as collectors items. Germinating them may be illegal where you are from, and The Noyes Boys take no responsibility for people who do not comply with local laws. NO THC IS SOLD ON THIS WEBSITE</h2>
+                
+                <h4>We deliver our seeds with few exceptions & we strongly advise you check regulations regarding seeds in your country BEFORE ordering, as we will not send seeds to somewhere it is illegal or be held responsible for any legal problems resulting from your purchase.</h4>
+                
+                <h4>STEALTH PACKAGING OPTION AVAILABLE</h4>
+                
+                <h2>All products are wrapped up in bubble wrap envelopes or small boxes with tracking. This ensures that they arrive with you protected and in perfect condition. Envelopes/boxes have only your address details, a stamp and the bar code label for tracking. We do not write what the contents are or put our company name on the envelope.</h2>
+                
+                <h2>Delivery Issues: If you do not receive your goods within the estimated times listed above, please contact your postal service with your tracking number</h2>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section class="form-section">
+        <div class="container">
+            <script>
+              /* paste this line in verbatim */
+              window.formbutton=window.formbutton||function(){(formbutton.q=formbutton.q||[]).push(arguments)};
+              /* customize formbutton below*/     
+              formbutton("create", {
+                action: "https://formspree.io/f/mbjndqgz",
+                title: "Compose Your Order",
+                fields: [
+                  { 
+                    type: "email", 
+                    label: "Email:", 
+                    name: "email",
+                    required: true,
+                    placeholder: "your@email.com"
+                  },
+                  {
+                    type: "textarea",
+                    label: "Message:",
+                    name: "message",
+                    placeholder: "STRAINS:                                  
+                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
+                        
+                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
+                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
+                    </div>
+                </div>
