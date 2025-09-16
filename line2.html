@@ -1474,31 +1474,37 @@
             }
         }
 
-        // Checkout function - redirects to contact page
+        // Checkout function - redirects to noyesboys.com/checkout.html
         function checkout() {
             if (cart.length === 0) {
                 alert('Your cart is empty!');
                 return;
             }
 
-            // Store cart data for the checkout page
-            const orderData = {
-                items: cart,
-                total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-                timestamp: new Date().toISOString()
+            // Prepare cart data for checkout page
+            const cartData = {
+                items: cart.map(item => ({
+                    name: item.strainName,
+                    variant: item.variant,
+                    variantText: item.variantText,
+                    price: item.price,
+                    quantity: item.quantity,
+                    total: item.price * item.quantity
+                })),
+                subtotal: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                timestamp: new Date().toISOString(),
+                source: 'line2-geode'
             };
+
+            // Store cart data in localStorage for the checkout page to access
+            localStorage.setItem('noyesBoysCart', JSON.stringify(cartData));
             
-            // Create order summary for URL
-            const orderSummary = cart.map(item => 
-                ${item.quantity}x ${item.strainName} (${item.variant})
-            ).join(', ');
+            // Create URL parameters as backup
+            const itemsParam = encodeURIComponent(JSON.stringify(cartData.items));
+            const totalParam = cartData.subtotal.toFixed(2);
             
-            // Redirect to contact/order page with order information
-            const orderParams = encodeURIComponent(orderSummary);
-            const totalAmount = orderData.total.toFixed(2);
-            
-            // Redirect to the contact page with order information
-            window.location.href = contact_us.html?order=${orderParams}&total=${totalAmount};
+            // Redirect to checkout page with cart data
+            window.location.href = https://www.noyesboys.com/checkout.html?items=${itemsParam}&total=${totalParam}&source=line2-geode;
         }
 
         // Initialize price displays
@@ -1528,4 +1534,4 @@
         });
     </script>
 </body>
-</html>y
+</html>
