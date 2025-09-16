@@ -676,7 +676,38 @@
                 window.location.href = 'index.html'; // or wherever your main page is
             }, 2000);
         });
+        // Add this to your checkout.html page
+document.addEventListener('DOMContentLoaded', function() {
+    const cartData = getCheckoutData();
+    
+    if (cartData.length > 0) {
+        displayCheckoutItems(cartData);
+        calculateTotal(cartData);
+    }
+});
 
+function displayCheckoutItems(cartData) {
+    const checkoutContainer = document.getElementById('checkout-items'); // You'll need this element
+    
+    cartData.forEach(item => {
+        // Create HTML elements to display each cart item
+        const itemElement = document.createElement('div');
+        itemElement.innerHTML = `
+            <div class="checkout-item">
+                <h4>${item.strainName}</h4>
+                <p>Quantity: ${item.quantity}</p>
+                <p>Variant: ${item.variantText}</p>
+                <p>Price: $${(item.price * item.quantity).toFixed(2)} CAD</p>
+            </div>
+        `;
+        checkoutContainer.appendChild(itemElement);
+    });
+}
+
+function calculateTotal(cartData) {
+    const total = cartData.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    document.getElementById('checkout-total').textContent = `$${total.toFixed(2)} CAD`;
+}
         // Calculate total
         function calculateTotal() {
             const subtotal = checkoutCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
