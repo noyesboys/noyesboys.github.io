@@ -504,122 +504,142 @@
 
     <script>
         class CheckoutManager {
-            constructor() {
-                this.cartData = null;
-                this.loadCartData();
-            }
+    constructor() {
+        this.cartData = null;
+        this.loadCartData();
+    }
 
-            loadCartData() {
-                try {
-                    // Try to load from checkout-specific storage first
-                    const checkoutData = sessionStorage.getItem('checkout_cart');
-                    if (checkoutData) {
-                        this.cartData = JSON.parse(checkoutData);
-                        console.log('Loaded checkout cart data:', this.cartData);
-                    } else {
-                        // Fallback to regular cart data
-                        const regularCart = sessionStorage.getItem('noyesboys_cart');
-                        if (regularCart) {
-                            const cartItems = JSON.parse(regularCart);
-                            this.cartData = {
-                                items: cartItems,
-                                total: cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-                                itemCount: cartItems.reduce((sum, item) => sum + item.quantity, 0),
-                                timestamp: Date.now()
-                            };
-                            console.log('Loaded regular cart data:', this.cartData);
-                        }
-                    }
-                } catch (e) {
-                    console.error('Error loading cart data:', e);
-                    this.cartData = null;
-                }
-
-                this.displayCheckout();
-            }
-
-            displayCheckout() {
-                const loadingState = document.getElementById('loadingState');
-                const emptyCartState = document.getElementById('emptyCartState');
-                const checkoutContent = document.getElementById('checkoutContent');
-
-                // Hide loading
-                loadingState.style.display = 'none';
-
-                if (!this.cartData || !this.cartData.items || this.cartData.items.length === 0) {
-                    // Show empty cart
-                    emptyCartState.style.display = 'block';
-                    checkoutContent.style.display = 'none';
-                } else {
-                    // Show checkout content
-                    emptyCartState.style.display = 'none';
-                    checkoutContent.style.display = 'grid';
-                    this.populateOrderSummary();
+    loadCartData() {
+        try {
+            // First try to load from localStorage (where your cart page actually stores data)
+            let checkoutData = localStorage.getItem('noyesboys_checkout_data');
+            if (checkoutData) {
+                this.cartData = JSON.parse(checkoutData);
+                console.log('Loaded checkout data from localStorage:', this.cartData);
+            } else {
+                // Fallback to regular cart data from localStorage (not sessionStorage!)
+                const regularCart = localStorage.getItem('noyesboys_cart');
+                if (regularCart) {
+                    const cartItems = JSON.parse(regularCart);
+                    this.cartData = {
+                        items: cartItems,
+                        total: cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                        itemCount: cartItems.reduce((sum, item) => sum + item.quantity, 0),
+                        timestamp: Date.now()
+                    };
+                    console.log('Loaded regular cart data from localStorage:', this.cartData);
                 }
             }
-
-            populateOrderSummary() {
-                const orderItems = document.getElementById('orderItems');
-                const subtotal = document.getElementById('subtotal');
-                const grandTotal = document.getElementById('grandTotal');
-                const orderDetailsTextarea = document.getElementById('orderDetails');
-
-                if (!this.cartData || !this.cartData.items) return;
-
-                // Populate order items
-                orderItems.innerHTML = this.cartData.items.map(item => {
-                    const itemTotal = item.price * item.quantity;
-                    return `
-                        <div class="order-item">
-                            <div class="item-details">
-                                <div class="item-name">${item.strainName}</div>
-                                <div class="item-variant">${item.variantText} × ${item.quantity}</div>
-                            </div>
-                            <div class="item-price">
-                                ${itemTotal.toFixed(2)} CAD
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-
-                // Update totals
-                subtotal.textContent = this.cartData.total.toFixed(2);
-                grandTotal.textContent = this.cartData.total.toFixed(2);
-
-                // Populate order details textarea with cart items
-                if (orderDetailsTextarea) {
-                    const orderDetails = this.cartData.items.map(item => 
-                        `${item.quantity}x ${item.strainName} (${item.variant})`
-                    ).join('\n');
-                    orderDetailsTextarea.value = orderDetails;
-                }
-            }
-
-            handleFormSubmit(formData) {
-                // Combine order data with form data
-                const orderData = {
-                    cart: this.cartData,
-                    customer: formData,
-                    orderDate: new Date().toISOString(),
-                    orderId: 'NB-' + Date.now()
-                };
-
-                console.log('Complete order data:', orderData);
-
-                // Here you would typically send this data to your server
-                alert(`Order submitted!\n\nOrder ID: ${orderData.orderId}\nTotal: $${this.cartData.total.toFixed(2)} CAD\n\nThank you for your order!`);
-
-                // Clear the cart after successful submission
-                sessionStorage.removeItem('checkout_cart');
-                sessionStorage.removeItem('noyesboys_cart');
-
-                // Redirect or show confirmation page
-                // window.location.href = 'order-confirmation.html';
-            }
+        } catch (e) {
+            console.error('Error loading cart data:', e);
+            this.cartData = null;
         }
 
-        // Initialize checkout manager
-        const checkoutManager = new CheckoutManager();
+        this.displayCheckout();
+    }
+
+    displayCheckout() {
+        const loadingState = document.getElementById('loadingState');
+        const emptyCartState = document.getElementById('emptyCartState');
+        const checkoutContent = document.getElementById('checkoutContent');
+
+        // Hide loading
+        loadingState.style.display = 'none';
+
+        if (!this.cartData || !this.cartData.items || this.cartData.items.length === 0) {
+            // Show empty cart
+            emptyCartState.style.display = 'block';
+            checkoutContent.style.display = 'none';
+        } else {
+            // Show checkout content
+            emptyCartState.style.display = 'none';
+            checkoutContent.style.display = 'grid';
+            this.populateOrderSummary();
+        }
+    }
+
+    populateOrderSummary() {
+        const orderItems = document.getElementById('orderItems');
+        const subtotal = document.getElementById('subtotal');
+        const grandTotal = document.getElementById('grandTotal');
+        const orderDetailsTextarea = document.getElementById('orderDetails');
+
+        if (!this.cartData || !this.cartData.items) return;
+
+        // Populate order items
+        orderItems.innerHTML = this.cartData.items.map(item => {
+            const itemTotal = item.price * item.quantity;
+            return `
+                <div class="order-item">
+                    <div class="item-details">
+                        <div class="item-name">${item.strainName}</div>
+                        <div class="item-variant">${item.variantText} × ${item.quantity}</div>
+                    </div>
+                    <div class="item-price">
+                        ${itemTotal.toFixed(2)} CAD
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Update totals
+        subtotal.textContent = this.cartData.total.toFixed(2);
+        grandTotal.textContent = this.cartData.total.toFixed(2);
+
+        // Populate order details textarea with cart items
+        if (orderDetailsTextarea) {
+            const orderDetails = this.cartData.items.map(item => 
+                `${item.quantity}x ${item.strainName} (${item.variant})`
+            ).join('\n');
+            orderDetailsTextarea.value = orderDetails;
+        }
+    }
+
+    handleFormSubmit(formData) {
+        // Combine order data with form data
+        const orderData = {
+            cart: this.cartData,
+            customer: formData,
+            orderDate: new Date().toISOString(),
+            orderId: 'NB-' + Date.now()
+        };
+
+        console.log('Complete order data:', orderData);
+
+        // Here you would typically send this data to your server
+        alert(`Order submitted!\n\nOrder ID: ${orderData.orderId}\nTotal: $${this.cartData.total.toFixed(2)} CAD\n\nThank you for your order!`);
+
+        // Clear the cart after successful submission
+        localStorage.removeItem('noyesboys_checkout_data');
+        localStorage.removeItem('noyesboys_cart');
+
+        // Redirect or show confirmation page
+        // window.location.href = 'order-confirmation.html';
+    }
+}
+
+// Initialize checkout manager
+const checkoutManager = new CheckoutManager();
+
+// Debug function updated
+window.debugCheckout = {
+    viewCartData: () => console.log('Cart Data:', checkoutManager.cartData),
+    viewAllStorage: () => {
+        console.log('=== localStorage ===');
+        console.log('Checkout Data:', localStorage.getItem('noyesboys_checkout_data'));
+        console.log('Regular Cart:', localStorage.getItem('noyesboys_cart'));
+        console.log('=== sessionStorage ===');
+        console.log('Checkout Cart:', sessionStorage.getItem('checkout_cart'));
+        console.log('Regular Cart:', sessionStorage.getItem('noyesboys_cart'));
+    },
+    clearStorage: () => {
+        localStorage.removeItem('noyesboys_checkout_data');
+        localStorage.removeItem('noyesboys_cart');
+        sessionStorage.removeItem('checkout_cart');
+        sessionStorage.removeItem('noyesboys_cart');
+        location.reload();
+    }
+};
 
         // Payment method selection
         function selectPayment(method) {
