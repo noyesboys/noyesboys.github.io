@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Noyes Boys - Cannabis Seeds Pricing | Feminized Craft Cannabis Seeds Canada</title>
+    <meta name="description" content="The Noyes Boys premium feminized cannabis seeds pricing. Hand-bred craft cannabis genetics with single seeds from $40, bulk packs, and special genetic lines. Free shipping over $300.">
+    <meta name="keywords" content="cannabis seeds canada, feminized seeds, craft cannabis, noyes boys, cannabis genetics, seed bank canada">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c1e 0%, #2d5a2d 50%, #4a7c4a 100%);
+            color: #333;
+            line-height: 1.4;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .header h1 {
+            color: #2d5a2d;
+            font-size: 2.2em;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .payment-methods {
+            color: #666;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
+
+        /* Cart Button */
+        .cart-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 124, 74, 0.4);
+        }
+
+        .cart-count {
+            background: white;
+            color: #2d5a2d;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .section-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #2d5a2d 0%, #4a7c4a 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .section-header h2 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+        
+        .section-header p {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+        
+        .compact-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+        
+        .row-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px;
+            justify-content: center;
+        }
+        
+        .row-grid .pricing-card {
+            flex: 1;
+            min-width: 220px;
+            max-width: 280px;
+        }
+        
+        .pricing-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            border-color: #4a7c4a;
+        }
+        
+        .pricing-card.featured {
+            border-color: #e74c3c;
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+        }
+        
+        .pricing-card.promo {
+            border-color: #f39c12;
+            background: linear-gradient(135deg, #fff3cd 0%, #fff 100%);
+        }
+        
+        .card-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .card-title {
+            font-size: 1.3em;
+            color: #2d5a2d;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .card-price {
+            font-size: 2.2em;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .card-subtitle {
+            color: #666;
+            font-size: 0.85em;
+        }
+        
+        .card-features {
+            list-style: none;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+        
+        .card-features li {
+            padding: 5px 0;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .card-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4a7c4a;
+            font-weight: bold;
+        }
+        
+        .card-features li:last-child {
+            border-bottom: none;
+        }
+        
+        .order-button {
+            background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+        }
+        
+        .order-button:hover {
+            background: linear-gradient(135deg, #2d5a2d 0%, #1e3c1e 100%);
+            transform: translateY(-2px);
+        }
+
+        .order-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .strain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 8px;
+            margin: 10px 0;
+        }
+        
+        .strain-item {
+            background: #f8f9fa;
+            padding: 6px 8px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            color: #2d5a2d;
+            font-size: 0.75em;
+        }
+        
+        .promo-banner {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 0.85em;
+        }
+        
+        .ended-banner {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+        }
+        
+        .compact-card {
+            padding: 15px;
+        }
+        
+        .compact-card .card-price {
+            font-size: 1.8em;
+        }
+        
+        .compact-card .card-title {
+            font-size: 1.1em;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .shipping-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .shipping-section h3 {
+            color: #2d5a2d;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .cart-modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: #333;
+        }
+
+        .cart-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .cart-close:hover {
+            color: #2d5a2d;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 1rem;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            color: #2d5a2d;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-variant {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .cart-item-price {
+            color: #2d5a2d;
+            font-weight: bold;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quantity-btn {
+            background: #4a7c4a;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .quantity-display {
+            min-width: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .remove-item {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .cart-total {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid #eee;
+        }
+
+        .cart-total h3 {
+            color: #2d5a2d;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .checkout-btn {
+            background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 1rem 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .compact-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .row-grid {
+                flex-direction: column;
+            }
+            
+            .row-grid .pricing-card {
+                max-width: none;
+                min-width: auto;
+            }
+            
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .strain-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+
+            .cart-button {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 10px auto;
+            }
+
+            .header {
+                padding-right: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="cart-button" onclick="openCart()">
+                <i class="fas fa-shopping-cart"></i>
+                Cart
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+            <h1>The Noyes Boys Cannabis Seeds</h1>
+            <p>Premium Hand-Bred Feminized Craft Cannabis Genetics</p>
+            <div class="payment-methods">
+                Accepting: E-Transfer • PayPal • Cryptocurrency
+            </div>
+        </div>
+
+        <!-- General Seed Packs -->
+        <div class="section-container">
+            <div class="section-header">
+                <h2>General Seed Packs</h2>
+                <p>Individual seeds and standard packs • Free shipping over $300</p>
+            </div>
+            <div class="row-grid">
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Single Seed</div>
+                        <div class="card-price">$40</div>
+                        <div class="card-subtitle">Any Genetic</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>Choose any strain</li>
+                        <li>No minimum order</li>
+                        <li>Feminized seeds</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('single-seed', 'Single Seed (Any Genetic)', 40)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">3 Seeds</div>
+                        <div class="card-price">$100</div>
+                        <div class="card-subtitle">Single strain</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>Same strain per pack</li>
+                        <li>Premium genetics</li>
+                        <li>Great starter pack</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('3-seeds', '3 Seeds (Single Strain)', 100)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card featured">
+                    <div class="card-header">
+                        <div class="card-title">5 Seeds</div>
+                        <div class="card-price">$150</div>
+                        <div class="card-subtitle">Single strain</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>Best value option</li>
+                        <li>Popular choice</li>
+                        <li>Quality guaranteed</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('5-seeds', '5 Seeds (Single Strain)', 150)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">10 Seeds</div>
+                        <div class="card-price">$200</div>
+                        <div class="card-subtitle">Single strain</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>Best per-seed value</li>
+                        <li>Serious growers</li>
+                        <li>Free shipping eligible</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('10-seeds', '10 Seeds (Single Strain)', 200)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card featured">
+                    <div class="card-header">
+                        <div class="card-title">Bulk Order</div>
+                        <div class="card-price">$300</div>
+                        <div class="card-subtitle">25 seeds</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>Bulk discount</li>
+                        <li>Free shipping</li>
+                        <li>Commercial grade</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('bulk-order', 'Bulk Order (25 Seeds)', 300)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Special Deals & Promotions -->
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Special Deals & Promotions</h2>
+                <p>Limited time offers and bulk packages</p>
+            </div>
+            <div class="row-grid">
+                <div class="pricing-card promo compact-card">
+                    <div class="promo-banner ended-banner">EASTER SALE - ENDED</div>
+                    <div class="card-header">
+                        <div class="card-title">3 Seeds Special</div>
+                        <div class="card-price">$50</div>
+                        <div class="card-subtitle">Was $100</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>50% discount</li>
+                        <li>Limited time</li>
+                        <li>Sale ended</li>
+                    </ul>
+                    <button class="order-button" disabled>Sale Ended</button>
+                </div>
+
+                <div class="pricing-card featured compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Complete Collection</div>
+                        <div class="card-price">$420</div>
+                        <div class="card-subtitle">30 seeds - Every strain</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>All 30 strains</li>
+                        <li>3 genetic lines</li>
+                        <li>Free shipping</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('complete-collection', 'Complete Collection (30 Seeds - Every Strain)', 420)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Surprise Seeds</div>
+                        <div class="card-price">FREE</div>
+                        <div class="card-subtitle">With orders $500+</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>Mystery strains</li>
+                        <li>Bonus with large orders</li>
+                        <li>Surprise genetics</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('surprise-seeds', 'Surprise Seeds (Free with $500+ orders)', 0)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Line 1 Deals -->
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Line 1 Deals - The Originals</h2>
+                <p>Purple Rainbow • Rainbow Cakes • Cake Breath • Alienoyes Kush • Mangonoyes Kush • Citronoyes Kush • Noyes Haze • Noyes Breath • Meat Cakes • Biscotti Rocks</p>
+            </div>
+            <div class="row-grid">
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">One of Each</div>
+                        <div class="card-price">$180</div>
+                        <div class="card-subtitle">10 different strains</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>Sample every strain</li>
+                        <li>Complete line coverage</li>
+                        <li>Free shipping</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('line1-one-each', 'Line 1 - One of Each (10 Different Strains)', 180)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Double Noyes Pack</div>
+                        <div class="card-price">$180</div>
+                        <div class="card-subtitle">10 seeds - Noyes strains</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>2x Alienoyes, Mangonoyes</li>
+                        <li>2x Citronoyes, Noyes Haze</li>
+                        <li>2x Noyes Breath</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('line1-double-noyes', 'Line 1 - Double Noyes Pack (10 Seeds)', 180)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Double Starter Pack</div>
+                        <div class="card-price">$180</div>
+                        <div class="card-subtitle">10 seeds - Starter strains</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>2x Purple Rainbow, Cakes</li>
+                        <li>2x Cake Breath, Meat Cakes</li>
+                        <li>2x Biscotti Rocks</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('line1-double-starter', 'Line 1 - Double Starter Pack (10 Seeds)', 180)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card featured">
+                    <div class="card-header">
+                        <div class="card-title">Line 1 Triple Pack</div>
+                        <div class="card-price">$420</div>
+                        <div class="card-subtitle">30 seeds - 3 of each</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>3x every Line 1 strain</li>
+                        <li>Complete genetics</li>
+                        <li>Premium package</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('line1-triple', 'Line 1 - Triple Pack (30 Seeds - 3 of Each)', 420)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Line 2 Deals -->
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Line 2 Deals - The Geodes</h2>
+                <p>YesNo Kush • Shiny Rocks • Noyes Rocks • Noyes Pebbles • Mango Rocks • Citrus Pebbles • Citrus Rocks • Alien Rocks • Citrus Haze Breath • Mango Aliens</p>
+            </div>
+            <div class="row-grid">
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Rock Pack</div>
+                        <div class="card-price">$100</div>
+                        <div class="card-subtitle">5 seeds - Rock genetics</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>Noyes, Shiny, Alien Rocks</li>
+                        <li>Mango, Citrus Rocks</li>
+                        <li>Rock genetics focus</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('line2-rock-pack', 'Line 2 - Rock Pack (5 Seeds)', 100)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Citrus Pack</div>
+                        <div class="card-price">$100</div>
+                        <div class="card-subtitle">5 seeds - Citrus genetics</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>Mango Aliens, Rocks</li>
+                        <li>Citrus Rocks, Pebbles</li>
+                        <li>Citrus Haze Breath</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('line2-citrus-pack', 'Line 2 - Citrus Pack (5 Seeds)', 100)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card featured">
+                    <div class="card-header">
+                        <div class="card-title">YesNo Kush Lottery</div>
+                        <div class="card-price">$30+</div>
+                        <div class="card-subtitle">Genetic Lottery</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>1 seed = $30</li>
+                        <li>5 seeds = $125</li>
+                        <li>10 seeds = $180</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('yesno-kush-1', 'YesNo Kush Lottery (1 Seed)', 30)">Add 1 Seed</button>
+                </div>
+
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Complete Line 2</div>
+                        <div class="card-price">$180</div>
+                        <div class="card-subtitle">10 different strains</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>All geode genetics</li>
+                        <li>Full line coverage</li>
+                        <li>Free shipping</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('line2-complete', 'Line 2 - Complete (10 Different Strains)', 180)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Line 2 Triple Pack</div>
+                        <div class="card-price">$420</div>
+                        <div class="card-subtitle">30 seeds - 3 of each</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>3x every geode strain</li>
+                        <li>Complete genetics</li>
+                        <li>Premium package</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('line2-triple', 'Line 2 - Triple Pack (30 Seeds - 3 of Each)', 420)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Line 3 Deals -->
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Line 3 Deals - The OGs</h2>
+                <p>Old School OG genetics crossed with Noyes foundation strains</p>
+            </div>
+            <div class="row-grid">
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Rock Pack</div>
+                        <div class="card-price">$100</div>
+                        <div class="card-subtitle">5 seeds</div>
+                    </div>
+                    <button class="order-button" onclick="addToCart('line3-rock-pack

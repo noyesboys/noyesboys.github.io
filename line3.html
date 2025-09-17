@@ -8,11 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="Noyes Boys Genetics Line 3 - OG Collection. Premium Canadian feminized cannabis seeds featuring 10 original crosses with authentic OG strains sourced from old school Canadian growers." />
     <meta name="author" content="The Noyes Boys" />
-    <meta name="google-site-verification" content="YY_2bRKlUVENWoR4yrdYMGOvZ_lVOzdR85k5ZEeW518" />
-    <meta name="facebook-domain-verification" content="x0rc7jo1d4rlw8uo12q3nzaav9m0id" />
     <title>Noyes Boys Line 3 - OG Collection | Old School Cannabis Seeds Canada</title>
     <link rel="icon" type="image/x-icon" href="assets/img/noyes boys logo.png" />
-    <!-- Font Awesome icons (free version)-->
+    <!-- Font Awesome icons -->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
@@ -77,6 +75,7 @@
             list-style: none;
             gap: 1rem;
             flex-wrap: wrap;
+            align-items: center;
         }
         
         .nav-links a {
@@ -91,13 +90,48 @@
         .nav-links a:hover {
             color: #4ade80;
         }
+
+        /* Cart Button */
+        .cart-button {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+
+        .cart-count {
+            background: #0a0a0a;
+            color: #4ade80;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
         
         /* Masthead Banner */
         .masthead {
             height: 100vh;
             min-height: 500px;
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
-                        url('assets/img/bg-masthead.jpg');
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%);
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: scroll;
@@ -134,7 +168,7 @@
             font-size: 1rem;
             color: rgba(255, 255, 255, 0.5);
             margin-bottom: 2rem;
-            max-width: 20rem;
+            max-width: 30rem;
             margin-left: auto;
             margin-right: auto;
         }
@@ -144,7 +178,6 @@
             gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
-            margin-bottom: 3rem;
         }
         
         .btn {
@@ -169,11 +202,6 @@
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(74, 222, 128, 0.6);
-        }
-        
-        /* Elfsight Widgets */
-        .elfsight-widget {
-            margin: 2rem 0;
         }
         
         /* About Section */
@@ -206,6 +234,14 @@
             font-size: 1.5rem;
         }
         
+        .logo-section p {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
         .legend {
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             padding: 2rem;
@@ -226,27 +262,6 @@
             color: #cbd5e1;
             margin-bottom: 0.5rem;
             font-size: 0.95rem;
-        }
-        
-        /* Line Description */
-        .line-description {
-            text-align: center;
-            margin-bottom: 4rem;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .line-description h3 {
-            color: #4ade80;
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-        }
-        
-        .line-description p {
-            color: #cbd5e1;
-            font-size: 1.1rem;
-            line-height: 1.8;
         }
         
         /* Strain Cards */
@@ -282,6 +297,12 @@
             height: 500px;
             object-fit: cover;
             object-position: center;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 1.2rem;
         }
         
         .strain-content {
@@ -369,676 +390,955 @@
         .read-more:hover {
             text-decoration: underline;
         }
-        
-        /* Disclaimer Section */
-        .disclaimer-section {
-            background: #111;
-            padding: 50px 0;
-            border-top: 1px solid #334155;
+
+        /* Product Selection */
+        .product-selection {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1rem 0;
         }
-        
-        .disclaimer-content {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
+
+        .variant-select {
+            margin-bottom: 1rem;
         }
-        
-        .disclaimer-content h2,
-        .disclaimer-content h4 {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-            font-weight: normal;
+
+        .variant-select label {
+            display: block;
+            color: #4ade80;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
         }
-        
-        .hidden-keywords {
+
+        .variant-select select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #475569;
+            border-radius: 10px;
+            background: #0f172a;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .variant-select select:focus {
+            outline: none;
+            border-color: #4ade80;
+        }
+
+        .price-display {
+            color: #4ade80;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        /* Add to Cart Button */
+        .add-to-cart-btn {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
             color: #0a0a0a;
-            font-size: 1px;
-            line-height: 1px;
-            opacity: 0.01;
-            position: absolute;
-            left: -9999px;
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            justify-content: center;
         }
-        
-        /* Responsive Design */
+
+        .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+
+        .add-to-cart-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .cart-modal-content {
+            background-color: #1e293b;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: white;
+        }
+
+        .cart-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .cart-close:hover {
+            color: #4ade80;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #334155;
+            margin-bottom: 1rem;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            color: #4ade80;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-variant {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+
+        .cart-item-price {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quantity-btn {
+            background: #4ade80;
+            color: #0a0a0a;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .quantity-display {
+            min-width: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .remove-item {
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .cart-total {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid #334155;
+        }
+
+        .cart-total h3 {
+            color: #4ade80;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .checkout-btn {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 25px;
+            padding: 1rem 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 2rem;
+            color: #cbd5e1;
+        }
+
+        /* Mobile Responsiveness */
         @media (max-width: 768px) {
-            .masthead h1 {
-                font-size: 2rem;
-                letter-spacing: 0.4rem;
-            }
-            
-            .masthead h2 {
-                font-size: 0.9rem;
-            }
-            
             .strain-card {
                 grid-template-columns: 1fr;
+                text-align: center;
             }
             
             .strain-card:nth-child(even) {
                 direction: ltr;
             }
             
-            .strain-image {
-                height: 350px;
+            .masthead h1 {
+                font-size: 2rem;
+                letter-spacing: 0.5rem;
             }
             
             .nav-links {
-                display: none;
-            }
-        }
-        
-        @media (min-width: 992px) {
-            .masthead h1 {
-                font-size: 4rem;
-                line-height: 4rem;
+                gap: 0.5rem;
             }
             
-            .masthead h2 {
-                max-width: 30rem;
-                font-size: 1.25rem;
-            }
-            
-            .strain-image {
-                height: 600px;
+            .nav-links a {
+                font-size: 0.8rem;
+                padding: 0.25rem;
             }
         }
     </style>
-    
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W7B6GRJ5HT"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-W7B6GRJ5HT');
-    </script>
 </head>
-
 <body>
-    <!-- Header -->
     <header>
         <nav class="container">
-            <a href="assets/img/noyes boys logo.png" class="logo">
+            <a href="#" class="logo">
                 <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
-                The Noyes Boys
+                Noyes Boys
             </a>
             <ul class="nav-links">
-                <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
-                <li><a href="deals.html">Deals</a></li>
-                <li><a href="order_now.html">Order Now</a></li>
-                <li><a href="contact_us.html">Contact</a></li>
-                <li><a href="readmore.html">Growing Guide</a></li>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#strains">Strains</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
+            <button class="cart-button" onclick="openCart()">
+                <i class="fas fa-shopping-cart"></i>
+                Cart
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
         </nav>
     </header>
 
-    <!-- Masthead -->
     <section class="masthead" id="home">
-        <div class="container">
-            <div class="masthead-content">
-                <h1>NOYES BOYS GENETICS</h1>
-                <h2>Line 3 - OG Collection - Old School Strains</h2>
-                <div class="cta-buttons">
-                    <a class="btn btn-primary" href="FeminizedSeedsHomepage.html">Home</a>
-                    <a class="btn btn-primary" href="genetics.html">Genetic Lineups</a>
-                    <a class="btn btn-primary" href="nextstrains.html">Next Release</a>
-                    <a class="btn btn-primary" href="deals.html">DEALS</a>
-                </div>
-                
-                <div class="elfsight-widget">
-                    <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                    <div class="elfsight-app-8dabc9c4-2112-442c-aa73-efa37382f500" data-elfsight-app-lazy></div>
-                </div>
-                
-                <div class="elfsight-widget">
-                    <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                    <div class="elfsight-app-f376e010-c0cf-4d4f-9e58-39e2b04e5335" data-elfsight-app-lazy></div>
-                </div>
+        <div class="masthead-content">
+            <h1>Noyes Boys</h1>
+            <h2>Line 3 - OG Collection - Old School Cannabis Genetics</h2>
+            <div class="cta-buttons">
+                <a href="#strains" class="btn btn-primary">Shop OG Strains</a>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section class="about-section" id="about">
+    <section class="about-section" id="strains">
         <div class="container">
-            <!-- Logo Section -->
+            <h2 class="section-title">OG Collection Strains</h2>
+            
             <div class="logo-section">
                 <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo">
-                <h3>Noyes Boys Logo Of Authenticity</h3>
-                
-                <div class="legend">
-                    <h5><strong>Legend:</strong></h5>
-                    <p><strong>F1:</strong> First generation cross between two distinct parent strains.</p>
-                    <p><strong>F2:</strong> Second generation cross of F1 x F1.</p>
-                    <p><strong>IBL:</strong> Inbred line (typically F5 and beyond), e.g., Noyes Kush.</p>
-                    <p><strong>BX1:</strong> Backcrossed with one of its original parent strains for improved stability.</p>
-                    <p><strong>BX2+:</strong> Further backcrossed for even greater stability and reduced genetic drift.</p>
-                </div>
-            </div>
-
-            <!-- Line Description -->
-            <div class="line-description">
-                <h3>Noyes Boys Genetic Line 3 - OG LINE</h3>
+                <h3>Line 3 - Old School OG Genetics</h3>
                 <p>10 Noyes Boys Originals crossed with REAL OG strains sourced in Canada from old school growers. These classic genetics represent the authentic heritage of Canadian cannabis culture, bringing together time-tested genetics with our proven Noyes Boys foundation strains.</p>
             </div>
 
-            <h2 class="section-title">OG Collection Strains</h2>
+            <div class="legend">
+                <h5>Availability Legend:</h5>
+                <p><i class="fas fa-circle" style="color: #22c55e;"></i> Available - Ready to ship</p>
+                <p><i class="fas fa-circle" style="color: #f59e0b;"></i> Almost Available - Coming soon</p>
+                <p><i class="fas fa-circle" style="color: #ef4444;"></i> Sold Out - Currently unavailable</p>
+            </div>
 
-            <!-- Strain Grid -->
             <div class="strain-grid">
                 <!-- Loud Dreams -->
                 <div class="strain-card">
-                    <img src="assets/logos/new logos/blue dream x noyes kush.png" alt="Loud Dreams - Blue Dream x Noyes Kush" class="strain-image">
+                    <img src="assets/logos/new logos/blue dream x noyes kush.png" alt="Loud Dreams" class="strain-image">
                     <div class="strain-content">
-                        <h4 class="strain-title">LOUD DREAMS</h4>
-                        <div class="strain-subtitle">(BLUE DREAM X NOYES KUSH)</div>
+                        <h3 class="strain-title">LOUD DREAMS</h3>
+                        <div class="strain-subtitle">(Blue Dream x Noyes Kush)</div>
                         <div class="strain-genetics">
-                            <a href="https://www.comparethestrain.ca/blue-dream/">Blue Dream</a> x 
-                            <a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Kush</a>
+                            <a href="#">Blue Dream</a> x <a href="#">Noyes Kush</a>
                         </div>
-                        
                         <div class="availability">
-                            <div class="availability-item">
-                                <span>BX1</span>
-                                <span class="available">AVAILABLE</span>
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> BX1 Available
                             </div>
                         </div>
-                        
                         <div class="strain-details">
-                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
-                            <div class="strain-detail"><strong>Variety:</strong> 15% Sativa / 85% Indica</div>
-                            <div class="strain-detail"><strong>Flowering Time:</strong> 62 Days</div>
-                            <div class="strain-detail"><strong>Plant Height:</strong> Short</div>
-                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
-                            <div class="strain-detail"><strong>THC Content:</strong> 19-21%</div>
+                            <div class="strain-detail"><strong>Type:</strong> 15% Sativa / 85% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 19-21%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Height:</strong> Short</div>
+                            <div class="strain-detail"><strong>CBD:</strong> >2%</div>
                             <div class="strain-detail"><strong>Effect:</strong> Motivated, Energetic, Happy</div>
-                            <div class="strain-detail"><strong>Taste:</strong> Berries, Gas, Earthy</div>
-                            <div class="strain-detail"><strong>Terpenes:</strong> Valencene, Humulene, Limonene</div>
-                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
                         </div>
+                        <p>Classic Blue Dream meets Noyes stability. Berries, gas, earthy flavors with valencene, humulene, limonene terpenes.</p>
                         
-                        <a href="https://seedfinder.eu/en/strain-info/loud-dreams/noyes-boys-genetics" class="read-more">READ MORE</a>
-                        
-                        <div class="elfsight-widget">
-                            <script src="https://elfsightcdn.com/platform.js" async></script>
-                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="loud-dreams-variant">Select BX1 Quantity:</label>
+                                <select id="loud-dreams-variant">
+                                    <option value="1-pack" data-price="40">1 Seeds - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="loud-dreams-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('loud-dreams', 'Loud Dreams BX1')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
                         </div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
                     </div>
                 </div>
 
                 <!-- Blueberry Fingers -->
                 <div class="strain-card">
-                    <img src="assets/logos/new logos/blueberry kush x noyes kush.png" alt="Blueberry Fingers - Blueberry Kush x Noyes Kush" class="strain-image">
+                    <img src="assets/logos/new logos/blueberry kush x noyes kush.png" alt="Blueberry Fingers" class="strain-image">
                     <div class="strain-content">
-                        <h4 class="strain-title">BLUEBERRY FINGERS</h4>
-                        <div class="strain-subtitle">(BLUEBERRY KUSH X NOYES KUSH)</div>
+                        <h3 class="strain-title">BLUEBERRY FINGERS</h3>
+                        <div class="strain-subtitle">(Blueberry Kush x Noyes Kush)</div>
                         <div class="strain-genetics">
-                            <a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Kush</a> x 
-                            <a href="https://www.comparethestrain.ca/blueberry/">Blueberry Kush</a>
+                            <a href="#">Blueberry Kush</a> x <a href="#">Noyes Kush</a>
                         </div>
-                        
                         <div class="availability">
-                            <div class="availability-item">
-                                <span>BX1</span>
-                                <span class="available">AVAILABLE</span>
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> BX1 Available
                             </div>
-                            <div class="availability-item">
-                                <span>BX2</span>
-                                <span class="available">AVAILABLE</span>
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> BX2 Available
                             </div>
                         </div>
-                        
                         <div class="strain-details">
-                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
-                            <div class="strain-detail"><strong>Variety:</strong> 30% Sativa / 70% Indica</div>
-                            <div class="strain-detail"><strong>Flowering Time:</strong> 65 Days</div>
-                            <div class="strain-detail"><strong>Plant Height:</strong> Short</div>
-                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
-                            <div class="strain-detail"><strong>THC Content:</strong> 18-20%</div>
+                            <div class="strain-detail"><strong>Type:</strong> 30% Sativa / 70% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 18-20%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 65 Days</div>
+                            <div class="strain-detail"><strong>Height:</strong> Short</div>
+                            <div class="strain-detail"><strong>CBD:</strong> >2%</div>
                             <div class="strain-detail"><strong>Effect:</strong> Motivated, Energetic, Happy</div>
-                            <div class="strain-detail"><strong>Taste:</strong> Blueberries, Fruit, Berries, Gas, Earthy, Citrus</div>
-                            <div class="strain-detail"><strong>Terpenes:</strong> Valencene, Humulene, Limonene</div>
-                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
                         </div>
+                        <p>Sweet blueberry flavors with classic indica relaxation. Fruit, berries, gas, earthy, citrus with valencene terpenes.</p>
                         
-                        <a href="https://app.jointcommerce.com/blog/category/cannabis-101/blueberry-fingers-by-noyes-boys-genetics-a-comprehensive-strain-guide/" class="read-more">READ MORE</a>
-                        
-                        <div class="elfsight-widget">
-                            <script src="https://elfsightcdn.com/platform.js" async></script>
-                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="blueberry-fingers-variant">Select Generation:</label>
+                                <select id="blueberry-fingers-variant">
+                                    <option value="1-pack" data-price="40">bx1 1 Seeds - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                    <option value="1-pack" data-price="40">bx2 1 Seeds - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="blueberry-fingers-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('blueberry-fingers', 'Blueberry Fingers')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
                         </div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
                     </div>
                 </div>
 
                 <!-- Cheeto Fingers -->
                 <div class="strain-card">
-                    <img src="assets/blurry logos/unused/cheetoFINGERS.png" alt="Cheeto Fingers - Orange Kush x Noyes Kush" class="strain-image">
+                    <img src="assets/blurry logos/unused/cheetoFINGERS.png" alt="Cheeto Fingers" class="strain-image">
                     <div class="strain-content">
-                        <h4 class="strain-title">CHEETO FINGERS</h4>
-                        <div class="strain-subtitle">(ORANGE KUSH X NOYES KUSH)</div>
+                        <h3 class="strain-title">CHEETO FINGERS</h3>
+                        <div class="strain-subtitle">(Orange Kush x Noyes Kush)</div>
                         <div class="strain-genetics">
-                            <a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Kush</a> x 
-                            <a href="https://www.comparethestrain.ca/orange-kush/">Orange Kush</a>
+                            <a href="#">Orange Kush</a> x <a href="#">Noyes Kush</a>
                         </div>
-                        
                         <div class="availability">
-                            <div class="availability-item">
-                                <span>BX1</span>
-                                <span class="available">AVAILABLE</span>
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> BX1 Available
                             </div>
-                            <div class="availability-item">
-                                <span>BX2</span>
-                                <span class="available">AVAILABLE</span>
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> BX2 Available
                             </div>
                         </div>
-                        
                         <div class="strain-details">
-                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
-                            <div class="strain-detail"><strong>Variety:</strong> 25% Sativa / 75% Indica</div>
-                            <div class="strain-detail"><strong>Flowering Time:</strong> 62 Days</div>
-                            <div class="strain-detail"><strong>Plant Height:</strong> Short</div>
-                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
-                            <div class="strain-detail"><strong>THC Content:</strong> 22-23%</div>
+                            <div class="strain-detail"><strong>Type:</strong> 25% Sativa / 75% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 22-23%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Height:</strong> Short</div>
+                            <div class="strain-detail"><strong>CBD:</strong> >2%</div>
                             <div class="strain-detail"><strong>Effect:</strong> Motivated, Energetic, Happy</div>
-                            <div class="strain-detail"><strong>Taste:</strong> Fruity, Gas, Earthy, Citrus</div>
-                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Limonene</div>
-                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
                         </div>
+                        <p>Orange citrus meets classic kush genetics. Fruity, gas, earthy, citrus flavors with humulene and limonene terpenes.</p>
                         
-                        <a href="https://app.jointcommerce.com/blog/category/cannabis-101/cheeto-fingers-by-noyes-boys-genetics-a-comprehensive-strain-guide/" class="read-more">READ MORE</a>
-                        
-                        <div class="elfsight-widget">
-                            <script src="https://elfsightcdn.com/platform.js" async></script>
-                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="cheeto-fingers-variant">Select Generation:</label>
+                                <select id="cheeto-fingers-variant">
+                                    <option value="1-pack" data-price="40">bx1 1 Seeds - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                    <option value="1-pack" data-price="40">bx2 1 Seeds - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="cheeto-fingers-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('cheeto-fingers', 'Cheeto Fingers')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
                         </div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
                     </div>
                 </div>
 
                 <!-- Noyes OG -->
                 <div class="strain-card">
-                    <img src="assets/logos/new logos/og kush x noyes kush.png" alt="Noyes OG - OG Kush x Noyes Kush" class="strain-image">
+                    <img src="assets/logos/new logos/og kush x noyes kush.png" alt="Noyes OG" class="strain-image">
                     <div class="strain-content">
-                        <h4 class="strain-title">NOYES OG</h4>
-                        <div class="strain-subtitle">(OG KUSH X NOYES KUSH)</div>
+                        <h3 class="strain-title">NOYES OG</h3>
+                        <div class="strain-subtitle">(OG Kush x Noyes Kush)</div>
                         <div class="strain-genetics">
-                            <a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Kush</a> x 
-                            <a href="https://www.comparethestrain.ca/og-kush/">OG Kush</a>
+                            <a href="#">OG Kush</a> x <a href="#">Noyes Kush</a>
                         </div>
-                        
                         <div class="availability">
-                            <div class="availability-item">
-                                <span>BX1</span>
-                                <span class="available">AVAILABLE</span>
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> BX1 Available
                             </div>
                         </div>
-                        
                         <div class="strain-details">
-                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
-                            <div class="strain-detail"><strong>Variety:</strong> 10% Sativa / 90% Indica</div>
-                            <div class="strain-detail"><strong>Flowering Time:</strong> 62 Days</div>
-                            <div class="strain-detail"><strong>Plant Height:</strong> Short</div>
-                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
-                            <div class="strain-detail"><strong>THC Content:</strong> 25-28%</div>
+                            <div class="strain-detail"><strong>Type:</strong> 10% Sativa / 90% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 25-28%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Height:</strong> Short</div>
+                            <div class="strain-detail"><strong>CBD:</strong> >2%</div>
                             <div class="strain-detail"><strong>Effect:</strong> Motivated, Energetic, Happy</div>
-                            <div class="strain-detail"><strong>Taste:</strong> Gas, Earthy, Citrus</div>
-                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Limonene</div>
-                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
                         </div>
+                        <p>The ultimate kush cross - authentic OG meets Noyes foundation. Gas, earthy, citrus with humulene and limonene.</p>
                         
-                        <a href="https://seedfinder.eu/index.php/en/strain-info/noyes-og/noyes-boys-genetics" class="read-more">READ MORE</a>
-                        
-                        <div class="elfsight-widget">
-                            <script src="https://elfsightcdn.com/platform.js" async></script>
-                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="noyes-og-variant">Select BX1 Quantity:</label>
+                                <select id="noyes-og-variant">
+                                    <option value="1-pack" data-price="40">1 Seeds - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="noyes-og-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('noyes-og', 'Noyes OG BX1')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
                         </div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
                     </div>
                 </div>
 
                 <!-- Bubba Noyes -->
                 <div class="strain-card">
-                    <img src="assets/logos/new logos/bubba kush x noyes kush.png" alt="Bubba Noyes - Bubba Kush x Noyes Kush" class="strain-image">
+                    <img src="assets/logos/new logos/bubba kush x noyes kush.png" alt="Bubba Noyes" class="strain-image">
                     <div class="strain-content">
-                        <h4 class="strain-title">BUBBA NOYES</h4>
-                        <div class="strain-subtitle">(BUBBA KUSH X NOYES KUSH)</div>
+                        <h3 class="strain-title">BUBBA NOYES</h3>
+                        <div class="strain-subtitle">(Bubba Kush x Noyes Kush)</div>
                         <div class="strain-genetics">
-                            <a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Kush</a> x 
-                            <a href="https://www.comparethestrain.ca/bubba-kush/">Bubba Kush</a>
+                            <a href="#">Bubba Kush</a> x <a href="#">Noyes Kush</a>
                         </div>
-                        
                         <div class="availability">
-                            <div class="availability-item">
-                                <span>BX1</span>
-                                <span class="available">AVAILABLE</span>
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> BX1 Available
                             </div>
                         </div>
-                        
                         <div class="strain-details">
-                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
-                            <div class="strain-detail"><strong>Variety:</strong> 25% Sativa / 75% Indica</div>
-                            <div class="strain-detail"><strong>Flowering Time:</strong> 62 Days</div>
-                            <div class="strain-detail"><strong>Plant Height:</strong> Short</div>
-                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
-                            <div class="strain-detail"><strong>THC Content:</strong> 22-25%</div>
+                            <div class="strain-detail"><strong>Type:</strong> 25% Sativa / 75% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 22-25%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Height:</strong> Short</div>
+                            <div class="strain-detail"><strong>CBD:</strong> >2%</div>
                             <div class="strain-detail"><strong>Effect:</strong> Motivated, Energetic, Happy</div>
-                            <div class="strain-detail"><strong>Taste:</strong> Gas, Earthy, Citrus</div>
-                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Limonene</div>
-                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
                         </div>
+                        <p>Classic Bubba genetics enhanced with Noyes stability. Heavy indica effects with gas, earthy, citrus flavors.</p>
                         
-                        <a href="https://app.jointcommerce.com/blog/category/cannabis-101/bubba-noyes-by-noyes-boys-genetics-a-comprehensive-strain-guide/" class="read-more">READ MORE</a>
-                        
-                        <div class="elfsight-widget">
-                            <script src="https://elfsightcdn.com/platform.js" async></script>
-                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="bubba-noyes-variant">Select BX1 Quantity:</label>
+                                <select id="bubba-noyes-variant">
+                                    <option value="1-pack" data-price="40">1 Seeds - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="bubba-noyes-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('bubba-noyes', 'Bubba Noyes BX1')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
                         </div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
                     </div>
                 </div>
 
                 <!-- Captain Noyes -->
                 <div class="strain-card">
-                    <img src="assets/logos/new logos/trainwreck x noyes kush.png" alt="Captain Noyes - Trainwreck x Noyes Kush" class="strain-image">
+                    <img src="assets/logos/new logos/trainwreck x noyes kush.png" alt="Captain Noyes" class="strain-image">
                     <div class="strain-content">
-                        <h4 class="strain-title">CAPTAIN NOYES</h4>
-                        <div class="strain-subtitle">(TRAINWRECK X NOYES KUSH)</div>
+                        <h3 class="strain-title">CAPTAIN NOYES</h3>
+                        <div class="strain-subtitle">(Trainwreck x Noyes Kush)</div>
                         <div class="strain-genetics">
-                            <a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Kush</a> x 
-                            <a href="https://www.comparethestrain.ca/trainwreck/">Trainwreck</a>
+                            <a href="#">Trainwreck</a> x <a href="#">Noyes Kush</a>
                         </div>
-                        
                         <div class="availability">
-                            <div class="availability-item">
-                                <span>BX1</span>
-                                <span class="available">AVAILABLE</span>
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> BX1 Available
                             </div>
-                            <div class="availability-item">
-                                <span>BX2</span>
-                                <span class="available">AVAILABLE</span>
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> BX2 Available
                             </div>
                         </div>
-                        
                         <div class="strain-details">
-                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
-                            <div class="strain-detail"><strong>Variety:</strong> 25% Sativa / 75% Indica</div>
-                            <div class="strain-detail"><strong>Flowering Time:</strong> 65 Days</div>
-                            <div class="strain-detail"><strong>Plant Height:</strong> Short</div>
-                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
-                            <div class="strain-detail"><strong>THC Content:</strong> 20-21%</div>
+                            <div class="strain-detail"><strong>Type:</strong> 25% Sativa / 75% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 20-21%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 65 Days</div>
+                            <div class="strain-detail"><strong>Height:</strong> Short</div>
+                            <div class="strain-detail"><strong>CBD:</strong> >2%</div>
                             <div class="strain-detail"><strong>Effect:</strong> Motivated, Energetic, Happy</div>
-                            <div class="strain-detail"><strong>Taste:</strong> Gas, Earthy, Citrus</div>
-                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Limonene</div>
-                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
                         </div>
+                        <p>Legendary Trainwreck meets Noyes foundation. Energetic effects with gas, earthy, citrus and humulene terpenes.</p>
                         
-                        <a href="https://app.jointcommerce.com/blog/category/cannabis-101/captain-noyes-by-noyes-boys-genetics-a-comprehensive-strain-guide/" class="read-more">READ MORE</a>
-                        
-                        <div class="elfsight-widget">
-                            <script src="https://elfsightcdn.com/platform.js" async></script>
-                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="captain-noyes-variant">Select Generation:</label>
+                                <select id="captain-noyes-variant">
+                                    <option value="1-pack" data-price="40">bx1 1 Seeds - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                    <option value="1-pack" data-price="40">bx2 1 Seeds - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="captain-noyes-price">$89 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('captain-noyes', 'Captain Noyes')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
                         </div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
                     </div>
                 </div>
 
                 <!-- Hash Fingers -->
                 <div class="strain-card">
-                    <img src="assets/logos/new logos/hashplant x noyes kush.png" alt="Hash Fingers - Hash Plant x Noyes Kush" class="strain-image">
+                    <img src="assets/logos/new logos/hashplant x noyes kush.png" alt="Hash Fingers" class="strain-image">
                     <div class="strain-content">
-                        <h4 class="strain-title">HASH FINGERS</h4>
-                        <div class="strain-subtitle">(HASH PLANT X NOYES KUSH)</div>
+                        <h3 class="strain-title">HASH FINGERS</h3>
+                        <div class="strain-subtitle">(Hash Plant x Noyes Kush)</div>
                         <div class="strain-genetics">
-                            <a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Kush</a> x 
-                            <a href="https://www.comparethestrain.ca/hash-plant/">Hashplant</a>
+                            <a href="#">Hash Plant</a> x <a href="#">Noyes Kush</a>
                         </div>
-                        
                         <div class="availability">
-                            <div class="availability-item">
-                                <span>BX1</span>
-                                <span class="available">AVAILABLE</span>
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> BX1 Available
                             </div>
                         </div>
-                        
                         <div class="strain-details">
-                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
-                            <div class="strain-detail"><strong>Variety:</strong> 10% Sativa / 90% Indica</div>
-                            <div class="strain-detail"><strong>Flowering Time:</strong> 62 Days</div>
-                            <div class="strain-detail"><strong>Plant Height:</strong> Short</div>
-                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
-                            <div class="strain-detail"><strong>THC Content:</strong> 25-28%</div>
+                            <div class="strain-detail"><strong>Type:</strong> 10% Sativa / 90% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 25-28%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Height:</strong> Short</div>
+                            <div class="strain-detail"><strong>CBD:</strong> >2%</div>
                             <div class="strain-detail"><strong>Effect:</strong> Motivated, Energetic, Happy</div>
-                            <div class="strain-detail"><strong>Taste:</strong> Gas, Earthy, Citrus</div>
-                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Limonene</div>
-                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
                         </div>
+                        <p>Premium hash plant genetics meet Noyes foundation. Heavy resin production with gas, earthy, citrus flavors.</p>
                         
-                        <a href="https://app.jointcommerce.com/blog/category/cannabis-101/hash-fingers-by-noyes-boys-genetics-a-comprehensive-strain-guide/" class="read-more">READ MORE</a>
-                        
-                        <div class="elfsight-widget">
-                            <script src="https://elfsightcdn.com/platform.js" async></script>
-                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="hash-fingers-variant">Select BX1 Quantity:</label>
+                                <select id="hash-fingers-variant">
+                                    <option value="1-pack" data-price="40">1 Seeds - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="hash-fingers-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('hash-fingers', 'Hash Fingers BX1')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
                         </div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
                     </div>
                 </div>
 
                 <!-- Noyes Poison -->
                 <div class="strain-card">
-                    <img src="assets/logos/new logos/durban poison x noyes kush.png" alt="Noyes Poison - Durban Poison x Noyes Kush" class="strain-image">
+                    <img src="assets/logos/new logos/durban poison x noyes kush.png" alt="Noyes Poison" class="strain-image">
                     <div class="strain-content">
-                        <h4 class="strain-title">NOYES POISON</h4>
-                        <div class="strain-subtitle">(DURBAN POISON X NOYES KUSH)</div>
+                        <h3 class="strain-title">NOYES POISON</h3>
+                        <div class="strain-subtitle">(Durban Poison x Noyes Kush)</div>
                         <div class="strain-genetics">
-                            <a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Kush</a> x 
-                            <a href="https://www.comparethestrain.ca/durban-poison/">Durban Poison</a>
+                            <a href="#">Durban Poison</a> x <a href="#">Noyes Kush</a>
                         </div>
-                        
                         <div class="availability">
-                            <div class="availability-item">
-                                <span>BX1</span>
-                                <span class="available">AVAILABLE</span>
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> BX1 Available
                             </div>
                         </div>
-                        
                         <div class="strain-details">
-                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
-                            <div class="strain-detail"><strong>Variety:</strong> 80% Sativa / 20% Indica</div>
-                            <div class="strain-detail"><strong>Flowering Time:</strong> 65-68 Days</div>
-                            <div class="strain-detail"><strong>Plant Height:</strong> Medium</div>
-                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
-                            <div class="strain-detail"><strong>THC Content:</strong> 23-24%</div>
+                            <div class="strain-detail"><strong>Type:</strong> 80% Sativa / 20% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 23-24%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 65-68 Days</div>
+                            <div class="strain-detail"><strong>Height:</strong> Medium</div>
+                            <div class="strain-detail"><strong>CBD:</strong> >2%</div>
                             <div class="strain-detail"><strong>Effect:</strong> Motivated, Energetic, Happy</div>
-                            <div class="strain-detail"><strong>Taste:</strong> Gas, Earthy, Citrus</div>
-                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Limonene</div>
-                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
                         </div>
+                        <p>Classic African sativa meets Canadian indica stability. Uplifting effects with gas, earthy, citrus flavors.</p>
                         
-                        <a href="https://app.jointcommerce.com/blog/category/cannabis-101/noyes-poison-by-noyes-boys-genetics-a-comprehensive-strain-guide/" class="read-more">READ MORE</a>
-                        
-                        <div class="elfsight-widget">
-                            <script src="https://elfsightcdn.com/platform.js" async></script>
-                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="noyes-poison-variant">Select BX1 Quantity:</label>
+                                <select id="noyes-poison-variant">
+                                    <option value="1-pack" data-price="40">1 Seeds - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="noyes-poison-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('noyes-poison', 'Noyes Poison BX1')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
                         </div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
                     </div>
                 </div>
 
                 <!-- Afghani Noyes -->
                 <div class="strain-card">
-                    <img src="assets/logos/new logos/afghan kush x noyes kush.png" alt="Afghani Noyes - Afghan Kush x Noyes Kush" class="strain-image">
+                    <img src="assets/logos/new logos/afghan kush x noyes kush.png" alt="Afghani Noyes" class="strain-image">
                     <div class="strain-content">
-                        <h4 class="strain-title">AFGHANI NOYES</h4>
-                        <div class="strain-subtitle">(AFGHAN KUSH X NOYES KUSH)</div>
+                        <h3 class="strain-title">AFGHANI NOYES</h3>
+                        <div class="strain-subtitle">(Afghan Kush x Noyes Kush)</div>
                         <div class="strain-genetics">
-                            <a href="https://www.comparethestrain.ca/afghan-ksuh/">Afghan Kush</a> x 
-                            <a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Kush</a>
+                            <a href="#">Afghan Kush</a> x <a href="#">Noyes Kush</a>
                         </div>
-                        
                         <div class="availability">
-                            <div class="availability-item">
-                                <span>BX1</span>
-                                <span class="available">AVAILABLE</span>
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> BX1 Available
                             </div>
-                            <div class="availability-item">
-                                <span>BX2</span>
-                                <span class="available">AVAILABLE</span>
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> BX2 Available
                             </div>
                         </div>
-                        
                         <div class="strain-details">
-                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
-                            <div class="strain-detail"><strong>Variety:</strong> 25% Sativa / 75% Indica</div>
-                            <div class="strain-detail"><strong>Flowering Time:</strong> 65 Days</div>
-                            <div class="strain-detail"><strong>Plant Height:</strong> Tall</div>
-                            <div class="strain-detail"><strong>CBD Content:</strong> >4%</div>
-                            <div class="strain-detail"><strong>THC Content:</strong> 18-22%</div>
+                            <div class="strain-detail"><strong>Type:</strong> 25% Sativa / 75% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 18-22%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 65 Days</div>
+                            <div class="strain-detail"><strong>Height:</strong> Tall</div>
+                            <div class="strain-detail"><strong>CBD:</strong> >4%</div>
                             <div class="strain-detail"><strong>Effect:</strong> Motivated, Energetic, Happy</div>
-                            <div class="strain-detail"><strong>Taste:</strong> Gas, Earthy</div>
-                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene</div>
-                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
                         </div>
+                        <p>Ancient Afghan genetics meet modern Canadian breeding. Higher CBD content with gas, earthy flavors and humulene terpenes.</p>
                         
-                        <a href="https://app.jointcommerce.com/blog/category/cannabis-101/afghani-noyes-a-comprehensive-strain-guide/" class="read-more">READ MORE</a>
-                        
-                        <div class="elfsight-widget">
-                            <script src="https://elfsightcdn.com/platform.js" async></script>
-                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="afghani-noyes-variant">Select Generation:</label>
+                                <select id="afghani-noyes-variant">
+                                    <option value="1-pack" data-price="40">bx1 1 Seeds - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                    <option value="1-pack" data-price="40">bx2 1 Seeds - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="afghani-noyes-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('afghani-noyes', 'Afghani Noyes')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
                         </div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
                     </div>
                 </div>
 
                 <!-- White Noyes -->
                 <div class="strain-card">
-                    <img src="assets/logos/new logos/white widow x noyes kush.png" alt="White Noyes - White Widow x Noyes Kush" class="strain-image">
+                    <img src="assets/logos/new logos/white widow x noyes kush.png" alt="White Noyes" class="strain-image">
                     <div class="strain-content">
-                        <h4 class="strain-title">WHITE NOYES</h4>
-                        <div class="strain-subtitle">(WHITE WIDOW X NOYES KUSH)</div>
+                        <h3 class="strain-title">WHITE NOYES</h3>
+                        <div class="strain-subtitle">(White Widow x Noyes Kush)</div>
                         <div class="strain-genetics">
-                            <a href="https://www.comparethestrain.ca/white-widow/">White Widow</a> x 
-                            <a href="https://www.comparethestrain.ca/dragons-breath/">Noyes Kush</a>
+                            <a href="#">White Widow</a> x <a href="#">Noyes Kush</a>
                         </div>
-                        
                         <div class="availability">
-                            <div class="availability-item">
-                                <span>BX1</span>
-                                <span class="available">AVAILABLE</span>
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> BX1 Available
                             </div>
                         </div>
-                        
                         <div class="strain-details">
-                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
-                            <div class="strain-detail"><strong>Variety:</strong> 40% Sativa / 60% Indica</div>
-                            <div class="strain-detail"><strong>Flowering Time:</strong> 62 Days</div>
-                            <div class="strain-detail"><strong>Plant Height:</strong> Short</div>
-                            <div class="strain-detail"><strong>CBD Content:</strong> >2%</div>
-                            <div class="strain-detail"><strong>THC Content:</strong> 22-23%</div>
+                            <div class="strain-detail"><strong>Type:</strong> 40% Sativa / 60% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 22-23%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Height:</strong> Short</div>
+                            <div class="strain-detail"><strong>CBD:</strong> >2%</div>
                             <div class="strain-detail"><strong>Effect:</strong> Motivated, Energetic, Happy</div>
-                            <div class="strain-detail"><strong>Taste:</strong> Gas, Citrus</div>
-                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Limonene</div>
-                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
                         </div>
+                        <p>Legendary White Widow meets Noyes foundation genetics. Frosty resin production with gas, citrus flavors.</p>
                         
-                        <a href="https://seedfinder.eu/en/strain-info/white-noyes/noyes-boys-genetics" class="read-more">READ MORE</a>
-                        
-                        <div class="elfsight-widget">
-                            <script src="https://elfsightcdn.com/platform.js" async></script>
-                            <div class="elfsight-app-6b3ca6e5-61d8-45bb-b99d-b2468922ff92" data-elfsight-app-lazy></div>
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="white-noyes-variant">Select BX1 Quantity:</label>
+                                <select id="white-noyes-variant">
+                                    <option value="1-pack" data-price="40">1 Seeds - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="white-noyes-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('white-noyes', 'White Noyes BX1')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
                         </div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-90af4c63-eded-4d21-b10a-a5e0253d3908" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-0a28bf84-2377-4f35-86fb-60dfd5115d09" data-elfsight-app-lazy></div>
-                        
-                        <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                        <div class="elfsight-app-9aeed267-a6ae-47e7-9e15-12d21acbd582" data-elfsight-app-lazy></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Disclaimer Section -->
-    <section class="disclaimer-section" id="disclaimers">
-        <div class="container">
-            <div class="disclaimer-content">
-                <h2>Disclaimer: By ordering from this site you affirm to be at least 19 year of age. Seeds are sold for genetic preservation and as collectors items. Germinating them may be illegal where
+    <!-- Cart Modal -->
+    <div id="cartModal" class="cart-modal">
+        <div class="cart-modal-content">
+            <span class="cart-close" onclick="closeCart()">&times;</span>
+            <h2 style="color: #4ade80; margin-bottom: 1rem;">Shopping Cart</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total">
+                <h3>Total: $<span id="cartTotal">0</span> CAD</h3>
+                <button class="checkout-btn" onclick="checkout()">
+                    <i class="fas fa-credit-card"></i> Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+
+        // Update variant price display
+        document.querySelectorAll('select[id$="-variant"]').forEach(select => {
+            select.addEventListener('change', function() {
+                const priceDisplayId = this.id.replace('-variant', '-price');
+                const selectedOption = this.options[this.selectedIndex];
+                const price = selectedOption.getAttribute('data-price');
+                document.getElementById(priceDisplayId).textContent = `${price} CAD`;
+            });
+        });
+
+        // Add to cart function
+        function addToCart(strainId, strainName) {
+            const select = document.getElementById(strainId + '-variant');
+            const selectedOption = select.options[select.selectedIndex];
+            const variant = selectedOption.value;
+            const price = parseFloat(selectedOption.getAttribute('data-price'));
+            const variantText = selectedOption.textContent;
+
+            // Check if item already exists in cart
+            const existingItem = cart.find(item => 
+                item.strainId === strainId && item.variant === variant
+            );
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    strainId: strainId,
+                    strainName: strainName,
+                    variant: variant,
+                    variantText: variantText,
+                    price: price,
+                    quantity: 1
+                });
+            }
+
+            updateCartDisplay();
+            
+            // Show success feedback
+            const button = document.querySelector(`button[onclick="addToCart('${strainId}', '${strainName}')"]`);
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check"></i> Added!';
+            button.style.background = '#22c55e';
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.style.background = '';
+            }, 1000);
+        }
+
+        // Update cart display
+        function updateCartDisplay() {
+            const cartCount = document.getElementById('cartCount');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<div class="empty-cart"><p>Your cart is empty</p><p>Add some premium OG genetics to get started!</p></div>';
+                cartTotal.textContent = '0.00';
+                return;
+            }
+
+            let total = 0;
+            cartItems.innerHTML = cart.map((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+
+                return `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.strainName}</div>
+                            <div class="cart-item-variant">${item.variantText}</div>
+                            <div class="cart-item-price">${item.price} CAD each</div>
+                        </div>
+                        <div class="cart-item-controls">
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                                <span class="quantity-display">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                            </div>
+                            <button class="remove-item" onclick="removeItem(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            cartTotal.textContent = total.toFixed(2);
+        }
+
+        // Update item quantity
+        function updateQuantity(index, change) {
+            cart[index].quantity += change;
+            
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            
+            updateCartDisplay();
+        }
+
+        // Remove item from cart
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCartDisplay();
+        }
+
+        // Open cart modal
+        function openCart() {
+            updateCartDisplay();
+            document.getElementById('cartModal').style.display = 'block';
+        }
+
+        // Close cart modal
+        function closeCart() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('cartModal');
+            if (event.target === modal) {
+                closeCart();
+            }
+        }
+
+        // Checkout function - redirects to noyesboys.com/checkout.html
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+
+            // Prepare cart data for checkout page
+            const cartData = {
+                items: cart.map(item => ({
+                    name: item.strainName,
+                    variant: item.variant,
+                    variantText: item.variantText,
+                    price: item.price,
+                    quantity: item.quantity,
+                    total: item.price * item.quantity
+                })),
+                subtotal: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                timestamp: new Date().toISOString(),
+                source: 'line3-og'
+            };
+
+            // Store cart data in localStorage for the checkout page to access
+            localStorage.setItem('noyesBoysCart', JSON.stringify(cartData));
+            
+            // Create URL parameters as backup
+            const itemsParam = encodeURIComponent(JSON.stringify(cartData.items));
+            const totalParam = cartData.subtotal.toFixed(2);
+            
+            // Redirect to checkout page with cart data
+            window.location.href = `https://www.noyesboys.com/checkout.html?items=${itemsParam}&total=${totalParam}&source=line3-og`;
+        }
+
+        // Initialize price displays
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('select[id$="-variant"]').forEach(select => {
+                if (!select.disabled) {
+                    const priceDisplayId = select.id.replace('-variant', '-price');
+                    const selectedOption = select.options[select.selectedIndex];
+                    const price = selectedOption.getAttribute('data-price');
+                    document.getElementById(priceDisplayId).textContent = `${price} CAD`;
+                }
+            });
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
