@@ -1121,18 +1121,19 @@
     </div>
 
     <script>
-        // Cart Management System with Session Storage
+        // Cart Management System with Local Storage
         class CartManager {
             constructor() {
                 this.storageKey = 'noyesboys_cart';
+                this.checkoutKey = 'noyesboys_checkout_data';
                 this.cart = this.loadCart();
                 this.updateCartDisplay();
             }
 
-            // Load cart from session storage
+            // Load cart from local storage
             loadCart() {
                 try {
-                    const stored = sessionStorage.getItem(this.storageKey);
+                    const stored = localStorage.getItem(this.storageKey);
                     return stored ? JSON.parse(stored) : [];
                 } catch (e) {
                     console.error('Error loading cart:', e);
@@ -1140,10 +1141,10 @@
                 }
             }
 
-            // Save cart to session storage
+            // Save cart to local storage
             saveCart() {
                 try {
-                    sessionStorage.setItem(this.storageKey, JSON.stringify(this.cart));
+                    localStorage.setItem(this.storageKey, JSON.stringify(this.cart));
                 } catch (e) {
                     console.error('Error saving cart:', e);
                 }
@@ -1275,17 +1276,39 @@
                     items: this.cart,
                     total: this.getTotal(),
                     itemCount: this.getTotalItems(),
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
+                    currency: 'CAD'
                 };
                 
-                // Store for checkout page
+                // Store for checkout page using localStorage
                 try {
-                    sessionStorage.setItem('checkout_cart', JSON.stringify(cartData));
+                    localStorage.setItem(this.checkoutKey, JSON.stringify(cartData));
+                    console.log('Cart data exported for checkout:', cartData);
                 } catch (e) {
                     console.error('Error storing checkout data:', e);
                 }
                 
                 return cartData;
+            }
+
+            // Get checkout data (for use on checkout page)
+            getCheckoutData() {
+                try {
+                    const stored = localStorage.getItem(this.checkoutKey);
+                    return stored ? JSON.parse(stored) : null;
+                } catch (e) {
+                    console.error('Error loading checkout data:', e);
+                    return null;
+                }
+            }
+
+            // Clear checkout data after successful order
+            clearCheckoutData() {
+                try {
+                    localStorage.removeItem(this.checkoutKey);
+                } catch (e) {
+                    console.error('Error clearing checkout data:', e);
+                }
             }
         }
 
@@ -1400,8 +1423,35 @@
         window.debugCart = {
             viewCart: () => console.log(cartManager.cart),
             clearCart: () => cartManager.clearCart(),
-            exportCart: () => cartManager.exportCartForCheckout()
+            exportCart: () => cartManager.exportCartForCheckout(),
+            getCheckoutData: () => cartManager.getCheckoutData()
         };
+
+        // Global function to access cart data from other pages
+        window.getNoyesBoysCart = function() {
+            return new CartManager();
+        };
+
+        // Global function to get checkout data (for checkout.html)
+        window.getNoyesBoysCheckoutData = function() {
+            const manager = new CartManager();
+            return manager.getCheckoutData();
+        };
+
+        // Event listener for testing checkout data transfer
+        document.addEventListener('DOMContentLoaded', function() {
+            // Test if we're on checkout page by checking URL or page elements
+            if (window.location.pathname.includes('checkout.html') || document.getElementById('checkout-form')) {
+                const checkoutData = window.getNoyesBoysCheckoutData();
+                if (checkoutData) {
+                    console.log('Checkout data loaded:', checkoutData);
+                    // You can populate your checkout form here
+                    // Example: populateCheckoutForm(checkoutData);
+                } else {
+                    console.log('No checkout data found');
+                }
+            }
+        });
     </script>
 </body>
 </html>
