@@ -262,6 +262,13 @@
             box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
         }
 
+        .submit-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
         .order-item {
             display: flex;
             justify-content: space-between;
@@ -345,6 +352,30 @@
             margin-bottom: 1rem;
         }
 
+        .cart-redirect {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            margin-top: 1rem;
+        }
+
+        .cart-redirect:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+
         /* Mobile Responsiveness */
         @media (max-width: 1024px) {
             .checkout-container {
@@ -376,11 +407,11 @@
 <body>
     <header>
         <nav class="container">
-            <a href="#" class="logo">
+            <a href="line1.html" class="logo">
                 <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
                 Noyes Boys
             </a>
-            <a href="javascript:history.back()" class="back-button">
+            <a href="line1.html" class="back-button">
                 <i class="fas fa-arrow-left"></i>
                 Back to Shop
             </a>
@@ -487,7 +518,7 @@
                         <!-- Order Details (Auto-populated) -->
                         <div class="form-group">
                             <label for="orderDetails">Strains & Quantities</label>
-                            <textarea id="orderDetails" name="orderDetails" placeholder="Your selected items will appear here..."></textarea>
+                            <textarea id="orderDetails" name="orderDetails" readonly placeholder="Your selected items will appear here..."></textarea>
                         </div>
 
                         <!-- Additional Information -->
@@ -514,7 +545,7 @@
                             <p>TRACKING NUMBER SENT WITHIN 3 DAYS OF PAYMENT</p>
                         </div>
 
-                        <button type="submit" class="submit-btn">
+                        <button type="submit" class="submit-btn" id="submitBtn" disabled>
                             <i class="fas fa-paper-plane"></i> Submit Order
                         </button>
                     </form>
@@ -526,8 +557,7 @@
                     <div id="orderSummaryItems">
                         <div class="empty-cart-message">
                             <i class="fas fa-shopping-cart"></i>
-                            <p>No items in cart</p>
-                            <p>Please add items before checkout</p>
+                            <p>Loading cart...</p>
                         </div>
                     </div>
                 </div>
@@ -536,47 +566,61 @@
     </div>
 
     <script>
-        let checkoutCart = [];
+        let checkoutData = null;
 
-        // Get cart data from URL parameters
+        // Load cart data from localStorage (same system as used in line1.html)
         function loadCartData() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const cartData = urlParams.get('cart');
-            
-            if (cartData) {
-                try {
-                    checkoutCart = JSON.parse(decodeURIComponent(cartData));
-                    console.log('Cart data loaded:', checkoutCart);
-                } catch (e) {
-                    console.error('Error parsing cart data:', e);
-                    checkoutCart = [];
+            try {
+                // First try to get checkout data
+                const checkoutStoredData = localStorage.getItem('noyesboys_checkout_data');
+                if (checkoutStoredData) {
+                    checkoutData = JSON.parse(checkoutStoredData);
+                    console.log('Checkout data loaded:', checkoutData);
+                } else {
+                    // Fallback to direct cart data
+                    const cartData = localStorage.getItem('noyesboys_cart');
+                    if (cartData) {
+                        const cart = JSON.parse(cartData);
+                        checkoutData = {
+                            items: cart,
+                            total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                            itemCount: cart.reduce((sum, item) => sum + item.quantity, 0),
+                            currency: 'CAD',
+                            timestamp: Date.now()
+                        };
+                        console.log('Cart data converted to checkout:', checkoutData);
+                    }
                 }
-            } else {
-                console.warn('No cart data found in URL');
-                checkoutCart = [];
+            } catch (e) {
+                console.error('Error loading cart data:', e);
+                checkoutData = null;
             }
             
             updateOrderSummary();
             populateOrderDetails();
+            updateSubmitButton();
         }
 
         // Update order summary display
         function updateOrderSummary() {
             const summaryContainer = document.getElementById('orderSummaryItems');
             
-            if (checkoutCart.length === 0) {
+            if (!checkoutData || checkoutData.items.length === 0) {
                 summaryContainer.innerHTML = `
                     <div class="empty-cart-message">
                         <i class="fas fa-shopping-cart"></i>
                         <p>No items in cart</p>
                         <p>Please add items before checkout</p>
+                        <a href="line1.html" class="cart-redirect">
+                            <i class="fas fa-shopping-cart"></i> Shop Now
+                        </a>
                     </div>
                 `;
                 return;
             }
 
             let subtotal = 0;
-            const itemsHtml = checkoutCart.map(item => {
+            const itemsHtml = checkoutData.items.map(item => {
                 const itemTotal = item.price * item.quantity;
                 subtotal += itemTotal;
                 
@@ -592,7 +636,7 @@
             }).join('');
 
             const shipping = 15.00; // Standard shipping
-            const taxes = subtotal * 0.13; // 13% HST (example)
+            const taxes = subtotal * 0.13; // 13% HST (example - adjust as needed)
             const total = subtotal + shipping + taxes;
 
             summaryContainer.innerHTML = `
@@ -622,16 +666,29 @@
         function populateOrderDetails() {
             const orderDetailsTextarea = document.getElementById('orderDetails');
             
-            if (checkoutCart.length === 0) {
+            if (!checkoutData || checkoutData.items.length === 0) {
                 orderDetailsTextarea.value = 'No items selected';
                 return;
             }
 
-            const orderDetails = checkoutCart.map(item => 
-                `${item.quantity}x ${item.strainName} (${item.variant})`
+            const orderDetails = checkoutData.items.map(item => 
+                `${item.quantity}x ${item.strainName} (${item.variant}) - $${(item.price * item.quantity).toFixed(2)} CAD`
             ).join('\n');
             
             orderDetailsTextarea.value = orderDetails;
+        }
+
+        // Update submit button state
+        function updateSubmitButton() {
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (!checkoutData || checkoutData.items.length === 0) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-times"></i> No Items in Cart';
+            } else {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Order';
+            }
         }
 
         // Payment method selection
@@ -648,11 +705,21 @@
             document.querySelector(`input[value="${method}"]`).checked = true;
         }
 
+        // Calculate total including taxes and shipping
+        function calculateTotal() {
+            if (!checkoutData || checkoutData.items.length === 0) return 0;
+            
+            const subtotal = checkoutData.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const shipping = 15.00;
+            const taxes = subtotal * 0.13;
+            return subtotal + shipping + taxes;
+        }
+
         // Form submission
         document.getElementById('checkoutForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            if (checkoutCart.length === 0) {
+            if (!checkoutData || checkoutData.items.length === 0) {
                 alert('Your cart is empty! Please add items before checkout.');
                 return;
             }
@@ -662,64 +729,62 @@
             const orderData = Object.fromEntries(formData);
             
             // Add cart items to order data
-            orderData.cartItems = checkoutCart;
+            orderData.cartItems = checkoutData.items;
             orderData.orderTotal = calculateTotal();
+            orderData.subtotal = checkoutData.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            orderData.shipping = 15.00;
+            orderData.taxes = orderData.subtotal * 0.13;
 
             // In a real implementation, you would send this to your server
             console.log('Order submitted:', orderData);
             
-            // Show success message
-            alert(`Order Submitted Successfully!\n\nOrder Details:\n${document.getElementById('orderDetails').value}\n\nTotal: $${calculateTotal().toFixed(2)} CAD\n\nThank you ${orderData.firstName}! We will contact you shortly with payment instructions and order confirmation.`);
+            // Create order summary for display
+            const itemsList = checkoutData.items.map(item => 
+                `${item.quantity}x ${item.strainName} (${item.variant})`
+            ).join('\n');
             
-            // Redirect back to main page or show confirmation
+            // Show success message
+            alert(`Order Submitted Successfully!
+
+Order Details:
+${itemsList}
+
+Subtotal: $${orderData.subtotal.toFixed(2)} CAD
+Shipping: $${orderData.shipping.toFixed(2)} CAD
+Taxes: $${orderData.taxes.toFixed(2)} CAD
+Total: $${orderData.orderTotal.toFixed(2)} CAD
+
+Thank you ${orderData.firstName}! We will contact you shortly with payment instructions and order confirmation.
+
+Your selected payment method: ${orderData.paymentMethod.toUpperCase()}`);
+            
+            // Clear checkout data after successful submission
+            try {
+                localStorage.removeItem('noyesboys_checkout_data');
+                // Optionally clear the main cart too
+                // localStorage.removeItem('noyesboys_cart');
+            } catch (e) {
+                console.error('Error clearing checkout data:', e);
+            }
+            
+            // Redirect back to main page after a short delay
             setTimeout(() => {
-                window.location.href = 'index.html'; // or wherever your main page is
-            }, 2000);
+                window.location.href = 'line1.html';
+            }, 3000);
         });
-        // Add this to your checkout.html page
-document.addEventListener('DOMContentLoaded', function() {
-    const cartData = getCheckoutData();
-    
-    if (cartData.length > 0) {
-        displayCheckoutItems(cartData);
-        calculateTotal(cartData);
-    }
-});
 
-function displayCheckoutItems(cartData) {
-    const checkoutContainer = document.getElementById('checkout-items'); // You'll need this element
-    
-    cartData.forEach(item => {
-        // Create HTML elements to display each cart item
-        const itemElement = document.createElement('div');
-        itemElement.innerHTML = `
-            <div class="checkout-item">
-                <h4>${item.strainName}</h4>
-                <p>Quantity: ${item.quantity}</p>
-                <p>Variant: ${item.variantText}</p>
-                <p>Price: $${(item.price * item.quantity).toFixed(2)} CAD</p>
-            </div>
-        `;
-        checkoutContainer.appendChild(itemElement);
-    });
-}
-
-function calculateTotal(cartData) {
-    const total = cartData.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    document.getElementById('checkout-total').textContent = `$${total.toFixed(2)} CAD`;
-}
-        // Calculate total
-        function calculateTotal() {
-            const subtotal = checkoutCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const shipping = 15.00;
-            const taxes = subtotal * 0.13;
-            return subtotal + shipping + taxes;
-        }
-
-        // Initialize page
+        // Initialize page when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('Checkout page loaded, loading cart data...');
             loadCartData();
         });
+
+        // Debug function
+        window.debugCheckout = function() {
+            console.log('Checkout Data:', checkoutData);
+            console.log('LocalStorage Cart:', localStorage.getItem('noyesboys_cart'));
+            console.log('LocalStorage Checkout:', localStorage.getItem('noyesboys_checkout_data'));
+        };
     </script>
 </body>
 </html>
