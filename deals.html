@@ -739,85 +739,6 @@
                         <li>Complete line coverage</li>
                         <li>Free shipping</li>
                     </ul>
-                    <button class="order-button" onclick="addToCart('line1-one-each', 'Line 1 - One of Each (10 Different Strains)', 180)">Add to Cart</button>
-                </div>
-
-                <div class="pricing-card compact-card">
-                    <div class="card-header">
-                        <div class="card-title">Double Noyes Pack</div>
-                        <div class="card-price">$180</div>
-                        <div class="card-subtitle">10 seeds - Noyes strains</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>2x Alienoyes, Mangonoyes</li>
-                        <li>2x Citronoyes, Noyes Haze</li>
-                        <li>2x Noyes Breath</li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('line1-double-noyes', 'Line 1 - Double Noyes Pack (10 Seeds)', 180)">Add to Cart</button>
-                </div>
-
-                <div class="pricing-card compact-card">
-                    <div class="card-header">
-                        <div class="card-title">Double Starter Pack</div>
-                        <div class="card-price">$180</div>
-                        <div class="card-subtitle">10 seeds - Starter strains</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>2x Purple Rainbow, Cakes</li>
-                        <li>2x Cake Breath, Meat Cakes</li>
-                        <li>2x Biscotti Rocks</li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('line1-double-starter', 'Line 1 - Double Starter Pack (10 Seeds)', 180)">Add to Cart</button>
-                </div>
-
-                <div class="pricing-card compact-card featured">
-                    <div class="card-header">
-                        <div class="card-title">Line 1 Triple Pack</div>
-                        <div class="card-price">$420</div>
-                        <div class="card-subtitle">30 seeds - 3 of each</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>3x every Line 1 strain</li>
-                        <li>Complete genetics</li>
-                        <li>Premium package</li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('line1-triple', 'Line 1 - Triple Pack (30 Seeds - 3 of Each)', 420)">Add to Cart</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Line 2 Deals -->
-        <div class="section-container">
-            <div class="section-header">
-                <h2>Line 2 Deals - The Geodes</h2>
-                <p>YesNo Kush • Shiny Rocks • Noyes Rocks • Noyes Pebbles • Mango Rocks • Citrus Pebbles • Citrus Rocks • Alien Rocks • Citrus Haze Breath • Mango Aliens</p>
-            </div>
-            <div class="row-grid">
-                <div class="pricing-card compact-card">
-                    <div class="card-header">
-                        <div class="card-title">Rock Pack</div>
-                        <div class="card-price">$100</div>
-                        <div class="card-subtitle">5 seeds - Rock genetics</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>Noyes, Shiny, Alien Rocks</li>
-                        <li>Mango, Citrus Rocks</li>
-                        <li>Rock genetics focus</li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('line2-rock-pack', 'Line 2 - Rock Pack (5 Seeds)', 100)">Add to Cart</button>
-                </div>
-
-                <div class="pricing-card compact-card">
-                    <div class="card-header">
-                        <div class="card-title">Citrus Pack</div>
-                        <div class="card-price">$100</div>
-                        <div class="card-subtitle">5 seeds - Citrus genetics</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>Mango Aliens, Rocks</li>
-                        <li>Citrus Rocks, Pebbles</li>
-                        <li>Citrus Haze Breath</li>
-                    </ul>
                     <button class="order-button" onclick="addToCart('line2-citrus-pack', 'Line 2 - Citrus Pack (5 Seeds)', 100)">Add to Cart</button>
                 </div>
 
@@ -1037,18 +958,31 @@
             }
 
             // Add item to cart
-            addItem(strainId, strainName) {
+            addItem(strainId, strainName, price = null, variant = 'Standard') {
                 const select = document.getElementById(strainId + '-variant');
-                if (!select) return false;
-
-                const selectedOption = select.options[select.selectedIndex];
-                const variant = selectedOption.value;
-                const price = parseFloat(selectedOption.getAttribute('data-price'));
-                const variantText = selectedOption.textContent;
+                
+                let finalPrice, finalVariant, variantText;
+                
+                if (select) {
+                    // Handle dropdown variants (for strain pages)
+                    const selectedOption = select.options[select.selectedIndex];
+                    finalVariant = selectedOption.value;
+                    finalPrice = parseFloat(selectedOption.getAttribute('data-price'));
+                    variantText = selectedOption.textContent;
+                } else if (price !== null) {
+                    // Handle simple pricing cards (for pricing page)
+                    finalPrice = price;
+                    finalVariant = variant;
+                    variantText = variant;
+                } else {
+                    // No select element and no price provided
+                    console.error('No variant selector or price provided for:', strainId);
+                    return false;
+                }
 
                 // Check if item already exists in cart
                 const existingItem = this.cart.find(item => 
-                    item.strainId === strainId && item.variant === variant
+                    item.strainId === strainId && item.variant === finalVariant
                 );
 
                 if (existingItem) {
@@ -1057,9 +991,9 @@
                     this.cart.push({
                         strainId: strainId,
                         strainName: strainName,
-                        variant: variant,
+                        variant: finalVariant,
                         variantText: variantText,
-                        price: price,
+                        price: finalPrice,
                         quantity: 1,
                         timestamp: Date.now()
                     });
@@ -1202,10 +1136,10 @@
         const cartManager = new CartManager();
 
         // Global functions for backward compatibility
-        function addToCart(strainId, strainName) {
-            if (cartManager.addItem(strainId, strainName)) {
+        function addToCart(strainId, strainName, price) {
+            if (cartManager.addItem(strainId, strainName, price)) {
                 // Show success feedback
-                const button = document.querySelector(`button[onclick="addToCart('${strainId}', '${strainName}')"]`);
+                const button = event.target || document.querySelector(`button[onclick*="addToCart('${strainId}'"]`);
                 if (button) {
                     const originalText = button.innerHTML;
                     button.innerHTML = '<i class="fas fa-check"></i> Added!';
@@ -1242,7 +1176,7 @@
             }
         }
 
-        function proceedToCheckout() {
+        function checkout() {
             if (cartManager.cart.length === 0) {
                 alert('Your cart is empty! Please add some items before proceeding to checkout.');
                 return false;
@@ -1251,7 +1185,12 @@
             // Export cart data for checkout page
             cartManager.exportCartForCheckout();
             
-            // Allow the link to proceed normally
+            // Close cart modal
+            closeCart();
+            
+            // Redirect to checkout page
+            window.location.href = 'checkout.html';
+            
             return true;
         }
 
@@ -1338,6 +1277,85 @@
                 }
             }
         });
-        </script>
+    </script>
 </body>
-</html>
+</html>1-one-each', 'Line 1 - One of Each (10 Different Strains)', 180)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Double Noyes Pack</div>
+                        <div class="card-price">$180</div>
+                        <div class="card-subtitle">10 seeds - Noyes strains</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>2x Alienoyes, Mangonoyes</li>
+                        <li>2x Citronoyes, Noyes Haze</li>
+                        <li>2x Noyes Breath</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('line1-double-noyes', 'Line 1 - Double Noyes Pack (10 Seeds)', 180)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Double Starter Pack</div>
+                        <div class="card-price">$180</div>
+                        <div class="card-subtitle">10 seeds - Starter strains</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>2x Purple Rainbow, Cakes</li>
+                        <li>2x Cake Breath, Meat Cakes</li>
+                        <li>2x Biscotti Rocks</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('line1-double-starter', 'Line 1 - Double Starter Pack (10 Seeds)', 180)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card featured">
+                    <div class="card-header">
+                        <div class="card-title">Line 1 Triple Pack</div>
+                        <div class="card-price">$420</div>
+                        <div class="card-subtitle">30 seeds - 3 of each</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>3x every Line 1 strain</li>
+                        <li>Complete genetics</li>
+                        <li>Premium package</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('line1-triple', 'Line 1 - Triple Pack (30 Seeds - 3 of Each)', 420)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Line 2 Deals -->
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Line 2 Deals - The Geodes</h2>
+                <p>YesNo Kush • Shiny Rocks • Noyes Rocks • Noyes Pebbles • Mango Rocks • Citrus Pebbles • Citrus Rocks • Alien Rocks • Citrus Haze Breath • Mango Aliens</p>
+            </div>
+            <div class="row-grid">
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Rock Pack</div>
+                        <div class="card-price">$100</div>
+                        <div class="card-subtitle">5 seeds - Rock genetics</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>Noyes, Shiny, Alien Rocks</li>
+                        <li>Mango, Citrus Rocks</li>
+                        <li>Rock genetics focus</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('line2-rock-pack', 'Line 2 - Rock Pack (5 Seeds)', 100)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Citrus Pack</div>
+                        <div class="card-price">$100</div>
+                        <div class="card-subtitle">5 seeds - Citrus genetics</div>
+                    </div>
+                    <ul class="card-features">
+                        <li>Mango Aliens, Rocks</li>
+                        <li>Citrus Rocks, Pebbles</li>
+                        <li>Citrus Haze Breath</li>
+                    </ul>
+                    <button class="order-button" onclick="addToCart('line

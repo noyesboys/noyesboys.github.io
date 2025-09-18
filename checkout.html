@@ -45,6 +45,27 @@
             justify-content: space-between;
             align-items: center;
         }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+        }
+        
+        .nav-links a:hover {
+            color: #4ade80;
+        }
         
         .logo {
             display: flex;
@@ -221,6 +242,44 @@
             gap: 1rem;
         }
 
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .payment-option {
+            background: #0f172a;
+            border: 2px solid #475569;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #cbd5e1;
+        }
+
+        .payment-option:hover {
+            border-color: #4ade80;
+        }
+
+        .payment-option.selected {
+            border-color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+            color: #4ade80;
+        }
+
+        .payment-option input[type="radio"] {
+            display: none;
+        }
+
+        .payment-option i {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
         .submit-btn {
             background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
             color: #0a0a0a;
@@ -247,6 +306,40 @@
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            color: #cbd5e1;
+            font-weight: normal;
+        }
+
+        .important-notice {
+            background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+            border-left: 4px solid #4ade80;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .important-notice h4 {
+            color: #4ade80;
+            margin-bottom: 0.5rem;
+        }
+
+        .important-notice p {
+            color: #cbd5e1;
         }
 
         /* Empty Cart */
@@ -294,6 +387,10 @@
             .checkout-title {
                 font-size: 2rem;
             }
+
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -304,6 +401,14 @@
                 <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
                 Noyes Boys - Checkout
             </a>
+            <ul class="nav-links">
+                <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
+                <li><a href="line1.html">Line 1</a></li>
+                <li><a href="deals.html">Deals</a></li>
+                <li><a href="order_now.html">Order Now</a></li>
+                <li><a href="contact_us.html">Contact</a></li>
+                <li><a href="readmore.html">Growing Guide</a></li>
+            </ul>
         </nav>
     </header>
 
@@ -414,9 +519,50 @@
                             </div>
                         </div>
 
-                        <div class="important-notice" style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-left: 4px solid #4ade80; padding: 1rem; border-radius: 10px; margin: 1.5rem 0;">
-                            <h4 style="color: #4ade80; margin-bottom: 0.5rem;"><i class="fas fa-maple-leaf"></i> Canada Only</h4>
-                            <p style="color: #cbd5e1;">We currently ship within Canada only. All orders are processed domestically.</p>
+                        <div class="important-notice">
+                            <h4><i class="fas fa-maple-leaf"></i> Canada Only</h4>
+                            <p>We currently ship within Canada only. All orders are processed domestically.</p>
+                        </div>
+
+                        <!-- Shipping Options -->
+                        <div class="form-section">
+                            <h4>Shipping Options *</h4>
+                            <div class="shipping-options" style="display: grid; gap: 1rem; margin-top: 0.5rem;">
+                                <div class="shipping-option" style="background: #0f172a; border: 2px solid #475569; border-radius: 10px; padding: 1rem; cursor: pointer; transition: all 0.3s ease; color: #cbd5e1;" onclick="selectShipping('free-bubble')">
+                                    <input type="radio" name="shippingMethod" value="free-bubble" required style="display: none;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div>
+                                            <div style="font-weight: bold; color: #4ade80; margin-bottom: 0.25rem;">Free - No Liability Shipping</div>
+                                            <div style="font-size: 0.9rem; color: #94a3b8;">Bubble mailer (no tracking)</div>
+                                        </div>
+                                        <div style="font-weight: bold; color: #4ade80;">FREE</div>
+                                    </div>
+                                </div>
+                                <div class="shipping-option" style="background: #0f172a; border: 2px solid #475569; border-radius: 10px; padding: 1rem; cursor: pointer; transition: all 0.3s ease; color: #cbd5e1;" onclick="selectShipping('upgrade-25')">
+                                    <input type="radio" name="shippingMethod" value="upgrade-25" required style="display: none;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div>
+                                            <div style="font-weight: bold; color: #4ade80; margin-bottom: 0.25rem;">Canada Post Box + Tracking</div>
+                                            <div style="font-size: 0.9rem; color: #94a3b8;">Secure box with tracking code</div>
+                                        </div>
+                                        <div style="font-weight: bold; color: #4ade80;">+$25 CAD</div>
+                                    </div>
+                                </div>
+                                <div class="shipping-option" style="background: #0f172a; border: 2px solid #475569; border-radius: 10px; padding: 1rem; cursor: pointer; transition: all 0.3s ease; color: #cbd5e1;" onclick="selectShipping('free-300')">
+                                    <input type="radio" name="shippingMethod" value="free-300" required style="display: none;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div>
+                                            <div style="font-weight: bold; color: #4ade80; margin-bottom: 0.25rem;">FREE Canada Post Box + Tracking</div>
+                                            <div style="font-size: 0.9rem; color: #94a3b8;">On orders over $300 CAD</div>
+                                        </div>
+                                        <div style="font-weight: bold; color: #22c55e;">FREE*</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(74, 222, 128, 0.1); border-radius: 8px; font-size: 0.9rem; color: #cbd5e1;">
+                                <i class="fas fa-info-circle" style="color: #4ade80; margin-right: 0.5rem;"></i>
+                                *Free Canada Post upgrade automatically applies to orders $300+
+                            </div>
                         </div>
 
                         <!-- Contact Information -->
@@ -435,20 +581,20 @@
                         <!-- Payment Method -->
                         <div class="form-section">
                             <h4>Payment Method *</h4>
-                            <div class="payment-methods" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 0.5rem;">
-                                <div class="payment-option" style="background: #0f172a; border: 2px solid #475569; border-radius: 10px; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.3s ease; color: #cbd5e1;" onclick="selectPayment('etransfer')">
-                                    <input type="radio" name="paymentMethod" value="etransfer" required style="display: none;">
-                                    <i class="fas fa-university" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block;"></i>
+                            <div class="payment-methods">
+                                <div class="payment-option" onclick="selectPayment('etransfer')">
+                                    <input type="radio" name="paymentMethod" value="etransfer" required>
+                                    <i class="fas fa-university"></i>
                                     <div>E-Transfer</div>
                                 </div>
-                                <div class="payment-option" style="background: #0f172a; border: 2px solid #475569; border-radius: 10px; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.3s ease; color: #cbd5e1;" onclick="selectPayment('paypal')">
-                                    <input type="radio" name="paymentMethod" value="paypal" required style="display: none;">
-                                    <i class="fab fa-paypal" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block;"></i>
+                                <div class="payment-option" onclick="selectPayment('paypal')">
+                                    <input type="radio" name="paymentMethod" value="paypal" required>
+                                    <i class="fab fa-paypal"></i>
                                     <div>PayPal</div>
                                 </div>
-                                <div class="payment-option" style="background: #0f172a; border: 2px solid #475569; border-radius: 10px; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.3s ease; color: #cbd5e1;" onclick="selectPayment('crypto')">
-                                    <input type="radio" name="paymentMethod" value="crypto" required style="display: none;">
-                                    <i class="fab fa-bitcoin" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block;"></i>
+                                <div class="payment-option" onclick="selectPayment('crypto')">
+                                    <input type="radio" name="paymentMethod" value="crypto" required>
+                                    <i class="fab fa-bitcoin"></i>
                                     <div>Crypto</div>
                                 </div>
                             </div>
@@ -482,16 +628,16 @@
 
                         <!-- Newsletter Signup -->
                         <div class="form-section">
-                            <div class="checkbox-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem;">
-                                <input type="checkbox" id="newsletter" name="newsletter" style="width: auto;">
-                                <label for="newsletter" style="margin-bottom: 0; color: #cbd5e1; font-weight: normal;">Update me when a new strain becomes available?</label>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="newsletter" name="newsletter">
+                                <label for="newsletter">Update me when a new strain becomes available?</label>
                             </div>
                         </div>
 
-                        <div class="important-notice" style="background: linear-gradient(135deg, #374151 0%, #4b5563 100%); border-left: 4px solid #4ade80; padding: 1rem; border-radius: 10px; margin: 1.5rem 0;">
-                            <h4 style="color: #4ade80; margin-bottom: 0.5rem;"><i class="fas fa-info-circle"></i> Order Process</h4>
-                            <p style="color: #cbd5e1; margin-bottom: 0.5rem;"><strong>WE WILL CONTACT YOU WITH PAYMENT LINK / CONFIRMATION OF SALE</strong></p>
-                            <p style="color: #cbd5e1;">TRACKING NUMBER SENT WITHIN 3 DAYS OF PAYMENT</p>
+                        <div class="important-notice">
+                            <h4><i class="fas fa-info-circle"></i> Order Process</h4>
+                            <p><strong>WE WILL CONTACT YOU WITH PAYMENT LINK / CONFIRMATION OF SALE</strong></p>
+                            <p>TRACKING NUMBER SENT WITHIN 3 DAYS OF PAYMENT</p>
                         </div>
 
                         <button type="submit" class="submit-btn">
@@ -504,168 +650,265 @@
     </section>
 
     <script>
-        class CheckoutManager {
-    constructor() {
-        this.cartData = null;
-        this.loadCartData();
-    }
+        // Initialize EmailJS when page loads
+        emailjs.init("YOUR_PUBLIC_KEY_HERE"); // Replace with your EmailJS public key
 
-    loadCartData() {
-        try {
-            // First try to load from localStorage (where your cart page actually stores data)
-            let checkoutData = localStorage.getItem('noyesboys_checkout_data');
-            if (checkoutData) {
-                this.cartData = JSON.parse(checkoutData);
-                console.log('Loaded checkout data from localStorage:', this.cartData);
-            } else {
-                // Fallback to regular cart data from localStorage (not sessionStorage!)
-                const regularCart = localStorage.getItem('noyesboys_cart');
-                if (regularCart) {
-                    const cartItems = JSON.parse(regularCart);
-                    this.cartData = {
-                        items: cartItems,
-                        total: cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-                        itemCount: cartItems.reduce((sum, item) => sum + item.quantity, 0),
-                        timestamp: Date.now()
-                    };
-                    console.log('Loaded regular cart data from localStorage:', this.cartData);
+        // Email sending function using EmailJS
+        async function sendOrderEmail(orderData, cartData) {
+            try {
+                // Format the cart items for email
+                const itemsList = cartData.items.map(item => 
+                    `${item.quantity}x ${item.strainName} (${item.variant}) - $${(item.price * item.quantity).toFixed(2)} CAD`
+                ).join('\n');
+
+                const subtotal = cartData.total;
+                const shipping = 15.00;
+                const taxes = subtotal * 0.13;
+                const total = subtotal + shipping + taxes;
+
+                // Email parameters that match your EmailJS template
+                const emailParams = {
+                    to_email: 'thenoyesboyz@gmail.com',
+                    customer_name: `${orderData.firstName} ${orderData.lastName}`,
+                    customer_email: orderData.email,
+                    customer_phone: orderData.phone || 'Not provided',
+                    customer_address: `${orderData.streetAddress}, ${orderData.city}, ${orderData.province} ${orderData.zipCode}`,
+                    payment_method: orderData.paymentMethod ? orderData.paymentMethod.toUpperCase() : 'Not selected',
+                    order_items: itemsList,
+                    subtotal: `$${subtotal.toFixed(2)} CAD`,
+                    shipping: `$${shipping.toFixed(2)} CAD`,
+                    taxes: `$${taxes.toFixed(2)} CAD`,
+                    total: `$${total.toFixed(2)} CAD`,
+                    additional_info: orderData.additionalInfo || 'None',
+                    promo_code: orderData.promoCode || 'None',
+                    newsletter: orderData.newsletter ? 'Yes' : 'No',
+                    order_date: new Date().toLocaleDateString('en-CA'),
+                    order_time: new Date().toLocaleTimeString('en-CA'),
+                    order_id: orderData.orderId
+                };
+
+                console.log('Sending email with params:', emailParams);
+
+                // Send email using EmailJS - replace with your actual IDs
+                const response = await emailjs.send(
+                    'YOUR_SERVICE_ID_HERE', // Replace with your EmailJS service ID
+                    'YOUR_TEMPLATE_ID_HERE', // Replace with your EmailJS template ID
+                    emailParams
+                );
+
+                console.log('Email sent successfully:', response);
+                return { success: true, response: response };
+            } catch (error) {
+                console.error('Failed to send email:', error);
+                return { success: false, error: error };
+            }
+        }
+
+        class CheckoutManager {
+            constructor() {
+                this.cartData = null;
+                this.loadCartData();
+            }
+
+            loadCartData() {
+                try {
+                    // First try to load from localStorage (where your cart page actually stores data)
+                    let checkoutData = localStorage.getItem('noyesboys_checkout_data');
+                    if (checkoutData) {
+                        this.cartData = JSON.parse(checkoutData);
+                        console.log('Loaded checkout data from localStorage:', this.cartData);
+                    } else {
+                        // Fallback to regular cart data from localStorage
+                        const regularCart = localStorage.getItem('noyesboys_cart');
+                        if (regularCart) {
+                            const cartItems = JSON.parse(regularCart);
+                            this.cartData = {
+                                items: cartItems,
+                                total: cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                                itemCount: cartItems.reduce((sum, item) => sum + item.quantity, 0),
+                                timestamp: Date.now()
+                            };
+                            console.log('Loaded regular cart data from localStorage:', this.cartData);
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error loading cart data:', e);
+                    this.cartData = null;
+                }
+
+                this.displayCheckout();
+            }
+
+            displayCheckout() {
+                const loadingState = document.getElementById('loadingState');
+                const emptyCartState = document.getElementById('emptyCartState');
+                const checkoutContent = document.getElementById('checkoutContent');
+
+                // Hide loading
+                loadingState.style.display = 'none';
+
+                if (!this.cartData || !this.cartData.items || this.cartData.items.length === 0) {
+                    // Show empty cart
+                    emptyCartState.style.display = 'block';
+                    checkoutContent.style.display = 'none';
+                } else {
+                    // Show checkout content
+                    emptyCartState.style.display = 'none';
+                    checkoutContent.style.display = 'grid';
+                    this.populateOrderSummary();
                 }
             }
-        } catch (e) {
-            console.error('Error loading cart data:', e);
-            this.cartData = null;
+
+            populateOrderSummary() {
+                const orderItems = document.getElementById('orderItems');
+                const subtotal = document.getElementById('subtotal');
+                const grandTotal = document.getElementById('grandTotal');
+                const orderDetailsTextarea = document.getElementById('orderDetails');
+
+                if (!this.cartData || !this.cartData.items) return;
+
+                // Populate order items
+                orderItems.innerHTML = this.cartData.items.map(item => {
+                    const itemTotal = item.price * item.quantity;
+                    return `
+                        <div class="order-item">
+                            <div class="item-details">
+                                <div class="item-name">${item.strainName}</div>
+                                <div class="item-variant">${item.variantText} × ${item.quantity}</div>
+                            </div>
+                            <div class="item-price">
+                                $${itemTotal.toFixed(2)} CAD
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Update totals
+                subtotal.textContent = this.cartData.total.toFixed(2);
+                grandTotal.textContent = this.cartData.total.toFixed(2);
+
+                // Populate order details textarea with cart items
+                if (orderDetailsTextarea) {
+                    const orderDetails = this.cartData.items.map(item => 
+                        `${item.quantity}x ${item.strainName} (${item.variant})`
+                    ).join('\n');
+                    orderDetailsTextarea.value = orderDetails;
+                }
+            }
+
+            async handleFormSubmit(formData) {
+                // Generate unique order ID
+                const orderId = 'NB-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+                
+                // Add order ID to form data
+                formData.orderId = orderId;
+
+                console.log('Processing order:', formData);
+
+                // Send email notification
+                const emailResult = await sendOrderEmail(formData, this.cartData);
+                
+                if (emailResult.success) {
+                    console.log('Email sent successfully!');
+                    alert(`Order submitted successfully!\n\nOrder ID: ${orderId}\nTotal: $${this.cartData.total.toFixed(2)} CAD\n\nEmail notification sent to Noyes Boys!\n\nThank you for your order! We will contact you shortly with payment instructions.`);
+                } else {
+                    console.error('Email failed to send:', emailResult.error);
+                    alert(`Order submitted!\n\nOrder ID: ${orderId}\nTotal: $${this.cartData.total.toFixed(2)} CAD\n\nNote: Email notification failed to send. Please contact us directly at thenoyesboyz@gmail.com with your order ID.\n\nThank you for your order!`);
+                }
+
+                // Clear the cart after successful submission
+                localStorage.removeItem('noyesboys_checkout_data');
+                localStorage.removeItem('noyesboys_cart');
+
+                // Redirect back to main page after delay
+                setTimeout(() => {
+                    window.location.href = 'line1.html';
+                }, 3000);
+            }
         }
 
-        this.displayCheckout();
-    }
-
-    displayCheckout() {
-        const loadingState = document.getElementById('loadingState');
-        const emptyCartState = document.getElementById('emptyCartState');
-        const checkoutContent = document.getElementById('checkoutContent');
-
-        // Hide loading
-        loadingState.style.display = 'none';
-
-        if (!this.cartData || !this.cartData.items || this.cartData.items.length === 0) {
-            // Show empty cart
-            emptyCartState.style.display = 'block';
-            checkoutContent.style.display = 'none';
-        } else {
-            // Show checkout content
-            emptyCartState.style.display = 'none';
-            checkoutContent.style.display = 'grid';
-            this.populateOrderSummary();
-        }
-    }
-
-    populateOrderSummary() {
-        const orderItems = document.getElementById('orderItems');
-        const subtotal = document.getElementById('subtotal');
-        const grandTotal = document.getElementById('grandTotal');
-        const orderDetailsTextarea = document.getElementById('orderDetails');
-
-        if (!this.cartData || !this.cartData.items) return;
-
-        // Populate order items
-        orderItems.innerHTML = this.cartData.items.map(item => {
-            const itemTotal = item.price * item.quantity;
-            return `
-                <div class="order-item">
-                    <div class="item-details">
-                        <div class="item-name">${item.strainName}</div>
-                        <div class="item-variant">${item.variantText} × ${item.quantity}</div>
-                    </div>
-                    <div class="item-price">
-                        ${itemTotal.toFixed(2)} CAD
-                    </div>
-                </div>
-            `;
-        }).join('');
-
-        // Update totals
-        subtotal.textContent = this.cartData.total.toFixed(2);
-        grandTotal.textContent = this.cartData.total.toFixed(2);
-
-        // Populate order details textarea with cart items
-        if (orderDetailsTextarea) {
-            const orderDetails = this.cartData.items.map(item => 
-                `${item.quantity}x ${item.strainName} (${item.variant})`
-            ).join('\n');
-            orderDetailsTextarea.value = orderDetails;
-        }
-    }
-
-    handleFormSubmit(formData) {
-        // Combine order data with form data
-        const orderData = {
-            cart: this.cartData,
-            customer: formData,
-            orderDate: new Date().toISOString(),
-            orderId: 'NB-' + Date.now()
-        };
-
-        console.log('Complete order data:', orderData);
-
-        // Here you would typically send this data to your server
-        alert(`Order submitted!\n\nOrder ID: ${orderData.orderId}\nTotal: $${this.cartData.total.toFixed(2)} CAD\n\nThank you for your order!`);
-
-        // Clear the cart after successful submission
-        localStorage.removeItem('noyesboys_checkout_data');
-        localStorage.removeItem('noyesboys_cart');
-
-        // Redirect or show confirmation page
-        // window.location.href = 'order-confirmation.html';
-    }
-}
-
-// Initialize checkout manager
-const checkoutManager = new CheckoutManager();
-
-// Debug function updated
-window.debugCheckout = {
-    viewCartData: () => console.log('Cart Data:', checkoutManager.cartData),
-    viewAllStorage: () => {
-        console.log('=== localStorage ===');
-        console.log('Checkout Data:', localStorage.getItem('noyesboys_checkout_data'));
-        console.log('Regular Cart:', localStorage.getItem('noyesboys_cart'));
-        console.log('=== sessionStorage ===');
-        console.log('Checkout Cart:', sessionStorage.getItem('checkout_cart'));
-        console.log('Regular Cart:', sessionStorage.getItem('noyesboys_cart'));
-    },
-    clearStorage: () => {
-        localStorage.removeItem('noyesboys_checkout_data');
-        localStorage.removeItem('noyesboys_cart');
-        sessionStorage.removeItem('checkout_cart');
-        sessionStorage.removeItem('noyesboys_cart');
-        location.reload();
-    }
-};
+        // Initialize checkout manager
+        const checkoutManager = new CheckoutManager();
 
         // Payment method selection
         function selectPayment(method) {
             // Remove selected class from all options
             document.querySelectorAll('.payment-option').forEach(option => {
                 option.classList.remove('selected');
-                option.style.borderColor = '#475569';
-                option.style.background = '#0f172a';
-                option.style.color = '#cbd5e1';
             });
             
             // Add selected class to clicked option
             const selectedOption = document.querySelector(`.payment-option[onclick="selectPayment('${method}')"]`);
             selectedOption.classList.add('selected');
-            selectedOption.style.borderColor = '#4ade80';
-            selectedOption.style.background = 'rgba(74, 222, 128, 0.1)';
-            selectedOption.style.color = '#4ade80';
             
             // Check the radio button
             document.querySelector(`input[value="${method}"]`).checked = true;
         }
 
+        // Shipping method selection
+        function selectShipping(method) {
+            // Remove selected class from all shipping options
+            document.querySelectorAll('.shipping-option').forEach(option => {
+                option.classList.remove('selected');
+                option.style.borderColor = '#475569';
+                option.style.background = '#0f172a';
+            });
+            
+            // Add selected class to clicked option
+            const selectedOption = document.querySelector(`.shipping-option[onclick="selectShipping('${method}')"]`);
+            selectedOption.classList.add('selected');
+            selectedOption.style.borderColor = '#4ade80';
+            selectedOption.style.background = 'rgba(74, 222, 128, 0.1)';
+            
+            // Check the radio button
+            document.querySelector(`input[value="${method}"]`).checked = true;
+
+            // Update shipping cost display
+            updateShippingCost(method);
+        }
+
+        // Update shipping cost in order summary
+        function updateShippingCost(shippingMethod) {
+            const shippingElement = document.getElementById('shipping');
+            const grandTotalElement = document.getElementById('grandTotal');
+            const subtotalValue = parseFloat(document.getElementById('subtotal').textContent);
+            
+            let shippingCost = 0;
+            
+            if (shippingMethod === 'upgrade-25') {
+                shippingCost = 25.00;
+            } else if (shippingMethod === 'free-300') {
+                // Check if order qualifies for free upgrade
+                if (subtotalValue >= 300) {
+                    shippingCost = 0;
+                } else {
+                    shippingCost = 0; // Still free but will show note
+                }
+            } else {
+                shippingCost = 0; // free-bubble
+            }
+            
+            // Update shipping display
+            if (shippingCost > 0) {
+                shippingElement.textContent = `${shippingCost.toFixed(2)} CAD`;
+            } else {
+                shippingElement.textContent = 'FREE';
+            }
+            
+            // Update grand total
+            const newTotal = subtotalValue + shippingCost;
+            grandTotalElement.textContent = newTotal.toFixed(2);
+        }
+
         // Handle form submission
-        document.getElementById('checkoutForm').addEventListener('submit', function(e) {
+        document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
             e.preventDefault();
+            
+            // Show loading state on submit button
+            const submitBtn = this.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Order...';
+            submitBtn.disabled = true;
             
             const formData = new FormData(this);
             const formObject = {};
@@ -675,11 +918,14 @@ window.debugCheckout = {
             }
 
             // Basic validation
-            const requiredFields = ['email', 'firstName', 'lastName', 'streetAddress', 'city', 'province', 'zipCode', 'paymentMethod'];
+            const requiredFields = ['email', 'firstName', 'lastName', 'streetAddress', 'city', 'province', 'zipCode', 'paymentMethod', 'shippingMethod'];
             const missingFields = requiredFields.filter(field => !formObject[field]);
             
             if (missingFields.length > 0) {
                 alert('Please fill in all required fields: ' + missingFields.join(', '));
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
                 return;
             }
 
@@ -687,6 +933,9 @@ window.debugCheckout = {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(formObject.email)) {
                 alert('Please enter a valid email address.');
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
                 return;
             }
 
@@ -695,6 +944,9 @@ window.debugCheckout = {
                 const postalCodeRegex = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
                 if (!postalCodeRegex.test(formObject.zipCode)) {
                     alert('Please enter a valid Canadian postal code (e.g., K1A 0A6).');
+                    // Reset button
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
                     return;
                 }
             }
@@ -703,19 +955,28 @@ window.debugCheckout = {
             formObject.cartItems = checkoutManager.cartData ? checkoutManager.cartData.items : [];
             formObject.orderTotal = checkoutManager.cartData ? checkoutManager.cartData.total : 0;
 
-            checkoutManager.handleFormSubmit(formObject);
+            await checkoutManager.handleFormSubmit(formObject);
         });
 
-        // Debug function
+        // Debug functions
         window.debugCheckout = {
             viewCartData: () => console.log('Cart Data:', checkoutManager.cartData),
-            viewSessionStorage: () => {
-                console.log('Checkout Cart:', sessionStorage.getItem('checkout_cart'));
-                console.log('Regular Cart:', sessionStorage.getItem('noyesboys_cart'));
+            viewAllStorage: () => {
+                console.log('=== localStorage ===');
+                console.log('Checkout Data:', localStorage.getItem('noyesboys_checkout_data'));
+                console.log('Regular Cart:', localStorage.getItem('noyesboys_cart'));
+            },
+        // Debug functions
+        window.debugCheckout = {
+            viewCartData: () => console.log('Cart Data:', checkoutManager.cartData),
+            viewAllStorage: () => {
+                console.log('=== localStorage ===');
+                console.log('Checkout Data:', localStorage.getItem('noyesboys_checkout_data'));
+                console.log('Regular Cart:', localStorage.getItem('noyesboys_cart'));
             },
             clearStorage: () => {
-                sessionStorage.removeItem('checkout_cart');
-                sessionStorage.removeItem('noyesboys_cart');
+                localStorage.removeItem('noyesboys_checkout_data');
+                localStorage.removeItem('noyesboys_cart');
                 location.reload();
             }
         };
