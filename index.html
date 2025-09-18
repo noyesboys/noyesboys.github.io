@@ -25,6 +25,188 @@
             color: #333;
             background: #0a0a0a;
         }
+
+        /* Age Verification Overlay - ADD THIS CSS */
+        .age-verification-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .age-verification-modal {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid #4ade80;
+            box-shadow: 0 20px 60px rgba(74, 222, 128, 0.3);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        .age-verification-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1.5rem;
+            border-radius: 50%;
+            border: 3px solid #4ade80;
+            padding: 10px;
+            background: #0f172a;
+        }
+
+        .age-verification-logo img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .age-verification-title {
+            color: #4ade80;
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .age-verification-subtitle {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .age-verification-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .age-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            min-width: 140px;
+        }
+
+        .age-btn-yes {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+        }
+
+        .age-btn-yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.6);
+        }
+
+        .age-btn-no {
+            background: transparent;
+            color: #ef4444;
+            border: 2px solid #ef4444;
+        }
+
+        .age-btn-no:hover {
+            background: #ef4444;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .age-verification-disclaimer {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .age-verification-brand {
+            color: #4ade80;
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .underage-message {
+            display: none;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+            animation: shake 0.6s ease-in-out;
+        }
+
+        .underage-message h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .underage-message p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Age verification animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shake {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(0); }
+            10% { transform: translateX(-10px); }
+            30% { transform: translateX(10px); }
+            60% { transform: translateX(-5px); }
+        }
+
+        /* Hide website content initially */
+        body.age-not-verified {
+            overflow: hidden;
+        }
+
+        body.age-not-verified .main-site-content {
+            filter: blur(5px);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        body.age-verified .main-site-content {
+            filter: none;
+            pointer-events: auto;
+            user-select: auto;
+        }
         
         .container {
             max-width: 1200px;
@@ -418,6 +600,24 @@
         
         /* Responsive */
         @media (max-width: 768px) {
+            .age-verification-modal {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            .age-verification-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .age-btn {
+                width: 100%;
+            }
+
+            .age-verification-title {
+                font-size: 1.5rem;
+            }
+            
             .masthead h1 {
                 font-size: 2rem;
                 letter-spacing: 0.4rem;
@@ -449,207 +649,319 @@
         }
     </style>
 </head>
-<body>
-    <!-- Header -->
-    <header>
-        <nav class="container">
-            <a href="assets/img/noyes boys logo.png" class="logo">
-                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
-                The Noyes Boys
-            </a>
-            <ul class="nav-links">
-                <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
-                <li><a href="deals.html">Deals</a></li>
-                <li><a href="order_now.html">Order Now</a></li>
-                <li><a href="contact_us.html">Contact</a></li>
-                <li><a href="affiliates.html">Affiliate Program</a></li>
-                <li><a href="reviews.html">Reviews</a></li>
-                <li><a href="readmore.html">Growing Guide</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- Masthead Banner -->
-    <section class="masthead" id="home">
-        <div class="container">
-            <div class="masthead-content">
-                <h1>NOYES BOYS GENETICS</h1>
-                <h2>Premium Canadian Cannabis Seeds</h2>
-                <div class="cta-buttons">
-                    <a href="genetics.html" class="btn btn-secondary">Shop Seeds</a>
-                    <a href="deals.html" class="btn btn-secondary">Pricing</a>
-                    <a href="https://en.seedfinder.eu/database/breeder/Noyes_Boys_Genetics/" class="btn btn-secondary">Learn More</a>
-                </div>
+<body class="age-not-verified">
+    <!-- ADD THE AGE VERIFICATION OVERLAY HERE - RIGHT AFTER <body> TAG -->
+    <div class="age-verification-overlay" id="ageVerificationOverlay">
+        <div class="age-verification-modal">
+            <div class="age-verification-logo">
+                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo">
+            </div>
+            
+            <h2 class="age-verification-title">Age Verification</h2>
+            <p class="age-verification-subtitle">
+                To buy our Feminized Seeds, please verify that you meet the legal age requirement in your area.
+            </p>
+            
+            <div class="age-verification-buttons">
+                <button class="age-btn age-btn-yes" onclick="verifyAge(true)">
+                    Yes, I'm over 19
+                </button>
+                <button class="age-btn age-btn-no" onclick="verifyAge(false)">
+                    No, I'm under 19
+                </button>
+            </div>
+            
+            <p class="age-verification-disclaimer">
+                By confirming your age, you acknowledge that you are legally eligible to view and purchase cannabis seed products. If you do not meet the age requirement, you will not be able to proceed.
+            </p>
+            
+            <div class="age-verification-brand">THE NOYES BOYS</div>
+            
+            <div class="underage-message" id="underageMessage">
+                <h3>Tsk Tsk</h3>
+                <p>You must be of legal age to view cannabis-related content. Please return when you meet the age requirement in your jurisdiction.</p>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Features -->
-    <section class="features">
-        <div class="container">
-            <h2 class="section-title">Why Choose The Noyes Boys</h2>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🏆</div>
-                    <h3>Premium Genetics</h3>
-                    <p>Hand-selected and bred for superior plant structure, mildew resistance, and exceptional yields. Our F8 genetics represent years of careful breeding and selection.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🇨🇦</div>
-                    <h3>Canadian Bred</h3>
-                    <p>Specifically developed for Canadian growing conditions. Our strains thrive in shorter seasons and are optimized for both indoor and outdoor cultivation.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🌱</div>
-                    <h3>Beginner Friendly</h3>
-                    <p>Easy-to-grow strains with robust genetics, disease resistance, and forgiving growth characteristics. Perfect for first-time growers and veterans alike.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔬</div>
-                    <h3>Craft Quality</h3>
-                    <p>Small-batch breeding ensures quality over quantity. Each seed represents careful selection for potency, flavor, structure, and overall plant health.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📦</div>
-                    <h3>Discreet Shipping</h3>
-                    <p>Fast, secure, and completely discreet shipping across Canada. Your privacy is our priority with unmarked packaging and secure payment options.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">✅</div>
-                    <h3>Germination Guarantee</h3>
-                    <p>We stand behind our genetics with a germination guarantee. High-quality seeds with proven viability and consistent results every time.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- WRAP ALL YOUR EXISTING CONTENT IN THIS DIV -->
+    <div class="main-site-content">
+        <!-- Header -->
+        <header>
+            <nav class="container">
+                <a href="assets/img/noyes boys logo.png" class="logo">
+                    <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+                    The Noyes Boys
+                </a>
+                <ul class="nav-links">
+                    <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
+                    <li><a href="deals.html">Deals</a></li>
+                    <li><a href="order_now.html">Order Now</a></li>
+                    <li><a href="contact_us.html">Contact</a></li>
+                    <li><a href="affiliates.html">Affiliate Program</a></li>
+                    <li><a href="reviews.html">Reviews</a></li>
+                    <li><a href="readmore.html">Growing Guide</a></li>
+                </ul>
+            </nav>
+        </header>
 
-    <!-- Product Categories -->
-    <section class="categories" id="seeds">
-        <div class="container">
-            <h2 class="section-title">Our Seed Collection</h2>
-            <div class="categories-grid">
-                <div class="category-card">
-                    <div class="category-image">🌸</div>
-                    <div class="category-content">
-                        <h3>Feminized Seeds</h3>
-                        <p>99.9% female plants guaranteed. Our feminized cannabis seeds eliminate the guesswork and maximize your growing space with productive female plants only.</p>
-                        <a class="btn btn-primary" href="genetics.html">Shop Feminized</a>
-                    </div>
-                </div>
-                <div class="category-card">
-                    <div class="category-image">⚡</div>
-                    <div class="category-content">
-                        <h3>Regular Seeds</h3>
-                        <p>To be added in the near future; by request.</p>
-                        <a class="btn btn-primary" href="nextstrains.html">Coming Soon</a>
-                    </div>
-                </div>
-                <div class="category-card">
-                    <div class="category-image">ORIGINALS</div>
-                    <div class="category-content">
-                        <h3>Original Noyes Boys Strains</h3>
-                        <p>Our signature purple strains bred specifically for Canadian conditions. Beautiful colors, exceptional flavor, and robust growth characteristics.</p>
-                        <a class="btn btn-primary" href="line1.html">Shop Originals</a>
-                    </div>
-                </div>
-                <div class="category-card">
-                    <div class="category-image">OG</div>
-                    <div class="category-content">
-                        <h3>OG crosses</h3>
-                        <p>Your old favourites; bred with Noyes Kush for potency, structure, and resilience.</p>
-                        <a class="btn btn-primary" href="line3.html">Shop OG Strains</a>
-                    </div>
-                </div>
-                <div class="category-card">
-                    <div class="category-image">GEODES🗿</div>
-                    <div class="category-content">
-                        <h3>"Geode" crosses</h3>
-                        <p>Rock Hard structure, Potency and Reilience!.</p>
-                        <a class="btn btn-primary" href="line2.html">Shop Geodes</a>
-                    </div>
-                </div>
-                <div class="category-card">
-                    <div class="category-image">SKUNK🤢</div>
-                    <div class="category-content">
-                        <h3>Skunk crosses</h3>
-                        <p>Everything SKUNK.</p>
-                        <a class="btn btn-primary" href="line4.html">Shop Skunk</a>
+        <!-- Masthead Banner -->
+        <section class="masthead" id="home">
+            <div class="container">
+                <div class="masthead-content">
+                    <h1>NOYES BOYS GENETICS</h1>
+                    <h2>Premium Canadian Cannabis Seeds</h2>
+                    <div class="cta-buttons">
+                        <a href="genetics.html" class="btn btn-secondary">Shop Seeds</a>
+                        <a href="deals.html" class="btn btn-secondary">Pricing</a>
+                        <a href="https://en.seedfinder.eu/database/breeder/Noyes_Boys_Genetics/" class="btn btn-secondary">Learn More</a>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- About Section -->
-    <section class="about" id="about">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-text">
-                    <h2>The Noyes Boys Story</h2>
-                    <p>Founded with a passion for cannabis genetics and a commitment to quality, The Noyes Boys Seed Bank has been serving Canadian growers since 2015. We believe that great cannabis starts with exceptional genetics.</p>
-                    <p>Our breeding program focuses on plant structure and resilience first, knowing that potency and flavor naturally follow when you work with the right genetics. Every strain in our collection has been carefully selected and bred for Canadian growing conditions.</p>
-                    <p>We breed for Canadian Purples, dense but well-spaced internoding, mildew resistance, and ease of growth. Our goal is to provide genetics that perform consistently, whether you're a first-time grower or a seasoned cultivator.</p>
-                </div>
-                <div class="about-image"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Trust Indicators -->
-    <section class="trust">
-        <div class="container">
-            <div class="trust-grid">
-                <div class="trust-item">
-                    <div class="trust-number">15+</div>
-                    <div class="trust-text">Years of Breeding Experience</div>
-                </div>
-                <div class="trust-item">
-                    <div class="trust-number">99%</div>
-                    <div class="trust-text">Customer Satisfaction Rate</div>
-                </div>
-                <div class="trust-item">
-                    <div class="trust-number">95%+</div>
-                    <div class="trust-text">Germination Rate Guaranteed</div>
-                </div>
-                <div class="trust-item">
-                    <div class="trust-number">100%</div>
-                    <div class="trust-text">Canadian Grown & Bred</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer id="contact">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>The Noyes Boys Seed Bank</h3>
-                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
-                        <img src="assets/img/noyes boys logo.png" alt="Logo" style="width: 40px; height: 40px; margin-right: 10px;">
-                        <span style="color: #4ade80; font-weight: bold;">Est. 2015</span>
+        <!-- Features -->
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">Why Choose The Noyes Boys</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🏆</div>
+                        <h3>Premium Genetics</h3>
+                        <p>Hand-selected and bred for superior plant structure, mildew resistance, and exceptional yields. Our F8 genetics represent years of careful breeding and selection.</p>
                     </div>
-                    <p>Premium Canadian cannabis seeds hand-bred for quality, structure, and resilience. Serving growers across Canada with exceptional genetics.</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <p><a href="genetics.html">Browse Seeds</a></p>
-                    <p><a href="contact_us.html">Socials</a></p>
-                    <p><a href="readmore.html">Growing Guide</a></p>
-                    <p><a href="noyeskush.html">Learn about Noyes Kush</a></p>
-                </div>
-                <div class="footer-section">
-                    <h3>Customer Service</h3>
-                    <p><a href="deals.html">Deals</a></p>
-                    <p><a href="deals.html">Shipping Info</a></p>
-                    <p><a href="readmore.html">Learning Centre</a></p>
+                    <div class="feature-card">
+                        <div class="feature-icon">🇨🇦</div>
+                        <h3>Canadian Bred</h3>
+                        <p>Specifically developed for Canadian growing conditions. Our strains thrive in shorter seasons and are optimized for both indoor and outdoor cultivation.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🌱</div>
+                        <h3>Beginner Friendly</h3>
+                        <p>Easy-to-grow strains with robust genetics, disease resistance, and forgiving growth characteristics. Perfect for first-time growers and veterans alike.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔬</div>
+                        <h3>Craft Quality</h3>
+                        <p>Small-batch breeding ensures quality over quantity. Each seed represents careful selection for potency, flavor, structure, and overall plant health.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📦</div>
+                        <h3>Discreet Shipping</h3>
+                        <p>Fast, secure, and completely discreet shipping across Canada. Your privacy is our priority with unmarked packaging and secure payment options.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">✅</div>
+                        <h3>Germination Guarantee</h3>
+                        <p>We stand behind our genetics with a germination guarantee. High-quality seeds with proven viability and consistent results every time.</p>
+                    </div>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 The Noyes Boys Seed Bank. All rights reserved.</p>
+        </section>
+
+        <!-- Product Categories -->
+        <section class="categories" id="seeds">
+            <div class="container">
+                <h2 class="section-title">Our Seed Collection</h2>
+                <div class="categories-grid">
+                    <div class="category-card">
+                        <div class="category-image">🌸</div>
+                        <div class="category-content">
+                            <h3>Feminized Seeds</h3>
+                            <p>99.9% female plants guaranteed. Our feminized cannabis seeds eliminate the guesswork and maximize your growing space with productive female plants only.</p>
+                            <a class="btn btn-primary" href="genetics.html">Shop Feminized</a>
+                        </div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-image">⚡</div>
+                        <div class="category-content">
+                            <h3>Regular Seeds</h3>
+                            <p>To be added in the near future; by request.</p>
+                            <a class="btn btn-primary" href="nextstrains.html">Coming Soon</a>
+                        </div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-image">ORIGINALS</div>
+                        <div class="category-content">
+                            <h3>Original Noyes Boys Strains</h3>
+                            <p>Our signature purple strains bred specifically for Canadian conditions. Beautiful colors, exceptional flavor, and robust growth characteristics.</p>
+                            <a class="btn btn-primary" href="line1.html">Shop Originals</a>
+                        </div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-image">OG</div>
+                        <div class="category-content">
+                            <h3>OG crosses</h3>
+                            <p>Your old favourites; bred with Noyes Kush for potency, structure, and resilience.</p>
+                            <a class="btn btn-primary" href="line3.html">Shop OG Strains</a>
+                        </div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-image">GEODES🗿</div>
+                        <div class="category-content">
+                            <h3>"Geode" crosses</h3>
+                            <p>Rock Hard structure, Potency and Reilience!.</p>
+                            <a class="btn btn-primary" href="line2.html">Shop Geodes</a>
+                        </div>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-image">SKUNK🤢</div>
+                        <div class="category-content">
+                            <h3>Skunk crosses</h3>
+                            <p>Everything SKUNK.</p>
+                            <a class="btn btn-primary" href="line4.html">Shop Skunk</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </footer>
+        </section>
+
+        <!-- About Section -->
+        <section class="about" id="about">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-text">
+                        <h2>The Noyes Boys Story</h2>
+                        <p>Founded with a passion for cannabis genetics and a commitment to quality, The Noyes Boys Seed Bank has been serving Canadian growers since 2015. We believe that great cannabis starts with exceptional genetics.</p>
+                        <p>Our breeding program focuses on plant structure and resilience first, knowing that potency and flavor naturally follow when you work with the right genetics. Every strain in our collection has been carefully selected and bred for Canadian growing conditions.</p>
+                        <p>We breed for Canadian Purples, dense but well-spaced internoding, mildew resistance, and ease of growth. Our goal is to provide genetics that perform consistently, whether you're a first-time grower or a seasoned cultivator.</p>
+                    </div>
+                    <div class="about-image"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust Indicators -->
+        <section class="trust">
+            <div class="container">
+                <div class="trust-grid">
+                    <div class="trust-item">
+                        <div class="trust-number">15+</div>
+                        <div class="trust-text">Years of Breeding Experience</div>
+                    </div>
+                    <div class="trust-item">
+                        <div class="trust-number">99%</div>
+                        <div class="trust-text">Customer Satisfaction Rate</div>
+                    </div>
+                    <div class="trust-item">
+                        <div class="trust-number">95%+</div>
+                        <div class="trust-text">Germination Rate Guaranteed</div>
+                    </div>
+                    <div class="trust-item">
+                        <div class="trust-number">100%</div>
+                        <div class="trust-text">Canadian Grown & Bred</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer id="contact">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>The Noyes Boys Seed Bank</h3>
+                        <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                            <img src="assets/img/noyes boys logo.png" alt="Logo" style="width: 40px; height: 40px; margin-right: 10px;">
+                            <span style="color: #4ade80; font-weight: bold;">Est. 2015</span>
+                        </div>
+                        <p>Premium Canadian cannabis seeds hand-bred for quality, structure, and resilience. Serving growers across Canada with exceptional genetics.</p>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Quick Links</h3>
+                        <p><a href="genetics.html">Browse Seeds</a></p>
+                        <p><a href="contact_us.html">Socials</a></p>
+                        <p><a href="readmore.html">Growing Guide</a></p>
+                        <p><a href="noyeskush.html">Learn about Noyes Kush</a></p>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Customer Service</h3>
+                        <p><a href="deals.html">Deals</a></p>
+                        <p><a href="deals.html">Shipping Info</a></p>
+                        <p><a href="readmore.html">Learning Centre</a></p>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 The Noyes Boys Seed Bank. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ADD THE JAVASCRIPT AT THE BOTTOM, BEFORE </body> -->
+    <script>
+        function verifyAge(isOfAge) {
+            const overlay = document.getElementById('ageVerificationOverlay');
+            const underageMessage = document.getElementById('underageMessage');
+            
+            if (isOfAge) {
+                // User is of age - hide overlay and show content
+                overlay.style.animation = 'fadeOut 0.5s ease-in-out forwards';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    document.body.classList.remove('age-not-verified');
+                    document.body.classList.add('age-verified');
+                    
+                    // Set a cookie/localStorage to remember for the session
+                    localStorage.setItem('noyesboys_age_verified', 'true');
+                    localStorage.setItem('noyesboys_age_verified_time', Date.now());
+                }, 500);
+            } else {
+                // User is under age - show warning message
+                underageMessage.style.display = 'block';
+                
+                // Optional: Redirect after a few seconds
+                setTimeout(() => {
+                    window.location.href = 'https://www.google.com';
+                }, 3000);
+            }
+        }
+
+        // Check if user was already verified (session-based)
+        function checkAgeVerification() {
+            const verified = localStorage.getItem('noyesboys_age_verified');
+            const verifyTime = localStorage.getItem('noyesboys_age_verified_time');
+            const currentTime = Date.now();
+            const oneHour = 60 * 60 * 1000; // 1 hour in milliseconds
+            
+            // If verified within the last hour, skip verification
+            if (verified === 'true' && verifyTime && (currentTime - verifyTime) < oneHour) {
+                document.getElementById('ageVerificationOverlay').style.display = 'none';
+                document.body.classList.remove('age-not-verified');
+                document.body.classList.add('age-verified');
+            }
+        }
+
+        // Add fadeOut animation style
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Check verification status when page loads
+        document.addEventListener('DOMContentLoaded', checkAgeVerification);
+
+        // Prevent right-click and inspect element while not verified
+        document.addEventListener('contextmenu', function(e) {
+            if (document.body.classList.contains('age-not-verified')) {
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (document.body.classList.contains('age-not-verified')) {
+                // Disable F12, Ctrl+Shift+I, Ctrl+U
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+                    (e.ctrlKey && e.key === 'U')) {
+                    e.preventDefault();
+                }
+            }
+        });
+    </script>
 </body>
 </html>
