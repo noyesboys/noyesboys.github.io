@@ -6,6 +6,8 @@
     <title>The Noyes Boys - Cannabis Seeds Pricing | Feminized Craft Cannabis Seeds Canada</title>
     <meta name="description" content="The Noyes Boys premium feminized cannabis seeds pricing. Hand-bred craft cannabis genetics with single seeds from $40, bulk packs, and special genetic lines. Free shipping over $300.">
     <meta name="keywords" content="cannabis seeds canada, feminized seeds, craft cannabis, noyes boys, cannabis genetics, seed bank canada">
+    <!-- Font Awesome icons -->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <style>
         * {
             margin: 0;
@@ -15,15 +17,128 @@
         
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1e3c1e 0%, #2d5a2d 50%, #4a7c4a 100%);
+            background: #0a0a0a;
             color: #333;
             line-height: 1.4;
+            margin: 0;
+            padding: 0;
+            padding-top: 100px;
+        }
+
+        /* Header Navigation */
+        header {
+            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4ade80;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .nav-links a:hover {
+            color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+            border-color: #4ade80;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: #4ade80;
+            color: #0a0a0a;
+            border-color: #4ade80;
+        }
+
+        /* Cart Button in Header */
+        .header-cart-button {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header-cart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+
+        .header-cart-count {
+            background: #0a0a0a;
+            color: #4ade80;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
         }
         
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
+            background: linear-gradient(135deg, #1e3c1e 0%, #2d5a2d 50%, #4a7c4a 100%);
+            min-height: calc(100vh - 100px);
         }
         
         .header {
@@ -33,7 +148,6 @@
             padding: 25px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            position: relative;
         }
         
         .header h1 {
@@ -53,45 +167,6 @@
             color: #666;
             font-weight: bold;
             font-size: 0.95em;
-        }
-
-        /* Cart Button */
-        .cart-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            padding: 12px 20px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .cart-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(74, 124, 74, 0.4);
-        }
-
-        .cart-count {
-            background: white;
-            color: #2d5a2d;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: bold;
         }
         
         .section-container {
@@ -295,20 +370,6 @@
             gap: 20px;
             padding: 20px;
         }
-        
-        .shipping-section {
-            background: rgba(255,255,255,0.95);
-            border-radius: 12px;
-            padding: 20px;
-            margin: 20px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .shipping-section h3 {
-            color: #2d5a2d;
-            margin-bottom: 15px;
-            text-align: center;
-        }
 
         /* Cart Modal */
         .cart-modal {
@@ -452,6 +513,10 @@
         }
         
         @media (max-width: 768px) {
+            body {
+                padding-top: 120px;
+            }
+            
             .pricing-grid {
                 grid-template-columns: 1fr;
             }
@@ -481,27 +546,43 @@
                 grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             }
 
-            .cart-button {
-                position: relative;
-                top: auto;
-                right: auto;
-                margin: 10px auto;
+            .nav-links {
+                display: none;
             }
 
-            .header {
-                padding-right: 25px;
+            nav {
+                flex-direction: column;
+                gap: 10px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <button class="cart-button" onclick="openCart()">
+    <header>
+        <nav>
+            <a href="#" class="logo">
+                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+                Noyes Boys
+            </a>
+            <ul class="nav-links">
+                <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
+                <li><a href="#pricing" class="active">Pricing</a></li>
+                <li><a href="line1.html">Line 1</a></li>
+                <li><a href="line2.html">Line 2</a></li>
+                <li><a href="line3.html">Line 3</a></li>
+                <li><a href="contact_us.html">Contact</a></li>
+                <li><a href="https://g.page/r/CZr0a3kuQ81AEAI/review" target="_blank">Reviews</a></li>
+            </ul>
+            <button class="header-cart-button" onclick="openCart()">
                 <i class="fas fa-shopping-cart"></i>
                 Cart
-                <span class="cart-count" id="cartCount">0</span>
+                <span class="header-cart-count" id="cartCount">0</span>
             </button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="header">
             <h1>The Noyes Boys Cannabis Seeds</h1>
             <p>Premium Hand-Bred Feminized Craft Cannabis Genetics</p>
             <div class="payment-methods">
@@ -793,8 +874,286 @@
             <div class="row-grid">
                 <div class="pricing-card compact-card">
                     <div class="card-header">
-                        <div class="card-title">Rock Pack</div>
+                        <div class="card-title">OG Pack</div>
                         <div class="card-price">$100</div>
                         <div class="card-subtitle">5 seeds</div>
                     </div>
-                    <button class="order-button" onclick="addToCart('line3-rock-pack
+                    <button class="order-button" onclick="addToCart('line3-og-pack', 'Line 3 - OG Pack (5 Seeds)', 100)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Old School Pack</div>
+                        <div class="card-price">$100</div>
+                        <div class="card-subtitle">5 seeds</div>
+                    </div>
+                    <button class="order-button" onclick="addToCart('line3-oldschool-pack', 'Line 3 - Old School Pack (5 Seeds)', 100)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Complete Line 3</div>
+                        <div class="card-price">$180</div>
+                        <div class="card-subtitle">10 strains</div>
+                    </div>
+                    <button class="order-button" onclick="addToCart('line3-complete', 'Line 3 - Complete (10 Different Strains)', 180)">Add to Cart</button>
+                </div>
+
+                <div class="pricing-card compact-card">
+                    <div class="card-header">
+                        <div class="card-title">Line 3 Triple Pack</div>
+                        <div class="card-price">$420</div>
+                        <div class="card-subtitle">30 seeds</div>
+                    </div>
+                    <button class="order-button" onclick="addToCart('line3-triple', 'Line 3 - Triple Pack (30 Seeds - 3 of Each)', 420)">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shipping & Merchandise -->
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Shipping & Merchandise</h2>
+                <p>Shipping options and branded merchandise</p>
+            </div>
+            <div class="two-column">
+                <div>
+                    <h3 style="color: #2d5a2d; margin-bottom: 15px; text-align: center;">Shipping Options</h3>
+                    <div class="pricing-grid" style="gap: 10px;">
+                        <div class="pricing-card compact-card">
+                            <div class="card-header">
+                                <div class="card-title">Standard</div>
+                                <div class="card-price">$0</div>
+                                <div class="card-subtitle">No tracking</div>
+                            </div>
+                            <button class="order-button" onclick="addToCart('shipping-standard', 'Standard Shipping', 0)">Add to Cart</button>
+                        </div>
+                        <div class="pricing-card compact-card featured">
+                            <div class="card-header">
+                                <div class="card-title">Tracked</div>
+                                <div class="card-price">$25</div>
+                                <div class="card-subtitle">FREE on $300+ orders</div>
+                            </div>
+                            <p style="text-align: center; margin: 10px 0; font-size: 0.8em;">Free with orders $300+</p>
+                            <button class="order-button" onclick="addToCart('shipping-tracked', 'Tracked Shipping', 25)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="color: #2d5a2d; margin-bottom: 15px; text-align: center;">Merchandise</h3>
+                    <div class="pricing-grid" style="gap: 10px;">
+                        <div class="pricing-card compact-card">
+                            <div class="card-header">
+                                <div class="card-title">Toques</div>
+                                <div class="card-price">$40</div>
+                            </div>
+                            <button class="order-button" onclick="addToCart('merch-toque', 'Noyes Boys Toque', 40)">Add to Cart</button>
+                        </div>
+                        <div class="pricing-card compact-card">
+                            <div class="card-header">
+                                <div class="card-title">T-Shirts</div>
+                                <div class="card-price">$60</div>
+                            </div>
+                            <button class="order-button" onclick="addToCart('merch-tshirt', 'Noyes Boys T-Shirt', 60)">Add to Cart</button>
+                        </div>
+                        <div class="pricing-card compact-card">
+                            <div class="card-header">
+                                <div class="card-title">Sweaters</div>
+                                <div class="card-price">$120</div>
+                            </div>
+                            <button class="order-button" onclick="addToCart('merch-sweater', 'Noyes Boys Sweater', 120)">Add to Cart</button>
+                        </div>
+                        <div class="pricing-card compact-card">
+                            <div class="card-header">
+                                <div class="card-title">Posters</div>
+                                <div class="card-price">$25</div>
+                            </div>
+                            <button class="order-button" onclick="addToCart('merch-poster', 'Noyes Boys Poster', 25)">Add to Cart</button>
+                        </div>
+                        <div class="pricing-card compact-card">
+                            <div class="card-header">
+                                <div class="card-title">Flags</div>
+                                <div class="card-price">$60</div>
+                                <div class="card-subtitle">4x4 or 2x4</div>
+                            </div>
+                            <button class="order-button" onclick="addToCart('merch-flag', 'Noyes Boys Flag (4x4 or 2x4)', 60)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Coming Soon</h2>
+                <p>Genetic Lines 4, 5, & 6 in development • Contact for custom orders, bulk discounts, and collaborations</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="cart-modal">
+        <div class="cart-modal-content">
+            <span class="cart-close" onclick="closeCart()">&times;</span>
+            <h2 style="color: #2d5a2d; margin-bottom: 1rem;">Shopping Cart</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total">
+                <h3>Total: $<span id="cartTotal">0</span> CAD</h3>
+                <button class="checkout-btn" onclick="checkout()">
+                    <i class="fas fa-credit-card"></i> Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+
+        // Add to cart function
+        function addToCart(itemId, itemName, price) {
+            // Check if item already exists in cart
+            const existingItem = cart.find(item => item.itemId === itemId);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    itemId: itemId,
+                    itemName: itemName,
+                    price: price,
+                    quantity: 1
+                });
+            }
+
+            updateCartDisplay();
+            
+            // Show success feedback
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check"></i> Added!';
+            button.style.background = '#22c55e';
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.style.background = '';
+            }, 1000);
+        }
+
+        // Update cart display
+        function updateCartDisplay() {
+            const cartCount = document.getElementById('cartCount');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<div class="empty-cart"><p>Your cart is empty</p><p>Add some premium genetics to get started!</p></div>';
+                cartTotal.textContent = '0.00';
+                return;
+            }
+
+            let total = 0;
+            cartItems.innerHTML = cart.map((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+
+                return `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.itemName}</div>
+                            <div class="cart-item-price">${item.price} CAD each</div>
+                        </div>
+                        <div class="cart-item-controls">
+                            <div class="quantity-controls">
+                                <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                                <span class="quantity-display">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                            </div>
+                            <button class="remove-item" onclick="removeItem(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            cartTotal.textContent = total.toFixed(2);
+        }
+
+        // Update item quantity
+        function updateQuantity(index, change) {
+            cart[index].quantity += change;
+            
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            
+            updateCartDisplay();
+        }
+
+        // Remove item from cart
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCartDisplay();
+        }
+
+        // Open cart modal
+        function openCart() {
+            updateCartDisplay();
+            document.getElementById('cartModal').style.display = 'block';
+        }
+
+        // Close cart modal
+        function closeCart() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('cartModal');
+            if (event.target === modal) {
+                closeCart();
+            }
+        }
+
+        // Checkout function - redirects to noyesboys.com/checkout.html
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+
+            // Prepare cart data for checkout page
+            const cartData = {
+                items: cart.map(item => ({
+                    name: item.itemName,
+                    itemId: item.itemId,
+                    price: item.price,
+                    quantity: item.quantity,
+                    total: item.price * item.quantity
+                })),
+                subtotal: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                timestamp: new Date().toISOString(),
+                source: 'pricing-page'
+            };
+
+            // Store cart data in localStorage for the checkout page to access
+            localStorage.setItem('noyesBoysCart', JSON.stringify(cartData));
+            
+            // Create URL parameters as backup
+            const itemsParam = encodeURIComponent(JSON.stringify(cartData.items));
+            const totalParam = cartData.subtotal.toFixed(2);
+            
+            // Redirect to checkout page with cart data
+            window.location.href = `https://www.noyesboys.com/checkout.html?items=${itemsParam}&total=${totalParam}&source=pricing-page`;
+        }
+
+        // Initialize cart display
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartDisplay();
+        });
+    </script>
+</body>
+</html>
