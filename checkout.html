@@ -651,7 +651,7 @@
 
     <script>
         // Initialize EmailJS when page loads
-        emailjs.init("YOUR_PUBLIC_KEY_HERE"); // Replace with your EmailJS public key
+        emailjs.init("ZiDmYogre9hNBY-bI"); // Replace with your EmailJS public key
 
         // Email sending function using EmailJS
         async function sendOrderEmail(orderData, cartData) {
@@ -691,8 +691,8 @@
 
                 // Send email using EmailJS - replace with your actual IDs
                 const response = await emailjs.send(
-                    'YOUR_SERVICE_ID_HERE', // Replace with your EmailJS service ID
-                    'YOUR_TEMPLATE_ID_HERE', // Replace with your EmailJS template ID
+                    'service_viyn3ld', // Replace with your EmailJS service ID
+                    'template_l8l5a4o', // Replace with your EmailJS template ID
                     emailParams
                 );
 
@@ -740,24 +740,34 @@
             }
 
             displayCheckout() {
-                const loadingState = document.getElementById('loadingState');
-                const emptyCartState = document.getElementById('emptyCartState');
-                const checkoutContent = document.getElementById('checkoutContent');
+    const loadingState = document.getElementById('loadingState');
+    const emptyCartState = document.getElementById('emptyCartState');
+    const checkoutContent = document.getElementById('checkoutContent');
 
-                // Hide loading
-                loadingState.style.display = 'none';
+    // Always hide loading first
+    if (loadingState) {
+        loadingState.style.display = 'none';
+    }
 
-                if (!this.cartData || !this.cartData.items || this.cartData.items.length === 0) {
-                    // Show empty cart
-                    emptyCartState.style.display = 'block';
-                    checkoutContent.style.display = 'none';
-                } else {
-                    // Show checkout content
-                    emptyCartState.style.display = 'none';
-                    checkoutContent.style.display = 'grid';
-                    this.populateOrderSummary();
-                }
-            }
+    // Log what we have for debugging
+    console.log('Cart data in displayCheckout:', this.cartData);
+    console.log('Items exist:', this.cartData && this.cartData.items);
+    console.log('Items length:', this.cartData?.items?.length);
+
+    // Check if we have valid cart data
+    if (!this.cartData || !this.cartData.items || this.cartData.items.length === 0) {
+        // Show empty cart
+        if (emptyCartState) emptyCartState.style.display = 'block';
+        if (checkoutContent) checkoutContent.style.display = 'none';
+        console.log('Showing empty cart state');
+    } else {
+        // Show checkout content
+        if (emptyCartState) emptyCartState.style.display = 'none';
+        if (checkoutContent) checkoutContent.style.display = 'grid';
+        console.log('Showing checkout content');
+        this.populateOrderSummary();
+    }
+}
 
             populateOrderSummary() {
                 const orderItems = document.getElementById('orderItems');
@@ -957,15 +967,6 @@
 
             await checkoutManager.handleFormSubmit(formObject);
         });
-
-        // Debug functions
-        window.debugCheckout = {
-            viewCartData: () => console.log('Cart Data:', checkoutManager.cartData),
-            viewAllStorage: () => {
-                console.log('=== localStorage ===');
-                console.log('Checkout Data:', localStorage.getItem('noyesboys_checkout_data'));
-                console.log('Regular Cart:', localStorage.getItem('noyesboys_cart'));
-            },
         // Debug functions
         window.debugCheckout = {
             viewCartData: () => console.log('Cart Data:', checkoutManager.cartData),
