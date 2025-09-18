@@ -6,7 +6,7 @@
     <title>Checkout - Noyes Boys Cannabis Seeds</title>
     <link rel="icon" type="image/x-icon" href="assets/img/noyes boys logo.png" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     
     <style>
         * {
@@ -651,7 +651,9 @@
 
     <script>
         // Initialize EmailJS when page loads
-        emailjs.init("ZiDmYogre9hNBY-bI"); // Replace with your EmailJS public key
+       emailjs.init({
+    publicKey: "ZiDmYogre9hNBY-bI"
+});
 
         // Email sending function using EmailJS
         async function sendOrderEmail(orderData, cartData) {
