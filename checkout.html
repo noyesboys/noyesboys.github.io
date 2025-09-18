@@ -655,54 +655,184 @@
 
         // Email sending function using EmailJS
         async function sendOrderEmail(orderData, cartData) {
-            try {
-                // Format the cart items for email
-                const itemsList = cartData.items.map(item => 
-                    `${item.quantity}x ${item.strainName} (${item.variant}) - $${(item.price * item.quantity).toFixed(2)} CAD`
-                ).join('\n');
-
-                const subtotal = cartData.total;
-                const shipping = 15.00;
-                const taxes = subtotal * 0.13;
-                const total = subtotal + shipping + taxes;
-
-                // Email parameters that match your EmailJS template
-                const emailParams = {
-                    to_email: 'thenoyesboyz@gmail.com',
-                    customer_name: `${orderData.firstName} ${orderData.lastName}`,
-                    customer_email: orderData.email,
-                    customer_phone: orderData.phone || 'Not provided',
-                    customer_address: `${orderData.streetAddress}, ${orderData.city}, ${orderData.province} ${orderData.zipCode}`,
-                    payment_method: orderData.paymentMethod ? orderData.paymentMethod.toUpperCase() : 'Not selected',
-                    order_items: itemsList,
-                    subtotal: `$${subtotal.toFixed(2)} CAD`,
-                    shipping: `$${shipping.toFixed(2)} CAD`,
-                    taxes: `$${taxes.toFixed(2)} CAD`,
-                    total: `$${total.toFixed(2)} CAD`,
-                    additional_info: orderData.additionalInfo || 'None',
-                    promo_code: orderData.promoCode || 'None',
-                    newsletter: orderData.newsletter ? 'Yes' : 'No',
-                    order_date: new Date().toLocaleDateString('en-CA'),
-                    order_time: new Date().toLocaleTimeString('en-CA'),
-                    order_id: orderData.orderId
-                };
-
-                console.log('Sending email with params:', emailParams);
-
-                // Send email using EmailJS - replace with your actual IDs
-                const response = await emailjs.send(
-                    'service_viyn3ld', // Replace with your EmailJS service ID
-                    'template_l8l5a4o', // Replace with your EmailJS template ID
-                    emailParams
-                );
-
-                console.log('Email sent successfully:', response);
-                return { success: true, response: response };
-            } catch (error) {
-                console.error('Failed to send email:', error);
-                return { success: false, error: error };
-            }
+    console.log('=== EMAIL DEBUG START ===');
+    console.log('Order Data:', orderData);
+    console.log('Cart Data:', cartData);
+    
+    try {
+        // Validate EmailJS is loaded
+        if (!window.emailjs) {
+            throw new Error('EmailJS not loaded');
         }
+        
+        // Format the cart items for email
+        const itemsList = cartData.items.map(item => 
+            `${item.quantity}x ${item.strainName} (${item.variant}) - $${(item.price * item.quantity).toFixed(2)} CAD`
+        ).join('\n');
+
+        const subtotal = cartData.total;
+        
+        // Calculate shipping based on selected method
+        let shippingCost = 0;
+        const shippingMethod = orderData.shippingMethod;
+        if (shippingMethod === 'upgrade-25') {
+            shippingCost = 25.00;
+        } else if (shippingMethod === 'free-300' && subtotal >= 300) {
+            shippingCost = 0;
+        } else {
+            shippingCost = 0; // free-bubble or free-300 under threshold
+        }
+        
+        const taxes = subtotal * 0.13; // 13% tax for Canada
+        const total = subtotal + shippingCost + taxes;
+
+        // Enhanced email parameters
+        const emailParams = {
+            // Basic customer info
+            customer_name: `${orderData.firstName || 'N/A'} ${orderData.lastName || 'N/A'}`,
+            customer_email: orderData.email || 'N/A',
+            customer_phone: orderData.phone || 'Not provided',
+            
+            // Address
+            customer_address: `${orderData.streetAddress || 'N/A'}, ${orderData.city || 'N/A'}, ${orderData.province || 'N/A'} ${orderData.zipCode || 'N/A'}`,
+            
+            // Payment and shipping
+            payment_method: orderData.paymentMethod ? orderData.paymentMethod.toUpperCase() : 'NOT SELECTED',
+            shipping_method: orderData.shippingMethod || 'NOT SELECTED',
+            
+            // Order details
+            order_items: itemsList || 'No items',
+            
+            // Financial breakdown
+            subtotal: `$${subtotal.toFixed(2)} CAD`,
+            shipping: shippingCost > 0 ? `$${shippingCost.toFixed(2)} CAD` : 'FREE',
+            taxes: `$${taxes.toFixed(2)} CAD`,
+            total: `$${total.toFixed(2)} CAD`,
+            
+            // Additional info
+            additional_info: orderData.additionalInfo || 'None',
+            promo_code: orderData.promoCode || 'None',
+            newsletter: orderData.newsletter ? 'Yes' : 'No',
+            
+            // Order metadata
+            order_id: orderData.orderId || 'NO-ID',
+            order_date: new Date().toLocaleDateString('en-CA'),
+            order_time: new Date().toLocaleTimeString('en-CA')
+        };
+
+        console.log('Email parameters being sent:', emailParams);
+
+        // IMPORTANT: Replace these with your ACTUAL EmailJS IDs
+        const SERVICE_ID = 'service_viyn3ld';  // Your service ID
+        const TEMPLATE_ID = 'template_l8l5a4o'; // Your template ID
+        
+        console.log(`Attempting to send email via EmailJS...`);
+        console.log(`Service ID: ${SERVICE_ID}`);
+        console.log(`Template ID: ${TEMPLATE_ID}`);
+
+        // Send email using EmailJS
+        const response = await emailjs.send(
+            SERVICE_ID,
+            TEMPLATE_ID,
+            emailParams
+        );
+
+        console.log('EmailJS Response:', response);
+        console.log('Email sent successfully!');
+        console.log('=== EMAIL DEBUG END ===');
+        
+        return { success: true, response: response };
+        
+    } catch (error) {
+        console.error('=== EMAIL ERROR ===');
+        console.error('Error details:', error);
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+        console.log('=== EMAIL DEBUG END ===');
+        
+        return { success: false, error: error };
+    }
+}
+
+// DEBUGGING FUNCTIONS - Add these to your existing code
+window.emailDebug = {
+    // Test if EmailJS is properly loaded
+    testEmailJSLoaded: function() {
+        console.log('EmailJS loaded:', !!window.emailjs);
+        console.log('EmailJS version:', window.emailjs ? window.emailjs.version : 'Not available');
+        return !!window.emailjs;
+    },
+    
+    // Test email sending with dummy data
+    testEmailSend: async function() {
+        const testOrderData = {
+            firstName: 'Test',
+            lastName: 'User',
+            email: 'test@example.com',
+            phone: '555-0123',
+            streetAddress: '123 Test St',
+            city: 'Toronto',
+            province: 'ON',
+            zipCode: 'M5V 3A1',
+            paymentMethod: 'etransfer',
+            shippingMethod: 'free-bubble',
+            additionalInfo: 'Test order',
+            promoCode: 'TEST123',
+            newsletter: true,
+            orderId: 'TEST-' + Date.now()
+        };
+        
+        const testCartData = {
+            items: [
+                {
+                    strainName: 'Test Strain',
+                    variant: 'Test Variant',
+                    quantity: 1,
+                    price: 50.00
+                }
+            ],
+            total: 50.00
+        };
+        
+        console.log('Sending test email...');
+        const result = await sendOrderEmail(testOrderData, testCartData);
+        console.log('Test email result:', result);
+        return result;
+    },
+    
+    // Check EmailJS service status
+    checkServiceStatus: function() {
+        // You can manually verify your service/template IDs here
+        console.log('Current EmailJS Configuration:');
+        console.log('Service ID: service_viyn3ld');
+        console.log('Template ID: template_l8l5a4o');
+        console.log('Public Key: ZiDmYogre9hNBY-bI');
+        console.log('');
+        console.log('Verify these match your EmailJS dashboard settings');
+    }
+};
+
+// TEMPLATE VALIDATION
+// Your current template variables should match these exactly:
+/*
+Expected template variables in EmailJS:
+- {{customer_name}}
+- {{customer_email}}
+- {{customer_phone}}
+- {{customer_address}}
+- {{payment_method}}
+- {{order_items}}
+- {{subtotal}}
+- {{shipping}}
+- {{taxes}}
+- {{total}}
+- {{additional_info}}
+- {{promo_code}}
+- {{newsletter}}
+- {{order_id}}
+- {{order_date}}
+- {{order_time}}
+*/
 
         class CheckoutManager {
             constructor() {
