@@ -273,61 +273,88 @@
     </a>
 
     <div class="login-container">
-        <div class="logo-section">
-            <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
-            <h1 class="login-title">Affiliate Portal</h1>
-            <p class="login-subtitle">Sign in to access your dashboard</p>
+        <div class="logo">
+            <h1>Affiliate Login</h1>
+            <p style="color: #cbd5e1; margin: 0;">Noyes Boys</p>
         </div>
-
-        <!-- Demo Credentials for Testing -->
-        <div class="demo-credentials">
-            <h4><i class="fas fa-info-circle"></i> Demo Login Credentials</h4>
-            <p><strong>Email:</strong> <code>demo@affiliate.com</code></p>
-            <p><strong>Password:</strong> <code>demo123</code></p>
-            <p style="font-size: 0.8rem; margin-top: 0.5rem; color: #94a3b8;">Use these credentials to test the affiliate portal</p>
-        </div>
-
-        <div class="error-message" id="errorMessage">
-            <i class="fas fa-exclamation-triangle"></i> <span id="errorText"></span>
-        </div>
-
-        <div class="success-message" id="successMessage">
-            <i class="fas fa-check-circle"></i> <span id="successText"></span>
-        </div>
-
+        
+        <div id="message"></div>
+        
         <form id="loginForm">
             <div class="form-group">
                 <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                <input type="email" id="email" name="email" required>
             </div>
-
+            
             <div class="form-group">
                 <label for="password">Password</label>
-                <div class="password-container">
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                    <button type="button" class="password-toggle" onclick="togglePassword()">
-                        <i class="fas fa-eye" id="passwordToggleIcon"></i>
-                    </button>
-                </div>
+                <input type="password" id="password" name="password" required>
             </div>
-
-            <div class="remember-forgot">
-                <div class="remember-me">
-                    <input type="checkbox" id="remember" name="remember">
-                    <label for="remember">Remember me</label>
-                </div>
-                <a href="#" class="forgot-password" onclick="showForgotPassword()">Forgot password?</a>
-            </div>
-
-            <button type="submit" class="login-btn">
-                <i class="fas fa-sign-in-alt"></i> Sign In
+            
+            <button type="submit" class="login-btn" id="loginBtn">
+                Login
             </button>
         </form>
-
-        <div class="signup-link">
-            Don't have an account? <a href="affiliates.html">Apply here</a>
+        
+        <div class="demo-link">
+            <a href="portal.html">View Demo Portal</a>
+        </div>
+        
+        <div class="links">
+            <a href="register.html">Apply to Join</a>
+            <a href="../index.html">Back to Store</a>
         </div>
     </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const loginBtn = document.getElementById('loginBtn');
+            const messageDiv = document.getElementById('message');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Disable button and show loading
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Logging in...';
+            messageDiv.innerHTML = '';
+            
+            try {
+                const response = await fetch('../api/affiliate/login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Store token
+                    localStorage.setItem('affiliateToken', data.token);
+                    localStorage.setItem('affiliateName', data.name);
+                    
+                    messageDiv.innerHTML = '<div class="success">Login successful! Redirecting...</div>';
+                    
+                    // Redirect to portal
+                    setTimeout(() => {
+                        window.location.href = 'portal.html';
+                    }, 1500);
+                } else {
+                    messageDiv.innerHTML = `<div class="error">${data.error}</div>`;
+                }
+            } catch (error) {
+                messageDiv.innerHTML = '<div class="error">Login failed. Please try again.</div>';
+            }
+            
+            // Re-enable button
+            loginBtn.disabled = false;
+            loginBtn.textContent = 'Login';
+        });
+    </script>
+</body>
 
     <script>
         // Demo affiliate credentials (in production, this would be handled server-side)
