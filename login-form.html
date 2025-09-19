@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Login - Noyes Boys</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/noyes boys logo.png" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4ade80;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+        }
+        
+        .nav-links a:hover {
+            color: #4ade80;
+        }
+
+        /* Login Container */
+        .login-wrapper {
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 120px;
+            padding-bottom: 40px;
+        }
+        
+        .login-container {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(74, 222, 128, 0.1);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-title {
+            color: #4ade80;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .login-subtitle {
+            color: #cbd5e1;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #4ade80;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #475569;
+            border-radius: 10px;
+            background: #0f172a;
+            color: white;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #4ade80;
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.3);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.6);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
+        
+        .success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            color: #86efac;
+        }
+
+        .login-links {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #475569;
+        }
+
+        .login-links a {
+            color: #4ade80;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .login-links a:hover {
+            color: #22c55e;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .login-container {
+                margin: 1rem;
+                padding: 2rem;
+            }
+
+            .login-title {
+                font-size: 1.5rem;
+            }
+
+            .nav-links {
+                gap: 0.5rem;
+            }
+            
+            .nav-links a {
+                font-size: 0.8rem;
+                padding: 0.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">
+                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+                Noyes Boys
+            </a>
+            <ul class="nav-links">
+                <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
+                <li><a href="index.html">Affiliate Program</a></li>
+                <li><a href="contact_us.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="login-wrapper">
+        <div class="login-container">
+            <div class="login-header">
+                <h1 class="login-title">Affiliate Login</h1>
+                <p class="login-subtitle">Access your affiliate dashboard</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Email Address
+                    </label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input type="password" id="password" name="password" required placeholder="Enter your password">
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </form>
+            
+            <div id="message"></div>
+
+            <div class="login-links">
+                <p style="color: #cbd5e1; margin-bottom: 1rem;">Don't have an account?</p>
+                <a href="index.html#apply">Apply for Affiliate Program</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            submitBtn.disabled = true;
+            messageDiv.innerHTML = '';
+            
+            try {
+                const response = await fetch('login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                });
+                
+                const result = await response.json();
+                
+                // Check for success (could be boolean true or string "1")
+                if (result.success === true || result.success === 1 || result.success === "1") {
+                    messageDiv.innerHTML = '<div class="message success"><i class="fas fa-check-circle"></i> Login successful! Redirecting to dashboard...</div>';
+                    // Store the token for future requests
+                    sessionStorage.setItem('affiliate_token', result.token);
+                    sessionStorage.setItem('affiliate_id', result.affiliate_id);
+                    sessionStorage.setItem('affiliate_name', result.name);
+                    // Redirect to dashboard after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.php';
+                    }, 2000);
+                } else {
+                    messageDiv.innerHTML = '<div class="message error"><i class="fas fa-exclamation-triangle"></i> ' + (result.error || 'Login failed') + '</div>';
+                }
+            } catch (error) {
+                messageDiv.innerHTML = '<div class="message error"><i class="fas fa-exclamation-triangle"></i> Connection error. Please try again.</div>';
+                console.error('Error:', error);
+            } finally {
+                // Reset button state
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Auto-focus email field when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('email').focus();
+        });
+    </script>
+</body>
+</html>
