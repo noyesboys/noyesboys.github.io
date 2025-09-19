@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Checkout - Noyes Boys Cannabis Seeds</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/noyes boys logo.png" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #0a0a0a;
+            padding-top: 100px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+        }
+        
+        .nav-links a:hover {
+            color: #4ade80;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4ade80;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        /* Main Content */
+        .checkout-section {
+            padding: 50px 0;
+            min-height: 100vh;
+        }
+
+        .checkout-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #4ade80;
+        }
+
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            height: fit-content;
+        }
+
+        .order-summary h3 {
+            color: #4ade80;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 1rem 0;
+            border-bottom: 1px solid #475569;
+            color: white;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-weight: bold;
+            color: #4ade80;
+            margin-bottom: 0.25rem;
+        }
+
+        .item-variant {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin-bottom: 0.25rem;
+        }
+
+        .item-quantity {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .item-price {
+            font-weight: bold;
+            color: #4ade80;
+            text-align: right;
+        }
+
+        .order-total {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #4ade80;
+        }
+
+        .total-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        .total-line.final {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #4ade80;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #475569;
+        }
+
+        /* Checkout Form */
+        .checkout-form {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 2rem;
+            border-radius: 15px;
+        }
+
+        .checkout-form h3 {
+            color: #4ade80;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h4 {
+            color: #4ade80;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #cbd5e1;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #475569;
+            border-radius: 8px;
+            background: #0f172a;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4ade80;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .payment-option {
+            background: #0f172a;
+            border: 2px solid #475569;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #cbd5e1;
+        }
+
+        .payment-option:hover {
+            border-color: #4ade80;
+        }
+
+        .payment-option.selected {
+            border-color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+            color: #4ade80;
+        }
+
+        .payment-option input[type="radio"] {
+            display: none;
+        }
+
+        .payment-option i {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 25px;
+            padding: 1rem 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            color: #cbd5e1;
+            font-weight: normal;
+        }
+
+        .important-notice {
+            background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+            border-left: 4px solid #4ade80;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .important-notice h4 {
+            color: #4ade80;
+            margin-bottom: 0.5rem;
+        }
+
+        .important-notice p {
+            color: #cbd5e1;
+        }
+
+        /* Empty Cart */
+        .empty-cart {
+            text-align: center;
+            color: #cbd5e1;
+            padding: 3rem;
+            grid-column: 1 / -1;
+        }
+
+        .empty-cart h3 {
+            color: #ef4444;
+            margin-bottom: 1rem;
+        }
+
+        .back-link {
+            color: #4ade80;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            color: #4ade80;
+            padding: 2rem;
+            grid-column: 1 / -1;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .checkout-title {
+                font-size: 2rem;
+            }
+
+            .payment-methods {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="line1.html" class="logo">
+                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+                Noyes Boys - Checkout
+            </a>
+            <ul class="nav-links">
+                <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
+                <li><a href="line1.html">Line 1</a></li>
+                <li><a href="deals.html">Deals</a></li>
+                <li><a href="order_now.html">Order Now</a></li>
+                <li><a href="contact_us.html">Contact</a></li>
+                <li><a href="readmore.html">Growing Guide</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="checkout-section">
+        <div class="container">
+            <h1 class="checkout-title">Checkout</h1>
+            
+            <div id="loadingState" class="loading">
+                <div class="checkout-container">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Loading your order...
+                    </div>
+                </div>
+            </div>
+
+            <div id="emptyCartState" class="empty-cart" style="display: none;">
+                <div class="checkout-container">
+                    <div class="empty-cart">
+                        <h3>Your cart is empty!</h3>
+                        <p>Looks like you haven't added any premium genetics to your cart yet.</p>
+                        <p><a href="line1.html" class="back-link">← Back to Strains</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="checkoutContent" class="checkout-container" style="display: none;">
+                <!-- Order Summary -->
+                <div class="order-summary">
+                    <h3><i class="fas fa-receipt"></i> Order Summary</h3>
+                    <div id="orderItems">
+                        <!-- Items will be populated here -->
+                    </div>
+                    <div class="order-total">
+                        <div class="total-line">
+                            <span>Subtotal:</span>
+                            <span>$<span id="subtotal">0.00</span> CAD</span>
+                        </div>
+                        <div class="total-line">
+                            <span>Shipping:</span>
+                            <span id="shipping">Calculated at next step</span>
+                        </div>
+                        <div class="total-line">
+                            <span>Tax:</span>
+                            <span id="tax">Calculated at next step</span>
+                        </div>
+                        <div class="total-line final">
+                            <span>Total:</span>
+                            <span>$<span id="grandTotal">0.00</span> CAD</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Checkout Form -->
+                <div class="checkout-form">
+                    <h3><i class="fas fa-user"></i> Checkout Information</h3>
+                    
+                    <form id="checkoutForm">
+                        <!-- Personal Information -->
+                        <div class="form-section">
+                            <h4>Personal Information</h4>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="firstName">First Name *</label>
+                                    <input type="text" id="firstName" name="firstName" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastName">Last Name *</label>
+                                    <input type="text" id="lastName" name="lastName" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shipping Address -->
+                        <div class="form-section">
+                            <h4>Shipping Address</h4>
+                            <div class="form-group">
+                                <label for="streetAddress">Street Address *</label>
+                                <input type="text" id="streetAddress" name="streetAddress" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="city">City *</label>
+                                    <input type="text" id="city" name="city" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="zipCode">ZIP/Postal Code *</label>
+                                    <input type="text" id="zipCode" name="zipCode" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="province">Province *</label>
+                                <select id="province" name="province" required>
+                                    <option value="">Select Province</option>
+                                    <option value="AB">Alberta</option>
+                                    <option value="BC">British Columbia</option>
+                                    <option value="MB">Manitoba</option>
+                                    <option value="NB">New Brunswick</option>
+                                    <option value="NL">Newfoundland and Labrador</option>
+                                    <option value="NS">Nova Scotia</option>
+                                    <option value="ON">Ontario</option>
+                                    <option value="PE">Prince Edward Island</option>
+                                    <option value="QC">Quebec</option>
+                                    <option value="SK">Saskatchewan</option>
+                                    <option value="NT">Northwest Territories</option>
+                                    <option value="NU">Nunavut</option>
+                                    <option value="YT">Yukon</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="important-notice">
+                            <h4><i class="fas fa-maple-leaf"></i> Canada Only</h4>
+                            <p>We currently ship within Canada only. All orders are processed domestically.</p>
+                        </div>
+
+                        <!-- Shipping Options -->
+                        <div class="form-section">
+                            <h4>Shipping Options *</h4>
+                            <div class="shipping-options" style="display: grid; gap: 1rem; margin-top: 0.5rem;">
+                                <div class="shipping-option" style="background: #0f172a; border: 2px solid #475569; border-radius: 10px; padding: 1rem; cursor: pointer; transition: all 0.3s ease; color: #cbd5e1;" onclick="selectShipping('free-bubble')">
+                                    <input type="radio" name="shippingMethod" value="free-bubble" required style="display: none;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div>
+                                            <div style="font-weight: bold; color: #4ade80; margin-bottom: 0.25rem;">Free - No Liability Shipping</div>
+                                            <div style="font-size: 0.9rem; color: #94a3b8;">Bubble mailer (no tracking)</div>
+                                        </div>
+                                        <div style="font-weight: bold; color: #4ade80;">FREE</div>
+                                    </div>
+                                </div>
+                                <div class="shipping-option" style="background: #0f172a; border: 2px solid #475569; border-radius: 10px; padding: 1rem; cursor: pointer; transition: all 0.3s ease; color: #cbd5e1;" onclick="selectShipping('upgrade-25')">
+                                    <input type="radio" name="shippingMethod" value="upgrade-25" required style="display: none;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div>
+                                            <div style="font-weight: bold; color: #4ade80; margin-bottom: 0.25rem;">Canada Post Box + Tracking</div>
+                                            <div style="font-size: 0.9rem; color: #94a3b8;">Secure box with tracking code</div>
+                                        </div>
+                                        <div style="font-weight: bold; color: #4ade80;">+$25 CAD</div>
+                                    </div>
+                                </div>
+                                <div class="shipping-option" style="background: #0f172a; border: 2px solid #475569; border-radius: 10px; padding: 1rem; cursor: pointer; transition: all 0.3s ease; color: #cbd5e1;" onclick="selectShipping('free-300')">
+                                    <input type="radio" name="shippingMethod" value="free-300" required style="display: none;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div>
+                                            <div style="font-weight: bold; color: #4ade80; margin-bottom: 0.25rem;">FREE Canada Post Box + Tracking</div>
+                                            <div style="font-size: 0.9rem; color: #94a3b8;">On orders over $300 CAD</div>
+                                        </div>
+                                        <div style="font-weight: bold; color: #22c55e;">FREE*</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(74, 222, 128, 0.1); border-radius: 8px; font-size: 0.9rem; color: #cbd5e1;">
+                                <i class="fas fa-info-circle" style="color: #4ade80; margin-right: 0.5rem;"></i>
+                                *Free Canada Post upgrade automatically applies to orders $300+
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="form-section">
+                            <h4>Contact Information</h4>
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number (optional)</label>
+                                <input type="tel" id="phone" name="phone">
+                            </div>
+                        </div>
+
+                        <!-- Payment Method -->
+                        <div class="form-section">
+                            <h4>Payment Method *</h4>
+                            <div class="payment-methods">
+                                <div class="payment-option" onclick="selectPayment('etransfer')">
+                                    <input type="radio" name="paymentMethod" value="etransfer" required>
+                                    <i class="fas fa-university"></i>
+                                    <div>E-Transfer</div>
+                                </div>
+                                <div class="payment-option" onclick="selectPayment('paypal')">
+                                    <input type="radio" name="paymentMethod" value="paypal" required>
+                                    <i class="fab fa-paypal"></i>
+                                    <div>PayPal</div>
+                                </div>
+                                <div class="payment-option" onclick="selectPayment('crypto')">
+                                    <input type="radio" name="paymentMethod" value="crypto" required>
+                                    <i class="fab fa-bitcoin"></i>
+                                    <div>Crypto</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Order Details (Auto-populated from cart) -->
+                        <div class="form-section">
+                            <h4>Order Details</h4>
+                            <div class="form-group">
+                                <label for="orderDetails">Strains & Quantities (auto-filled)</label>
+                                <textarea id="orderDetails" name="orderDetails" rows="4" readonly style="background: #1a1a1a; color: #4ade80;"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Additional Information -->
+                        <div class="form-section">
+                            <h4>Additional Information</h4>
+                            <div class="form-group">
+                                <label for="additionalInfo">Special Requests or Notes</label>
+                                <textarea id="additionalInfo" name="additionalInfo" rows="3" placeholder="Any special requests or notes..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Promotional Deal -->
+                        <div class="form-section">
+                            <div class="form-group">
+                                <label for="promoCode">Promotional Deal (if applicable)</label>
+                                <input type="text" id="promoCode" name="promoCode" placeholder="Holiday sale / other deals">
+                            </div>
+                        </div>
+
+                        <!-- Newsletter Signup -->
+                        <div class="form-section">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="newsletter" name="newsletter">
+                                <label for="newsletter">Update me when a new strain becomes available?</label>
+                            </div>
+                        </div>
+
+                        <div class="important-notice">
+                            <h4><i class="fas fa-info-circle"></i> Order Process</h4>
+                            <p><strong>WE WILL CONTACT YOU WITH PAYMENT LINK / CONFIRMATION OF SALE</strong></p>
+                            <p>TRACKING NUMBER SENT WITHIN 3 DAYS OF PAYMENT</p>
+                        </div>
+
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-lock"></i> Complete Order
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Initialize EmailJS when page loads
+       emailjs.init({
+    publicKey: "ZiDmYogre9hNBY-bI"
+});
+
+        // Email sending function using EmailJS
+        async function sendOrderEmail(orderData, cartData) {
+    console.log('=== EMAIL DEBUG START ===');
+    console.log('Order Data:', orderData);
+    console.log('Cart Data:', cartData);
+    
+    try {
+        // Validate EmailJS is loaded
+        if (!window.emailjs) {
+            throw new Error('EmailJS not loaded');
+        }
+        
+        // Format the cart items for email
+        const itemsList = cartData.items.map(item => 
+            `${item.quantity}x ${item.strainName} (${item.variant}) - $${(item.price * item.quantity).toFixed(2)} CAD`
+        ).join('\n');
+
+        const subtotal = cartData.total;
+        
+        // Calculate shipping based on selected method
+        let shippingCost = 0;
+        const shippingMethod = orderData.shippingMethod;
+        if (shippingMethod === 'upgrade-25') {
+            shippingCost = 25.00;
+        } else if (shippingMethod === 'free-300' && subtotal >= 300) {
+            shippingCost = 0;
+        } else {
+            shippingCost = 0; // free-bubble or free-300 under threshold
+        }
+        
+        const taxes = subtotal * 0.13; // 13% tax for Canada
+        const total = subtotal + shippingCost + taxes;
+
+        // Enhanced email parameters
+        const emailParams = {
+            // Basic customer info
+            customer_name: `${orderData.firstName || 'N/A'} ${orderData.lastName || 'N/A'}`,
+            customer_email: orderData.email || 'N/A',
+            customer_phone: orderData.phone || 'Not provided',
+            
+            // Address
+            customer_address: `${orderData.streetAddress || 'N/A'}, ${orderData.city || 'N/A'}, ${orderData.province || 'N/A'} ${orderData.zipCode || 'N/A'}`,
+            
+            // Payment and shipping
+            payment_method: orderData.paymentMethod ? orderData.paymentMethod.toUpperCase() : 'NOT SELECTED',
+            shipping_method: orderData.shippingMethod || 'NOT SELECTED',
+            
+            // Order details
+            order_items: itemsList || 'No items',
+            
+            // Financial breakdown
+            subtotal: `$${subtotal.toFixed(2)} CAD`,
+            shipping: shippingCost > 0 ? `$${shippingCost.toFixed(2)} CAD` : 'FREE',
+            taxes: `$${taxes.toFixed(2)} CAD`,
+            total: `$${total.toFixed(2)} CAD`,
+            
+            // Additional info
+            additional_info: orderData.additionalInfo || 'None',
+            promo_code: orderData.promoCode || 'None',
+            newsletter: orderData.newsletter ? 'Yes' : 'No',
+            
+            // Order metadata
+            order_id: orderData.orderId || 'NO-ID',
+            order_date: new Date().toLocaleDateString('en-CA'),
+            order_time: new Date().toLocaleTimeString('en-CA')
+        };
+
+        console.log('Email parameters being sent:', emailParams);
+
+        // IMPORTANT: Replace these with your ACTUAL EmailJS IDs
+        const SERVICE_ID = 'service_viyn3ld';  // Your service ID
+        const TEMPLATE_ID = 'template_l8l5a4o'; // Your template ID
+        
+        console.log(`Attempting to send email via EmailJS...`);
+        console.log(`Service ID: ${SERVICE_ID}`);
+        console.log(`Template ID: ${TEMPLATE_ID}`);
+
+        // Send email using EmailJS
+        const response = await emailjs.send(
+            SERVICE_ID,
+            TEMPLATE_ID,
+            emailParams
+        );
+
+        console.log('EmailJS Response:', response);
+        console.log('Email sent successfully!');
+        console.log('=== EMAIL DEBUG END ===');
+        
+        return { success: true, response: response };
+        
+    } catch (error) {
+        console.error('=== EMAIL ERROR ===');
+        console.error('Error details:', error);
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+        console.log('=== EMAIL DEBUG END ===');
+        
+        return { success: false, error: error };
+    }
+}
+
+// DEBUGGING FUNCTIONS - Add these to your existing code
+window.emailDebug = {
+    // Test if EmailJS is properly loaded
+    testEmailJSLoaded: function() {
+        console.log('EmailJS loaded:', !!window.emailjs);
+        console.log('EmailJS version:', window.emailjs ? window.emailjs.version : 'Not available');
+        return !!window.emailjs;
+    },
+    
+    // Test email sending with dummy data
+    testEmailSend: async function() {
+        const testOrderData = {
+            firstName: 'Test',
+            lastName: 'User',
+            email: 'test@example.com',
+            phone: '555-0123',
+            streetAddress: '123 Test St',
+            city: 'Toronto',
+            province: 'ON',
+            zipCode: 'M5V 3A1',
+            paymentMethod: 'etransfer',
+            shippingMethod: 'free-bubble',
+            additionalInfo: 'Test order',
+            promoCode: 'TEST123',
+            newsletter: true,
+            orderId: 'TEST-' + Date.now()
+        };
+        
+        const testCartData = {
+            items: [
+                {
+                    strainName: 'Test Strain',
+                    variant: 'Test Variant',
+                    quantity: 1,
+                    price: 50.00
+                }
+            ],
+            total: 50.00
+        };
+        
+        console.log('Sending test email...');
+        const result = await sendOrderEmail(testOrderData, testCartData);
+        console.log('Test email result:', result);
+        return result;
+    },
+    
+    // Check EmailJS service status
+    checkServiceStatus: function() {
+        // You can manually verify your service/template IDs here
+        console.log('Current EmailJS Configuration:');
+        console.log('Service ID: service_viyn3ld');
+        console.log('Template ID: template_l8l5a4o');
+        console.log('Public Key: ZiDmYogre9hNBY-bI');
+        console.log('');
+        console.log('Verify these match your EmailJS dashboard settings');
+    }
+};
+
+// TEMPLATE VALIDATION
+// Your current template variables should match these exactly:
+/*
+Expected template variables in EmailJS:
+- {{customer_name}}
+- {{customer_email}}
+- {{customer_phone}}
+- {{customer_address}}
+- {{payment_method}}
+- {{order_items}}
+- {{subtotal}}
+- {{shipping}}
+- {{taxes}}
+- {{total}}
+- {{additional_info}}
+- {{promo_code}}
+- {{newsletter}}
+- {{order_id}}
+- {{order_date}}
+- {{order_time}}
+*/
+
+        class CheckoutManager {
+            constructor() {
+                this.cartData = null;
+                this.loadCartData();
+            }
+
+            loadCartData() {
+                try {
+                    // First try to load from localStorage (where your cart page actually stores data)
+                    let checkoutData = localStorage.getItem('noyesboys_checkout_data');
+                    if (checkoutData) {
+                        this.cartData = JSON.parse(checkoutData);
+                        console.log('Loaded checkout data from localStorage:', this.cartData);
+                    } else {
+                        // Fallback to regular cart data from localStorage
+                        const regularCart = localStorage.getItem('noyesboys_cart');
+                        if (regularCart) {
+                            const cartItems = JSON.parse(regularCart);
+                            this.cartData = {
+                                items: cartItems,
+                                total: cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                                itemCount: cartItems.reduce((sum, item) => sum + item.quantity, 0),
+                                timestamp: Date.now()
+                            };
+                            console.log('Loaded regular cart data from localStorage:', this.cartData);
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error loading cart data:', e);
+                    this.cartData = null;
+                }
+
+                this.displayCheckout();
+            }
+
+            displayCheckout() {
+    const loadingState = document.getElementById('loadingState');
+    const emptyCartState = document.getElementById('emptyCartState');
+    const checkoutContent = document.getElementById('checkoutContent');
+
+    // Always hide loading first
+    if (loadingState) {
+        loadingState.style.display = 'none';
+    }
+
+    // Log what we have for debugging
+    console.log('Cart data in displayCheckout:', this.cartData);
+    console.log('Items exist:', this.cartData && this.cartData.items);
+    console.log('Items length:', this.cartData?.items?.length);
+
+    // Check if we have valid cart data
+    if (!this.cartData || !this.cartData.items || this.cartData.items.length === 0) {
+        // Show empty cart
+        if (emptyCartState) emptyCartState.style.display = 'block';
+        if (checkoutContent) checkoutContent.style.display = 'none';
+        console.log('Showing empty cart state');
+    } else {
+        // Show checkout content
+        if (emptyCartState) emptyCartState.style.display = 'none';
+        if (checkoutContent) checkoutContent.style.display = 'grid';
+        console.log('Showing checkout content');
+        this.populateOrderSummary();
+    }
+}
+
+            populateOrderSummary() {
+                const orderItems = document.getElementById('orderItems');
+                const subtotal = document.getElementById('subtotal');
+                const grandTotal = document.getElementById('grandTotal');
+                const orderDetailsTextarea = document.getElementById('orderDetails');
+
+                if (!this.cartData || !this.cartData.items) return;
+
+                // Populate order items
+                orderItems.innerHTML = this.cartData.items.map(item => {
+                    const itemTotal = item.price * item.quantity;
+                    return `
+                        <div class="order-item">
+                            <div class="item-details">
+                                <div class="item-name">${item.strainName}</div>
+                                <div class="item-variant">${item.variantText} × ${item.quantity}</div>
+                            </div>
+                            <div class="item-price">
+                                $${itemTotal.toFixed(2)} CAD
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Update totals
+                subtotal.textContent = this.cartData.total.toFixed(2);
+                grandTotal.textContent = this.cartData.total.toFixed(2);
+
+                // Populate order details textarea with cart items
+                if (orderDetailsTextarea) {
+                    const orderDetails = this.cartData.items.map(item => 
+                        `${item.quantity}x ${item.strainName} (${item.variant})`
+                    ).join('\n');
+                    orderDetailsTextarea.value = orderDetails;
+                }
+            }
+
+            async handleFormSubmit(formData) {
+                // Generate unique order ID
+                const orderId = 'NB-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+                
+                // Add order ID to form data
+                formData.orderId = orderId;
+
+                console.log('Processing order:', formData);
+
+                // Send email notification
+                const emailResult = await sendOrderEmail(formData, this.cartData);
+                
+                if (emailResult.success) {
+                    console.log('Email sent successfully!');
+                    alert(`Order submitted successfully!\n\nOrder ID: ${orderId}\nTotal: $${this.cartData.total.toFixed(2)} CAD\n\nEmail notification sent to Noyes Boys!\n\nThank you for your order! We will contact you shortly with payment instructions.`);
+                } else {
+                    console.error('Email failed to send:', emailResult.error);
+                    alert(`Order submitted!\n\nOrder ID: ${orderId}\nTotal: $${this.cartData.total.toFixed(2)} CAD\n\nNote: Email notification failed to send. Please contact us directly at thenoyesboyz@gmail.com with your order ID.\n\nThank you for your order!`);
+                }
+
+                // Clear the cart after successful submission
+                localStorage.removeItem('noyesboys_checkout_data');
+                localStorage.removeItem('noyesboys_cart');
+
+                // Redirect back to main page after delay
+                setTimeout(() => {
+                    window.location.href = 'line1.html';
+                }, 3000);
+            }
+        }
+
+        // Initialize checkout manager
+        const checkoutManager = new CheckoutManager();
+
+        // Payment method selection
+        function selectPayment(method) {
+            // Remove selected class from all options
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            const selectedOption = document.querySelector(`.payment-option[onclick="selectPayment('${method}')"]`);
+            selectedOption.classList.add('selected');
+            
+            // Check the radio button
+            document.querySelector(`input[value="${method}"]`).checked = true;
+        }
+
+        // Shipping method selection
+        function selectShipping(method) {
+            // Remove selected class from all shipping options
+            document.querySelectorAll('.shipping-option').forEach(option => {
+                option.classList.remove('selected');
+                option.style.borderColor = '#475569';
+                option.style.background = '#0f172a';
+            });
+            
+            // Add selected class to clicked option
+            const selectedOption = document.querySelector(`.shipping-option[onclick="selectShipping('${method}')"]`);
+            selectedOption.classList.add('selected');
+            selectedOption.style.borderColor = '#4ade80';
+            selectedOption.style.background = 'rgba(74, 222, 128, 0.1)';
+            
+            // Check the radio button
+            document.querySelector(`input[value="${method}"]`).checked = true;
+
+            // Update shipping cost display
+            updateShippingCost(method);
+        }
+
+        // Update shipping cost in order summary
+        function updateShippingCost(shippingMethod) {
+            const shippingElement = document.getElementById('shipping');
+            const grandTotalElement = document.getElementById('grandTotal');
+            const subtotalValue = parseFloat(document.getElementById('subtotal').textContent);
+            
+            let shippingCost = 0;
+            
+            if (shippingMethod === 'upgrade-25') {
+                shippingCost = 25.00;
+            } else if (shippingMethod === 'free-300') {
+                // Check if order qualifies for free upgrade
+                if (subtotalValue >= 300) {
+                    shippingCost = 0;
+                } else {
+                    shippingCost = 0; // Still free but will show note
+                }
+            } else {
+                shippingCost = 0; // free-bubble
+            }
+            
+            // Update shipping display
+            if (shippingCost > 0) {
+                shippingElement.textContent = `${shippingCost.toFixed(2)} CAD`;
+            } else {
+                shippingElement.textContent = 'FREE';
+            }
+            
+            // Update grand total
+            const newTotal = subtotalValue + shippingCost;
+            grandTotalElement.textContent = newTotal.toFixed(2);
+        }
+
+        // Handle form submission
+        document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Show loading state on submit button
+            const submitBtn = this.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Order...';
+            submitBtn.disabled = true;
+            
+            const formData = new FormData(this);
+            const formObject = {};
+            
+            for (let [key, value] of formData.entries()) {
+                formObject[key] = value;
+            }
+
+            // Basic validation
+            const requiredFields = ['email', 'firstName', 'lastName', 'streetAddress', 'city', 'province', 'zipCode', 'paymentMethod', 'shippingMethod'];
+            const missingFields = requiredFields.filter(field => !formObject[field]);
+            
+            if (missingFields.length > 0) {
+                alert('Please fill in all required fields: ' + missingFields.join(', '));
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formObject.email)) {
+                alert('Please enter a valid email address.');
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
+
+            // Canadian postal code validation (if zipCode is provided)
+            if (formObject.zipCode) {
+                const postalCodeRegex = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
+                if (!postalCodeRegex.test(formObject.zipCode)) {
+                    alert('Please enter a valid Canadian postal code (e.g., K1A 0A6).');
+                    // Reset button
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    return;
+                }
+            }
+
+            // Add cart data to form object
+            formObject.cartItems = checkoutManager.cartData ? checkoutManager.cartData.items : [];
+            formObject.orderTotal = checkoutManager.cartData ? checkoutManager.cartData.total : 0;
+
+            await checkoutManager.handleFormSubmit(formObject);
+        });
+        // Debug functions
+        window.debugCheckout = {
+            viewCartData: () => console.log('Cart Data:', checkoutManager.cartData),
+            viewAllStorage: () => {
+                console.log('=== localStorage ===');
+                console.log('Checkout Data:', localStorage.getItem('noyesboys_checkout_data'));
+                console.log('Regular Cart:', localStorage.getItem('noyesboys_cart'));
+            },
+            clearStorage: () => {
+                localStorage.removeItem('noyesboys_checkout_data');
+                localStorage.removeItem('noyesboys_cart');
+                location.reload();
+            }
+        };
+
+    function checkAffiliateOrder() {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        if (cookie.includes('affiliate=')) {
+            return cookie.split('=')[1]; // Returns "john123"
+        }
+    }
+    return null;
+}
+
+// Add to your email data
+const affiliateWhoSentThem = checkAffiliateOrder();
+if (affiliateWhoSentThem) {
+    emailParams.affiliate_referral = affiliateWhoSentThem;
+}
+// Check for affiliate referral
+$affiliate_ref = null;
+
+// Check URL parameter
+if (isset($_GET['ref'])) {
+    $affiliate_ref = $_GET['ref'];
+    // Store in session for future purchases
+    $_SESSION['affiliate_ref'] = $affiliate_ref;
+}
+// Or check session
+elseif (isset($_SESSION['affiliate_ref'])) {
+    $affiliate_ref = $_SESSION['affiliate_ref'];
+}
+
+// If we have an affiliate reference and order is completed
+if ($affiliate_ref && $order_completed && $order_total > 0) {
+    
+    require_once 'classes/Affiliate.php';
+    $affiliate = new Affiliate();
+    
+    // Record the sale
+    $product_description = "Sale: " . $order_details; // Customize this
+    $commission = $affiliate->recordSale($affiliate_ref, $order_id, $order_total, $product_description);
+    
+    if ($commission) {
+        // Send notification email to you
+        $admin_email = 'your-email@domain.com';
+        $subject = 'Affiliate Sale Notification';
+        $message = "Affiliate Sale Recorded:\n\n";
+        $message .= "Affiliate ID: {$affiliate_ref}\n";
+        $message .= "Order ID: {$order_id}\n";
+        $message .= "Sale Amount: $" . number_format($order_total, 2) . "\n";
+        $message .= "Commission: $" . number_format($commission, 2) . "\n";
+        $message .= "Product: {$product_description}\n";
+        
+        mail($admin_email, $subject, $message);
+        
+        // Clear the affiliate session so it doesn't apply to future orders
+        unset($_SESSION['affiliate_ref']);
+    }
+}
+    </script>
+</body>
+</html>
