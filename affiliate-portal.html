@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Affiliate Portal - Noyes Boys</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/noyes boys logo.png" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #0a0a0a;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4ade80;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: white;
+        }
+        
+        .logout-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .logout-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 2rem 0;
+            min-height: calc(100vh - 100px);
+        }
+        
+        .page-title {
+            color: #4ade80;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid #475569;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(74, 222, 128, 0.3);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            color: #4ade80;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4ade80;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #cbd5e1;
+            font-size: 1rem;
+        }
+        
+        .stat-change {
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        .positive {
+            color: #22c55e;
+        }
+        
+        .negative {
+            color: #ef4444;
+        }
+        
+        /* Tier Progress */
+        .tier-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 2px solid #4ade80;
+        }
+        
+        .tier-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .current-tier {
+            background: #4ade80;
+            color: #0a0a0a;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        
+        .commission-rate {
+            color: #4ade80;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .progress-bar {
+            background: #475569;
+            height: 10px;
+            border-radius: 5px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #4ade80, #22c55e);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .next-tier {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+        
+        /* Sections */
+        .section {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            color: #4ade80;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Link Generator */
+        .link-generator {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .link-input {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        
+        .link-input select,
+        .link-input input {
+            padding: 0.75rem;
+            border: 2px solid #475569;
+            border-radius: 10px;
+            background: #0f172a;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .link-input select:focus,
+        .link-input input:focus {
+            outline: none;
+            border-color: #4ade80;
+        }
+        
+        .generate-btn {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .generated-link {
+            background: #0f172a;
+            border: 2px solid #475569;
+            border-radius: 10px;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .link-text {
+            color: #4ade80;
+            font-family: monospace;
+            word-break: break-all;
+            flex: 1;
+            margin-right: 1rem;
+        }
+        
+        .copy-btn {
+            background: #475569;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .copy-btn:hover {
+            background: #4ade80;
+            color: #0a0a0a;
+        }
+        
+        /* Marketing Materials */
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .material-card {
+            background: #0f172a;
+            border: 2px solid #475569;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .material-card:hover {
+            border-color: #4ade80;
+            transform: translateY(-3px);
+        }
+        
+        .material-icon {
+            font-size: 2rem;
+            color: #4ade80;
+            margin-bottom: 1rem;
+        }
+        
+        .material-title {
+            color: white;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        
+        .material-description {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 25px;
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Recent Activity */
+        .activity-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #475569;
+            color: #cbd5e1;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-info {
+            flex: 1;
+        }
+        
+        .activity-amount {
+            color: #4ade80;
+            font-weight: bold;
+        }
+        
+        .activity-date {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+        
+        /* Payout Info */
+        .payout-info {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ade80;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .payout-info h4 {
+            color: #4ade80;
+            margin-bottom: 0.5rem;
+        }
+        
+        .payout-info p {
+            color: #cbd5e1;
+            margin: 0;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .link-generator {
+                grid-template-columns: 1fr;
+            }
+            
+            .generated-link {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .link-text {
+                margin-right: 0;
+                text-align: center;
+            }
+            
+            .materials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">
+                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+                Noyes Boys - Affiliate Portal
+            </a>
+            <div class="user-info">
+                <span>Welcome, <strong id="affiliateName">John Doe</strong></span>
+                <a href="affiliate-login.html" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <div class="container">
+            <h1 class="page-title">Affiliate Dashboard</h1>
+            <p class="page-subtitle">Track your performance, generate links, and access marketing materials</p>
+
+            <!-- Tier Progress -->
+            <div class="tier-card">
+                <div class="tier-header">
+                    <div>
+                        <h3 style="color: white; margin-bottom: 0.5rem;">Current Tier</h3>
+                        <div class="current-tier" id="currentTier">Pro Affiliate</div>
+                    </div>
+                    <div class="commission-rate">
+                        <span id="commissionRate">30</span>% Commission
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="tierProgress" style="width: 65%;"></div>
+                </div>
+                <div class="next-tier">
+                    $<span id="nextTierAmount">1,850</span> more to reach Elite tier (35% commission)
+                </div>
+            </div>
+
+            <!-- Stats Dashboard -->
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-value" id="totalEarnings">$2,485</div>
+                    <div class="stat-label">Total Earnings</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> +$340 this month
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-mouse-pointer"></i>
+                    </div>
+                    <div class="stat-value" id="totalClicks">1,247</div>
+                    <div class="stat-label">Total Clicks</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> +89 this week
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-value" id="totalSales">28</div>
+                    <div class="stat-label">Total Sales</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> +4 this week
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="stat-value" id="conversionRate">2.2%</div>
+                    <div class="stat-label">Conversion Rate</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> +0.3% vs avg
+                    </div>
+                </div>
+            </div>
+
+            <!-- Link Generator -->
+            <div class="section">
+                <h3 class="section-title">
+                    <i class="fas fa-link"></i> Generate Affiliate Links
+                </h3>
+                <div class="link-generator">
+                    <div class="link-input">
+                        <select id="pageSelect">
+                            <option value="line1.html">Line 1 - Premium Strains</option>
+                            <option value="FeminizedSeedsHomepage.html">Homepage</option>
+                            <option value="deals.html">Deals Page</option>
+                            <option value="order_now.html">Order Now</option>
+                        </select>
+                        <input type="text" id="campaignName" placeholder="Campaign name (optional)">
+                    </div>
+                    <button class="generate-btn" onclick="generateLink()">
+                        <i class="fas fa-plus"></i> Generate Link
+                    </button>
+                </div>
+                <div id="generatedLinkContainer" style="display: none;">
+                    <div class="generated-link">
+                        <span class="link-text" id="generatedLink"></span>
+                        <button class="copy-btn" onclick="copyLink()">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Marketing Materials -->
+            <div class="section">
+                <h3 class="section-title">
+                    <i class="fas fa-images"></i> Marketing Materials
+                </h3>
+                <div class="materials-grid">
+                    <div class="material-card">
+                        <div class="material-icon">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div class="material-title">Banner Pack</div>
+                        <div class="material-description">Web banners in multiple sizes (728x90, 300x250, 160x600)</div>
+                        <a href="#" class="download-btn" onclick="downloadMaterial('banners')">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+
+                    <div class="material-card">
+                        <div class="material-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="material-title">Product Photos</div>
+                        <div class="material-description">High-resolution strain photos and product shots</div>
+                        <a href="#" class="download-btn" onclick="downloadMaterial('photos')">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+
+                    <div class="material-card">
+                        <div class="material-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="material-title">Strain Descriptions</div>
+                        <div class="material-description">Detailed strain information and growing guides</div>
+                        <a href="#" class="download-btn" onclick="downloadMaterial('descriptions')">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+
+                    <div class="material-card">
+                        <div class="material-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="material-title">Email Templates</div>
+                        <div class="material-description">Ready-to-use email campaigns and newsletters</div>
+                        <a href="#" class="download-btn" onclick="downloadMaterial('emails')">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="section">
+                <h3 class="section-title">
+                    <i class="fas fa-clock"></i> Recent Activity
+                </h3>
+                <div class="activity-list" id="activityList">
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <div>Sale: 3x Citronoyes Haze</div>
+                            <div class="activity-date">2 hours ago</div>
+                        </div>
+                        <div class="activity-amount">+$45.00</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <div>Sale: 1x Alienoyes Kush</div>
+                            <div class="activity-date">1 day ago</div>
+                        </div>
+                        <div class="activity-amount">+$12.00</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-info">
+                            <div>Sale: 5x Purple Rainbow</div>
+                            <div class="activity-date">2 days ago</div>
+                        </div>
+                        <div class="activity-amount">+$75.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payout Information -->
+            <div class="section">
+                <h3 class="section-title">
+                    <i class="fas fa-credit-card"></i> Payout Information
+                </h3>
+                <div class="payout-info">
+                    <h4>Next Payout: December 15, 2024</h4>
+                    <p>Your current balance of $340.50 will be processed via e-transfer to your registered email.</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div style="text-align: center; color: #cbd5e1;">
+                        <div style="font-size: 1.5rem; color: #4ade80; font-weight: bold;">$340.50</div>
+                        <div>Pending Balance</div>
+                    </div>
+                    <div style="text-align: center; color: #cbd5e1;">
+                        <div style="font-size: 1.5rem; color: #4ade80; font-weight: bold;">$2,144.50</div>
+                        <div>Paid to Date</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulate affiliate data (in real implementation, this would come from your database)
+        const affiliateData = {
+            id: 'AFF001',
+            name: 'John Doe',
+            tier: 'Pro',
+            commissionRate: 30,
+            totalEarnings: 2485,
+            totalClicks: 1247,
+            totalSales: 28,
+            conversionRate: 2.2,
+            pendingBalance: 340.50,
+            paidToDate: 2144.50
+        };
+
+        // Initialize dashboard with affiliate data
+        function initializeDashboard() {
+            document.getElementById('affiliateName').textContent = affiliateData.name;
+            document.getElementById('currentTier').textContent = affiliateData.tier + ' Affiliate';
+            document.getElementById('commissionRate').textContent = affiliateData.commissionRate;
+            document.getElementById('totalEarnings').textContent = '$' + affiliateData.totalEarnings.toLocaleString();
+            document.getElementById('totalClicks').textContent = affiliateData.totalClicks.toLocaleString();
+            document.getElementById('totalSales').textContent = affiliateData.totalSales;
+            document.getElementById('conversionRate').textContent = affiliateData.conversionRate + '%';
+        }
+
+        // Generate affiliate link
+        function generateLink() {
+            const page = document.getElementById('pageSelect').value;
+            const campaign = document.getElementById('campaignName').value;
+            const baseUrl = 'https://noyesboys.com/';
+            
+            let affiliateLink = baseUrl + page + '?ref=' + affiliateData.id.toLowerCase();
+            
+            if (campaign) {
+                affiliateLink += '&campaign=' + encodeURIComponent(campaign.toLowerCase().replace(/\s+/g, '-'));
+            }
+            
+            document.getElementById('generatedLink').textContent = affiliateLink;
+            document.getElementById('generatedLinkContainer').style.display = 'block';
+        }
+
+        // Copy link to clipboard
+        function copyLink() {
+            const linkText = document.getElementById('generatedLink').textContent;
+            navigator.clipboard.writeText(linkText).then(() => {
+                const copyBtn = document.querySelector('.copy-btn');
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                copyBtn.style.background = '#22c55e';
+                
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                    copyBtn.style.background = '#475569';
+                }, 2000);
+            });
+        }
+
+        // Download marketing materials
+        function downloadMaterial(type) {
+            // In a real implementation, this would trigger actual downloads
+            alert(`Downloading ${type} package...\n\nIn a real implementation, this would download a ZIP file containing all ${type} for your campaigns.`);
+        }
+
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', initializeDashboard);
+
+        // Simulate real-time updates (in production, this would be WebSocket or periodic API calls)
+        setInterval(() => {
+            // Simulate small changes in stats
+            const clicksElement = document.getElementById('totalClicks');
+            const currentClicks = parseInt(clicksElement.textContent.replace(',', ''));
+            if (Math.random() > 0.7) { // 30% chance of new click
+                clicksElement.textContent = (currentClicks + 1).toLocaleString();
+            }
+        }, 30000); // Check every 30 seconds
+    </script>
+</body>
+</html>
