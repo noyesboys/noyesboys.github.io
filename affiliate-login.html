@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Affiliate Login - Noyes Boys</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/noyes boys logo.png" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Login Container */
+        .login-container {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border: 1px solid #475569;
+        }
+        
+        .logo-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+        
+        .login-title {
+            color: #4ade80;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        
+        .login-subtitle {
+            color: #cbd5e1;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #4ade80;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #475569;
+            border-radius: 10px;
+            background: #0f172a;
+            color: white;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #4ade80;
+        }
+        
+        .form-group input::placeholder {
+            color: #6b7280;
+        }
+        
+        .password-container {
+            position: relative;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .password-toggle:hover {
+            color: #4ade80;
+        }
+        
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #cbd5e1;
+        }
+        
+        .remember-me input[type="checkbox"] {
+            width: auto;
+        }
+        
+        .forgot-password {
+            color: #4ade80;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 25px;
+            padding: 1rem 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+        
+        .login-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .signup-link {
+            text-align: center;
+            color: #cbd5e1;
+        }
+        
+        .signup-link a {
+            color: #4ade80;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: #fca5a5;
+            display: none;
+        }
+        
+        .success-message {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid #22c55e;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: #86efac;
+            display: none;
+        }
+        
+        /* Demo Credentials Box */
+        .demo-credentials {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ade80;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        .demo-credentials h4 {
+            color: #4ade80;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        .demo-credentials p {
+            color: #cbd5e1;
+            margin: 0.25rem 0;
+        }
+        
+        .demo-credentials code {
+            background: #0f172a;
+            padding: 0.25rem 0.5rem;
+            border-radius: 5px;
+            color: #4ade80;
+            font-family: monospace;
+        }
+        
+        /* Back to Home */
+        .back-home {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            color: #4ade80;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .back-home:hover {
+            color: #22c55e;
+            transform: translateX(-5px);
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .login-container {
+                margin: 1rem;
+                padding: 2rem;
+            }
+            
+            .back-home {
+                position: static;
+                margin-bottom: 2rem;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="FeminizedSeedsHomepage.html" class="back-home">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+
+    <div class="login-container">
+        <div class="logo">
+            <h1>Affiliate Login</h1>
+            <p style="color: #cbd5e1; margin: 0;">Noyes Boys</p>
+        </div>
+        
+        <div id="message"></div>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" class="login-btn" id="loginBtn">
+                Login
+            </button>
+        </form>
+        
+        <div class="demo-link">
+            <a href="portal.html">View Demo Portal</a>
+        </div>
+        
+        <div class="links">
+            <a href="register.html">Apply to Join</a>
+            <a href="../index.html">Back to Store</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const loginBtn = document.getElementById('loginBtn');
+            const messageDiv = document.getElementById('message');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Disable button and show loading
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Logging in...';
+            messageDiv.innerHTML = '';
+            
+            try {
+                const response = await fetch('../api/affiliate/login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Store token
+                    localStorage.setItem('affiliateToken', data.token);
+                    localStorage.setItem('affiliateName', data.name);
+                    
+                    messageDiv.innerHTML = '<div class="success">Login successful! Redirecting...</div>';
+                    
+                    // Redirect to portal
+                    setTimeout(() => {
+                        window.location.href = 'portal.html';
+                    }, 1500);
+                } else {
+                    messageDiv.innerHTML = `<div class="error">${data.error}</div>`;
+                }
+            } catch (error) {
+                messageDiv.innerHTML = '<div class="error">Login failed. Please try again.</div>';
+            }
+            
+            // Re-enable button
+            loginBtn.disabled = false;
+            loginBtn.textContent = 'Login';
+        });
+    </script>
+</body>
+
+    <script>
+        // Demo affiliate credentials (in production, this would be handled server-side)
+        const validCredentials = {
+            'demo@affiliate.com': 'demo123',
+            'johndoe@example.com': 'affiliate123',
+            'noyesboys@noyesboys.com': 'password123'
+        };
+
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('passwordToggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.className = 'fas fa-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.className = 'fas fa-eye';
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            const successDiv = document.getElementById('successMessage');
+            
+            successDiv.style.display = 'none';
+            errorText.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            const successText = document.getElementById('successText');
+            const errorDiv = document.getElementById('errorMessage');
+            
+            errorDiv.style.display = 'none';
+            successText.textContent = message;
+            successDiv.style.display = 'block';
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Handle forgot password
+        function showForgotPassword() {
+            alert('Please contact support at thenoyesboyz@gmail.com for password assistance.');
+        }
+
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember').checked;
+            const submitBtn = document.querySelector('.login-btn');
+            
+            // Show loading state
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing In...';
+            submitBtn.disabled = true;
+            
+            // Simulate authentication delay
+            setTimeout(() => {
+                // Check credentials (in production, this would be an API call)
+                if (validCredentials[email] && validCredentials[email] === password) {
+                    showSuccess('Login successful! Redirecting to dashboard...');
+                    
+                    // Store login state (in production, use proper session management)
+                    if (remember) {
+                        localStorage.setItem('affiliateLoggedIn', 'true');
+                        localStorage.setItem('affiliateEmail', email);
+                    } else {
+                        sessionStorage.setItem('affiliateLoggedIn', 'true');
+                        sessionStorage.setItem('affiliateEmail', email);
+                    }
+                    
+                    // Redirect to portal after short delay
+                    setTimeout(() => {
+                        window.location.href = 'affiliate-portal.html';
+                    }, 2000);
+                    
+                } else {
+                    showError('Invalid email or password. Please try again.');
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
+            }, 1500);
+        });
+
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem('affiliateLoggedIn') || sessionStorage.getItem('affiliateLoggedIn');
+            
+            if (isLoggedIn === 'true') {
+                showSuccess('You are already logged in. Redirecting...');
+                setTimeout(() => {
+                    window.location.href = 'affiliate-portal.html';
+                }, 1500);
+            }
+        });
+
+        // Auto-fill demo credentials when clicking on them
+        document.querySelector('.demo-credentials').addEventListener('click', function(e) {
+            if (e.target.tagName === 'CODE') {
+                const text = e.target.textContent;
+                if (text.includes('@')) {
+                    document.getElementById('email').value = text;
+                } else {
+                    document.getElementById('password').value = text;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

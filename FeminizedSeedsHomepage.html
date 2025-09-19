@@ -462,7 +462,7 @@
                 <li><a href="deals.html">Deals</a></li>
                 <li><a href="order_now.html">Order Now</a></li>
                 <li><a href="contact_us.html">Contact</a></li>
-                <li><a href="affiliates.html">Affiliate Program</a></li>
+                <li><a href="affiliate/affiliates.html">Affiliate Program</a></li>
                 <li><a href="reviews.html">Reviews</a></li>
                 <li><a href="readmore.html">Growing Guide</a></li>
             </ul>
@@ -665,6 +665,22 @@ function checkForAffiliateLink() {
 }
 
 checkForAffiliateLink();
+
+// Add this to track affiliate clicks
+if (isset($_GET['ref'])) {
+    $affiliate_ref = $_GET['ref'];
+    $current_page = basename($_SERVER['PHP_SELF']);
+    $campaign = isset($_GET['campaign']) ? $_GET['campaign'] : null;
+    
+    // Store affiliate in session
+    session_start();
+    $_SESSION['affiliate_ref'] = $affiliate_ref;
+    
+    // Track the click
+    require_once 'classes/Affiliate.php';
+    $affiliate = new Affiliate();
+    $affiliate->recordClick($affiliate_ref, $current_page, $campaign);
+}
 
     </script>
 </body>

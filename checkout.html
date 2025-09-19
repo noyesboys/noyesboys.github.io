@@ -1129,7 +1129,47 @@ const affiliateWhoSentThem = checkAffiliateOrder();
 if (affiliateWhoSentThem) {
     emailParams.affiliate_referral = affiliateWhoSentThem;
 }
+// Check for affiliate referral
+$affiliate_ref = null;
 
+// Check URL parameter
+if (isset($_GET['ref'])) {
+    $affiliate_ref = $_GET['ref'];
+    // Store in session for future purchases
+    $_SESSION['affiliate_ref'] = $affiliate_ref;
+}
+// Or check session
+elseif (isset($_SESSION['affiliate_ref'])) {
+    $affiliate_ref = $_SESSION['affiliate_ref'];
+}
+
+// If we have an affiliate reference and order is completed
+if ($affiliate_ref && $order_completed && $order_total > 0) {
+    
+    require_once 'classes/Affiliate.php';
+    $affiliate = new Affiliate();
+    
+    // Record the sale
+    $product_description = "Sale: " . $order_details; // Customize this
+    $commission = $affiliate->recordSale($affiliate_ref, $order_id, $order_total, $product_description);
+    
+    if ($commission) {
+        // Send notification email to you
+        $admin_email = 'your-email@domain.com';
+        $subject = 'Affiliate Sale Notification';
+        $message = "Affiliate Sale Recorded:\n\n";
+        $message .= "Affiliate ID: {$affiliate_ref}\n";
+        $message .= "Order ID: {$order_id}\n";
+        $message .= "Sale Amount: $" . number_format($order_total, 2) . "\n";
+        $message .= "Commission: $" . number_format($commission, 2) . "\n";
+        $message .= "Product: {$product_description}\n";
+        
+        mail($admin_email, $subject, $message);
+        
+        // Clear the affiliate session so it doesn't apply to future orders
+        unset($_SESSION['affiliate_ref']);
+    }
+}
     </script>
 </body>
 </html>
