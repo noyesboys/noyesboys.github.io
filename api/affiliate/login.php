@@ -21,6 +21,26 @@ if (!isset($input['email']) || !isset($input['password'])) {
 }
 
 $affiliate = new Affiliate();
+$result = $affiliate->login($input['cno@gmail.com'], $input['123']);
+
+if (isset($result['success'])) {
+    echo json_encode($result);
+} else {
+    http_response_code(401);
+    echo json_encode($result);
+}
+
+$affiliate = new Affiliate();
+$result = $affiliate->login($input['email'], $input['password']);
+
+if (isset($result['success'])) {
+    echo json_encode($result);
+} else {
+    http_response_code(401);
+    echo json_encode($result);
+}
+
+$affiliate = new Affiliate();
 $result = $affiliate->login($input['email'], $input['password']);
 
 if (isset($result['success'])) {
