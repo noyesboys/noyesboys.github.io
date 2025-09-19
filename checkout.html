@@ -1113,6 +1113,23 @@ Expected template variables in EmailJS:
                 location.reload();
             }
         };
+
+    function checkAffiliateOrder() {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        if (cookie.includes('affiliate=')) {
+            return cookie.split('=')[1]; // Returns "john123"
+        }
+    }
+    return null;
+}
+
+// Add to your email data
+const affiliateWhoSentThem = checkAffiliateOrder();
+if (affiliateWhoSentThem) {
+    emailParams.affiliate_referral = affiliateWhoSentThem;
+}
+
     </script>
 </body>
 </html>

@@ -651,5 +651,21 @@
             </div>
         </div>
     </footer>
+
+<script>
+function checkForAffiliateLink() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const affiliateCode = urlParams.get('ref'); // Gets the "john123" part
+    
+    if (affiliateCode) {
+        // Remember this for 60 days
+        document.cookie = 'affiliate=${affiliateCode}; max-age=5184000; path=/';
+        console.log('Affiliate tracked:', affiliateCode);
+    }
+}
+
+checkForAffiliateLink();
+
+    </script>
 </body>
 </html>
