@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="title" content="Affiliate Program - The Noyes Boys" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Join the Noyes Boys Affiliate Program - Earn up to 35% commission promoting premium Canadian cannabis genetics" />
+    <meta name="author" content="The Noyes Boys" />
+    <title>Affiliate Program - Noyes Boys Premium Canadian Cannabis Genetics</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/noyes boys logo.png" />
+    <!-- Font Awesome icons -->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #0a0a0a;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4ade80;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+        }
+        
+        .nav-links a:hover {
+            color: #4ade80;
+        }
+        
+        /* Masthead Banner */
+        .masthead {
+            height: 100vh;
+            min-height: 600px;
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            padding-top: 120px;
+        }
+        
+        .masthead-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .masthead h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 3rem;
+            line-height: 3rem;
+            letter-spacing: 0.8rem;
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .masthead h2 {
+            font-size: 1.5rem;
+            color: #4ade80;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .masthead p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.6);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid #4ade80;
+        }
+        
+        .btn-secondary:hover {
+            background: #4ade80;
+            color: #0a0a0a;
+            transform: translateY(-2px);
+        }
+        
+        /* Main Content Sections */
+        .section {
+            padding: 100px 0;
+            background: #000000;
+        }
+        
+        .section-alt {
+            background: #111111;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #4ade80;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            color: #cbd5e1;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Commission Structure */
+        .commission-tiers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .tier-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tier-card.featured {
+            border-color: #4ade80;
+            transform: scale(1.05);
+        }
+        
+        .tier-card.featured::before {
+            content: "MOST POPULAR";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #4ade80;
+            color: #0a0a0a;
+            padding: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        
+        .tier-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(74, 222, 128, 0.3);
+        }
+        
+        .tier-title {
+            color: #4ade80;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .tier-commission {
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tier-requirement {
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tier-features {
+            list-style: none;
+            text-align: left;
+        }
+        
+        .tier-features li {
+            color: #cbd5e1;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .tier-features li i {
+            color: #4ade80;
+            width: 16px;
+        }
+        
+        /* Benefits Grid */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .benefit-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .benefit-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .benefit-icon {
+            font-size: 3rem;
+            color: #4ade80;
+            margin-bottom: 1rem;
+        }
+        
+        .benefit-title {
+            color: #4ade80;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        .benefit-description {
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        
+        /* How it Works */
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .step-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4ade80;
+            color: #0a0a0a;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .step-title {
+            color: #4ade80;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .step-description {
+            color: #cbd5e1;
+            line-height: 1.6;
+        }
+        
+        /* Application Form */
+        .application-form {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #4ade80;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #475569;
+            border-radius: 10px;
+            background: #0f172a;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4ade80;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .required {
+            color: #ef4444;
+        }
+        
+        /* Stats Section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #4ade80;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+        }
+        
+        /* FAQ Section */
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            color: #4ade80;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-question:hover {
+            background: rgba(74, 222, 128, 0.1);
+        }
+        
+        .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            color: #cbd5e1;
+            display: none;
+            line-height: 1.6;
+        }
+        
+        .faq-answer.active {
+            display: block;
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .masthead h1 {
+                font-size: 2rem;
+                letter-spacing: 0.5rem;
+            }
+            
+            .commission-tiers {
+                grid-template-columns: 1fr;
+            }
+            
+            .tier-card.featured {
+                transform: none;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                gap: 0.5rem;
+            }
+            
+            .nav-links a {
+                font-size: 0.8rem;
+                padding: 0.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">
+                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+                Noyes Boys
+            </a>
+            <ul class="nav-links">
+                <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
+                <li><a href="affiliate-login.html">Login</a></li>
+                <li><a href="affiliate-portal.html">Your Stats</a></li>
+                <li><a href="contact_us.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="masthead" id="home">
+        <div class="masthead-content">
+            <h1>Affiliate Program</h1>
+            <h2>Join the Noyes Boys Family</h2>
+            <p>Earn up to 35% commission promoting Canada's premier feminized cannabis genetics. Turn your passion for premium cannabis into profit.</p>
+            <div class="cta-buttons">
+                <a class="btn btn-primary" href="#apply">
+                    <i class="fas fa-rocket"></i> Apply Now
+                </a>
+                <a class="btn btn-secondary" href="#how-it-works">
+                    <i class="fas fa-info-circle"></i> Learn More
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Commission Structure -->
+    <section class="section" id="commissions">
+        <div class="container">
+            <h2 class="section-title">Commission Structure</h2>
+            <p class="section-subtitle">Our tiered commission system rewards performance. The more you sell, the more you earn.</p>
+            
+            <div class="commission-tiers">
+                <div class="tier-card">
+                    <div class="tier-title">Starter</div>
+                    <div class="tier-commission">20%</div>
+                    <div class="tier-requirement">$0 - $999/month in sales</div>
+                    <ul class="tier-features">
+                        <li><i class="fas fa-check"></i> 20% commission on all sales</li>
+                        <li><i class="fas fa-check"></i> Marketing materials provided</li>
+                        <li><i class="fas fa-check"></i> Monthly payouts</li>
+                        <li><i class="fas fa-check"></i> Dedicated affiliate portal</li>
+                        <li><i class="fas fa-check"></i> Email support</li>
+                    </ul>
+                </div>
+                
+                <div class="tier-card featured">
+                    <div class="tier-title">Pro</div>
+                    <div class="tier-commission">30%</div>
+                    <div class="tier-requirement">$1,000 - $4,999/month in sales</div>
+                    <ul class="tier-features">
+                        <li><i class="fas fa-check"></i> 30% commission on all sales</li>
+                        <li><i class="fas fa-check"></i> Premium marketing assets</li>
+                        <li><i class="fas fa-check"></i> Weekly payouts</li>
+                        <li><i class="fas fa-check"></i> Priority support</li>
+                        <li><i class="fas fa-check"></i> Custom discount codes</li>
+                        <li><i class="fas fa-check"></i> Performance bonuses</li>
+                    </ul>
+                </div>
+                
+                <div class="tier-card">
+                    <div class="tier-title">Elite</div>
+                    <div class="tier-commission">35%</div>
+                    <div class="tier-requirement">$5,000+/month in sales</div>
+                    <ul class="tier-features">
+                        <li><i class="fas fa-check"></i> 35% commission on all sales</li>
+                        <li><i class="fas fa-check"></i> Exclusive marketing content</li>
+                        <li><i class="fas fa-check"></i> Daily payouts available</li>
+                        <li><i class="fas fa-check"></i> Direct line to founders</li>
+                        <li><i class="fas fa-check"></i> Early access to new strains</li>
+                        <li><i class="fas fa-check"></i> Co-marketing opportunities</li>
+                        <li><i class="fas fa-check"></i> Quarterly bonuses</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="section section-alt" id="benefits">
+        <div class="container">
+            <h2 class="section-title">Why Partner With Noyes Boys?</h2>
+            <p class="section-subtitle">We provide everything you need to succeed in the cannabis affiliate space</p>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="benefit-title">Premium Genetics</div>
+                    <div class="benefit-description">Promote Canada's finest feminized cannabis seeds with proven genetics and high germination rates.</div>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="benefit-title">High Commissions</div>
+                    <div class="benefit-description">Earn up to 35% on every sale - one of the highest rates in the cannabis seed industry.</div>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="benefit-title">Growing Market</div>
+                    <div class="benefit-description">Cannabis cultivation is exploding in Canada. Tap into this booming market with premium products.</div>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="benefit-title">Marketing Tools</div>
+                    <div class="benefit-description">Access professional banners, product photos, strain descriptions, and promotional content.</div>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="benefit-title">60-Day Cookies</div>
+                    <div class="benefit-description">Extended cookie life means you earn commissions on purchases up to 60 days after referral.</div>
+                </div>
+                
+                <div class="benefit-card">
+                    <div class="benefit-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="benefit-title">Dedicated Support</div>
+                    <div class="benefit-description">Get help from our affiliate team to maximize your earnings and optimize your campaigns.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Getting started is simple. Follow these steps to begin earning commissions</p>
+            
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Apply & Get Approved</div>
+                    <div class="step-description">Fill out our affiliate application form. We review all applications within 24-48 hours.</div>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Get Your Links</div>
+                    <div class="step-description">Access your unique affiliate links and marketing materials through our affiliate portal.</div>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Start Promoting</div>
+                    <div class="step-description">Share your links through your website, social media, email lists, or other marketing channels.</div>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Earn Commissions</div>
+                    <div class="step-description">Get paid for every sale generated through your referral links. Track your performance in real-time.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Program Stats</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">$275</div>
+                    <div class="stat-label">Average Order Value</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">4.2%</div>
+                    <div class="stat-label">Conversion Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Customer Satisfaction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">60</div>
+                    <div class="stat-label">Cookie Duration (Days)</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How much can I earn as a Noyes Boys affiliate?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Your earnings depend on your sales volume and commission tier. With our average order value of $275 and commission rates up to 35%, top affiliates earn $5,000+ per month.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        When and how do I get paid?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Payouts are processed monthly for Starter tier, weekly for Pro tier, and daily for Elite tier affiliates. We pay via e-transfer, PayPal, or bank transfer with a minimum payout of $100.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        What marketing materials do you provide?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        We provide high-quality banners, product photos, strain descriptions, email templates, social media content, and landing pages. All materials are professionally designed and optimized for conversions.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Who can join the affiliate program?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        We welcome cannabis educators, growers, influencers, bloggers, and anyone with an audience interested in premium cannabis genetics. You must be 19+ and comply with local cannabis laws.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        How long do cookies last?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Our cookies last 60 days, giving you plenty of time to earn commissions from your referrals. This is longer than most affiliate programs in the cannabis space.
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFAQ(this)">
+                        Can I promote on social media?
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="faq-answer">
+                        Yes! We encourage promotion through compliant social media channels. We provide platform-specific content and guidelines to help you stay within each platform's policies.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Form -->
+    <section class="section section-alt" id="apply">
+        <div class="container">
+            <h2 class="section-title">Apply to Join</h2>
+            <p class="section-subtitle">Ready to start earning? Fill out the form below to apply for our affiliate program</p>
+            
+            <div class="application-form">
+            <div class="application-form">
+                <form id="affiliateForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name <span class="required">*</span></label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name <span class="required">*</span></label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="website">Website/Social Media URL <span class="required">*</span></label>
+                        <input type="url" id="website" name="website" placeholder="https://" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="platform">Primary Promotion Platform <span class="required">*</span></label>
+                        <select id="platform" name="platform" required>
+                            <option value="">Select Platform</option>
+                            <option value="website">Website/Blog</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="youtube">YouTube</option>
+                            <option value="tiktok">TikTok</option>
+                            <option value="twitter">Twitter</option>
+                            <option value="email">Email Marketing</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="audience">Audience Size</label>
+                        <select id="audience" name="audience">
+                            <option value="">Select Range</option>
+                            <option value="under-1k">Under 1,000</option>
+                            <option value="1k-10k">1,000 - 10,000</option>
+                            <option value="10k-50k">10,000 - 50,000</option>
+                            <option value="50k-100k">50,000 - 100,000</option>
+                            <option value="over-100k">Over 100,000</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="experience">Cannabis Industry Experience <span class="required">*</span></label>
+                        <select id="experience" name="experience" required>
+                            <option value="">Select Experience Level</option>
+                            <option value="beginner">Beginner (0-1 years)</option>
+                            <option value="intermediate">Intermediate (2-4 years)</option>
+                            <option value="advanced">Advanced (5+ years)</option>
+                            <option value="professional">Industry Professional</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="motivation">Why do you want to promote Noyes Boys? <span class="required">*</span></label>
+                        <textarea id="motivation" name="motivation" rows="4" placeholder="Tell us about your interest in our genetics and how you plan to promote our products..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="strategy">Marketing Strategy</label>
+                        <textarea id="strategy" name="strategy" rows="3" placeholder="Describe your planned approach to promoting our seeds (optional)"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="province">Province/State <span class="required">*</span></label>
+                        <select id="province" name="province" required>
+                            <option value="">Select Location</option>
+                            <option value="AB">Alberta</option>
+                            <option value="BC">British Columbia</option>
+                            <option value="MB">Manitoba</option>
+                            <option value="NB">New Brunswick</option>
+                            <option value="NL">Newfoundland and Labrador</option>
+                            <option value="NS">Nova Scotia</option>
+                            <option value="ON">Ontario</option>
+                            <option value="PE">Prince Edward Island</option>
+                            <option value="QC">Quebec</option>
+                            <option value="SK">Saskatchewan</option>
+                            <option value="NT">Northwest Territories</option>
+                            <option value="NU">Nunavut</option>
+                            <option value="YT">Yukon</option>
+                            <option value="other">Other/International</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
+                            <input type="checkbox" id="terms" name="terms" required style="margin-top: 0.25rem; width: auto;">
+                            <label for="terms" style="margin-bottom: 0; font-weight: normal; color: #cbd5e1;">
+                                I agree to the <a href="#" style="color: #4ade80;">affiliate terms and conditions</a> and confirm I am 19+ years old <span class="required">*</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div style="display: flex; align-items: flex-start; gap: 0.5rem;">
+                            <input type="checkbox" id="newsletter" name="newsletter" style="margin-top: 0.25rem; width: auto;">
+                            <label for="newsletter" style="margin-bottom: 0; font-weight: normal; color: #cbd5e1;">
+                                Subscribe to affiliate newsletter for tips, updates, and new strain releases
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem;">
+                        <i class="fas fa-paper-plane"></i> Submit Application
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Initialize EmailJS when page loads
+        emailjs.init({
+    publicKey: "ZiDmYogre9hNBY-bI"
+});
+
+        // Email sending function for affiliate applications
+        async function sendAffiliateEmail(applicationData) {
+            try {
+                // Email parameters that match your EmailJS template
+                const emailParams = {
+                    to_email: 'thenoyesboyz@gmail.com',
+                    first_name: applicationData.firstName,
+                    last_name: applicationData.lastName,
+                    email: applicationData.email,
+                    phone: applicationData.phone || 'Not provided',
+                    website: applicationData.website,
+                    platform: applicationData.platform,
+                    audience: applicationData.audience || 'Not specified',
+                    experience: applicationData.experience,
+                    motivation: applicationData.motivation,
+                    strategy: applicationData.strategy || 'Not provided',
+                    province: applicationData.province,
+                    age_verified: applicationData.terms ? 'Yes - Terms accepted' : 'No',
+                    newsletter_signup: applicationData.newsletter ? 'Yes' : 'No',
+                    application_date: new Date().toLocaleDateString('en-CA'),
+                    application_time: new Date().toLocaleTimeString('en-CA')
+                };
+
+                console.log('Sending affiliate application email with params:', emailParams);
+
+                // Send email using EmailJS - replace YOUR_AFFILIATE_TEMPLATE_ID with your actual template ID
+                const response = await emailjs.send(
+                    'service_viyn3ld', // Your existing service ID
+                    'template_wtchgc5', // Replace with your new affiliate template ID
+                    emailParams
+                );
+
+                console.log('Affiliate application email sent successfully:', response);
+                return { success: true, response: response };
+            } catch (error) {
+                console.error('Failed to send affiliate application email:', error);
+                return { success: false, error: error };
+            }
+        }
+
+        // FAQ Toggle Function
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('i');
+            
+            // Close all other FAQs
+            document.querySelectorAll('.faq-answer').forEach(faq => {
+                if (faq !== answer) {
+                    faq.classList.remove('active');
+                }
+            });
+            
+            document.querySelectorAll('.faq-question i').forEach(faqIcon => {
+                if (faqIcon !== icon) {
+                    faqIcon.className = 'fas fa-chevron-down';
+                }
+            });
+            
+            // Toggle current FAQ
+            answer.classList.toggle('active');
+            
+            if (answer.classList.contains('active')) {
+                icon.className = 'fas fa-chevron-up';
+            } else {
+                icon.className = 'fas fa-chevron-down';
+            }
+        }
+
+        // Form Submission with Email Integration
+        document.getElementById('affiliateForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const formObject = {};
+            
+            for (let [key, value] of formData.entries()) {
+                formObject[key] = value;
+            }
+            
+            // Basic validation
+            const requiredFields = ['firstName', 'lastName', 'email', 'website', 'platform', 'experience', 'motivation', 'province', 'terms'];
+            const missingFields = requiredFields.filter(field => !formObject[field]);
+            
+            if (missingFields.length > 0) {
+                alert('Please fill in all required fields: ' + missingFields.join(', '));
+                return;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formObject.email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+            
+            // URL validation
+            const urlRegex = /^https?:\/\/.+/;
+            if (!urlRegex.test(formObject.website)) {
+                alert('Please enter a valid website URL (must start with http:// or https://)');
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting Application...';
+            submitBtn.disabled = true;
+            
+            // Send email notification
+            const emailResult = await sendAffiliateEmail(formObject);
+            
+            if (emailResult.success) {
+                console.log('Affiliate application email sent successfully!');
+                alert(`Application Submitted Successfully!
+
+Thank you ${formObject.firstName}! We've received your affiliate application and sent it to our team.
+
+What's Next:
+• We'll review your application within 24-48 hours
+• If approved, you'll receive login credentials to our affiliate portal
+• You can then start earning commissions immediately
+
+We'll contact you at ${formObject.email} with your application status.
+
+Email notification sent to Noyes Boys team!
+
+Welcome to the Noyes Boys family!`);
+            } else {
+                console.error('Affiliate application email failed:', emailResult.error);
+                alert(`Application Submitted!
+
+Thank you ${formObject.firstName}! Your application has been processed.
+
+Note: Email notification failed to send automatically. Please also send us an email directly at thenoyesboyz@gmail.com with the subject "Affiliate Application - ${formObject.firstName} ${formObject.lastName}" to ensure we receive your application.
+
+We'll review your application within 24-48 hours.`);
+            }
+            
+            // Reset form
+            this.reset();
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Animate stats on scroll
+        function animateStats() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = entry.target;
+                        const finalValue = target.textContent;
+                        
+                        // Only animate numbers
+                        if (/^\d+/.test(finalValue)) {
+                            const numValue = parseInt(finalValue.match(/^\d+/)[0]);
+                            let current = 0;
+                            const increment = numValue / 50;
+                            const timer = setInterval(() => {
+                                current += increment;
+                                if (current >= numValue) {
+                                    target.textContent = finalValue;
+                                    clearInterval(timer);
+                                } else {
+                                    target.textContent = Math.floor(current) + finalValue.substring(numValue.toString().length);
+                                }
+                            }, 30);
+                        }
+                        
+                        observer.unobserve(target);
+                    }
+                });
+            });
+            
+            statNumbers.forEach(stat => observer.observe(stat));
+        }
+        
+        // Initialize animations when page loads
+        document.addEventListener('DOMContentLoaded', animateStats);
+        
+        // Debug function for testing
+        window.debugAffiliate = {
+            testEmail: (testData) => {
+                const sampleData = testData || {
+                    firstName: 'Test',
+                    lastName: 'User',
+                    email: 'test@example.com',
+                    website: 'https://example.com',
+                    platform: 'website',
+                    experience: 'intermediate',
+                    motivation: 'Test application',
+                    province: 'ON',
+                    terms: true,
+                    newsletter: false
+                };
+                return sendAffiliateEmail(sampleData);
+            }
+        };
+    </script>
+</body>
+</html>
