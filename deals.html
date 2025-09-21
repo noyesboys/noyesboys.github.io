@@ -1335,7 +1335,7 @@
                 const price = selectedOption.getAttribute('data-price');
                 const priceDisplay = document.getElementById(priceDisplayId);
                 if (priceDisplay) {
-                    priceDisplay.textContent = ${price} CAD;
+                    priceDisplay.textContent = `${price} CAD`;
                 }
 
                 // Add change listener
@@ -1345,7 +1345,7 @@
                     const price = selectedOption.getAttribute('data-price');
                     const priceDisplay = document.getElementById(priceDisplayId);
                     if (priceDisplay) {
-                        priceDisplay.textContent = ${price} CAD;
+                        priceDisplay.textContent = `${price} CAD`;
                     }
                 });
             });
