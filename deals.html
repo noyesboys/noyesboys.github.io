@@ -22,13 +22,13 @@
             line-height: 1.4;
             margin: 0;
             padding: 0;
-            padding-top: 100px;
+            padding-top: 70px;
         }
 
-        /* Header Navigation */
+        /* Compact Header Navigation */
         header {
             background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
-            padding: 1rem 0;
+            padding: 0.5rem 0;
             position: fixed;
             width: 100%;
             top: 0;
@@ -44,12 +44,13 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
+            min-height: 60px;
         }
         
         .logo {
             display: flex;
             align-items: center;
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: bold;
             color: #4ade80;
             text-decoration: none;
@@ -57,16 +58,16 @@
         }
         
         .logo-img {
-            width: 45px;
-            height: 45px;
-            margin-right: 10px;
+            width: 35px;
+            height: 35px;
+            margin-right: 8px;
             border-radius: 50%;
         }
         
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 1.5rem;
+            gap: 1rem;
             flex-wrap: wrap;
             align-items: center;
         }
@@ -76,8 +77,8 @@
             text-decoration: none;
             transition: all 0.3s ease;
             font-weight: 600;
-            font-size: 1rem;
-            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            padding: 0.5rem 0.8rem;
             border-radius: 8px;
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
@@ -97,39 +98,39 @@
             border-color: #4ade80;
         }
 
-        /* Cart Button in Header */
-        .header-cart-button {
+        /* Compact Cart Button */
+        .header-cart-button, .cart-button {
             background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
             color: #0a0a0a;
             border: none;
-            border-radius: 25px;
-            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
             font-weight: bold;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 0.5rem;
             transition: all 0.3s ease;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .header-cart-button:hover {
+        .header-cart-button:hover, .cart-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
         }
 
-        .header-cart-count {
+        .header-cart-count, .cart-count {
             background: #0a0a0a;
             color: #4ade80;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: bold;
         }
         
@@ -138,7 +139,7 @@
             margin: 0 auto;
             padding: 20px;
             background: linear-gradient(135deg, #1e3c1e 0%, #2d5a2d 50%, #4a7c4a 100%);
-            min-height: calc(100vh - 100px);
+            min-height: calc(100vh - 70px);
         }
         
         .header {
@@ -511,10 +512,84 @@
             padding: 2rem;
             color: #666;
         }
+
+        /* Masthead Section */
+        .masthead {
+            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .masthead-content h1 {
+            color: #4ade80;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .masthead-content h2 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
         
         @media (max-width: 768px) {
             body {
-                padding-top: 120px;
+                padding-top: 80px;
+            }
+            
+            nav {
+                flex-direction: column;
+                gap: 8px;
+                min-height: 70px;
+                padding: 8px 20px;
+            }
+
+            .nav-links {
+                gap: 0.5rem;
+            }
+
+            .nav-links a {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.8rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .logo-img {
+                width: 30px;
+                height: 30px;
             }
             
             .pricing-grid {
@@ -546,31 +621,35 @@
                 grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             }
 
-            .nav-links {
-                display: none;
+            .masthead-content h1 {
+                font-size: 2rem;
             }
 
-            nav {
-                flex-direction: column;
-                gap: 10px;
+            .nav-buttons {
+                gap: 0.5rem;
+            }
+
+            .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <nav class="container">
+        <nav>
             <a href="#" class="logo">
                 <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
                 Noyes Boys
             </a>
             <ul class="nav-links">
                 <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
-                <li><a href="deals.html">Pricing</a></li>
+                <li><a href="pricing.html" class="active">Pricing</a></li>
                 <li><a href="line1.html">Line 1</a></li>
                 <li><a href="line2.html">Line 2</a></li>
                 <li><a href="line3.html">Line 3</a></li>
-                <li><a href="#" class="active">Contact</a></li>
+                <li><a href="contact.html">Contact</a></li>
                 <li><a href="reviews.html">Reviews</a></li>
             </ul>
             <button class="cart-button" onclick="openCart()">
@@ -586,13 +665,13 @@
             <h1>Noyes Boys</h1>
             <h2>Premium Canadian Cannabis Genetics</h2>
             <div class="nav-buttons">
-                <a class="btn btn-primary" href="FeminizedSeedsHomepage.html">Home</a>
-                <a class="btn btn-primary" href="genetics.html">Genetic Lineups</a>
-                <a class="btn btn-primary" href="nextstrains.html">Next Release</a>
-                <a class="btn btn-primary" href="deals.html">DEALS</a>
-                <a class="btn btn-primary" href="order_now.html">Order Now</a>
-                <a class="btn btn-primary" href="reviews.html">Reviews</a>
-                <a class="btn btn-primary" href="readmore.html">Growing Guide</a>
+                <a class="btn" href="FeminizedSeedsHomepage.html">Home</a>
+                <a class="btn" href="genetics.html">Genetic Lineups</a>
+                <a class="btn" href="nextstrains.html">Next Release</a>
+                <a class="btn" href="deals.html">DEALS</a>
+                <a class="btn" href="order_now.html">Order Now</a>
+                <a class="btn" href="reviews.html">Reviews</a>
+                <a class="btn" href="readmore.html">Growing Guide</a>
             </div>
         </div>
     </section>
@@ -820,8 +899,8 @@
                         <li>Citrus Rocks, Pebbles</li>
                         <li>Citrus Haze Breath</li>
                     </ul>
-                    <button class="order-button" onclick="addToCart('line1-one-each', 'Line 1 - One of Each (10 Different Strains)', 180)">Add to Cart</button>
-                    </div>
+                    <button class="order-button" onclick="addToCart('line2-citrus-pack', 'Line 2 - Citrus Pack (5 Seeds)', 100)">Add to Cart</button>
+                </div>
                     
                 <div class="pricing-card compact-card">
                     <div class="card-header">
@@ -834,7 +913,7 @@
                         <li>Complete line coverage</li>
                         <li>Free shipping</li>
                     </ul>
-                    <button class="order-button" onclick="addToCart('line2-citrus-pack', 'Line 2 - Citrus Pack (5 Seeds)', 100)">Add to Cart</button>
+                    <button class="order-button" onclick="addToCart('line2-one-each', 'Line 2 - One of Each (10 Different Strains)', 180)">Add to Cart</button>
                 </div>
 
                 <div class="pricing-card compact-card featured">
@@ -1023,33 +1102,12 @@
     </div>
 
     <script>
-        // Cart Management System with Local Storage
+        // Cart Management System with In-Memory Storage
         class CartManager {
             constructor() {
-                this.storageKey = 'noyesboys_cart';
-                this.checkoutKey = 'noyesboys_checkout_data';
-                this.cart = this.loadCart();
+                this.cart = [];
+                this.checkoutData = null;
                 this.updateCartDisplay();
-            }
-
-            // Load cart from local storage
-            loadCart() {
-                try {
-                    const stored = localStorage.getItem(this.storageKey);
-                    return stored ? JSON.parse(stored) : [];
-                } catch (e) {
-                    console.error('Error loading cart:', e);
-                    return [];
-                }
-            }
-
-            // Save cart to local storage
-            saveCart() {
-                try {
-                    localStorage.setItem(this.storageKey, JSON.stringify(this.cart));
-                } catch (e) {
-                    console.error('Error saving cart:', e);
-                }
             }
 
             // Add item to cart
@@ -1094,7 +1152,6 @@
                     });
                 }
 
-                this.saveCart();
                 this.updateCartDisplay();
                 return true;
             }
@@ -1109,7 +1166,6 @@
                     this.cart.splice(index, 1);
                 }
                 
-                this.saveCart();
                 this.updateCartDisplay();
             }
 
@@ -1118,14 +1174,12 @@
                 if (index < 0 || index >= this.cart.length) return;
                 
                 this.cart.splice(index, 1);
-                this.saveCart();
                 this.updateCartDisplay();
             }
 
             // Clear entire cart
             clearCart() {
                 this.cart = [];
-                this.saveCart();
                 this.updateCartDisplay();
             }
 
@@ -1187,7 +1241,7 @@
 
             // Export cart data for checkout
             exportCartForCheckout() {
-                const cartData = {
+                this.checkoutData = {
                     items: this.cart,
                     total: this.getTotal(),
                     itemCount: this.getTotalItems(),
@@ -1195,35 +1249,18 @@
                     currency: 'CAD'
                 };
                 
-                // Store for checkout page using localStorage
-                try {
-                    localStorage.setItem(this.checkoutKey, JSON.stringify(cartData));
-                    console.log('Cart data exported for checkout:', cartData);
-                } catch (e) {
-                    console.error('Error storing checkout data:', e);
-                }
-                
-                return cartData;
+                console.log('Cart data exported for checkout:', this.checkoutData);
+                return this.checkoutData;
             }
 
-            // Get checkout data (for use on checkout page)
+            // Get checkout data
             getCheckoutData() {
-                try {
-                    const stored = localStorage.getItem(this.checkoutKey);
-                    return stored ? JSON.parse(stored) : null;
-                } catch (e) {
-                    console.error('Error loading checkout data:', e);
-                    return null;
-                }
+                return this.checkoutData;
             }
 
             // Clear checkout data after successful order
             clearCheckoutData() {
-                try {
-                    localStorage.removeItem(this.checkoutKey);
-                } catch (e) {
-                    console.error('Error clearing checkout data:', e);
-                }
+                this.checkoutData = null;
             }
         }
 
@@ -1234,7 +1271,7 @@
         function addToCart(strainId, strainName, price) {
             if (cartManager.addItem(strainId, strainName, price)) {
                 // Show success feedback
-                const button = event.target || document.querySelector(`button[onclick*="addToCart('${strainId}'"]`);
+                const button = event.target || document.querySelector(button[onclick*="addToCart('${strainId}'"]);
                 if (button) {
                     const originalText = button.innerHTML;
                     button.innerHTML = '<i class="fas fa-check"></i> Added!';
@@ -1298,7 +1335,7 @@
                 const price = selectedOption.getAttribute('data-price');
                 const priceDisplay = document.getElementById(priceDisplayId);
                 if (priceDisplay) {
-                    priceDisplay.textContent = `${price} CAD`;
+                    priceDisplay.textContent = ${price} CAD;
                 }
 
                 // Add change listener
@@ -1308,7 +1345,7 @@
                     const price = selectedOption.getAttribute('data-price');
                     const priceDisplay = document.getElementById(priceDisplayId);
                     if (priceDisplay) {
-                        priceDisplay.textContent = `${price} CAD`;
+                        priceDisplay.textContent = ${price} CAD;
                     }
                 });
             });
@@ -1339,23 +1376,14 @@
             });
         });
 
-        // Debug functions (can be removed in production)
-        window.debugCart = {
-            viewCart: () => console.log(cartManager.cart),
-            clearCart: () => cartManager.clearCart(),
-            exportCart: () => cartManager.exportCartForCheckout(),
-            getCheckoutData: () => cartManager.getCheckoutData()
-        };
-
         // Global function to access cart data from other pages
         window.getNoyesBoysCart = function() {
-            return new CartManager();
+            return cartManager;
         };
 
         // Global function to get checkout data (for checkout.html)
         window.getNoyesBoysCheckoutData = function() {
-            const manager = new CartManager();
-            return manager.getCheckoutData();
+            return cartManager.getCheckoutData();
         };
 
         // Event listener for testing checkout data transfer
@@ -1365,8 +1393,6 @@
                 const checkoutData = window.getNoyesBoysCheckoutData();
                 if (checkoutData) {
                     console.log('Checkout data loaded:', checkoutData);
-                    // You can populate your checkout form here
-                    // Example: populateCheckoutForm(checkoutData);
                 } else {
                     console.log('No checkout data found');
                 }
