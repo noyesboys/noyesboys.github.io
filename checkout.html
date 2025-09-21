@@ -6,7 +6,7 @@
     <title>Checkout - Noyes Boys Cannabis Seeds</title>
     <link rel="icon" type="image/x-icon" href="assets/img/noyes boys logo.png" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     
     <style>
         * {
@@ -373,61 +373,6 @@
             grid-column: 1 / -1;
         }
 
-        /* Demo Notice */
-        .demo-notice {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: white;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .demo-notice h4 {
-            margin-bottom: 0.5rem;
-        }
-
-        .demo-cart-btn {
-            background: #4ade80;
-            color: #0a0a0a;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            margin: 0 0.5rem;
-        }
-
-        /* Shipping Options */
-        .shipping-options {
-            display: grid;
-            gap: 1rem;
-            margin-top: 0.5rem;
-        }
-
-        .shipping-option {
-            background: #0f172a;
-            border: 2px solid #475569;
-            border-radius: 10px;
-            padding: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: #cbd5e1;
-        }
-
-        .shipping-option:hover {
-            border-color: #4ade80;
-        }
-
-        .shipping-option.selected {
-            border-color: #4ade80;
-            background: rgba(74, 222, 128, 0.1);
-        }
-
-        .shipping-option input[type="radio"] {
-            display: none;
-        }
-
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .checkout-container {
@@ -452,17 +397,17 @@
 <body>
     <header>
         <nav class="container">
-            <a href="#" class="logo">
+            <a href="line1.html" class="logo">
                 <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
                 Noyes Boys - Checkout
             </a>
             <ul class="nav-links">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Line 1</a></li>
-                <li><a href="#">Deals</a></li>
-                <li><a href="#">Order Now</a></li>
-                <li><a href="#">Contact</a></li>
-                <li><a href="#">Growing Guide</a></li>
+                <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
+                <li><a href="line1.html">Line 1</a></li>
+                <li><a href="deals.html">Deals</a></li>
+                <li><a href="order_now.html">Order Now</a></li>
+                <li><a href="contact_us.html">Contact</a></li>
+                <li><a href="readmore.html">Growing Guide</a></li>
             </ul>
         </nav>
     </header>
@@ -471,22 +416,30 @@
         <div class="container">
             <h1 class="checkout-title">Checkout</h1>
             
-            <!-- Demo Notice -->
-            <div class="demo-notice">
-                <h4>Demo Mode - Cart Data Simulation</h4>
-                <p>Since this is running in Claude.ai, localStorage isn't available. Click below to simulate cart data:</p>
-                <button class="demo-cart-btn" onclick="createSampleCart()">Create Sample Cart</button>
-                <button class="demo-cart-btn" onclick="clearCart()">Clear Cart</button>
+            <div id="loadingState" class="loading">
+                <div class="checkout-container">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Loading your order...
+                    </div>
+                </div>
             </div>
 
-            <div id="checkoutContent" class="checkout-container">
+            <div id="emptyCartState" class="empty-cart" style="display: none;">
+                <div class="checkout-container">
+                    <div class="empty-cart">
+                        <h3>Your cart is empty!</h3>
+                        <p>Looks like you haven't added any premium genetics to your cart yet.</p>
+                        <p><a href="line1.html" class="back-link">← Back to Strains</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="checkoutContent" class="checkout-container" style="display: none;">
                 <!-- Order Summary -->
                 <div class="order-summary">
                     <h3><i class="fas fa-receipt"></i> Order Summary</h3>
                     <div id="orderItems">
-                        <div class="empty-cart">
-                            <p>No items in cart. Use "Create Sample Cart" button above.</p>
-                        </div>
+                        <!-- Items will be populated here -->
                     </div>
                     <div class="order-total">
                         <div class="total-line">
@@ -495,11 +448,11 @@
                         </div>
                         <div class="total-line">
                             <span>Shipping:</span>
-                            <span id="shipping">FREE</span>
+                            <span id="shipping">Calculated at next step</span>
                         </div>
                         <div class="total-line">
-                            <span>Tax (13%):</span>
-                            <span>$<span id="tax">0.00</span> CAD</span>
+                            <span>Tax:</span>
+                            <span id="tax">Calculated at next step</span>
                         </div>
                         <div class="total-line final">
                             <span>Total:</span>
@@ -574,9 +527,9 @@
                         <!-- Shipping Options -->
                         <div class="form-section">
                             <h4>Shipping Options *</h4>
-                            <div class="shipping-options">
-                                <div class="shipping-option" onclick="selectShipping('free-bubble')">
-                                    <input type="radio" name="shippingMethod" value="free-bubble" required>
+                            <div class="shipping-options" style="display: grid; gap: 1rem; margin-top: 0.5rem;">
+                                <div class="shipping-option" style="background: #0f172a; border: 2px solid #475569; border-radius: 10px; padding: 1rem; cursor: pointer; transition: all 0.3s ease; color: #cbd5e1;" onclick="selectShipping('free-bubble')">
+                                    <input type="radio" name="shippingMethod" value="free-bubble" required style="display: none;">
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
                                         <div>
                                             <div style="font-weight: bold; color: #4ade80; margin-bottom: 0.25rem;">Free - No Liability Shipping</div>
@@ -585,8 +538,8 @@
                                         <div style="font-weight: bold; color: #4ade80;">FREE</div>
                                     </div>
                                 </div>
-                                <div class="shipping-option" onclick="selectShipping('upgrade-25')">
-                                    <input type="radio" name="shippingMethod" value="upgrade-25" required>
+                                <div class="shipping-option" style="background: #0f172a; border: 2px solid #475569; border-radius: 10px; padding: 1rem; cursor: pointer; transition: all 0.3s ease; color: #cbd5e1;" onclick="selectShipping('upgrade-25')">
+                                    <input type="radio" name="shippingMethod" value="upgrade-25" required style="display: none;">
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
                                         <div>
                                             <div style="font-weight: bold; color: #4ade80; margin-bottom: 0.25rem;">Canada Post Box + Tracking</div>
@@ -595,10 +548,20 @@
                                         <div style="font-weight: bold; color: #4ade80;">+$25 CAD</div>
                                     </div>
                                 </div>
+                                <div class="shipping-option" style="background: #0f172a; border: 2px solid #475569; border-radius: 10px; padding: 1rem; cursor: pointer; transition: all 0.3s ease; color: #cbd5e1;" onclick="selectShipping('free-300')">
+                                    <input type="radio" name="shippingMethod" value="free-300" required style="display: none;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div>
+                                            <div style="font-weight: bold; color: #4ade80; margin-bottom: 0.25rem;">FREE Canada Post Box + Tracking</div>
+                                            <div style="font-size: 0.9rem; color: #94a3b8;">On orders over $300 CAD</div>
+                                        </div>
+                                        <div style="font-weight: bold; color: #22c55e;">FREE*</div>
+                                    </div>
+                                </div>
                             </div>
                             <div style="margin-top: 1rem; padding: 1rem; background: rgba(74, 222, 128, 0.1); border-radius: 8px; font-size: 0.9rem; color: #cbd5e1;">
                                 <i class="fas fa-info-circle" style="color: #4ade80; margin-right: 0.5rem;"></i>
-                                Free Canada Post upgrade automatically applies to orders $300+
+                                *Free Canada Post upgrade automatically applies to orders $300+
                             </div>
                         </div>
 
@@ -637,7 +600,7 @@
                             </div>
                         </div>
 
-                        <!-- Order Details -->
+                        <!-- Order Details (Auto-populated from cart) -->
                         <div class="form-section">
                             <h4>Order Details</h4>
                             <div class="form-group">
@@ -687,162 +650,362 @@
     </section>
 
     <script>
-        // Initialize EmailJS
-        emailjs.init({
-            publicKey: "ZiDmYogre9hNBY-bI"
-        });
+        // Initialize EmailJS when page loads
+       emailjs.init({
+    publicKey: "ZiDmYogre9hNBY-bI"
+});
 
-        // In-memory cart storage (replaces localStorage)
-        let cartData = {
-            items: [],
-            total: 0,
-            itemCount: 0,
-            timestamp: Date.now()
+        // Email sending function using EmailJS
+        async function sendOrderEmail(orderData, cartData) {
+    console.log('=== EMAIL DEBUG START ===');
+    console.log('Order Data:', orderData);
+    console.log('Cart Data:', cartData);
+    
+    try {
+        // Validate EmailJS is loaded
+        if (!window.emailjs) {
+            throw new Error('EmailJS not loaded');
+        }
+        
+        // Format the cart items for email
+        const itemsList = cartData.items.map(item => 
+            `${item.quantity}x ${item.strainName} (${item.variant}) - $${(item.price * item.quantity).toFixed(2)} CAD`
+        ).join('\n');
+
+        const subtotal = cartData.total;
+        
+        // Calculate shipping based on selected method
+        let shippingCost = 0;
+        const shippingMethod = orderData.shippingMethod;
+        if (shippingMethod === 'upgrade-25') {
+            shippingCost = 25.00;
+        } else if (shippingMethod === 'free-300' && subtotal >= 300) {
+            shippingCost = 0;
+        } else {
+            shippingCost = 0; // free-bubble or free-300 under threshold
+        }
+        
+        const taxes = subtotal * 0.13; // 13% tax for Canada
+        const total = subtotal + shippingCost + taxes;
+
+        // Enhanced email parameters
+        const emailParams = {
+            // Basic customer info
+            customer_name: `${orderData.firstName || 'N/A'} ${orderData.lastName || 'N/A'}`,
+            customer_email: orderData.email || 'N/A',
+            customer_phone: orderData.phone || 'Not provided',
+            
+            // Address
+            customer_address: `${orderData.streetAddress || 'N/A'}, ${orderData.city || 'N/A'}, ${orderData.province || 'N/A'} ${orderData.zipCode || 'N/A'}`,
+            
+            // Payment and shipping
+            payment_method: orderData.paymentMethod ? orderData.paymentMethod.toUpperCase() : 'NOT SELECTED',
+            shipping_method: orderData.shippingMethod || 'NOT SELECTED',
+            
+            // Order details
+            order_items: itemsList || 'No items',
+            
+            // Financial breakdown
+            subtotal: `$${subtotal.toFixed(2)} CAD`,
+            shipping: shippingCost > 0 ? `$${shippingCost.toFixed(2)} CAD` : 'FREE',
+            taxes: `$${taxes.toFixed(2)} CAD`,
+            total: `$${total.toFixed(2)} CAD`,
+            
+            // Additional info
+            additional_info: orderData.additionalInfo || 'None',
+            promo_code: orderData.promoCode || 'None',
+            newsletter: orderData.newsletter ? 'Yes' : 'No',
+            
+            // Order metadata
+            order_id: orderData.orderId || 'NO-ID',
+            order_date: new Date().toLocaleDateString('en-CA'),
+            order_time: new Date().toLocaleTimeString('en-CA')
         };
 
-        // Create sample cart data for demo purposes
-        function createSampleCart() {
-            cartData = {
-                items: [
-                    {
-                        strainId: 'purple-rainbow',
-                        strainName: 'Purple Rainbow',
-                        variant: '5-seeds',
-                        variantText: '5 Seeds',
-                        price: 150,
-                        quantity: 1
-                    },
-                    {
-                        strainId: 'noyes-haze',
-                        strainName: 'Noyes Haze',
-                        variant: '3-seeds',
-                        variantText: '3 Seeds',
-                        price: 100,
-                        quantity: 2
-                    },
-                    {
-                        strainId: 'cake-breath',
-                        strainName: 'Cake Breath',
-                        variant: 'single-seed',
-                        variantText: 'Single Seed',
-                        price: 40,
-                        quantity: 3
-                    }
-                ],
-                total: 0,
-                itemCount: 0,
-                timestamp: Date.now()
-            };
+        console.log('Email parameters being sent:', emailParams);
 
-            // Calculate totals
-            cartData.total = cartData.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            cartData.itemCount = cartData.items.reduce((sum, item) => sum + item.quantity, 0);
+        // IMPORTANT: Replace these with your ACTUAL EmailJS IDs
+        const SERVICE_ID = 'service_viyn3ld';  // Your service ID
+        const TEMPLATE_ID = 'template_l8l5a4o'; // Your template ID
+        
+        console.log(`Attempting to send email via EmailJS...`);
+        console.log(`Service ID: ${SERVICE_ID}`);
+        console.log(`Template ID: ${TEMPLATE_ID}`);
 
-            console.log('Sample cart created:', cartData);
-            displayOrderSummary();
-        }
+        // Send email using EmailJS
+        const response = await emailjs.send(
+            SERVICE_ID,
+            TEMPLATE_ID,
+            emailParams
+        );
 
-        // Clear cart data
-        function clearCart() {
-            cartData = {
-                items: [],
-                total: 0,
-                itemCount: 0,
-                timestamp: Date.now()
-            };
-            displayOrderSummary();
-        }
+        console.log('EmailJS Response:', response);
+        console.log('Email sent successfully!');
+        console.log('=== EMAIL DEBUG END ===');
+        
+        return { success: true, response: response };
+        
+    } catch (error) {
+        console.error('=== EMAIL ERROR ===');
+        console.error('Error details:', error);
+        console.error('Error message:', error.message);
+        console.error('Error stack:', error.stack);
+        console.log('=== EMAIL DEBUG END ===');
+        
+        return { success: false, error: error };
+    }
+}
 
-        // Display order summary
-        function displayOrderSummary() {
-            const orderItems = document.getElementById('orderItems');
-            const subtotal = document.getElementById('subtotal');
-            const tax = document.getElementById('tax');
-            const grandTotal = document.getElementById('grandTotal');
-            const orderDetailsTextarea = document.getElementById('orderDetails');
-
-            if (!cartData || !cartData.items || cartData.items.length === 0) {
-                orderItems.innerHTML = '<div class="empty-cart"><p>No items in cart. Use "Create Sample Cart" button above.</p></div>';
-                subtotal.textContent = '0.00';
-                tax.textContent = '0.00';
-                grandTotal.textContent = '0.00';
-                if (orderDetailsTextarea) {
-                    orderDetailsTextarea.value = '';
+// DEBUGGING FUNCTIONS - Add these to your existing code
+window.emailDebug = {
+    // Test if EmailJS is properly loaded
+    testEmailJSLoaded: function() {
+        console.log('EmailJS loaded:', !!window.emailjs);
+        console.log('EmailJS version:', window.emailjs ? window.emailjs.version : 'Not available');
+        return !!window.emailjs;
+    },
+    
+    // Test email sending with dummy data
+    testEmailSend: async function() {
+        const testOrderData = {
+            firstName: 'Test',
+            lastName: 'User',
+            email: 'test@example.com',
+            phone: '555-0123',
+            streetAddress: '123 Test St',
+            city: 'Toronto',
+            province: 'ON',
+            zipCode: 'M5V 3A1',
+            paymentMethod: 'etransfer',
+            shippingMethod: 'free-bubble',
+            additionalInfo: 'Test order',
+            promoCode: 'TEST123',
+            newsletter: true,
+            orderId: 'TEST-' + Date.now()
+        };
+        
+        const testCartData = {
+            items: [
+                {
+                    strainName: 'Test Strain',
+                    variant: 'Test Variant',
+                    quantity: 1,
+                    price: 50.00
                 }
-                return;
+            ],
+            total: 50.00
+        };
+        
+        console.log('Sending test email...');
+        const result = await sendOrderEmail(testOrderData, testCartData);
+        console.log('Test email result:', result);
+        return result;
+    },
+    
+    // Check EmailJS service status
+    checkServiceStatus: function() {
+        // You can manually verify your service/template IDs here
+        console.log('Current EmailJS Configuration:');
+        console.log('Service ID: service_viyn3ld');
+        console.log('Template ID: template_l8l5a4o');
+        console.log('Public Key: ZiDmYogre9hNBY-bI');
+        console.log('');
+        console.log('Verify these match your EmailJS dashboard settings');
+    }
+};
+
+// TEMPLATE VALIDATION
+// Your current template variables should match these exactly:
+/*
+Expected template variables in EmailJS:
+- {{customer_name}}
+- {{customer_email}}
+- {{customer_phone}}
+- {{customer_address}}
+- {{payment_method}}
+- {{order_items}}
+- {{subtotal}}
+- {{shipping}}
+- {{taxes}}
+- {{total}}
+- {{additional_info}}
+- {{promo_code}}
+- {{newsletter}}
+- {{order_id}}
+- {{order_date}}
+- {{order_time}}
+*/
+
+        class CheckoutManager {
+            constructor() {
+                this.cartData = null;
+                this.loadCartData();
             }
 
-            // Display items
-            orderItems.innerHTML = cartData.items.map(item => {
-                const itemTotal = item.price * item.quantity;
-                return `
-                    <div class="order-item">
-                        <div class="item-details">
-                            <div class="item-name">${item.strainName}</div>
-                            <div class="item-variant">${item.variantText} × ${item.quantity}</div>
+            loadCartData() {
+                try {
+                    // First try to load from localStorage (where your cart page actually stores data)
+                    let checkoutData = localStorage.getItem('noyesboys_checkout_data');
+                    if (checkoutData) {
+                        this.cartData = JSON.parse(checkoutData);
+                        console.log('Loaded checkout data from localStorage:', this.cartData);
+                    } else {
+                        // Fallback to regular cart data from localStorage
+                        const regularCart = localStorage.getItem('noyesboys_cart');
+                        if (regularCart) {
+                            const cartItems = JSON.parse(regularCart);
+                            this.cartData = {
+                                items: cartItems,
+                                total: cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                                itemCount: cartItems.reduce((sum, item) => sum + item.quantity, 0),
+                                timestamp: Date.now()
+                            };
+                            console.log('Loaded regular cart data from localStorage:', this.cartData);
+                        }
+                    }
+                } catch (e) {
+                    console.error('Error loading cart data:', e);
+                    this.cartData = null;
+                }
+
+                this.displayCheckout();
+            }
+
+            displayCheckout() {
+    const loadingState = document.getElementById('loadingState');
+    const emptyCartState = document.getElementById('emptyCartState');
+    const checkoutContent = document.getElementById('checkoutContent');
+
+    // Always hide loading first
+    if (loadingState) {
+        loadingState.style.display = 'none';
+    }
+
+    // Log what we have for debugging
+    console.log('Cart data in displayCheckout:', this.cartData);
+    console.log('Items exist:', this.cartData && this.cartData.items);
+    console.log('Items length:', this.cartData?.items?.length);
+
+    // Check if we have valid cart data
+    if (!this.cartData || !this.cartData.items || this.cartData.items.length === 0) {
+        // Show empty cart
+        if (emptyCartState) emptyCartState.style.display = 'block';
+        if (checkoutContent) checkoutContent.style.display = 'none';
+        console.log('Showing empty cart state');
+    } else {
+        // Show checkout content
+        if (emptyCartState) emptyCartState.style.display = 'none';
+        if (checkoutContent) checkoutContent.style.display = 'grid';
+        console.log('Showing checkout content');
+        this.populateOrderSummary();
+    }
+}
+
+            populateOrderSummary() {
+                const orderItems = document.getElementById('orderItems');
+                const subtotal = document.getElementById('subtotal');
+                const grandTotal = document.getElementById('grandTotal');
+                const orderDetailsTextarea = document.getElementById('orderDetails');
+
+                if (!this.cartData || !this.cartData.items) return;
+
+                // Populate order items
+                orderItems.innerHTML = this.cartData.items.map(item => {
+                    const itemTotal = item.price * item.quantity;
+                    return `
+                        <div class="order-item">
+                            <div class="item-details">
+                                <div class="item-name">${item.strainName}</div>
+                                <div class="item-variant">${item.variantText} × ${item.quantity}</div>
+                            </div>
+                            <div class="item-price">
+                                $${itemTotal.toFixed(2)} CAD
+                            </div>
                         </div>
-                        <div class="item-price">
-                            $${itemTotal.toFixed(2)} CAD
-                        </div>
-                    </div>
-                `;
-            }).join('');
+                    `;
+                }).join('');
 
-            // Update totals
-            const subtotalValue = cartData.total;
-            const taxValue = subtotalValue * 0.13; // 13% Canadian tax
-            const totalValue = subtotalValue + taxValue;
+                // Update totals
+                subtotal.textContent = this.cartData.total.toFixed(2);
+                grandTotal.textContent = this.cartData.total.toFixed(2);
 
-            subtotal.textContent = subtotalValue.toFixed(2);
-            tax.textContent = taxValue.toFixed(2);
-            grandTotal.textContent = totalValue.toFixed(2);
+                // Populate order details textarea with cart items
+                if (orderDetailsTextarea) {
+                    const orderDetails = this.cartData.items.map(item => 
+                        `${item.quantity}x ${item.strainName} (${item.variant})`
+                    ).join('\n');
+                    orderDetailsTextarea.value = orderDetails;
+                }
+            }
 
-            // Update order details textarea
-            if (orderDetailsTextarea) {
-                const orderDetails = cartData.items.map(item => 
-                    ${item.quantity}x ${item.strainName} (${item.variantText})
-                ).join('\n');
-                orderDetailsTextarea.value = orderDetails;
+            async handleFormSubmit(formData) {
+                // Generate unique order ID
+                const orderId = 'NB-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+                
+                // Add order ID to form data
+                formData.orderId = orderId;
+
+                console.log('Processing order:', formData);
+
+                // Send email notification
+                const emailResult = await sendOrderEmail(formData, this.cartData);
+                
+                if (emailResult.success) {
+                    console.log('Email sent successfully!');
+                    alert(`Order submitted successfully!\n\nOrder ID: ${orderId}\nTotal: $${this.cartData.total.toFixed(2)} CAD\n\nEmail notification sent to Noyes Boys!\n\nThank you for your order! We will contact you shortly with payment instructions.`);
+                } else {
+                    console.error('Email failed to send:', emailResult.error);
+                    alert(`Order submitted!\n\nOrder ID: ${orderId}\nTotal: $${this.cartData.total.toFixed(2)} CAD\n\nNote: Email notification failed to send. Please contact us directly at thenoyesboyz@gmail.com with your order ID.\n\nThank you for your order!`);
+                }
+
+                // Clear the cart after successful submission
+                localStorage.removeItem('noyesboys_checkout_data');
+                localStorage.removeItem('noyesboys_cart');
+
+                // Redirect back to main page after delay
+                setTimeout(() => {
+                    window.location.href = 'line1.html';
+                }, 3000);
             }
         }
+
+        // Initialize checkout manager
+        const checkoutManager = new CheckoutManager();
 
         // Payment method selection
         function selectPayment(method) {
+            // Remove selected class from all options
             document.querySelectorAll('.payment-option').forEach(option => {
                 option.classList.remove('selected');
             });
             
-            const selectedOption = document.querySelector(.payment-option[onclick="selectPayment('${method}')"]);
-            if (selectedOption) {
-                selectedOption.classList.add('selected');
-            }
+            // Add selected class to clicked option
+            const selectedOption = document.querySelector(`.payment-option[onclick="selectPayment('${method}')"]`);
+            selectedOption.classList.add('selected');
             
-            const radioButton = document.querySelector(input[value="${method}"]);
-            if (radioButton) {
-                radioButton.checked = true;
-            }
+            // Check the radio button
+            document.querySelector(`input[value="${method}"]`).checked = true;
         }
 
         // Shipping method selection
         function selectShipping(method) {
+            // Remove selected class from all shipping options
             document.querySelectorAll('.shipping-option').forEach(option => {
                 option.classList.remove('selected');
                 option.style.borderColor = '#475569';
                 option.style.background = '#0f172a';
             });
             
-            const selectedOption = document.querySelector(.shipping-option[onclick="selectShipping('${method}')"]);
-            if (selectedOption) {
-                selectedOption.classList.add('selected');
-                selectedOption.style.borderColor = '#4ade80';
-                selectedOption.style.background = 'rgba(74, 222, 128, 0.1)';
-            }
+            // Add selected class to clicked option
+            const selectedOption = document.querySelector(`.shipping-option[onclick="selectShipping('${method}')"]`);
+            selectedOption.classList.add('selected');
+            selectedOption.style.borderColor = '#4ade80';
+            selectedOption.style.background = 'rgba(74, 222, 128, 0.1)';
             
-            const radioButton = document.querySelector(input[value="${method}"]);
-            if (radioButton) {
-                radioButton.checked = true;
-            }
+            // Check the radio button
+            document.querySelector(`input[value="${method}"]`).checked = true;
 
+            // Update shipping cost display
             updateShippingCost(method);
         }
 
@@ -857,116 +1020,33 @@
             if (shippingMethod === 'upgrade-25') {
                 shippingCost = 25.00;
             } else if (shippingMethod === 'free-300') {
+                // Check if order qualifies for free upgrade
                 if (subtotalValue >= 300) {
                     shippingCost = 0;
                 } else {
-                    shippingCost = 0;
+                    shippingCost = 0; // Still free but will show note
                 }
             } else {
                 shippingCost = 0; // free-bubble
             }
             
+            // Update shipping display
             if (shippingCost > 0) {
-                shippingElement.textContent = ${shippingCost.toFixed(2)} CAD;
+                shippingElement.textContent = `${shippingCost.toFixed(2)} CAD`;
             } else {
                 shippingElement.textContent = 'FREE';
             }
             
-            const taxValue = subtotalValue * 0.13;
-            const newTotal = subtotalValue + shippingCost + taxValue;
+            // Update grand total
+            const newTotal = subtotalValue + shippingCost;
             grandTotalElement.textContent = newTotal.toFixed(2);
-            
-            // Update tax display too
-            const taxElement = document.getElementById('tax');
-            if (taxElement) {
-                taxElement.textContent = taxValue.toFixed(2);
-            }
-        }
-
-        // Email sending function using EmailJS
-        async function sendOrderEmail(orderData, cartData) {
-            console.log('=== EMAIL DEBUG START ===');
-            console.log('Order Data:', orderData);
-            console.log('Cart Data:', cartData);
-            
-            try {
-                if (!window.emailjs) {
-                    throw new Error('EmailJS not loaded');
-                }
-                
-                const itemsList = cartData.items.map(item => 
-                    ${item.quantity}x ${item.strainName} (${item.variantText}) - ${(item.price * item.quantity).toFixed(2)} CAD
-                ).join('\n');
-
-                const subtotal = cartData.total;
-                
-                let shippingCost = 0;
-                const shippingMethod = orderData.shippingMethod;
-                if (shippingMethod === 'upgrade-25') {
-                    shippingCost = 25.00;
-                } else if (shippingMethod === 'free-300' && subtotal >= 300) {
-                    shippingCost = 0;
-                } else {
-                    shippingCost = 0;
-                }
-                
-                const taxes = subtotal * 0.13;
-                const total = subtotal + shippingCost + taxes;
-
-                const emailParams = {
-                    customer_name: ${orderData.firstName || 'N/A'} ${orderData.lastName || 'N/A'},
-                    customer_email: orderData.email || 'N/A',
-                    customer_phone: orderData.phone || 'Not provided',
-                    customer_address: ${orderData.streetAddress || 'N/A'}, ${orderData.city || 'N/A'}, ${orderData.province || 'N/A'} ${orderData.zipCode || 'N/A'},
-                    payment_method: orderData.paymentMethod ? orderData.paymentMethod.toUpperCase() : 'NOT SELECTED',
-                    shipping_method: orderData.shippingMethod || 'NOT SELECTED',
-                    order_items: itemsList || 'No items',
-                    subtotal: ${subtotal.toFixed(2)} CAD,
-                    shipping: shippingCost > 0 ? ${shippingCost.toFixed(2)} CAD : 'FREE',
-                    taxes: ${taxes.toFixed(2)} CAD,
-                    total: ${total.toFixed(2)} CAD,
-                    additional_info: orderData.additionalInfo || 'None',
-                    promo_code: orderData.promoCode || 'None',
-                    newsletter: orderData.newsletter ? 'Yes' : 'No',
-                    order_id: orderData.orderId || 'NO-ID',
-                    order_date: new Date().toLocaleDateString('en-CA'),
-                    order_time: new Date().toLocaleTimeString('en-CA')
-                };
-
-                console.log('Email parameters being sent:', emailParams);
-
-                const response = await emailjs.send(
-                    'service_viyn3ld',
-                    'template_l8l5a4o',
-                    emailParams
-                );
-
-                console.log('EmailJS Response:', response);
-                console.log('Email sent successfully!');
-                console.log('=== EMAIL DEBUG END ===');
-                
-                return { success: true, response: response };
-                
-            } catch (error) {
-                console.error('=== EMAIL ERROR ===');
-                console.error('Error details:', error);
-                console.error('Error message:', error.message);
-                console.log('=== EMAIL DEBUG END ===');
-                
-                return { success: false, error: error };
-            }
         }
 
         // Handle form submission
         document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Check if cart has items
-            if (!cartData || !cartData.items || cartData.items.length === 0) {
-                alert('Your cart is empty! Please add items to your cart before checking out.\n\nFor demo purposes, click "Create Sample Cart" button above.');
-                return;
-            }
-            
+            // Show loading state on submit button
             const submitBtn = this.querySelector('.submit-btn');
             const originalText = submitBtn.innerHTML;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Order...';
@@ -985,6 +1065,7 @@
             
             if (missingFields.length > 0) {
                 alert('Please fill in all required fields: ' + missingFields.join(', '));
+                // Reset button
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
                 return;
@@ -994,79 +1075,101 @@
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(formObject.email)) {
                 alert('Please enter a valid email address.');
+                // Reset button
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
                 return;
             }
 
-            // Canadian postal code validation
+            // Canadian postal code validation (if zipCode is provided)
             if (formObject.zipCode) {
                 const postalCodeRegex = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
                 if (!postalCodeRegex.test(formObject.zipCode)) {
                     alert('Please enter a valid Canadian postal code (e.g., K1A 0A6).');
+                    // Reset button
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
                     return;
                 }
             }
 
-            // Generate unique order ID
-            const orderId = 'NB-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
-            formObject.orderId = orderId;
-            
             // Add cart data to form object
-            formObject.cartItems = cartData.items;
-            formObject.orderTotal = cartData.total;
+            formObject.cartItems = checkoutManager.cartData ? checkoutManager.cartData.items : [];
+            formObject.orderTotal = checkoutManager.cartData ? checkoutManager.cartData.total : 0;
 
-            console.log('Processing order:', formObject);
-
-            // Send email notification
-            const emailResult = await sendOrderEmail(formObject, cartData);
-            
-            if (emailResult.success) {
-                console.log('Email sent successfully!');
-                alert(Order submitted successfully!\n\nOrder ID: ${orderId}\nTotal: ${cartData.total.toFixed(2)} CAD\n\nEmail notification sent to Noyes Boys!\n\nThank you for your order! We will contact you shortly with payment instructions.);
-            } else {
-                console.error('Email failed to send:', emailResult.error);
-                alert(Order submitted!\n\nOrder ID: ${orderId}\nTotal: ${cartData.total.toFixed(2)} CAD\n\nNote: Email notification failed to send. Please contact us directly at thenoyesboyz@gmail.com with your order ID.\n\nThank you for your order!);
-            }
-
-            // Clear the cart after successful submission
-            clearCart();
-
-            // Reset form
-            this.reset();
-            document.querySelectorAll('.payment-option, .shipping-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            
-            // Reset button
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
+            await checkoutManager.handleFormSubmit(formObject);
         });
-
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
-            displayOrderSummary();
-            
-            // Auto-select free shipping by default
-            selectShipping('free-bubble');
-        });
-
         // Debug functions
         window.debugCheckout = {
-            viewCartData: () => console.log('Cart Data:', cartData),
-            createTestOrder: () => {
-                createSampleCart();
-                document.getElementById('firstName').value = 'John';
-                document.getElementById('lastName').value = 'Doe';
-                document.getElementById('email').value = 'john.doe@example.com';
-                document.getElementById('streetAddress').value = '123 Main St';
-                document.getElementById('city').value = 'Toronto';
-                document.getElementById('province').value = 'ON';
-                document.getElementById('zipCode').value = 'M5V 3A1';
-                selectPayment('etransfer');
-                selectShipping('free-bubble');
-                console.log('Test order form populated!');
+            viewCartData: () => console.log('Cart Data:', checkoutManager.cartData),
+            viewAllStorage: () => {
+                console.log('=== localStorage ===');
+                console.log('Checkout Data:', localStorage.getItem('noyesboys_checkout_data'));
+                console.log('Regular Cart:', localStorage.getItem('noyesboys_cart'));
+            },
+            clearStorage: () => {
+                localStorage.removeItem('noyesboys_checkout_data');
+                localStorage.removeItem('noyesboys_cart');
+                location.reload();
             }
         };
+
+    function checkAffiliateOrder() {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        if (cookie.includes('affiliate=')) {
+            return cookie.split('=')[1]; // Returns "john123"
+        }
+    }
+    return null;
+}
+
+// Add to your email data
+const affiliateWhoSentThem = checkAffiliateOrder();
+if (affiliateWhoSentThem) {
+    emailParams.affiliate_referral = affiliateWhoSentThem;
+}
+// Check for affiliate referral
+$affiliate_ref = null;
+
+// Check URL parameter
+if (isset($_GET['ref'])) {
+    $affiliate_ref = $_GET['ref'];
+    // Store in session for future purchases
+    $_SESSION['affiliate_ref'] = $affiliate_ref;
+}
+// Or check session
+elseif (isset($_SESSION['affiliate_ref'])) {
+    $affiliate_ref = $_SESSION['affiliate_ref'];
+}
+
+// If we have an affiliate reference and order is completed
+if ($affiliate_ref && $order_completed && $order_total > 0) {
+    
+    require_once 'classes/Affiliate.php';
+    $affiliate = new Affiliate();
+    
+    // Record the sale
+    $product_description = "Sale: " . $order_details; // Customize this
+    $commission = $affiliate->recordSale($affiliate_ref, $order_id, $order_total, $product_description);
+    
+    if ($commission) {
+        // Send notification email to you
+        $admin_email = 'your-email@domain.com';
+        $subject = 'Affiliate Sale Notification';
+        $message = "Affiliate Sale Recorded:\n\n";
+        $message .= "Affiliate ID: {$affiliate_ref}\n";
+        $message .= "Order ID: {$order_id}\n";
+        $message .= "Sale Amount: $" . number_format($order_total, 2) . "\n";
+        $message .= "Commission: $" . number_format($commission, 2) . "\n";
+        $message .= "Product: {$product_description}\n";
+        
+        mail($admin_email, $subject, $message);
+        
+        // Clear the affiliate session so it doesn't apply to future orders
+        unset($_SESSION['affiliate_ref']);
+    }
+}
+    </script>
+</body>
+</html>
