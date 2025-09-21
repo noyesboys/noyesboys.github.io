@@ -105,6 +105,52 @@
             margin: 0 auto;
         }
 
+        /* Debug Panel */
+        .debug-panel {
+            background: linear-gradient(135deg, #4c1d95 0%, #581c87 100%);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            color: white;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .debug-panel h4 {
+            color: #c4b5fd;
+            margin-bottom: 0.5rem;
+        }
+
+        .debug-panel pre {
+            background: #1e1b4b;
+            padding: 0.5rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            overflow-x: auto;
+        }
+
+        .debug-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .debug-btn {
+            background: #7c3aed;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .debug-btn:hover {
+            background: #6d28d9;
+        }
+
         /* Order Summary */
         .order-summary {
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
@@ -416,6 +462,21 @@
         <div class="container">
             <h1 class="checkout-title">Checkout</h1>
             
+            <!-- Debug Panel -->
+            <div class="debug-panel">
+                <h4>Debug Information</h4>
+                <div>Status: <span id="debugStatus">Initializing...</span></div>
+                <div>Cart Items Found: <span id="debugItemCount">0</span></div>
+                <div>Total Value: <span id="debugTotal">$0.00</span></div>
+                <pre id="debugData">No data loaded</pre>
+                <div class="debug-buttons">
+                    <button class="debug-btn" onclick="debugFunctions.checkStorage()">Check Storage</button>
+                    <button class="debug-btn" onclick="debugFunctions.createTestCart()">Create Test Cart</button>
+                    <button class="debug-btn" onclick="debugFunctions.clearStorage()">Clear Storage</button>
+                    <button class="debug-btn" onclick="debugFunctions.reloadData()">Reload Data</button>
+                </div>
+            </div>
+            
             <div id="loadingState" class="loading">
                 <div class="checkout-container">
                     <div class="loading">
@@ -430,8 +491,6 @@
                         <h3>Your cart is empty!</h3>
                         <p>Looks like you haven't added any premium genetics to your cart yet.</p>
                         <p><a href="line1.html" class="back-link">← Back to Strains</a></p>
-                        <br>
-                        <button onclick="window.debugCart.createTestCart()" style="background: #4ade80; color: #0a0a0a; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Create Test Cart</button>
                     </div>
                 </div>
             </div>
@@ -483,90 +542,6 @@
                             </div>
                         </div>
 
-                        <!-- Shipping Address -->
-                        <div class="form-section">
-                            <h4>Shipping Address</h4>
-                            <div class="form-group">
-                                <label for="streetAddress">Street Address *</label>
-                                <input type="text" id="streetAddress" name="streetAddress" required>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="city">City *</label>
-                                    <input type="text" id="city" name="city" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="zipCode">ZIP/Postal Code *</label>
-                                    <input type="text" id="zipCode" name="zipCode" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="province">Province *</label>
-                                <select id="province" name="province" required>
-                                    <option value="">Select Province</option>
-                                    <option value="AB">Alberta</option>
-                                    <option value="BC">British Columbia</option>
-                                    <option value="MB">Manitoba</option>
-                                    <option value="NB">New Brunswick</option>
-                                    <option value="NL">Newfoundland and Labrador</option>
-                                    <option value="NS">Nova Scotia</option>
-                                    <option value="ON">Ontario</option>
-                                    <option value="PE">Prince Edward Island</option>
-                                    <option value="QC">Quebec</option>
-                                    <option value="SK">Saskatchewan</option>
-                                    <option value="NT">Northwest Territories</option>
-                                    <option value="NU">Nunavut</option>
-                                    <option value="YT">Yukon</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="important-notice">
-                            <h4><i class="fas fa-maple-leaf"></i> Canada Only</h4>
-                            <p>We currently ship within Canada only. All orders are processed domestically.</p>
-                        </div>
-
-                        <!-- Shipping Options -->
-                        <div class="form-section">
-                            <h4>Shipping Options *</h4>
-                            <div class="shipping-options" style="display: grid; gap: 1rem; margin-top: 0.5rem;">
-                                <div class="shipping-option" style="background: #0f172a; border: 2px solid #475569; border-radius: 10px; padding: 1rem; cursor: pointer; transition: all 0.3s ease; color: #cbd5e1;" onclick="selectShipping('free-bubble')">
-                                    <input type="radio" name="shippingMethod" value="free-bubble" required style="display: none;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <div>
-                                            <div style="font-weight: bold; color: #4ade80; margin-bottom: 0.25rem;">Free - No Liability Shipping</div>
-                                            <div style="font-size: 0.9rem; color: #94a3b8;">Bubble mailer (no tracking)</div>
-                                        </div>
-                                        <div style="font-weight: bold; color: #4ade80;">FREE</div>
-                                    </div>
-                                </div>
-                                <div class="shipping-option" style="background: #0f172a; border: 2px solid #475569; border-radius: 10px; padding: 1rem; cursor: pointer; transition: all 0.3s ease; color: #cbd5e1;" onclick="selectShipping('upgrade-25')">
-                                    <input type="radio" name="shippingMethod" value="upgrade-25" required style="display: none;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <div>
-                                            <div style="font-weight: bold; color: #4ade80; margin-bottom: 0.25rem;">Canada Post Box + Tracking</div>
-                                            <div style="font-size: 0.9rem; color: #94a3b8;">Secure box with tracking code</div>
-                                        </div>
-                                        <div style="font-weight: bold; color: #4ade80;">+$25 CAD</div>
-                                    </div>
-                                </div>
-                                <div class="shipping-option" style="background: #0f172a; border: 2px solid #475569; border-radius: 10px; padding: 1rem; cursor: pointer; transition: all 0.3s ease; color: #cbd5e1;" onclick="selectShipping('free-300')">
-                                    <input type="radio" name="shippingMethod" value="free-300" required style="display: none;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <div>
-                                            <div style="font-weight: bold; color: #4ade80; margin-bottom: 0.25rem;">FREE Canada Post Box + Tracking</div>
-                                            <div style="font-size: 0.9rem; color: #94a3b8;">On orders over $300 CAD</div>
-                                        </div>
-                                        <div style="font-weight: bold; color: #22c55e;">FREE*</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(74, 222, 128, 0.1); border-radius: 8px; font-size: 0.9rem; color: #cbd5e1;">
-                                <i class="fas fa-info-circle" style="color: #4ade80; margin-right: 0.5rem;"></i>
-                                *Free Canada Post upgrade automatically applies to orders $300+
-                            </div>
-                        </div>
-
                         <!-- Contact Information -->
                         <div class="form-section">
                             <h4>Contact Information</h4>
@@ -611,37 +586,6 @@
                             </div>
                         </div>
 
-                        <!-- Additional Information -->
-                        <div class="form-section">
-                            <h4>Additional Information</h4>
-                            <div class="form-group">
-                                <label for="additionalInfo">Special Requests or Notes</label>
-                                <textarea id="additionalInfo" name="additionalInfo" rows="3" placeholder="Any special requests or notes..."></textarea>
-                            </div>
-                        </div>
-
-                        <!-- Promotional Deal -->
-                        <div class="form-section">
-                            <div class="form-group">
-                                <label for="promoCode">Promotional Deal (if applicable)</label>
-                                <input type="text" id="promoCode" name="promoCode" placeholder="Holiday sale / other deals">
-                            </div>
-                        </div>
-
-                        <!-- Newsletter Signup -->
-                        <div class="form-section">
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="newsletter" name="newsletter">
-                                <label for="newsletter">Update me when a new strain becomes available?</label>
-                            </div>
-                        </div>
-
-                        <div class="important-notice">
-                            <h4><i class="fas fa-info-circle"></i> Order Process</h4>
-                            <p><strong>WE WILL CONTACT YOU WITH PAYMENT LINK / CONFIRMATION OF SALE</strong></p>
-                            <p>TRACKING NUMBER SENT WITHIN 3 DAYS OF PAYMENT</p>
-                        </div>
-
                         <button type="submit" class="submit-btn">
                             <i class="fas fa-lock"></i> Complete Order
                         </button>
@@ -657,420 +601,239 @@
             publicKey: "ZiDmYogre9hNBY-bI"
         });
 
-        // Email sending function using EmailJS
-        async function sendOrderEmail(orderData, cartData) {
-            console.log('=== EMAIL DEBUG START ===');
-            console.log('Order Data:', orderData);
-            console.log('Cart Data:', cartData);
-            
-            try {
-                // Validate EmailJS is loaded
-                if (!window.emailjs) {
-                    throw new Error('EmailJS not loaded');
-                }
-                
-                // Format the cart items for email
-                const itemsList = cartData.items.map(item => 
-                    `${item.quantity}x ${item.strainName} (${item.variant}) - $${(item.price * item.quantity).toFixed(2)} CAD`
-                ).join('\n');
-
-                const subtotal = cartData.total;
-                
-                // Calculate shipping based on selected method
-                let shippingCost = 0;
-                const shippingMethod = orderData.shippingMethod;
-                if (shippingMethod === 'upgrade-25') {
-                    shippingCost = 25.00;
-                } else if (shippingMethod === 'free-300' && subtotal >= 300) {
-                    shippingCost = 0;
-                } else {
-                    shippingCost = 0; // free-bubble or free-300 under threshold
-                }
-                
-                const taxes = subtotal * 0.13; // 13% tax for Canada
-                const total = subtotal + shippingCost + taxes;
-
-                // Enhanced email parameters
-                const emailParams = {
-                    // Basic customer info
-                    customer_name: `${orderData.firstName || 'N/A'} ${orderData.lastName || 'N/A'}`,
-                    customer_email: orderData.email || 'N/A',
-                    customer_phone: orderData.phone || 'Not provided',
-                    
-                    // Address
-                    customer_address: `${orderData.streetAddress || 'N/A'}, ${orderData.city || 'N/A'}, ${orderData.province || 'N/A'} ${orderData.zipCode || 'N/A'}`,
-                    
-                    // Payment and shipping
-                    payment_method: orderData.paymentMethod ? orderData.paymentMethod.toUpperCase() : 'NOT SELECTED',
-                    shipping_method: orderData.shippingMethod || 'NOT SELECTED',
-                    
-                    // Order details
-                    order_items: itemsList || 'No items',
-                    
-                    // Financial breakdown
-                    subtotal: `$${subtotal.toFixed(2)} CAD`,
-                    shipping: shippingCost > 0 ? `$${shippingCost.toFixed(2)} CAD` : 'FREE',
-                    taxes: `$${taxes.toFixed(2)} CAD`,
-                    total: `$${total.toFixed(2)} CAD`,
-                    
-                    // Additional info
-                    additional_info: orderData.additionalInfo || 'None',
-                    promo_code: orderData.promoCode || 'None',
-                    newsletter: orderData.newsletter ? 'Yes' : 'No',
-                    
-                    // Order metadata
-                    order_id: orderData.orderId || 'NO-ID',
-                    order_date: new Date().toLocaleDateString('en-CA'),
-                    order_time: new Date().toLocaleTimeString('en-CA')
-                };
-
-                // Add affiliate referral if exists
-                if (window.affiliateReferral) {
-                    emailParams.affiliate_referral = window.affiliateReferral;
-                }
-
-                console.log('Email parameters being sent:', emailParams);
-
-                // Send email using EmailJS
-                const response = await emailjs.send(
-                    'service_viyn3ld',
-                    'template_l8l5a4o',
-                    emailParams
-                );
-
-                console.log('EmailJS Response:', response);
-                console.log('Email sent successfully!');
-                console.log('=== EMAIL DEBUG END ===');
-                
-                return { success: true, response: response };
-                
-            } catch (error) {
-                console.error('=== EMAIL ERROR ===');
-                console.error('Error details:', error);
-                console.error('Error message:', error.message);
-                console.error('Error stack:', error.stack);
-                console.log('=== EMAIL DEBUG END ===');
-                
-                return { success: false, error: error };
-            }
-        }
-
+        // Enhanced CheckoutManager with better debugging
         class CheckoutManager {
             constructor() {
                 this.cartData = null;
+                this.debugMode = true;
+                console.log('=== CHECKOUT MANAGER INITIALIZED ===');
+                this.updateDebugPanel('Initializing...');
                 this.loadCartData();
             }
 
+            updateDebugPanel(status, data = null) {
+                if (!this.debugMode) return;
+                
+                const debugStatus = document.getElementById('debugStatus');
+                const debugItemCount = document.getElementById('debugItemCount');
+                const debugTotal = document.getElementById('debugTotal');
+                const debugData = document.getElementById('debugData');
+
+                if (debugStatus) debugStatus.textContent = status;
+                
+                if (data) {
+                    if (debugItemCount) debugItemCount.textContent = data.itemCount || 0;
+                    if (debugTotal) debugTotal.textContent = $${(data.total || 0).toFixed(2)} CAD;
+                    if (debugData) debugData.textContent = JSON.stringify(data, null, 2);
+                } else if (this.cartData) {
+                    if (debugItemCount) debugItemCount.textContent = this.cartData.itemCount || 0;
+                    if (debugTotal) debugTotal.textContent = $${(this.cartData.total || 0).toFixed(2)} CAD;
+                    if (debugData) debugData.textContent = JSON.stringify(this.cartData, null, 2);
+                }
+            }
+
             loadCartData() {
+                console.log('=== LOADING CART DATA ===');
+                this.updateDebugPanel('Loading cart data...');
+
                 try {
-                    // First try to load from localStorage (where your cart page actually stores data)
-                    let checkoutData = localStorage.getItem('noyesboys_checkout_data');
-                    if (checkoutData) {
-                        this.cartData = JSON.parse(checkoutData);
-                        console.log('Loaded checkout data from localStorage:', this.cartData);
+                    // Check if localStorage is available
+                    if (typeof(Storage) === "undefined") {
+                        console.error('localStorage not supported!');
+                        this.updateDebugPanel('ERROR: localStorage not supported');
+                        this.displayCheckout();
+                        return;
+                    }
+
+                    // Method 1: Try checkout data first
+                    let checkoutDataRaw = localStorage.getItem('noyesboys_checkout_data');
+                    console.log('Raw checkout data:', checkoutDataRaw);
+
+                    if (checkoutDataRaw) {
+                        try {
+                            this.cartData = JSON.parse(checkoutDataRaw);
+                            console.log('✓ Loaded from checkout data:', this.cartData);
+                            this.updateDebugPanel('Loaded from checkout data', this.cartData);
+                        } catch (parseError) {
+                            console.error('Failed to parse checkout data:', parseError);
+                            this.updateDebugPanel('ERROR: Failed to parse checkout data');
+                        }
                     } else {
-                        // Fallback to regular cart data from localStorage
-                        const regularCart = localStorage.getItem('noyesboys_cart');
-                        if (regularCart) {
-                            const cartItems = JSON.parse(regularCart);
-                            this.cartData = {
-                                items: cartItems,
-                                total: cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
-                                itemCount: cartItems.reduce((sum, item) => sum + item.quantity, 0),
-                                timestamp: Date.now()
-                            };
-                            console.log('Loaded regular cart data from localStorage:', this.cartData);
+                        console.log('No checkout data found');
+                    }
+
+                    // Method 2: Try regular cart data as fallback
+                    if (!this.cartData || !this.cartData.items || this.cartData.items.length === 0) {
+                        let regularCartRaw = localStorage.getItem('noyesboys_cart');
+                        console.log('Raw regular cart data:', regularCartRaw);
+
+                        if (regularCartRaw) {
+                            try {
+                                const cartItems = JSON.parse(regularCartRaw);
+                                console.log('Parsed cart items:', cartItems);
+
+                                if (Array.isArray(cartItems) && cartItems.length > 0) {
+                                    this.cartData = {
+                                        items: cartItems,
+                                        total: cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+                                        itemCount: cartItems.reduce((sum, item) => sum + item.quantity, 0),
+                                        timestamp: Date.now()
+                                    };
+                                    console.log('✓ Created cart data from regular cart:', this.cartData);
+                                    this.updateDebugPanel('Created from regular cart data', this.cartData);
+                                } else {
+                                    console.log('Regular cart is empty or invalid');
+                                    this.updateDebugPanel('Regular cart is empty or invalid');
+                                }
+                            } catch (parseError) {
+                                console.error('Failed to parse regular cart data:', parseError);
+                                this.updateDebugPanel('ERROR: Failed to parse regular cart data');
+                            }
+                        } else {
+                            console.log('No regular cart data found');
+                            this.updateDebugPanel('No cart data found in localStorage');
                         }
                     }
-                } catch (e) {
-                    console.error('Error loading cart data:', e);
+
+                } catch (error) {
+                    console.error('Error in loadCartData:', error);
+                    this.updateDebugPanel('ERROR: ' + error.message);
                     this.cartData = null;
                 }
 
+                console.log('Final cart data:', this.cartData);
                 this.displayCheckout();
             }
 
             displayCheckout() {
-                console.log('=== CHECKOUT DEBUG START ===');
+                console.log('=== DISPLAYING CHECKOUT ===');
                 
                 const loadingState = document.getElementById('loadingState');
                 const emptyCartState = document.getElementById('emptyCartState');
                 const checkoutContent = document.getElementById('checkoutContent');
 
-                console.log('Elements found:');
-                console.log('loadingState:', !!loadingState);
-                console.log('emptyCartState:', !!emptyCartState);
-                console.log('checkoutContent:', !!checkoutContent);
-                
-                console.log('Cart data:', this.cartData);
-                console.log('Items exist:', this.cartData && this.cartData.items);
-                console.log('Items length:', this.cartData?.items?.length);
-
-                // FIXED: Don't hide loading until we know what to show
                 try {
+                    // Validate elements exist
+                    if (!loadingState || !emptyCartState || !checkoutContent) {
+                        console.error('Missing required DOM elements');
+                        this.updateDebugPanel('ERROR: Missing DOM elements');
+                        return;
+                    }
+
                     // Check if we have valid cart data
-                    if (!this.cartData || !this.cartData.items || this.cartData.items.length === 0) {
-                        console.log('No cart data found - showing empty cart');
+                    const hasValidCart = this.cartData && 
+                                        this.cartData.items && 
+                                        Array.isArray(this.cartData.items) && 
+                                        this.cartData.items.length > 0;
+
+                    console.log('Has valid cart:', hasValidCart);
+                    console.log('Items array:', this.cartData?.items);
+
+                    if (!hasValidCart) {
+                        console.log('Showing empty cart state');
+                        this.updateDebugPanel('No valid cart data - showing empty cart');
                         
-                        // Hide loading and checkout content, show empty cart
-                        if (loadingState) loadingState.style.display = 'none';
-                        if (checkoutContent) checkoutContent.style.display = 'none';
-                        if (emptyCartState) emptyCartState.style.display = 'block';
-                        
+                        loadingState.style.display = 'none';
+                        checkoutContent.style.display = 'none';
+                        emptyCartState.style.display = 'block';
                     } else {
-                        console.log('Cart data found - showing checkout content');
+                        console.log('Showing checkout content');
+                        this.updateDebugPanel('Valid cart found - showing checkout', this.cartData);
                         
-                        // Hide loading and empty cart, show checkout content
-                        if (loadingState) loadingState.style.display = 'none';
-                        if (emptyCartState) emptyCartState.style.display = 'none';
-                        if (checkoutContent) checkoutContent.style.display = 'grid';
+                        loadingState.style.display = 'none';
+                        emptyCartState.style.display = 'none';
+                        checkoutContent.style.display = 'grid';
                         
                         // Populate the order summary
                         this.populateOrderSummary();
                     }
+
                 } catch (error) {
                     console.error('Error in displayCheckout:', error);
+                    this.updateDebugPanel('ERROR in displayCheckout: ' + error.message);
                     
-                    // If there's an error, show empty cart as fallback
+                    // Show empty cart as fallback
                     if (loadingState) loadingState.style.display = 'none';
                     if (checkoutContent) checkoutContent.style.display = 'none';
                     if (emptyCartState) emptyCartState.style.display = 'block';
                 }
-                
-                console.log('=== CHECKOUT DEBUG END ===');
             }
 
             populateOrderSummary() {
+                console.log('=== POPULATING ORDER SUMMARY ===');
+                
                 const orderItems = document.getElementById('orderItems');
                 const subtotal = document.getElementById('subtotal');
                 const grandTotal = document.getElementById('grandTotal');
                 const orderDetailsTextarea = document.getElementById('orderDetails');
 
-                if (!this.cartData || !this.cartData.items) return;
-
-                // Populate order items
-                orderItems.innerHTML = this.cartData.items.map(item => {
-                    const itemTotal = item.price * item.quantity;
-                    return `
-                        <div class="order-item">
-                            <div class="item-details">
-                                <div class="item-name">${item.strainName}</div>
-                                <div class="item-variant">${item.variantText || item.variant} × ${item.quantity}</div>
-                            </div>
-                            <div class="item-price">
-                                ${itemTotal.toFixed(2)} CAD
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-
-                // Update totals
-                subtotal.textContent = this.cartData.total.toFixed(2);
-                grandTotal.textContent = this.cartData.total.toFixed(2);
-
-                // Populate order details textarea with cart items
-                if (orderDetailsTextarea) {
-                    const orderDetails = this.cartData.items.map(item => 
-                        `${item.quantity}x ${item.strainName} (${item.variant})`
-                    ).join('\n');
-                    orderDetailsTextarea.value = orderDetails;
-                }
-            }
-
-            async handleFormSubmit(formData) {
-                // Generate unique order ID
-                const orderId = 'NB-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
-                
-                // Add order ID to form data
-                formData.orderId = orderId;
-
-                console.log('Processing order:', formData);
-
-                // Send email notification
-                const emailResult = await sendOrderEmail(formData, this.cartData);
-                
-                if (emailResult.success) {
-                    console.log('Email sent successfully!');
-                    alert(`Order submitted successfully!\n\nOrder ID: ${orderId}\nTotal: ${this.cartData.total.toFixed(2)} CAD\n\nEmail notification sent to Noyes Boys!\n\nThank you for your order! We will contact you shortly with payment instructions.`);
-                } else {
-                    console.error('Email failed to send:', emailResult.error);
-                    alert(`Order submitted!\n\nOrder ID: ${orderId}\nTotal: ${this.cartData.total.toFixed(2)} CAD\n\nNote: Email notification failed to send. Please contact us directly at thenoyesboyz@gmail.com with your order ID.\n\nThank you for your order!`);
-                }
-
-                // Clear the cart after successful submission
-                localStorage.removeItem('noyesboys_checkout_data');
-                localStorage.removeItem('noyesboys_cart');
-
-                // Redirect back to main page after delay
-                setTimeout(() => {
-                    window.location.href = 'line1.html';
-                }, 3000);
-            }
-        }
-
-        // Initialize checkout manager
-        const checkoutManager = new CheckoutManager();
-
-        // Payment method selection
-        function selectPayment(method) {
-            // Remove selected class from all options
-            document.querySelectorAll('.payment-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            
-            // Add selected class to clicked option
-            const selectedOption = document.querySelector(`.payment-option[onclick="selectPayment('${method}')"]`);
-            if (selectedOption) {
-                selectedOption.classList.add('selected');
-            }
-            
-            // Check the radio button
-            const radioButton = document.querySelector(`input[value="${method}"]`);
-            if (radioButton) {
-                radioButton.checked = true;
-            }
-        }
-
-        // Shipping method selection
-        function selectShipping(method) {
-            // Remove selected class from all shipping options
-            document.querySelectorAll('.shipping-option').forEach(option => {
-                option.classList.remove('selected');
-                option.style.borderColor = '#475569';
-                option.style.background = '#0f172a';
-            });
-            
-            // Add selected class to clicked option
-            const selectedOption = document.querySelector(`.shipping-option[onclick="selectShipping('${method}')"]`);
-            if (selectedOption) {
-                selectedOption.classList.add('selected');
-                selectedOption.style.borderColor = '#4ade80';
-                selectedOption.style.background = 'rgba(74, 222, 128, 0.1)';
-            }
-            
-            // Check the radio button
-            const radioButton = document.querySelector(`input[value="${method}"]`);
-            if (radioButton) {
-                radioButton.checked = true;
-            }
-
-            // Update shipping cost display
-            updateShippingCost(method);
-        }
-
-        // Update shipping cost in order summary
-        function updateShippingCost(shippingMethod) {
-            const shippingElement = document.getElementById('shipping');
-            const grandTotalElement = document.getElementById('grandTotal');
-            const subtotalValue = parseFloat(document.getElementById('subtotal').textContent);
-            
-            let shippingCost = 0;
-            
-            if (shippingMethod === 'upgrade-25') {
-                shippingCost = 25.00;
-            } else if (shippingMethod === 'free-300') {
-                // Check if order qualifies for free upgrade
-                if (subtotalValue >= 300) {
-                    shippingCost = 0;
-                } else {
-                    shippingCost = 0; // Still free but will show note
-                }
-            } else {
-                shippingCost = 0; // free-bubble
-            }
-            
-            // Update shipping display
-            if (shippingCost > 0) {
-                shippingElement.textContent = `${shippingCost.toFixed(2)} CAD`;
-            } else {
-                shippingElement.textContent = 'FREE';
-            }
-            
-            // Update grand total
-            const newTotal = subtotalValue + shippingCost;
-            grandTotalElement.textContent = newTotal.toFixed(2);
-        }
-
-        // Handle form submission
-        document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            // Show loading state on submit button
-            const submitBtn = this.querySelector('.submit-btn');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Order...';
-            submitBtn.disabled = true;
-            
-            const formData = new FormData(this);
-            const formObject = {};
-            
-            for (let [key, value] of formData.entries()) {
-                formObject[key] = value;
-            }
-
-            // Basic validation
-            const requiredFields = ['email', 'firstName', 'lastName', 'streetAddress', 'city', 'province', 'zipCode', 'paymentMethod', 'shippingMethod'];
-            const missingFields = requiredFields.filter(field => !formObject[field]);
-            
-            if (missingFields.length > 0) {
-                alert('Please fill in all required fields: ' + missingFields.join(', '));
-                // Reset button
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                return;
-            }
-
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(formObject.email)) {
-                alert('Please enter a valid email address.');
-                // Reset button
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                return;
-            }
-
-            // Canadian postal code validation (if zipCode is provided)
-            if (formObject.zipCode) {
-                const postalCodeRegex = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
-                if (!postalCodeRegex.test(formObject.zipCode)) {
-                    alert('Please enter a valid Canadian postal code (e.g., K1A 0A6).');
-                    // Reset button
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
+                if (!this.cartData || !this.cartData.items) {
+                    console.error('No cart data to populate');
                     return;
                 }
+
+                try {
+                    // Populate order items
+                    const itemsHTML = this.cartData.items.map(item => {
+                        const itemTotal = (item.price || 0) * (item.quantity || 1);
+                        return `
+                            <div class="order-item">
+                                <div class="item-details">
+                                    <div class="item-name">${item.strainName || 'Unknown Strain'}</div>
+                                    <div class="item-variant">${item.variantText || item.variant || 'Unknown Variant'} × ${item.quantity || 1}</div>
+                                </div>
+                                <div class="item-price">
+                                    ${itemTotal.toFixed(2)} CAD
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    if (orderItems) {
+                        orderItems.innerHTML = itemsHTML;
+                    }
+
+                    // Update totals
+                    if (subtotal) {
+                        subtotal.textContent = this.cartData.total.toFixed(2);
+                    }
+                    if (grandTotal) {
+                        grandTotal.textContent = this.cartData.total.toFixed(2);
+                    }
+
+                    // Populate order details textarea
+                    if (orderDetailsTextarea) {
+                        const orderDetails = this.cartData.items.map(item => 
+                            ${item.quantity}x ${item.strainName} (${item.variant})
+                        ).join('\n');
+                        orderDetailsTextarea.value = orderDetails;
+                    }
+
+                    console.log('✓ Order summary populated successfully');
+
+                } catch (error) {
+                    console.error('Error populating order summary:', error);
+                    this.updateDebugPanel('ERROR populating summary: ' + error.message);
+                }
             }
 
-            // Add cart data to form object
-            formObject.cartItems = checkoutManager.cartData ? checkoutManager.cartData.items : [];
-            formObject.orderTotal = checkoutManager.cartData ? checkoutManager.cartData.total : 0;
-
-            await checkoutManager.handleFormSubmit(formObject);
-        });
+            // Force reload cart data
+            reloadData() {
+                console.log('=== FORCE RELOADING DATA ===');
+                this.cartData = null;
+                this.loadCartData();
+            }
+        }
 
         // Debug functions
-        window.debugCheckout = {
-            viewCartData: () => console.log('Cart Data:', checkoutManager.cartData),
-            viewAllStorage: () => {
-                console.log('=== localStorage ===');
-                console.log('Checkout Data:', localStorage.getItem('noyesboys_checkout_data'));
-                console.log('Regular Cart:', localStorage.getItem('noyesboys_cart'));
-            },
-            clearStorage: () => {
-                localStorage.removeItem('noyesboys_checkout_data');
-                localStorage.removeItem('noyesboys_cart');
-                location.reload();
-            }
-        };
-
-        // Debug cart functions
-        window.debugCart = {
+        const debugFunctions = {
             checkStorage: function() {
-                console.log('=== CART STORAGE DEBUG ===');
+                console.log('=== STORAGE DEBUG ===');
+                console.log('localStorage available:', typeof(Storage) !== "undefined");
                 console.log('noyesboys_checkout_data:', localStorage.getItem('noyesboys_checkout_data'));
                 console.log('noyesboys_cart:', localStorage.getItem('noyesboys_cart'));
                 
+                // Try parsing both
                 try {
                     const checkoutData = localStorage.getItem('noyesboys_checkout_data');
                     if (checkoutData) {
@@ -1093,51 +856,127 @@
             createTestCart: function() {
                 const testCart = [
                     {
-                        strainName: 'Purple Noyes Kush',
-                        variant: '5 Seeds',
-                        variantText: '5 Seeds',
+                        strainName: 'Alienoyes Kush',
+                        variant: '5-pack',
+                        variantText: '5 Seeds - $150 CAD',
                         quantity: 1,
-                        price: 75.00
+                        price: 150.00
                     },
                     {
-                        strainName: 'Noyes Berry Blast', 
-                        variant: '10 Seeds',
-                        variantText: '10 Seeds',
-                        quantity: 2,
-                        price: 50.00
+                        strainName: 'Purple Rainbow', 
+                        variant: '3-pack',
+                        variantText: '3 Seeds - $100 CAD',
+                        quantity: 1,
+                        price: 100.00
                     }
                 ];
                 
                 localStorage.setItem('noyesboys_cart', JSON.stringify(testCart));
-                console.log('Test cart created! Refreshing page...');
-                location.reload();
+                console.log('Test cart created! Reloading...');
+                checkoutManager.reloadData();
             },
             
-            clearCart: function() {
+            clearStorage: function() {
                 localStorage.removeItem('noyesboys_checkout_data');
                 localStorage.removeItem('noyesboys_cart');
-                console.log('Cart cleared! Refreshing page...');
-                location.reload();
+                console.log('Storage cleared! Reloading...');
+                checkoutManager.reloadData();
+            },
+
+            reloadData: function() {
+                checkoutManager.reloadData();
             }
         };
 
-        // Affiliate tracking function
-        function checkAffiliateOrder() {
-            const cookies = document.cookie.split(';');
-            for (let cookie of cookies) {
-                if (cookie.includes('affiliate=')) {
-                    return cookie.split('=')[1];
-                }
+        // Initialize checkout manager
+        let checkoutManager;
+
+        // Payment method selection
+        function selectPayment(method) {
+            // Remove selected class from all options
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            const selectedOption = document.querySelector(.payment-option[onclick="selectPayment('${method}')"]);
+            if (selectedOption) {
+                selectedOption.classList.add('selected');
             }
-            return null;
+            
+            // Check the radio button
+            const radioButton = document.querySelector(input[value="${method}"]);
+            if (radioButton) {
+                radioButton.checked = true;
+            }
         }
 
-        // Initialize affiliate tracking when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            const affiliateWhoSentThem = checkAffiliateOrder();
-            if (affiliateWhoSentThem) {
-                console.log('Affiliate referral detected:', affiliateWhoSentThem);
-                // Store for later use in email
-                window.affiliateReferral = affiliateWhoSentThem;
+        // Handle form submission
+        document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Show loading state on submit button
+            const submitBtn = this.querySelector('.submit-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Order...';
+            submitBtn.disabled = true;
+            
+            const formData = new FormData(this);
+            const formObject = {};
+            
+            for (let [key, value] of formData.entries()) {
+                formObject[key] = value;
             }
+
+            // Basic validation
+            const requiredFields = ['email', 'firstName', 'lastName', 'paymentMethod'];
+            const missingFields = requiredFields.filter(field => !formObject[field]);
+            
+            if (missingFields.length > 0) {
+                alert('Please fill in all required fields: ' + missingFields.join(', '));
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formObject.email)) {
+                alert('Please enter a valid email address.');
+                // Reset button
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                return;
+            }
+
+            // Generate unique order ID
+            const orderId = 'NB-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+            formObject.orderId = orderId;
+
+            // Add cart data to form object
+            formObject.cartItems = checkoutManager.cartData ? checkoutManager.cartData.items : [];
+            formObject.orderTotal = checkoutManager.cartData ? checkoutManager.cartData.total : 0;
+
+            console.log('Processing order:', formObject);
+
+            // For demo purposes - show success message
+            alert(Order submitted successfully!\n\nOrder ID: ${orderId}\nTotal: ${formObject.orderTotal.toFixed(2)} CAD\n\nThank you for your order!);
+
+            // Clear the cart after successful submission
+            localStorage.removeItem('noyesboys_checkout_data');
+            localStorage.removeItem('noyesboys_cart');
+
+            // Reset button
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+
+            // Reload to show empty cart
+            checkoutManager.reloadData();
+        });
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('=== PAGE LOADED ===');
+            checkoutManager = new CheckoutManager();
         });
