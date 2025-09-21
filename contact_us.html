@@ -2,19 +2,21 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="title" content="The Noyes Boys Social Media" />
-    <meta name="tags" content="noyes boys, the noyes boys, noyes boys seeds, noyes seeds, noyes kush, Noyes, Noyes Boys, Noyes Boys Genetics, genetics, seeds, noyes genetics, Feminized, Feminized seeds, seeds, canada, seedbank, genetics, cannabis, marijuana, weed, small source, single source, inhouse, original, bred, sourced, canadian, noyes, noyesboys, the noyesboys, thenoyesboys, the noyes boys, noyes seeds, noyes genetics, noyes kush, alienoyes kush, mangonoyeskush, noyes breath, noyes haze, cannabis strains, new cannabis, seeds, seed bank, online seed bank, canadian seed bank, canadian cannabis, craft cannabis seeds, craft cannabis, delivery, free seeds, free, free shipping, extra seeds, seed, online, order now, cheap, freebie, coupon, fast, quick delivery" />
-    <meta name="keywords" content="Feminized, Feminized seeds, canadian cannabis seeds, noyes, noyes boys, noyes seeds, noyeskush, alienoyes, noyes kush, noyes strains, mangonoyes, ontario cannabis seeds, free cannabis seeds canada, genetics, small source canadian seed breeder, single source, inhouse, original, bred, sourced, canadian, noyes, noyesboys, the noyesboys, thenoyesboys, the noyes boys, noyes seeds, noyes genetics, noyes kush, alienoyes kush, mangonoyeskush, noyes breath, noyes haze, cannabis strains, new cannabis, seeds, seed bank, online seed bank, canadian seed bank, canadian cannabis, craft cannabis seeds, craft cannabis, delivery, free seeds, free, seed, online, order now, cheap, freebie, coupon, fast, quick delivery" />
+    <meta name="title" content="Contact The Noyes Boys - Get In Touch" />
+    <meta name="keywords" content="contact noyes boys, cannabis seeds support, customer service, email contact, social media, facebook, instagram, twitter, canadian cannabis seeds contact" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="Trusted Small Source Canadian fem Cannabis Seed shop" />
+    <meta name="description" content="Contact The Noyes Boys cannabis seed bank. Get support, ask questions, or connect with us on social media. Fast response times and friendly customer service." />
     <meta name="author" content="The Noyes Boys" />
-    <meta name="google-site-verification" content="YY_2bRKlUVENWoR4yrdYMGOvZ_lVOzdR85k5ZEeW518" />
-    <meta name="facebook-domain-verification" content="x0rc7jo1d4rlw8uo12q3nzaav9m0id" />
-    <title>Contact Us & Social Media - The Noyes Boys</title>
+    <title>Contact Us - The Noyes Boys Cannabis Seeds</title>
     <link rel="icon" type="image/x-icon" href="assets/img/noyes boys logo.png" />
-    <!-- Font Awesome icons (free version)-->
+    
+    <!-- Font Awesome icons -->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <!-- Google fonts-->
+    
+    <!-- EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <!-- Google fonts -->
     <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
     
@@ -30,6 +32,7 @@
             line-height: 1.6;
             color: #333;
             background: #0a0a0a;
+            padding-top: 80px;
         }
         
         .container {
@@ -82,67 +85,65 @@
         .nav-links a {
             color: white;
             text-decoration: none;
-            transition: color 0.3s ease;
-            font-weight: 500;
-            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
         }
         
         .nav-links a:hover {
             color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+            border-color: #4ade80;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: #4ade80;
+            color: #0a0a0a;
+            border-color: #4ade80;
         }
         
-        /* Masthead Banner */
-        .masthead {
-            height: 100vh;
-            min-height: 500px;
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
-                        url('assets/img/bg-masthead.jpg');
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: scroll;
-            background-size: cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #1e3c1e 0%, #2d5a2d 50%, #4a7c4a 100%);
+            padding: 100px 0 80px;
             text-align: center;
             color: white;
-            position: relative;
-            padding-top: 120px;
         }
         
-        .masthead-content {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        
-        .masthead h1 {
-            font-family: 'Arial', sans-serif;
-            font-size: 2.5rem;
-            line-height: 2.5rem;
-            letter-spacing: 0.8rem;
-            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
-            -webkit-text-fill-color: transparent;
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
             -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-transform: uppercase;
-            font-weight: 700;
-            margin-bottom: 2rem;
+            font-weight: bold;
         }
         
-        .masthead h2 {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.5);
+        .hero p {
+            font-size: 1.2rem;
             margin-bottom: 3rem;
-            max-width: 30rem;
+            opacity: 0.9;
+            max-width: 600px;
             margin-left: auto;
             margin-right: auto;
         }
-        
+
+        /* Navigation Buttons - Original Style */
         .nav-buttons {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1rem;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .btn {
@@ -170,191 +171,347 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(74, 222, 128, 0.6);
         }
-        
-        .widget-container {
-            margin-top: 3rem;
-            padding: 2rem;
-            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(51, 65, 85, 0.8) 100%);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+
+        /* Social Media Links */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .social-link:hover {
+            background: #4ade80;
+            color: #0a0a0a;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(74, 222, 128, 0.4);
+        }
+
+        .social-link.facebook:hover {
+            background: #1877f2;
+            color: white;
+        }
+
+        .social-link.instagram:hover {
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            color: white;
+        }
+
+        .social-link.twitter:hover {
+            background: #000000;
+            color: white;
+        }
+
+        /* Ensure Font Awesome icons display */
+        .social-link i {
+            font-family: "Font Awesome 6 Brands", "Font Awesome 6 Free";
+            font-weight: 900;
         }
         
         /* Main Content */
         .main-content {
-            padding: 100px 0;
+            padding: 80px 0;
             background: #111;
         }
-        
-        .section-title {
-            text-align: center;
+
+        /* Contact Form Section */
+        .contact-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-section h2 {
+            color: #2d5a2d;
             font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: #4ade80;
-        }
-        
-        .section-subtitle {
-            text-align: center;
-            font-size: 1.2rem;
-            color: #cbd5e1;
-            margin-bottom: 2rem;
-        }
-        
-        /* Widget Sections */
-        .widget-section {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            border-radius: 15px;
-            padding: 3rem;
-            margin: 3rem 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        
-        .widget-section h3 {
-            color: #4ade80;
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
             text-align: center;
         }
-        
-        /* Social Media Section */
-        .social-section {
-            padding: 80px 0;
-            background: #0a0a0a;
+
+        .contact-section p {
+            color: #666;
+            font-size: 1.1rem;
+            text-align: center;
+            margin-bottom: 2rem;
         }
-        
-        /* Reviews Section */
-        .reviews-section {
-            padding: 80px 0;
-            background: #111;
-        }
-        
-        /* Disclaimers */
-        .disclaimers {
-            padding: 50px 0;
-            background: #1e293b;
-        }
-        
-        .disclaimer-content {
-            max-width: 1000px;
+
+        .contact-form {
+            max-width: 600px;
             margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: #2d5a2d;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4ade80;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 2rem auto 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.6);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-message {
+            display: none;
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 1rem;
             text-align: center;
         }
-        
-        .disclaimer-content h2 {
-            color: #4ade80;
-            margin-bottom: 2rem;
-            font-size: 1.8rem;
-        }
-        
-        .disclaimer-content h4,
-        .disclaimer-content p {
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-            font-size: 1rem;
-        }
-        
-        .disclaimer-content .small {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.6);
-        }
-        
-        /* Footer */
-        footer {
-            background: #0a0a0a;
-            padding: 50px 0 20px;
-            border-top: 1px solid #334155;
-        }
-        
-        .footer-content {
+
+        /* Contact Info Grid */
+        .contact-info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
         }
-        
-        .footer-section h3 {
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .info-card i {
+            font-size: 3rem;
             color: #4ade80;
             margin-bottom: 1rem;
         }
-        
-        .footer-section p, .footer-section a {
-            color: #cbd5e1;
-            text-decoration: none;
-            line-height: 1.8;
+
+        .info-card h3 {
+            color: #2d5a2d;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
         }
-        
-        .footer-section a:hover {
+
+        .info-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .faq-section h2 {
+            color: #2d5a2d;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1.5rem;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .faq-question {
+            color: #2d5a2d;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .faq-question:hover {
             color: #4ade80;
         }
-        
-        .footer-bottom {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid #334155;
-            color: #64748b;
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-answer {
+            color: #666;
+            line-height: 1.6;
+            padding-left: 1rem;
+        }
+
+        /* Business Hours */
+        .hours-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .hours-table th,
+        .hours-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .hours-table th {
+            background: #f8f9fa;
+            color: #2d5a2d;
+            font-weight: bold;
+        }
+
+        /* Disclaimers */
+        .disclaimers {
+            background: rgba(30, 41, 59, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 3rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .disclaimers h3 {
+            color: #4ade80;
+            margin-bottom: 1rem;
+        }
+
+        .disclaimers p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
         }
         
-        /* SEO Text - Hidden but accessible */
-        .seo-text {
-            position: absolute;
-            left: -10000px;
-            top: auto;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-        }
-        
-        /* Responsive */
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .masthead h1 {
+            .hero h1 {
                 font-size: 2rem;
-                letter-spacing: 0.4rem;
             }
             
-            .masthead h2 {
-                font-size: 0.9rem;
+            .hero p {
+                font-size: 1rem;
             }
             
             .nav-buttons {
                 grid-template-columns: 1fr;
+            }
+
+            .social-links {
+                gap: 1rem;
+            }
+
+            .social-link {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
             }
             
             .nav-links {
                 display: none;
             }
             
-            .widget-section {
-                padding: 2rem;
+            .contact-section,
+            .faq-section {
+                padding: 20px;
             }
-        }
-        
-        @media (min-width: 992px) {
-            .masthead h1 {
-                font-size: 4rem;
-                line-height: 4rem;
+
+            .form-row {
+                grid-template-columns: 1fr;
             }
-            
-            .masthead h2 {
-                font-size: 1.25rem;
-            }
-            
-            .nav-buttons {
-                grid-template-columns: repeat(3, 1fr);
+
+            .contact-info-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
-    
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-W7B6GRJ5HT"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-W7B6GRJ5HT');
-    </script>
 </head>
 
-<body id="page-top">
+<body>
     <!-- Header -->
     <header>
         <nav class="container">
@@ -364,206 +521,284 @@
             </a>
             <ul class="nav-links">
                 <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
-                <li><a href="genetics.html">Genetics</a></li>
-                <li><a href="deals.html">Deals</a></li>
-                <li><a href="order_now.html">Order Now</a></li>
-                <li><a href="contact_us.html">Contact</a></li>
-                <li><a href="readmore.html">Growing Guide</a></li>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="line1.html">Line 1</a></li>
+                <li><a href="line2.html">Line 2</a></li>
+                <li><a href="line3.html">Line 3</a></li>
+                <li><a href="#" class="active">Contact</a></li>
+                <li><a href="reviews.html">Reviews</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Masthead Banner -->
-    <section class="masthead" id="home">
+    <!-- Hero Section -->
+    <section class="hero">
         <div class="container">
-            <div class="masthead-content">
-                <h1>NOYES BOYS GENETICS</h1>
-                <h2>Feminized Canadian Craft Cannabis Seeds</h2>
+            <h1>Get In Touch</h1>
+            <p>We're here to help with questions about our genetics, orders, growing tips, or anything else you need. Connect with us through any of the channels below.</p>
+            
+            <div class="nav-buttons">
+                <a class="btn btn-primary" href="FeminizedSeedsHomepage.html">Home</a>
+                <a class="btn btn-primary" href="genetics.html">Genetic Lineups</a>
+                <a class="btn btn-primary" href="nextstrains.html">Next Release</a>
+                <a class="btn btn-primary" href="deals.html">DEALS</a>
+                <a class="btn btn-primary" href="order_now.html">Order Now</a>
+                <a class="btn btn-primary" href="reviews.html">Reviews</a>
+                <a class="btn btn-primary" href="readmore.html">Growing Guide</a>
+                <a class="btn btn-primary" href="#disclaimers">Disclaimers</a>
+            </div>
+
+            <!-- Social Media Links -->
+            <div class="social-links">
+                <a href="#" class="social-link facebook" target="_blank" title="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="social-link instagram" target="_blank" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="social-link twitter" target="_blank" title="Twitter/X">
+                    <i class="fab fa-x-twitter"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="main-content">
+        <div class="container">
+            
+            <!-- Contact Form -->
+            <div class="contact-section">
+                <h2>Send Us a Message</h2>
+                <p>Whether you have questions about our genetics, need help with an order, or want growing advice - we're here to help!</p>
                 
-                <div class="nav-buttons">
-                    <a class="btn btn-primary" href="FeminizedSeedsHomepage.html">Home</a>
-                    <a class="btn btn-primary" href="genetics.html">Genetic Lineups</a>
-                    <a class="btn btn-primary" href="nextstrains.html">Next Release</a>
-                    <a class="btn btn-primary" href="deals.html">DEALS</a>
-                    <a class="btn btn-primary" href="https://noyesboys.com/order_now.html#signup">Order Now</a>
-                    <a class="btn btn-primary" href="contact_us.html">Socials</a>
-                    <a class="btn btn-primary" href="https://en.seedfinder.eu/database/breeder/Noyes_Boys_Genetics/">Additional Info</a>
-                    <a class="btn btn-primary" href="#disclaimers">Disclaimers</a>
-                    <a class="btn btn-primary" href="https://noyesboys.com/readmore.html">Read More</a>
-                </div>
-
-                <div class="widget-container">
-                    <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                    <div class="elfsight-app-8dabc9c4-2112-442c-aa73-efa37382f500" data-elfsight-app-lazy></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Social Media Section -->
-    <section class="social-section" id="socials">
-        <div class="container">
-            <h2 class="section-title">Connect With Us</h2>
-            <p class="section-subtitle">Follow us on social media for updates, growing tips, and community interaction</p>
-            
-            <div class="widget-section">
-                <h3>Social Media</h3>
-                <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                <div class="elfsight-app-c1689ff3-f9a9-4006-bdb8-8792189547da" data-elfsight-app-lazy></div>
-            </div>
-            
-            <div class="widget-section">
-                <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                <div class="elfsight-app-e64a5e07-4074-4c01-96f7-ac0076542685" data-elfsight-app-lazy></div>
-            </div>
-            
-            <div class="widget-section">
-                <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                <div class="elfsight-app-8dabc9c4-2112-442c-aa73-efa37382f500" data-elfsight-app-lazy"></div>
-            </div>
-            
-            <div class="widget-section">
-                <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                <div class="elfsight-app-3f029932-fff3-45e5-b33e-9ec1d842ecee" data-elfsight-app-lazy></div>
-            </div>
-        </div>
-    </section>
-                <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                <div class="elfsight-app-09f5c9c2-5c51-4bec-a33c-f15792f3ffbb" data-elfsight-app-lazy></div>
-            </div>
-                <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                <div class="elfsight-app-3f029932-fff3-45e5-b33e-9ec1d842ecee" data-elfsight-app-lazy"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact & Order Section -->
-    <section style="background: #0a0a0a; padding: 80px 0;">
-        <div class="container">
-            <h2 class="section-title">Contact & Order</h2>
-            
-            <div class="widget-section">
-                <h3>Get In Touch</h3>
-                <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                <div class="elfsight-app-61deca9a-071c-4c35-bdca-bd7f7e465e4c" data-elfsight-app-lazy></div>
-            </div>
-            
-            <div class="widget-section">
-                <h3>Our Partners</h3>
-                <!-- Elfsight Logo Showcase -->
-                <script src="https://elfsightcdn.com/platform.js" async></script>
-                <div class="elfsight-app-810e07d2-061e-466d-8b58-217472178ceb" data-elfsight-app-lazy></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Disclaimers -->
-    <section class="disclaimers" id="disclaimers">
-        <div class="container">
-            <div class="disclaimer-content">
-                <h2>Important Information</h2>
-                
-                <h4>Disclaimer:</h4>
-                <p class="small">By ordering from this site you affirm to be at least 19 years of age. Seeds are sold for genetic preservation and as collectors items. Germinating them may be illegal where you are from, and The Noyes Boys take no responsibility for people who do not comply with local laws. NO THC IS SOLD ON THIS WEBSITE</p>
-                
-                <h4>Shipping Information:</h4>
-                <p class="small">We deliver our seeds with few exceptions & we strongly advise you check regulations regarding seeds in your country BEFORE ordering, as we will not send seeds to somewhere it is illegal or be held responsible for any legal problems resulting from your purchase.</p>
-                
-                <h4>Stealth Packaging:</h4>
-                <p class="small">STEALTH PACKAGING OPTION AVAILABLE</p>
-                <p class="small">All products are wrapped up in bubble wrap envelopes or small boxes with tracking. This ensures that they arrive with you protected and in perfect condition. Envelopes/boxes have only your address details, a stamp and the bar code label for tracking. We do not write what the contents are or put our company name on the envelope.</p>
-                
-                <h4>Delivery Issues:</h4>
-                <p class="small">If you do not receive your goods within the estimated times listed above, please contact your postal service with your tracking number.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Additional Widgets -->
-    <section style="background: #111; padding: 50px 0;">
-        <div class="container">
-            <div class="widget-section">
-                <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                <div class="elfsight-app-41c30db8-85f5-4ec0-b0a2-963c8897c2da" data-elfsight-app-lazy"></div>
-            </div>
-            
-            <div class="widget-section">
-                <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
-                <div class="elfsight-app-8a60e01a-8e69-47ba-a7d3-ef6d974f3920" data-elfsight-app-lazy"></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>The Noyes Boys Seed Bank</h3>
-                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
-                        <img src="assets/img/noyes boys logo.png" alt="Logo" style="width: 40px; height: 40px; margin-right: 10px;">
-                        <span style="color: #4ade80; font-weight: bold;">Est. 2015</span>
+                <form id="contactForm" class="contact-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Your Name *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
                     </div>
-                    <p>Premium Canadian cannabis seeds hand-bred for quality, structure, and resilience. Connect with us on social media and read customer reviews.</p>
+                    
+                    <div class="form-group">
+                        <label for="subject">Subject *</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Select a topic...</option>
+                            <option value="Order Inquiry">Order Inquiry</option>
+                            <option value="Product Questions">Product Questions</option>
+                            <option value="Growing Help">Growing Help</option>
+                            <option value="Shipping Question">Shipping Question</option>
+                            <option value="Technical Support">Technical Support</option>
+                            <option value="Partnership/Wholesale">Partnership/Wholesale</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Your Message *</label>
+                        <textarea id="message" name="message" placeholder="Please provide details about your inquiry..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="submitBtn">Send Message</button>
+                    
+                    <div id="successMessage" class="success-message">
+                        <h4>Message Sent Successfully!</h4>
+                        <p>Thank you for contacting us. We'll get back to you within 24 hours.</p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Contact Info Grid -->
+            <div class="contact-info-grid">
+                <div class="info-card">
+                    <i class="fas fa-envelope"></i>
+                    <h3>Email Support</h3>
+                    <p>Get in touch for any questions about orders, genetics, or growing tips. We respond within 24 hours.</p>
                 </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <p><a href="genetics.html">Genetic Lineups</a></p>
-                    <p><a href="deals.html">Deals</a></p>
-                    <p><a href="https://noyesboys.com/order_now.html#signup">Order Now</a></p>
-                    <p><a href="#socials">Social Media</a></p>
+                
+                <div class="info-card">
+                    <i class="fas fa-shipping-fast"></i>
+                    <h3>Order Tracking</h3>
+                    <p>Need help with your order? Contact us with your order number and we'll provide tracking information and updates.</p>
                 </div>
-                <div class="footer-section">
-                    <h3>Customer Service</h3>
-                    <p><a href="#reviews">Customer Reviews</a></p>
-                    <p><a href="https://g.page/r/CZr0a3kuQ81AEAI/review">Leave a Review</a></p>
-                    <p><a href="https://noyesboys.com/readmore.html">Read More</a></p>
+                
+                <div class="info-card">
+                    <i class="fas fa-seedling"></i>
+                    <h3>Growing Support</h3>
+                    <p>Our experienced team can help with growing questions, strain recommendations, and cultivation tips.</p>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 The Noyes Boys Seed Bank. All rights reserved.</p>
+
+            <!-- Business Hours -->
+            <div class="info-card" style="margin-top: 2rem;">
+                <i class="fas fa-clock"></i>
+                <h3>Response Times</h3>
+                <table class="hours-table">
+                    <tr>
+                        <th>Contact Method</th>
+                        <th>Response Time</th>
+                    </tr>
+                    <tr>
+                        <td>Email Support</td>
+                        <td>Within 24 hours</td>
+                    </tr>
+                    <tr>
+                        <td>Social Media</td>
+                        <td>1-2 business days</td>
+                    </tr>
+                    <tr>
+                        <td>Order Inquiries</td>
+                        <td>Same business day</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <h2>Frequently Asked Questions</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How long does shipping take? <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer" style="display: none;">
+                        Shipping times vary by location but typically take 5-14 business days within Canada. International shipping may take longer depending on customs and local postal services.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Are your seeds feminized? <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer" style="display: none;">
+                        Yes! All of our seeds are feminized, ensuring you get female plants that produce the flowers you're looking for. Our feminization process achieves 99%+ female rates.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Do you offer growing advice? <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer" style="display: none;">
+                        Absolutely! We're passionate growers ourselves and love helping customers succeed. Contact us with any growing questions or check out our growing guide for detailed information.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What payment methods do you accept? <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer" style="display: none;">
+                        We accept various payment methods including e-transfer, cryptocurrency, and other secure payment options. Contact us for current payment options and instructions.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Can I track my order? <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer" style="display: none;">
+                        Yes! Once your order ships, you'll receive tracking information via email. You can also contact us anytime for order status updates.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Disclaimers -->
+            <div class="disclaimers">
+                <h3>Important Information</h3>
+                <p><strong>Legal Disclaimer:</strong> Seeds are sold for genetic preservation and as collectors items. By ordering, you confirm you are at least 19 years of age and understand local laws regarding cannabis seeds in your area.</p>
+                <p><strong>Shipping:</strong> We ship with tracking and stealth packaging options available. Check your local regulations before ordering as we cannot ship to areas where it's prohibited.</p>
+                <p><strong>Quality Guarantee:</strong> All our genetics are hand-bred for quality, structure, and resilience. We stand behind our products and are here to help ensure your success.</p>
             </div>
         </div>
-    </footer>
+    </section>
 
-    <!-- SEO Keywords (hidden) -->
-    <div class="seo-text">
-        canadian cannabis seeds, order canadians seeds, feminized seeds, femenized seeds, cannabis seeds online, order seeds online, cannabis order seeds online, fem seeds online, fem seeds canada, canada fem seeds, online fem seeds canada, fem seeds , seeds fem, feminized seed canada, Canadian Feminized cannabis seeds, Feminized, noyes, noyes Feminized, noyes boys Feminized, noyes seeds, Feminized seeds, fem seeds, noyeskush, fem, fem seeds cannabis, alienoyes, noyes kush, noyes strains, mangonoyes, ontario cannabis seeds, NOYES KUSH, kush, haze, strains, new strains free cannabis seeds canada, genetics, small source canadian seed breeder, single source, inhouse, original, bred, sourced, canadian, noyes, noyesboys, the noyesboys, thenoyesboys, the noyes boys, noyes seeds, noyes genetics, noyes kush, alienoyes kush, mangonoyeskush, noyes breath, noyes haze, cannabis strains, new cannabis, seeds, seed bank, online seed bank, canadian seed bank, canadian cannabis, craft cannabis seeds, craft cannabis, delivery, free seeds, free, seed, online, order now, cheap, freebie, coupon, fast, quick delivery, order now, buy now, canadian seeds, canadian seed bank, noyes genetics, noyes weed, kush seeds, weed, cannabis, marijuana, mj, cannabis clones, clones, canadian clones, canadian bred seeds, canadian seed website, mariajuan seed website, buy canabis seeds online
-    </div>
-
-    <!-- Form Button Script -->
     <script>
-      /* paste this line in verbatim */
-      window.formbutton=window.formbutton||function(){(formbutton.q=formbutton.q||[]).push(arguments)};
-      /* customize formbutton below*/     
-      formbutton("create", {
-        action: "https://formspree.io/f/mbjndqgz",
-        title: "Compose Your Order",
-        fields: [
-          { 
-            type: "email", 
-            label: "Email:", 
-            name: "email",
-            required: true,
-            placeholder: "your@email.com"
-          },
-          {
-            type: "textarea",
-            label: "Message:",
-            name: "message",
-            placeholder: "STRAINS:                                  QUANTITYS:                            DESIRED METHOD OF PAYMENT                DELIVERY ADRESS:                 ",
-          },
-          { type: "submit" }      
-        ],
-        styles: {
-          title: {
-            backgroundColor: "green"
-          },
-          button: {
-            backgroundColor: "green"
-          }
+        // Initialize EmailJS
+        function initEmailJS() {
+            // Replace with your EmailJS public key
+            emailjs.init('ysZHGhtGsYM3n0oQP');
         }
-      });
+
+        // Contact form handling
+        document.addEventListener('DOMContentLoaded', function() {
+            initEmailJS();
+            
+            const contactForm = document.getElementById('contactForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const successMessage = document.getElementById('successMessage');
+
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(contactForm);
+                const templateParams = {
+                    from_name: formData.get('name'),
+                    from_email: formData.get('email'),
+                    subject: formData.get('subject'),
+                    message: formData.get('message'),
+                    submission_date: new Date().toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    })
+                };
+
+                // Show loading state
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Sending...';
+                submitBtn.disabled = true;
+
+                // Send email via EmailJS
+                // Replace with your service ID and template ID
+                emailjs.send('service_lzo8muu', 'template_hq77hie', templateParams)
+                    .then(function(response) {
+                        console.log('Email sent successfully:', response);
+                        successMessage.style.display = 'block';
+                        contactForm.reset();
+                        contactForm.scrollIntoView({ behavior: 'smooth' });
+                    })
+                    .catch(function(error) {
+                        console.error('Failed to send email:', error);
+                        alert('There was an issue sending your message. Please try again or contact us directly through social media.');
+                    })
+                    .finally(function() {
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                    });
+            });
+
+            // FAQ toggle functionality
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    if (answer.style.display === 'none' || answer.style.display === '') {
+                        answer.style.display = 'block';
+                        icon.style.transform = 'rotate(180deg)';
+                    } else {
+                        answer.style.display = 'none';
+                        icon.style.transform = 'rotate(0deg)';
+                    }
+                });
+            });
+        });
+
+        // Update social media links (you'll need to replace these with your actual links)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Replace these with your actual social media URLs
+            document.querySelector('.facebook').href = 'https://www.facebook.com/TheNoyesBoys/about_contact_and_basic_info/';
+            document.querySelector('.instagram').href = 'https://www.instagram.com/noyes_boys/'; 
+            document.querySelector('.twitter').href = 'https://x.com/The_Noyes_Boys';
+        });
     </script>
 </body>
 </html>
