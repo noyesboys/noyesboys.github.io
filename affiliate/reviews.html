@@ -9,6 +9,9 @@
     <!-- Font Awesome icons -->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     
+    <!-- EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
     <!-- Schema.org markup for reviews -->
     <script type="application/ld+json">
     {
@@ -486,20 +489,31 @@
             </a>
             <ul class="nav-links">
                 <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
-                <li><a href="pricing.html">Pricing</a></li>
-                <li><a href="line1.html">Line 1</a></li>
-                <li><a href="line2.html">Line 2</a></li>
-                <li><a href="line3.html">Line 3</a></li>
+                <li><a href="genetics.html">Genetic Lineup</a></li>
+                <li><a href="nextstrains.html">Next Release</a></li>
+                <li><a href="deals.html">Deals</a></li>
+                <li><a href="order_now.html">Order Now</a></li>
                 <li><a href="contact_us.html">Contact</a></li>
-                <li><a href="#" class="active">Reviews</a></li>
+                <li><a href="readmore.html">Growing Guide</a></li>
             </ul>
-            <button class="header-cart-button" onclick="openCart()">
-                <i class="fas fa-shopping-cart"></i>
-                Cart
-                <span class="header-cart-count" id="cartCount">0</span>
-            </button>
         </nav>
     </header>
+
+    <section class="masthead" id="home">
+        <div class="masthead-content">
+            <h1>Noyes Boys</h1>
+            <h2>Premium Canadian Cannabis Genetics</h2>
+            <div class="nav-buttons">
+                <a class="btn" href="FeminizedSeedsHomepage.html">Home</a>
+                <a class="btn" href="genetics.html">Genetic Lineups</a>
+                <a class="btn" href="nextstrains.html">Next Release</a>
+                <a class="btn" href="deals.html">DEALS</a>
+                <a class="btn" href="order_now.html">Order Now</a>
+                <a class="btn" href="reviews.html">Reviews</a>
+                <a class="btn" href="readmore.html">Growing Guide</a>
+            </div>
+        </div>
+    </section>
 
     <div class="container">
         <div class="header">
@@ -1140,7 +1154,14 @@
             updateCartCount();
             displayReviews();
             setupReviewForm();
+            initEmailJS();
         });
+
+        function initEmailJS() {
+            // Initialize EmailJS with your public key
+            // Replace 'YOUR_PUBLIC_KEY' with your actual EmailJS public key
+            emailjs.init('ysZHGhtGsYM3n0oQP');
+        }
 
         function setupReviewForm() {
             // Star rating functionality
@@ -1204,11 +1225,11 @@
                 name: formData.get('reviewerName'),
                 rating: parseInt(formData.get('selectedRating')),
                 content: formData.get('reviewContent'),
-                strain: formData.get('reviewStrain') || '',
+                strain: formData.get('reviewStrain') || 'Not specified',
                 email: formData.get('reviewEmail'),
                 date: new Date().toISOString().split('T')[0],
                 hasImage: false,
-                verified: false // Will be set to true after admin verification
+                verified: false
             };
             
             // Basic validation
@@ -1217,32 +1238,61 @@
                 return;
             }
             
-            // Store in localStorage (for demonstration - in production, send to server)
-            const pendingReviews = JSON.parse(localStorage.getItem('noyesboys_pending_reviews') || '[]');
-            pendingReviews.push(reviewData);
-            localStorage.setItem('noyesboys_pending_reviews', JSON.stringify(pendingReviews));
+            // Show loading state
+            const submitBtn = document.querySelector('.submit-review-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
             
-            // Show success message
-            document.getElementById('reviewSuccess').style.display = 'block';
-            form.reset();
-            document.getElementById('selectedRating').value = '';
+            // Prepare email template parameters
+            const templateParams = {
+                customer_name: reviewData.name,
+                customer_email: reviewData.email,
+                rating: reviewData.rating,
+                strain: reviewData.strain,
+                review_content: reviewData.content,
+                submission_date: new Date().toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                }),
+                star_display: '★'.repeat(Math.floor(reviewData.rating)) + (reviewData.rating % 1 ? '½' : '') + '☆'.repeat(5 - Math.ceil(reviewData.rating))
+            };
             
-            // Reset stars
-            document.querySelectorAll('.star').forEach(star => {
-                star.style.color = '#ddd';
-            });
-            
-            // Scroll to success message
-            document.getElementById('reviewSuccess').scrollIntoView({ behavior: 'smooth' });
-            
-            // In a real application, you would send this data to your server:
-            // fetch('/api/reviews', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(reviewData)
-            // });
-            
-            console.log('Review submitted:', reviewData);
+            // Send email using EmailJS
+            // Replace 'YOUR_SERVICE_ID' and 'YOUR_TEMPLATE_ID' with your actual EmailJS service and template IDs
+            emailjs.send('service_lzo8muu', 'template_28e7ax9', templateParams)
+                .then(function(response) {
+                    console.log('Email sent successfully:', response);
+                    
+                    // Store in localStorage for backup
+                    const pendingReviews = JSON.parse(localStorage.getItem('noyesboys_pending_reviews') || '[]');
+                    pendingReviews.push(reviewData);
+                    localStorage.setItem('noyesboys_pending_reviews', JSON.stringify(pendingReviews));
+                    
+                    // Show success message
+                    document.getElementById('reviewSuccess').style.display = 'block';
+                    form.reset();
+                    document.getElementById('selectedRating').value = '';
+                    
+                    // Reset stars
+                    document.querySelectorAll('.star').forEach(star => {
+                        star.style.color = '#ddd';
+                    });
+                    
+                    // Scroll to success message
+                    document.getElementById('reviewSuccess').scrollIntoView({ behavior: 'smooth' });
+                }, function(error) {
+                    console.error('Failed to send email:', error);
+                    alert('There was an issue submitting your review. Please try again or contact us directly.');
+                })
+                .finally(function() {
+                    // Reset button state
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                });
         }
 
         function updateCartCount() {

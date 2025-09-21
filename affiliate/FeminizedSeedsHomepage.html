@@ -464,7 +464,7 @@
                 <li><a href="contact_us.html">Contact</a></li>
                 <li><a href="affiliate/affiliates.html">Affiliate Program</a></li>
                 <li><a href="reviews.html">Reviews</a></li>
-                <li><a href="readmore.html">Growing Guide</a></li>
+                <li><a href="https://en.seedfinder.eu/database/breeder/Noyes_Boys_Genetics/">Read More</a></li>
             </ul>
         </nav>
     </header>
@@ -478,8 +478,22 @@
                 <div class="cta-buttons">
                     <a href="genetics.html" class="btn btn-secondary">Shop Seeds</a>
                     <a href="deals.html" class="btn btn-secondary">Pricing</a>
-                    <a href="https://en.seedfinder.eu/database/breeder/Noyes_Boys_Genetics/" class="btn btn-secondary">Learn More</a>
+                    <a href="reviews.html" class="btn btn-secondary">Reviews</a>
+                    <a href="affiliate/affiliates.html" class="btn btn-secondary">Affiliates</a>
+                    <a href="readmore.html" class="btn btn-secondary">Blog</a>
                 </div>
+            </div>
+            <!-- Social Media Links -->
+            <div class="social-links">
+                <a href="#" class="social-link facebook" target="_blank" title="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="social-link instagram" target="_blank" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="social-link twitter" target="_blank" title="Twitter/X">
+                    <i class="fab fa-x-twitter"></i>
+                </a>
             </div>
         </div>
     </section>
@@ -677,9 +691,9 @@ if (isset($_GET['ref'])) {
     $_SESSION['affiliate_ref'] = $affiliate_ref;
     
     // Track the click
-    require_once 'classes/Affiliate.php';
+    require_once = 'classes/Affiliate.php';
     $affiliate = new Affiliate();
-    $affiliate->recordClick($affiliate_ref, $current_page, $campaign);
+    $affiliate = recordClick($affiliate_ref, $current_page, $campaign);
 }
 
     </script>
