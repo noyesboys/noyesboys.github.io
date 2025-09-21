@@ -1102,12 +1102,33 @@
     </div>
 
     <script>
-        // Cart Management System with In-Memory Storage
+        // Cart Management System with Local Storage
         class CartManager {
             constructor() {
-                this.cart = [];
-                this.checkoutData = null;
+                this.storageKey = 'noyesboys_cart';
+                this.checkoutKey = 'noyesboys_checkout_data';
+                this.cart = this.loadCart();
                 this.updateCartDisplay();
+            }
+
+            // Load cart from local storage
+            loadCart() {
+                try {
+                    const stored = localStorage.getItem(this.storageKey);
+                    return stored ? JSON.parse(stored) : [];
+                } catch (e) {
+                    console.error('Error loading cart:', e);
+                    return [];
+                }
+            }
+
+            // Save cart to local storage
+            saveCart() {
+                try {
+                    localStorage.setItem(this.storageKey, JSON.stringify(this.cart));
+                } catch (e) {
+                    console.error('Error saving cart:', e);
+                }
             }
 
             // Add item to cart
@@ -1152,6 +1173,7 @@
                     });
                 }
 
+                this.saveCart();
                 this.updateCartDisplay();
                 return true;
             }
@@ -1166,6 +1188,7 @@
                     this.cart.splice(index, 1);
                 }
                 
+                this.saveCart();
                 this.updateCartDisplay();
             }
 
@@ -1174,12 +1197,14 @@
                 if (index < 0 || index >= this.cart.length) return;
                 
                 this.cart.splice(index, 1);
+                this.saveCart();
                 this.updateCartDisplay();
             }
 
             // Clear entire cart
             clearCart() {
                 this.cart = [];
+                this.saveCart();
                 this.updateCartDisplay();
             }
 
@@ -1241,7 +1266,7 @@
 
             // Export cart data for checkout
             exportCartForCheckout() {
-                this.checkoutData = {
+                const cartData = {
                     items: this.cart,
                     total: this.getTotal(),
                     itemCount: this.getTotalItems(),
@@ -1249,18 +1274,35 @@
                     currency: 'CAD'
                 };
                 
-                console.log('Cart data exported for checkout:', this.checkoutData);
-                return this.checkoutData;
+                // Store for checkout page using localStorage
+                try {
+                    localStorage.setItem(this.checkoutKey, JSON.stringify(cartData));
+                    console.log('Cart data exported for checkout:', cartData);
+                } catch (e) {
+                    console.error('Error storing checkout data:', e);
+                }
+                
+                return cartData;
             }
 
-            // Get checkout data
+            // Get checkout data (for use on checkout page)
             getCheckoutData() {
-                return this.checkoutData;
+                try {
+                    const stored = localStorage.getItem(this.checkoutKey);
+                    return stored ? JSON.parse(stored) : null;
+                } catch (e) {
+                    console.error('Error loading checkout data:', e);
+                    return null;
+                }
             }
 
             // Clear checkout data after successful order
             clearCheckoutData() {
-                this.checkoutData = null;
+                try {
+                    localStorage.removeItem(this.checkoutKey);
+                } catch (e) {
+                    console.error('Error clearing checkout data:', e);
+                }
             }
         }
 
@@ -1326,7 +1368,7 @@
             return true;
         }
 
-        // Update variant price display
+       // Update variant price display
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize price displays
             document.querySelectorAll('select[id$="-variant"]').forEach(select => {
