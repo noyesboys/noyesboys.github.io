@@ -227,7 +227,6 @@
             position: relative;
         }
 
-        /* Fixed image styling */
         .merch-image-container img {
             width: 100%;
             height: 100%;
@@ -235,12 +234,10 @@
             border-radius: 8px;
         }
 
-        /* For single images */
         .merch-image-container img:only-child {
             object-fit: contain;
         }
 
-        /* For multiple images - create a grid */
         .merch-image-container:has(img + img) {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
@@ -306,6 +303,11 @@
             font-weight: bold;
             cursor: pointer;
             width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .order-button:hover {
+            transform: translateY(-2px);
         }
 
         .options-title {
@@ -339,7 +341,6 @@
             height: 80px;
         }
 
-        /* Fixed logo option images */
         .logo-option img {
             width: 100%;
             height: 100%;
@@ -365,58 +366,7 @@
             padding: 20px;
         }
 
-        .strain-cards-layout {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 30px;
-            padding: 20px;
-        }
-
-        .strain-selector, .strain-display {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .strain-card-preview {
-            background: #f8f9fa;
-            border: 2px solid #ddd;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .strain-card-image {
-            width: 100%;
-            height: 200px;
-            background: #eee;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-weight: bold;
-        }
-
-        .strain-details {
-            background: rgba(74, 124, 74, 0.1);
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-
-        .strain-details ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .strain-details li {
-            padding: 3px 0;
-            border-bottom: 1px solid rgba(74, 124, 74, 0.2);
-        }
-
+        /* Cart Modal */
         .cart-modal {
             display: none;
             position: fixed;
@@ -448,6 +398,10 @@
             cursor: pointer;
         }
 
+        .cart-close:hover {
+            color: #2d5a2d;
+        }
+
         .cart-item {
             display: flex;
             justify-content: space-between;
@@ -472,6 +426,11 @@
             font-size: 0.9rem;
         }
 
+        .cart-item-price {
+            color: #2d5a2d;
+            font-weight: bold;
+        }
+
         .cart-item-controls {
             display: flex;
             align-items: center;
@@ -492,6 +451,10 @@
             width: 30px;
             height: 30px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
         }
 
         .quantity-display {
@@ -514,6 +477,12 @@
             margin-top: 2rem;
             padding-top: 1rem;
             border-top: 2px solid #eee;
+        }
+
+        .cart-total h3 {
+            color: #2d5a2d;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .checkout-btn {
@@ -681,11 +650,11 @@
                         <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/stink.jpg" alt="Design"></div>
                         <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/strainnamelist.jpg" alt="Design"></div>
                     </div>
-                    <p style="color: #666; font-size: 0.9rem; text-align: center;">High-quality screen printing on 100% cotton.</p>
+                    <p style="color: #666; font-size: 0.9rem; text-align: center;">Other Strain Arts Are Available.</p>
                 </div>
             </div>
         </div>
-                <!-- T-Shirts -->
+        <!-- T-Shirts -->
         <div class="section-container">
             <div class="section-header">
                 <h3>T-Shirts - $60 CAD</h3>
@@ -768,7 +737,7 @@
                         <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/stink.jpg" alt="Design"></div>
                         <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/strainnamelist.jpg" alt="Design"></div>
                     </div>
-                    <p style="color: #666; font-size: 0.9rem; text-align: center;">Select from 20+ unique strain designs with high-quality embroidery.</p>
+                    <p style="color: #666; font-size: 0.9rem; text-align: center;">Other Strain Arts Are Available.</p>
                 </div>
             </div>
         </div>
@@ -852,7 +821,7 @@
                         <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/stink.jpg" alt="Design"></div>
                         <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/strainnamelist.jpg" alt="Design"></div>
                     </div>
-                    <p style="color: #666; font-size: 0.9rem; text-align: center;">Premium embroidered designs on high-quality fleece.</p>
+                    <p style="color: #666; font-size: 0.9rem; text-align: center;">Other strains are available.</p>
                 </div>
             </div>
         </div>
@@ -865,110 +834,327 @@
             <h2 style="margin-bottom: 1rem; color: #2d5a2d;">Shopping Cart</h2>
             <div id="cartItems"></div>
             <div class="cart-total">
-                <h3 style="color: #2d5a2d;">Total: <span id="cartTotal">$0.00 CAD</span></h3>
+                <h3>Total: $<span id="cartTotal">0.00</span> CAD</h3>
                 <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
             </div>
         </div>
     </div>
 
     <script>
-        let cart = [];
-        let cartCount = 0;
+        // Cart Management System with Local Storage (same as deals page)
+        class CartManager {
+            constructor() {
+                this.storageKey = 'noyesboys_cart';
+                this.checkoutKey = 'noyesboys_checkout_data';
+                this.cart = this.loadCart();
+                this.updateCartDisplay();
+            }
 
-        function updateCartDisplay() {
-            document.getElementById('cartCount').textContent = cartCount;
+            // Load cart from local storage
+            loadCart() {
+                try {
+                    const stored = localStorage.getItem(this.storageKey);
+                    return stored ? JSON.parse(stored) : [];
+                } catch (e) {
+                    console.error('Error loading cart:', e);
+                    return [];
+                }
+            }
+
+            // Save cart to local storage
+            saveCart() {
+                try {
+                    localStorage.setItem(this.storageKey, JSON.stringify(this.cart));
+                } catch (e) {
+                    console.error('Error saving cart:', e);
+                }
+            }
+
+            // Add item to cart
+            addItem(strainId, strainName, price = null, variant = 'Standard') {
+                const select = document.getElementById(strainId + '-variant');
+                
+                let finalPrice, finalVariant, variantText;
+                
+                if (select) {
+                    // Handle dropdown variants (for strain pages)
+                    const selectedOption = select.options[select.selectedIndex];
+                    finalVariant = selectedOption.value;
+                    finalPrice = parseFloat(selectedOption.getAttribute('data-price'));
+                    variantText = selectedOption.textContent;
+                } else if (price !== null) {
+                    // Handle simple pricing cards (for pricing page)
+                    finalPrice = price;
+                    finalVariant = variant;
+                    variantText = variant;
+                } else {
+                    // No select element and no price provided
+                    console.error('No variant selector or price provided for:', strainId);
+                    return false;
+                }
+
+                // Check if item already exists in cart
+                const existingItem = this.cart.find(item => 
+                    item.strainId === strainId && item.variant === finalVariant
+                );
+
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    this.cart.push({
+                        strainId: strainId,
+                        strainName: strainName,
+                        variant: finalVariant,
+                        variantText: variantText,
+                        price: finalPrice,
+                        quantity: 1,
+                        timestamp: Date.now()
+                    });
+                }
+
+                this.saveCart();
+                this.updateCartDisplay();
+                return true;
+            }
+
+            // Update item quantity
+            updateQuantity(index, change) {
+                if (index < 0 || index >= this.cart.length) return;
+
+                this.cart[index].quantity += change;
+                
+                if (this.cart[index].quantity <= 0) {
+                    this.cart.splice(index, 1);
+                }
+                
+                this.saveCart();
+                this.updateCartDisplay();
+            }
+
+            // Remove item from cart
+            removeItem(index) {
+                if (index < 0 || index >= this.cart.length) return;
+                
+                this.cart.splice(index, 1);
+                this.saveCart();
+                this.updateCartDisplay();
+            }
+
+            // Clear entire cart
+            clearCart() {
+                this.cart = [];
+                this.saveCart();
+                this.updateCartDisplay();
+            }
+
+            // Get cart total
+            getTotal() {
+                return this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            }
+
+            // Get total item count
+            getTotalItems() {
+                return this.cart.reduce((sum, item) => sum + item.quantity, 0);
+            }
+
+            // Update cart display
+            updateCartDisplay() {
+                const cartCount = document.getElementById('cartCount');
+                const cartItems = document.getElementById('cartItems');
+                const cartTotal = document.getElementById('cartTotal');
+
+                if (cartCount) {
+                    cartCount.textContent = this.getTotalItems();
+                }
+
+                if (cartItems && cartTotal) {
+                    if (this.cart.length === 0) {
+                        cartItems.innerHTML = '<div class="empty-cart"><p>Your cart is empty</p><p>Add some premium merchandise to get started!</p></div>';
+                        cartTotal.textContent = '0.00';
+                        return;
+                    }
+
+                    const total = this.getTotal();
+                    cartItems.innerHTML = this.cart.map((item, index) => {
+                        const itemTotal = item.price * item.quantity;
+
+                        return `
+                            <div class="cart-item">
+                                <div class="cart-item-info">
+                                    <div class="cart-item-name">${item.strainName}</div>
+                                    <div class="cart-item-variant">${item.variantText}</div>
+                                    <div class="cart-item-price">${item.price.toFixed(2)} CAD each</div>
+                                </div>
+                                <div class="cart-item-controls">
+                                    <div class="quantity-controls">
+                                        <button class="quantity-btn" onclick="cartManager.updateQuantity(${index}, -1)">-</button>
+                                        <span class="quantity-display">${item.quantity}</span>
+                                        <button class="quantity-btn" onclick="cartManager.updateQuantity(${index}, 1)">+</button>
+                                    </div>
+                                    <button class="remove-item" onclick="cartManager.removeItem(${index})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    cartTotal.textContent = total.toFixed(2);
+                }
+            }
+
+            // Export cart data for checkout
+            exportCartForCheckout() {
+                const cartData = {
+                    items: this.cart,
+                    total: this.getTotal(),
+                    itemCount: this.getTotalItems(),
+                    timestamp: Date.now(),
+                    currency: 'CAD'
+                };
+                
+                // Store for checkout page using localStorage
+                try {
+                    localStorage.setItem(this.checkoutKey, JSON.stringify(cartData));
+                    console.log('Cart data exported for checkout:', cartData);
+                } catch (e) {
+                    console.error('Error storing checkout data:', e);
+                }
+                
+                return cartData;
+            }
+
+            // Get checkout data (for use on checkout page)
+            getCheckoutData() {
+                try {
+                    const stored = localStorage.getItem(this.checkoutKey);
+                    return stored ? JSON.parse(stored) : null;
+                } catch (e) {
+                    console.error('Error loading checkout data:', e);
+                    return null;
+                }
+            }
+
+            // Clear checkout data after successful order
+            clearCheckoutData() {
+                try {
+                    localStorage.removeItem(this.checkoutKey);
+                } catch (e) {
+                    console.error('Error clearing checkout data:', e);
+                }
+            }
         }
 
+        // Initialize cart manager
+        const cartManager = new CartManager();
+
+        // Merchandise-specific cart function
         function addMerchToCart(type) {
             const strainSelect = document.getElementById(type + '-strain');
             const colorSelect = document.getElementById(type + '-color');
             const sizeSelect = document.getElementById(type + '-size');
             
-            let price = parseFloat(strainSelect.options[strainSelect.selectedIndex].dataset.price);
-            if (colorSelect.value === 'custom') {
-                price += 10;
+            // Get base price
+            let basePrice;
+            switch(type) {
+                case 'toque': basePrice = 40; break;
+                case 'tshirt': basePrice = 60; break;
+                case 'sweater': basePrice = 120; break;
+                default: basePrice = 40;
             }
 
-            const item = {
-                type: type,
-                strain: strainSelect.options[strainSelect.selectedIndex].text,
-                color: colorSelect.options[colorSelect.selectedIndex].text,
-                size: sizeSelect ? sizeSelect.options[sizeSelect.selectedIndex].text : null,
-                price: price,
-                quantity: 1
-            };
-
-            cart.push(item);
-            cartCount++;
-            updateCartDisplay();
-            alert('Item added to cart!');
-        }
-
-        function openCart() {
-            const modal = document.getElementById('cartModal');
-            const cartItems = document.getElementById('cartItems');
-            
-            if (cart.length === 0) {
-                cartItems.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
-            } else {
-                let cartHTML = '';
-                let total = 0;
-                
-                cart.forEach((item, index) => {
-                    cartHTML += `
-                        <div class="cart-item">
-                            <div class="cart-item-info">
-                                <div class="cart-item-name">${item.type.charAt(0).toUpperCase() + item.type.slice(1)} - ${item.strain}</div>
-                                <div class="cart-item-variant">Color: ${item.color}${item.size ? ', Size: ' + item.size : ''}</div>
-                            </div>
-                            <div class="cart-item-controls">
-                                <div class="quantity-controls">
-                                    <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
-                                    <span class="quantity-display">${item.quantity}</span>
-                                    <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
-                                </div>
-                                <div style="font-weight: bold; color: #e74c3c;">${(item.price * item.quantity).toFixed(2)}</div>
-                                <button class="remove-item" onclick="removeItem(${index})">Remove</button>
-                            </div>
-                        </div>
-                    `;
-                    total += item.price * item.quantity;
-                });
-                
-                cartItems.innerHTML = cartHTML;
-                document.getElementById('cartTotal').textContent = ' + total.toFixed(2) + ' CAD';
+            // Calculate final price
+            let finalPrice = basePrice;
+            if (colorSelect && colorSelect.value === 'custom') {
+                finalPrice += 10;
             }
+
+            // Build variant description
+            let variantParts = [];
+            if (strainSelect) variantParts.push(strainSelect.options[strainSelect.selectedIndex].text);
+            if (sizeSelect) variantParts.push('Size: ' + sizeSelect.options[sizeSelect.selectedIndex].text);
+            if (colorSelect) variantParts.push('Color: ' + colorSelect.options[colorSelect.selectedIndex].text);
             
-            modal.style.display = 'block';
+            const variantText = variantParts.join(', ');
+            const itemName = type.charAt(0).toUpperCase() + type.slice(1);
+
+            // Create unique ID for this specific variant
+            const itemId = type + '-' + (strainSelect ? strainSelect.value : 'default') + 
+                          '-' + (sizeSelect ? sizeSelect.value : 'onesize') + 
+                          '-' + (colorSelect ? colorSelect.value : 'black');
+
+            // Add to cart using the same system as deals page
+            if (cartManager.addItem(itemId, itemName, finalPrice, variantText)) {
+                // Show success feedback
+                const button = event.target;
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Added!';
+                button.style.background = '#22c55e';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = '';
+                }, 1500);
+            }
         }
 
-        function closeCart() {
-            document.getElementById('cartModal').style.display = 'none';
+        // Global functions for backward compatibility
+        function addToCart(strainId, strainName, price) {
+            if (cartManager.addItem(strainId, strainName, price)) {
+                // Show success feedback
+                const button = event.target;
+                if (button) {
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-check"></i> Added!';
+                    button.style.background = '#22c55e';
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.style.background = '';
+                    }, 1000);
+                }
+            }
         }
 
         function updateQuantity(index, change) {
-            cart[index].quantity += change;
-            if (cart[index].quantity <= 0) {
-                removeItem(index);
-            } else {
-                openCart(); // Refresh cart display
-            }
+            cartManager.updateQuantity(index, change);
         }
 
         function removeItem(index) {
-            cartCount -= cart[index].quantity;
-            cart.splice(index, 1);
-            updateCartDisplay();
-            openCart(); // Refresh cart display
+            cartManager.removeItem(index);
+        }
+
+        function openCart() {
+            cartManager.updateCartDisplay();
+            const modal = document.getElementById('cartModal');
+            if (modal) {
+                modal.style.display = 'block';
+            }
+        }
+
+        function closeCart() {
+            const modal = document.getElementById('cartModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
         }
 
         function checkout() {
-            if (cart.length === 0) {
-                alert('Your cart is empty!');
-                return;
+            if (cartManager.cart.length === 0) {
+                alert('Your cart is empty! Please add some items before proceeding to checkout.');
+                return false;
             }
+
+            // Export cart data for checkout page
+            cartManager.exportCartForCheckout();
             
-            alert('Checkout functionality would be implemented here. Please contact us to place your order!');
+            // Close cart modal
+            closeCart();
+            
+            // Redirect to checkout page
+            window.location.href = 'checkout.html';
+            
+            return true;
         }
 
         // Update price display when options change
@@ -976,21 +1162,24 @@
             const colorSelect = document.getElementById(type + '-color');
             const strainSelect = document.getElementById(type + '-strain');
             
-            if (colorSelect && strainSelect) {
-                [colorSelect, strainSelect].forEach(select => {
-                    select.addEventListener('change', () => {
-                        let basePrice = parseFloat(strainSelect.options[strainSelect.selectedIndex].dataset.price);
-                        let finalPrice = basePrice;
-                        
-                        if (colorSelect.value === 'custom') {
-                            finalPrice += 10;
-                        }
-                        
-                        document.getElementById(type + '-price').textContent = ' + finalPrice.toFixed(2) + ' CAD';
-                    });
-                });
-            }
-        });
+            if (colorSelect) {
+                colorSelect.addEventListener('change', () => {
+                    let basePrice;
+                    switch(type) {
+                        case 'toque': basePrice = 40; break;
+                        case 'tshirt': basePrice = 60; break;
+                        case 'sweater': basePrice = 120; break;
+                        default: basePrice = 40;
+                    }
+                    
+                    let finalPrice = basePrice;
+                    if (colorSelect.value === 'custom') {
+                        finalPrice += 10;
+                    }
+                    
+                    const priceDisplay = document.getElementById(type + '-price');
+                    if (priceDisplay) {
+                        priceDisplay.textContent = 
 
         // Close cart when clicking outside
         window.onclick = function(event) {
@@ -999,6 +1188,21 @@
                 closeCart();
             }
         }
+
+        // Global functions to access cart data from other pages
+        window.getNoyesBoysCart = function() {
+            return cartManager;
+        };
+
+        window.getNoyesBoysCheckoutData = function() {
+            return cartManager.getCheckoutData();
+        };
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load and display cart on page load
+            cartManager.updateCartDisplay();
+        });
     </script>
 </body>
 </html>

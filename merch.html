@@ -862,143 +862,356 @@
     <div id="cartModal" class="cart-modal">
         <div class="cart-modal-content">
             <span class="cart-close" onclick="closeCart()">&times;</span>
-            <h2 style="margin-bottom: 1rem; color: #2d5a2d;">Shopping Cart</h2>
+            <h2 style="color: #2d5a2d; margin-bottom: 1rem;">Shopping Cart</h2>
             <div id="cartItems"></div>
             <div class="cart-total">
-                <h3 style="color: #2d5a2d;">Total: <span id="cartTotal">$0.00 CAD</span></h3>
-                <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+                <h3>Total: $<span id="cartTotal">0</span> CAD</h3>
+                <button class="checkout-btn" onclick="checkout()">
+                    <i class="fas fa-credit-card"></i> Proceed to Checkout
+                </button>
             </div>
         </div>
     </div>
 
     <script>
-        let cart = [];
-        let cartCount = 0;
-
-        function updateCartDisplay() {
-            document.getElementById('cartCount').textContent = cartCount;
-        }
-
-        function addMerchToCart(type) {
-            const strainSelect = document.getElementById(type + '-strain');
-            const colorSelect = document.getElementById(type + '-color');
-            const sizeSelect = document.getElementById(type + '-size');
-            
-            let price = parseFloat(strainSelect.options[strainSelect.selectedIndex].dataset.price);
-            if (colorSelect.value === 'custom') {
-                price += 10;
+        // Cart Management System with Local Storage
+        class CartManager {
+            constructor() {
+                this.storageKey = 'noyesboys_cart';
+                this.checkoutKey = 'noyesboys_checkout_data';
+                this.cart = this.loadCart();
+                this.updateCartDisplay();
             }
 
-            const item = {
-                type: type,
-                strain: strainSelect.options[strainSelect.selectedIndex].text,
-                color: colorSelect.options[colorSelect.selectedIndex].text,
-                size: sizeSelect ? sizeSelect.options[sizeSelect.selectedIndex].text : null,
-                price: price,
-                quantity: 1
-            };
+            // Load cart from local storage
+            loadCart() {
+                try {
+                    const stored = localStorage.getItem(this.storageKey);
+                    return stored ? JSON.parse(stored) : [];
+                } catch (e) {
+                    console.error('Error loading cart:', e);
+                    return [];
+                }
+            }
 
-            cart.push(item);
-            cartCount++;
-            updateCartDisplay();
-            alert('Item added to cart!');
-        }
+            // Save cart to local storage
+            saveCart() {
+                try {
+                    localStorage.setItem(this.storageKey, JSON.stringify(this.cart));
+                } catch (e) {
+                    console.error('Error saving cart:', e);
+                }
+            }
 
-        function openCart() {
-            const modal = document.getElementById('cartModal');
-            const cartItems = document.getElementById('cartItems');
-            
-            if (cart.length === 0) {
-                cartItems.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
-            } else {
-                let cartHTML = '';
-                let total = 0;
+            // Add item to cart
+            addItem(strainId, strainName, price = null, variant = 'Standard') {
+                const select = document.getElementById(strainId + '-variant');
                 
-                cart.forEach((item, index) => {
-                    cartHTML += `
-                        <div class="cart-item">
-                            <div class="cart-item-info">
-                                <div class="cart-item-name">${item.type.charAt(0).toUpperCase() + item.type.slice(1)} - ${item.strain}</div>
-                                <div class="cart-item-variant">Color: ${item.color}${item.size ? ', Size: ' + item.size : ''}</div>
-                            </div>
-                            <div class="cart-item-controls">
-                                <div class="quantity-controls">
-                                    <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
-                                    <span class="quantity-display">${item.quantity}</span>
-                                    <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                let finalPrice, finalVariant, variantText;
+                
+                if (select) {
+                    // Handle dropdown variants (for strain pages)
+                    const selectedOption = select.options[select.selectedIndex];
+                    finalVariant = selectedOption.value;
+                    finalPrice = parseFloat(selectedOption.getAttribute('data-price'));
+                    variantText = selectedOption.textContent;
+                } else if (price !== null) {
+                    // Handle simple pricing cards (for pricing page)
+                    finalPrice = price;
+                    finalVariant = variant;
+                    variantText = variant;
+                } else {
+                    // No select element and no price provided
+                    console.error('No variant selector or price provided for:', strainId);
+                    return false;
+                }
+
+                // Check if item already exists in cart
+                const existingItem = this.cart.find(item => 
+                    item.strainId === strainId && item.variant === finalVariant
+                );
+
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    this.cart.push({
+                        strainId: strainId,
+                        strainName: strainName,
+                        variant: finalVariant,
+                        variantText: variantText,
+                        price: finalPrice,
+                        quantity: 1,
+                        timestamp: Date.now()
+                    });
+                }
+
+                this.saveCart();
+                this.updateCartDisplay();
+                return true;
+            }
+
+            // Update item quantity
+            updateQuantity(index, change) {
+                if (index < 0 || index >= this.cart.length) return;
+
+                this.cart[index].quantity += change;
+                
+                if (this.cart[index].quantity <= 0) {
+                    this.cart.splice(index, 1);
+                }
+                
+                this.saveCart();
+                this.updateCartDisplay();
+            }
+
+            // Remove item from cart
+            removeItem(index) {
+                if (index < 0 || index >= this.cart.length) return;
+                
+                this.cart.splice(index, 1);
+                this.saveCart();
+                this.updateCartDisplay();
+            }
+
+            // Clear entire cart
+            clearCart() {
+                this.cart = [];
+                this.saveCart();
+                this.updateCartDisplay();
+            }
+
+            // Get cart total
+            getTotal() {
+                return this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            }
+
+            // Get total item count
+            getTotalItems() {
+                return this.cart.reduce((sum, item) => sum + item.quantity, 0);
+            }
+
+            // Update cart display
+            updateCartDisplay() {
+                const cartCount = document.getElementById('cartCount');
+                const cartItems = document.getElementById('cartItems');
+                const cartTotal = document.getElementById('cartTotal');
+
+                if (cartCount) {
+                    cartCount.textContent = this.getTotalItems();
+                }
+
+                if (cartItems && cartTotal) {
+                    if (this.cart.length === 0) {
+                        cartItems.innerHTML = '<div class="empty-cart"><p>Your cart is empty</p><p>Add some premium genetics to get started!</p></div>';
+                        cartTotal.textContent = '0.00';
+                        return;
+                    }
+
+                    const total = this.getTotal();
+                    cartItems.innerHTML = this.cart.map((item, index) => {
+                        const itemTotal = item.price * item.quantity;
+
+                        return `
+                            <div class="cart-item">
+                                <div class="cart-item-info">
+                                    <div class="cart-item-name">${item.strainName}</div>
+                                    <div class="cart-item-variant">${item.variantText}</div>
+                                    <div class="cart-item-price">${item.price.toFixed(2)} CAD each</div>
                                 </div>
-                                <div style="font-weight: bold; color: #e74c3c;">${(item.price * item.quantity).toFixed(2)}</div>
-                                <button class="remove-item" onclick="removeItem(${index})">Remove</button>
+                                <div class="cart-item-controls">
+                                    <div class="quantity-controls">
+                                        <button class="quantity-btn" onclick="cartManager.updateQuantity(${index}, -1)">-</button>
+                                        <span class="quantity-display">${item.quantity}</span>
+                                        <button class="quantity-btn" onclick="cartManager.updateQuantity(${index}, 1)">+</button>
+                                    </div>
+                                    <button class="remove-item" onclick="cartManager.removeItem(${index})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    `;
-                    total += item.price * item.quantity;
-                });
-                
-                cartItems.innerHTML = cartHTML;
-                document.getElementById('cartTotal').textContent = ' + total.toFixed(2) + 'CAD';
+                        `;
+                    }).join('');
+
+                    cartTotal.textContent = total.toFixed(2);
+                }
             }
-            
-            modal.style.display = 'block';
+
+            // Export cart data for checkout
+            exportCartForCheckout() {
+                const cartData = {
+                    items: this.cart,
+                    total: this.getTotal(),
+                    itemCount: this.getTotalItems(),
+                    timestamp: Date.now(),
+                    currency: 'CAD'
+                };
+                
+                // Store for checkout page using localStorage
+                try {
+                    localStorage.setItem(this.checkoutKey, JSON.stringify(cartData));
+                    console.log('Cart data exported for checkout:', cartData);
+                } catch (e) {
+                    console.error('Error storing checkout data:', e);
+                }
+                
+                return cartData;
+            }
+
+            // Get checkout data (for use on checkout page)
+            getCheckoutData() {
+                try {
+                    const stored = localStorage.getItem(this.checkoutKey);
+                    return stored ? JSON.parse(stored) : null;
+                } catch (e) {
+                    console.error('Error loading checkout data:', e);
+                    return null;
+                }
+            }
+
+            // Clear checkout data after successful order
+            clearCheckoutData() {
+                try {
+                    localStorage.removeItem(this.checkoutKey);
+                } catch (e) {
+                    console.error('Error clearing checkout data:', e);
+                }
+            }
         }
 
-        function closeCart() {
-            document.getElementById('cartModal').style.display = 'none';
+        // Initialize cart manager
+        const cartManager = new CartManager();
+
+        // Global functions for backward compatibility
+        function addToCart(strainId, strainName, price) {
+            if (cartManager.addItem(strainId, strainName, price)) {
+                // Show success feedback
+                const button = event.target || document.querySelector(button[onclick*="addToCart('${strainId}'"]);
+                if (button) {
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-check"></i> Added!';
+                    button.style.background = '#22c55e';
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.style.background = '';
+                    }, 1000);
+                }
+            }
         }
 
         function updateQuantity(index, change) {
-            cart[index].quantity += change;
-            if (cart[index].quantity <= 0) {
-                removeItem(index);
-            } else {
-                openCart(); // Refresh cart display
-            }
+            cartManager.updateQuantity(index, change);
         }
 
         function removeItem(index) {
-            cartCount -= cart[index].quantity;
-            cart.splice(index, 1);
-            updateCartDisplay();
-            openCart(); // Refresh cart display
+            cartManager.removeItem(index);
+        }
+
+        function openCart() {
+            cartManager.updateCartDisplay();
+            const modal = document.getElementById('cartModal');
+            if (modal) {
+                modal.style.display = 'block';
+            }
+        }
+
+        function closeCart() {
+            const modal = document.getElementById('cartModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
         }
 
         function checkout() {
-            if (cart.length === 0) {
-                alert('Your cart is empty!');
-                return;
+            if (cartManager.cart.length === 0) {
+                alert('Your cart is empty! Please add some items before proceeding to checkout.');
+                return false;
             }
+
+            // Export cart data for checkout page
+            cartManager.exportCartForCheckout();
             
-            alert('Checkout functionality would be implemented here. Please contact us to place your order!');
+            // Close cart modal
+            closeCart();
+            
+            // Redirect to checkout page
+            window.location.href = 'checkout.html';
+            
+            return true;
         }
 
-        // Update price display when options change
-        ['toque', 'tshirt', 'sweater'].forEach(type => {
-            const colorSelect = document.getElementById(type + '-color');
-            const strainSelect = document.getElementById(type + '-strain');
-            
-            if (colorSelect && strainSelect) {
-                [colorSelect, strainSelect].forEach(select => {
-                    select.addEventListener('change', () => {
-                        let basePrice = parseFloat(strainSelect.options[strainSelect.selectedIndex].dataset.price);
-                        let finalPrice = basePrice;
-                        
-                        if (colorSelect.value === 'custom') {
-                            finalPrice += 10;
-                        }
-                        
-                        document.getElementById(type + '-price').textContent = ' + finalPrice.toFixed(2) + 'CAD';
-                    });
+       // Update variant price display
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize price displays
+            document.querySelectorAll('select[id$="-variant"]').forEach(select => {
+                const priceDisplayId = select.id.replace('-variant', '-price');
+                const selectedOption = select.options[select.selectedIndex];
+                const price = selectedOption.getAttribute('data-price');
+                const priceDisplay = document.getElementById(priceDisplayId);
+                if (priceDisplay) {
+                    priceDisplay.textContent = `${price} CAD`;
+                }
+
+                // Add change listener
+                select.addEventListener('change', function() {
+                    const priceDisplayId = this.id.replace('-variant', '-price');
+                    const selectedOption = this.options[this.selectedIndex];
+                    const price = selectedOption.getAttribute('data-price');
+                    const priceDisplay = document.getElementById(priceDisplayId);
+                    if (priceDisplay) {
+                        priceDisplay.textContent = `${price} CAD`;
+                    }
                 });
-            }
+            });
+
+            // Load and display cart on page load
+            cartManager.updateCartDisplay();
         });
 
-        // Close cart when clicking outside
+        // Close modal when clicking outside
         window.onclick = function(event) {
             const modal = document.getElementById('cartModal');
-            if (event.target == modal) {
+            if (event.target === modal) {
                 closeCart();
             }
         }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Global function to access cart data from other pages
+        window.getNoyesBoysCart = function() {
+            return cartManager;
+        };
+
+        // Global function to get checkout data (for checkout.html)
+        window.getNoyesBoysCheckoutData = function() {
+            return cartManager.getCheckoutData();
+        };
+
+        // Event listener for testing checkout data transfer
+        document.addEventListener('DOMContentLoaded', function() {
+            // Test if we're on checkout page by checking URL or page elements
+            if (window.location.pathname.includes('checkout.html') || document.getElementById('checkout-form')) {
+                const checkoutData = window.getNoyesBoysCheckoutData();
+                if (checkoutData) {
+                    console.log('Checkout data loaded:', checkoutData);
+                } else {
+                    console.log('No checkout data found');
+                }
+            }
+        });
     </script>
 </body>
 </html>
