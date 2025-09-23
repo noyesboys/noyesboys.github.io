@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citrus Haze Breath - Noyes Boys Genetics</title>
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background: #0a0a0a;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 30px;
+        }
+
+        .back-nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-nav a:hover {
+            color: #66BB6A;
+        }
+
+        .strain-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-radius: 15px;
+            border: 1px solid #333;
+        }
+
+        .strain-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .strain-subtitle {
+            font-size: 1.3rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .strain-type {
+            background: #4CAF50;
+            color: #000;
+            border-radius: 25px;
+            padding: 8px 20px;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Overall Rating Section */
+        .overall-rating {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+
+        .overall-rating h3 {
+            color: #4CAF50;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .rating-stars {
+            font-size: 2rem;
+            color: #4CAF50;
+        }
+
+        .rating-score {
+            font-size: 2.5rem;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .rating-details {
+            color: #cccccc;
+            font-size: 1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .strain-image {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(45deg, #FF6F00, #FF8F00, #FFA726, #FFCC02, #CDDC39);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: none;
+            margin-bottom: 15px;
+        }
+
+        .photo-note {
+            color: #888;
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .strain-info {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #333;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #4CAF50;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .description {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .description h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .description p {
+            color: #cccccc;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #4CAF50;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.1);
+        }
+
+        .feature-card h4 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #cccccc;
+            line-height: 1.7;
+        }
+
+        .stats-section {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .stats-title {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .stat-item {
+            margin-bottom: 25px;
+        }
+
+        .stat-label {
+            color: #cccccc;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+        }
+
+        .stat-bar {
+            height: 12px;
+            background: #2d2d2d;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #444;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #66BB6A);
+            border-radius: 6px;
+            transition: width 0.8s ease;
+        }
+
+        .lineage-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .parent-strain {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+
+        .parent-strain h4 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .parent-strain p {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .cta-section {
+            text-align: center;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 50px 40px;
+            border: 1px solid #333;
+            margin-bottom: 40px;
+        }
+
+        .cta-section h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .cta-section p {
+            color: #cccccc;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            background: #4CAF50;
+            color: #000;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cta-button:hover {
+            background: #66BB6A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+        }
+
+        .cta-button.secondary:hover {
+            background: #4CAF50;
+            color: #000;
+        }
+
+        /* Review Section Styles */
+        .review-section {
+            margin-top: 40px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            border: 1px solid #333;
+        }
+
+        .review-section h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .review-form-container {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid #444;
+        }
+
+        .review-form {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #555;
+            background: #1a1a1a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
+            background: #1a1a1a;
+            border: 2px dashed #555;
+            border-radius: 8px;
+            color: #ccc;
+        }
+
+        .form-group input[type="file"]:hover {
+            border-color: #4CAF50;
+        }
+
+        .file-upload-note {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #888;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .rating-section {
+            margin-bottom: 20px;
+        }
+
+        .rating-section label {
+            display: block;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .star-rating {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .star {
+            color: #555;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #4CAF50;
+        }
+
+        .submit-review-btn {
+            background: #4CAF50;
+            color: #000;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-review-btn:hover {
+            background: #66BB6A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .submit-review-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .reviews-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .review-item {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .reviewer-name {
+            color: #4CAF50;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .grow-type {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .review-date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .review-stars {
+            color: #4CAF50;
+            font-size: 1.2rem;
+        }
+
+        .review-title {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .review-content {
+            color: #cccccc;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .success-message {
+            background: #4CAF50;
+            color: #000;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .error-message {
+            background: #f44336;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .strain-title {
+                font-size: 2.5rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .rating-display {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-nav">
+            <a href="javascript:history.back()">← Back to Strain Collection</a>
+        </div>
+
+        <header class="strain-header">
+            <h1 class="strain-title">Citrus Haze Breath</h1>
+            <p class="strain-subtitle">Energizing Citrus with Relaxing Breath Genetics</p>
+            <span class="strain-type">30% Indica / 70% Sativa</span>
+        </header>
+
+        <!-- Overall Rating Section -->
+        <div class="overall-rating">
+            <h3>Customer Reviews</h3>
+            <div class="rating-display">
+                <div class="rating-stars" id="overallStars">★★★★☆</div>
+                <div class="rating-score" id="overallScore">4.3</div>
+            </div>
+            <div class="rating-details" id="ratingDetails">Based on 23 reviews</div>
+        </div>
+
+        <div class="main-content">
+            <div class="strain-image">
+                <div class="image-placeholder">
+                    INSERT YOUR PHOTO HERE
+                </div>
+                <p style="color: #4CAF50; font-style: italic; font-weight: 500;">Bright citrus aroma with frosty sativa structure</p>
+                <p class="photo-note">Insert your photo here</p>
+            </div>
+
+            <div class="strain-info">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">THC Content</div>
+                        <div class="info-value">22-25%</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">CBD Content</div>
+                        <div class="info-value">&lt;1%</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Flowering Time</div>
+                        <div class="info-value">65-72 days</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Yield Indoor</div>
+                        <div class="info-value">450-500g/m²</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Yield Outdoor</div>
+                        <div class="info-value">1.5-2lb/plant</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Plant Height</div>
+                        <div class="info-value">Tall</div>
+                    </div>
+                </div>
+
+                <div class="lineage-section">
+                    <div class="parent-strain">
+                        <h4>Genetics</h4>
+                        <p>Citrus Haze × Mendo Breath</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="description">
+            <h3>About Citrus Haze Breath</h3>
+            <p>Citrus Haze Breath represents an innovative approach to hybrid breeding, combining the energizing, citrus-forward characteristics of premium Haze genetics with the relaxing, therapeutic qualities of Mendo Breath. This sativa-dominant hybrid showcases Noyes Boys' expertise in balancing contrasting genetics to create a strain that offers both mental stimulation and physical relaxation.</p>
+            
+            <p>The strain exhibits the classic sativa structure with tall growth, elongated internodes, and beautiful light-green foliage that develops stunning citrus aromas during flowering. The Breath genetics contribute to enhanced resin production and add a creamy, vanilla undertone that complements the bright citrus flavors. This combination creates a complex terpene profile that's both invigorating and soothing.</p>
+            
+            <p>Effects are perfectly balanced for daytime use - the initial cerebral uplift provides energy, focus, and creativity, while the Breath genetics ensure a smooth, relaxing comedown without sedation. This makes Citrus Haze Breath ideal for productive activities, social gatherings, or creative endeavors where you want mental clarity with a touch of physical comfort.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4>🍊 Flavor Profile</h4>
+                <p>Bright citrus and lemon zest with creamy vanilla undertones from Breath genetics. Dominant Limonene and Valencene create refreshing, uplifting aromatics with smooth finish.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>⚡ Effects</h4>
+                <p>Energizing cerebral uplift with gentle body relaxation. Perfect for daytime productivity, creative work, and social activities. Balanced high that doesn't overwhelm.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🌱 Growing</h4>
+                <p>Classic sativa structure with tall growth and excellent stretch. Great for SCROG setups and outdoor cultivation. Strong mildew resistance. Insert your photo here for growing tips.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🎨 Versatility</h4>
+                <p>Perfect all-day strain that transitions well from morning energy to evening relaxation. Ideal for users seeking functional cannabis that enhances rather than impairs.</p>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h3 class="stats-title">Strain Characteristics</h3>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Potency</span>
+                    <span>25%</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 83%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Energy Boost</span>
+                    <span>High</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 88%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Creativity</span>
+                    <span>Excellent</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 90%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Daytime Use</span>
+                    <span>Perfect</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 95%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h3>Ready to Grow Citrus Haze Breath?</h3>
+            <p>
+                Experience the perfect balance of energizing citrus and relaxing breath genetics. 
+                Ideal for growers seeking a versatile, daytime-friendly hybrid with complex flavors.
+            </p>
+            <button class="cta-button">Shop Citrus Haze Breath Seeds</button>
+            <button class="cta-button secondary" onclick="scrollToReviews()">Leave a Review</button>
+        </div>
+
+        <!-- Review Section -->
+        <div class="review-section">
+            <h3>Community Reviews</h3>
+            
+            <!-- Review Form -->
+            <div class="review-form-container">
+                <form id="reviewForm" class="review-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="reviewerName">Name</label>
+                            <input type="text" id="reviewerName" name="reviewerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="growType">Growing Method</label>
+                            <select id="growType" name="growType">
+                                <option value="indoor">Indoor</option>
+                                <option value="outdoor">Outdoor</option>
+                                <option value="greenhouse">Greenhouse</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="rating-section">
+                        <label>Overall Rating</label>
+                        <div class="star-rating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reviewTitle">Review Title</label>
+                        <input type="text" id="reviewTitle" name="reviewTitle" placeholder="Sum up your experience..." required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reviewText">Your Review</label>
+                        <textarea id="reviewText" name="reviewText" rows="4" placeholder="Share your growing experience, effects, taste, etc..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reviewPhotos">Upload Photos (Optional)</label>
+                        <input type="file" id="reviewPhotos" name="reviewPhotos" multiple accept="image/*">
+                        <div class="file-upload-note">You can upload multiple photos of your grow, harvest, or buds (JPG, PNG, GIF)</div>
+                    </div>
+                    
+                    <div class="success-message" id="successMessage">
+                        ✅ Thank you! Your review has been submitted and will be verified and published shortly.
+                    </div>
+                    
+                    <div class="error-message" id="errorMessage">
+                        ❌ There was an error submitting your review. Please try again.
+                    </div>
+                    
+                    <button type="submit" class="submit-review-btn" id="submitBtn">Submit Review for Verification</button>
+                </form>
+            </div>
+
+            <!-- Reviews Display -->
+            <div class="reviews-container" id="reviewsContainer">
+                <!-- Reviews will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample reviews data (23 reviews for Citrus Haze Breath focusing on energy, creativity, and citrus flavors)
+        let reviews = [
+            {
+                name: "CitrusLover",
+                growType: "Indoor",
+                rating: 5,
+                title: "Perfect daytime strain!",
+                content: "Citrus Haze Breath is exactly what I needed for productive days. The lemon and citrus flavors are incredible - so bright and refreshing. Effects are energizing without being jittery, and the Breath genetics add just enough relaxation to keep me comfortable. Perfect for work and creative projects!",
+                date: "1 week ago"
+            },
+            {
+                name: "CreativeBoost",
+                growType: "Indoor",
+                rating: 4,
+                title: "Amazing for creative work",
+                content: "As a graphic designer, I love strains that enhance creativity without clouding focus. Citrus Haze Breath delivers perfectly - bright mental stimulation with enough body comfort to stay relaxed during long sessions. The citrus flavors are a bonus. Great breeding work from Noyes Boys!",
+                date: "2 weeks ago"
+            },
+            {
+                name: "SativaSeeker",
+                growType: "Outdoor",
+                rating: 5,
+                title: "Best sativa-dom hybrid I've grown",
+                content: "Grown outdoors in Ontario and Citrus Haze Breath performed beautifully. Tall plants with great stretch, finished in early October, and the citrus aromas filled the garden. Effects are uplifting and social - perfect for weekend activities with friends. Will definitely grow again!",
+                date: "3 weeks ago"
+            },
+            {
+                name: "EnergySeeker",
+                growType: "Indoor",
+                rating: 4,
+                title: "Great morning strain",
+                content: "Love starting my day with Citrus Haze Breath. The energy boost is clean and sustained, not racy like some sativas. The vanilla undertones from the Breath genetics smooth out the citrus perfectly. Only wish the yield was slightly higher, but quality over quantity!",
+                date: "1 month ago"
+            },
+            {
+                name: "FlavorChaser",
+                growType: "Indoor",
+                rating: 5,
+                title: "Incredible citrus flavors",
+                content: "The terpene profile on this strain is outstanding. Getting strong lemon zest, orange peel, and that creamy vanilla finish. Lab tested at 2.8% total terps. The flavor translates beautifully to vaping and the effects are perfectly balanced. This is what hybrid breeding should be!",
+                date: "2 weeks ago"
+            },
+            {
+                name: "ProductivityBoost",
+                growType: "Indoor",
+                rating: 5,
+                title: "Perfect work strain",
+                content: "Found my ideal work strain in Citrus Haze Breath. Keeps me focused and motivated without anxiety or paranoia. The citrus brightness really helps with mood and the gentle body effects prevent any tension. Great for long work days or studying sessions.",
+                date: "4 weeks ago"
+            },
+            {
+                name: "BalancedEffects",
+                growType: "Greenhouse",
+                rating: 4,
+                title: "Well-balanced hybrid",
+                content: "Love the balance between mental stimulation and physical comfort. The Haze genetics provide the energy while the Breath genetics add smoothness. Greenhouse growing enhanced the citrus terpenes beautifully. Great all-around strain for various activities.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "SocialSmoke",
+                growType: "Indoor",
+                rating: 5,
+                title: "Fantastic social strain",
+                content: "Citrus Haze Breath is perfect for social gatherings. Everyone stays happy, talkative, and engaged without getting too sedated. The bright flavors are always a hit and the effects keep conversations flowing. This is my go-to for parties and hangouts.",
+                date: "5 weeks ago"
+            },
+            {
+                name: "MorningMotivation",
+                growType: "Indoor",
+                rating: 4,
+                title: "Great wake and bake",
+                content: "Perfect for morning use - gives me the energy and motivation to tackle the day. The citrus flavors are like sunshine in a joint and the effects are clean and functional. Helps with morning mood and gets me moving without jitters.",
+                date: "6 weeks ago"
+            },
+            {
+                name: "TerpHunter420",
+                growType: "Indoor",
+                rating: 5,
+                title: "Complex terpene profile",
+                content: "The terpene complexity is incredible - dominant Limonene with Valencene and hints of Linalool from the Breath side. Creates this amazing citrus-vanilla combination that's both energizing and calming. This is sophisticated breeding at work.",
+                date: "1 month ago"
+            },
+            {
+                name: "FunctionalHigh",
+                growType: "Indoor",
+                rating: 4,
+                title: "Functional daytime high",
+                content: "Love strains that enhance rather than impair, and Citrus Haze Breath delivers. Clear-headed effects with gentle body relaxation. Perfect for maintaining productivity while enjoying a nice buzz. The citrus flavors make medicating enjoyable.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "GreenhouseGuru",
+                growType: "Greenhouse",
+                rating: 5,
+                title: "Excellent greenhouse performer",
+                content: "Citrus Haze Breath thrives in greenhouse environments. The controlled conditions really bring out the citrus terpenes and the tall structure works well with vertical space. Great response to training and consistently good yields.",
+                date: "4 weeks ago"
+            },
+            {
+                name: "AnxietyRelief",
+                growType: "Indoor",
+                rating: 4,
+                title: "Helps with anxiety",
+                content: "Dealing with anxiety and Citrus Haze Breath helps without making me sleepy. The uplifting effects counter negative thoughts while the Breath genetics prevent any raciness. Perfect balance for managing mood during the day.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "WorkoutBuddy",
+                growType: "Indoor",
+                rating: 5,
+                title: "Great pre-workout strain",
+                content: "Love using Citrus Haze Breath before workouts. The energy boost is clean and sustained, perfect for cardio or yoga. The citrus flavors are refreshing and the effects enhance focus during exercise. No paranoia or anxiety, just clean energy.",
+                date: "5 weeks ago"
+            },
+            {
+                name: "ArtistType",
+                growType: "Indoor",
+                rating: 5,
+                title: "Enhances creativity perfectly",
+                content: "As a musician, I need strains that open up creativity without clouding technical ability. Citrus Haze Breath is perfect - sparks ideas, enhances perception, but keeps me focused enough to execute. The bright flavors match the bright effects perfectly.",
+                date: "1 month ago"
+            },
+            {
+                name: "AllDaySmoke",
+                growType: "Indoor",
+                rating: 4,
+                title: "Perfect all-day strain",
+                content: "Can smoke this throughout the day without getting burned out. Morning energy transitions to afternoon productivity and evening relaxation. The Breath genetics really smooth out the Haze intensity. Great for users who want consistent, functional effects.",
+                date: "6 weeks ago"
+            },
+            {
+                name: "FlavorVaper",
+                growType: "Indoor",
+                rating: 5,
+                title: "Amazing in the vaporizer",
+                content: "The flavor profile really shines when vaped. Getting distinct citrus notes at lower temps and the vanilla creaminess at higher temps. Effects are clean and clear with great flavor delivery throughout the session. Perfect vaping strain!",
+                date: "3 weeks ago"
+            },
+            {
+                name: "DepressionFighter",
+                growType: "Indoor",
+                rating: 4,
+                title: "Lifts mood effectively",
+                content: "Using for depression management and Citrus Haze Breath really helps lift my mood. The bright citrus effects counter dark thoughts and the energy helps me stay active. Much better than pharmaceuticals with way more enjoyable side effects!",
+                date: "4 weeks ago"
+            },
+            {
+                name: "ConcentrateKing",
+                growType: "Indoor",
+                rating: 5,
+                title: "Excellent for extracts",
+                content: "Made rosin from Citrus Haze Breath and the results are incredible. The citrus terpenes translate beautifully into concentrates with amazing flavor and clean effects. Return was decent at 18% and the quality is outstanding. Great starting material.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "StudyBuddy",
+                growType: "Indoor",
+                rating: 4,
+                title: "Great for studying",
+                content: "College student here - Citrus Haze Breath is perfect for long study sessions. Keeps me focused and engaged without the crash that comes with caffeine. The gentle body effects prevent tension from sitting too long. Definitely helps with retention too!",
+                date: "5 weeks ago"
+            },
+            {
+                name: "OutdoorBC",
+                growType: "Outdoor",
+                rating: 4,
+                title: "Good outdoor performer",
+                content: "Grown in coastal BC and handled our climate well. Plants got tall but stayed manageable with some training. The citrus aromas really developed in the outdoor environment. Finished before the rains and quality was excellent. Great Canadian genetics.",
+                date: "2 months ago"
+            },
+            {
+                name: "MoodLifter",
+                growType: "Indoor",
+                rating: 5,
+                title: "Instant mood booster",
+                content: "When I'm feeling down, Citrus Haze Breath never fails to lift my spirits. The bright citrus flavors and uplifting effects are like sunshine on a cloudy day. Perfect strain for battling negative moods and staying positive throughout the day.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "ActiveLifestyle",
+                growType: "Indoor",
+                rating: 5,
+                title: "Perfect for active users",
+                content: "Love being active while medicated and Citrus Haze Breath is ideal. Great for hiking, biking, or any outdoor activity. The energy is clean, focus is sharp, and the citrus flavors are refreshing during physical activity. This is adventure cannabis!",
+                date: "1 month ago"
+            }
+        ];
+
+        // EmailJS configuration with your provided credentials
+        const EMAILJS_SERVICE_ID = 'service_or5mors';
+        const EMAILJS_TEMPLATE_ID = 'template_iec8q2e';
+        const EMAILJS_PUBLIC_KEY = 'tm_ahVHnHlPN6lF_E';
+
+        // Initialize EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        // Calculate overall rating
+        function calculateOverallRating() {
+            const totalReviews = reviews.length;
+            const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+            const averageRating = totalReviews > 0 ? (totalRating / totalReviews) : 0;
+            
+            return {
+                average: averageRating,
+                total: totalReviews
+            };
+        }
+
+        // Update overall rating display
+        function updateOverallRating() {
+            const rating = calculateOverallRating();
+            const starsElement = document.getElementById('overallStars');
+            const scoreElement = document.getElementById('overallScore');
+            const detailsElement = document.getElementById('ratingDetails');
+            
+            // Create star display
+            const fullStars = Math.floor(rating.average);
+            const hasHalfStar = rating.average % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            
+            let starsHTML = '★'.repeat(fullStars);
+            if (hasHalfStar) starsHTML += '☆';
+            starsHTML += '☆'.repeat(emptyStars);
+            
+            starsElement.textContent = starsHTML;
+            scoreElement.textContent = rating.average.toFixed(1);
+            detailsElement.textContent = `Based on ${rating.total} reviews`;
+        }
+
+        // Scroll to reviews function
+        function scrollToReviews() {
+            document.querySelector('.review-section').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Star rating functionality
+        let selectedRating = 0;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.star');
+            const reviewForm = document.getElementById('reviewForm');
+            
+            // Initialize overall rating display
+            updateOverallRating();
+            
+            // Star rating interaction
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(this.dataset.rating);
+                    updateStars();
+                });
+                
+                star.addEventListener('mouseenter', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    highlightStars(rating);
+                });
+            });
+            
+            // Reset star highlighting on mouse leave
+            document.querySelector('.star-rating').addEventListener('mouseleave', function() {
+                updateStars();
+            });
+            
+            // Form submission
+            reviewForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitReviewViaEmail();
+            });
+            
+            // Initial render of reviews
+            renderReviews();
+            
+            // Animate stat bars on scroll
+            const statBars = document.querySelectorAll('.stat-fill');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.width = entry.target.style.width;
+                    }
+                });
+            });
+            
+            statBars.forEach(bar => observer.observe(bar));
+        });
+        
+        function highlightStars(rating) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+        
+        function updateStars() {
+            highlightStars(selectedRating);
+        }
+        
+        function submitReviewViaEmail() {
+            const form = document.getElementById('reviewForm');
+            const formData = new FormData(form);
+            const submitBtn = document.getElementById('submitBtn');
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            if (selectedRating === 0) {
+                alert('Please select a rating!');
+                return;
+            }
+            
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            
+            // Hide previous messages
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            
+            // Prepare email data
+            const emailData = {
+                reviewer_name: formData.get('reviewerName'),
+                grow_type: formData.get('growType'),
+                rating: selectedRating,
+                review_title: formData.get('reviewTitle'),
+                review_content: formData.get('reviewText'),
+                strain_name: 'Citrus Haze Breath',
+                submission_date: new Date().toLocaleDateString(),
+                photos_attached: formData.get('reviewPhotos').name ? 'Yes - ' + formData.get('reviewPhotos').name : 'No photos uploaded'
+            };
+            
+            // Send email via EmailJS
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailData)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    
+                    // Show success message
+                    successMsg.style.display = 'block';
+                    
+                    // Reset form
+                    form.reset();
+                    selectedRating = 0;
+                    updateStars();
+                    
+                    // Scroll to success message
+                    successMsg.scrollIntoView({ behavior: 'smooth' });
+                    
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    
+                    // Show error message
+                    errorMsg.style.display = 'block';
+                    errorMsg.scrollIntoView({ behavior: 'smooth' });
+                })
+                .finally(function() {
+                    // Re-enable submit button
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Submit Review for Verification';
+                });
+        }
+        
+        function renderReviews() {
+            const container = document.getElementById('reviewsContainer');
+            
+            container.innerHTML = reviews.map(review => `
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <strong class="reviewer-name">${review.name}</strong>
+                            <span class="grow-type">${review.growType}</span>
+                            <span class="review-date">${review.date}</span>
+                        </div>
+                        <div class="review-stars">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
+                    </div>
+                    <h4 class="review-title">${review.title}</h4>
+                    <p class="review-content">${review.content}</p>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

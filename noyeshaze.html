@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noyes Haze - Noyes Boys Genetics</title>
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background: #0a0a0a;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 30px;
+        }
+
+        .back-nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-nav a:hover {
+            color: #66BB6A;
+        }
+
+        .strain-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-radius: 15px;
+            border: 1px solid #333;
+        }
+
+        .strain-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .strain-subtitle {
+            font-size: 1.3rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .strain-type {
+            background: #4CAF50;
+            color: #000;
+            border-radius: 25px;
+            padding: 8px 20px;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Overall Rating Section */
+        .overall-rating {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+
+        .overall-rating h3 {
+            color: #4CAF50;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .rating-stars {
+            font-size: 2rem;
+            color: #4CAF50;
+        }
+
+        .rating-score {
+            font-size: 2.5rem;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .rating-details {
+            color: #cccccc;
+            font-size: 1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .strain-image {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FF8C00, #FF6347, #FF69B4);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: none;
+            margin-bottom: 15px;
+        }
+
+        .photo-note {
+            color: #888;
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .strain-info {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #333;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #4CAF50;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .description {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .description h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .description p {
+            color: #cccccc;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #4CAF50;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.1);
+        }
+
+        .feature-card h4 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #cccccc;
+            line-height: 1.7;
+        }
+
+        .stats-section {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .stats-title {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .stat-item {
+            margin-bottom: 25px;
+        }
+
+        .stat-label {
+            color: #cccccc;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+        }
+
+        .stat-bar {
+            height: 12px;
+            background: #2d2d2d;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #444;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #66BB6A);
+            border-radius: 6px;
+            transition: width 0.8s ease;
+        }
+
+        .lineage-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .parent-strain {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+
+        .parent-strain h4 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .parent-strain p {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .cta-section {
+            text-align: center;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 50px 40px;
+            border: 1px solid #333;
+            margin-bottom: 40px;
+        }
+
+        .cta-section h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .cta-section p {
+            color: #cccccc;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            background: #4CAF50;
+            color: #000;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cta-button:hover {
+            background: #66BB6A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+        }
+
+        .cta-button.secondary:hover {
+            background: #4CAF50;
+            color: #000;
+        }
+
+        /* Review Section Styles */
+        .review-section {
+            margin-top: 40px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            border: 1px solid #333;
+        }
+
+        .review-section h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .review-form-container {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid #444;
+        }
+
+        .review-form {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #555;
+            background: #1a1a1a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
+            background: #1a1a1a;
+            border: 2px dashed #555;
+            border-radius: 8px;
+            color: #ccc;
+        }
+
+        .form-group input[type="file"]:hover {
+            border-color: #4CAF50;
+        }
+
+        .file-upload-note {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #888;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .rating-section {
+            margin-bottom: 20px;
+        }
+
+        .rating-section label {
+            display: block;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .star-rating {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .star {
+            color: #555;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #4CAF50;
+        }
+
+        .submit-review-btn {
+            background: #4CAF50;
+            color: #000;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-review-btn:hover {
+            background: #66BB6A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .submit-review-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .reviews-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .review-item {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .reviewer-name {
+            color: #4CAF50;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .grow-type {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .review-date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .review-stars {
+            color: #4CAF50;
+            font-size: 1.2rem;
+        }
+
+        .review-title {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .review-content {
+            color: #cccccc;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .success-message {
+            background: #4CAF50;
+            color: #000;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .error-message {
+            background: #f44336;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .strain-title {
+                font-size: 2.5rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .rating-display {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-nav">
+            <a href="javascript:history.back()">← Back to Strain Collection</a>
+        </div>
+
+        <header class="strain-header">
+            <h1 class="strain-title">Noyes Haze</h1>
+            <p class="strain-subtitle">Classic Haze Energy with Modern Genetics</p>
+            <span class="strain-type">20% Indica / 80% Sativa</span>
+        </header>
+
+        <!-- Overall Rating Section -->
+        <div class="overall-rating">
+            <h3>Customer Reviews</h3>
+            <div class="rating-display">
+                <div class="rating-stars" id="overallStars">★★★★★</div>
+                <div class="rating-score" id="overallScore">4.4</div>
+            </div>
+            <div class="rating-details" id="ratingDetails">Based on 27 reviews</div>
+        </div>
+
+        <div class="main-content">
+            <div class="strain-image">
+                <div class="image-placeholder">
+                    INSERT YOUR PHOTO HERE
+                </div>
+                <p style="color: #4CAF50; font-style: italic; font-weight: 500;">Classic haze structure with vibrant sativa energy</p>
+                <p class="photo-note">Insert your photo here</p>
+            </div>
+
+            <div class="strain-info">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">THC Content</div>
+                        <div class="info-value">20-24%</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">CBD Content</div>
+                        <div class="info-value">&lt;1%</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Flowering Time</div>
+                        <div class="info-value">70-77 days</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Yield Indoor</div>
+                        <div class="info-value">400-450g/m²</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Yield Outdoor</div>
+                        <div class="info-value">1-2lb/plant</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Plant Height</div>
+                        <div class="info-value">Very Tall</div>
+                    </div>
+                </div>
+
+                <div class="lineage-section">
+                    <div class="parent-strain">
+                        <h4>Genetics</h4>
+                        <p>Original Haze × Noyes Foundation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="description">
+            <h3>About Noyes Haze</h3>
+            <p>Noyes Haze represents the pinnacle of sativa breeding, combining legendary Original Haze genetics with the innovative Noyes foundation strains. This 80% sativa delivers the classic haze experience - soaring cerebral effects, incredible energy, and exceptional creativity enhancement - while incorporating modern improvements in yield, flowering time, and overall stability.</p>
+            
+            <p>The strain exhibits classic haze characteristics with very tall growth, extensive branching, and beautiful light-green foliage that develops complex spicy and floral aromas during the extended flowering period. The Noyes genetics contribute enhanced resin production and slightly faster finishing times while maintaining the pure sativa effects that made haze legendary.</p>
+            
+            <p>Effects are powerfully energizing and cerebral, perfect for daytime activities, creative projects, and social situations. The initial rush provides intense mental clarity and focus, followed by hours of sustained energy and euphoria. This is cannabis for the active mind - enhancing creativity, promoting deep conversations, and providing the motivation to tackle challenging projects with enthusiasm and clarity.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4>🌟 Flavor Profile</h4>
+                <p>Classic haze spice and floral notes with earthy undertones. Dominant Terpinolene and Pinene create uplifting aromatics with hints of pepper and pine that energize the senses.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>⚡ Effects</h4>
+                <p>Powerful cerebral stimulation with sustained energy and creativity. Perfect for productive days, artistic endeavors, and active pursuits. Clean, focused high that enhances rather than impairs.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🌱 Growing</h4>
+                <p>Classic sativa structure requiring height management. Excellent for outdoor cultivation and experienced growers. Long flowering rewards patience with exceptional quality. Insert your photo here for growing results.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🎯 Purpose</h4>
+                <p>The ultimate daytime strain for creative professionals, active individuals, and anyone seeking sustained mental energy without the crash. Pure sativa genetics at their finest.</p>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h3 class="stats-title">Strain Characteristics</h3>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Energy Boost</span>
+                    <span>Maximum</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 98%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Creativity</span>
+                    <span>Exceptional</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 95%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Focus</span>
+                    <span>Outstanding</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 92%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Daytime Use</span>
+                    <span>Perfect</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h3>Ready to Experience Noyes Haze?</h3>
+            <p>
+                Discover the legendary power of classic haze genetics enhanced by modern breeding. 
+                Perfect for those seeking maximum creativity, energy, and mental clarity.
+            </p>
+            <button class="cta-button">Shop Noyes Haze Seeds</button>
+            <button class="cta-button secondary" onclick="scrollToReviews()">Leave a Review</button>
+        </div>
+
+        <!-- Review Section -->
+        <div class="review-section">
+            <h3>Community Reviews</h3>
+            
+            <!-- Review Form -->
+            <div class="review-form-container">
+                <form id="reviewForm" class="review-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="reviewerName">Name</label>
+                            <input type="text" id="reviewerName" name="reviewerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="growType">Growing Method</label>
+                            <select id="growType" name="growType">
+                                <option value="indoor">Indoor</option>
+                                <option value="outdoor">Outdoor</option>
+                                <option value="greenhouse">Greenhouse</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="rating-section">
+                        <label>Overall Rating</label>
+                        <div class="star-rating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reviewTitle">Review Title</label>
+                        <input type="text" id="reviewTitle" name="reviewTitle" placeholder="Sum up your experience..." required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reviewText">Your Review</label>
+                        <textarea id="reviewText" name="reviewText" rows="4" placeholder="Share your growing experience, effects, taste, etc..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reviewPhotos">Upload Photos (Optional)</label>
+                        <input type="file" id="reviewPhotos" name="reviewPhotos" multiple accept="image/*">
+                        <div class="file-upload-note">You can upload multiple photos of your grow, harvest, or buds (JPG, PNG, GIF)</div>
+                    </div>
+                    
+                    <div class="success-message" id="successMessage">
+                        ✅ Thank you! Your review has been submitted and will be verified and published shortly.
+                    </div>
+                    
+                    <div class="error-message" id="errorMessage">
+                        ❌ There was an error submitting your review. Please try again.
+                    </div>
+                    
+                    <button type="submit" class="submit-review-btn" id="submitBtn">Submit Review for Verification</button>
+                </form>
+            </div>
+
+            <!-- Reviews Display -->
+            <div class="reviews-container" id="reviewsContainer">
+                <!-- Reviews will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample reviews data (27 reviews for Noyes Haze focusing on energy, creativity, and sativa effects)
+        let reviews = [
+            {
+                name: "SativaEnergy",
+                growType: "Indoor",
+                rating: 5,
+                title: "Pure sativa perfection!",
+                content: "Noyes Haze is everything I want in a sativa - incredible energy, laser focus, and creativity that lasts for hours. The classic haze spice flavors are perfect and the effects are clean with no anxiety. This is my new favorite daytime strain for getting things done!",
+                date: "1 week ago"
+            },
+            {
+                name: "CreativeMind",
+                growType: "Indoor",
+                rating: 4,
+                title: "Amazing for creative work",
+                content: "As a writer, I need strains that enhance creativity without clouding thoughts. Noyes Haze delivers perfectly - ideas flow freely, focus stays sharp, and the energy is sustained for long writing sessions. The haze genetics really shine through with that classic cerebral clarity.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "OutdoorGrower",
+                growType: "Outdoor",
+                rating: 5,
+                title: "Excellent outdoor performer",
+                content: "Grown outdoors in BC and Noyes Haze reached over 8 feet with proper training. The yield was excellent and the quality outstanding. Classic haze flavors with that energizing cerebral rush. Finished in mid-October with beautiful spicy aromas filling the garden.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "ProductiveDay",
+                growType: "Indoor",
+                rating: 5,
+                title: "Best productivity strain ever",
+                content: "When I need to tackle a massive to-do list, Noyes Haze is my go-to. The energy is incredible, focus is laser-sharp, and motivation stays high for hours. No jitters or crash like caffeine - just clean, sustained mental energy that gets everything done efficiently.",
+                date: "4 weeks ago"
+            },
+            {
+                name: "HazeConnoisseur",
+                growType: "Indoor",
+                rating: 5,
+                title: "Classic haze done right",
+                content: "20+ years smoking haze strains and Noyes Haze captures everything great about classic genetics while improving stability and flowering time. The cerebral effects are pure haze - uplifting, energizing, and thought-provoking. The spicy flavors are authentic and delicious.",
+                date: "1 month ago"
+            },
+            {
+                name: "MorningMotivation",
+                growType: "Indoor",
+                rating: 4,
+                title: "Perfect wake and bake",
+                content: "Nothing gets me motivated for the day like Noyes Haze. The energy boost is immediate and sustained, focus becomes razor-sharp, and creativity flows freely. Perfect for morning routines and starting productive days on the right foot.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "SocialButterfly",
+                growType: "Indoor",
+                rating: 5,
+                title: "Amazing social strain",
+                content: "Noyes Haze makes me talkative, engaging, and genuinely interested in conversations. Perfect for parties, networking events, or just hanging with friends. The energy is infectious and everyone stays upbeat and engaged. Great social lubricant without impairment.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "FitnessBoost",
+                growType: "Indoor",
+                rating: 4,
+                title: "Great pre-workout strain",
+                content: "Love using Noyes Haze before workouts - the energy is clean and sustained, perfect for cardio or weightlifting. Enhances focus during exercise and makes workouts more enjoyable. No paranoia or anxiety, just pure motivational energy.",
+                date: "4 weeks ago"
+            },
+            {
+                name: "ArtistInspiration",
+                growType: "Indoor",
+                rating: 5,
+                title: "Unlocks creativity",
+                content: "As a painter, Noyes Haze is my creative catalyst. Colors seem more vivid, ideas flow freely, and I can work for hours with sustained focus and energy. The haze genetics really enhance artistic perception and keep the creative process flowing smoothly.",
+                date: "5 weeks ago"
+            },
+            {
+                name: "TallPlants",
+                growType: "Greenhouse",
+                rating: 4,
+                title: "Impressive height and yield",
+                content: "Grown in greenhouse and these plants stretched like crazy - needed constant training but the final yield was excellent. Classic haze structure with beautiful spicy aromas. The greenhouse environment really enhanced the terpene development. Patience pays off!",
+                date: "6 weeks ago"
+            },
+            {
+                name: "StudySession",
+                growType: "Indoor",
+                rating: 5,
+                title: "Perfect for studying",
+                content: "Graduate student here - Noyes Haze is incredible for long study sessions. Maintains focus for hours, enhances retention, and keeps energy high without jitters. The mental clarity is perfect for processing complex information. My secret academic weapon!",
+                date: "1 month ago"
+            },
+            {
+                name: "DepressionFighter",
+                growType: "Indoor",
+                rating: 4,
+                title: "Lifts mood instantly",
+                content: "Dealing with seasonal depression and Noyes Haze provides incredible mood elevation. The energizing effects counter lethargy while the cerebral uplift fights negative thoughts. Much better than pharmaceuticals and actually enjoyable to use.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "TerpProfile",
+                growType: "Indoor",
+                rating: 5,
+                title: "Complex terpene profile",
+                content: "Lab tested my Noyes Haze at 2.6% total terps with dominant Terpinolene and Pinene. The spicy, piney flavors are incredible and the energizing effects match the terpene profile perfectly. This is what sophisticated breeding looks like.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "LongFlowering",
+                growType: "Indoor",
+                rating: 4,
+                title: "Worth the wait",
+                content: "Yes, it takes 11 weeks to flower, but the quality justifies every day of waiting. Pure sativa effects with incredible energy and creativity. The yields are decent considering it's a landrace-dominant sativa. Quality over quantity every time.",
+                date: "4 weeks ago"
+            },
+            {
+                name: "CleanEnergy",
+                growType: "Indoor",
+                rating: 5,
+                title: "Cleanest energy ever",
+                content: "The energy from Noyes Haze is incredible - no anxiety, no jitters, no crash. Just pure, sustained mental energy that lasts for hours. Perfect for anyone who wants functional cannabis that enhances rather than impairs daily activities.",
+                date: "5 weeks ago"
+            },
+            {
+                name: "PublicSpeaking",
+                growType: "Indoor",
+                rating: 4,
+                title: "Helps with presentations",
+                content: "Used to get nervous before presentations, but Noyes Haze gives me confidence and mental clarity. Thoughts flow smoothly, energy is high, and I can think on my feet. The social aspects are enhanced without any paranoia or anxiety.",
+                date: "6 weeks ago"
+            },
+            {
+                name: "ADHDHelper",
+                growType: "Indoor",
+                rating: 5,
+                title: "Helps with ADHD",
+                content: "Dealing with ADHD and Noyes Haze provides the focus and energy I need without pharmaceutical side effects. Helps me stay on task for hours and actually enhances my natural creativity. This strain is life-changing for neurodivergent minds.",
+                date: "1 month ago"
+            },
+            {
+                name: "WritersFriend",
+                growType: "Indoor",
+                rating: 5,
+                title: "Writer's best friend",
+                content: "Novelist here - Noyes Haze is perfect for writing sessions. Ideas flow freely, focus stays sharp for hours, and the energy prevents writer's block. The cerebral effects enhance storytelling ability while maintaining the discipline needed for long projects.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "OutdoorCanada",
+                growType: "Outdoor",
+                rating: 4,
+                title: "Great Canadian outdoor",
+                content: "Grown outdoors in Ontario and finished beautifully in early October. Plants were massive with excellent yields. The classic haze effects are perfect for our shorter summers - energizing and uplifting when the weather gets grey.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "NoAnxiety",
+                growType: "Indoor",
+                rating: 5,
+                title: "Zero anxiety effects",
+                content: "Prone to cannabis anxiety but Noyes Haze never causes issues. The energy is clean and positive, focus is enhanced, and there's never any paranoia or racing thoughts. Perfect sativa for anxiety-prone users who still want energy and creativity.",
+                date: "4 weeks ago"
+            },
+            {
+                name: "MusicProducer",
+                growType: "Indoor",
+                rating: 4,
+                title: "Enhanced musical creativity",
+                content: "Producer here - Noyes Haze enhances musical perception and creativity like nothing else. Can work on tracks for hours with sustained focus and the ideas just keep flowing. The haze genetics really seem to unlock different levels of artistic expression.",
+                date: "5 weeks ago"
+            },
+            {
+                name: "AllDayEnergy",
+                growType: "Indoor",
+                rating: 5,
+                title: "Sustained all-day energy",
+                content: "Love that I can smoke Noyes Haze throughout the day and maintain high energy and productivity. No tolerance buildup, no crash, just consistent clean energy that enhances everything I do. This is functional cannabis at its best.",
+                date: "6 weeks ago"
+            },
+            {
+                name: "HikingBuddy",
+                growType: "Indoor",
+                rating: 5,
+                title: "Perfect for outdoor activities",
+                content: "Noyes Haze is my hiking companion - enhances appreciation of nature, provides sustained energy for long trails, and makes every outdoor adventure more engaging. The clear-headed effects let me stay safe while enhancing the experience.",
+                date: "1 month ago"
+            },
+            {
+                name: "FlavorChaser",
+                growType: "Indoor",
+                rating: 4,
+                title: "Classic haze flavors",
+                content: "The spicy, piney haze flavors are authentic and delicious. When vaped, you get distinct spice notes at lower temps and deeper earth tones at higher temps. The flavor profile matches the energizing effects perfectly. Old school done right!",
+                date: "2 weeks ago"
+            },
+            {
+                name: "ConcentrateMaker",
+                growType: "Indoor",
+                rating: 4,
+                title: "Good for extracts",
+                content: "Made rosin from Noyes Haze and while yields were moderate at 15%, the quality is exceptional. The energizing terpenes translate beautifully to concentrates and the effects are even more pronounced. Perfect starting material for sativa extracts.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "CommutePerfect",
+                growType: "Indoor",
+                rating: 5,
+                title: "Great for commuting",
+                content: "Public transit becomes enjoyable with Noyes Haze - makes me more observant, sociable with fellow commuters, and the time passes quickly. The energy and mood enhancement make daily routines more pleasant. Perfect functional high.",
+                date: "4 weeks ago"
+            },
+            {
+                name: "LearningEnhancer",
+                growType: "Indoor",
+                rating: 4,
+                title: "Enhances learning",
+                content: "Taking online courses and Noyes Haze really enhances information absorption and retention. Can focus on lectures for hours and the material seems more interesting and engaging. Great for anyone doing continuing education.",
+                date: "5 weeks ago"
+            },
+            {
+                name: "GameChanger",
+                growType: "Indoor",
+                rating: 5,
+                title: "Life-changing strain",
+                content: "After years of heavy indicas, Noyes Haze showed me what sativa genetics can do. The energy, creativity, and mental clarity are incredible. This strain literally changed how I approach cannabis - now I want function AND enjoyment. Pure perfection!",
+                date: "6 weeks ago"
+            },
+            {
+                name: "MotivationBoost",
+                growType: "Indoor",
+                rating: 5,
+                title: "Ultimate motivation",
+                content: "When I'm feeling lazy or unmotivated, Noyes Haze gets me moving. The energy boost is immediate and the mental clarity helps prioritize tasks effectively. Perfect for overcoming procrastination and tackling challenging projects with enthusiasm.",
+                date: "1 month ago"
+            },
+            {
+                name: "TeamMeetings",
+                growType: "Indoor",
+                rating: 4,
+                title: "Great for work meetings",
+                content: "Micro-dosing Noyes Haze before video calls makes me more engaged, articulate, and creative in problem-solving. The mental clarity and energy enhance professional performance without any impairment. My secret productivity weapon.",
+                date: "2 weeks ago"
+            }
+        ];
+
+        // EmailJS configuration with your provided credentials
+        const EMAILJS_SERVICE_ID = 'service_or5mors';
+        const EMAILJS_TEMPLATE_ID = 'template_iec8q2e';
+        const EMAILJS_PUBLIC_KEY = 'tm_ahVHnHlPN6lF_E';
+
+        // Initialize EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        // Calculate overall rating
+        function calculateOverallRating() {
+            const totalReviews = reviews.length;
+            const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+            const averageRating = totalReviews > 0 ? (totalRating / totalReviews) : 0;
+            
+            return {
+                average: averageRating,
+                total: totalReviews
+            };
+        }
+
+        // Update overall rating display
+        function updateOverallRating() {
+            const rating = calculateOverallRating();
+            const starsElement = document.getElementById('overallStars');
+            const scoreElement = document.getElementById('overallScore');
+            const detailsElement = document.getElementById('ratingDetails');
+            
+            // Create star display
+            const fullStars = Math.floor(rating.average);
+            const hasHalfStar = rating.average % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            
+            let starsHTML = '★'.repeat(fullStars);
+            if (hasHalfStar) starsHTML += '☆';
+            starsHTML += '☆'.repeat(emptyStars);
+            
+            starsElement.textContent = starsHTML;
+            scoreElement.textContent = rating.average.toFixed(1);
+            detailsElement.textContent = `Based on ${rating.total} reviews`;
+        }
+
+        // Scroll to reviews function
+        function scrollToReviews() {
+            document.querySelector('.review-section').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Star rating functionality
+        let selectedRating = 0;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.star');
+            const reviewForm = document.getElementById('reviewForm');
+            
+            // Initialize overall rating display
+            updateOverallRating();
+            
+            // Star rating interaction
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(this.dataset.rating);
+                    updateStars();
+                });
+                
+                star.addEventListener('mouseenter', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    highlightStars(rating);
+                });
+            });
+            
+            // Reset star highlighting on mouse leave
+            document.querySelector('.star-rating').addEventListener('mouseleave', function() {
+                updateStars();
+            });
+            
+            // Form submission
+            reviewForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitReviewViaEmail();
+            });
+            
+            // Initial render of reviews
+            renderReviews();
+            
+            // Animate stat bars on scroll
+            const statBars = document.querySelectorAll('.stat-fill');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.width = entry.target.style.width;
+                    }
+                });
+            });
+            
+            statBars.forEach(bar => observer.observe(bar));
+        });
+        
+        function highlightStars(rating) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+        
+        function updateStars() {
+            highlightStars(selectedRating);
+        }
+        
+        function submitReviewViaEmail() {
+            const form = document.getElementById('reviewForm');
+            const formData = new FormData(form);
+            const submitBtn = document.getElementById('submitBtn');
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            if (selectedRating === 0) {
+                alert('Please select a rating!');
+                return;
+            }
+            
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            
+            // Hide previous messages
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            
+            // Prepare email data
+            const emailData = {
+                reviewer_name: formData.get('reviewerName'),
+                grow_type: formData.get('growType'),
+                rating: selectedRating,
+                review_title: formData.get('reviewTitle'),
+                review_content: formData.get('reviewText'),
+                strain_name: 'Noyes Haze',
+                submission_date: new Date().toLocaleDateString(),
+                photos_attached: formData.get('reviewPhotos').name ? 'Yes - ' + formData.get('reviewPhotos').name : 'No photos uploaded'
+            };
+            
+            // Send email via EmailJS
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailData)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    
+                    // Show success message
+                    successMsg.style.display = 'block';
+                    
+                    // Reset form
+                    form.reset();
+                    selectedRating = 0;
+                    updateStars();
+                    
+                    // Scroll to success message
+                    successMsg.scrollIntoView({ behavior: 'smooth' });
+                    
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    
+                    // Show error message
+                    errorMsg.style.display = 'block';
+                    errorMsg.scrollIntoView({ behavior: 'smooth' });
+                })
+                .finally(function() {
+                    // Re-enable submit button
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Submit Review for Verification';
+                });
+        }
+        
+        function renderReviews() {
+            const container = document.getElementById('reviewsContainer');
+            
+            container.innerHTML = reviews.map(review => `
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <strong class="reviewer-name">${review.name}</strong>
+                            <span class="grow-type">${review.growType}</span>
+                            <span class="review-date">${review.date}</span>
+                        </div>
+                        <div class="review-stars">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
+                    </div>
+                    <h4 class="review-title">${review.title}</h4>
+                    <p class="review-content">${review.content}</p>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blueberry Fingers - Noyes Boys Genetics</title>
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background: #0a0a0a;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 30px;
+        }
+
+        .back-nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-nav a:hover {
+            color: #66BB6A;
+        }
+
+        .strain-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-radius: 15px;
+            border: 1px solid #333;
+        }
+
+        .strain-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .strain-subtitle {
+            font-size: 1.3rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .strain-type {
+            background: #4CAF50;
+            color: #000;
+            border-radius: 25px;
+            padding: 8px 20px;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Overall Rating Section */
+        .overall-rating {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+
+        .overall-rating h3 {
+            color: #4CAF50;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .rating-stars {
+            font-size: 2rem;
+            color: #4CAF50;
+        }
+
+        .rating-score {
+            font-size: 2.5rem;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .rating-details {
+            color: #cccccc;
+            font-size: 1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .strain-image {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(45deg, #4169E1, #6495ED, #87CEEB, #9370DB, #8A2BE2);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+        }
+
+        .photo-note {
+            color: #888;
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .strain-info {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #333;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #4CAF50;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .description {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .description h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .description p {
+            color: #cccccc;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #4CAF50;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.1);
+        }
+
+        .feature-card h4 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #cccccc;
+            line-height: 1.7;
+        }
+
+        .stats-section {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .stats-title {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .stat-item {
+            margin-bottom: 25px;
+        }
+
+        .stat-label {
+            color: #cccccc;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+        }
+
+        .stat-bar {
+            height: 12px;
+            background: #2d2d2d;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #444;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #66BB6A);
+            border-radius: 6px;
+            transition: width 0.8s ease;
+        }
+
+        .lineage-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .parent-strain {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+
+        .parent-strain h4 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .parent-strain p {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .cta-section {
+            text-align: center;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 50px 40px;
+            border: 1px solid #333;
+            margin-bottom: 40px;
+        }
+
+        .cta-section h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .cta-section p {
+            color: #cccccc;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            background: #4CAF50;
+            color: #000;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cta-button:hover {
+            background: #66BB6A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+        }
+
+        .cta-button.secondary:hover {
+            background: #4CAF50;
+            color: #000;
+        }
+
+        /* Review Section Styles */
+        .review-section {
+            margin-top: 40px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            border: 1px solid #333;
+        }
+
+        .review-section h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .review-form-container {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid #444;
+        }
+
+        .review-form {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #555;
+            background: #1a1a1a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
+            background: #1a1a1a;
+            border: 2px dashed #555;
+            border-radius: 8px;
+            color: #ccc;
+        }
+
+        .form-group input[type="file"]:hover {
+            border-color: #4CAF50;
+        }
+
+        .file-upload-note {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #888;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .rating-section {
+            margin-bottom: 20px;
+        }
+
+        .rating-section label {
+            display: block;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .star-rating {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .star {
+            color: #555;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #4CAF50;
+        }
+
+        .submit-review-btn {
+            background: #4CAF50;
+            color: #000;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-review-btn:hover {
+            background: #66BB6A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .submit-review-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .reviews-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .review-item {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .reviewer-name {
+            color: #4CAF50;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .grow-type {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .review-date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .review-stars {
+            color: #4CAF50;
+            font-size: 1.2rem;
+        }
+
+        .review-title {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .review-content {
+            color: #cccccc;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .success-message {
+            background: #4CAF50;
+            color: #000;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .error-message {
+            background: #f44336;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .strain-title {
+                font-size: 2.5rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .rating-display {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-nav">
+            <a href="javascript:history.back()">← Back to Strain Collection</a>
+        </div>
+
+        <header class="strain-header">
+            <h1 class="strain-title">Blueberry Fingers</h1>
+            <p class="strain-subtitle">Sweet Blueberry with Energetic OG Effects</p>
+            <span class="strain-type">30% Sativa / 70% Indica</span>
+        </header>
+
+        <!-- Overall Rating Section -->
+        <div class="overall-rating">
+            <h3>Customer Reviews</h3>
+            <div class="rating-display">
+                <div class="rating-stars" id="overallStars">★★★★☆</div>
+                <div class="rating-score" id="overallScore">4.3</div>
+            </div>
+            <div class="rating-details" id="ratingDetails">Based on 17 reviews</div>
+        </div>
+
+        <div class="main-content">
+            <div class="strain-image">
+                <div class="image-placeholder">
+                    INSERT YOUR PHOTO HERE
+                </div>
+                <p style="color: #4CAF50; font-style: italic; font-weight: 500;">Sweet blueberry flavors with motivated, energetic effects</p>
+                <p class="photo-note">Insert your photo here</p>
+            </div>
+
+            <div class="strain-info">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">THC Content</div>
+                        <div class="info-value">18-20%</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">CBD Content</div>
+                        <div class="info-value">&gt;2%</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Flowering Time</div>
+                        <div class="info-value">65 days</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Yield Indoor</div>
+                        <div class="info-value">350-400g/m²</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Yield Outdoor</div>
+                        <div class="info-value">1-1.25lb/plant</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Plant Height</div>
+                        <div class="info-value">Short</div>
+                    </div>
+                </div>
+
+                <div class="lineage-section">
+                    <div class="parent-strain">
+                        <h4>Genetics</h4>
+                        <p>Blueberry × OG Selection</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="description">
+            <h3>About Blueberry Fingers</h3>
+            <p>Blueberry Fingers represents an exceptional fusion of sweet blueberry genetics with energetic OG characteristics, creating a strain that defies typical indica stereotypes. This indica-dominant hybrid delivers the beloved berry flavors that made blueberry strains famous while providing surprisingly motivated and energetic effects that make it perfect for daytime use.</p>
+            
+            <p>The strain exhibits short, compact growth with dense bud development and beautiful purple and blue color expressions throughout flowering. The complex terpene profile combines Valencene for sweet citrus undertones, Humulene for gassy depth, and Limonene for bright citrus notes that complement the dominant blueberry characteristics.</p>
+            
+            <p>Effects are uniquely balanced, providing the motivated, energetic, and happy characteristics typically associated with sativa strains while maintaining the comfortable body effects of its indica dominance. This makes Blueberry Fingers perfect for users seeking functional relaxation with delicious berry flavors and consistent, uplifting effects.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4>Flavor Profile</h4>
+                <p>Dominant blueberry and berry flavors with gassy, earthy undertones and bright citrus notes. Complex terpene profile featuring Valencene, Humulene, and Limonene for layered flavor complexity.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>Effects</h4>
+                <p>Motivated, energetic, and happy effects despite indica dominance. Perfect for daytime use with functional relaxation that doesn't impair productivity or social activities.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>Growing</h4>
+                <p>Short, compact plants ideal for indoor cultivation and height-restricted spaces. Dense bud development with beautiful color expression and manageable structure throughout flowering.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>Versatility</h4>
+                <p>Unique combination of indica structure with sativa-like effects. Perfect for users who want berry flavors and comfortable relaxation without sedation or couch-lock.</p>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h3 class="stats-title">Strain Characteristics</h3>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Berry Flavor</span>
+                    <span>Excellent</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 90%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Motivation</span>
+                    <span>High</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 85%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Daytime Use</span>
+                    <span>Perfect</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 88%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Compact Growing</span>
+                    <span>Excellent</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 92%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h3>Ready to Grow Blueberry Fingers?</h3>
+            <p>
+                Experience the unique combination of sweet blueberry flavors with energetic, motivated effects. 
+                Perfect for growers seeking compact plants with functional, daytime-friendly indica genetics.
+            </p>
+            <button class="cta-button">Shop Blueberry Fingers Seeds</button>
+            <button class="cta-button secondary" onclick="scrollToReviews()">Leave a Review</button>
+        </div>
+
+        <!-- Review Section -->
+        <div class="review-section">
+            <h3>Community Reviews</h3>
+            
+            <!-- Review Form -->
+            <div class="review-form-container">
+                <form id="reviewForm" class="review-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="reviewerName">Name</label>
+                            <input type="text" id="reviewerName" name="reviewerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="growType">Growing Method</label>
+                            <select id="growType" name="growType">
+                                <option value="indoor">Indoor</option>
+                                <option value="outdoor">Outdoor</option>
+                                <option value="greenhouse">Greenhouse</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="rating-section">
+                        <label>Overall Rating</label>
+                        <div class="star-rating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reviewTitle">Review Title</label>
+                        <input type="text" id="reviewTitle" name="reviewTitle" placeholder="Sum up your experience..." required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reviewText">Your Review</label>
+                        <textarea id="reviewText" name="reviewText" rows="4" placeholder="Share your growing experience, effects, taste, etc..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reviewPhotos">Upload Photos (Optional)</label>
+                        <input type="file" id="reviewPhotos" name="reviewPhotos" multiple accept="image/*">
+                        <div class="file-upload-note">You can upload multiple photos of your grow, harvest, or buds (JPG, PNG, GIF)</div>
+                    </div>
+                    
+                    <div class="success-message" id="successMessage">
+                        Thank you! Your review has been submitted and will be verified and published shortly.
+                    </div>
+                    
+                    <div class="error-message" id="errorMessage">
+                        There was an error submitting your review. Please try again.
+                    </div>
+                    
+                    <button type="submit" class="submit-review-btn" id="submitBtn">Submit Review for Verification</button>
+                </form>
+            </div>
+
+            <!-- Reviews Display -->
+            <div class="reviews-container" id="reviewsContainer">
+                <!-- Reviews will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let reviews = [
+            {
+                name: "BerryLover420",
+                growType: "Indoor",
+                rating: 5,
+                title: "Amazing blueberry flavors with energy!",
+                content: "Blueberry Fingers is incredible - authentic blueberry and berry flavors with surprisingly energetic effects! Indoor grow stayed nice and short, perfect for my tent. The motivated, happy effects make this perfect for daytime use. Love that it's an indica that doesn't couch-lock you!",
+                date: "1 week ago"
+            },
+            {
+                name: "CompactGrower",
+                growType: "Indoor",
+                rating: 4,
+                title: "Perfect for small spaces",
+                content: "Short plants that pack a punch! Blueberry Fingers stayed compact throughout flower but produced dense, colorful buds. The berry flavors are outstanding and the energetic effects are perfect for staying productive. Great strain for height-restricted grows.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "DaytimeSmoke",
+                growType: "Indoor",
+                rating: 5,
+                title: "Best daytime indica ever",
+                content: "Finally found an indica I can smoke during the day! Blueberry Fingers provides all the berry flavors and body comfort I want without making me sleepy. Motivated and energetic effects keep me going. This strain breaks all the rules in the best way!",
+                date: "3 weeks ago"
+            },
+            {
+                name: "FlavorHunter",
+                growType: "Indoor",
+                rating: 4,
+                title: "Complex berry terpene profile",
+                content: "The terpene complexity is impressive - getting strong blueberry and fruit flavors with gassy, earthy undertones and bright citrus notes. Valencene really adds sweetness while Limonene provides brightness. Effects are surprisingly energetic for an indica-dominant strain.",
+                date: "1 month ago"
+            },
+            {
+                name: "MotivatedMom",
+                growType: "Indoor",
+                rating: 5,
+                title: "Perfect for busy parents",
+                content: "As a working mom, Blueberry Fingers is perfect for unwinding while staying functional. Sweet berry flavors are delicious and the motivated, happy effects help me tackle household tasks with a smile. No couch-lock, just comfortable energy!",
+                date: "4 weeks ago"
+            },
+            {
+                name: "ProductiveVibes",
+                growType: "Indoor",
+                rating: 4,
+                title: "Functional relaxation at its best",
+                content: "Love strains that relax without sedation and Blueberry Fingers delivers perfectly. Berry flavors are authentic and the effects keep me motivated and energetic. Perfect for creative work or social activities. This is what functional cannabis should be!",
+                date: "2 weeks ago"
+            },
+            {
+                name: "ShortAndSweet",
+                growType: "Indoor",
+                rating: 5,
+                title: "Compact powerhouse",
+                content: "Don't let the short stature fool you - these plants produce! Dense, resinous buds with incredible bag appeal and stunning color development. Blueberry flavors are off the charts and effects are perfectly balanced for any time of day.",
+                date: "5 weeks ago"
+            },
+            {
+                name: "HappyGardener",
+                growType: "Indoor",
+                rating: 4,
+                title: "Mood lifting berry goodness",
+                content: "The happy effects from Blueberry Fingers are immediate and sustained. Sweet berry flavors always put a smile on my face and the energetic buzz keeps me active and positive. Great strain for battling stress and staying motivated!",
+                date: "3 weeks ago"
+            },
+            {
+                name: "BerryFlavors",
+                growType: "Indoor",
+                rating: 5,
+                title: "Authentic blueberry genetics",
+                content: "The blueberry flavors are so authentic it tastes like fresh berries! Growing indoors really brought out the fruit and berry characteristics. Effects are uniquely balanced - relaxing but not sedating. This is premium berry genetics!",
+                date: "6 weeks ago"
+            },
+            {
+                name: "EnergeticIndica",
+                growType: "Indoor",
+                rating: 4,
+                title: "Indica that doesn't slow you down",
+                content: "Love having an indica-dominant strain that provides energy instead of sedation. Blueberry Fingers breaks the typical indica stereotype with motivated, happy effects. Perfect for users who want body comfort without the couch-lock.",
+                date: "1 month ago"
+            },
+            {
+                name: "SweetTooth",
+                growType: "Indoor",
+                rating: 5,
+                title: "Dessert-like cannabis experience",
+                content: "The berry sweetness makes every session feel like dessert! Blueberry Fingers combines incredible flavor with functional effects. The citrus undertones add complexity while the energetic buzz keeps me going. This is enjoyable medicine!",
+                date: "4 weeks ago"
+            },
+            {
+                name: "FunctionalMeds",
+                growType: "Indoor",
+                rating: 4,
+                title: "Great for daytime medication",
+                content: "Using Blueberry Fingers for anxiety and it works wonderfully without impairment. The berry flavors make medicating pleasant and the motivated effects help me stay productive. Perfect balance of therapeutic benefits and functionality.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "ColorfulBuds",
+                growType: "Indoor",
+                rating: 5,
+                title: "Beautiful purple and blue hues",
+                content: "The color development on Blueberry Fingers is stunning - deep purples and blues throughout the buds. Visual appeal matches the incredible berry flavors perfectly. Effects are energetic and happy, making this a complete package!",
+                date: "5 weeks ago"
+            },
+            {
+                name: "WorkFromHome",
+                growType: "Indoor",
+                rating: 4,
+                title: "Perfect work-from-home strain",
+                content: "Remote work and Blueberry Fingers are a perfect match. Berry flavors brighten my day and the energetic, motivated effects help me stay focused on tasks. No afternoon crashes, just sustained productivity with comfort.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "AnxietyRelief",
+                growType: "Indoor",
+                rating: 5,
+                title: "Calms anxiety without sedation",
+                content: "Dealing with anxiety and Blueberry Fingers provides excellent relief without making me drowsy. The happy, energetic effects counter negative thoughts while berry flavors make medicating enjoyable. Much better than prescription options!",
+                date: "6 weeks ago"
+            },
+            {
+                name: "TerpComplexity",
+                growType: "Indoor",
+                rating: 4,
+                title: "Layered terpene profile",
+                content: "The terpene complexity is outstanding - dominant berry sweetness with gassy depth and bright citrus highlights. Lab tested at 2.4% total terps. The Valencene, Humulene, and Limonene create incredible flavor layering throughout the session.",
+                date: "1 month ago"
+            },
+            {
+                name: "AllDayStrain",
+                growType: "Indoor",
+                rating: 5,
+                title: "Can use from morning to night",
+                content: "Blueberry Fingers is versatile enough for any time of day. Morning motivation, afternoon creativity, evening relaxation - all without sedation. Berry flavors never get old and the balanced effects make this an everyday strain!",
+                date: "4 weeks ago"
+            }
+        ];
+
+        // EmailJS configuration with your provided credentials
+        const EMAILJS_SERVICE_ID = 'service_or5mors';
+        const EMAILJS_TEMPLATE_ID = 'template_iec8q2e';
+        const EMAILJS_PUBLIC_KEY = 'tm_ahVHnHlPN6lF_E';
+
+        // Initialize EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        // Calculate overall rating
+        function calculateOverallRating() {
+            const totalReviews = reviews.length;
+            const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+            const averageRating = totalReviews > 0 ? (totalRating / totalReviews) : 0;
+            
+            return {
+                average: averageRating,
+                total: totalReviews
+            };
+        }
+
+        // Update overall rating display
+        function updateOverallRating() {
+            const rating = calculateOverallRating();
+            const starsElement = document.getElementById('overallStars');
+            const scoreElement = document.getElementById('overallScore');
+            const detailsElement = document.getElementById('ratingDetails');
+            
+            // Create star display
+            const fullStars = Math.floor(rating.average);
+            const hasHalfStar = rating.average % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            
+            let starsHTML = '★'.repeat(fullStars);
+            if (hasHalfStar) starsHTML += '☆';
+            starsHTML += '☆'.repeat(emptyStars);
+            
+            starsElement.textContent = starsHTML;
+            scoreElement.textContent = rating.average.toFixed(1);
+            detailsElement.textContent = `Based on ${rating.total} reviews`;
+        }
+
+        // Scroll to reviews function
+        function scrollToReviews() {
+            document.querySelector('.review-section').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Star rating functionality
+        let selectedRating = 0;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.star');
+            const reviewForm = document.getElementById('reviewForm');
+            
+            // Initialize overall rating display
+            updateOverallRating();
+            
+            // Star rating interaction
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(this.dataset.rating);
+                    updateStars();
+                });
+                
+                star.addEventListener('mouseenter', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    highlightStars(rating);
+                });
+            });
+            
+            // Reset star highlighting on mouse leave
+            document.querySelector('.star-rating').addEventListener('mouseleave', function() {
+                updateStars();
+            });
+            
+            // Form submission
+            reviewForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitReviewViaEmail();
+            });
+            
+            // Initial render of reviews
+            renderReviews();
+            
+            // Animate stat bars on scroll
+            const statBars = document.querySelectorAll('.stat-fill');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.width = entry.target.style.width;
+                    }
+                });
+            });
+            
+            statBars.forEach(bar => observer.observe(bar));
+        });
+        
+        function highlightStars(rating) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+        
+        function updateStars() {
+            highlightStars(selectedRating);
+        }
+        
+        function submitReviewViaEmail() {
+            const form = document.getElementById('reviewForm');
+            const formData = new FormData(form);
+            const submitBtn = document.getElementById('submitBtn');
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            if (selectedRating === 0) {
+                alert('Please select a rating!');
+                return;
+            }
+            
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            
+            // Hide previous messages
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            
+            // Prepare email data
+            const emailData = {
+                reviewer_name: formData.get('reviewerName'),
+                grow_type: formData.get('growType'),
+                rating: selectedRating,
+                review_title: formData.get('reviewTitle'),
+                review_content: formData.get('reviewText'),
+                strain_name: 'Blueberry Fingers',
+                submission_date: new Date().toLocaleDateString(),
+                photos_attached: formData.get('reviewPhotos').name ? 'Yes - ' + formData.get('reviewPhotos').name : 'No photos uploaded'
+            };
+            
+            // Send email via EmailJS
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailData)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    
+                    // Show success message
+                    successMsg.style.display = 'block';
+                    
+                    // Reset form
+                    form.reset();
+                    selectedRating = 0;
+                    updateStars();
+                    
+                    // Scroll to success message
+                    successMsg.scrollIntoView({ behavior: 'smooth' });
+                    
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    
+                    // Show error message
+                    errorMsg.style.display = 'block';
+                    errorMsg.scrollIntoView({ behavior: 'smooth' });
+                })
+                .finally(function() {
+                    // Re-enable submit button
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Submit Review for Verification';
+                });
+        }
+        
+        function renderReviews() {
+            const container = document.getElementById('reviewsContainer');
+            
+            container.innerHTML = reviews.map(review => `
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <strong class="reviewer-name">${review.name}</strong>
+                            <span class="grow-type">${review.growType}</span>
+                            <span class="review-date">${review.date}</span>
+                        </div>
+                        <div class="review-stars">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
+                    </div>
+                    <h4 class="review-title">${review.title}</h4>
+                    <p class="review-content">${review.content}</p>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

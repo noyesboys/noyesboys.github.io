@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meat Cakes - Noyes Boys Genetics</title>
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background: #0a0a0a;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 30px;
+        }
+
+        .back-nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-nav a:hover {
+            color: #66BB6A;
+        }
+
+        .strain-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-radius: 15px;
+            border: 1px solid #333;
+        }
+
+        .strain-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .strain-subtitle {
+            font-size: 1.3rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .strain-type {
+            background: #4CAF50;
+            color: #000;
+            border-radius: 25px;
+            padding: 8px 20px;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Overall Rating Section */
+        .overall-rating {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+
+        .overall-rating h3 {
+            color: #4CAF50;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .rating-stars {
+            font-size: 2rem;
+            color: #4CAF50;
+        }
+
+        .rating-score {
+            font-size: 2.5rem;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .rating-details {
+            color: #cccccc;
+            font-size: 1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .strain-image {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(45deg, #8D4004, #A0522D, #CD853F, #D2691E, #B8860B);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            margin-bottom: 15px;
+        }
+
+        .photo-note {
+            color: #888;
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .strain-info {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #333;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #4CAF50;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .description {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .description h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .description p {
+            color: #cccccc;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #4CAF50;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.1);
+        }
+
+        .feature-card h4 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #cccccc;
+            line-height: 1.7;
+        }
+
+        .stats-section {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .stats-title {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .stat-item {
+            margin-bottom: 25px;
+        }
+
+        .stat-label {
+            color: #cccccc;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+        }
+
+        .stat-bar {
+            height: 12px;
+            background: #2d2d2d;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #444;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #66BB6A);
+            border-radius: 6px;
+            transition: width 0.8s ease;
+        }
+
+        .lineage-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .parent-strain {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+
+        .parent-strain h4 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .parent-strain p {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .cta-section {
+            text-align: center;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 50px 40px;
+            border: 1px solid #333;
+            margin-bottom: 40px;
+        }
+
+        .cta-section h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .cta-section p {
+            color: #cccccc;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            background: #4CAF50;
+            color: #000;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cta-button:hover {
+            background: #66BB6A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+        }
+
+        .cta-button.secondary:hover {
+            background: #4CAF50;
+            color: #000;
+        }
+
+        /* Review Section Styles */
+        .review-section {
+            margin-top: 40px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            border: 1px solid #333;
+        }
+
+        .review-section h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .review-form-container {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid #444;
+        }
+
+        .review-form {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #555;
+            background: #1a1a1a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
+            background: #1a1a1a;
+            border: 2px dashed #555;
+            border-radius: 8px;
+            color: #ccc;
+        }
+
+        .form-group input[type="file"]:hover {
+            border-color: #4CAF50;
+        }
+
+        .file-upload-note {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #888;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .rating-section {
+            margin-bottom: 20px;
+        }
+
+        .rating-section label {
+            display: block;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .star-rating {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .star {
+            color: #555;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #4CAF50;
+        }
+
+        .submit-review-btn {
+            background: #4CAF50;
+            color: #000;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-review-btn:hover {
+            background: #66BB6A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .submit-review-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .reviews-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .review-item {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .reviewer-name {
+            color: #4CAF50;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .grow-type {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .review-date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .review-stars {
+            color: #4CAF50;
+            font-size: 1.2rem;
+        }
+
+        .review-title {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .review-content {
+            color: #cccccc;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .success-message {
+            background: #4CAF50;
+            color: #000;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .error-message {
+            background: #f44336;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .strain-title {
+                font-size: 2.5rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .rating-display {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-nav">
+            <a href="javascript:history.back()">← Back to Strain Collection</a>
+        </div>
+
+        <header class="strain-header">
+            <h1 class="strain-title">Meat Cakes</h1>
+            <p class="strain-subtitle">Savory Umami Flavors with Cake Structure</p>
+            <span class="strain-type">70% Indica / 30% Sativa</span>
+        </header>
+
+        <!-- Overall Rating Section -->
+        <div class="overall-rating">
+            <h3>Customer Reviews</h3>
+            <div class="rating-display">
+                <div class="rating-stars" id="overallStars">★★★★☆</div>
+                <div class="rating-score" id="overallScore">4.1</div>
+            </div>
+            <div class="rating-details" id="ratingDetails">Based on 22 reviews</div>
+        </div>
+
+        <div class="main-content">
+            <div class="strain-image">
+                <div class="image-placeholder">
+                    INSERT YOUR PHOTO HERE
+                </div>
+                <p style="color: #4CAF50; font-style: italic; font-weight: 500;">Rich, savory aroma with dense cake-like structure</p>
+                <p class="photo-note">Insert your photo here</p>
+            </div>
+
+            <div class="strain-info">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">THC Content</div>
+                        <div class="info-value">24-27%</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">CBD Content</div>
+                        <div class="info-value">&lt;1%</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Flowering Time</div>
+                        <div class="info-value">58-65 days</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Yield Indoor</div>
+                        <div class="info-value">540-590g/m²</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Yield Outdoor</div>
+                        <div class="info-value">2.5-3lb/plant</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Plant Height</div>
+                        <div class="info-value">Medium</div>
+                    </div>
+                </div>
+
+                <div class="lineage-section">
+                    <div class="parent-strain">
+                        <h4>Genetics</h4>
+                        <p>Meatloaf × Wedding Cake</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="description">
+            <h3>About Meat Cakes</h3>
+            <p>Meat Cakes is a bold and innovative indica-dominant hybrid that pushes the boundaries of cannabis flavor profiles by combining the unique savory, umami-rich characteristics of Meatloaf with the beloved structure and effects of Wedding Cake. This strain represents a completely new direction in cannabis breeding, offering an entirely different sensory experience that challenges expectations and delivers something truly unique for adventurous connoisseurs.</p>
+            
+            <p>The strain develops the classic dense, chunky bud structure associated with Wedding Cake genetics, but the aroma and flavor profile is dramatically different. Instead of sweet dessert notes, Meat Cakes produces rich, savory scents reminiscent of roasted herbs, earthy spices, and complex umami flavors that some describe as "meaty" or mushroom-like. This unusual terpene combination creates an entirely new category of cannabis flavors.</p>
+            
+            <p>Effects are deeply relaxing and sedating, making Meat Cakes perfect for evening use, appetite stimulation, and deep relaxation. The indica dominance provides a powerful body stone that melts away physical tension and stress, while the unique flavor profile makes each session a memorable culinary experience. This strain appeals to users seeking something completely different from typical sweet or citrus cannabis varieties.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4>🥩 Savory Umami</h4>
+                <p>Unique savory flavor profile with rich, meaty umami notes and earthy spices. Dominated by Caryophyllene and unique terpenes creating an entirely new cannabis flavor experience.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>😴 Deep Relaxation</h4>
+                <p>Powerful indica effects providing deep physical relaxation and sedation. Perfect for evening use, appetite stimulation, and relief from chronic pain and insomnia.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🌱 Growing</h4>
+                <p>Dense Wedding Cake structure with excellent yields and resin production. Medium-sized plants perfect for indoor cultivation. Insert your photo here for growing tips.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🔥 Bold Innovation</h4>
+                <p>Revolutionary flavor profile that challenges cannabis conventions. Perfect for adventurous users seeking completely unique sensory experiences beyond traditional varieties.</p>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h3 class="stats-title">Strain Characteristics</h3>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Potency</span>
+                    <span>27%</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 90%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Appetite Stimulation</span>
+                    <span>Maximum</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 100%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Uniqueness</span>
+                    <span>Revolutionary</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 100%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Evening Use</span>
+                    <span>Perfect</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 95%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h3>Ready to Grow Meat Cakes?</h3>
+            <p>
+                Experience revolutionary savory cannabis flavors with powerful indica effects and exceptional yields. 
+                Perfect for adventurous growers seeking bold, innovative genetics.
+            </p>
+            <button class="cta-button">Shop Meat Cakes Seeds</button>
+            <button class="cta-button secondary" onclick="scrollToReviews()">Leave a Review</button>
+        </div>
+
+        <!-- Review Section -->
+        <div class="review-section">
+            <h3>Community Reviews</h3>
+            
+            <!-- Review Form -->
+            <div class="review-form-container">
+                <form id="reviewForm" class="review-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="reviewerName">Name</label>
+                            <input type="text" id="reviewerName" name="reviewerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="growType">Growing Method</label>
+                            <select id="growType" name="growType">
+                                <option value="indoor">Indoor</option>
+                                <option value="outdoor">Outdoor</option>
+                                <option value="greenhouse">Greenhouse</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="rating-section">
+                        <label>Overall Rating</label>
+                        <div class="star-rating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reviewTitle">Review Title</label>
+                        <input type="text" id="reviewTitle" name="reviewTitle" placeholder="Sum up your experience..." required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reviewText">Your Review</label>
+                        <textarea id="reviewText" name="reviewText" rows="4" placeholder="Share your growing experience, effects, taste, etc..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reviewPhotos">Upload Photos (Optional)</label>
+                        <input type="file" id="reviewPhotos" name="reviewPhotos" multiple accept="image/*">
+                        <div class="file-upload-note">You can upload multiple photos of your grow, harvest, or buds (JPG, PNG, GIF)</div>
+                    </div>
+                    
+                    <div class="success-message" id="successMessage">
+                        ✅ Thank you! Your review has been submitted and will be verified and published shortly.
+                    </div>
+                    
+                    <div class="error-message" id="errorMessage">
+                        ❌ There was an error submitting your review. Please try again.
+                    </div>
+                    
+                    <button type="submit" class="submit-review-btn" id="submitBtn">Submit Review for Verification</button>
+                </form>
+            </div>
+
+            <!-- Reviews Display -->
+            <div class="reviews-container" id="reviewsContainer">
+                <!-- Reviews will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample reviews data (22 reviews for Meat Cakes focusing on unique flavors and effects)
+        let reviews = [
+            {
+                name: "SavorySeeker",
+                growType: "Indoor",
+                rating: 4,
+                title: "Unlike anything I've ever tasted",
+                content: "Meat Cakes is absolutely revolutionary. The savory, umami flavors are completely different from typical cannabis - it's like nothing I've experienced before. Rich, earthy, almost mushroom-like notes with hints of roasted herbs. The effects are powerfully relaxing and the appetite stimulation is incredible. Not for everyone, but amazing for adventurous users!",
+                date: "1 week ago"
+            },
+            {
+                name: "UmamiLover",
+                growType: "Indoor",
+                rating: 5,
+                title: "Revolutionary flavor profile",
+                content: "As someone who loves unique flavors, Meat Cakes blew me away. The savory, meaty aromas are so different and complex. It's like cannabis met fine dining - rich, sophisticated, and completely unexpected. The indica effects are perfect for evening relaxation and the yields were excellent. Bold genetics that actually deliver!",
+                date: "2 weeks ago"
+            },
+            {
+                name: "AdventurousGrower",
+                growType: "Indoor",
+                rating: 5,
+                title: "Bold innovation in cannabis",
+                content: "Meat Cakes represents exactly what cannabis breeding should be - bold innovation that pushes boundaries. The savory, umami-rich flavors are completely revolutionary. It's not just different, it's sophisticated. Effects are deeply relaxing with incredible appetite stimulation. This strain started conversations and changed minds about what cannabis can be.",
+                date: "1 month ago"
+            },
+            {
+                name: "AppetiteBooster",
+                growType: "Indoor",
+                rating: 5,
+                title: "Incredible for appetite stimulation",
+                content: "Using Meat Cakes medicinally for appetite issues and it's incredible. The savory flavors actually trigger hunger responses before the effects even kick in. Then the indica stone provides powerful munchies that help with eating disorders. The unique flavor profile makes medicating more interesting too.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "MushroomNotes",
+                growType: "Indoor",
+                rating: 4,
+                title: "Earthy mushroom undertones",
+                content: "The flavor profile reminds me of sautéed mushrooms with herbs and spices. Very earthy and savory with this rich, meaty umami quality. It's definitely an acquired taste but I've grown to love it. The effects are perfect for evening relaxation and the dense buds look amazing. Unique genetics for sure!",
+                date: "4 weeks ago"
+            },
+            {
+                name: "ConnoisseurChoice",
+                growType: "Indoor",
+                rating: 4,
+                title: "Connoisseur level genetics",
+                content: "Meat Cakes is for cannabis connoisseurs who appreciate innovation. The savory terpene profile is sophisticated and complex - like a fine wine or aged cheese. Not everyone will understand it, but those who do will appreciate the artistry. Effects are solid indica with great yields and structure.",
+                date: "5 weeks ago"
+            },
+            {
+                name: "CuriousFirst",
+                growType: "Indoor",
+                rating: 3,
+                title: "Curious first experience",
+                content: "Tried Meat Cakes out of pure curiosity and it's definitely an experience. The savory flavors are so unexpected - took some getting used to. The effects are great though - deep relaxation and serious munchies. I appreciate the innovation even if it's not my personal preference. Worth trying once for sure.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "HerbSpices",
+                growType: "Indoor",
+                rating: 4,
+                title: "Herbs and spices galore",
+                content: "The terpene complexity in Meat Cakes is incredible - getting rosemary, thyme, black pepper, and these rich earthy notes. It's like smoking a spice rack in the best way possible. Effects are powerfully sedating and great for insomnia. The flavor grows on you with each session.",
+                date: "6 weeks ago"
+            },
+            {
+                name: "EveningRelief",
+                growType: "Indoor",
+                rating: 5,
+                title: "Perfect evening medicine",
+                content: "Meat Cakes is my evening go-to for chronic pain and insomnia. The unique flavors make medicating more interesting, and the indica effects provide incredible relief. Deep body relaxation that melts away tension and pain. The appetite stimulation helps with medication side effects too.",
+                date: "1 month ago"
+            },
+            {
+                name: "BoldFlavors",
+                growType: "Indoor",
+                rating: 4,
+                title: "Bold flavors that challenge expectations",
+                content: "Love that Noyes Boys had the courage to create something this different. Meat Cakes challenges everything you think you know about cannabis flavors. The savory, umami profile is sophisticated and complex. Not for beginners, but perfect for experienced users seeking something new.",
+                date: "4 weeks ago"
+            },
+            {
+                name: "YieldChamp",
+                growType: "Indoor",
+                rating: 4,
+                title: "Excellent yields with unique character",
+                content: "Got 570g/m² of dense, resinous buds with incredible savory aromas. The Wedding Cake structure is perfect for indoor growing and the yields are outstanding. The unique flavor profile is just a bonus on top of solid growing performance. Great for commercial operations wanting something different.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "TerpProfile",
+                growType: "Indoor",
+                rating: 5,
+                title: "Most unique terpene profile ever",
+                content: "The terpene chemistry in Meat Cakes is fascinating. Lab tested at 3.0% total terps with compounds I've never seen before. Creates these rich, savory flavors that are completely unique in cannabis. This is advanced breeding creating entirely new sensory experiences. Incredible innovation!",
+                date: "5 weeks ago"
+            },
+            {
+                name: "SedativeEffects",
+                growType: "Indoor",
+                rating: 4,
+                title: "Powerful sedative effects",
+                content: "The indica effects in Meat Cakes are incredibly strong. Deep, full-body relaxation that's perfect for chronic pain and insomnia. The unique flavors are interesting but the medical effects are what keep me coming back. Powerful medicine disguised as culinary innovation.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "AcquiredTaste",
+                growType: "Indoor",
+                rating: 3,
+                title: "Definitely an acquired taste",
+                content: "Meat Cakes took some getting used to - the savory flavors are so different from typical cannabis. After a few sessions though, I started appreciating the complexity. It's like developing a taste for fine wine or aged cheese. The effects are solid indica stone. Unique genetics that grow on you.",
+                date: "6 weeks ago"
+            },
+            {
+                name: "InnovationLeader",
+                growType: "Indoor",
+                rating: 5,
+                title: "Leading cannabis innovation",
+                content: "This is what cannabis innovation should look like. Meat Cakes doesn't just follow trends - it creates entirely new categories. The savory flavor profile opens up possibilities we never imagined. Combined with excellent growing traits and powerful effects, this is revolutionary genetics.",
+                date: "1 month ago"
+            },
+            {
+                name: "SophisticatedPalate",
+                growType: "Indoor",
+                rating: 4,
+                title: "For sophisticated palates",
+                content: "Meat Cakes is cannabis for people with sophisticated palates. The savory, umami flavors are complex and refined - like fine cuisine. Not everyone will appreciate it, but those who do understand it's special. Effects are perfect indica relaxation with incredible appetite enhancement.",
+                date: "4 weeks ago"
+            },
+            {
+                name: "MedicalBenefit",
+                growType: "Indoor",
+                rating: 5,
+                title: "Amazing medical benefits",
+                content: "Using for cancer treatment side effects and Meat Cakes is incredible. The unique flavors stimulate appetite even before the effects kick in, and the indica stone helps with pain and nausea. The savory profile is actually easier on sensitive stomachs than sweet strains. Medical cannabis evolved.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "GameChanger",
+                growType: "Indoor",
+                rating: 4,
+                title: "Total game changer",
+                content: "Meat Cakes changes the entire conversation about cannabis flavors. The savory, herbal profile is so sophisticated and unexpected. It's not just different - it's better in its own unique way. Shows what's possible when breeders think outside conventional categories.",
+                date: "5 weeks ago"
+            },
+            {
+                name: "DeepRelaxation",
+                growType: "Indoor",
+                rating: 4,
+                title: "Deep relaxation and appetite",
+                content: "The effects profile is perfect - deep physical relaxation combined with serious appetite stimulation. The unique savory flavors add interest to evening sessions. Great for stress relief and eating disorders. The dense buds and good yields make it practical for regular use too.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "FutureGenetics",
+                growType: "Indoor",
+                rating: 5,
+                title: "This is the future of cannabis",
+                content: "Meat Cakes represents the future of cannabis genetics. Instead of repeating the same sweet/citrus profiles, it creates entirely new sensory experiences. The savory umami flavors are revolutionary. Combined with excellent effects and growing traits, this is next-level breeding. Pure innovation!",
+                date: "1 month ago"
+            },
+            {
+                name: "CulinaryCanvas",
+                growType: "Indoor",
+                rating: 4,
+                title: "Cannabis meets culinary art",
+                content: "Meat Cakes is where cannabis meets culinary art. The savory flavor complexity rivals fine dining - herbs, spices, umami richness. It's not just cannabis, it's a gastronomic experience. The indica effects are perfect for food appreciation too. This strain changes how we think about cannabis flavors.",
+                date: "6 weeks ago"
+            }
+        ];
+
+        // EmailJS configuration with your provided credentials
+        const EMAILJS_SERVICE_ID = 'service_or5mors';
+        const EMAILJS_TEMPLATE_ID = 'template_iec8q2e';
+        const EMAILJS_PUBLIC_KEY = 'tm_ahVHnHlPN6lF_E';
+
+        // Initialize EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        // Calculate overall rating
+        function calculateOverallRating() {
+            const totalReviews = reviews.length;
+            const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+            const averageRating = totalReviews > 0 ? (totalRating / totalReviews) : 0;
+            
+            return {
+                average: averageRating,
+                total: totalReviews
+            };
+        }
+
+        // Update overall rating display
+        function updateOverallRating() {
+            const rating = calculateOverallRating();
+            const starsElement = document.getElementById('overallStars');
+            const scoreElement = document.getElementById('overallScore');
+            const detailsElement = document.getElementById('ratingDetails');
+            
+            // Create star display
+            const fullStars = Math.floor(rating.average);
+            const hasHalfStar = rating.average % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            
+            let starsHTML = '★'.repeat(fullStars);
+            if (hasHalfStar) starsHTML += '☆';
+            starsHTML += '☆'.repeat(emptyStars);
+            
+            starsElement.textContent = starsHTML;
+            scoreElement.textContent = rating.average.toFixed(1);
+            detailsElement.textContent = `Based on ${rating.total} reviews`;
+        }
+
+        // Scroll to reviews function
+        function scrollToReviews() {
+            document.querySelector('.review-section').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Star rating functionality
+        let selectedRating = 0;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.star');
+            const reviewForm = document.getElementById('reviewForm');
+            
+            // Initialize overall rating display
+            updateOverallRating();
+            
+            // Star rating interaction
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(this.dataset.rating);
+                    updateStars();
+                });
+                
+                star.addEventListener('mouseenter', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    highlightStars(rating);
+                });
+            });
+            
+            // Reset star highlighting on mouse leave
+            document.querySelector('.star-rating').addEventListener('mouseleave', function() {
+                updateStars();
+            });
+            
+            // Form submission
+            reviewForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitReviewViaEmail();
+            });
+            
+            // Initial render of reviews
+            renderReviews();
+            
+            // Animate stat bars on scroll
+            const statBars = document.querySelectorAll('.stat-fill');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.width = entry.target.style.width;
+                    }
+                });
+            });
+            
+            statBars.forEach(bar => observer.observe(bar));
+        });
+        
+        function highlightStars(rating) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+        
+        function updateStars() {
+            highlightStars(selectedRating);
+        }
+        
+        function submitReviewViaEmail() {
+            const form = document.getElementById('reviewForm');
+            const formData = new FormData(form);
+            const submitBtn = document.getElementById('submitBtn');
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            if (selectedRating === 0) {
+                alert('Please select a rating!');
+                return;
+            }
+            
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            
+            // Hide previous messages
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            
+            // Prepare email data
+            const emailData = {
+                reviewer_name: formData.get('reviewerName'),
+                grow_type: formData.get('growType'),
+                rating: selectedRating,
+                review_title: formData.get('reviewTitle'),
+                review_content: formData.get('reviewText'),
+                strain_name: 'Meat Cakes',
+                submission_date: new Date().toLocaleDateString(),
+                photos_attached: formData.get('reviewPhotos').name ? 'Yes - ' + formData.get('reviewPhotos').name : 'No photos uploaded'
+            };
+            
+            // Send email via EmailJS
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailData)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    
+                    // Show success message
+                    successMsg.style.display = 'block';
+                    
+                    // Reset form
+                    form.reset();
+                    selectedRating = 0;
+                    updateStars();
+                    
+                    // Scroll to success message
+                    successMsg.scrollIntoView({ behavior: 'smooth' });
+                    
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    
+                    // Show error message
+                    errorMsg.style.display = 'block';
+                    errorMsg.scrollIntoView({ behavior: 'smooth' });
+                })
+                .finally(function() {
+                    // Re-enable submit button
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Submit Review for Verification';
+                });
+        }
+        
+        function renderReviews() {
+            const container = document.getElementById('reviewsContainer');
+            
+            container.innerHTML = reviews.map(review => `
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <strong class="reviewer-name">${review.name}</strong>
+                            <span class="grow-type">${review.growType}</span>
+                            <span class="review-date">${review.date}</span>
+                        </div>
+                        <div class="review-stars">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
+                    </div>
+                    <h4 class="review-title">${review.title}</h4>
+                    <p class="review-content">${review.content}</p>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Noyes Boys - Merchandise</title>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #0a0a0a;
+            color: #333;
+            line-height: 1.4;
+            padding-top: 70px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
+            padding: 0.5rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            min-height: 60px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #4ade80;
+            text-decoration: none;
+        }
+        
+        .logo-img {
+            width: 35px;
+            height: 35px;
+            margin-right: 8px;
+            border-radius: 50%;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .nav-links a:hover {
+            color: #4ade80;
+            border-color: #4ade80;
+        }
+
+        .nav-links a.active {
+            background: #4ade80;
+            color: #0a0a0a;
+        }
+
+        .cart-button {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .cart-count {
+            background: #0a0a0a;
+            color: #4ade80;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c1e 0%, #2d5a2d 50%, #4a7c4a 100%);
+            min-height: calc(100vh - 70px);
+        }
+        
+        .masthead {
+            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
+            padding: 2rem 0;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .masthead h1 {
+            color: #4ade80;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .masthead h2 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255,255,255,0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            color: #2d5a2d;
+            font-size: 2.2em;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        
+        .section-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #2d5a2d 0%, #4a7c4a 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .section-header h2, .section-header h3 {
+            margin-bottom: 5px;
+        }
+        
+        .section-header p {
+            opacity: 0.9;
+        }
+
+        .apparel-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .apparel-main, .apparel-options {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .merch-image-container {
+            height: 250px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-weight: bold;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .merch-title {
+            font-size: 1.4em;
+            color: #2d5a2d;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .merch-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .merch-options {
+            margin-bottom: 15px;
+        }
+
+        .merch-options label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2d5a2d;
+        }
+
+        .merch-select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .price-display {
+            font-size: 1.8em;
+            color: #e74c3c;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .order-button {
+            background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .options-title {
+            color: #2d5a2d;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .logo-option {
+            aspect-ratio: 1;
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 0.8rem;
+            text-align: center;
+            padding: 5px;
+        }
+
+        .merch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .merch-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .merch-content {
+            padding: 20px;
+        }
+
+        .strain-cards-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .strain-selector, .strain-display {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .strain-card-preview {
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .strain-card-image {
+            width: 100%;
+            height: 200px;
+            background: #eee;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .strain-details {
+            background: rgba(74, 124, 74, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        .strain-details ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .strain-details li {
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(74, 124, 74, 0.2);
+        }
+
+        .cart-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .cart-modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: #333;
+        }
+
+        .cart-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 1rem;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            color: #2d5a2d;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-variant {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quantity-btn {
+            background: #4a7c4a;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .quantity-display {
+            min-width: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .remove-item {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .cart-total {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid #eee;
+        }
+
+        .checkout-btn {
+            background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 1rem 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="FeminizedSeedsHomepage.html" class="logo">
+                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+                The Noyes Boys
+            </a>
+            <ul class="nav-links">
+                <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
+                <li><a href="deals.html">Pricing</a></li>
+                <li><a href="line1.html">Line 1</a></li>
+                <li><a href="line2.html">Line 2</a></li>
+                <li><a href="line3.html">Line 3</a></li>
+                <li><a href="merch.html" class="active">Merch</a></li>
+                <li><a href="contact_us.html">Contact</a></li>
+                <li><a href="reviews.html">Reviews</a></li>
+            </ul>
+            <button class="cart-button" onclick="openCart()">
+                <i class="fas fa-shopping-cart"></i>
+                Cart
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+        </nav>
+    </header>
+
+    <section class="masthead">
+        <div class="masthead-content">
+            <h1>Noyes Boys Merchandise</h1>
+            <h2>Represent Your Favorite Strains</h2>
+            <div class="nav-buttons">
+                <a class="btn" href="FeminizedSeedsHomepage.html">Home</a>
+                <a class="btn" href="deals.html">Seeds</a>
+                <a class="btn" href="#apparel">Apparel</a>
+                <a class="btn" href="#accessories">Accessories</a>
+                <a class="btn" href="#strain-cards">Strain Cards</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="header">
+            <h1>Official Noyes Boys Merchandise</h1>
+            <p>Premium apparel and accessories featuring your favorite strain genetics</p>
+            <div style="color: #666; font-weight: bold; font-size: 0.95em; margin-top: 10px;">
+                Accepting: E-Transfer • PayPal • Cryptocurrency
+            </div>
+        </div>
+
+        <!-- Toques -->
+        <div class="section-container" id="apparel">
+            <div class="section-header">
+                <h3>Toques - $40 CAD</h3>
+            </div>
+            <div class="apparel-layout">
+                <div class="apparel-main">
+                    <div class="merch-image-container">INSERT TOQUE PHOTO HERE</div>
+                    <div class="merch-content">
+                        <div class="merch-title">Custom Strain Toque</div>
+                        <div class="merch-description">Premium knit toques featuring custom strain artwork. Keep warm while repping your favorite genetics.</div>
+                        <div class="merch-options">
+                            <label>Select Strain Design:</label>
+                            <select class="merch-select" id="toque-strain">
+                                <option value="purple-rainbow" data-price="40">Purple Rainbow</option>
+                                <option value="rainbow-cakes" data-price="40">Rainbow Cakes</option>
+                                <option value="cake-breath" data-price="40">Cake Breath</option>
+                                <option value="alienoyes-kush" data-price="40">Alienoyes Kush</option>
+                                <option value="mangonoyes-kush" data-price="40">Mangonoyes Kush</option>
+                                <option value="citronoyes-kush" data-price="40">Citronoyes Kush</option>
+                                <option value="noyes-haze" data-price="40">Noyes Haze</option>
+                                <option value="noyes-breath" data-price="40">Noyes Breath</option>
+                                <option value="meat-cakes" data-price="40">Meat Cakes</option>
+                                <option value="biscotti-rocks" data-price="40">Biscotti Rocks</option>
+                                <option value="yesno-kush" data-price="40">YesNo Kush</option>
+                                <option value="shiny-rocks" data-price="40">Shiny Rocks</option>
+                                <option value="noyes-rocks" data-price="40">Noyes Rocks</option>
+                                <option value="noyes-pebbles" data-price="40">Noyes Pebbles</option>
+                                <option value="mango-rocks" data-price="40">Mango Rocks</option>
+                                <option value="citrus-pebbles" data-price="40">Citrus Pebbles</option>
+                                <option value="citrus-rocks" data-price="40">Citrus Rocks</option>
+                                <option value="alien-rocks" data-price="40">Alien Rocks</option>
+                                <option value="citrus-haze-breath" data-price="40">Citrus Haze Breath</option>
+                                <option value="mango-aliens" data-price="40">Mango Aliens</option>
+                            </select>
+                            <label>Color:</label>
+                            <select class="merch-select" id="toque-color">
+                                <option value="black">Black</option>
+                                <option value="custom">Custom Color (+$10)</option>
+                            </select>
+                        </div>
+                        <div class="price-display" id="toque-price">$40.00 CAD</div>
+                        <button class="order-button" onclick="addMerchToCart('toque')">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="apparel-options">
+                    <div class="options-title">Strain Art Options</div>
+                    <div class="logo-grid">
+                        <div class="logo-option">INSERT STRAIN LOGO 1</div>
+                        <div class="logo-option">INSERT STRAIN LOGO 2</div>
+                        <div class="logo-option">INSERT STRAIN LOGO 3</div>
+                        <div class="logo-option">INSERT STRAIN LOGO 4</div>
+                        <div class="logo-option">INSERT STRAIN LOGO 5</div>
+                        <div class="logo-option">INSERT STRAIN LOGO 6</div>
+                    </div>
+                    <p style="color: #666; font-size: 0.9rem; text-align: center;">Select from 20+ unique strain designs with high-quality embroidery.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- T-Shirts -->
+        <div class="section-container">
+            <div class="section-header">
+                <h3>T-Shirts - $60 CAD</h3>
+            </div>
+            <div class="apparel-layout">
+                <div class="apparel-main">
+                    <div class="merch-image-container">INSERT T-SHIRT PHOTO HERE</div>
+                    <div class="merch-content">
+                        <div class="merch-title">Custom Strain T-Shirt</div>
+                        <div class="merch-description">Premium cotton t-shirts featuring vibrant strain artwork. Available in sizes S-3XL.</div>
+                        <div class="merch-options">
+                            <label>Select Strain Design:</label>
+                            <select class="merch-select" id="tshirt-strain">
+                                <option value="purple-rainbow" data-price="60">Purple Rainbow</option>
+                                <option value="rainbow-cakes" data-price="60">Rainbow Cakes</option>
+                                <option value="cake-breath" data-price="60">Cake Breath</option>
+                                <option value="alienoyes-kush" data-price="60">Alienoyes Kush</option>
+                                <option value="mangonoyes-kush" data-price="60">Mangonoyes Kush</option>
+                                <option value="citronoyes-kush" data-price="60">Citronoyes Kush</option>
+                                <option value="noyes-haze" data-price="60">Noyes Haze</option>
+                                <option value="noyes-breath" data-price="60">Noyes Breath</option>
+                                <option value="meat-cakes" data-price="60">Meat Cakes</option>
+                                <option value="biscotti-rocks" data-price="60">Biscotti Rocks</option>
+                                <option value="yesno-kush" data-price="60">YesNo Kush</option>
+                                <option value="shiny-rocks" data-price="60">Shiny Rocks</option>
+                                <option value="noyes-rocks" data-price="60">Noyes Rocks</option>
+                                <option value="noyes-pebbles" data-price="60">Noyes Pebbles</option>
+                                <option value="mango-rocks" data-price="60">Mango Rocks</option>
+                                <option value="citrus-pebbles" data-price="60">Citrus Pebbles</option>
+                                <option value="citrus-rocks" data-price="60">Citrus Rocks</option>
+                                <option value="alien-rocks" data-price="60">Alien Rocks</option>
+                                <option value="citrus-haze-breath" data-price="60">Citrus Haze Breath</option>
+                                <option value="mango-aliens" data-price="60">Mango Aliens</option>
+                            </select>
+                            <label>Size:</label>
+                            <select class="merch-select" id="tshirt-size">
+                                <option value="small">Small</option>
+                                <option value="medium">Medium</option>
+                                <option value="large">Large</option>
+                                <option value="xl">X-Large</option>
+                                <option value="2xl">2X-Large</option>
+                                <option value="3xl">3X-Large</option>
+                            </select>
+                            <label>Color:</label>
+                            <select class="merch-select" id="tshirt-color">
+                                <option value="black">Black</option>
+                                <option value="custom">Custom Color (+$10)</option>
+                            </select>
+                        </div>
+                        <div class="price-display" id="tshirt-price">$60.00 CAD</div>
+                        <button class="order-button" onclick="addMerchToCart('tshirt')">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="apparel-options">
+                    <div class="options-title">Design Previews</div>
+                    <div class="logo-grid">
+                        <div class="logo-option">INSERT TSHIRT DESIGN 1</div>
+                        <div class="logo-option">INSERT TSHIRT DESIGN 2</div>
+                        <div class="logo-option">INSERT TSHIRT DESIGN 3</div>
+                        <div class="logo-option">INSERT TSHIRT DESIGN 4</div>
+                        <div class="logo-option">INSERT TSHIRT DESIGN 5</div>
+                        <div class="logo-option">INSERT TSHIRT DESIGN 6</div>
+                    </div>
+                    <p style="color: #666; font-size: 0.9rem; text-align: center;">High-quality screen printing on 100% cotton.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sweaters -->
+        <div class="section-container">
+            <div class="section-header">
+                <h3>Sweaters - $120 CAD</h3>
+            </div>
+            <div class="apparel-layout">
+                <div class="apparel-main">
+                    <div class="merch-image-container">INSERT SWEATER PHOTO HERE</div>
+                    <div class="merch-content">
+                        <div class="merch-title">Premium Strain Sweater</div>
+                        <div class="merch-description">Luxury hooded sweaters featuring detailed strain artwork. Premium fleece blend for ultimate comfort.</div>
+                        <div class="merch-options">
+                            <label>Select Strain Design:</label>
+                            <select class="merch-select" id="sweater-strain">
+                                <option value="purple-rainbow" data-price="120">Purple Rainbow</option>
+                                <option value="rainbow-cakes" data-price="120">Rainbow Cakes</option>
+                                <option value="cake-breath" data-price="120">Cake Breath</option>
+                                <option value="alienoyes-kush" data-price="120">Alienoyes Kush</option>
+                                <option value="mangonoyes-kush" data-price="120">Mangonoyes Kush</option>
+                                <option value="citronoyes-kush" data-price="120">Citronoyes Kush</option>
+                                <option value="noyes-haze" data-price="120">Noyes Haze</option>
+                                <option value="noyes-breath" data-price="120">Noyes Breath</option>
+                                <option value="meat-cakes" data-price="120">Meat Cakes</option>
+                                <option value="biscotti-rocks" data-price="120">Biscotti Rocks</option>
+                                <option value="yesno-kush" data-price="120">YesNo Kush</option>
+                                <option value="shiny-rocks" data-price="120">Shiny Rocks</option>
+                                <option value="noyes-rocks" data-price="120">Noyes Rocks</option>
+                                <option value="noyes-pebbles" data-price="120">Noyes Pebbles</option>
+                                <option value="mango-rocks" data-price="120">Mango Rocks</option>
+                                <option value="citrus-pebbles" data-price="120">Citrus Pebbles</option>
+                                <option value="citrus-rocks" data-price="120">Citrus Rocks</option>
+                                <option value="alien-rocks" data-price="120">Alien Rocks</option>
+                                <option value="citrus-haze-breath" data-price="120">Citrus Haze Breath</option>
+                                <option value="mango-aliens" data-price="120">Mango Aliens</option>
+                            </select>
+                            <label>Size:</label>
+                            <select class="merch-select" id="sweater-size">
+                                <option value="small">Small</option>
+                                <option value="medium">Medium</option>
+                                <option value="large">Large</option>
+                                <option value="xl">X-Large</option>
+                                <option value="2xl">2X-Large</option>
+                                <option value="3xl">3X-Large</option>
+                            </select>
+                            <label>Color:</label>
+                            <select class="merch-select" id="sweater-color">
+                                <option value="black">Black</option>
+                                <option value="custom">Custom Color (+$10)</option>
+                            </select>
+                        </div>
+                        <div class="price-display" id="sweater-price">$120.00 CAD</div>
+                        <button class="order-button" onclick="addMerchToCart('sweater')">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="apparel-options">
+                    <div class="options-title">Sweater Designs</div>
+                    <div class="logo-grid">
+                        <div class="logo-option">INSERT SWEATER DESIGN 1</div>
+                        <div class="logo-option">INSERT SWEATER DESIGN 2</div>
+                        <div class="logo-option">INSERT SWEATER DESIGN 3</div>
+                        <div class="logo-option">INSERT SWEATER DESIGN 4</div>
+                        <div class="logo-option">INSERT SWEATER DESIGN 5</div>
+                        <div class="logo-option">INSERT SWEATER DESIGN 6</div>
+                    </div
