@@ -214,7 +214,7 @@
         }
 
         .merch-image-container {
-            height: 250px;
+            height: 300px;
             background: #f8f9fa;
             display: flex;
             align-items: center;
@@ -223,6 +223,36 @@
             font-weight: bold;
             border-radius: 8px;
             margin-bottom: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Fixed image styling */
+        .merch-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        /* For single images */
+        .merch-image-container img:only-child {
+            object-fit: contain;
+        }
+
+        /* For multiple images - create a grid */
+        .merch-image-container:has(img + img) {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 5px;
+            padding: 10px;
+        }
+
+        .merch-image-container:has(img + img) img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
         }
 
         .merch-title {
@@ -303,7 +333,18 @@
             color: #666;
             font-size: 0.8rem;
             text-align: center;
-            padding: 5px;
+            padding: 3px;
+            overflow: hidden;
+            width: 80px;
+            height: 80px;
+        }
+
+        /* Fixed logo option images */
+        .logo-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
         }
 
         .merch-grid {
@@ -492,6 +533,37 @@
             padding: 2rem;
             color: #666;
         }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .apparel-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .merch-image-container:has(img + img) {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .logo-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            
+            .logo-option {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .logo-option {
+                width: 70px;
+                height: 70px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -549,7 +621,7 @@
             <div class="apparel-layout">
                 <div class="apparel-main">
                     <div class="merch-image-container">
-                    <img src="assets/sept22edits/websiteimagedata/clothes/noyesboyshats.jpg" alt="Toque">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/noyesboyshats.jpg" alt="Toque">
                     </div>
                     <div class="merch-content">
                         <div class="merch-title">Custom Strain Toque</div>
@@ -591,30 +663,28 @@
                 <div class="apparel-options">
                     <div class="options-title">Strain Art Options</div>
                     <div class="logo-grid">
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/alienizedskunk.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/blueberryskunk.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/bluerryfingers.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/bubbanoyes.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/captainnoyes (2).jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/captainnoyes.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/cheetosfingers.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/cheetosfingers (2).jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/noyesog.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/rainbowskunk.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/noyespoison.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkbreath.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkcake.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkcapone.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkface.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/stink.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/strainnamelist.jpg" alt="Toque"></div>
-
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/alienizedskunk.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/blueberryskunk.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/bluerryfingers.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/bubbanoyes.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/captainnoyes (2).jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/captainnoyes.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/cheetosfingers.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/cheetosfingers (2).jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/noyesog.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/rainbowskunk.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/noyespoison.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkbreath.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkcake.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkcapone.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkface.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/stink.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/strainnamelist.jpg" alt="Design"></div>
                     </div>
-                    <p style="color: #666; font-size: 0.9rem; text-align: center;">Select from 20+ unique strain designs with high-quality embroidery.</p>
+                    <p style="color: #666; font-size: 0.9rem; text-align: center;">High-quality screen printing on 100% cotton.</p>
                 </div>
             </div>
         </div>
-
         <!-- T-Shirts -->
         <div class="section-container">
             <div class="section-header">
@@ -623,14 +693,15 @@
             <div class="apparel-layout">
                 <div class="apparel-main">
                     <div class="merch-image-container">
-                    <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt1.png" alt="tshirt">
-                    <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt2.png" alt="tshirt">
-                    <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt3.png" alt="tshirt">
-                    <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt4.png" alt="tshirt">
-                    <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt5.png" alt="tshirt">
-                    <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt6.png" alt="tshirt">
-                    <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt7.png" alt="tshirt">
-
+                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt1.png" alt="T-shirt">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt2.png" alt="T-shirt">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt3.png" alt="T-shirt">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt4.png" alt="T-shirt">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt5.png" alt="T-shirt">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt6.png" alt="T-shirt">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt7.png" alt="T-shirt">
+                    </div>
+                    <div class="merch-content">
                         <div class="merch-title">Custom Strain T-Shirt</div>
                         <div class="merch-description">Premium cotton t-shirts featuring vibrant strain artwork. Available in sizes S-3XL.</div>
                         <div class="merch-options">
@@ -679,29 +750,28 @@
                 <div class="apparel-options">
                     <div class="options-title">Design Previews</div>
                     <div class="logo-grid">
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/alienizedskunk.jpg" alt="TSHIRT"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/blueberryskunk.jpg" alt="TSHIRT"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/bluerryfingers.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/bubbanoyes.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/captainnoyes (2).jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/captainnoyes.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/cheetosfingers.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/cheetosfingers (2).jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/noyesog.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/rainbowskunk.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/noyespoison.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkbreath.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkcake.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkcapone.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkface.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/stink.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/strainnamelist.jpg" alt="Toque"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/alienizedskunk.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/blueberryskunk.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/bluerryfingers.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/bubbanoyes.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/captainnoyes (2).jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/captainnoyes.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/cheetosfingers.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/cheetosfingers (2).jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/noyesog.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/rainbowskunk.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/noyespoison.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkbreath.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkcake.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkcapone.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkface.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/stink.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/strainnamelist.jpg" alt="Design"></div>
                     </div>
-                    <p style="color: #666; font-size: 0.9rem; text-align: center;">High-quality screen printing on 100% cotton.</p>
+                    <p style="color: #666; font-size: 0.9rem; text-align: center;">Select from 20+ unique strain designs with high-quality embroidery.</p>
                 </div>
             </div>
         </div>
-
         <!-- Sweaters -->
         <div class="section-container">
             <div class="section-header">
@@ -710,10 +780,12 @@
             <div class="apparel-layout">
                 <div class="apparel-main">
                     <div class="merch-image-container">
-                    <img src="assets/sept22edits/websiteimagedata/clothes/sweater3.jpg" alt="tshirt">
-                    <img src="assets/sept22edits/websiteimagedata/clothes/sweater4.jpg" alt="clothes">
-                    <img src="assets/sept22edits/websiteimagedata/clothes/sweater1.jpg" alt="sweater">
-                    <img src="assets/sept22edits/websiteimagedata/clothes/sweater2.jpg" alt="swag">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/sweater3.jpg" alt="Sweater">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/sweater4.jpg" alt="Sweater">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/sweater1.jpg" alt="Sweater">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/sweater2.jpg" alt="Sweater">
+                    </div>
+                    <div class="merch-content">
                         <div class="merch-title">Premium Strain Sweater</div>
                         <div class="merch-description">Luxury hooded sweaters featuring detailed strain artwork. Premium fleece blend for ultimate comfort.</div>
                         <div class="merch-options">
@@ -762,21 +834,259 @@
                 <div class="apparel-options">
                     <div class="options-title">Sweater Designs</div>
                     <div class="logo-grid">
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/alienizedskunk.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/blueberryskunk.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/bluerryfingers.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/bubbanoyes.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/captainnoyes (2).jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/captainnoyes.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/cheetosfingers.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/cheetosfingers (2).jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/noyesog.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/rainbowskunk.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/noyespoison.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkbreath.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkcake.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkcapone.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkface.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/stink.jpg" alt="Toque"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/strainnamelist.jpg" alt="Toque"></div>
-                    </div
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/alienizedskunk.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/blueberryskunk.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/bluerryfingers.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/bubbanoyes.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/captainnoyes (2).jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/captainnoyes.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/cheetosfingers.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/cheetosfingers (2).jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/noyesog.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/rainbowskunk.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/noyespoison.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkbreath.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkcake.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkcapone.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkface.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/stink.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/strainnamelist.jpg" alt="Design"></div>
+                    </div>
+                    <p style="color: #666; font-size: 0.9rem; text-align: center;">Premium embroidered designs on high-quality fleece.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="cart-modal">
+        <div class="cart-modal-content">
+            <span class="cart-close" onclick="closeCart()">&times;</span>
+            <h2 style="margin-bottom: 1rem; color: #2d5a2d;">Shopping Cart</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total">
+                <h3 style="color: #2d5a2d;">Total: <span id="cartTotal">$0.00 CAD</span></h3>
+                <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let cartCount = 0;
+
+        function updateCartDisplay() {
+            document.getElementById('cartCount').textContent = cartCount;
+        }
+
+        function addMerchToCart(type) {
+            const strainSelect = document.getElementById(type + '-strain');
+            const colorSelect = document.getElementById(type + '-color');
+            const sizeSelect = document.getElementById(type + '-size');
+            
+            let price = parseFloat(strainSelect.options[strainSelect.selectedIndex].dataset.price);
+            if (colorSelect.value === 'custom') {
+                price += 10;
+            }
+
+            const item = {
+                type: type,
+                strain: strainSelect.options[strainSelect.selectedIndex].text,
+                color: colorSelect.options[colorSelect.selectedIndex].text,
+                size: sizeSelect ? sizeSelect.options[sizeSelect.selectedIndex].text : null,
+                price: price,
+                quantity: 1
+            };
+
+            cart.push(item);
+            cartCount++;
+            updateCartDisplay();
+            alert('Item added to cart!');
+        }
+
+        function openCart() {
+            const modal = document.getElementById('cartModal');
+            const cartItems = document.getElementById('cartItems');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+            } else {
+                let cartHTML = '';
+                let total = 0;
+                
+                cart.forEach((item, index) => {
+                    cartHTML += `
+                        <div class="cart-item">
+                            <div class="cart-item-info">
+                                <div class="cart-item-name">${item.type.charAt(0).toUpperCase() + item.type.slice(1)} - ${item.strain}</div>
+                                <div class="cart-item-variant">Color: ${item.color}${item.size ? ', Size: ' + item.size : ''}</div>
+                            </div>
+                            <div class="cart-item-controls">
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                                    <span class="quantity-display">${item.quantity}</span>
+                                    <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                                </div>
+                                <div style="font-weight: bold; color: #e74c3c;">${(item.price * item.quantity).toFixed(2)}</div>
+                                <button class="remove-item" onclick="removeItem(${index})">Remove</button>
+                            </div>
+                        </div>
+                    `;
+                    total += item.price * item.quantity;
+                });
+                
+                cartItems.innerHTML = cartHTML;
+                document.getElementById('cartTotal').textContent = ' + total.toFixed(2) + 'CAD';
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function closeCart() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        function updateQuantity(index, change) {
+            cart[index].quantity += change;
+            if (cart[index].quantity <= 0) {
+                removeItem(index);
+            } else {
+                openCart(); // Refresh cart display
+            }
+        }
+
+        function removeItem(index) {
+            cartCount -= cart[index].quantity;
+            cart.splice(index, 1);
+            updateCartDisplay();
+            openCart(); // Refresh cart display
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            alert('Checkout functionality would be implemented here. Please contact us to place your order!');
+        }
+
+        // Update price display when options change
+        ['toque', 'tshirt', 'sweater'].forEach(type => {
+            const colorSelect = document.getElementById(type + '-color');
+            const strainSelect = document.getElementById(type + '-strain');
+            
+            if (colorSelect && strainSelect) {
+                [colorSelect, strainSelect].forEach(select => {
+                    select.addEventListener('change', () => {
+                        let basePrice = parseFloat(strainSelect.options[strainSelect.selectedIndex].dataset.price);
+                        let finalPrice = basePrice;
+                        
+                        if (colorSelect.value === 'custom') {
+                            finalPrice += 10;
+                        }
+                        
+                        document.getElementById(type + '-price').textContent = ' + finalPrice.toFixed(2) + 'CAD';
+                    });
+                });
+            }
+        });
+
+        // Close cart when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('cartModal');
+            if (event.target == modal) {
+                closeCart();
+            }
+        }
+    </script>
+</body>
+</html> class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/blueberryskunk.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/bluerryfingers.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/bubbanoyes.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/captainnoyes (2).jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/captainnoyes.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/cheetosfingers.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/cheetosfingers (2).jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/noyesog.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/rainbowskunk.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/noyespoison.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkbreath.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkcake.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkcapone.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/skunkface.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/stink.jpg" alt="Design"></div>
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/strainnamelist.jpg" alt="Design"></div>
+                    </div>
+                    <p style="color: #666; font-size: 0.9rem; text-align: center;">Select from 20+ unique strain designs with high-quality embroidery.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- T-Shirts -->
+        <div class="section-container">
+            <div class="section-header">
+                <h3>T-Shirts - $60 CAD</h3>
+            </div>
+            <div class="apparel-layout">
+                <div class="apparel-main">
+                    <div class="merch-image-container">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt1.png" alt="T-shirt">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt2.png" alt="T-shirt">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt3.png" alt="T-shirt">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt4.png" alt="T-shirt">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt5.png" alt="T-shirt">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt6.png" alt="T-shirt">
+                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt7.png" alt="T-shirt">
+                    </div>
+                    <div class="merch-content">
+                        <div class="merch-title">Custom Strain T-Shirt</div>
+                        <div class="merch-description">Premium cotton t-shirts featuring vibrant strain artwork. Available in sizes S-3XL.</div>
+                        <div class="merch-options">
+                            <label>Select Strain Design:</label>
+                            <select class="merch-select" id="tshirt-strain">
+                                <option value="purple-rainbow" data-price="60">Purple Rainbow</option>
+                                <option value="rainbow-cakes" data-price="60">Rainbow Cakes</option>
+                                <option value="cake-breath" data-price="60">Cake Breath</option>
+                                <option value="alienoyes-kush" data-price="60">Alienoyes Kush</option>
+                                <option value="mangonoyes-kush" data-price="60">Mangonoyes Kush</option>
+                                <option value="citronoyes-kush" data-price="60">Citronoyes Kush</option>
+                                <option value="noyes-haze" data-price="60">Noyes Haze</option>
+                                <option value="noyes-breath" data-price="60">Noyes Breath</option>
+                                <option value="meat-cakes" data-price="60">Meat Cakes</option>
+                                <option value="biscotti-rocks" data-price="60">Biscotti Rocks</option>
+                                <option value="yesno-kush" data-price="60">YesNo Kush</option>
+                                <option value="shiny-rocks" data-price="60">Shiny Rocks</option>
+                                <option value="noyes-rocks" data-price="60">Noyes Rocks</option>
+                                <option value="noyes-pebbles" data-price="60">Noyes Pebbles</option>
+                                <option value="mango-rocks" data-price="60">Mango Rocks</option>
+                                <option value="citrus-pebbles" data-price="60">Citrus Pebbles</option>
+                                <option value="citrus-rocks" data-price="60">Citrus Rocks</option>
+                                <option value="alien-rocks" data-price="60">Alien Rocks</option>
+                                <option value="citrus-haze-breath" data-price="60">Citrus Haze Breath</option>
+                                <option value="mango-aliens" data-price="60">Mango Aliens</option>
+                            </select>
+                            <label>Size:</label>
+                            <select class="merch-select" id="tshirt-size">
+                                <option value="small">Small</option>
+                                <option value="medium">Medium</option>
+                                <option value="large">Large</option>
+                                <option value="xl">X-Large</option>
+                                <option value="2xl">2X-Large</option>
+                                <option value="3xl">3X-Large</option>
+                            </select>
+                            <label>Color:</label>
+                            <select class="merch-select" id="tshirt-color">
+                                <option value="black">Black</option>
+                                <option value="custom">Custom Color (+$10)</option>
+                            </select>
+                        </div>
+                        <div class="price-display" id="tshirt-price">$60.00 CAD</div>
+                        <button class="order-button" onclick="addMerchToCart('tshirt')">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="apparel-options">
+                    <div class="options-title">Design Previews</div>
+                    <div class="logo-grid">
+                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/sweater images/alienizedskunk.jpg" alt="Design"></div>
+                        <div
