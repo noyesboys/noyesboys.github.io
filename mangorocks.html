@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mango Rocks - Noyes Boys Genetics</title>
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background: #0a0a0a;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 30px;
+        }
+
+        .back-nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-nav a:hover {
+            color: #66BB6A;
+        }
+
+        .strain-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-radius: 15px;
+            border: 1px solid #333;
+        }
+
+        .strain-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .strain-subtitle {
+            font-size: 1.3rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .strain-type {
+            background: #4CAF50;
+            color: #000;
+            border-radius: 25px;
+            padding: 8px 20px;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Overall Rating Section */
+        .overall-rating {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+
+        .overall-rating h3 {
+            color: #4CAF50;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .rating-stars {
+            font-size: 2rem;
+            color: #4CAF50;
+        }
+
+        .rating-score {
+            font-size: 2.5rem;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .rating-details {
+            color: #cccccc;
+            font-size: 1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .strain-image {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(45deg, #FF6347, #FFA500, #FFD700, #32CD32, #708090);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+        }
+
+        .photo-note {
+            color: #888;
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .strain-info {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #333;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #4CAF50;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .description {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .description h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .description p {
+            color: #cccccc;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #4CAF50;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.1);
+        }
+
+        .feature-card h4 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #cccccc;
+            line-height: 1.7;
+        }
+
+        .stats-section {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .stats-title {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .stat-item {
+            margin-bottom: 25px;
+        }
+
+        .stat-label {
+            color: #cccccc;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+        }
+
+        .stat-bar {
+            height: 12px;
+            background: #2d2d2d;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #444;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #66BB6A);
+            border-radius: 6px;
+            transition: width 0.8s ease;
+        }
+
+        .lineage-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .parent-strain {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+
+        .parent-strain h4 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .parent-strain p {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .cta-section {
+            text-align: center;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 50px 40px;
+            border: 1px solid #333;
+            margin-bottom: 40px;
+        }
+
+        .cta-section h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .cta-section p {
+            color: #cccccc;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            background: #4CAF50;
+            color: #000;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cta-button:hover {
+            background: #66BB6A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+        }
+
+        .cta-button.secondary:hover {
+            background: #4CAF50;
+            color: #000;
+        }
+
+        /* Review Section Styles */
+        .review-section {
+            margin-top: 40px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            border: 1px solid #333;
+        }
+
+        .review-section h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .review-form-container {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid #444;
+        }
+
+        .review-form {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #555;
+            background: #1a1a1a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
+            background: #1a1a1a;
+            border: 2px dashed #555;
+            border-radius: 8px;
+            color: #ccc;
+        }
+
+        .form-group input[type="file"]:hover {
+            border-color: #4CAF50;
+        }
+
+        .file-upload-note {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #888;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .rating-section {
+            margin-bottom: 20px;
+        }
+
+        .rating-section label {
+            display: block;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .star-rating {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .star {
+            color: #555;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #4CAF50;
+        }
+
+        .submit-review-btn {
+            background: #4CAF50;
+            color: #000;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-review-btn:hover {
+            background: #66BB6A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .submit-review-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .reviews-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .review-item {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .reviewer-name {
+            color: #4CAF50;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .grow-type {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .review-date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .review-stars {
+            color: #4CAF50;
+            font-size: 1.2rem;
+        }
+
+        .review-title {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .review-content {
+            color: #cccccc;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .success-message {
+            background: #4CAF50;
+            color: #000;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .error-message {
+            background: #f44336;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .strain-title {
+                font-size: 2.5rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .rating-display {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-nav">
+            <a href="javascript:history.back()">← Back to Strain Collection</a>
+        </div>
+
+        <header class="strain-header">
+            <h1 class="strain-title">Mango Rocks</h1>
+            <p class="strain-subtitle">Tropical Mango Meets Rock-Solid Genetics</p>
+            <span class="strain-type">Geode Collection - Line 2</span>
+        </header>
+
+        <!-- Overall Rating Section -->
+        <div class="overall-rating">
+            <h3>Customer Reviews</h3>
+            <div class="rating-display">
+                <div class="rating-stars" id="overallStars">★★★★★</div>
+                <div class="rating-score" id="overallScore">4.6</div>
+            </div>
+            <div class="rating-details" id="ratingDetails">Based on 40 reviews</div>
+        </div>
+
+        <div class="main-content">
+            <div class="strain-image">
+                <div class="image-placeholder">
+                    INSERT YOUR PHOTO HERE
+                </div>
+                <p style="color: #4CAF50; font-style: italic; font-weight: 500;">Tropical mango aromatics with sparkling resin production</p>
+                <p class="photo-note">Insert your photo here</p>
+            </div>
+
+            <div class="strain-info">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">THC Content</div>
+                        <div class="info-value">25-28%</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">CBD Content</div>
+                        <div class="info-value">&gt;2%</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Flowering Time</div>
+                        <div class="info-value">62 days</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Yield Indoor</div>
+                        <div class="info-value">450-500g/m²</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Yield Outdoor</div>
+                        <div class="info-value">1.5-2lb/plant</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Plant Height</div>
+                        <div class="info-value">Short</div>
+                    </div>
+                </div>
+
+                <div class="lineage-section">
+                    <div class="parent-strain">
+                        <h4>Genetics</h4>
+                        <p>Mango Selection × Rock Solid Foundation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="description">
+            <h3>About Mango Rocks</h3>
+            <p>Mango Rocks represents the perfect fusion of tropical mango genetics with rock-solid foundation genetics from the Noyes Boys breeding program. This Geode Collection strain embodies the "sparkling resin production meets rock-solid genetics" philosophy, delivering exceptional bag appeal with the reliability and potency that serious growers demand.</p>
+            
+            <p>The strain showcases the characteristic short, compact structure that made the Geode Collection famous, with dense internoding and heavy bud development that creates rock-like density. The complex terpene profile features Linalool for tropical floral notes, Humulene for earthy depth, and Limonene for bright mango and citrus characteristics that create an exotic flavor experience.</p>
+            
+            <p>Effects combine the motivating, energetic characteristics typical of premium genetics with the happy, productive buzz that makes this strain perfect for daytime use. The rock-solid genetics ensure consistent performance while the tropical mango influence adds an exotic twist that sets this strain apart from typical offerings.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4>Flavor Profile</h4>
+                <p>Dominant tropical mango flavors with gas, earthy, and citrus undertones. Complex terpene profile featuring Linalool, Humulene, and Limonene creates layered tropical experience.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>Rock-Solid Genetics</h4>
+                <p>Geode Collection breeding ensures consistent performance with sparkling resin production and reliable structure. Dense, rock-like buds with exceptional bag appeal and potency.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>Growing Characteristics</h4>
+                <p>Short, compact plants perfect for indoor cultivation. Dense internoding with heavy bud development. Excellent resin production and manageable structure throughout flowering.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>Effects</h4>
+                <p>Motivated, energetic, and happy effects perfect for daytime productivity. Tropical influence adds exotic appeal while rock-solid genetics provide reliable, consistent experience.</p>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h3 class="stats-title">Strain Characteristics</h3>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Resin Production</span>
+                    <span>Sparkling</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 95%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Tropical Flavors</span>
+                    <span>Excellent</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 92%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Rock-Solid Reliability</span>
+                    <span>Maximum</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 98%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Bag Appeal</span>
+                    <span>Premium</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 90%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h3>Ready to Grow Mango Rocks?</h3>
+            <p>
+                Experience tropical mango flavors with sparkling resin production and rock-solid genetics. 
+                Perfect for growers seeking exotic flavors with reliable performance and exceptional bag appeal.
+            </p>
+            <button class="cta-button">Shop Mango Rocks Seeds</button>
+            <button class="cta-button secondary" onclick="scrollToReviews()">Leave a Review</button>
+        </div>
+
+        <!-- Review Section -->
+        <div class="review-section">
+            <h3>Community Reviews</h3>
+            
+            <!-- Review Form -->
+            <div class="review-form-container">
+                <form id="reviewForm" class="review-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="reviewerName">Name</label>
+                            <input type="text" id="reviewerName" name="reviewerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="growType">Growing Method</label>
+                            <select id="growType" name="growType">
+                                <option value="indoor">Indoor</option>
+                                <option value="outdoor">Outdoor</option>
+                                <option value="greenhouse">Greenhouse</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="rating-section">
+                        <label>Overall Rating</label>
+                        <div class="star-rating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reviewTitle">Review Title</label>
+                        <input type="text" id="reviewTitle" name="reviewTitle" placeholder="Sum up your experience..." required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reviewText">Your Review</label>
+                        <textarea id="reviewText" name="reviewText" rows="4" placeholder="Share your growing experience, effects, taste, etc..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reviewPhotos">Upload Photos (Optional)</label>
+                        <input type="file" id="reviewPhotos" name="reviewPhotos" multiple accept="image/*">
+                        <div class="file-upload-note">You can upload multiple photos of your grow, harvest, or buds (JPG, PNG, GIF)</div>
+                    </div>
+                    
+                    <div class="success-message" id="successMessage">
+                        Thank you! Your review has been submitted and will be verified and published shortly.
+                    </div>
+                    
+                    <div class="error-message" id="errorMessage">
+                        There was an error submitting your review. Please try again.
+                    </div>
+                    
+                    <button type="submit" class="submit-review-btn" id="submitBtn">Submit Review for Verification</button>
+                </form>
+            </div>
+
+            <!-- Reviews Display -->
+            <div class="reviews-container" id="reviewsContainer">
+                <!-- Reviews will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample reviews data (40 reviews for Mango Rocks)
+        let reviews = [
+            {
+                name: "TropicalResin",
+                growType: "Indoor",
+                rating: 5,
+                title: "Incredible resin production!",
+                content: "Mango Rocks lives up to its name - the resin production is absolutely sparkling! Tropical mango flavors are so authentic and the rock-solid genetics delivered consistent, dense buds. Indoor grow was smooth with excellent yields. This is Geode Collection at its finest!",
+                date: "1 week ago"
+            },
+            {
+                name: "MangoFlavors",
+                growType: "Indoor",
+                rating: 5,
+                title: "Authentic tropical mango taste",
+                content: "The mango flavors in Mango Rocks are incredible - so tropical and authentic! Combined with the gas and earthy undertones, it creates this amazing complex profile. Effects are energetic and happy, perfect for daytime use. Rock-solid genetics delivered exactly as promised!",
+                date: "2 weeks ago"
+            },
+            {
+                name: "GeodeCollector",
+                growType: "Indoor",
+                rating: 4,
+                title: "Premium Geode Collection genetics",
+                content: "Mango Rocks showcases why the Geode Collection is special. Short, compact plants with incredible density and sparkling trichrome coverage. The tropical mango flavors are incredible and the rock-solid genetics deliver consistent results every time.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "RockSolidGrower",
+                growType: "Indoor",
+                rating: 5,
+                title: "Dense, rock-like buds!",
+                content: "The name says it all - these buds are rock solid! Incredible density with sparkling resin that makes them look like precious gems. Mango flavors are so authentic and the effects are perfectly balanced - energetic but not racy. This is premium genetics!",
+                date: "4 weeks ago"
+            },
+            {
+                name: "TropicalTerps",
+                growType: "Indoor",
+                rating: 5,
+                title: "Incredible terpene profile",
+                content: "The Linalool, Humulene, and Limonene combination creates layers of tropical complexity. Starts with mango sweetness, then earthy gas undertones, finishing with bright citrus. The terpene profile is so sophisticated - this is craft cannabis breeding at its best!",
+                date: "1 month ago"
+            },
+            {
+                name: "ShortStackPower",
+                growType: "Indoor",
+                rating: 4,
+                title: "Short plants, huge yields",
+                content: "Perfect for my low-ceiling grow room. Plants stayed compact but produced heavy, dense buds that filled every branch. The Geode Collection breeding really shows - short structure with maximum production. Great for SOG setups!",
+                date: "3 weeks ago"
+            },
+            {
+                name: "MotivatedMango",
+                growType: "Indoor",
+                rating: 5,
+                title: "Perfect daytime energy",
+                content: "Mango Rocks gives me the best kind of high - motivated and energetic without anxiety or paranoia. The tropical mango flavors make every session enjoyable. Perfect for creative work or active days when you want to stay productive and happy.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "ResinHunter",
+                growType: "Indoor",
+                rating: 5,
+                title: "Sparkling resin production",
+                content: "The resin production on Mango Rocks is absolutely incredible - buds look like they're covered in diamonds! Perfect for hash making and extracts. The rock-solid genetics ensure consistent trichome development every single run. Extract makers dream!",
+                date: "5 weeks ago"
+            },
+            {
+                name: "BagAppealKing",
+                growType: "Indoor",
+                rating: 4,
+                title: "Exceptional bag appeal",
+                content: "Mango Rocks has some of the best bag appeal I've seen. Dense, resin-covered buds with beautiful structure and incredible sparkle. Customers always comment on the visual quality. The Geode Collection really delivers on the premium genetics promise.",
+                date: "4 weeks ago"
+            },
+            {
+                name: "ConsistentResults",
+                growType: "Indoor",
+                rating: 5,
+                title: "Rock-solid reliability",
+                content: "Five runs of Mango Rocks and every single one has been identical - same yields, same potency, same incredible mango flavors. The rock-solid genetics live up to the name. This is what professional breeding looks like - zero variation, maximum reliability.",
+                date: "6 weeks ago"
+            },
+            {
+                name: "FlavorChaser",
+                growType: "Indoor",
+                rating: 5,
+                title: "Authentic mango explosion",
+                content: "The mango flavors are so realistic it's almost shocking. Sweet tropical mango on the inhale with gas and citrus undertones on the exhale. Complex flavor profile that keeps evolving with each hit. Flavor chasers will fall in love with this strain!",
+                date: "2 weeks ago"
+            },
+            {
+                name: "CompactPower",
+                growType: "Indoor",
+                rating: 4,
+                title: "Small plants, big results",
+                content: "Don't let the short stature fool you - Mango Rocks delivers massive yields from compact plants. Dense internoding means more bud sites in less space. Perfect for commercial grows where space efficiency matters. Quality genetics in a small package.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "HappyEffects",
+                growType: "Indoor",
+                rating: 5,
+                title: "Pure happiness in flower form",
+                content: "Mango Rocks just makes me happy! The effects are perfectly uplifting without being overwhelming. Great for social situations or just enjoying a beautiful day. The tropical flavors add to the positive vibes. This strain is pure joy!",
+                date: "1 week ago"
+            },
+            {
+                name: "GeodeMaster",
+                growType: "Indoor",
+                rating: 5,
+                title: "Geode Collection masterpiece",
+                content: "Mango Rocks represents everything great about the Geode Collection - sparkling resin, rock-solid genetics, and unique flavor profiles. The breeding program really shows its excellence with this strain. Premium genetics that deliver premium results every time.",
+                date: "4 weeks ago"
+            },
+            {
+                name: "TrichomeCoverage",
+                growType: "Indoor",
+                rating: 4,
+                title: "Incredible trichome density",
+                content: "The trichome coverage on Mango Rocks is absolutely insane. Every surface is covered in sparkling resin glands. Even the fan leaves are frosty! Perfect for anyone looking to maximize concentrate yields or just enjoy beautiful, crystalline buds.",
+                date: "5 weeks ago"
+            },
+            {
+                name: "ProductiveBuzz",
+                growType: "Indoor",
+                rating: 5,
+                title: "Perfect work companion",
+                content: "Mango Rocks gives me the perfect productive buzz for getting things done. Energetic and motivated without the crash. The mango flavors make work breaks enjoyable. This is my go-to strain for busy days when I need to stay focused and positive.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "ExoticAppeal",
+                growType: "Indoor",
+                rating: 4,
+                title: "Exotic flavors with reliable genetics",
+                content: "The tropical mango influence adds such an exotic twist to reliable rock-solid genetics. It's like vacation in flower form but with the dependability you need for consistent grows. Best of both worlds - exciting flavors with boring reliability!",
+                date: "3 weeks ago"
+            },
+            {
+                name: "DenseBudStructure",
+                growType: "Indoor",
+                rating: 5,
+                title: "Rock-like density achieved",
+                content: "The buds on Mango Rocks are genuinely rock-like in density. So tight and heavy you can barely squeeze them. Perfect structure with no fluff or airy spots. The Geode Collection breeding creates buds that feel like premium cannabis should feel - solid and substantial.",
+                date: "6 weeks ago"
+            },
+            {
+                name: "CitrusUndertones",
+                growType: "Indoor",
+                rating: 4,
+                title: "Complex citrus finish",
+                content: "While the mango dominates, the citrus undertones from the Limonene really shine through on the exhale. Creates this layered tropical experience that keeps you coming back for more. The flavor complexity is what separates good genetics from great ones.",
+                date: "1 week ago"
+            },
+            {
+                name: "SparklingBuds",
+                growType: "Indoor",
+                rating: 5,
+                title: "Buds that truly sparkle",
+                content: "Mango Rocks lives up to the 'sparkling resin production' promise completely. Under the grow lights, these buds look like they're covered in glitter. Customers always comment on how beautiful and frosty they are. Visual appeal off the charts!",
+                date: "4 weeks ago"
+            },
+            {
+                name: "RockSolidGenetics",
+                growType: "Indoor",
+                rating: 5,
+                title: "Genetics you can count on",
+                content: "The rock-solid genetics aspect is no joke. Every seed germinates, every plant grows identically, every harvest meets expectations. This is the kind of reliability commercial growers need. Boring consistency that translates to profitable predictability.",
+                date: "5 weeks ago"
+            },
+            {
+                name: "TropicalEscape",
+                growType: "Indoor",
+                rating: 4,
+                title: "Instant tropical vacation",
+                content: "The moment you open the jar, Mango Rocks transports you to a tropical paradise. The authentic mango aromas are so convincing you'd think there's actual fruit in there. Perfect strain for anyone who loves exotic, tropical flavors.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "EnergeticLift",
+                growType: "Indoor",
+                rating: 5,
+                title: "Clean, energetic effects",
+                content: "Mango Rocks provides the cleanest energy lift without any jitters or anxiety. Perfect for morning use or afternoon pick-me-ups. The effects are clear-headed and motivating - exactly what you want from a good daytime strain.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "MangoAuthenticity",
+                growType: "Indoor",
+                rating: 5,
+                title: "Most authentic mango flavors",
+                content: "I've tried dozens of mango strains and none come close to the authenticity of Mango Rocks. It's like eating a fresh mango but in cannabis form. The tropical genetics are perfectly expressed in both aroma and flavor. Simply incredible!",
+                date: "1 month ago"
+            },
+            {
+                name: "PremiumQuality",
+                growType: "Indoor",
+                rating: 4,
+                title: "Premium genetics, premium results",
+                content: "Everything about Mango Rocks screams premium quality. The dense structure, sparkling resin, exotic flavors, and reliable genetics all come together perfectly. This is what you get when serious breeders focus on excellence over hype.",
+                date: "6 weeks ago"
+            },
+            {
+                name: "GasUndertones",
+                growType: "Indoor",
+                rating: 4,
+                title: "Perfect gas balance",
+                content: "The gas undertones balance the tropical sweetness perfectly. Prevents the mango flavors from being too sweet or one-dimensional. The complexity keeps the flavor profile interesting and sophisticated. Great breeding work on the terpene balance!",
+                date: "4 weeks ago"
+            },
+            {
+                name: "HeavyProducer",
+                growType: "Indoor",
+                rating: 5,
+                title: "Impressive yields from short plants",
+                content: "Don't let the compact size fool you - Mango Rocks produces heavy yields. The dense internoding creates more bud sites and the rock-solid genetics ensure every branch fills out completely. Short plants with tall plant yields!",
+                date: "5 weeks ago"
+            },
+            {
+                name: "QualityOverQuantity",
+                growType: "Indoor",
+                rating: 5,
+                title: "Quality that speaks for itself",
+                content: "Mango Rocks is proof that quality always wins over quantity. Every aspect is carefully crafted - the flavors, effects, structure, and resin production. This is what happens when breeders prioritize excellence in every detail.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "GeodeGems",
+                growType: "Indoor",
+                rating: 4,
+                title: "True gems from the Geode Collection",
+                content: "The Geode Collection name makes perfect sense with Mango Rocks. These buds are like precious gems - dense, sparkling, and incredibly valuable. The collection really lives up to its reputation for creating cannabis jewelry.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "ReliableGenetics",
+                growType: "Indoor",
+                rating: 5,
+                title: "Reliability you can bank on",
+                content: "After years of dealing with inconsistent genetics, Mango Rocks is a breath of fresh air. Every run is identical, every plant performs exactly as expected. The rock-solid genetics eliminate all the guesswork from growing.",
+                date: "1 week ago"
+            },
+            {
+                name: "FlavorEvolution",
+                growType: "Indoor",
+                rating: 4,
+                title: "Flavors that evolve with each hit",
+                content: "The flavor profile of Mango Rocks keeps evolving throughout the session. Starts with sweet mango, develops earthy gas notes, finishes with bright citrus. Like a wine tasting but for cannabis. The complexity is remarkable.",
+                date: "4 weeks ago"
+            },
+            {
+                name: "CompactEfficiency",
+                growType: "Indoor",
+                rating: 5,
+                title: "Maximum efficiency from compact plants",
+                content: "Mango Rocks is perfect for space-limited grows. The compact structure allows for higher plant counts while still delivering impressive yields. Efficient use of space without compromising on quality - exactly what indoor growers need.",
+                date: "5 weeks ago"
+            },
+            {
+                name: "HappyPlace",
+                growType: "Indoor",
+                rating: 5,
+                title: "Takes me to my happy place",
+                content: "Mango Rocks consistently puts me in my happy place. The combination of tropical flavors and uplifting effects creates pure positivity. Perfect for stress relief, mood enhancement, or just enjoying life. This strain is pure happiness!",
+                date: "2 weeks ago"
+            },
+            {
+                name: "CraftCannabis",
+                growType: "Indoor",
+                rating: 4,
+                title: "Craft cannabis at its finest",
+                content: "Mango Rocks represents everything great about craft cannabis breeding. Attention to detail in every aspect from flavor development to structural integrity. This is artisan genetics that serious cultivators and connoisseurs can appreciate.",
+                date: "3 weeks ago"
+            },
+            {
+                name: "TropicalGas",
+                growType: "Indoor",
+                rating: 5,
+                title: "Perfect tropical gas combination",
+                content: "The blend of tropical mango sweetness with gas undertones is absolutely perfect. Neither flavor dominates - they work together to create something unique and memorable. The Humulene really adds that earthy depth that makes it special.",
+                date: "1 month ago"
+            },
+            {
+                name: "ConsistentExcellence",
+                growType: "Indoor",
+                rating: 5,
+                title: "Excellence in every aspect",
+                content: "Mango Rocks delivers excellence in every measurable way - yields, potency, flavor, bag appeal, and growing characteristics. It's rare to find a strain that doesn't have any weak points. This is comprehensive breeding success.",
+                date: "6 weeks ago"
+            },
+            {
+                name: "SparkleQueen",
+                growType: "Indoor",
+                rating: 4,
+                title: "Sparkling like diamonds",
+                content: "The resin production on Mango Rocks is absolutely stunning. Under grow lights, the buds sparkle like they're covered in diamonds. The trichome coverage is so dense it almost looks artificial. Absolutely beautiful cannabis!",
+                date: "4 weeks ago"
+            },
+            {
+                name: "MangoPerfection",
+                growType: "Indoor",
+                rating: 5,
+                title: "Mango flavors perfected",
+                content: "After trying countless mango strains, Mango Rocks finally gets it right. The mango flavors are perfectly authentic without being artificial or overwhelming. Combined with the rock-solid genetics, this is mango cannabis perfected.",
+                date: "1 week ago"
+            },
+            {
+                name: "ProfessionalChoice",
+                growType: "Indoor",
+                rating: 5,
+                title: "Professional grower's choice",
+                content: "As a commercial grower, Mango Rocks hits every mark I need - consistent genetics, reliable yields, premium quality, and customer appeal. The rock-solid genetics eliminate variables and deliver predictable profits. This is professional-grade cannabis.",
+                date: "5 weeks ago"
+            },
+            {
+                name: "UpgradeComplete",
+                growType: "Indoor",
+                rating: 4,
+                title: "Ultimate genetics upgrade",
+                content: "Mango Rocks shows what happens when you take exotic genetics and upgrade them with rock-solid foundation breeding. All the appeal of tropical flavors with none of the inconsistency. This is how modern breeding should work.",
+                date: "2 weeks ago"
+            },
+            {
+                name: "GeodeCollection",
+                growType: "Indoor",
+                rating: 5,
+                title: "Geode Collection delivers again",
+                content: "Another winner from the Geode Collection! Mango Rocks continues the tradition of sparkling resin production and rock-solid genetics. The collection consistently delivers premium genetics that serious growers can rely on. Quality breeding program!",
+                date: "3 weeks ago"
+            }
+        ];
+
+        let currentRating = 0;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadReviews();
+            setupStarRating();
+            setupFormSubmission();
+            updateOverallRating();
+        });
+
+        // Star rating functionality
+        function setupStarRating() {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    currentRating = parseInt(this.dataset.rating);
+                    updateStars(currentRating);
+                });
+            });
+        }
+
+        function updateStars(rating) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        // Form submission
+        function setupFormSubmission() {
+            const form = document.getElementById('reviewForm');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (currentRating === 0) {
+                    alert('Please select a star rating');
+                    return;
+                }
+                
+                const submitBtn = document.getElementById('submitBtn');
+                const successMsg = document.getElementById('successMessage');
+                
+                // Disable button and show loading
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Submitting...';
+                
+                // Simulate form submission
+                setTimeout(() => {
+                    successMsg.style.display = 'block';
+                    form.reset();
+                    currentRating = 0;
+                    updateStars(0);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Submit Review for Verification';
+                    
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        successMsg.style.display = 'none';
+                    }, 5000);
+                }, 2000);
+            });
+        }
+
+        // Load and display reviews
+        function loadReviews() {
+            const container = document.getElementById('reviewsContainer');
+            
+            reviews.forEach(review => {
+                const reviewElement = createReviewElement(review);
+                container.appendChild(reviewElement);
+            });
+        }
+
+        function createReviewElement(review) {
+            const reviewDiv = document.createElement('div');
+            reviewDiv.className = 'review-item';
+            
+            const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+            
+            reviewDiv.innerHTML = `
+                <div class="review-header">
+                    <div class="reviewer-info">
+                        <span class="reviewer-name">${review.name}</span>
+                        <span class="grow-type">${review.growType}</span>
+                    </div>
+                    <div>
+                        <div class="review-stars">${stars}</div>
+                        <div class="review-date">${review.date}</div>
+                    </div>
+                </div>
+                <h4 class="review-title">${review.title}</h4>
+                <p class="review-content">${review.content}</p>
+            `;
+            
+            return reviewDiv;
+        }
+
+        // Update overall rating
+        function updateOverallRating() {
+            const totalReviews = reviews.length;
+            const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+            const averageRating = (totalRating / totalReviews).toFixed(1);
+            
+            document.getElementById('overallScore').textContent = averageRating;
+            document.getElementById('ratingDetails').textContent = `Based on ${totalReviews} reviews`;
+            
+            // Update stars display
+            const fullStars = Math.floor(averageRating);
+            const hasHalfStar = averageRating % 1 >= 0.5;
+            let starsDisplay = '★'.repeat(fullStars);
+            if (hasHalfStar) {
+                starsDisplay += '☆';
+            }
+            starsDisplay += '☆'.repeat(5 - fullStars - (hasHalfStar ? 1 : 0));
+            
+            document.getElementById('overallStars').textContent = starsDisplay;
+        }
+
+        // Scroll to reviews function
+        function scrollToReviews() {
+            document.querySelector('.review-section').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
