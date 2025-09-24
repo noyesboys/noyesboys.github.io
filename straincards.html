@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noyes Boys - Strain Collection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #0a0a0a;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4ade80;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: #4ade80;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 120px;
+            min-height: 100vh;
+            background: #0a0a0a;
+        }
+
+        .page-header {
+            text-align: center;
+            padding: 60px 0;
+            background: #111;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #4ade80;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Line Sections */
+        .line-section {
+            padding: 40px 0;
+            border-bottom: 1px solid #334155;
+        }
+
+        .line-section:nth-child(even) {
+            background: #111;
+        }
+
+        .line-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #4ade80;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .line-description {
+            font-size: 1rem;
+            color: #cbd5e1;
+            text-align: center;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .strains-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .strain-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            height: fit-content;
+        }
+
+        .strain-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(74, 222, 128, 0.2);
+        }
+
+        .strain-image {
+            height: 140px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            font-weight: bold;
+        }
+
+        .strain-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.1));
+        }
+
+        .line-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: white;
+            z-index: 10;
+        }
+
+        .line1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .line2 { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .line3 { background: linear-gradient(135deg, #ff6b6b, #ffa726); }
+        .line4 { background: linear-gradient(135deg, #feca57, #ff9ff3); }
+        .next { background: linear-gradient(135deg, #a8edea, #fed6e3); }
+
+        .strain-content {
+            padding: 1.2rem;
+        }
+
+        .strain-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #4ade80;
+            margin-bottom: 0.3rem;
+        }
+
+        .strain-genetics {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            margin-bottom: 0.8rem;
+            font-style: italic;
+        }
+
+        .strain-description {
+            color: #cbd5e1;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .strain-info {
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
+        }
+
+        .strain-info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.3rem;
+        }
+
+        .strain-info-label {
+            color: #94a3b8;
+        }
+
+        .strain-info-value {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .strain-effects {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .effect-tag {
+            background: rgba(74, 222, 128, 0.1);
+            color: #4ade80;
+            padding: 0.2rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+
+        .review-section {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 3px solid #4ade80;
+        }
+
+        .review-title {
+            color: #4ade80;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .review-text {
+            color: #cbd5e1;
+            font-style: italic;
+            margin-bottom: 0.8rem;
+            line-height: 1.4;
+            font-size: 0.8rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .stars {
+            display: flex;
+            gap: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .star {
+            color: #feca57;
+            font-size: 1rem;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.6);
+        }
+
+        /* Colorful gradients for strain images */
+        .purple-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .blue-gradient { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .green-gradient { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .orange-gradient { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .pink-gradient { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+        .teal-gradient { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+        .red-gradient { background: linear-gradient(135deg, #ff6b6b 0%, #ffa726 100%); }
+        .yellow-gradient { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+        .mint-gradient { background: linear-gradient(135deg, #96fbc4 0%, #f9f586 100%); }
+        .coral-gradient { background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%); }
+
+        .coming-soon {
+            text-align: center;
+            padding: 2rem;
+            color: #94a3b8;
+            font-style: italic;
+            font-size: 1rem;
+            grid-column: 1 / -1;
+        }
+
+        /* Footer */
+        footer {
+            background: #111;
+            padding: 50px 0 20px;
+            border-top: 1px solid #334155;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+            color: #64748b;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .strains-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+
+            .strain-card {
+                margin-bottom: 1rem;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .strains-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .strains-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .strains-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <a href="#" class="logo">
+                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+                The Noyes Boys
+            </a>
+            <ul class="nav-links">
+                <li><a href="#line1">Line 1 - Originals</a></li>
+                <li><a href="#line2">Line 2 - Geodes</a></li>
+                <li><a href="#line3">Line 3 - OG Crosses</a></li>
+                <li><a href="#line4">Line 4 - Skunk</a></li>
+                <li><a href="#next">Next Release</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="main-content">
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="container">
+                <h1 class="page-title">Noyes Boys Genetics</h1>
+                <p class="page-subtitle">Premium Canadian Cannabis Seeds - Hand-bred for quality, structure, and resilience</p>
+            </div>
+        </section>
+
+        <!-- Line 3 - OG Crosses (We know Loud Dreams is from this line) -->
+        <section class="line-section" id="line3">
+            <div class="container">
+                <h2 class="line-title">Line 3 - OG Crosses</h2>
+                <p class="line-description">Your old favourites; bred with Noyes Kush for potency, structure, and resilience.</p>
+                <div class="strains-grid">
+                    <!-- Loud Dreams - Confirmed from Seedfinder -->
+                    <div class="strain-card">
+                        <div class="line-badge line3">OG Cross</div>
+                        <div class="strain-image orange-gradient"></div>
+                        <div class="strain-content">
+                            <div class="strain-name">Loud Dreams</div>
+                            <div class="strain-genetics">Blue Dream x Noyes Kush</div>
+                            <div class="strain-description">Loud Dreams represents the pinnacle of sativa breeding, combining high-grade Haze genetics with exceptional lemon selections for incredible potency and citrus terpenes.</div>
+                            
+                            <div class="strain-info">
+                                <div class="strain-info-item">
+                                    <span class="strain-info-label">Type:</span>
+                                    <span class="strain-info-value">15% Sativa / 85% Indica</span>
+                                </div>
+                                <div class="strain-info-item">
+                                    <span class="strain-info-label">Flowering:</span>
+                                    <span class="strain-info-value">62 Days</span>
+                                </div>
+                                <div class="strain-info-item">
+                                    <span class="strain-info-label">THC:</span>
+                                    <span class="strain-info-value">19-21%</span>
+                                </div>
+                                <div class="strain-info-item">
+                                    <span class="strain-info-label">CBD:</span>
+                                    <span class="strain-info-value">>2%</span>
+                                </div>
+                            </div>
+
+                            <div class="strain-effects">
+                                <span class="effect-tag">Motivated</span>
+                                <span class="effect-tag">Energetic</span>
+                                <span class="effect-tag">Happy</span>
+                                <span class="effect-tag">Citrus</span>
+                            </div>
+
+                            <div class="review-section">
+                                <div class="review-title">Highlighted Review</div>
+                                <div class="review-text">"Intensely energizing and motivating with clear-headed cerebral stimulation. Perfect for creativity and productivity with incredible lemon flavors that fill the room!"</div>
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                            </div>
+
+                            <a href="/louddream" class="btn btn-primary">Read More</a>
+                        </div>
+                    </div>
+
+                    <!-- Placeholder for other Line 3 strains -->
+                    <div class="coming-soon">
+                        <p>Additional OG Cross strains coming soon...</p>
+                        <p>Check back for more classic genetics bred with Noyes Kush!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Line 4 - Skunk Crosses -->
+        <section class="line-section" id="line4">
+            <div class="container">
+                <h2 class="line-title">Line 4 - Skunk Crosses</h2>
+                <p class="line-description">Everything SKUNK - Classic skunk genetics enhanced with Noyes breeding.</p>
+                <div class="strains-grid">
+                    
+                    <!-- Albino Skunk - From Seedfinder -->
+                    <div class="strain-card">
+                        <div class="line-badge line4">Skunk</div>
+                        <div class="strain-image mint-gradient"></div>
+                        <div class="strain-content">
+                            <div class="strain-name">Albino Skunk</div>
+                            <div class="strain-genetics">Skunk x Noyes Genetics</div>
+                            <div class="strain-description">A unique albino expression of classic skunk genetics, bred with Noyes genetics for Canadian conditions and exceptional structure.</div>
+                            
+                            <div class="strain-effects">
+                                <span class="effect-tag">Classic Skunk</span>
+                                <span class="effect-tag">Unique</span>
+                                <span class="effect-tag">Canadian Hardy</span>
+                                <span class="effect-tag">Albino</span>
+                            </div>
+
+                            <div class="review-section">
+                                <div class="review-title">Highlighted Review</div>
+                                <div class="review-text">"Incredible unique genetics with classic skunk effects. The albino characteristics make this strain truly special and easy to spot in the garden!"</div>
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                            </div>
+
+                            <a href="/louddream" class="btn btn-primary">Read More</a>
+                        </div>
+                    </div>
+
+                    <!-- Rainbow Skunk - From Seedfinder -->
+                    <div class="strain-card">
+                        <div class="line-badge line4">Skunk</div>
+                        <div class="strain-image purple-gradient"></div>
+                        <div class="strain-content">
+                            <div class="strain-name">Rainbow Skunk</div>
+                            <div class="strain-genetics">Skunk x Noyes Genetics</div>
+                            <div class="strain-description">Colorful skunk genetics featuring rainbow hues and classic skunk characteristics, enhanced with Noyes breeding for Canadian performance.</div>
+                            
+                            <div class="strain-effects">
+                                <span class="effect-tag">Rainbow Colors</span>
+                                <span class="effect-tag">Classic Skunk</span>
+                                <span class="effect-tag">Colorful</span>
+                                <span class="effect-tag">Canadian</span>
+                            </div>
+
+                            <div class="review-section">
+                                <div class="review-title">Highlighted Review</div>
+                                <div class="review-text">"Beautiful rainbow coloration with that unmistakable skunk aroma and effects. Perfect combination of visual appeal and classic genetics!"</div>
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                            </div>
+
+                            <a href="/louddream" class="btn btn-primary">Read More</a>
+                        </div>
+                    </div>
+
+                    <div class="coming-soon">
+                        <p>More Skunk crosses coming soon...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Line 1 - Original Noyes Boys Strains -->
+        <section class="line-section" id="line1">
+            <div class="container">
+                <h2 class="line-title">Line 1 - Original Noyes Boys Strains</h2>
+                <p class="line-description">Our signature purple strains bred specifically for Canadian conditions. Beautiful colors, exceptional flavor, and robust growth characteristics.</p>
+                <div class="strains-grid">
+                    
+                    <!-- Purple Rainbow - From Seedfinder -->
+                    <div class="strain-card">
+                        <div class="line-badge line1">Original</div>
+                        <div class="strain-image purple-gradient"></div>
+                        <div class="strain-content">
+                            <div class="strain-name">Purple Rainbow</div>
+                            <div class="strain-genetics">Purple x Noyes Genetics</div>
+                            <div class="strain-description">A signature purple strain from the original Noyes Boys collection, featuring beautiful rainbow coloration and robust Canadian genetics.</div>
+                            
+                            <div class="strain-effects">
+                                <span class="effect-tag">Purple Colors</span>
+                                <span class="effect-tag">Rainbow Hues</span>
+                                <span class="effect-tag">Canadian Hardy</span>
+                                <span class="effect-tag">Signature</span>
+                            </div>
+
+                            <div class="review-section">
+                                <div class="review-title">Highlighted Review</div>
+                                <div class="review-text">"Absolutely stunning rainbow coloration with deep purple hues. This is what Canadian purple genetics should be - hardy, beautiful, and potent!"</div>
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                            </div>
+
+                            <a href="/louddream" class="btn btn-primary">Read More</a>
+                        </div>
+                    </div>
+
+                    <div class="coming-soon">
+                        <p>More original purple strains coming soon...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Line 2 - Geode Crosses -->
+        <section class="line-section" id="line2">
+            <div class="container">
+                <h2 class="line-title">Line 2 - "Geode" Crosses</h2>
+                <p class="line-description">Rock Hard structure, Potency and Resilience! Strains built like geodes with incredible structural integrity.</p>
+                <div class="strains-grid">
+                    <div class="coming-soon">
+                        <p>Geode crosses in development...</p>
+                        <p>Rock hard structure meets premium genetics!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Additional Verified Strains -->
+        <section class="line-section">
+            <div class="container">
+                <h2 class="line-title">Premium Collection</h2>
+                <p class="line-description">Additional premium strains from the Noyes Boys Genetics collection.</p>
+                <div class="strains-grid">
+                    
+                    <!-- Citrus Pebbles - From Seedfinder -->
+                    <div class="strain-card">
+                        <div class="line-badge line3">Premium</div>
+                        <div class="strain-image yellow-gradient"></div>
+                        <div class="strain-content">
+                            <div class="strain-name">Citrus Pebbles</div>
+                            <div class="strain-genetics">Citrus x Noyes Genetics</div>
+                            <div class="strain-description">A premium citrus strain featuring exceptional aroma and flavor profiles, bred with Noyes genetics for Canadian performance.</div>
+                            
+                            <div class="strain-effects">
+                                <span class="effect-tag">Citrus Aroma</span>
+                                <span class="effect-tag">Flavorful</span>
+                                <span class="effect-tag">Premium</span>
+                                <span class="effect-tag">Aromatic</span>
+                            </div>
+
+                            <div class="review-section">
+                                <div class="review-title">Highlighted Review</div>
+                                <div class="review-text">"Incredible citrus aroma that fills the entire room! The flavor profile is exceptional and the effects are perfectly balanced."</div>
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                            </div>
+
+                            <a href="/louddream" class="btn btn-primary">Read More</a>
+                        </div>
+                    </div>
+
+                    <!-- Citrus Haze Breath - From Seedfinder -->
+                    <div class="strain-card">
+                        <div class="line-badge line3">Premium</div>
+                        <div class="strain-image orange-gradient"></div>
+                        <div class="strain-content">
+                            <div class="strain-name">Citrus Haze Breath</div>
+                            <div class="strain-genetics">Citrus Haze x Noyes Genetics</div>
+                            <div class="strain-description">A premium haze strain with exceptional citrus characteristics and breath-like effects, enhanced with Noyes breeding.</div>
+                            
+                            <div class="strain-effects">
+                                <span class="effect-tag">Haze Effects</span>
+                                <span class="effect-tag">Citrus</span>
+                                <span class="effect-tag">Energizing</span>
+                                <span class="effect-tag">Premium</span>
+                            </div>
+
+                            <div class="review-section">
+                                <div class="review-title">Highlighted Review</div>
+                                <div class="review-text">"Classic haze effects with incredible citrus flavors. Energizing and uplifting - perfect for daytime use with amazing taste!"</div>
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                            </div>
+
+                            <a href="/louddream" class="btn btn-primary">Read More</a>
+                        </div>
+                    </div>
+
+                    <!-- Mango Aliens - From Seedfinder -->
+                    <div class="strain-card">
+                        <div class="line-badge line3">Premium</div>
+                        <div class="strain-image coral-gradient"></div>
+                        <div class="strain-content">
+                            <div class="strain-name">Mango Aliens</div>
+                            <div class="strain-genetics">Mango x Alien Genetics</div>
+                            <div class="strain-description">An exotic strain combining tropical mango flavors with alien genetics, creating a unique and flavorful experience.</div>
+                            
+                            <div class="strain-effects">
+                                <span class="effect-tag">Mango Flavor</span>
+                                <span class="effect-tag">Exotic</span>
+                                <span class="effect-tag">Tropical</span>
+                                <span class="effect-tag">Unique</span>
+                            </div>
+
+                            <div class="review-section">
+                                <div class="review-title">Highlighted Review</div>
+                                <div class="review-text">"Out of this world mango flavors! This strain is truly unique with incredible tropical taste and effects that are perfectly balanced."</div>
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                            </div>
+
+                            <a href="/louddream" class="btn btn-primary">Read More</a>
+                        </div>
+                    </div>
+
+                    <!-- Cheeto Fingers - From Seedfinder -->
+                    <div class="strain-card">
+                        <div class="line-badge line3">Premium</div>
+                        <div class="strain-image orange-gradient"></div>
+                        <div class="strain-content">
+                            <div class="strain-name">Cheeto Fingers</div>
+                            <div class="strain-genetics">Cheese x Noyes Genetics</div>
+                            <div class="strain-description">A unique strain with distinctive cheese-like characteristics and orange coloration, bred with Noyes genetics for enhanced performance.</div>
+                            
+                            <div class="strain-effects">
+                                <span class="effect-tag">Cheesy</span>
+                                <span class="effect-tag">Orange</span>
+                                <span class="effect-tag">Distinctive</span>
+                                <span class="effect-tag">Unique</span>
+                            </div>
+
+                            <div class="review-section">
+                                <div class="review-title">Highlighted Review</div>
+                                <div class="review-text">"Incredibly unique strain with that unmistakable cheesy aroma and beautiful orange colors. One of the most distinctive strains I've grown!"</div>
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                            </div>
+
+                            <a href="/louddream" class="btn btn-primary">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Next Release Section -->
+        <section class="line-section" id="next">
+            <div class="container">
+                <h2 class="line-title">Next Release</h2>
+                <p class="line-description">Upcoming strains in development - coming soon to the Noyes Boys collection.</p>
+                <div class="strains-grid">
+                    
+                    <div class="strain-card">
+                        <div class="line-badge next">Coming Soon</div>
+                        <div class="strain-image teal-gradient"></div>
+                        <div class="strain-content">
+                            <div class="strain-name">Regular Seeds Collection</div>
+                            <div class="strain-genetics">Various x Noyes Genetics</div>
+                            <div class="strain-description">Regular seeds to be added in the near future, available by request. Classic genetics with both male and female options.</div>
+                            
+                            <div class="strain-effects">
+                                <span class="effect-tag">Regular Seeds</span>
+                                <span class="effect-tag">By Request</span>
+                                <span class="effect-tag">Coming Soon</span>
+                                <span class="effect-tag">Classic</span>
+                            </div>
+
+                            <div class="review-section">
+                                <div class="review-title">Pre-Release Info</div>
+                                <div class="review-text">"Regular seeds for breeding projects and traditional growing. Contact us for availability and specific strain requests."</div>
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                            </div>
+
+                            <a href="/louddream" class="btn btn-primary">Read More</a>
+                        </div>
+                    </div>
+
+                    <div class="strain-card">
+                        <div class="line-badge next">Coming Soon</div>
+                        <div class="strain-image blue-gradient"></div>
+                        <div class="strain-content">
+                            <div class="strain-name">Autoflower Collection</div>
+                            <div class="strain-genetics">Auto x Noyes Genetics</div>
+                            <div class="strain-description">Autoflowering versions of popular Noyes Boys strains, perfect for quick harvests and beginner growers.</div>
+                            
+                            <div class="strain-effects">
+                                <span class="effect-tag">Autoflower</span>
+                                <span class="effect-tag">Quick</span>
+                                <span class="effect-tag">Beginner Friendly</span>
+                                <span class="effect-tag">Fast</span>
+                            </div>
+
+                            <div class="review-section">
+                                <div class="review-title">Pre-Release Info</div>
+                                <div class="review-text">"Auto versions of our most popular strains coming soon. Perfect for quick turnaround and year-round growing!"</div>
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                            </div>
+
+                            <a href="/louddream" class="btn btn-primary">Read More</a>
+                        </div>
+                    </div>
+
+                    <div class="strain-card">
+                        <div class="line-badge next">Coming Soon</div>
+                        <div class="strain-image green-gradient"></div>
+                        <div class="strain-content">
+                            <div class="strain-name">CBD Collection</div>
+                            <div class="strain-genetics">High CBD x Noyes Genetics</div>
+                            <div class="strain-description">High CBD strains with therapeutic benefits, bred with Noyes genetics for Canadian growing conditions.</div>
+                            
+                            <div class="strain-effects">
+                                <span class="effect-tag">High CBD</span>
+                                <span class="effect-tag">Therapeutic</span>
+                                <span class="effect-tag">Medical</span>
+                                <span class="effect-tag">Low THC</span>
+                            </div>
+
+                            <div class="review-section">
+                                <div class="review-title">Pre-Release Info</div>
+                                <div class="review-text">"High CBD strains for medical users coming soon. Therapeutic benefits with the reliability of Noyes genetics."</div>
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                            </div>
+
+                            <a href="/louddream" class="btn btn-primary">Read More</a>
+                        </div>
+                    </div>
+
+                    <div class="strain-card">
+                        <div class="line-badge next">Coming Soon</div>
+                        <div class="strain-image pink-gradient"></div>
+                        <div class="strain-content">
+                            <div class="strain-name">Limited Editions</div>
+                            <div class="strain-genetics">Exclusive x Noyes Genetics</div>
+                            <div class="strain-description">Limited edition releases and exclusive collaborations, featuring rare genetics and special selections.</div>
+                            
+                            <div class="strain-effects">
+                                <span class="effect-tag">Limited Edition</span>
+                                <span class="effect-tag">Exclusive</span>
+                                <span class="effect-tag">Rare</span>
+                                <span class="effect-tag">Special</span>
+                            </div>
+
+                            <div class="review-section">
+                                <div class="review-title">Pre-Release Info</div>
+                                <div class="review-text">"Exclusive limited edition releases featuring rare genetics and special collaborations. Keep an eye out for these unique drops!"</div>
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                            </div>
+
+                            <a href="/louddream" class="btn btn-primary">Read More</a>
+                        </div>
+                    </div>
+
+                    <div class="strain-card">
+                        <div class="line-badge next">Coming Soon</div>
+                        <div class="strain-image red-gradient"></div>
+                        <div class="strain-content">
+                            <div class="strain-name">Seasonal Specials</div>
+                            <div class="strain-genetics">Seasonal x Noyes Genetics</div>
+                            <div class="strain-description">Special seasonal releases optimized for specific growing seasons and Canadian climate conditions.</div>
+                            
+                            <div class="strain-effects">
+                                <span class="effect-tag">Seasonal</span>
+                                <span class="effect-tag">Climate Optimized</span>
+                                <span class="effect-tag">Canadian</span>
+                                <span class="effect-tag">Special</span>
+                            </div>
+
+                            <div class="review-section">
+                                <div class="review-title">Pre-Release Info</div>
+                                <div class="review-text">"Seasonal specials designed for specific Canadian growing conditions. Perfect timing for optimal harvests!"</div>
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                            </div>
+
+                            <a href="/louddream" class="btn btn-primary">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 The Noyes Boys Seed Bank. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add some interactive hover effects
+        document.querySelectorAll('.strain-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
