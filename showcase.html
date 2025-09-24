@@ -101,77 +101,10 @@
             // Smooth scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
-        function populateAllPhotosGrid() {
-            const grid = document.getElementById('allPhotosGrid');
-            if (!grid) return;
-            
-            // Get all strain data from the individual sections
-            const allStrains = [
-                { name: 'Noyes Kush', description: 'Foundation genetics for all breeding', category: 'originals' },
-                { name: 'Purple Rainbow', description: 'Sativa-dominant with grape flavors', category: 'originals' },
-                { name: 'Duct Tape', description: 'Heavy indica with couch-lock effects', category: 'originals' },
-                { name: 'Mango Aliens', description: 'Perfect hybrid with mango flavors', category: 'originals' },
-                { name: 'Citrus Haze Breath', description: 'Sativa with lemon citrus flavors', category: 'originals' },
-                { name: 'Loud Dreams', description: 'Potent sativa with lemon terpenes', category: 'originals' },
-                { name: 'Genetic Lottery', description: 'Unstable crosses for pheno hunting', category: 'geode' },
-                { name: 'Noyes Breath', description: 'Indica-dominant with gas and citrus', category: 'geode' },
-                { name: 'Noyes Cake', description: 'Balanced hybrid with excellent structure', category: 'geode' },
-                { name: 'Blueberry Kush', description: 'Classic blueberry with berry flavors', category: 'og' },
-                { name: 'OG Kush', description: 'Tall classic OG with gas flavors', category: 'og' },
-                { name: 'Albino Skunk', description: 'Unique white phenotype skunk', category: 'skunk' },
-                { name: 'Rainbow Skunk', description: 'Colorful skunk with berry notes', category: 'skunk' },
-                { name: 'Premium Seeds', description: 'High-quality feminized collection', category: 'seeds' },
-                { name: 'Growing Cycle', description: 'Complete grow documentation', category: 'grows' }
-            ];
-            
-            grid.innerHTML = allStrains.map((strain, index) => `
-                <div class="photo-item">
-                    <div class="photo-carousel" data-strain="all-${index}">
-                        <div class="photo-slides">
-                            <div class="photo-slide"><span>${strain.name} - Photo 1</span></div>
-                            <div class="photo-slide"><span>${strain.name} - Photo 2</span></div>
-                            <div class="photo-slide"><span>${strain.name} - Photo 3</span></div>
-                            <div class="photo-slide"><span>${strain.name} - Photo 4</span></div>
-                            <div class="photo-slide"><span>${strain.name} - Photo 5</span></div>
-                        </div>
-                        <button class="carousel-controls carousel-prev" onclick="changeSlide('all-${index}', -1)">‹</button>
-                        <button class="carousel-controls carousel-next" onclick="changeSlide('all-${index}', 1)">›</button>
-                        <div class="carousel-indicators">
-                            <button class="carousel-dot active" onclick="currentSlide('all-${index}', 1)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('all-${index}', 2)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('all-${index}', 3)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('all-${index}', 4)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('all-${index}', 5)"></button>
-                        </div>
-                    </div>
-                    <div class="photo-info">
-                        <h3 class="photo-title">${strain.name}</h3>
-                        <p class="photo-description">${strain.description}</p>
-                        <div class="strain-stats">
-                            <div class="stat-item">
-                                <div class="stat-label">Category</div>
-                                <div class="stat-value">${strain.category}</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Quality</div>
-                                <div class="stat-value">Premium</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Origin</div>
-                                <div class="stat-value">Canada</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            
             // Initialize slide indexes for newly created carousels
             allStrains.forEach((strain, index) => {
                 slideIndexes[`all-${index}`] = 1;
             });
-        }
-
         function openModal(title, description) {
             const modal = document.getElementById('photoModal');
             const modalTitle = document.getElementById('modalTitle');
