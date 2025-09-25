@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -56,6 +56,7 @@
             height: 45px;
             margin-right: 10px;
             border-radius: 50%;
+            background: #4ade80;
         }
 
         .nav-links {
@@ -183,30 +184,9 @@
             cursor: pointer;
             border: 2px solid transparent;
         }
-        .card-image {
-        position: relative;
-        width: 100%;
-        height: 200px; /* Adjust based on your design */
-        background-color: #eee; /* Fallback color if no images are loaded */
-        }
 
-        .placeholder {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        }
-
-        .overlay-photo {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 0.7; /* Adjust transparency */
-        }
         .strain-card:hover {
-        transform: translateY(-5px) scale(1.02);
+            transform: translateY(-5px) scale(1.02);
             box-shadow: 0 10px 25px rgba(74, 222, 128, 0.3);
             border-color: #4ade80;
         }
@@ -222,7 +202,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 1.5rem;
             color: white;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
             font-weight: bold;
@@ -439,6 +419,13 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .placeholder-image {
+            background: #334155;
+            color: #4ade80;
+            font-size: 0.8rem;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -446,7 +433,7 @@
     <header>
         <nav class="container">
             <a href="#" class="logo">
-                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+                <div class="logo-img"></div>
                 The Noyes Boys
             </a>
             <ul class="nav-links">
@@ -490,13 +477,13 @@
         <section class="line-section" id="line1">
             <div class="container">
                 <h2 class="line-title">Line 1 - Original Noyes Boys Strains</h2>
-                <p class="line-description">Our Original Ten - The foundation strains bred specifically for Canadian conditions</p>
+                <p class="line-description">The foundation strains - bred specifically for Canadian conditions</p>
                 <div class="cards-grid">
                     
                     <!-- Purple Rainbow -->
                     <div class="strain-card" data-tags="indica purple rainbow alien">
                         <div class="line-badge line1">Original</div>
-                        <div class="card-image purple-gradient"></div>
+                        <div class="card-image purple-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Purple Rainbow</div>
@@ -513,16 +500,17 @@
                                 </div>
                                 <div class="info-row">
                                     <span class="info-label">THC:</span>
-                                    <span class="info-value">27-28%</span>
+                                    <span class="info-value">25-27%</span>
                                 </div>
                             </div>
                             <div class="strain-effects">
                                 <span class="effect-tag">Motivated</span>
                                 <span class="effect-tag">Energetic</span>
                                 <span class="effect-tag">Happy</span>
+                                <span class="effect-tag">Uplifted</span>
                             </div>
                             <div class="review-section">
-                                <div class="review-text">"Rock solid structure with incredible resin production. Lives up to the geode name!"</div>
+                                <div class="review-text">"Incredible rainbow colors with that classic alien tech power. Perfect balance of energy and relaxation!"</div>
                                 <div class="stars">
                                     <span class="star">★</span>
                                     <span class="star">★</span>
@@ -536,11 +524,11 @@
                             </div>
                         </div>
                     </div>
+
                     <!-- Rainbow Cakes -->
                     <div class="strain-card" data-tags="sativa rainbow cake wedding">
                         <div class="line-badge line1">Original</div>
-                        <div class="card-image coral-gradient"></div>
-                        <img src="assets/sept22edits/websiteimagedata/cards/finished/" alt="Your Photo" class="overlay-photo"></div>
+                        <div class="card-image coral-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Rainbow Cakes</div>
@@ -585,7 +573,7 @@
                     <!-- Cake Breath -->
                     <div class="strain-card" data-tags="indica cake wedding meatbreath">
                         <div class="line-badge line1">Original</div>
-                        <div class="card-image blue-gradient"></div>
+                        <div class="card-image blue-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Cake Breath</div>
@@ -629,7 +617,7 @@
                     <!-- Alienoyes Kush -->
                     <div class="strain-card" data-tags="indica alien og kush">
                         <div class="line-badge line1">Original</div>
-                        <div class="card-image green-gradient"></div>
+                        <div class="card-image green-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Alienoyes Kush</div>
@@ -673,7 +661,7 @@
                     <!-- Mangonoyes Kush -->
                     <div class="strain-card" data-tags="hybrid mango kush fruity">
                         <div class="line-badge line1">Original</div>
-                        <div class="card-image orange-gradient"></div>
+                        <div class="card-image orange-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Mangonoyes Kush</div>
@@ -718,7 +706,7 @@
                     <!-- Citronoyes Haze -->
                     <div class="strain-card" data-tags="sativa citrus haze lemon">
                         <div class="line-badge line1">Original</div>
-                        <div class="card-image yellow-gradient"></div>
+                        <div class="card-image yellow-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Citronoyes Haze</div>
@@ -762,7 +750,7 @@
                     <!-- Noyes Haze -->
                     <div class="strain-card" data-tags="sativa haze lemon citrus">
                         <div class="line-badge line1">Original</div>
-                        <div class="card-image mint-gradient"></div>
+                        <div class="card-image mint-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Noyes Haze</div>
@@ -810,8 +798,7 @@
                     <!-- Noyes Breath -->
                     <div class="strain-card" data-tags="indica meatbreath kush">
                         <div class="line-badge line1">Original</div>
-                        <div class="card-image red-gradient"></div>
-                        <img src="assets/sept22edits/websiteimagedata/cards/finished/noyesbreathcard.jpg" alt="Noyes Breath" class="overlay-photo"></div>
+                        <div class="card-image red-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Noyes Breath</div>
@@ -854,7 +841,7 @@
                     <!-- Meat Cakes -->
                     <div class="strain-card" data-tags="indica meatbreath cake wedding">
                         <div class="line-badge line1">Original</div>
-                        <div class="card-image coral-gradient"></div>
+                        <div class="card-image coral-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Meat Cakes</div>
@@ -898,7 +885,7 @@
                     <!-- Biscotti Rocks -->
                     <div class="strain-card" data-tags="indica biscotti rainbow meatbreath">
                         <div class="line-badge line1">Original</div>
-                        <div class="card-image teal-gradient"></div>
+                        <div class="card-image teal-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Biscotti Rocks</div>
@@ -952,7 +939,7 @@
                     <!-- Yesno Kush -->
                     <div class="strain-card" data-tags="indica experimental hybrid">
                         <div class="line-badge line2">Geode</div>
-                        <div class="card-image mint-gradient"></div>
+                        <div class="card-image mint-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Yesno Kush</div>
@@ -992,11 +979,54 @@
                         </div>
                     </div>
 
-                    
+                    <!-- Shiny Rocks -->
+                    <div class="strain-card" data-tags="indica rocks geode">
+                        <div class="line-badge line2">Geode</div>
+                        <div class="card-image yellow-gradient">/yourphotohere</div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <div class="strain-name">Shiny Rocks</div>
+                                <div class="strain-genetics">Noyes Rocks × Noyes Pebbles</div>
+                            </div>
+                            <div class="strain-info">
+                                <div class="info-row">
+                                    <span class="info-label">Type:</span>
+                                    <span class="info-value">25% S / 75% I</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Flowering:</span>
+                                    <span class="info-value">62 days</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">THC:</span>
+                                    <span class="info-value">27-28%</span>
+                                </div>
+                            </div>
+                            <div class="strain-effects">
+                                <span class="effect-tag">Motivated</span>
+                                <span class="effect-tag">Energetic</span>
+                                <span class="effect-tag">Happy</span>
+                            </div>
+                            <div class="review-section">
+                                <div class="review-text">"Rock solid structure with incredible resin production. Lives up to the geode name!"</div>
+                                <div class="stars">
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                    <span class="star">★</span>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <a href="/shinyrocks" class="btn">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Noyes Rocks -->
                     <div class="strain-card" data-tags="indica biscotti rocks">
                         <div class="line-badge line2">Geode</div>
-                        <div class="card-image blue-gradient"></div>
+                        <div class="card-image blue-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Noyes Rocks</div>
@@ -1040,7 +1070,7 @@
                     <!-- Noyes Pebbles -->
                     <div class="strain-card" data-tags="indica citrus biscotti">
                         <div class="line-badge line2">Geode</div>
-                        <div class="card-image green-gradient"></div>
+                        <div class="card-image green-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Noyes Pebbles</div>
@@ -1083,7 +1113,7 @@
                     <!-- Mango Rocks -->
                     <div class="strain-card" data-tags="indica mango biscotti">
                         <div class="line-badge line2">Geode</div>
-                        <div class="card-image coral-gradient"></div>
+                        <div class="card-image coral-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Mango Rocks</div>
@@ -1126,7 +1156,7 @@
                     <!-- Citrus Pebbles -->
                     <div class="strain-card" data-tags="hybrid citrus geode">
                         <div class="line-badge line2">Geode</div>
-                        <div class="card-image yellow-gradient"></div>
+                        <div class="card-image yellow-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Citrus Pebbles</div>
@@ -1170,7 +1200,7 @@
                     <!-- Citrus Rocks -->
                     <div class="strain-card" data-tags="indica citrus biscotti">
                         <div class="line-badge line2">Geode</div>
-                        <div class="card-image orange-gradient"></div>
+                        <div class="card-image orange-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Citrus Rocks</div>
@@ -1214,7 +1244,7 @@
                     <!-- Alien Rocks -->
                     <div class="strain-card" data-tags="indica alien biscotti">
                         <div class="line-badge line2">Geode</div>
-                        <div class="card-image green-gradient"></div>
+                        <div class="card-image green-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Alien Rocks</div>
@@ -1258,7 +1288,7 @@
                     <!-- Citrus Haze Breath -->
                     <div class="strain-card" data-tags="indica citrus haze meatbreath">
                         <div class="line-badge line2">Geode</div>
-                        <div class="card-image mint-gradient"></div>
+                        <div class="card-image mint-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Citrus Haze Breath</div>
@@ -1302,7 +1332,7 @@
                     <!-- Mango Aliens -->
                     <div class="strain-card" data-tags="indica mango alien">
                         <div class="line-badge line2">Geode</div>
-                        <div class="card-image purple-gradient"></div>
+                        <div class="card-image purple-gradient">/yourphotohere</div>
                         <div class="card-content">
                             <div class="card-header">
                                 <div class="strain-name">Mango Aliens</div>
@@ -1334,747 +1364,4 @@
                                     <span class="star">★</span>
                                     <span class="star">★</span>
                                     <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/mangoaliens" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- Line 3 - OG Crosses -->
-        <section class="line-section" id="line3">
-            <div class="container">
-                <h2 class="line-title">Line 3 - OG Crosses</h2>
-                <p class="line-description">Your old favourites; bred with Noyes Kush for potency, structure, and resilience.</p>
-                <div class="cards-grid">
-                    
-                    <!-- Loud Dreams -->
-                    <div class="strain-card" data-tags="indica og blue dream">
-                        <div class="line-badge line3">OG Cross</div>
-                        <div class="card-image orange-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-header">
-                                <div class="strain-name">Loud Dreams</div>
-                                <div class="strain-genetics">Blue Dream × Noyes Kush</div>
-                            </div>
-                            <div class="strain-info">
-                                <div class="info-row">
-                                    <span class="info-label">Type:</span>
-                                    <span class="info-value">15% S / 85% I</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Flowering:</span>
-                                    <span class="info-value">62 days</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">THC:</span>
-                                    <span class="info-value">19-21%</span>
-                                </div>
-                            </div>
-                            <div class="strain-effects">
-                                <span class="effect-tag">Motivated</span>
-                                <span class="effect-tag">Energetic</span>
-                                <span class="effect-tag">Happy</span>
-                            </div>
-                            <div class="review-section">
-                                <div class="review-text">"Classic Blue Dream improved with Noyes genetics. Berry and gas flavors are incredible!"</div>
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/louddreams" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Afghani Noyes -->
-                    <div class="strain-card" data-tags="indica og afghan">
-                        <div class="line-badge line3">OG Cross</div>
-                        <div class="card-image purple-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-header">
-                                <div class="strain-name">Afghani Noyes</div>
-                                <div class="strain-genetics">Afghan Kush × Noyes Kush</div>
-                            </div>
-                            <div class="strain-info">
-                                <div class="info-row">
-                                    <span class="info-label">Type:</span>
-                                    <span class="info-value">25% S / 75% I</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Flowering:</span>
-                                    <span class="info-value">65 days</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">THC:</span>
-                                    <span class="info-value">18-22%</span>
-                                </div>
-                            </div>
-                            <div class="strain-effects">
-                                <span class="effect-tag">Motivated</span>
-                                <span class="effect-tag">Energetic</span>
-                                <span class="effect-tag">Happy</span>
-                            </div>
-                            <div class="review-section">
-                                <div class="review-text">"Classic Afghan genetics with Noyes improvement. Higher CBD content adds therapeutic value!"</div>
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/afghaninoyes" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- White Noyes -->
-                    <div class="strain-card" data-tags="hybrid og white widow">
-                        <div class="line-badge line3">OG Cross</div>
-                        <div class="card-image mint-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-header">
-                                <div class="strain-name">White Noyes</div>
-                                <div class="strain-genetics">White Widow × Noyes Kush</div>
-                            </div>
-                            <div class="strain-info">
-                                <div class="info-row">
-                                    <span class="info-label">Type:</span>
-                                    <span class="info-value">40% S / 60% I</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Flowering:</span>
-                                    <span class="info-value">62 days</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">THC:</span>
-                                    <span class="info-value">22-23%</span>
-                                </div>
-                            </div>
-                            <div class="strain-effects">
-                                <span class="effect-tag">Motivated</span>
-                                <span class="effect-tag">Energetic</span>
-                                <span class="effect-tag">Happy</span>
-                            </div>
-                            <div class="review-section">
-                                <div class="review-text">"White Widow resin production with improved structure. Gas and citrus flavors shine!"</div>
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/whitenoyes" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Blueberry Fingers -->
-                    <div class="strain-card" data-tags="indica og blueberry">
-                        <div class="line-badge line3">OG Cross</div>
-                        <div class="card-image blue-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-header">
-                                <div class="strain-name">Blueberry Fingers</div>
-                                <div class="strain-genetics">Noyes Kush × Blueberry Kush</div>
-                            </div>
-                            <div class="strain-info">
-                                <div class="info-row">
-                                    <span class="info-label">Type:</span>
-                                    <span class="info-value">30% S / 70% I</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Flowering:</span>
-                                    <span class="info-value">65 days</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">THC:</span>
-                                    <span class="info-value">18-20%</span>
-                                </div>
-                            </div>
-                            <div class="strain-effects">
-                                <span class="effect-tag">Motivated</span>
-                                <span class="effect-tag">Energetic</span>
-                                <span class="effect-tag">Happy</span>
-                            </div>
-                            <div class="review-section">
-                                <div class="review-text">"Amazing blueberry and berry flavors with balanced effects. Sweet and gassy!"</div>
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/blueberryfingers" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Cheeto Fingers -->
-                    <div class="strain-card" data-tags="indica og orange">
-                        <div class="line-badge line3">OG Cross</div>
-                        <div class="card-image yellow-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-header">
-                                <div class="strain-name">Cheeto Fingers</div>
-                                <div class="strain-genetics">Noyes Kush × Orange Kush</div>
-                            </div>
-                            <div class="strain-info">
-                                <div class="info-row">
-                                    <span class="info-label">Type:</span>
-                                    <span class="info-value">25% S / 75% I</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Flowering:</span>
-                                    <span class="info-value">62 days</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">THC:</span>
-                                    <span class="info-value">22-23%</span>
-                                </div>
-                            </div>
-                            <div class="strain-effects">
-                                <span class="effect-tag">Motivated</span>
-                                <span class="effect-tag">Energetic</span>
-                                <span class="effect-tag">Happy</span>
-                            </div>
-                            <div class="review-section">
-                                <div class="review-text">"Unique orange kush flavors with that signature Noyes structure. Fruity and gassy!"</div>
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/cheetofingers" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Noyes OG -->
-                    <div class="strain-card" data-tags="indica og kush">
-                        <div class="line-badge line3">OG Cross</div>
-                        <div class="card-image red-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-header">
-                                <div class="strain-name">Noyes OG</div>
-                                <div class="strain-genetics">Noyes Kush × OG Kush</div>
-                            </div>
-                            <div class="strain-info">
-                                <div class="info-row">
-                                    <span class="info-label">Type:</span>
-                                    <span class="info-value">10% S / 90% I</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Flowering:</span>
-                                    <span class="info-value">62 days</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">THC:</span>
-                                    <span class="info-value">25-28%</span>
-                                </div>
-                            </div>
-                            <div class="strain-effects">
-                                <span class="effect-tag">Motivated</span>
-                                <span class="effect-tag">Energetic</span>
-                                <span class="effect-tag">Happy</span>
-                            </div>
-                            <div class="review-section">
-                                <div class="review-text">"Classic OG Kush improved with Noyes genetics. Gas, earthy and citrus with incredible potency!"</div>
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/noyesog" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Bubba Noyes -->
-                    <div class="strain-card" data-tags="indica og bubba kush">
-                        <div class="line-badge line3">OG Cross</div>
-                        <div class="card-image purple-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-header">
-                                <div class="strain-name">Bubba Noyes</div>
-                                <div class="strain-genetics">Noyes Kush × Bubba Kush</div>
-                            </div>
-                            <div class="strain-info">
-                                <div class="info-row">
-                                    <span class="info-label">Type:</span>
-                                    <span class="info-value">25% S / 75% I</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Flowering:</span>
-                                    <span class="info-value">62 days</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">THC:</span>
-                                    <span class="info-value">22-25%</span>
-                                </div>
-                            </div>
-                            <div class="strain-effects">
-                                <span class="effect-tag">Motivated</span>
-                                <span class="effect-tag">Energetic</span>
-                                <span class="effect-tag">Happy</span>
-                            </div>
-                            <div class="review-section">
-                                <div class="review-text">"Classic Bubba Kush with enhanced structure. Gas, earthy and citrus flavors with reliable effects!"</div>
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/bubbanoyes" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Captain Noyes -->
-                    <div class="strain-card" data-tags="indica og trainwreck">
-                        <div class="line-badge line3">OG Cross</div>
-                        <div class="card-image orange-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-header">
-                                <div class="strain-name">Captain Noyes</div>
-                                <div class="strain-genetics">Noyes Kush × Trainwreck</div>
-                            </div>
-                            <div class="strain-info">
-                                <div class="info-row">
-                                    <span class="info-label">Type:</span>
-                                    <span class="info-value">25% S / 75% I</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Flowering:</span>
-                                    <span class="info-value">65 days</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">THC:</span>
-                                    <span class="info-value">20-21%</span>
-                                </div>
-                            </div>
-                            <div class="strain-effects">
-                                <span class="effect-tag">Motivated</span>
-                                <span class="effect-tag">Energetic</span>
-                                <span class="effect-tag">Happy</span>
-                            </div>
-                            <div class="review-section">
-                                <div class="review-text">"Trainwreck power with Noyes reliability. Gas, earthy and citrus with energizing effects!"</div>
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/captainnoyes" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Hash Fingers -->
-                    <div class="strain-card" data-tags="indica og hash">
-                        <div class="line-badge line3">OG Cross</div>
-                        <div class="card-image mint-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-header">
-                                <div class="strain-name">Hash Fingers</div>
-                                <div class="strain-genetics">Noyes Kush × Hash Plant</div>
-                            </div>
-                            <div class="strain-info">
-                                <div class="info-row">
-                                    <span class="info-label">Type:</span>
-                                    <span class="info-value">10% S / 90% I</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Flowering:</span>
-                                    <span class="info-value">62 days</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">THC:</span>
-                                    <span class="info-value">25-28%</span>
-                                </div>
-                            </div>
-                            <div class="strain-effects">
-                                <span class="effect-tag">Motivated</span>
-                                <span class="effect-tag">Energetic</span>
-                                <span class="effect-tag">Happy</span>
-                            </div>
-                            <div class="review-section">
-                                <div class="review-text">"Classic hash plant genetics with Noyes improvement. Gas, earthy and citrus with heavy potency!"</div>
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/hashfingers" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Noyes Poison -->
-                    <div class="strain-card" data-tags="sativa og durban">
-                        <div class="line-badge line3">OG Cross</div>
-                        <div class="card-image green-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-header">
-                                <div class="strain-name">Noyes Poison</div>
-                                <div class="strain-genetics">Durban Poison × Noyes Kush</div>
-                            </div>
-                            <div class="strain-info">
-                                <div class="info-row">
-                                    <span class="info-label">Type:</span>
-                                    <span class="info-value">80% S / 20% I</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Flowering:</span>
-                                    <span class="info-value">65-68 days</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">THC:</span>
-                                    <span class="info-value">23-24%</span>
-                                </div>
-                            </div>
-                            <div class="strain-effects">
-                                <span class="effect-tag">Motivated</span>
-                                <span class="effect-tag">Energetic</span>
-                                <span class="effect-tag">Happy</span>
-                            </div>
-                            <div class="review-section">
-                                <div class="review-text">"Pure sativa energy from Durban Poison with Noyes structure. Gas, earthy and citrus with uplifting effects!"</div>
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/noyespoison" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-                            <div class="card-footer">
-                                <a href="/cheetofingers" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- Line 4 - Skunk Crosses -->
-        <section class="line-section" id="line4">
-            <div class="container">
-                <h2 class="line-title">Line 4 - Skunk Crosses</h2>
-                <p class="line-description">Everything SKUNK - Classic skunk genetics enhanced with Noyes breeding.</p>
-                <div class="cards-grid">
-                    
-                    <!-- Albino Skunk -->
-                    <div class="strain-card" data-tags="indica skunk albino">
-                        <div class="line-badge line4">Skunk</div>
-                        <div class="card-image mint-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-header">
-                                <div class="strain-name">Albino Skunk</div>
-                                <div class="strain-genetics">Skunk × ATF × Noyes Breath</div>
-                            </div>
-                            <div class="strain-info">
-                                <div class="info-row">
-                                    <span class="info-label">Type:</span>
-                                    <span class="info-value">35% S / 65% I</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Flowering:</span>
-                                    <span class="info-value">66-68 days</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">THC:</span>
-                                    <span class="info-value">24-26%</span>
-                                </div>
-                            </div>
-                            <div class="strain-effects">
-                                <span class="effect-tag">Happy</span>
-                                <span class="effect-tag">Energetic</span>
-                            </div>
-                            <div class="review-section">
-                                <div class="review-text">"Unique albino characteristics with classic skunk power. Skunky and gassy flavors!"</div>
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/albinoskunk" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Rainbow Skunk -->
-                    <div class="strain-card" data-tags="indica skunk rainbow">
-                        <div class="line-badge line4">Skunk</div>
-                        <div class="card-image purple-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-header">
-                                <div class="strain-name">Rainbow Skunk</div>
-                                <div class="strain-genetics">Skunk × Rainbow Belts</div>
-                            </div>
-                            <div class="strain-info">
-                                <div class="info-row">
-                                    <span class="info-label">Type:</span>
-                                    <span class="info-value">30% S / 70% I</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Flowering:</span>
-                                    <span class="info-value">66-68 days</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">THC:</span>
-                                    <span class="info-value">21-22%</span>
-                                </div>
-                            </div>
-                            <div class="strain-effects">
-                                <span class="effect-tag">Colorful</span>
-                                <span class="effect-tag">Classic Skunk</span>
-                            </div>
-                            <div class="review-section">
-                                <div class="review-text">"Beautiful rainbow colors meet classic skunk genetics. Visual appeal with potent effects!"</div>
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/rainbowskunk" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Skunk Breath -->
-                    <div class="strain-card" data-tags="indica skunk meatbreath">
-                        <div class="line-badge line4">Skunk</div>
-                        <div class="card-image red-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-header">
-                                <div class="strain-name">Skunk Breath</div>
-                                <div class="strain-genetics">Skunk × Noyes Breath</div>
-                            </div>
-                            <div class="strain-info">
-                                <div class="info-row">
-                                    <span class="info-label">Type:</span>
-                                    <span class="info-value">20% S / 80% I</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Flowering:</span>
-                                    <span class="info-value">64 days</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">THC:</span>
-                                    <span class="info-value">28%</span>
-                                </div>
-                            </div>
-                            <div class="strain-effects">
-                                <span class="effect-tag">Relaxed</span>
-                                <span class="effect-tag">Sleepy</span>
-                                <span class="effect-tag">Happy</span>
-                            </div>
-                            <div class="review-section">
-                                <div class="review-text">"Heavy hitting indica with skunk and rubber flavors. Perfect for evening relaxation!"</div>
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/skunkbreath" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Blueberry Skunk -->
-                    <div class="strain-card" data-tags="indica skunk blueberry">
-                        <div class="line-badge line4">Skunk</div>
-                        <div class="card-image blue-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-header">
-                                <div class="strain-name">Blueberry Skunk</div>
-                                <div class="strain-genetics">Skunk × Blueberry Fingers</div>
-                            </div>
-                            <div class="strain-info">
-                                <div class="info-row">
-                                    <span class="info-label">Type:</span>
-                                    <span class="info-value">30% S / 70% I</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Flowering:</span>
-                                    <span class="info-value">64-65 days</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">THC:</span>
-                                    <span class="info-value">24-26%</span>
-                                </div>
-                            </div>
-                            <div class="strain-effects">
-                                <span class="effect-tag">Relaxed</span>
-                                <span class="effect-tag">Sleepy</span>
-                                <span class="effect-tag">Happy</span>
-                            </div>
-                            <div class="review-section">
-                                <div class="review-text">"Sweet blueberry flavors with classic skunk backbone. Best of both worlds!"</div>
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/blueberryskunk" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Skunk Cake -->
-                    <div class="strain-card" data-tags="indica skunk cake">
-                        <div class="line-badge line4">Skunk</div>
-                        <div class="card-image coral-gradient"></div>
-                        <div class="card-content">
-                            <div class="card-header">
-                                <div class="strain-name">Skunk Cake</div>
-                                <div class="strain-genetics">Skunk × Cake Breath</div>
-                            </div>
-                            <div class="strain-info">
-                                <div class="info-row">
-                                    <span class="info-label">Type:</span>
-                                    <span class="info-value">15% S / 85% I</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Flowering:</span>
-                                    <span class="info-value">62 days</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">THC:</span>
-                                    <span class="info-value">28%</span>
-                                </div>
-                            </div>
-                            <div class="strain-effects">
-                                <span class="effect-tag">Relaxed</span>
-                            </div>
-                            <div class="review-section">
-                                <div class="review-text">"Potent indica combining skunk and cake genetics. Incredibly relaxing effects!"</div>
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/skunkcake" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- Next Release Section -->
-        <section class="line-section" id="next">
-            <div class="container">
-                <h2 class="line-title">Next Release</h2>
-                <p class="line-description">Upcoming strains almost ready for release - coming very soon!</p>
-                <div class="cards-grid">
-                    
-                    <!-- Citrus Squirts -->
-                    <div class="strain-card" data-tags="sativa citrus upcoming">
-                        <div class="line-badge next">Coming Soon</div>">Type:</span>
-                                    <span class="info-value">25% S / 75% I</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">Flowering:</span>
-                                    <span class="info-value">62 days</span>
-                                </div>
-                                <div class="info-row">
-                                    <span class="info-label">THC:</span>
-                                    <span class="info-value">25-27%</span>
-                                </div>
-                            </div>
-                            <div class="strain-effects">
-                                <span class="effect-tag">Motivated</span>
-                                <span class="effect-tag">Energetic</span>
-                                <span class="effect-tag">Happy</span>
-                                <span class="effect-tag">Uplifted</span>
-                            </div>
-                            <div class="review-section">
-                                <div class="review-text">"Incredible rainbow colors with that classic alien tech power. Perfect balance of energy and relaxation!"</div>
-                                <div class="stars">
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                    <span class="star">★</span>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/citrussquirts" class="btn">Read More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-                    
+                                    <span
