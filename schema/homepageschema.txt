@@ -1,0 +1,278 @@
+<!-- MAIN ORGANIZATION SCHEMA - Add this to your homepage <head> section -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "NoyesBoys",
+  "url": "https://noyesboys.com",
+  "logo": "https://noyesboys.com/assets/img/noyes%20boys%20logo.png",
+  "description": "Canadian Cannabis Seed Seedbank Online",
+  "foundingDate": "2015",
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "email": "thenoyesboyz@gmail.om",
+      "contactType": "customer service",
+      "areaServed": "Canada",
+      "availableLanguage": ["English"]
+    },
+  ],
+  "sameAs": [
+    "https://www.facebook.com/TheNoyesBoys",
+    "https://x.com/The_Noyes_Boys",
+    "https://www.instagram.com/noyes_boys/"
+  ]
+}
+</script>
+
+<!-- LOCAL BUSINESS SCHEMA - If you have a physical location -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "NoYesBoys",
+  "image": "https://noyesboys.com/assets/img/noyes%20boys%20logo.png",
+  "@id": "https://noyesboys.com",
+  "url": "https://noyesboys.com",
+  "priceRange": "$5-$40",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "ONLINE RETAILER",
+    "addressLocality": "Thunder Bay",
+    "addressRegion": "Ontario",
+    "postalCode": "12345",
+    "addressCountry": "CANADA"
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      "opens": "00:00",
+      "closes": "24:00"
+    }
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "reviewCount": "127"
+  }
+}
+</script>
+
+<!-- WEBSITE SCHEMA - Add to homepage -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "NoyesBoys",
+  "url": "https://noyesboys.com",
+  "description": "Professional Cannabis Seed Production",
+  "publisher": {
+    "@type": "Organization",
+    "name": "NoyesBoys"
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://noyesboys.com/search?q={search_term_string}"
+    },
+    "query-input": "required name=line"
+  }
+}
+</script>
+
+<!-- SERVICE SCHEMA - Add to services page -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "NoyesBoys Feminized Cannabis Genetics",
+  "description": "The BEST Cannabis Seeds Canada Has to Offer",
+  "provider": {
+    "@type": "Organization",
+    "name": "NoyesBoys",
+    "url": "https://noyesboys.com"
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "Canada"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "cannabis seeds",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "basic seed packs",
+          "description": "1-30 seeds"
+        },
+        "price": "$20-$40",
+        "priceCurrency": "CAD"
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Bulk",
+          "description": "30 seeds for a great deal"
+        },
+        "price": "$220-$420",
+        "priceCurrency": "CAD"
+      },
+      ]
+  }
+}
+</script>
+
+<!-- FAQ SCHEMA - Add to FAQ page or homepage -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How long does it take to Grow from seed?",
+      "acceptedAnswer": {
+        "@type": "1-2 months of veg & 62 days of flower",
+        "text": "Most websites take 2-4 weeks to complete, depending on complexity. Simple brochure sites can be done in 1-2 weeks, while e-commerce sites typically take 3-6 weeks."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you provide website hosting?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "no we only host our own genetics, but other sites host us"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "will feminized seeds grow male plants",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "in extremely rare conditions; 1%>"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is your pricing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "$40 for a single feminized seed, down to below $20 in bulk."
+      }
+    }
+  ]
+}
+</script>
+
+<!-- BREADCRUMB SCHEMA - Add to individual pages -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Noyes Original Strains",
+      "item": "https://noyesboys.com/Line1.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Noyes OG strains",
+      "item": "https://noyesboys.com/line2.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Noyes Geode (rock) Strains",
+      "item": "https://noyesboys.com/Line3.html"
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "name": "Noyes skunk Strains",
+      "item": "https://noyesboys.com/Line4.html"
+    },
+
+
+  ]
+}
+</script>
+
+<!-- ARTICLE SCHEMA - Add to blog posts -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "introduction to the noyes boys",
+  "description": "Noyes Boys Genetics has earned its reputation as a standout Canadian seed bank, carving out a niche in the cannabis seeds market through its craft approach, rich genetics, and commitment to producing high-quality feminized seeds.",
+  "image": "https://noyesboys.com/assets/img/noyes%20boys%20logo.png",
+  "author": {
+    "@type": "Person",
+    "name": "The Noyes Boys Genetics",
+    "url": "https://noyesboys.com/readmore.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "NoyesBoys",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://noyesboys.com/assets/img/noyes%20boys%20logo.png",
+      "width": 200,
+      "height": 60
+    }
+  },
+  "datePublished": "2025-09-22T10:00:00+00:00",
+  "dateModified": "2025-09-22T10:00:00+00:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://noyesboys.com/readmore.html"
+  },
+  "articleSection": "Cannabis Growing Tips",
+  "wordCount": 1200
+},
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "understanding feminized seedsw",
+  "description": "What Are Feminized Seeds?
+Feminized seeds are genetically engineered to produce only female plants, ensuring that every plant in your garden will contribute to a bountiful harvest. This eliminates the unpredictability of regular seeds and maximizes growing efficiency.
+The Science Behind Feminization",
+  "image": "https://noyesboys.com/assets/img/noyes%20boys%20logo.png",
+  "author": {
+    "@type": "Person",
+    "name": "The Noyes Boys Genetics",
+    "url": "https://noyesboys.com/readmore.html"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "NoyesBoys",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://noyesboys.com/assets/img/noyes%20boys%20logo.png",
+      "width": 200,
+      "height": 60
+    }
+  },
+  "datePublished": "2025-09-22T10:00:00+00:00",
+  "dateModified": "2025-09-22T10:00:00+00:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://noyesboys.com/readmore.html"
+  },
+  "articleSection": "Cannabis Growing Tips",
+  "wordCount": 1200
+},
+</script>

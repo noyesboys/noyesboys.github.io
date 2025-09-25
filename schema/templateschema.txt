@@ -1,0 +1,262 @@
+<!-- MAIN ORGANIZATION SCHEMA - Add this to your homepage <head> section -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "NoYesBoys",
+  "url": "https://noyesboys.com",
+  "logo": "https://noyesboys.com/images/logo.png",
+  "description": "Professional web design and digital marketing services helping businesses grow their online presence.",
+  "foundingDate": "2020",
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "telephone": "+1-555-123-4567",
+      "contactType": "customer service",
+      "areaServed": "US",
+      "availableLanguage": ["English"]
+    },
+    {
+      "@type": "ContactPoint",
+      "email": "info@noyesboys.com",
+      "contactType": "customer service"
+    }
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "123 Business Street",
+    "addressLocality": "Your City",
+    "addressRegion": "Your State",
+    "postalCode": "12345",
+    "addressCountry": "US"
+  },
+  "sameAs": [
+    "https://www.facebook.com/noyesboys",
+    "https://www.twitter.com/noyesboys",
+    "https://www.linkedin.com/company/noyesboys",
+    "https://www.instagram.com/noyesboys"
+  ]
+}
+</script>
+
+<!-- LOCAL BUSINESS SCHEMA - If you have a physical location -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "NoYesBoys",
+  "image": "https://noyesboys.com/images/storefront.jpg",
+  "@id": "https://noyesboys.com",
+  "url": "https://noyesboys.com",
+  "telephone": "+1-555-123-4567",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "123 Business Street",
+    "addressLocality": "Your City",
+    "addressRegion": "Your State",
+    "postalCode": "12345",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 40.7128,
+    "longitude": -74.0060
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      "opens": "09:00",
+      "closes": "17:00"
+    }
+  ],
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "reviewCount": "127"
+  }
+}
+</script>
+
+<!-- WEBSITE SCHEMA - Add to homepage -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "NoYesBoys",
+  "url": "https://noyesboys.com",
+  "description": "Professional web design and digital marketing services",
+  "publisher": {
+    "@type": "Organization",
+    "name": "NoYesBoys"
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://noyesboys.com/search?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+<!-- SERVICE SCHEMA - Add to services page -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "NoYesBoys Web Design Services",
+  "description": "Complete web design and development services including responsive design, e-commerce solutions, and digital marketing.",
+  "provider": {
+    "@type": "Organization",
+    "name": "NoYesBoys",
+    "url": "https://noyesboys.com"
+  },
+  "areaServed": {
+    "@type": "Country",
+    "name": "United States"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Web Design Services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Basic Website Package",
+          "description": "5-page responsive website with contact forms"
+        },
+        "price": "1500",
+        "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "E-commerce Website",
+          "description": "Full online store with payment processing"
+        },
+        "price": "3500",
+        "priceCurrency": "USD"
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Digital Marketing Package",
+          "description": "SEO, social media management, and content marketing"
+        },
+        "price": "800",
+        "priceCurrency": "USD"
+      }
+    ]
+  }
+}
+</script>
+
+<!-- FAQ SCHEMA - Add to FAQ page or homepage -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How long does it take to build a website?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most websites take 2-4 weeks to complete, depending on complexity. Simple brochure sites can be done in 1-2 weeks, while e-commerce sites typically take 3-6 weeks."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you provide website hosting?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, we offer reliable web hosting services starting at $15/month. This includes SSL certificates, daily backups, and 24/7 monitoring."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can you help with SEO and digital marketing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely! We offer comprehensive digital marketing services including SEO optimization, Google Ads management, social media marketing, and content creation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is your pricing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Our basic website packages start at $1,500. E-commerce sites start at $3,500. We also offer monthly marketing packages starting at $800/month. Contact us for a custom quote."
+      }
+    }
+  ]
+}
+</script>
+
+<!-- BREADCRUMB SCHEMA - Add to individual pages -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://noyesboys.com"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Services",
+      "item": "https://noyesboys.com/services"
+    }
+  ]
+}
+</script>
+
+<!-- ARTICLE SCHEMA - Add to blog posts -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Your Blog Post Title Here",
+  "description": "Brief description of your blog post content",
+  "image": "https://noyesboys.com/images/blog-post-image.jpg",
+  "author": {
+    "@type": "Person",
+    "name": "Author Name",
+    "url": "https://noyesboys.com/about"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "NoYesBoys",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://noyesboys.com/images/logo.png",
+      "width": 200,
+      "height": 60
+    }
+  },
+  "datePublished": "2025-09-22T10:00:00+00:00",
+  "dateModified": "2025-09-22T10:00:00+00:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://noyesboys.com/blog/your-post-url"
+  },
+  "articleSection": "Web Design Tips",
+  "wordCount": 1200
+}
+</script>

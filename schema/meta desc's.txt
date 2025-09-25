@@ -1,0 +1,49 @@
+NOYESBOYS.COM META DESCRIPTION TAGS - COPY & PASTE READY
+
+=== HOMEPAGE (https://noyesboys.com/) ===
+<meta name="description" content="Premium Canadian cannabis seeds since 2015. Hand-bred F8 feminized genetics with 99.9% female guarantee. Purple strains, mildew resistant, fast shipping.">
+
+=== FEMINIZED SEEDS HOMEPAGE ===
+<meta name="description" content="Premium feminized cannabis seeds bred for Canadian conditions. 99.9% female plants guaranteed. Superior structure, mildew resistance, exceptional yields.">
+
+=== DEALS PAGE ===
+<meta name="description" content="Special deals on premium Canadian cannabis seeds. Stealth packaging, multiple payment options including crypto. Age 19+ only. Fast, discreet shipping.">
+
+=== LINE 1 PAGE ===
+<meta name="description" content="Noyes Boys Line 1 cannabis genetics. Hand-selected feminized seeds bred for Canadian growing conditions. Premium F8 genetics with proven performance.">
+
+=== LINE 2 PAGE ===
+<meta name="description" content="Line 2 cannabis seed collection from Noyes Boys. Feminized genetics optimized for short seasons. Mildew resistant strains perfect for beginners.">
+
+=== LINE 3 PAGE ===
+<meta name="description" content="Noyes Boys Line 3 premium cannabis seeds. Purple strains bred for Canadian climate. Dense, well-spaced internoding with exceptional flavor profiles.">
+
+=== LINE 4 PAGE ===
+<meta name="description" content="Line 4 cannabis genetics featuring rock-hard structure and potency. Canadian-bred feminized seeds with superior resilience and consistent results.">
+
+=== NEXT STRAINS PAGE ===
+<meta name="description" content="Upcoming cannabis strains from Noyes Boys. New genetics in development featuring improved structure, potency, and Canadian climate adaptation.">
+
+=== GENETICS PAGE ===
+<meta name="description" content="Noyes Boys cannabis genetics breeding program. F8 stabilized strains focused on plant structure, mildew resistance, and ease of growth for all levels.">
+
+=== NOYES KUSH PAGE ===
+<meta name="description" content="Noyes Kush F8 - our signature Canadian cannabis strain. Purple phenotypes, dense structure, mildew resistant. Bred specifically for short growing seasons.">
+
+=== ORDER NOW PAGE ===
+<meta name="description" content="Order premium Canadian cannabis seeds online. Multiple payment options including crypto. Stealth packaging, germination guarantee, fast shipping.">
+
+=== CONTACT US PAGE ===
+<meta name="description" content="Contact Noyes Boys Seed Bank for Canadian cannabis genetics. Expert breeding advice, strain information, and customer support since 2015.">
+
+=== REVIEWS PAGE ===
+<meta name="description" content="Customer reviews for Noyes Boys cannabis seeds. Real grower experiences with our Canadian-bred F8 genetics. Quality, germination, and growing results.">
+
+=== READ MORE PAGE ===
+<meta name="description" content="Learn more about Noyes Boys breeding philosophy. Canadian cannabis genetics focused on plant structure, resilience, and consistent performance since 2015.">
+
+IMPLEMENTATION INSTRUCTIONS:
+1. Copy the meta tag for each page
+2. Paste it in the <head> section of your HTML
+3. Place it after <title> but before </head>
+4. Make sure there's only one meta description per page
