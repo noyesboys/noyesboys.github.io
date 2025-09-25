@@ -173,96 +173,42 @@
 
         /* Playing Card Style */
         .strain-card {
-    width: 100%;
-    max-width: 300px; /* Control the max width of the card */
-    margin: 10px;
-    overflow: hidden;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
+            aspect-ratio: 2.5/3.5;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .card-image {
+        position: relative;
+        width: 100%;
+        height: 200px; /* Adjust based on your design */
+        background-color: #eee; /* Fallback color if no images are loaded */
+        }
 
-.card-image {
-    position: relative;
-    width: 100%;
-    height: 200px; /* Set a fixed height for the image */
-    overflow: hidden;
-    background-color: #eee; /* Fallback color */
-}
+        .placeholder {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        }
 
-.placeholder,
-.overlay-photo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Ensures images cover the container */
-}
-
-.overlay-photo {
-    opacity: 0.7; /* Optional transparency for the overlay image */
-}
-
-.card-content {
-    padding: 15px;
-}
-
-.card-header {
-    margin-bottom: 10px;
-}
-
-.strain-name {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.strain-genetics {
-    font-size: 14px;
-    color: #666;
-}
-
-.strain-info .info-row {
-    margin-bottom: 8px;
-}
-
-.info-label {
-    font-weight: bold;
-}
-
-.effect-tag {
-    display: inline-block;
-    background: #f0f0f0;
-    margin-right: 5px;
-    padding: 3px 8px;
-    border-radius: 12px;
-}
-
-.stars {
-    color: #f1c40f;
-}
-
-.star {
-    font-size: 18px;
-}
-
-.card-footer {
-    margin-top: 10px;
-}
-
-.btn {
-    display: inline-block;
-    background-color: #2c3e50;
-    color: #fff;
-    padding: 8px 15px;
-    text-decoration: none;
-    border-radius: 5px;
-    text-align: center;
-}
+        .overlay-photo {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0.7; /* Adjust transparency */
+        }
         .strain-card:hover {
         transform: translateY(-5px) scale(1.02);
-        box-shadow: 0 10px 25px rgba(74, 222, 128, 0.3);
-        border-color: #4ade80;
+            box-shadow: 0 10px 25px rgba(74, 222, 128, 0.3);
+            border-color: #4ade80;
         }
 
         .card-image {
