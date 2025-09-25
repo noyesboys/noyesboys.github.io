@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hashfingers - Noyes Boys Genetics</title>
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background: #0a0a0a;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 30px;
+        }
+
+        .back-nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-nav a:hover {
+            color: #66BB6A;
+        }
+
+        .strain-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-radius: 15px;
+            border: 1px solid #333;
+        }
+
+        .strain-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .strain-subtitle {
+            font-size: 1.3rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .strain-type {
+            background: #4CAF50;
+            color: #000;
+            border-radius: 25px;
+            padding: 8px 20px;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Overall Rating Section */
+        .overall-rating {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+
+        .overall-rating h3 {
+            color: #4CAF50;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .rating-stars {
+            font-size: 2rem;
+            color: #4CAF50;
+        }
+
+        .rating-score {
+            font-size: 2.5rem;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .rating-details {
+            color: #cccccc;
+            font-size: 1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .strain-image {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(45deg, #8B4513, #A0522D, #CD853F, #DAA520, #B8860B, #9ACD32);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            margin-bottom: 15px;
+        }
+
+        .photo-note {
+            color: #888;
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .strain-info {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #333;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #4CAF50;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .description {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .description h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .description p {
+            color: #cccccc;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #4CAF50;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.1);
+        }
+
+        .feature-card h4 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #cccccc;
+            line-height: 1.7;
+        }
+
+        .stats-section {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .stats-title {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .stat-item {
+            margin-bottom: 25px;
+        }
+
+        .stat-label {
+            color: #cccccc;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+        }
+
+        .stat-bar {
+            height: 12px;
+            background: #2d2d2d;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #444;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #66BB6A);
+            border-radius: 6px;
+            transition: width 0.8s ease;
+        }
+
+        .lineage-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .parent-strain {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+
+        .parent-strain h4 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .parent-strain p {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .cta-section {
+            text-align: center;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 50px 40px;
+            border: 1px solid #333;
+            margin-bottom: 40px;
+        }
+
+        .cta-section h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .cta-section p {
+            color: #cccccc;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            background: #4CAF50;
+            color: #000;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cta-button:hover {
+            background: #66BB6A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+        }
+
+        .cta-button.secondary:hover {
+            background: #4CAF50;
+            color: #000;
+        }
+
+        /* Review Section Styles */
+        .review-section {
+            margin-top: 40px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            border: 1px solid #333;
+        }
+
+        .review-section h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .review-form-container {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid #444;
+        }
+
+        .review-form {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #555;
+            background: #1a1a1a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
+            background: #1a1a1a;
+            border: 2px dashed #555;
+            border-radius: 8px;
+            color: #ccc;
+        }
+
+        .form-group input[type="file"]:hover {
+            border-color: #4CAF50;
+        }
+
+        .file-upload-note {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #888;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .rating-section {
+            margin-bottom: 20px;
+        }
+
+        .rating-section label {
+            display: block;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .star-rating {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .star {
+            color: #555;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #4CAF50;
+        }
+
+        .submit-review-btn {
+            background: #4CAF50;
+            color: #000;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-review-btn:hover {
+            background: #66BB6A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .submit-review-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .reviews-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .review-item {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .reviewer-name {
+            color: #4CAF50;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .grow-type {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .review-date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .review-stars {
+            color: #4CAF50;
+            font-size: 1.2rem;
+        }
+
+        .review-title {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .review-content {
+            color: #cccccc;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .success-message {
+            background: #4CAF50;
+            color: #000;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .error-message {
+            background: #f44336;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .strain-title {
+                font-size: 2.5rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .rating-display {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-nav">
+            <a href="javascript:history.back()">← Back to Strain Collection</a>
+        </div>
+
+        <header class="strain-header">
+            <h1 class="strain-title">Hashfingers</h1>
+            <p class="strain-subtitle">Ultimate Hash-Making Machine</p>
+            <span class="strain-type">60% Indica / 40% Sativa</span>
+        </header>
+
+        <!-- Overall Rating Section -->
+        <div class="overall-rating">
+            <h3>Customer Reviews</h3>
+            <div class="rating-display">
+                <div class="rating-stars" id="overallStars">★★★★★</div>
+                <div class="rating-score" id="overallScore">4.7</div>
+            </div>
+            <div class="rating-details" id="ratingDetails">Based on 38 reviews</div>
+        </div>
+
+        <div class="main-content">
+            <div class="strain-image">
+                <div class="image-placeholder">
+                    INSERT YOUR PHOTO HERE
+                </div>
+                <p style="color: #4CAF50; font-style: italic; font-weight: 500;">Sticky resin production that coats your fingers in golden hash</p>
+                <p class="photo-note">Insert your photo here</p>
+            </div>
+
+            <div class="strain-info">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">THC Content</div>
+                        <div class="info-value">23-27%</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">CBD Content</div>
+                        <div class="info-value">&lt;1%</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Flowering Time</div>
+                        <div class="info-value">63-70 days</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Yield Indoor</div>
+                        <div class="info-value">500-600g/m²</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Yield Outdoor</div>
+                        <div class="info-value">2-3lb/plant</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Plant Height</div>
+                        <div class="info-value">Medium-Tall</div>
+                    </div>
+                </div>
+
+                <div class="lineage-section">
+                    <div class="parent-strain">
+                        <h4>Genetics</h4>
+                        <p>Hash Plant × Sticky Fingers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="description">
+            <h3>About Hashfingers</h3>
+            <p>Hashfingers represents the pinnacle of hash-making genetics, bred specifically for extract artists and concentrate enthusiasts who demand maximum resin production and premium hash quality. This strain combines the legendary Hash Plant genetics with the ultra-sticky characteristics of Sticky Fingers, creating a cultivar that literally coats your fingers in golden resin during handling.</p>
+            
+            <p>The name says it all - Hashfingers produces such abundant, sticky trichomes that trimming and handling the buds results in fingers completely covered in premium finger hash. This isn't just about quantity; the quality of the resin is exceptional, with complex terpene profiles and potent cannabinoid content that creates world-class hash and concentrates.</p>
+            
+            <p>Effects provide the perfect balance for hash enthusiasts - clear-headed enough for concentrate work but potent enough to deliver serious relief. The 60/40 indica-dominant profile offers relaxing body effects while maintaining mental clarity, making it ideal for both medicinal users and those who appreciate craft hash traditions. This strain bridges old-school hash culture with modern concentrate innovation.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4>🔥 Extreme Resin Production</h4>
+                <p>Produces so much sticky resin that your fingers get completely coated in premium finger hash. Perfect for traditional hash-making and modern extraction methods.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🧬 Hash Plant Heritage</h4>
+                <p>Built on legendary Hash Plant genetics known worldwide for concentrate production. Combined with Sticky Fingers for even more resinous characteristics.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>⚖️ Perfect Balance</h4>
+                <p>60/40 indica-dominant ratio provides relaxing effects while maintaining clarity. Ideal for concentrate work and hash appreciation sessions.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🎯 Extract Excellence</h4>
+                <p>Exceptional yields for bubble hash, rosin, dry sift, and all extraction methods. Premium terpene preservation creates world-class concentrates.</p>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h3 class="stats-title">Strain Characteristics</h3>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Resin Production</span>
+                    <span>Extreme</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 98%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Hash Quality</span>
+                    <span>Premium</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 96%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Extract Yields</span>
+                    <span>Maximum</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 94%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Stickiness Factor</span>
+                    <span>Legendary</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h3>Ready to Make Premium Hash?</h3>
+            <p>
+                Experience the ultimate hash-making strain with extreme resin production and legendary stickiness. 
+                Perfect for extract artists and concentrate enthusiasts seeking maximum yields and premium quality.
+            </p>
+            <button class="cta-button">Shop Hashfingers Seeds</button>
+            <button class="cta-button secondary" onclick="scrollToReviews()">Leave a Review</button>
+        </div>
+
+        <!-- Review Section -->
+        <div class="review-section">
+            <h3>Community Reviews</h3>
+            
+            <!-- Review Form -->
+            <div class="review-form-container">
+                <form id="reviewForm" class="review-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="reviewerName">Name</label>
+                            <input type="text" id="reviewerName" name="reviewerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="growType">Growing Method</label>
+                            <select id="growType" name="growType">
+                                <option value="indoor">Indoor</option>
+                                <option value="outdoor">Outdoor</option>
+                                <option value="greenhouse">Greenhouse</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="rating-section">
+                        <label>Overall Rating</label>
+                        <div class="star-rating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reviewTitle">Review Title</label>
+                        <input type="text" id="reviewTitle" name="reviewTitle" placeholder="Sum up your experience..." required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reviewText">Your Review</label>
+                        <textarea id="reviewText" name="reviewText" rows="4" placeholder="Share your growing experience, effects, taste, etc..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reviewPhotos">Upload Photos (Optional)</label>
+                        <input type="file" id="reviewPhotos" name="reviewPhotos" multiple accept="image/*">
+                        <div class="file-upload-note">You can upload multiple photos of your grow, harvest, or buds (JPG, PNG, GIF)</div>
+                    </div>
+                    
+                    <div class="success-message" id="successMessage">
+                        Thank you! Your review has been submitted and will be verified and published shortly.
+                    </div>
+                    
+                    <div class="error-message" id="errorMessage">
+                        There was an error submitting your review. Please try again.
+                    </div>
+                    
+                    <button type="submit" class="submit-review-btn" id="submitBtn">Submit Review for Verification</button>
+                </form>
+            </div>
+
+            <!-- Reviews Display -->
+            <div class="reviews-container" id="reviewsContainer">
+                <!-- Reviews will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample reviews data (38 reviews for Hashfingers)
+        let reviews = [
+            {
+                name: "HashMaster",
+                growType: "Indoor",
+                rating: 5,
+                title: "Ultimate hash-making strain!",
+                content: "Hashfingers is absolutely incredible for hash production. The resin is so sticky that my fingers were completely coated in golden hash after trimming. Made some of the best bubble hash I've ever produced. This strain is a concentrate artist's dream!",
+                date: "1 week ago"
+            },
+            {
+                name: "StickyFingers420",
+                growType: "Indoor",
+                rating: 5,
+                title: "So much resin it's ridiculous",
+                content: "The name is perfect - my fingers were literally dripping with sticky resin. Never seen production like this before. The finger hash alone was incredible quality. Perfect for anyone serious about making concentrates. This is the real deal!",
+                date: "2 weeks ago"
+            },
+            {
+                name: "ExtractArtist",
+                growType: "Indoor",
+                rating: 4,
+                title: "Rosin press heaven",
+                content: "Hashfingers produces insane rosin yields. The trichome coverage is so dense that every surface is coated in resin. Pressed some amazing live rosin with incredible flavor and potency. Extract makers need this strain in their arsenal!",
+                date: "3 weeks ago"
+            },
+            {
+                name: "BubbleHashKing",
+                growType: "Indoor",
+                rating: 5,
+                title: "Perfect for bubble hash",
+                content: "Made the most beautiful full-melt bubble hash from Hashfingers. The trichome heads are perfect size and quality for water extraction. Yields were massive and the hash was pure gold. This strain was bred for hash making and it shows!",
+                date: "1 month ago"
+            },
+            {
+                name: "ResinCollector",
+                growType: "Indoor",
+                rating: 5,
+                title: "Finger hash goldmine!",
+                content: "The amount of resin this strain produces is absolutely insane. After just touching the buds during trimming, my fingers were completely coated in sticky golden hash. Made some incredible dry sift that was pure fire. This strain is a concentrate maker's absolute dream come true!",
+                date: "1 month ago"
+            },
+            {
+                name: "ConcentratePro",
+                growType: "Indoor",
+                rating: 4,
+                title: "Amazing for extracts",
+                content: "Hashfingers delivered exactly what I was looking for - maximum resin production for concentrate making. The bubble hash yields were incredible and the quality was top shelf. Effects are perfect for evening sessions. Only small complaint is the trim work gets messy with all that sticky resin!",
+                date: "1 month ago"
+            },
+            {
+                name: "StickySteve",
+                growType: "Indoor",
+                rating: 5,
+                title: "Lives up to the hype completely",
+                content: "Everything I read about Hashfingers was true. The resin production is off the charts - literally had to use scissors to cut the hash off my fingers after handling the buds. Made some of the best rosin I've ever pressed. This strain is the real deal for hash makers!",
+                date: "1 month ago"
+            },
+            {
+                name: "HashPlantFan",
+                growType: "Outdoor",
+                rating: 5,
+                title: "Hash Plant genetics shine through",
+                content: "You can definitely see the Hash Plant genetics in this strain. Outdoor plants were covered in resin from top to bottom. The finger hash was so good I barely needed to make bubble hash! Perfect balance of effects too - relaxing but not couch-locking. Excellent work by Noyes Boys!",
+                date: "5 weeks ago"
+            },
+            {
+                name: "FingerHashKing",
+                growType: "Indoor",
+                rating: 5,
+                title: "Finger hash better than most concentrates",
+                content: "The finger hash from Hashfingers was literally better quality than most concentrates I've bought. So sticky and potent that just scraping it off my hands gave me enough for multiple sessions. The actual buds made incredible bubble hash too. This strain is revolutionary!",
+                date: "6 weeks ago"
+            },
+            {
+                name: "TrimmerNightmare",
+                growType: "Indoor",
+                rating: 4,
+                title: "Trimming was a sticky mess (in the best way)",
+                content: "Trimming Hashfingers was absolutely insane - my scissors got so gummed up with resin I had to stop every few minutes to clean them. My fingers looked like I dipped them in honey hash. The yields were massive and quality incredible. Worth every sticky minute of trim work!",
+                date: "2 months ago"
+            },
+            {
+                name: "OldSchoolHasher",
+                growType: "Indoor",
+                rating: 5,
+                title: "Takes me back to the old country",
+                content: "This strain reminds me of the legendary hash plants from back in the day. The resin production is unreal and the quality of the finger hash is just like what we used to scrape in the mountains. Modern genetics with old school hash-making power. Absolutely perfect!",
+                date: "2 months ago"
+            },
+            {
+                name: "ExtractArtisan",
+                growType: "Indoor",
+                rating: 5,
+                title: "Professional extract maker approved",
+                content: "As a professional extract maker, I can say Hashfingers is in a league of its own for resin production. The trichome quality is exceptional and extraction yields are through the roof. Made some award-winning bubble hash with this strain. Every serious extractor needs this in their arsenal!",
+                date: "2 months ago"
+            },
+            {
+                name: "RosinPressGod",
+                growType: "Indoor",
+                rating: 5,
+                title: "Rosin press yields are incredible",
+                content: "Pressed some Hashfingers flower and the yields were absolutely incredible - 28% return of pure golden rosin. The flavor was amazing and effects were perfect. The amount of resin on the buds made pressing feel like cheating. This strain was bred for concentrates!",
+                date: "3 months ago"
+            },
+            {
+                name: "StickyFingerz",
+                growType: "Greenhouse",
+                rating: 4,
+                title: "Greenhouse success story",
+                content: "Grew Hashfingers in the greenhouse and even with the lower light, the resin production was still incredible. The finger hash alone was worth the grow. Plants stayed compact but produced massive amounts of sticky buds. Great strain for concentrate enthusiasts!",
+                date: "3 months ago"
+            },
+            {
+                name: "HashMakingMachine",
+                growType: "Indoor",
+                rating: 5,
+                title: "Built for hash making",
+                content: "This strain was clearly bred with hash making in mind. The resin glands are huge and perfectly formed for extraction. Made some of the finest bubble hash I've ever produced. The finger hash during trimming was so good I saved every scraping. Absolute perfection!",
+                date: "3 months ago"
+            },
+            {
+                name: "ConcentrateConnoisseur",
+                growType: "Indoor",
+                rating: 5,
+                title: "Connoisseur grade extracts",
+                content: "Hashfingers produces connoisseur grade material for extractions. The terpene preservation is incredible and the potency is off the charts. Made some 6-star bubble hash that melted completely clean. This is what extract artists dream about!",
+                date: "4 months ago"
+            },
+            {
+                name: "DabKing420",
+                growType: "Indoor",
+                rating: 4,
+                title: "Rosin dabs are incredible",
+                content: "The rosin from Hashfingers is some of the best I've ever dabbed. Incredible flavor, potency, and texture. The yields from pressing were amazing too. Only thing is the plants get so sticky during flower that maintenance is challenging, but totally worth it!",
+                date: "4 months ago"
+            },
+            {
+                name: "BubbleHashMaster",
+                growType: "Indoor",
+                rating: 5,
+                title: "Bubble hash perfection",
+                content: "Made the most perfect bubble hash with Hashfingers - full melt, incredible flavor, and potent effects. The trichome heads are perfectly sized for water extraction. Even the finger hash scraped off during processing was better than most store-bought concentrates. Legendary strain!",
+                date: "4 months ago"
+            },
+            {
+                name: "StickyIckyGrower",
+                growType: "Indoor",
+                rating: 5,
+                title: "Stickiest strain I've ever grown",
+                content: "Hashfingers is hands down the stickiest strain I've ever grown in 15 years of cultivation. The resin production is absolutely ridiculous - every surface of the plant is covered. The finger hash alone made the entire grow worth it. This strain is legendary!",
+                date: "5 months ago"
+            },
+            {
+                name: "ExtractEnthusiast",
+                growType: "Indoor",
+                rating: 4,
+                title: "Extract enthusiast's paradise",
+                content: "For anyone into making concentrates, Hashfingers is paradise. The yields are incredible and the quality is top shelf. Made amazing rosin, bubble hash, and dry sift all from one plant. The effects are perfect too - relaxing but clear-headed. Highly recommended!",
+                date: "5 months ago"
+            },
+            {
+                name: "ResinRich",
+                growType: "Indoor",
+                rating: 5,
+                title: "Resin production is off the charts",
+                content: "The resin production on Hashfingers is literally off the charts. I've never seen anything like it. The finger hash was so abundant I filled a small container just from trimming. The quality is exceptional too - potent, flavorful, and perfectly textured. Amazing genetics!",
+                date: "5 months ago"
+            },
+            {
+                name: "HashPlantLegend",
+                growType: "Outdoor",
+                rating: 5,
+                title: "Hash Plant genetics perfected",
+                content: "This is what Hash Plant should be in 2024. The resin production is incredible and the plants are vigorous and healthy. Made traditional hand-rubbed hash that was absolutely incredible. The outdoor yields were massive and every gram was covered in resin. Perfection!",
+                date: "6 months ago"
+            },
+            {
+                name: "ModernHasher",
+                growType: "Indoor",
+                rating: 5,
+                title: "Modern hash making perfection",
+                content: "Hashfingers bridges the gap between traditional hash making and modern extraction perfectly. The resin quality is exceptional for both old school and new school techniques. Made incredible temple balls and amazing rosin from the same plants. This is the future!",
+                date: "6 months ago"
+            },
+            {
+                name: "ConcentrateCrafter",
+                growType: "Indoor",
+                rating: 4,
+                title: "Craft concentrate maker's choice",
+                content: "As someone who makes craft concentrates professionally, Hashfingers is now a staple in my garden. The quality and quantity of resin is unmatched. Makes incredible live rosin and fresh frozen bubble hash. The terpene profiles are complex and delicious. Excellent strain!",
+                date: "6 months ago"
+            },
+            {
+                name: "FingerHashCollector",
+                growType: "Indoor",
+                rating: 5,
+                title: "Collecting finger hash by the gram",
+                content: "I literally collected grams of finger hash just from handling Hashfingers during harvest and trim. The quality was so good I barely needed to make other concentrates. This strain produces more finger hash than some strains produce total resin. Absolutely incredible!",
+                date: "7 months ago"
+            },
+            {
+                name: "StickyBudSpecialist",
+                growType: "Indoor",
+                rating: 5,
+                title: "Specialist in sticky buds approved",
+                content: "I specialize in growing extra resinous strains and Hashfingers is the stickiest I've ever encountered. The buds are so covered in resin they look frosted. The finger hash production during trimming is legendary. This strain sets a new standard for stickiness!",
+                date: "7 months ago"
+            },
+            {
+                name: "HashTraditionalist",
+                growType: "Indoor",
+                rating: 5,
+                title: "Honors hash making traditions",
+                content: "Hashfingers honors the traditional hash making genetics while bringing modern improvements. The resin production rivals anything from the legendary hash regions. Made some traditional pressed hash that was absolutely incredible. This strain respects the hash legacy!",
+                date: "8 months ago"
+            },
+            {
+                name: "ExtractExpert",
+                growType: "Indoor",
+                rating: 5,
+                title: "Extract expert's top choice",
+                content: "After testing dozens of strains for extraction, Hashfingers is now my top choice. The yield, quality, and consistency are unmatched. Makes world-class bubble hash, rosin, and dry sift. The finger hash alone is better than most commercial concentrates. Exceptional genetics!",
+                date: "8 months ago"
+            },
+            {
+                name: "PremiumHashMaker",
+                growType: "Indoor",
+                rating: 4,
+                title: "Premium hash maker's review",
+                content: "Hashfingers produces premium quality material for hash making. The resin glands are perfectly developed and the extraction yields are incredible. Made some award-winning hash with this strain. Only minor complaint is the extreme stickiness makes handling challenging!",
+                date: "8 months ago"
+            },
+            {
+                name: "StickyFingerSyndrome",
+                growType: "Indoor",
+                rating: 5,
+                title: "Warning: causes sticky finger syndrome",
+                content: "Fair warning - Hashfingers will give you permanent sticky finger syndrome! The resin production is so extreme that you'll be scraping hash off your fingers for hours after handling. But that's exactly what makes this strain so special. Incredible for concentrate making!",
+                date: "9 months ago"
+            },
+            {
+                name: "HashEnthusiast2024",
+                growType: "Indoor",
+                rating: 5,
+                title: "2024's best hash strain",
+                content: "Hashfingers is easily 2024's best strain for hash making. The genetics are perfect, the resin production is extreme, and the quality is unmatched. Made incredible concentrates using every extraction method. This strain represents the pinnacle of hash genetics!",
+                date: "9 months ago"
+            },
+            {
+                name: "ResinProduction101",
+                growType: "Indoor",
+                rating: 5,
+                title: "Textbook resin production",
+                content: "If you want to teach someone about resin production, show them Hashfingers. The trichome development is textbook perfect and the quantities are incredible. The finger hash quality rivals anything I've seen in 20 years of hash making. This is how it's done!",
+                date: "10 months ago"
+            },
+            {
+                name: "ClassicHashRevival",
+                growType: "Outdoor",
+                rating: 5,
+                title: "Reviving classic hash traditions",
+                content: "Hashfingers revives the classic hash making traditions with modern genetics. The outdoor plants produced pounds of incredibly resinous material perfect for traditional methods. Made some hand-pressed hash that transported me back to the golden age. Incredible strain!",
+                date: "10 months ago"
+            },
+            {
+                name: "ExtractInnovator",
+                growType: "Indoor",
+                rating: 4,
+                title: "Innovation meets tradition",
+                content: "Hashfingers perfectly combines innovative genetics with traditional hash making qualities. The resin production enables both modern extraction techniques and old school methods. Made incredible live rosin and traditional temple balls. Some of the best material I've worked with!",
+                date: "11 months ago"
+            },
+            {
+                name: "UltimateHashStrain",
+                growType: "Indoor",
+                rating: 5,
+                title: "The ultimate hash strain",
+                content: "After growing hundreds of strains, I can confidently say Hashfingers is the ultimate hash strain. The resin production is legendary, the quality is exceptional, and the genetics are rock solid. Every hash maker needs this strain in their garden. Absolute perfection!",
+                date: "11 months ago"
+            }
+        ];
+
+        // Calculate overall rating
+        function calculateOverallRating() {
+            const totalReviews = reviews.length;
+            const totalStars = reviews.reduce((sum, review) => sum + review.rating, 0);
+            const averageRating = totalStars / totalReviews;
+            
+            document.getElementById('overallScore').textContent = averageRating.toFixed(1);
+            document.getElementById('ratingDetails').textContent = `Based on ${totalReviews} reviews`;
+            
+            // Update star display
+            const starsElement = document.getElementById('overallStars');
+            const fullStars = Math.floor(averageRating);
+            const hasHalfStar = averageRating % 1 >= 0.5;
+            
+            let starsHTML = '';
+            for (let i = 0; i < fullStars; i++) {
+                starsHTML += '★';
+            }
+            if (hasHalfStar && fullStars < 5) {
+                starsHTML += '★';
+            }
+            while (starsHTML.length < 5) {
+                starsHTML += '☆';
+            }
+            starsElement.textContent = starsHTML;
+        }
+
+        // Display reviews
+        function displayReviews() {
+            const container = document.getElementById('reviewsContainer');
+            
+            reviews.forEach(review => {
+                const reviewElement = document.createElement('div');
+                reviewElement.className = 'review-item';
+                
+                const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                
+                reviewElement.innerHTML = `
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-name">${review.name}</div>
+                            <div class="grow-type">${review.growType}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="review-stars">${stars}</div>
+                            <div class="review-date">${review.date}</div>
+                        </div>
+                    </div>
+                    <div class="review-title">${review.title}</div>
+                    <div class="review-content">${review.content}</div>
+                `;
+                
+                container.appendChild(reviewElement);
+            });
+        }
+
+        // Star rating functionality
+        let currentRating = 0;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.star');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    currentRating = parseInt(this.dataset.rating);
+                    updateStarDisplay();
+                });
+                
+                star.addEventListener('mouseover', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    highlightStars(rating);
+                });
+            });
+            
+            document.querySelector('.star-rating').addEventListener('mouseleave', function() {
+                updateStarDisplay();
+            });
+            
+            function highlightStars(rating) {
+                stars.forEach((star, index) => {
+                    star.classList.toggle('active', index < rating);
+                });
+            }
+            
+            function updateStarDisplay() {
+                highlightStars(currentRating);
+            }
+            
+            calculateOverallRating();
+            displayReviews();
+        });
+
+        // Form submission
+        document.getElementById('reviewForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (currentRating === 0) {
+                alert('Please select a star rating');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            
+            // Simulate form submission
+            setTimeout(() => {
+                successMsg.style.display = 'block';
+                errorMsg.style.display = 'none';
+                
+                // Reset form
+                document.getElementById('reviewForm').reset();
+                currentRating = 0;
+                updateStarDisplay();
+                
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Review for Verification';
+                
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                }, 5000);
+            }, 1500);
+        });
+
+        function scrollToReviews() {
+            document.querySelector('.review-section').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+        function updateStarDisplay() {
+            // Function definition moved to DOMContentLoaded for proper scope
+        }
+    </script>
+</body>
+</html>
