@@ -3,17 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noyes Boys Genetics - Premium Canadian Cannabis Seeds Showcase</title>
-    <meta name="description" content="Explore the finest Canadian cannabis genetics from Noyes Boys. Premium feminized seeds, craft quality breeding, and exceptional yields. Browse our strain showcase featuring original strains, geode crosses, OG crosses, and skunk genetics.">
-    <meta name="keywords" content="noyes boys genetics, canadian cannabis seeds, feminized cannabis seeds, premium cannabis genetics, noyes kush, purple rainbow, geode crosses, skunk genetics, craft cannabis seeds, canadian bred cannabis">
-    <meta name="author" content="Noyes Boys Genetics">
-    <meta property="og:title" content="Noyes Boys Genetics - Premium Canadian Cannabis Seeds">
-    <meta property="og:description" content="Discover premium Canadian cannabis genetics with exceptional yields and craft quality breeding.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://noyesboys.com/showcase">
-    <meta name="twitter:card" content="summary_large_image">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Noyes Boys Genetics - Strain Showcase</title>
+    <meta name="description" content="Explore the complete collection of Noyes Boys Genetics strains organized by genetic lines. Premium Canadian cannabis seeds with detailed strain information.">
     
     <style>
         * {
@@ -23,1403 +14,1133 @@
         }
 
         body {
-            font-family: 'Rajdhani', sans-serif;
-            background: #000;
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
             color: #fff;
             line-height: 1.6;
-            min-height: 100vh;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 20px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 50px;
-            padding: 40px 20px;
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
         }
 
-        .main-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 4rem;
-            font-weight: 900;
-            color: #00ff00;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-
-        .subtitle {
-            font-size: 1.5rem;
-            color: #ccc;
-            margin-bottom: 30px;
-            font-weight: 300;
-        }
-
-        .tagline {
-            font-size: 1.1rem;
-            color: #aaa;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.8;
-            font-weight: 300;
-        }
-
-        .navigation {
+        nav {
             display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 50px;
-            padding: 20px;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .nav-btn {
-            background: #111;
-            color: #fff;
-            padding: 15px 30px;
-            border: 2px solid #00ff00;
-            border-radius: 0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 700;
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4ade80;
             text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.9rem;
         }
 
-        .nav-btn:hover,
-        .nav-btn.active {
-            background: #00ff00;
-            color: #000;
-            transform: none;
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+            border-radius: 50%;
         }
 
-        .showcase-section {
-            margin-bottom: 60px;
-            display: none;
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
         }
 
-        .showcase-section.active {
-            display: block;
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
         }
 
-        .section-header {
-            background: #111;
-            border: 2px solid #00ff00;
-            padding: 40px;
-            margin-bottom: 40px;
+        .nav-links a:hover {
+            color: #4ade80;
+        }
+
+        /* Main Content */
+        main {
+            padding-top: 100px;
+            min-height: 100vh;
+        }
+
+        .page-header {
             text-align: center;
+            padding: 3rem 0;
+            background: linear-gradient(135deg, #111 0%, #1e293b 100%);
+            margin-bottom: 3rem;
         }
 
-        .section-title {
-            font-family: 'Orbitron', monospace;
-            font-size: 2.5rem;
-            color: #00ff00;
-            margin-bottom: 15px;
-            font-weight: 900;
+        .page-title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #4ade80;
+            margin-bottom: 1rem;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
 
-        .section-description {
-            color: #ccc;
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Line Sections */
+        .genetic-line {
+            margin-bottom: 4rem;
+        }
+
+        .line-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 15px;
+            border: 2px solid #4ade80;
+        }
+
+        .line-title {
+            font-size: 2rem;
+            color: #4ade80;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .line-description {
+            color: #cbd5e1;
             font-size: 1.1rem;
             max-width: 800px;
             margin: 0 auto;
-            font-weight: 300;
         }
 
-        .photo-grid {
+        /* Strain Grid */
+        .strain-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
-        .photo-item {
-            background: #111;
-            border: 2px solid #333;
-            transition: border-color 0.3s ease;
-        }
-
-        .photo-item:hover {
-            border-color: #00ff00;
-        }
-
-        .photo-carousel {
-            position: relative;
-            height: 300px;
+        /* Strain Cards */
+        .strain-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 15px;
             overflow: hidden;
-        }
-
-        .photo-slides {
-            display: flex;
-            height: 100%;
-            transition: transform 0.3s ease;
-        }
-
-        .photo-slide {
-            min-width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #00ff00, #004400, #008800, #00aa00, #00cc00);
-            background-size: 400% 400%;
-            animation: gradientShift 10s ease infinite;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #000;
-            font-size: 24px;
-            font-weight: 900;
-            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            border: 1px solid #374151;
             position: relative;
+            height: 400px;
         }
 
-        .photo-slide::after {
-            content: '';
+        .strain-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(74, 222, 128, 0.2);
+            border-color: #4ade80;
+        }
+
+        .card-image {
+            height: 100%;
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.3);
-        }
-
-        .photo-slide span {
-            position: relative;
+            transition: opacity 0.3s ease;
             z-index: 1;
-            text-align: center;
-            padding: 20px;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .strain-card:hover .card-image {
+            opacity: 0;
         }
 
-        .carousel-controls {
+        .blue-gradient {
+            background: linear-gradient(45deg, #1e40af, #3b82f6, #60a5fa);
+        }
+
+        .green-gradient {
+            background: linear-gradient(45deg, #166534, #22c55e, #4ade80);
+        }
+
+        .purple-gradient {
+            background: linear-gradient(45deg, #7c2d92, #a855f7, #c084fc);
+        }
+
+        .orange-gradient {
+            background: linear-gradient(45deg, #ea580c, #f97316, #fb923c);
+        }
+
+        .card-overlay {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0,255,0,0.8);
-            color: #000;
-            border: none;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            transition: background 0.3s ease;
-        }
-
-        .carousel-controls:hover {
-            background: #00ff00;
-        }
-
-        .carousel-prev {
-            left: 10px;
-        }
-
-        .carousel-next {
-            right: 10px;
-        }
-
-        .carousel-indicators {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
             display: flex;
-            gap: 8px;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            transition: opacity 0.3s ease;
         }
 
-        .carousel-dot {
-            width: 10px;
-            height: 10px;
-            background: rgba(255,255,255,0.5);
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s ease;
+        .strain-card:hover .card-overlay {
+            opacity: 0;
         }
 
-        .carousel-dot.active {
-            background: #00ff00;
-        }
-
-        .photo-info {
-            padding: 25px;
-        }
-
-        .photo-title {
-            font-family: 'Orbitron', monospace;
-            color: #00ff00;
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 10px;
+        .card-overlay-text {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .photo-description {
-            color: #ccc;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            font-weight: 300;
+        .card-content {
+            padding: 1.5rem;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 3;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            overflow-y: auto;
+        }
+
+        .strain-card:hover .card-content {
+            opacity: 1;
+        }
+
+        .strain-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #4ade80;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .strain-genetics {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-style: italic;
         }
 
         .strain-stats {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            padding-top: 20px;
-            border-top: 1px solid #333;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
         }
 
-        .stat-item {
-            text-align: center;
-            background: #222;
-            padding: 10px;
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid #374151;
         }
 
         .stat-label {
-            color: #00ff00;
+            color: #94a3b8;
             font-size: 0.8rem;
-            margin-bottom: 5px;
-            font-weight: 700;
             text-transform: uppercase;
         }
 
         .stat-value {
             color: #fff;
-            font-weight: 700;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .strain-effects {
+            margin-bottom: 1rem;
+        }
+
+        .effects-label {
+            color: #4ade80;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+
+        .effects-list {
+            color: #cbd5e1;
+            font-size: 0.8rem;
+        }
+
+        .strain-flavors {
+            margin-bottom: 1rem;
+        }
+
+        .flavors-label {
+            color: #4ade80;
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+
+        .flavors-list {
+            color: #cbd5e1;
+            font-size: 0.8rem;
+        }
+
+        .availability-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .available {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+
+        .limited {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        .coming-soon {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+            color: white;
+        }
+
+        .read-more-btn {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .read-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .line-title {
+                font-size: 1.5rem;
+            }
+            
+            .strain-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Navigation Filters */
+        .filter-nav {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: #111;
+            border-radius: 15px;
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            background: transparent;
+            color: #cbd5e1;
+            border: 2px solid #4ade80;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
             font-size: 0.9rem;
         }
 
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: #111;
-            border: 2px solid #00ff00;
-            padding: 40px;
-            max-width: 800px;
-            max-height: 90vh;
-            overflow-y: auto;
-            margin: 20px;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            color: #00ff00;
-            font-size: 3rem;
-            cursor: pointer;
-            z-index: 1001;
-            font-weight: bold;
-        }
-
-        .modal-image {
-            width: 100%;
-            height: 400px;
-            background: linear-gradient(45deg, #00ff00, #004400);
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #000;
-            font-size: 28px;
-            font-weight: 900;
-        }
-
-        .modal-title {
-            color: #00ff00;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            font-weight: 900;
-            text-transform: uppercase;
-        }
-
-        .modal-description {
-            color: #ccc;
-            line-height: 1.8;
-            margin-bottom: 30px;
-            font-size: 1.1rem;
-            font-weight: 300;
-        }
-
-        .cta-section {
-            background: #111;
-            border: 2px solid #00ff00;
-            padding: 50px;
-            text-align: center;
-            margin-top: 50px;
-        }
-
-        .cta-title {
-            color: #00ff00;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            font-weight: 900;
-            text-transform: uppercase;
-        }
-
-        .cta-description {
-            color: #ccc;
-            font-size: 1.2rem;
-            margin-bottom: 40px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            font-weight: 300;
-        }
-
-        .cta-button {
-            background: #111;
-            color: #00ff00;
-            padding: 15px 40px;
-            border: 2px solid #00ff00;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 10px;
-            text-decoration: none;
-            display: inline-block;
-            text-transform: uppercase;
-        }
-
-        .cta-button:hover {
-            background: #00ff00;
-            color: #000;
-        }
-
-        @media (max-width: 768px) {
-            .main-title {
-                font-size: 2.5rem;
-            }
-            
-            .photo-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-            
-            .navigation {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .nav-btn {
-                width: 250px;
-                text-align: center;
-            }
-            
-            .strain-stats {
-                grid-template-columns: 1fr;
-            }
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #4ade80;
+            color: #0a0a0a;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <h1 class="main-title">NOYES BOYS GENETICS</h1>
-            <p class="tagline">
-                Explore our finest genetics through stunning photography. From original strains to 
-                geode crosses, discover the beauty and potency of Canadian-bred cannabis at its finest.
-            </p>
-        </header>
-
-        <!-- Navigation -->
-        <nav class="navigation" role="navigation" aria-label="Strain categories">
-            <button class="nav-btn" onclick="showSection('originals')" data-section="originals">Original Strains</button>
-            <button class="nav-btn" onclick="showSection('geode')" data-section="geode"> Geode Crosses</button>
-            <button class="nav-btn" onclick="showSection('og')" data-section="og">OG Crosses</button>
-            <button class="nav-btn" onclick="showSection('skunk')" data-section="skunk">Skunk</button>
-            <button class="nav-btn" onclick="showSection('seeds')" data-section="seeds">Seeds</button>
-            <button class="nav-btn" onclick="showSection('grows')" data-section="grows">Random</button>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <a href="FeminizedSeedsHomepage.html" class="logo">
+                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+                The Noyes Boys
+            </a>
+            <ul class="nav-links">
+                <li><a href="/FeminizedSeedsHomepage">Home</a></li>
+                <li><a href="/genetics">Genetics</a></li>
+                <li><a href="/deals">Deals</a></li>
+                <li><a href="/contact_us">Contact</a></li>
+            </ul>
         </nav>
+    </header>
 
-        <!-- Line 1 - Original Strains Section -->
-        <section class="showcase-section" id="originals">
-            <div class="section-header">
-                <h2 class="section-title">Line 1 - Original Noyes Boys Strains</h2>
-                <p class="section-description">Our signature strains bred specifically for Canadian conditions. Beautiful colors, exceptional flavor, and robust growth characteristics.</p>
-            </div>
-            
-            <div class="photo-grid">
-                <!-- Noyes Kush -->
-                <div class="photo-item">
-                    <div class="photo-carousel" data-strain="noyes-kush">
-                        <div class="photo-slides">
-                            <div class="photo-slide">
-                            <div class="photo-slide"><span>Noyes Kush</span></div>
-                            <div class="photo-slide"><span>Noyes Kush</span></div>
-                            <img src="assets/Noyes Kush (F8).png" alt="Noyes Kush"></div>
-                        </div>
-                        <button class="carousel-controls carousel-prev" onclick="changeSlide('noyes-kush', -1)">‹</button>
-                        <button class="carousel-controls carousel-next" onclick="changeSlide('noyes-kush', 1)">›</button>
-                        <div class="carousel-indicators">
-                            <button class="carousel-dot active" onclick="currentSlide('noyes-kush', 1)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('noyes-kush', 2)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('noyes-kush', 3)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('noyes-kush', 4)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('noyes-kush', 5)"></button>
-                        </div>
-                    </div>
-                    <div class="photo-info">
-                        <h3 class="photo-title">Noyes Kush</h3>
-                        <p class="photo-description">Foundation genetics for all our breeding. Classic kush characteristics with Canadian resilience and exceptional structure.</p>
-                        <div class="strain-stats">
-                            <div class="stat-item">
-                                <div class="stat-label">THC</div>
-                                <div class="stat-value">25-27%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Type</div>
-                                <div class="stat-value">75% Indica</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Flowering</div>
-                                <div class="stat-value">62 Days</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Purple Rainbow -->
-                <div class="photo-item">
-                    <div class="photo-carousel" data-strain="purple-rainbow">
-                        <div class="photo-slides">
-                            <div class="photo-slide"><span>Purple Rainbow - Photo 1</span></div>
-                            <img src="assets/Noyes Kush (F8).png" alt="Noyes Kush"></div>
-                        </div>
-                        <button class="carousel-controls carousel-prev" onclick="changeSlide('purple-rainbow', -1)">‹</button>
-                        <button class="carousel-controls carousel-next" onclick="changeSlide('purple-rainbow', 1)">›</button>
-                        <div class="carousel-indicators">
-                            <button class="carousel-dot active" onclick="currentSlide('purple-rainbow', 1)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('purple-rainbow', 2)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('purple-rainbow', 3)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('purple-rainbow', 4)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('purple-rainbow', 5)"></button>
-                        </div>
-                    </div>
-                    <div class="photo-info">
-                        <h3 class="photo-title">Purple Rainbow</h3>
-                        <p class="photo-description">Sativa-dominant hybrid with beautiful grape and citrus flavors. Energetic and confident effects perfect for daytime use.</p>
-                        <div class="strain-stats">
-                            <div class="stat-item">
-                                <div class="stat-label">THC</div>
-                                <div class="stat-value">24-26%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Type</div>
-                                <div class="stat-value">70% Sativa</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Flowering</div>
-                                <div class="stat-value">68 Days</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Alienoyes Kush-->
-                <div class="photo-item">
-                    <div class="photo-carousel" data-strain="Alienoyes Kush">
-                        <div class="photo-slides">
-                            <div class="photo-slide"><span>Alienoyes Kush</span></div>
-                            <img src="assets/" alt="Alienoyes Kush"></div>
-                        </div>
-                        <button class="carousel-controls carousel-prev" onclick="changeSlide('Alienoyes-Kush', -1)">‹</button>
-                        <button class="carousel-controls carousel-next" onclick="changeSlide('Alienoyes-Kush', 1)">›</button>
-                        <div class="carousel-indicators">
-                            <button class="carousel-dot active" onclick="currentSlide('Alienoyes-Kush', 1)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('Alienoyes-Kush', 2)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('Alienoyes-Kush', 3)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('Alienoyes-Kush', 4)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('Alienoyes-Kush', 5)"></button>
-                        </div>
-                    </div>
-                    <div class="photo-info">
-                        <h3 class="photo-title">Duct Tape</h3>
-                        <p class="photo-description">Heavy indica-dominant strain with powerful couch-lock effects. Gas, earthy, and pungent flavors with high THC content.</p>
-                        <div class="strain-stats">
-                            <div class="stat-item">
-                                <div class="stat-label">THC</div>
-                                <div class="stat-value">27-28%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Type</div>
-                                <div class="stat-value">85% Indica</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Flowering</div>
-                                <div class="stat-value">62 Days</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Mango Aliens -->
-                <div class="photo-item">
-                    <div class="photo-carousel" data-strain="mango-aliens">
-                        <div class="photo-slides">
-                            <div class="photo-slide"><span>Mango Aliens</span></div>
-                            <img src="assets/Noyes Kush (F8).png" alt="Noyes Kush"></div>
-                        </div>
-                        <button class="carousel-controls carousel-prev" onclick="changeSlide('mango-aliens', -1)">‹</button>
-                        <button class="carousel-controls carousel-next" onclick="changeSlide('mango-aliens', 1)">›</button>
-                        <div class="carousel-indicators">
-                            <button class="carousel-dot active" onclick="currentSlide('mango-aliens', 1)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('mango-aliens', 2)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('mango-aliens', 3)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('mango-aliens', 4)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('mango-aliens', 5)"></button>
-                        </div>
-                    </div>
-                    <div class="photo-info">
-                        <h3 class="photo-title">Mango Aliens</h3>
-                        <p class="photo-description">Perfect hybrid balance with tropical mango flavors. Energetic and productive effects ideal for creative activities.</p>
-                        <div class="strain-stats">
-                            <div class="stat-item">
-                                <div class="stat-label">THC</div>
-                                <div class="stat-value">25-26%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Type</div>
-                                <div class="stat-value">50/50 Hybrid</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Flowering</div>
-                                <div class="stat-value">65 Days</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Citrus Haze Breath -->
-                <div class="photo-item">
-                    <div class="photo-carousel" data-strain="citrus-haze-breath">
-                        <div class="photo-slides">
-                            <div class="photo-slide"><span>Citrus Haze Breath - Photo 1</span></div>
-                            <img src="assets/Noyes Kush (F8).png" alt="Noyes Kush"></div>
-                        </div>
-                        <button class="carousel-controls carousel-prev" onclick="changeSlide('citrus-haze-breath', -1)">‹</button>
-                        <button class="carousel-controls carousel-next" onclick="changeSlide('citrus-haze-breath', 1)">›</button>
-                        <div class="carousel-indicators">
-                            <button class="carousel-dot active" onclick="currentSlide('citrus-haze-breath', 1)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('citrus-haze-breath', 2)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('citrus-haze-breath', 3)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('citrus-haze-breath', 4)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('citrus-haze-breath', 5)"></button>
-                        </div>
-                    </div>
-                    <div class="photo-info">
-                        <h3 class="photo-title">Citrus Haze Breath</h3>
-                        <p class="photo-description">Tall sativa-dominant strain with bright lemon and citrus flavors. High energy and motivation perfect for active days.</p>
-                        <div class="strain-stats">
-                            <div class="stat-item">
-                                <div class="stat-label">THC</div>
-                                <div class="stat-value">24-26%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Type</div>
-                                <div class="stat-value">75% Sativa</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Flowering</div>
-                                <div class="stat-value">62-70 Days</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Loud Dreams -->
-                <div class="photo-item">
-                    <div class="photo-carousel" data-strain="loud-dreams">
-                        <div class="photo-slides">
-                            <div class="photo-slide"><span>Loud Dreams</span></div>
-                            <img src="assets/Noyes Kush (F8).png" alt="Noyes Kush"></div>
-                        </div>
-                        <button class="carousel-controls carousel-prev" onclick="changeSlide('loud-dreams', -1)">‹</button>
-                        <button class="carousel-controls carousel-next" onclick="changeSlide('loud-dreams', 1)">›</button>
-                        <div class="carousel-indicators">
-                            <button class="carousel-dot active" onclick="currentSlide('loud-dreams', 1)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('loud-dreams', 2)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('loud-dreams', 3)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('loud-dreams', 4)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('loud-dreams', 5)"></button>
-                        </div>
-                    </div>
-                    <div class="photo-info">
-                        <h3 class="photo-title">Loud Dreams</h3>
-                        <p class="photo-description">Potent sativa strain with exceptional lemon flavour</p>
-                         <div class="strain-stats">
-                            <div class="stat-item">
-                                <div class="stat-label">THC</div>
-                                <div class="stat-value">23%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Type</div>
-                                <div class="stat-value">sativa</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Project</div>
-                                <div class="stat-value">Lemon Terps</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-         <!-- Line 2 - Geode Crosses Section -->
-        <section class="showcase-section" id="geode">
-            <div class="section-header">
-                <h2 class="section-title">Line 2 - Geode Crosses</h2>
-                <p class="section-description">Rock Hard structure, Potency and Resilience! Dense, crystalline buds with exceptional bag appeal.</p>
-            </div>
-            
-            <div class="photo-grid">
-                <!-- Genetic Lottery -->
-                <div class="photo-item">
-                    <div class="photo-carousel" data-strain="genetic-lottery">
-                        <div class="photo-slides">
-                            <div class="photo-slide"><span>Genetic Lottery - Photo 1</span></div>
-                            <div class="photo-slide"><span>Genetic Lottery - Photo 2</span></div>
-                            <div class="photo-slide"><span>Genetic Lottery - Photo 3</span></div>
-                            <div class="photo-slide"><span>Genetic Lottery - Photo 4</span></div>
-                            <div class="photo-slide"><span>Genetic Lottery - Photo 5</span></div>
-                        </div>
-                        <button class="carousel-controls carousel-prev" onclick="changeSlide('genetic-lottery', -1)">‹</button>
-                        <button class="carousel-controls carousel-next" onclick="changeSlide('genetic-lottery', 1)">›</button>
-                        <div class="carousel-indicators">
-                            <button class="carousel-dot active" onclick="currentSlide('genetic-lottery', 1)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('genetic-lottery', 2)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('genetic-lottery', 3)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('genetic-lottery', 4)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('genetic-lottery', 5)"></button>
-                        </div>
-                    </div>
-                    <div class="photo-info">
-                        <h3 class="photo-title">Genetic Lottery</h3>
-                        <p class="photo-description">Unstable "mega" crosses from all 5 original strains. Perfect for fun pheno hunting projects with unknown potency and characteristics.</p>
-                        <div class="strain-stats">
-                            <div class="stat-item">
-                                <div class="stat-label">THC</div>
-                                <div class="stat-value">?????</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Type</div>
-                                <div class="stat-value">?????</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Project</div>
-                                <div class="stat-value">Pheno Hunt</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Noyes Breath -->
-                <div class="photo-item">
-                    <div class="photo-carousel" data-strain="noyes-breath">
-                        <div class="photo-slides">
-                            <div class="photo-slide"><span>Noyes Breath - Photo 1</span></div>
-                            <div class="photo-slide"><span>Noyes Breath - Photo 2</span></div>
-                            <div class="photo-slide"><span>Noyes Breath - Photo 3</span></div>
-                            <div class="photo-slide"><span>Noyes Breath - Photo 4</span></div>
-                            <div class="photo-slide"><span>Noyes Breath - Photo 5</span></div>
-                        </div>
-                        <button class="carousel-controls carousel-prev" onclick="changeSlide('noyes-breath', -1)">‹</button>
-                        <button class="carousel-controls carousel-next" onclick="changeSlide('noyes-breath', 1)">›</button>
-                        <div class="carousel-indicators">
-                            <button class="carousel-dot active" onclick="currentSlide('noyes-breath', 1)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('noyes-breath', 2)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('noyes-breath', 3)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('noyes-breath', 4)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('noyes-breath', 5)"></button>
-                        </div>
-                    </div>
-                    <div class="photo-info">
-                        <h3 class="photo-title">Noyes Breath</h3>
-                        <p class="photo-description">Indica-dominant hybrid with gas, earthy, and citrus flavors. High THC content with energetic and happy effects.</p>
-                        <div class="strain-stats">
-                            <div class="stat-item">
-                                <div class="stat-label">THC</div>
-                                <div class="stat-value">27-28%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Type</div>
-                                <div class="stat-value">75% Indica</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Flowering</div>
-                                <div class="stat-value">62 Days</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Noyes Cake -->
-                <div class="photo-item">
-                    <div class="photo-carousel" data-strain="noyes-cake">
-                        <div class="photo-slides">
-                            <div class="photo-slide"><span>Noyes Cake - Photo 1</span></div>
-                            <div class="photo-slide"><span>Noyes Cake - Photo 2</span></div>
-                            <div class="photo-slide"><span>Noyes Cake - Photo 3</span></div>
-                            <div class="photo-slide"><span>Noyes Cake - Photo 4</span></div>
-                            <div class="photo-slide"><span>Noyes Cake - Photo 5</span></div>
-                        </div>
-                        <button class="carousel-controls carousel-prev" onclick="changeSlide('noyes-cake', -1)">‹</button>
-                        <button class="carousel-controls carousel-next" onclick="changeSlide('noyes-cake', 1)">›</button>
-                        <div class="carousel-indicators">
-                            <button class="carousel-dot active" onclick="currentSlide('noyes-cake', 1)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('noyes-cake', 2)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('noyes-cake', 3)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('noyes-cake', 4)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('noyes-cake', 5)"></button>
-                        </div>
-                    </div>
-                    <div class="photo-info">
-                        <h3 class="photo-title">Noyes Cake</h3>
-                        <p class="photo-description">Balanced hybrid with gas, earthy, and citrus terpenes. Energetic and happy effects with excellent structure.</p>
-                        <div class="strain-stats">
-                            <div class="stat-item">
-                                <div class="stat-label">THC</div>
-                                <div class="stat-value">25-28%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Type</div>
-                                <div class="stat-value">60% Indica</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Flowering</div>
-                                <div class="stat-value">62 Days</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- More Geode strains... -->
+    <main>
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="container">
+                <h1 class="page-title">Strain Showcase</h1>
+                <p class="page-subtitle">Explore our complete collection of premium Canadian cannabis genetics, organized by breeding lines</p>
             </div>
         </section>
 
-        <!-- Line 3 - OG Crosses Section -->
-        <section class="showcase-section" id="og">
-            <div class="section-header">
-                <h2 class="section-title">Line 3 - OG Crosses</h2>
-                <p class="section-description">Your old favourites bred with Noyes Kush for potency, structure, and resilience.</p>
-            </div>
-            
-            <div class="photo-grid">
-                <!-- Blueberry Kush -->
-                <div class="photo-item">
-                    <div class="photo-carousel" data-strain="blueberry-kush">
-                        <div class="photo-slides">
-                            <div class="photo-slide"><span>Blueberry Kush - Photo 1</span></div>
-                            <div class="photo-slide"><span>Blueberry Kush - Photo 2</span></div>
-                            <div class="photo-slide"><span>Blueberry Kush - Photo 3</span></div>
-                            <div class="photo-slide"><span>Blueberry Kush - Photo 4</span></div>
-                            <div class="photo-slide"><span>Blueberry Kush - Photo 5</span></div>
-                        </div>
-                        <button class="carousel-controls carousel-prev" onclick="changeSlide('blueberry-kush', -1)">‹</button>
-                        <button class="carousel-controls carousel-next" onclick="changeSlide('blueberry-kush', 1)">›</button>
-                        <div class="carousel-indicators">
-                            <button class="carousel-dot active" onclick="currentSlide('blueberry-kush', 1)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('blueberry-kush', 2)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('blueberry-kush', 3)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('blueberry-kush', 4)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('blueberry-kush', 5)"></button>
-                        </div>
-                    </div>
-                    <div class="photo-info">
-                        <h3 class="photo-title">Blueberry Kush</h3>
-                        <p class="photo-description">Classic blueberry genetics with berry, gas, and earthy flavors. Energetic and happy effects with medium CBD content.</p>
-                        <div class="strain-stats">
-                            <div class="stat-item">
-                                <div class="stat-label">THC</div>
-                                <div class="stat-value">19-21%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Type</div>
-                                <div class="stat-value">85% Indica</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Flowering</div>
-                                <div class="stat-value">62 Days</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- OG Kush -->
-                <div class="photo-item">
-                    <div class="photo-carousel" data-strain="og-kush">
-                        <div class="photo-slides">
-                            <div class="photo-slide"><span>OG Kush - Photo 1</span></div>
-                            <div class="photo-slide"><span>OG Kush - Photo 2</span></div>
-                            <div class="photo-slide"><span>OG Kush - Photo 3</span></div>
-                            <div class="photo-slide"><span>OG Kush - Photo 4</span></div>
-                            <div class="photo-slide"><span>OG Kush - Photo 5</span></div>
-                        </div>
-                        <button class="carousel-controls carousel-prev" onclick="changeSlide('og-kush', -1)">‹</button>
-                        <button class="carousel-controls carousel-next" onclick="changeSlide('og-kush', 1)">›</button>
-                        <div class="carousel-indicators">
-                            <button class="carousel-dot active" onclick="currentSlide('og-kush', 1)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('og-kush', 2)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('og-kush', 3)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('og-kush', 4)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('og-kush', 5)"></button>
-                        </div>
-                    </div>
-                    <div class="photo-info">
-                        <h3 class="photo-title">OG Kush</h3>
-                        <p class="photo-description">Tall classic OG genetics with gas and earthy flavors. High CBD content with energetic and happy effects.</p>
-                        <div class="strain-stats">
-                            <div class="stat-item">
-                                <div class="stat-label">THC</div>
-                                <div class="stat-value">18-22%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Type</div>
-                                <div class="stat-value">75% Indica</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Flowering</div>
-                                <div class="stat-value">65 Days</div>
-                            </div>
-                        </div>
-                    </div>
+        <!-- Filter Navigation -->
+        <section class="filter-nav">
+            <div class="container">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" onclick="showAllLines()">All Lines</button>
+                    <button class="filter-btn" onclick="showLine('line1')">Line 1 - Originals</button>
+                    <button class="filter-btn" onclick="showLine('line2')">Line 2 - Geode Crosses</button>
+                    <button class="filter-btn" onclick="showLine('line3')">Line 3 - OG Crosses</button>
+                    <button class="filter-btn" onclick="showLine('line4')">Line 4 - Skunk</button>
                 </div>
             </div>
         </section>
 
-        <!-- Line 4 - Skunk Section -->
-        <section class="showcase-section" id="skunk">
-            <div class="section-header">
-                <h2 class="section-title">Line 4 - Skunk Crosses</h2>
-                <p class="section-description">Everything SKUNK. Classic genetics with modern improvements for Canadian growers.</p>
-            </div>
-            
-            <div class="photo-grid">
-                <!-- Albino Skunk -->
-                <div class="photo-item">
-                    <div class="photo-carousel" data-strain="albino-skunk">
-                        <div class="photo-slides">
-                            <div class="photo-slide"><span>Albino Skunk - Photo 1</span></div>
-                            <div class="photo-slide"><span>Albino Skunk - Photo 2</span></div>
-                            <div class="photo-slide"><span>Albino Skunk - Photo 3</span></div>
-                            <div class="photo-slide"><span>Albino Skunk - Photo 4</span></div>
-                            <div class="photo-slide"><span>Albino Skunk - Photo 5</span></div>
-                        </div>
-                        <button class="carousel-controls carousel-prev" onclick="changeSlide('albino-skunk', -1)">‹</button>
-                        <button class="carousel-controls carousel-next" onclick="changeSlide('albino-skunk', 1)">›</button>
-                        <div class="carousel-indicators">
-                            <button class="carousel-dot active" onclick="currentSlide('albino-skunk', 1)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('albino-skunk', 2)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('albino-skunk', 3)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('albino-skunk', 4)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('albino-skunk', 5)"></button>
-                        </div>
-                    </div>
-                    <div class="photo-info">
-                        <h3 class="photo-title">Albino Skunk</h3>
-                        <p class="photo-description">Unique white phenotype with classic skunky and gassy flavors. Happy and energetic effects with medium plant height.</p>
-                        <div class="strain-stats">
-                            <div class="stat-item">
-                                <div class="stat-label">THC</div>
-                                <div class="stat-value">24-26%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Type</div>
-                                <div class="stat-value">65% Indica</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Flowering</div>
-                                <div class="stat-value">66-68 Days</div>
-                            </div>
-                        </div>
-                    </div>
+        <div class="container">
+            <!-- Line 1 - Original Strains -->
+            <section class="genetic-line" id="line1">
+                <div class="line-header">
+                    <h2 class="line-title">Line 1 - Original Noyes Boys Strains</h2>
+                    <p class="line-description">Our signature strains bred specifically for Canadian conditions. These are the foundation genetics that started it all.</p>
                 </div>
 
-                <!-- Rainbow Skunk -->
-                <div class="photo-item">
-                    <div class="photo-carousel" data-strain="rainbow-skunk">
-                        <div class="photo-slides">
-                            <div class="photo-slide"><span>Rainbow Skunk - Photo 1</span></div>
-                            <div class="photo-slide"><span>Rainbow Skunk - Photo 2</span></div>
-                            <div class="photo-slide"><span>Rainbow Skunk - Photo 3</span></div>
-                            <div class="photo-slide"><span>Rainbow Skunk - Photo 4</span></div>
-                            <div class="photo-slide"><span>Rainbow Skunk - Photo 5</span></div>
+                <div class="strain-grid">
+                    <!-- Purple Rainbow -->
+                    <div class="strain-card">
+                        <div class="card-image purple-gradient">
+                            <div class="card-overlay">
+                                <div class="card-overlay-text">Purple Rainbow</div>
+                            </div>
                         </div>
-                        <button class="carousel-controls carousel-prev" onclick="changeSlide('rainbow-skunk', -1)">‹</button>
-                        <button class="carousel-controls carousel-next" onclick="changeSlide('rainbow-skunk', 1)">›</button>
-                        <div class="carousel-indicators">
-                            <button class="carousel-dot active" onclick="currentSlide('rainbow-skunk', 1)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('rainbow-skunk', 2)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('rainbow-skunk', 3)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('rainbow-skunk', 4)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('rainbow-skunk', 5)"></button>
+                        <div class="card-content">
+                            <h3 class="strain-name">Purple Rainbow</h3>
+                            <p class="strain-genetics">Alien Tech × Rainbow Belts × Wedding Cake</p>
+                            <div class="strain-stats">
+                                <div class="stat-row">
+                                    <span class="stat-label">THC</span>
+                                    <span class="stat-value">25-27%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Flowering</span>
+                                    <span class="stat-value">62 days</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Type</span>
+                                    <span class="stat-value">25% S / 75% I</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Height</span>
+                                    <span class="stat-value">Medium</span>
+                                </div>
+                            </div>
+                            <div class="strain-effects">
+                                <div class="effects-label">Effects:</div>
+                                <div class="effects-list">Motivated, Energetic, Happy, Uplifted</div>
+                            </div>
+                            <div class="strain-flavors">
+                                <div class="flavors-label">Flavors:</div>
+                                <div class="flavors-list">Gas, Earthy, Citrus</div>
+                            </div>
+                            <span class="availability-badge available">Available</span>
+                            <a href="/purplerainbow" class="read-more-btn">Read More</a>
                         </div>
                     </div>
-                    <div class="photo-info">
-                        <h3 class="photo-title">Rainbow Skunk</h3>
-                        <p class="photo-description">Colorful skunk genetics with skunky, gassy, and berry flavors. Tall growth with energetic, happy, and motivated effects.</p>
-                        <div class="strain-stats">
-                            <div class="stat-item">
-                                <div class="stat-label">THC</div>
-                                <div class="stat-value">21-22%</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Type</div>
-                                <div class="stat-value">70% Indica</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Flowering</div>
-                                <div class="stat-value">66-68 Days</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Seeds Section -->
-        <section class="showcase-section" id="seeds">
-            <div class="section-header">
-                <h2 class="section-title">Premium Seeds</h2>
-                <p class="section-description">High-quality feminized cannabis seeds with germination guarantee. Canadian bred for Canadian conditions.</p>
-            </div>
-            
-            <div class="photo-grid">
-                <div class="photo-item">
-                    <div class="photo-carousel" data-strain="seed-collection">
-                        <div class="photo-slides">
-                            <div class="photo-slide"><span>Premium Seeds - Collection 1</span></div>
-                            <div class="photo-slide"><span>Premium Seeds - Collection 2</span></div>
-                            <div class="photo-slide"><span>Premium Seeds - Collection 3</span></div>
-                            <div class="photo-slide"><span>Premium Seeds - Collection 4</span></div>
-                            <div class="photo-slide"><span>Premium Seeds - Collection 5</span></div>
+                    <!-- Rainbow Cakes -->
+                    <div class="strain-card">
+                        <div class="card-image blue-gradient">
+                            <div class="card-overlay">
+                                <div class="card-overlay-text">Rainbow Cakes</div>
+                            </div>
                         </div>
-                        <button class="carousel-controls carousel-prev" onclick="changeSlide('seed-collection', -1)">‹</button>
-                        <button class="carousel-controls carousel-next" onclick="changeSlide('seed-collection', 1)">›</button>
-                        <div class="carousel-indicators">
-                            <button class="carousel-dot active" onclick="currentSlide('seed-collection', 1)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('seed-collection', 2)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('seed-collection', 3)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('seed-collection', 4)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('seed-collection', 5)"></button>
-                        </div>
-                    </div>
-                    <div class="photo-info">
-                        <h3 class="photo-title">Feminized Seed Collection</h3>
-                        <p class="photo-description">High-quality feminized seeds with germination guarantee. Carefully selected genetics from all our premium lines.</p>
-                        <div class="strain-stats">
-                            <div class="stat-item">
-                                <div class="stat-label">Female</div>
-                                <div class="stat-value">99.9%</div>
+                        <div class="card-content">
+                            <h3 class="strain-name">Rainbow Cakes</h3>
+                            <p class="strain-genetics">Noyes Breath × Biscotti × Wedding Cake</p>
+                            <div class="strain-stats">
+                                <div class="stat-row">
+                                    <span class="stat-label">THC</span>
+                                    <span class="stat-value">24-26%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Flowering</span>
+                                    <span class="stat-value">68 days</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Type</span>
+                                    <span class="stat-value">70% S / 30% I</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Height</span>
+                                    <span class="stat-value">Medium</span>
+                                </div>
                             </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Germination</div>
-                                <div class="stat-value">95%+</div>
+                            <div class="strain-effects">
+                                <div class="effects-label">Effects:</div>
+                                <div class="effects-list">Motivated, Energetic, Happy, Confident</div>
                             </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Quality</div>
-                                <div class="stat-value">Premium</div>
+                            <div class="strain-flavors">
+                                <div class="flavors-label">Flavors:</div>
+                                <div class="flavors-list">Grapes, Citrus</div>
                             </div>
+                            <span class="availability-badge available">Available</span>
+                            <a href="/rainbowcakes" class="read-more-btn">Read More</a>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Growing Photos Section -->
-        <section class="showcase-section" id="grows">
-            <div class="section-header">
-                <h2 class="section-title">Growing Gallery</h2>
-                <p class="section-description">See our genetics in action from seedling to harvest. Real grows from real customers across Canada.</p>
-            </div>
-            
-            <div class="photo-grid">
-                <div class="photo-item">
-                    <div class="photo-carousel" data-strain="grow-cycle">
-                        <div class="photo-slides">
-                            <div class="photo-slide"><span>Growing Cycle - Seedlings</span></div>
-                            <div class="photo-slide"><span>Growing Cycle - Vegetative</span></div>
-                            <div class="photo-slide"><span>Growing Cycle - Early Flower</span></div>
-                            <div class="photo-slide"><span>Growing Cycle - Mid Flower</span></div>
-                            <div class="photo-slide"><span>Growing Cycle - Harvest</span></div>
+                    <!-- Cake Breath -->
+                    <div class="strain-card">
+                        <div class="card-image green-gradient">
+                            <div class="card-overlay">
+                                <div class="card-overlay-text">Cake Breath</div>
+                            </div>
                         </div>
-                        <button class="carousel-controls carousel-prev" onclick="changeSlide('grow-cycle', -1)">‹</button>
-                        <button class="carousel-controls carousel-next" onclick="changeSlide('grow-cycle', 1)">›</button>
-                        <div class="carousel-indicators">
-                            <button class="carousel-dot active" onclick="currentSlide('grow-cycle', 1)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('grow-cycle', 2)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('grow-cycle', 3)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('grow-cycle', 4)"></button>
-                            <button class="carousel-dot" onclick="currentSlide('grow-cycle', 5)"></button>
+                        <div class="card-content">
+                            <h3 class="strain-name">Cake Breath</h3>
+                            <p class="strain-genetics">Wedding Cake × Meatbreath</p>
+                            <div class="strain-stats">
+                                <div class="stat-row">
+                                    <span class="stat-label">THC</span>
+                                    <span class="stat-value">27-28%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Flowering</span>
+                                    <span class="stat-value">62 days</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Type</span>
+                                    <span class="stat-value">15% S / 85% I</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Height</span>
+                                    <span class="stat-value">Short</span>
+                                </div>
+                            </div>
+                            <div class="strain-effects">
+                                <div class="effects-label">Effects:</div>
+                                <div class="effects-list">Tired, Sleepy, Couch-lock</div>
+                            </div>
+                            <div class="strain-flavors">
+                                <div class="flavors-label">Flavors:</div>
+                                <div class="flavors-list">Gas, Earthy, Pungent</div>
+                            </div>
+                            <span class="availability-badge available">Available</span>
+                            <a href="/cakebreath" class="read-more-btn">Read More</a>
                         </div>
                     </div>
-                    <div class="photo-info">
-                        <h3 class="photo-title">Complete Growing Cycle</h3>
-                        <p class="photo-description">Follow the complete growing journey from healthy seedlings to beautiful harvest-ready plants.</p>
-                        <div class="strain-stats">
-                            <div class="stat-item">
-                                <div class="stat-label">Duration</div>
-                                <div class="stat-value">4+ Months</div>
+
+                    <!-- Alienoyes Kush -->
+                    <div class="strain-card">
+                        <div class="card-image purple-gradient">
+                            <div class="card-overlay">
+                                <div class="card-overlay-text">Alienoyes Kush</div>
                             </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Success</div>
-                                <div class="stat-value">High</div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="strain-name">Alienoyes Kush</h3>
+                            <p class="strain-genetics">Alien Tech × Noyes Kush</p>
+                            <div class="strain-stats">
+                                <div class="stat-row">
+                                    <span class="stat-label">THC</span>
+                                    <span class="stat-value">27-28%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Flowering</span>
+                                    <span class="stat-value">62 days</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Type</span>
+                                    <span class="stat-value">25% S / 75% I</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Height</span>
+                                    <span class="stat-value">Short</span>
+                                </div>
                             </div>
-                            <div class="stat-item">
-                                <div class="stat-label">Quality</div>
-                                <div class="stat-value">Premium</div>
+                            <div class="strain-effects">
+                                <div class="effects-label">Effects:</div>
+                                <div class="effects-list">Comfy, Restful, Relaxed</div>
                             </div>
+                            <div class="strain-flavors">
+                                <div class="flavors-label">Flavors:</div>
+                                <div class="flavors-list">Gas, Earthy, Citrus</div>
+                            </div>
+                            <span class="availability-badge available">Available</span>
+                            <a href="/alienoyeskush" class="read-more-btn">Read More</a>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-<!-- Modal -->
-        <div class="modal" id="photoModal">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
-            <div class="modal-content">
-                <div class="modal-image" id="modalImage"></div>
-                <h3 class="modal-title" id="modalTitle"></h3>
-                <p class="modal-description" id="modalDescription"></p>
-            </div>
+            </section>
+
+            <!-- Line 2 - Geode Crosses -->
+            <section class="genetic-line" id="line2">
+                <div class="line-header">
+                    <h2 class="line-title">Line 2 - Geode Crosses</h2>
+                    <p class="line-description">Rock Hard structure, Potency and Resilience! Dense, crystalline buds with exceptional bag appeal.</p>
+                </div>
+
+                <div class="strain-grid">
+                    <!-- Yesno Kush -->
+                    <div class="strain-card">
+                        <div class="card-image orange-gradient">
+                            <div class="card-overlay">
+                                <div class="card-overlay-text">Yesno Kush</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="strain-name">Yesno Kush</h3>
+                            <p class="strain-genetics">Genetic Lottery of 5 Line1 strains</p>
+                            <div class="strain-stats">
+                                <div class="stat-row">
+                                    <span class="stat-label">THC</span>
+                                    <span class="stat-value">Unknown</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Flowering</span>
+                                    <span class="stat-value">~65 days</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Type</span>
+                                    <span class="stat-value">Unknown</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Project</span>
+                                    <span class="stat-value">Pheno Hunt</span>
+                                </div>
+                            </div>
+                            <div class="strain-effects">
+                                <div class="effects-label">Effects:</div>
+                                <div class="effects-list">Phenohunting / Experimentation</div>
+                            </div>
+                            <div class="strain-flavors">
+                                <div class="flavors-label">Flavors:</div>
+                                <div class="flavors-list">Variable - Surprise!</div>
+                            </div>
+                            <span class="availability-badge available">Available</span>
+                            <a href="/yesnokush" class="read-more-btn">Read More</a>
+                        </div>
+                    </div>
+
+                    <!-- Shiny Rocks -->
+                    <div class="strain-card">
+                        <div class="card-image blue-gradient">
+                            <div class="card-overlay">
+                                <div class="card-overlay-text">Shiny Rocks</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="strain-name">Shiny Rocks</h3>
+                            <p class="strain-genetics">Noyes Rocks × Noyes Pebbles</p>
+                            <div class="strain-stats">
+                                <div class="stat-row">
+                                    <span class="stat-label">THC</span>
+                                    <span class="stat-value">27-28%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Flowering</span>
+                                    <span class="stat-value">62 days</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Type</span>
+                                    <span class="stat-value">25% S / 75% I</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Height</span>
+                                    <span class="stat-value">Short</span>
+                                </div>
+                            </div>
+                            <div class="strain-effects">
+                                <div class="effects-label">Effects:</div>
+                                <div class="effects-list">Motivated, Energetic, Happy</div>
+                            </div>
+                            <div class="strain-flavors">
+                                <div class="flavors-label">Flavors:</div>
+                                <div class="flavors-list">Gas, Earthy, Citrus</div>
+                            </div>
+                            <span class="availability-badge available">Available</span>
+                            <a href="/shinyrocks" class="read-more-btn">Read More</a>
+                        </div>
+                    </div>
+
+                    <!-- Mango Aliens -->
+                    <div class="strain-card">
+                        <div class="card-image orange-gradient">
+                            <div class="card-overlay">
+                                <div class="card-overlay-text">Mango Aliens</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="strain-name">Mango Aliens</h3>
+                            <p class="strain-genetics">Mangonoyes Kush × Alienoyes Kush</p>
+                            <div class="strain-stats">
+                                <div class="stat-row">
+                                    <span class="stat-label">THC</span>
+                                    <span class="stat-value">25-28%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Flowering</span>
+                                    <span class="stat-value">62 days</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Type</span>
+                                    <span class="stat-value">25% S / 75% I</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Height</span>
+                                    <span class="stat-value">Short</span>
+                                </div>
+                            </div>
+                            <div class="strain-effects">
+                                <div class="effects-label">Effects:</div>
+                                <div class="effects-list">Motivated, Energetic, Happy</div>
+                            </div>
+                            <div class="strain-flavors">
+                                <div class="flavors-label">Flavors:</div>
+                                <div class="flavors-list">Mango, Fruit, Gas, Citrus</div>
+                            </div>
+                            <span class="availability-badge available">Available</span>
+                            <a href="/mangoaliens" class="read-more-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Line 3 - OG Crosses -->
+            <section class="genetic-line" id="line3">
+                <div class="line-header">
+                    <h2 class="line-title">Line 3 - OG Crosses</h2>
+                    <p class="line-description">Your old favourites bred with Noyes Kush for potency, structure, and resilience.</p>
+                </div>
+
+                <div class="strain-grid">
+                    <!-- Loud Dreams -->
+                    <div class="strain-card">
+                        <div class="card-image blue-gradient">
+                            <div class="card-overlay">
+                                <div class="card-overlay-text">Loud Dreams</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="strain-name">Loud Dreams</h3>
+                            <p class="strain-genetics">Blue Dream × Noyes Kush</p>
+                            <div class="strain-stats">
+                                <div class="stat-row">
+                                    <span class="stat-label">THC</span>
+                                    <span class="stat-value">19-21%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Flowering</span>
+                                    <span class="stat-value">62 days</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Type</span>
+                                    <span class="stat-value">15% S / 85% I</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Height</span>
+                                    <span class="stat-value">Short</span>
+                                </div>
+                            </div>
+                            <div class="strain-effects">
+                                <div class="effects-label">Effects:</div>
+                                <div class="effects-list">Motivated, Energetic, Happy</div>
+                            </div>
+                            <div class="strain-flavors">
+                                <div class="flavors-label">Flavors:</div>
+                                <div class="flavors-list">Berries, Gas, Earthy</div>
+                            </div>
+                            <span class="availability-badge available">Available</span>
+                            <a href="/louddreams" class="read-more-btn">Read More</a>
+                        </div>
+                    </div>
+
+                    <!-- Blueberry Fingers -->
+                    <div class="strain-card">
+                        <div class="card-image purple-gradient">
+                            <div class="card-overlay">
+                                <div class="card-overlay-text">Blueberry Fingers</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="strain-name">Blueberry Fingers</h3>
+                            <p class="strain-genetics">Noyes Kush × Blueberry Kush</p>
+                            <div class="strain-stats">
+                                <div class="stat-row">
+                                    <span class="stat-label">THC</span>
+                                    <span class="stat-value">18-20%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Flowering</span>
+                                    <span class="stat-value">65 days</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Type</span>
+                                    <span class="stat-value">30% S / 70% I</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Height</span>
+                                    <span class="stat-value">Short</span>
+                                </div>
+                            </div>
+                            <div class="strain-effects">
+                                <div class="effects-label">Effects:</div>
+                                <div class="effects-list">Motivated, Energetic, Happy</div>
+                            </div>
+                            <div class="strain-flavors">
+                                <div class="flavors-label">Flavors:</div>
+                                <div class="flavors-list">Blueberries, Fruit, Berries, Gas, Earthy, Citrus</div>
+                            </div>
+                            <span class="availability-badge available">Available</span>
+                            <a href="/blueberryfingers" class="read-more-btn">Read More</a>
+                        </div>
+                    </div>
+
+                    <!-- Noyes OG -->
+                    <div class="strain-card">
+                        <div class="card-image green-gradient">
+                            <div class="card-overlay">
+                                <div class="card-overlay-text">Noyes OG</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="strain-name">Noyes OG</h3>
+                            <p class="strain-genetics">Noyes Kush × OG Kush</p>
+                            <div class="strain-stats">
+                                <div class="stat-row">
+                                    <span class="stat-label">THC</span>
+                                    <span class="stat-value">25-28%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Flowering</span>
+                                    <span class="stat-value">62 days</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Type</span>
+                                    <span class="stat-value">10% S / 90% I</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Height</span>
+                                    <span class="stat-value">Short</span>
+                                </div>
+                            </div>
+                            <div class="strain-effects">
+                                <div class="effects-label">Effects:</div>
+                                <div class="effects-list">Motivated, Energetic, Happy</div>
+                            </div>
+                            <div class="strain-flavors">
+                                <div class="flavors-label">Flavors:</div>
+                                <div class="flavors-list">Gas, Earthy, Citrus</div>
+                            </div>
+                            <span class="availability-badge available">Available</span>
+                            <a href="/noyesog" class="read-more-btn">Read More</a>>
+                            </div>
+                            <span class="availability-badge available">Available</span>
+                        </div>
+                    </div>
+
+                    <!-- Blueberry Fingers -->
+                    <div class="strain-card">
+                        <div class="card-image purple-gradient">
+                            <div class="card-overlay">
+                                <div class="card-overlay-text">Blueberry Fingers</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="strain-name">Blueberry Fingers</h3>
+                            <p class="strain-genetics">Noyes Kush × Blueberry Kush</p>
+                            <div class="strain-stats">
+                                <div class="stat-row">
+                                    <span class="stat-label">THC</span>
+                                    <span class="stat-value">18-20%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Flowering</span>
+                                    <span class="stat-value">65 days</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Type</span>
+                                    <span class="stat-value">30% S / 70% I</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Height</span>
+                                    <span class="stat-value">Short</span>
+                                </div>
+                            </div>
+                            <div class="strain-effects">
+                                <div class="effects-label">Effects:</div>
+                                <div class="effects-list">Motivated, Energetic, Happy</div>
+                            </div>
+                            <div class="strain-flavors">
+                                <div class="flavors-label">Flavors:</div>
+                                <div class="flavors-list">Blueberries, Fruit, Berries, Gas, Earthy, Citrus</div>
+                            </div>
+                            <span class="availability-badge available">Available</span>
+                        </div>
+                    </div>
+
+                    <!-- Noyes OG -->
+                    <div class="strain-card">
+                        <div class="card-image green-gradient">
+                            <div class="card-overlay">
+                                <div class="card-overlay-text">Noyes OG</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="strain-name">Noyes OG</h3>
+                            <p class="strain-genetics">Noyes Kush × OG Kush</p>
+                            <div class="strain-stats">
+                                <div class="stat-row">
+                                    <span class="stat-label">THC</span>
+                                    <span class="stat-value">25-28%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Flowering</span>
+                                    <span class="stat-value">62 days</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Type</span>
+                                    <span class="stat-value">10% S / 90% I</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Height</span>
+                                    <span class="stat-value">Short</span>
+                                </div>
+                            </div>
+                            <div class="strain-effects">
+                                <div class="effects-label">Effects:</div>
+                                <div class="effects-list">Motivated, Energetic, Happy</div>
+                            </div>
+                            <div class="strain-flavors">
+                                <div class="flavors-label">Flavors:</div>
+                                <div class="flavors-list">Gas, Earthy, Citrus</div>
+                            </div>
+                            <span class="availability-badge available">Available</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Line 4 - Skunk -->
+            <section class="genetic-line" id="line4">
+                <div class="line-header">
+                    <h2 class="line-title">Line 4 - Skunk Crosses</h2>
+                    <p class="line-description">Everything SKUNK. Classic genetics with modern improvements for Canadian growers.</p>
+                </div>
+
+                <div class="strain-grid">
+                    <!-- Albino Skunk -->
+                    <div class="strain-card">
+                        <div class="card-image blue-gradient">
+                            <div class="card-overlay">
+                                <div class="card-overlay-text">Albino Skunk</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="strain-name">Albino Skunk</h3>
+                            <p class="strain-genetics">Skunk × ATF × Noyes Breath</p>
+                            <div class="strain-stats">
+                                <div class="stat-row">
+                                    <span class="stat-label">THC</span>
+                                    <span class="stat-value">24-26%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Flowering</span>
+                                    <span class="stat-value">66-68 days</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Type</span>
+                                    <span class="stat-value">35% S / 65% I</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Height</span>
+                                    <span class="stat-value">Medium</span>
+                                </div>
+                            </div>
+                            <div class="strain-effects">
+                                <div class="effects-label">Effects:</div>
+                                <div class="effects-list">Happy, Energetic</div>
+                            </div>
+                            <div class="strain-flavors">
+                                <div class="flavors-label">Flavors:</div>
+                                <div class="flavors-list">Skunky, Gassy</div>
+                            </div>
+                            <span class="availability-badge available">Available</span>
+                            <a href="/albinoskunk" class="read-more-btn">Read More</a>
+                        </div>
+                    </div>
+
+                    <!-- Rainbow Skunk -->
+                    <div class="strain-card">
+                        <div class="card-image purple-gradient">
+                            <div class="card-overlay">
+                                <div class="card-overlay-text">Rainbow Skunk</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="strain-name">Rainbow Skunk</h3>
+                            <p class="strain-genetics">Skunk × Rainbow Belts</p>
+                            <div class="strain-stats">
+                                <div class="stat-row">
+                                    <span class="stat-label">THC</span>
+                                    <span class="stat-value">21-22%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Flowering</span>
+                                    <span class="stat-value">66-68 days</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Type</span>
+                                    <span class="stat-value">30% S / 70% I</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Height</span>
+                                    <span class="stat-value">Tall</span>
+                                </div>
+                            </div>
+                            <div class="strain-effects">
+                                <div class="effects-label">Effects:</div>
+                                <div class="effects-list">Energetic, Happy, Motivated</div>
+                            </div>
+                            <div class="strain-flavors">
+                                <div class="flavors-label">Flavors:</div>
+                                <div class="flavors-list">Skunky, Gassy, Berries</div>
+                            </div>
+                            <span class="availability-badge available">Available</span>
+                            <a href="/rainbowskunk" class="read-more-btn">Read More</a>
+                        </div>
+                    </div>
+
+                    <!-- Skunk Breath -->
+                    <div class="strain-card">
+                        <div class="card-image green-gradient">
+                            <div class="card-overlay">
+                                <div class="card-overlay-text">Skunk Breath</div>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <h3 class="strain-name">Skunk Breath</h3>
+                            <p class="strain-genetics">Skunk × Noyes Breath</p>
+                            <div class="strain-stats">
+                                <div class="stat-row">
+                                    <span class="stat-label">THC</span>
+                                    <span class="stat-value">28%</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Flowering</span>
+                                    <span class="stat-value">64 days</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Type</span>
+                                    <span class="stat-value">20% S / 80% I</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Height</span>
+                                    <span class="stat-value">Short-Med</span>
+                                </div>
+                            </div>
+                            <div class="strain-effects">
+                                <div class="effects-label">Effects:</div>
+                                <div class="effects-list">Relaxed, Sleepy, Happy</div>
+                            </div>
+                            <div class="strain-flavors">
+                                <div class="flavors-label">Flavors:</div>
+                                <div class="flavors-list">Skunky, Gas, Rubber</div>
+                            </div>
+                            <span class="availability-badge available">Available</span>
+                            <a href="/skunkbreath" class="read-more-btn">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
-
-        <!-- Call to Action Section -->
-        <div class="cta-section">
-            <h2 class="cta-title">Ready to Grow Premium Genetics?</h2>
-            <p class="cta-description">
-                Experience the quality and consistency of Noyes Boys Genetics. Canadian-bred cannabis seeds 
-                with exceptional yields, mildew resistance, and craft quality breeding. Perfect for both 
-                novice and experienced growers across Canada.
-            </p>
-            <a href="/genetics" class="cta-button">Browse All Strains</a>
-            <a href="contact_us.html" class="cta-button">Contact Us</a>
-        </div>
-    </div>
+    </main>
 
     <script>
-        // Track current slide for each carousel
-        const slideIndexes = {};
+        function showAllLines() {
+            const lines = document.querySelectorAll('.genetic-line');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            lines.forEach(line => line.style.display = 'block');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
 
-        // Initialize all carousels
-        document.addEventListener('DOMContentLoaded', function() {
-            const carousels = document.querySelectorAll('.photo-carousel');
-            carousels.forEach(carousel => {
-                const strainName = carousel.dataset.strain;
-                slideIndexes[strainName] = 1;
+        function showLine(lineId) {
+            const lines = document.querySelectorAll('.genetic-line');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            lines.forEach(line => {
+                line.style.display = line.id === lineId ? 'block' : 'none';
             });
             
-            populateAllPhotosGrid();
-        });
-
-        function changeSlide(strainName, direction) {
-            const carousel = document.querySelector(`[data-strain="${strainName}"]`);
-            const slides = carousel.querySelector('.photo-slides');
-            const totalSlides = carousel.querySelectorAll('.photo-slide').length;
-            
-            slideIndexes[strainName] += direction;
-            
-            if (slideIndexes[strainName] > totalSlides) {
-                slideIndexes[strainName] = 1;
-            }
-            if (slideIndexes[strainName] < 1) {
-                slideIndexes[strainName] = totalSlides;
-            }
-            
-            updateCarousel(strainName);
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
         }
 
-        function currentSlide(strainName, slideNumber) {
-            slideIndexes[strainName] = slideNumber;
-            updateCarousel(strainName);
-        }
-
-        function updateCarousel(strainName) {
-            const carousel = document.querySelector(`[data-strain="${strainName}"]`);
-            const slides = carousel.querySelector('.photo-slides');
-            const dots = carousel.querySelectorAll('.carousel-dot');
-            
-            const translateX = -((slideIndexes[strainName] - 1) * 100);
-            slides.style.transform = `translateX(${translateX}%)`;
-            
-            // Update dots
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === slideIndexes[strainName] - 1);
-            });
-        }
-
-        function showSection(sectionId) {
-            // Hide all sections
-            const sections = document.querySelectorAll('.showcase-section');
-            sections.forEach(section => section.classList.remove('active'));
-            
-            // Remove active class from all nav buttons
-            const navButtons = document.querySelectorAll('.nav-btn');
-            navButtons.forEach(btn => btn.classList.remove('active'));
-            
-            // Show selected section
-            const targetSection = document.getElementById(sectionId);
-            if (targetSection) {
-                targetSection.classList.add('active');
-            }
-            
-            // Add active class to clicked button
-            const activeButton = document.querySelector(`[data-section="${sectionId}"]`);
-            if (activeButton) {
-                activeButton.classList.add('active');
-            }
-            
-            // If showing "all", populate the grid with all photos
-            if (sectionId === 'all') {
-                populateAllPhotosGrid();
-            }
-            
-            // Smooth scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-            // Initialize slide indexes for newly created carousels
-            allStrains.forEach((strain, index) => {
-                slideIndexes[`all-${index}`] = 1;
-            });
-        function openModal(title, description) {
-            const modal = document.getElementById('photoModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalDescription = document.getElementById('modalDescription');
-            const modalImage = document.getElementById('modalImage');
-            
-            modalTitle.textContent = title;
-            modalDescription.textContent = description;
-            modalImage.innerHTML = `<span>${title}</span>`;
-            
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('photoModal');
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        // Close modal when clicking outside
-        document.getElementById('photoModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeModal();
-            }
-        });
-
-        // Close modal with Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeModal();
-            }
-        });
-
-        // Auto-play functionality (optional)
-        function startAutoPlay(strainName, interval = 5000) {
-            setInterval(() => {
-                changeSlide(strainName, 1);
-            }, interval);
-        }
-
-        // Touch/swipe support for mobile
-        let touchStartX = 0;
-        let touchEndX = 0;
-        
-        document.addEventListener('touchstart', function(e) {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-        
-        document.addEventListener('touchend', function(e) {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe(e.target);
-        });
-        
-        function handleSwipe(target) {
-            const carousel = target.closest('.photo-carousel');
-            if (!carousel) return;
-            
-            const strainName = carousel.dataset.strain;
-            const swipeDistance = Math.abs(touchStartX - touchEndX);
-            
-            if (swipeDistance > 50) { // Minimum swipe distance
-                if (touchStartX > touchEndX) {
-                    // Swipe left - next slide
-                    changeSlide(strainName, 1);
-                } else {
-                    // Swipe right - previous slide
-                    changeSlide(strainName, -1);
-                }
-            }
-        }
-
-        // SEO and Analytics functions
-        function trackPhotoView(photoTitle) {
-            // Add your analytics tracking here
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'photo_view', {
-                    'photo_name': photoTitle,
-                    'event_category': 'engagement'
-                });
-            }
-            console.log(`Photo viewed: ${photoTitle}`);
-        }
-
-        function trackSectionView(sectionName) {
-            // Add your analytics tracking here  
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'section_view', {
-                    'section_name': sectionName,
-                    'event_category': 'navigation'
-                });
-            }
-            console.log(`Section viewed: ${sectionName}`);
-        }
-
-        // Intersection Observer for lazy loading and animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const photoObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                    
-                    // Track photo view
-                    const title = entry.target.querySelector('.photo-title');
-                    if (title) {
-                        trackPhotoView(title.textContent);
-                    }
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
                 }
             });
-        }, observerOptions);
-
-        // Initialize animations and observers
-        function initializeAnimations() {
-            const photoItems = document.querySelectorAll('.photo-item');
-            photoItems.forEach(item => {
-                item.style.opacity = '0';
-                item.style.transform = 'translateY(30px)';
-                item.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-                photoObserver.observe(item);
-            });
-        }
-
-        // Keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            const activeSection = document.querySelector('.showcase-section.active');
-            if (!activeSection) return;
-            
-            const carousels = activeSection.querySelectorAll('.photo-carousel');
-            if (carousels.length === 0) return;
-            
-            // Focus on first carousel for arrow key navigation
-            const firstCarousel = carousels[0];
-            const strainName = firstCarousel.dataset.strain;
-            
-            switch(e.key) {
-                case 'ArrowRight':
-                    e.preventDefault();
-                    changeSlide(strainName, 1);
-                    break;
-                case 'ArrowLeft':
-                    e.preventDefault();
-                    changeSlide(strainName, -1);
-                    break;
-            }
         });
-
-        // Performance optimization - Preload next images
-        function preloadNextImage(strainName) {
-            // Implementation for actual image preloading when you replace placeholders
-        }
-
-        // Initialize everything when DOM is loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            const carousels = document.querySelectorAll('.photo-carousel');
-            carousels.forEach(carousel => {
-                const strainName = carousel.dataset.strain;
-                slideIndexes[strainName] = 1;
-            });
-            
-            populateAllPhotosGrid();
-            initializeAnimations();
-            
-            // Add smooth scrolling for anchor links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
-        });
-
-        // Add schema.org structured data for SEO
-        const structuredData = {
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Noyes Boys Genetics",
-            "description": "Premium Canadian Cannabis Seeds and Genetics",
-            "url": "https://noyesboys.com",
-            "logo": "https://noyesboys.com/logo.png",
-            "address": {
-                "@type": "PostalAddress",
-                "addressCountry": "CA"
-            },
-            "sameAs": [
-                "https://www.facebook.com/TheNoyesBoys"
-            ],
-            "offers": {
-                "@type": "AggregateOffer",
-                "priceCurrency": "CAD",
-                "availability": "https://schema.org/InStock",
-                "category": "Cannabis Seeds"
-            }
-        };
-
-        // Insert structured data
-        const script = document.createElement('script');
-        script.type = 'application/ld+json';
-        script.textContent = JSON.stringify(structuredData);
-        document.head.appendChild(script);
     </script>
 </body>
 </html>
