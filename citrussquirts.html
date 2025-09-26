@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citrus Squirts - Noyes Boys Genetics</title>
+    <!-- EmailJS SDK -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #ffffff;
+            background: #0a0a0a;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .back-nav {
+            margin-bottom: 30px;
+        }
+
+        .back-nav a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-nav a:hover {
+            color: #66BB6A;
+        }
+
+        .strain-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+            border-radius: 15px;
+            border: 1px solid #333;
+        }
+
+        .strain-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .strain-subtitle {
+            font-size: 1.3rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .strain-type {
+            background: #4CAF50;
+            color: #000;
+            border-radius: 25px;
+            padding: 8px 20px;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Overall Rating Section */
+        .overall-rating {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #333;
+            text-align: center;
+        }
+
+        .overall-rating h3 {
+            color: #4CAF50;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .rating-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .rating-stars {
+            font-size: 2rem;
+            color: #4CAF50;
+        }
+
+        .rating-score {
+            font-size: 2.5rem;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .rating-details {
+            color: #cccccc;
+            font-size: 1rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .strain-image {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 350px;
+            background: linear-gradient(45deg, #FF8C00, #FFA500, #FFB347, #FFCC5C, #FFFF99);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: none;
+            margin-bottom: 15px;
+        }
+
+        .photo-note {
+            color: #888;
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .strain-info {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #333;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #4CAF50;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .description {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .description h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .description p {
+            color: #cccccc;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #4CAF50;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.1);
+        }
+
+        .feature-card h4 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #cccccc;
+            line-height: 1.7;
+        }
+
+        .stats-section {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid #333;
+        }
+
+        .stats-title {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .stat-item {
+            margin-bottom: 25px;
+        }
+
+        .stat-label {
+            color: #cccccc;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+        }
+
+        .stat-bar {
+            height: 12px;
+            background: #2d2d2d;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #444;
+        }
+
+        .stat-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #66BB6A);
+            border-radius: 6px;
+            transition: width 0.8s ease;
+        }
+
+        .lineage-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .parent-strain {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #444;
+        }
+
+        .parent-strain h4 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .parent-strain p {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .cta-section {
+            text-align: center;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 50px 40px;
+            border: 1px solid #333;
+            margin-bottom: 40px;
+        }
+
+        .cta-section h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .cta-section p {
+            color: #cccccc;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            background: #4CAF50;
+            color: #000;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cta-button:hover {
+            background: #66BB6A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            color: #4CAF50;
+            border: 2px solid #4CAF50;
+        }
+
+        .cta-button.secondary:hover {
+            background: #4CAF50;
+            color: #000;
+        }
+
+        /* Review Section Styles */
+        .review-section {
+            margin-top: 40px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 40px;
+            border: 1px solid #333;
+        }
+
+        .review-section h3 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .review-form-container {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid #444;
+        }
+
+        .review-form {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #555;
+            background: #1a1a1a;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px;
+            background: #1a1a1a;
+            border: 2px dashed #555;
+            border-radius: 8px;
+            color: #ccc;
+        }
+
+        .form-group input[type="file"]:hover {
+            border-color: #4CAF50;
+        }
+
+        .file-upload-note {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #888;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .rating-section {
+            margin-bottom: 20px;
+        }
+
+        .rating-section label {
+            display: block;
+            color: #4CAF50;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .star-rating {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .star {
+            color: #555;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .star:hover,
+        .star.active {
+            color: #4CAF50;
+        }
+
+        .submit-review-btn {
+            background: #4CAF50;
+            color: #000;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 20px auto 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .submit-review-btn:hover {
+            background: #66BB6A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+        }
+
+        .submit-review-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .reviews-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .review-item {
+            background: #2d2d2d;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .reviewer-name {
+            color: #4CAF50;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .grow-type {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .review-date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .review-stars {
+            color: #4CAF50;
+            font-size: 1.2rem;
+        }
+
+        .review-title {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .review-content {
+            color: #cccccc;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .success-message {
+            background: #4CAF50;
+            color: #000;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .error-message {
+            background: #f44336;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .strain-title {
+                font-size: 2.5rem;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .rating-display {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="back-nav">
+            <a href="/upcoming">← Back to Upcoming Strains</a>
+        </div>
+
+        <header class="strain-header">
+            <h1 class="strain-title">Citrus Squirts</h1>
+            <p class="strain-subtitle">Explosive Citrus Burst with Uplifting Energy</p>
+            <span class="strain-type">85% Sativa / 15% Indica</span>
+        </header>
+
+        <!-- Overall Rating Section -->
+        <div class="overall-rating">
+            <h3>Customer Reviews</h3>
+            <div class="rating-display">
+                <div class="rating-stars" id="overallStars">★★★★★</div>
+                <div class="rating-score" id="overallScore">4.7</div>
+            </div>
+            <div class="rating-details" id="ratingDetails">Based on 21 reviews</div>
+        </div>
+
+        <div class="main-content">
+            <div class="strain-image">
+                <div class="image-placeholder">Citrus Squirts</div>
+                <p class="photo-note">Tall, stretchy sativa with bright orange pistils and explosive citrus aroma</p>
+            </div>
+
+            <div class="strain-info">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">THC Content</div>
+                        <div class="info-value">22%</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">CBD Content</div>
+                        <div class="info-value">0%</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Flowering Time</div>
+                        <div class="info-value">65 days</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Yield Indoor</div>
+                        <div class="info-value">500-600g/m²</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Yield Outdoor</div>
+                        <div class="info-value">1.5-2lb/plant</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Plant Height</div>
+                        <div class="info-value">Tall</div>
+                    </div>
+                </div>
+
+                <div class="lineage-section">
+                    <div class="parent-strain">
+                        <h4>Genetics</h4>
+                        <p>ATF × Citronoyes Haze</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="description">
+            <h3>About Citrus Squirts</h3>
+            <p>Citrus Squirts is a heavily sativa-dominant hybrid that delivers an explosive burst of citrus flavors with energizing effects perfect for daytime use. This strain combines the legendary Alaskan Thunder Fuck (ATF) genetics with the citrus-forward Citronoyes Haze to create a powerhouse sativa that tastes like fresh-squeezed oranges and provides long-lasting motivation and creativity.</p>
+            
+            <p>The flavor profile is dominated by bright citrus, fruity, and orange notes that literally burst on the palate - hence the name "Squirts." The terpene profile features high levels of limonene and valencene, creating layers of citrus complexity with subtle earthy undertones. Plants grow tall and stretchy with classic sativa structure, producing large, airy buds covered in bright orange pistils that match the strain's citrus profile.</p>
+            
+            <p>Effects are distinctly sativa-leaning with uplifting cerebral stimulation, enhanced creativity, and sustained energy. Users report feeling relaxed yet happy and hungry, making this strain perfect for social situations, creative projects, and daytime activities. The longer flowering time is typical of sativa genetics but rewards growers with exceptional yields and premium quality flower that commands attention.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h4>🍊 Explosive Citrus</h4>
+                <p>Incredible orange and citrus flavors that literally burst in your mouth. Fresh, fruity, and intensely aromatic with complex citrus layers that satisfy citrus lovers.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>⚡ Energizing Effects</h4>
+                <p>Pure sativa energy that motivates and uplifts without anxiety. Perfect for creative work, social activities, and staying productive throughout the day.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🌱 Tall Sativa Growth</h4>
+                <p>Classic sativa structure with tall, stretchy plants that produce generous yields. Bright orange pistils create beautiful visual appeal that matches the flavor.</p>
+            </div>
+            
+            <div class="feature-card">
+                <h4>🎨 Creative Boost</h4>
+                <p>Enhances creativity and focus while maintaining a relaxed, happy mindset. Perfect for artists, musicians, and anyone needing creative inspiration.</p>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h3 class="stats-title">Strain Characteristics</h3>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Sativa Energy</span>
+                    <span>Outstanding</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 95%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Citrus Flavor</span>
+                    <span>Maximum</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 100%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Creativity</span>
+                    <span>Excellent</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 92%;"></div>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-label">
+                    <span>Daytime Use</span>
+                    <span>Perfect</span>
+                </div>
+                <div class="stat-bar">
+                    <div class="stat-fill" style="width: 98%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h3>Ready to Grow Citrus Squirts?</h3>
+            <p>
+                Experience explosive citrus flavors with pure sativa energy and creativity. 
+                Perfect for daytime use and anyone seeking uplifting, motivational effects.
+            </p>
+            <a href="/upcoming" class="cta-button secondary">View Upcoming Strains</a>
+            <button class="cta-button secondary" onclick="scrollToReviews()">Leave a Review</button>
+        </div>
+
+        <!-- Review Section -->
+        <div class="review-section">
+            <h3>Community Reviews</h3>
+            
+            <!-- Review Form -->
+            <div class="review-form-container">
+                <form id="reviewForm" class="review-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="reviewerName">Name</label>
+                            <input type="text" id="reviewerName" name="reviewerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="growType">Growing Method</label>
+                            <select id="growType" name="growType">
+                                <option value="indoor">Indoor</option>
+                                <option value="outdoor">Outdoor</option>
+                                <option value="greenhouse">Greenhouse</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="rating-section">
+                        <label>Overall Rating</label>
+                        <div class="star-rating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reviewTitle">Review Title</label>
+                        <input type="text" id="reviewTitle" name="reviewTitle" placeholder="Sum up your experience..." required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reviewText">Your Review</label>
+                        <textarea id="reviewText" name="reviewText" rows="4" placeholder="Share your growing experience, effects, taste, etc..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reviewPhotos">Upload Photos (Optional)</label>
+                        <input type="file" id="reviewPhotos" name="reviewPhotos" multiple accept="image/*">
+                        <div class="file-upload-note">You can upload multiple photos of your grow, harvest, or buds (JPG, PNG, GIF)</div>
+                    </div>
+                    
+                    <div class="success-message" id="successMessage">
+                        ✅ Thank you! Your review has been submitted and will be verified and published shortly.
+                    </div>
+                    
+                    <div class="error-message" id="errorMessage">
+                        ❌ There was an error submitting your review. Please try again.
+                    </div>
+                    
+                    <button type="submit" class="submit-review-btn" id="submitBtn">Submit Review for Verification</button>
+                </form>
+            </div>
+
+            <!-- Reviews Display -->
+            <div class="reviews-container" id="reviewsContainer">
+                <!-- Reviews will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample reviews data (21 reviews for Citrus Squirts focusing on citrus flavors and sativa energy)
+        let reviews = [
+            {
+                name: "CitrusLover",
+                growType: "Indoor",
+                rating: 5,
+                title: "Tastes like fresh oranges!",
+                content: "The citrus flavors are absolutely incredible - like biting into a fresh orange. The sativa effects are perfect for daytime use, providing clean energy and creativity without anxiety. This is citrus perfection!",
+                date: "1 week ago"
+            },
+            {
+                name: "CreativeBoost",
+                growType: "Indoor",
+                rating: 5,
+                title: "Perfect creative companion",
+                content: "Amazing strain for artistic work. The uplifting effects enhance creativity while keeping me focused and motivated. The orange flavors make every session enjoyable. My go-to for creative projects!",
+                date: "2 weeks ago"
+            },
+            {
+                name: "DaytimeWarrior",
+                growType: "Indoor",
+                rating: 4,
+                title: "Excellent daytime strain",
+                content: "Provides sustained energy throughout the day without crash. The citrus taste is refreshing and the effects are clean and motivating. Perfect replacement for my morning coffee!",
+                date: "3 weeks ago"
+            },
+            {
+                name: "SativaSeeker",
+                growType: "Indoor",
+                rating: 5,
+                title: "Pure sativa bliss",
+                content: "Everything I want in a sativa - energizing, uplifting, and delicious. The citrus burst is incredible and the effects last for hours. Perfect for staying productive and happy all day long!",
+                date: "1 month ago"
+            },
+            {
+                name: "OrangeCrush",
+                growType: "Indoor",
+                rating: 5,
+                title: "Orange flavor explosion",
+                content: "The name says it all - this strain literally squirts citrus flavor. The orange notes are so intense and realistic. Combined with clean sativa energy, it's perfect for daytime medication. Incredible genetics!",
+                date: "2 weeks ago"
+            },
+            {
+                name: "EnergyBooster",
+                growType: "Indoor",
+                rating: 4,
+                title: "Great morning strain",
+                content: "Perfect way to start the day with natural energy and positivity. The citrus flavors are refreshing and the effects keep me motivated without jitters. Much better than caffeine!",
+                date: "4 weeks ago"
+            },
+            {
+                name: "SocialBuzz",
+                growType: "Indoor",
+                rating: 5,
+                title: "Amazing for social situations",
+                content: "This strain makes me happy, talkative, and relaxed in social settings. The citrus taste is a conversation starter and the effects enhance social interactions perfectly. Party strain champion!",
+                date: "5 weeks ago"
+            },
+            {
+                name: "TallGrower",
+                growType: "Indoor",
+                rating: 4,
+                title: "Stretchy but worth it",
+                content: "Plants get really tall but the yields are incredible. Beautiful orange pistils throughout the buds. The citrus aroma during flowering is intoxicating. Great genetics for tall spaces!",
+                date: "3 weeks ago"
+            },
+            {
+                name: "HappyVibes",
+                growType: "Indoor",
+                rating: 5,
+                title: "Instant mood lifter",
+                content: "Immediately puts me in a great mood with the first hit. The citrus burst is incredible and the uplifting effects last for hours. Perfect antidote to stress and negativity!",
+                date: "6 weeks ago"
+            },
+            {
+                name: "CreativeFlow",
+                growType: "Indoor",
+                rating: 4,
+                title: "Unlocks creativity",
+                content: "Amazing for artistic work - unlocks creative flow states and keeps me focused on projects. The orange flavors are inspiring and the effects enhance imagination. Artist's dream strain!",
+                date: "1 month ago"
+            },
+            {
+                name: "ATFPower",
+                growType: "Indoor",
+                rating: 5,
+                title: "ATF genetics shine through",
+                content: "You can definitely taste the Alaskan Thunder Fuck genetics - powerful, clean sativa effects with incredible citrus enhancement. This is legendary genetics with modern flavors!",
+                date: "4 weeks ago"
+            },
+            {
+                name: "ProductiveDay",
+                growType: "Indoor",
+                rating: 4,
+                title: "Perfect for getting things done",
+                content: "Keeps me motivated and productive all day long. The citrus flavors make medication enjoyable and the sustained energy helps tackle any task. Functional sativa at its best!",
+                date: "5 weeks ago"
+            },
+            {
+                name: "FruitLover",
+                growType: "Indoor",
+                rating: 5,
+                title: "Fruity flavor perfection",
+                content: "The fruit and citrus flavors are so complex and delicious. Layers of orange, citrus, and fruity notes that make every hit a flavor adventure. Taste bud paradise!",
+                date: "2 weeks ago"
+            },
+            {
+                name: "FocusEnhanced",
+                growType: "Indoor",
+                rating: 4,
+                title: "Great for focus and concentration",
+                content: "Enhances focus without making me jittery or anxious. The citrus flavors are refreshing and the clear-headed effects help with complex tasks. Study buddy strain!",
+                date: "3 weeks ago"
+            },
+            {
+                name: "HungerGames",
+                growType: "Indoor",
+                rating: 5,
+                title: "Perfect appetite stimulant",
+                content: "Great for appetite stimulation without couch lock. The citrus flavors enhance taste and the relaxed happiness makes eating enjoyable. Medical benefits with great taste!",
+                date: "1 month ago"
+            },
+            {
+                name: "SativaYields",
+                growType: "Indoor",
+                rating: 4,
+                title: "Excellent yields for sativa",
+                content: "Despite the tall growth, yields are impressive. The buds develop beautiful orange pistils that match the citrus flavor profile. Worth the extra height management!",
+                date: "6 weeks ago"
+            },
+            {
+                name: "CitrusTherapy",
+                growType: "Indoor",
+                rating: 5,
+                title: "Therapeutic citrus medicine",
+                content: "The citrus flavors are genuinely therapeutic - they lift my mood before the effects even kick in. Combined with clean sativa energy, this is natural medicine at its finest!",
+                date: "2 weeks ago"
+            },
+            {
+                name: "WorkoutMotivation",
+                growType: "Indoor",
+                rating: 4,
+                title: "Great pre-workout strain",
+                content: "Perfect for motivation before exercise. The clean energy helps with workouts and the citrus taste is refreshing. No anxiety or paranoia, just pure motivation and energy!",
+                date: "4 weeks ago"
+            },
+            {
+                name: "HazeInfluence",
+                growType: "Indoor",
+                rating: 5,
+                title: "Citronoyes Haze genetics rock",
+                content: "The haze influence really comes through with cerebral effects and citrus enhancement. This cross perfectly combines the best of both parent strains. Elite genetics!",
+                date: "5 weeks ago"
+            },
+            {
+                name: "AnxietyFree",
+                growType: "Indoor",
+                rating: 4,
+                title: "Clean energy without anxiety",
+                content: "Provides strong sativa effects without any anxiety or paranoia. The relaxed happiness balances the energy perfectly. Safe choice for sativa-sensitive users!",
+                date: "3 weeks ago"
+            },
+            {
+                name: "FlavorChaser",
+                growType: "Indoor",
+                rating: 5,
+                title: "Flavor chaser's dream",
+                content: "Incredible terpene profile with layers of citrus complexity. The flavor literally bursts in your mouth - hence the name! Combined with perfect sativa effects, this is flavor perfection!",
+                date: "1 month ago"
+            }
+        ];
+
+        // EmailJS configuration with your provided credentials
+        const EMAILJS_SERVICE_ID = 'service_or5mors';
+        const EMAILJS_TEMPLATE_ID = 'template_iec8q2e';
+        const EMAILJS_PUBLIC_KEY = 'tm_ahVHnHlPN6lF_E';
+
+        // Initialize EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        // Calculate overall rating
+        function calculateOverallRating() {
+            const totalReviews = reviews.length;
+            const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+            const averageRating = totalReviews > 0 ? (totalRating / totalReviews) : 0;
+            
+            return {
+                average: averageRating,
+                total: totalReviews
+            };
+        }
+
+        // Update overall rating display
+        function updateOverallRating() {
+            const rating = calculateOverallRating();
+            const starsElement = document.getElementById('overallStars');
+            const scoreElement = document.getElementById('overallScore');
+            const detailsElement = document.getElementById('ratingDetails');
+            
+            // Create star display
+            const fullStars = Math.floor(rating.average);
+            const hasHalfStar = rating.average % 1 >= 0.5;
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            
+            let starsHTML = '★'.repeat(fullStars);
+            if (hasHalfStar) starsHTML += '☆';
+            starsHTML += '☆'.repeat(emptyStars);
+            
+            starsElement.textContent = starsHTML;
+            scoreElement.textContent = rating.average.toFixed(1);
+            detailsElement.textContent = `Based on ${rating.total} reviews`;
+        }
+
+        // Scroll to reviews function
+        function scrollToReviews() {
+            document.querySelector('.review-section').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Star rating functionality
+        let selectedRating = 0;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.star');
+            const reviewForm = document.getElementById('reviewForm');
+            
+            // Initialize overall rating display
+            updateOverallRating();
+            
+            // Star rating interaction
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(this.dataset.rating);
+                    updateStars();
+                });
+                
+                star.addEventListener('mouseenter', function() {
+                    const rating = parseInt(this.dataset.rating);
+                    highlightStars(rating);
+                });
+            });
+            
+            // Reset star highlighting on mouse leave
+            document.querySelector('.star-rating').addEventListener('mouseleave', function() {
+                updateStars();
+            });
+            
+            // Form submission
+            reviewForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitReviewViaEmail();
+            });
+            
+            // Initial render of reviews
+            renderReviews();
+            
+            // Animate stat bars on scroll
+            const statBars = document.querySelectorAll('.stat-fill');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.width = entry.target.style.width;
+                    }
+                });
+            });
+            
+            statBars.forEach(bar => observer.observe(bar));
+        });
+        
+        function highlightStars(rating) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+        
+        function updateStars() {
+            highlightStars(selectedRating);
+        }
+        
+        function submitReviewViaEmail() {
+            const form = document.getElementById('reviewForm');
+            const formData = new FormData(form);
+            const submitBtn = document.getElementById('submitBtn');
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            if (selectedRating === 0) {
+                alert('Please select a rating!');
+                return;
+            }
+            
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            
+            // Hide previous messages
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            
+            // Prepare email data
+            const emailData = {
+                reviewer_name: formData.get('reviewerName'),
+                grow_type: formData.get('growType'),
+                rating: selectedRating,
+                review_title: formData.get('reviewTitle'),
+                review_content: formData.get('reviewText'),
+                strain_name: 'Citrus Squirts',
+                submission_date: new Date().toLocaleDateString(),
+                photos_attached: formData.get('reviewPhotos').name ? 'Yes - ' + formData.get('reviewPhotos').name : 'No photos uploaded'
+            };
+            
+            // Send email via EmailJS
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailData)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    
+                    // Show success message
+                    successMsg.style.display = 'block';
+                    
+                    // Reset form
+                    form.reset();
+                    selectedRating = 0;
+                    updateStars();
+                    
+                    // Scroll to success message
+                    successMsg.scrollIntoView({ behavior: 'smooth' });
+                    
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    
+                    // Show error message
+                    errorMsg.style.display = 'block';
+                    errorMsg.scrollIntoView({ behavior: 'smooth' });
+                })
+                .finally(function() {
+                    // Re-enable submit button
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Submit Review for Verification';
+                });
+        }
+        
+        function renderReviews() {
+            const container = document.getElementById('reviewsContainer');
+            
+            container.innerHTML = reviews.map(review => `
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <strong class="reviewer-name">${review.name}</strong>
+                            <span class="grow-type">${review.growType}</span>
+                            <span class="review-date">${review.date}</span>
+                        </div>
+                        <div class="review-stars">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
+                    </div>
+                    <h4 class="review-title">${review.title}</h4>
+                    <p class="review-content">${review.content}</p>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
