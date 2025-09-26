@@ -169,10 +169,83 @@
             bottom: 0;
             transition: opacity 0.3s ease;
             z-index: 1;
+            overflow: hidden;
         }
 
         .strain-card:hover .card-image {
             opacity: 0;
+        }
+
+        .image-carousel {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .carousel-track {
+            display: flex;
+            width: 300%;
+            height: 100%;
+            transition: transform 0.4s ease;
+        }
+
+        .carousel-slide {
+            width: 33.333%;
+            height: 100%;
+            flex-shrink: 0;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .carousel-nav:hover {
+            background: rgba(74, 222, 128, 0.8);
+        }
+
+        .carousel-prev {
+            left: 10px;
+        }
+
+        .carousel-next {
+            right: 10px;
+        }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 10;
+        }
+
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-dot.active {
+            background: #4ade80;
+            transform: scale(1.2);
         }
 
         .blue-gradient {
@@ -458,10 +531,33 @@
 
                 <div class="strain-grid">
                     <!-- Purple Rainbow -->
-                    <div class="strain-card">
-                        <div class="card-image purple-gradient">
-                            <div class="card-overlay">
-                                <div class="card-overlay-text">Purple Rainbow</div>
+                    <div class="strain-card" data-strain="purple-rainbow">
+                        <div class="card-image">
+                            <div class="image-carousel">
+                                <div class="carousel-track">
+                                    <div class="carousel-slide purple-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Purple Rainbow</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide blue-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Purple Rainbow</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide green-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Purple Rainbow</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="carousel-nav carousel-prev" onclick="changeCarouselSlide('purple-rainbow', -1)">‹</button>
+                                <button class="carousel-nav carousel-next" onclick="changeCarouselSlide('purple-rainbow', 1)">›</button>
+                                <div class="carousel-dots">
+                                    <button class="carousel-dot active" onclick="setCarouselSlide('purple-rainbow', 0)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('purple-rainbow', 1)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('purple-rainbow', 2)"></button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-content">
@@ -499,10 +595,33 @@
                     </div>
 
                     <!-- Rainbow Cakes -->
-                    <div class="strain-card">
-                        <div class="card-image blue-gradient">
-                            <div class="card-overlay">
-                                <div class="card-overlay-text">Rainbow Cakes</div>
+                    <div class="strain-card" data-strain="rainbow-cakes">
+                        <div class="card-image">
+                            <div class="image-carousel">
+                                <div class="carousel-track">
+                                    <div class="carousel-slide blue-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Rainbow Cakes</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide purple-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Rainbow Cakes</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide orange-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Rainbow Cakes</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="carousel-nav carousel-prev" onclick="changeCarouselSlide('rainbow-cakes', -1)">‹</button>
+                                <button class="carousel-nav carousel-next" onclick="changeCarouselSlide('rainbow-cakes', 1)">›</button>
+                                <div class="carousel-dots">
+                                    <button class="carousel-dot active" onclick="setCarouselSlide('rainbow-cakes', 0)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('rainbow-cakes', 1)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('rainbow-cakes', 2)"></button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-content">
@@ -540,10 +659,33 @@
                     </div>
 
                     <!-- Cake Breath -->
-                    <div class="strain-card">
-                        <div class="card-image green-gradient">
-                            <div class="card-overlay">
-                                <div class="card-overlay-text">Cake Breath</div>
+                    <div class="strain-card" data-strain="cake-breath">
+                        <div class="card-image">
+                            <div class="image-carousel">
+                                <div class="carousel-track">
+                                    <div class="carousel-slide green-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Cake Breath</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide purple-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Cake Breath</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide blue-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Cake Breath</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="carousel-nav carousel-prev" onclick="changeCarouselSlide('cake-breath', -1)">‹</button>
+                                <button class="carousel-nav carousel-next" onclick="changeCarouselSlide('cake-breath', 1)">›</button>
+                                <div class="carousel-dots">
+                                    <button class="carousel-dot active" onclick="setCarouselSlide('cake-breath', 0)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('cake-breath', 1)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('cake-breath', 2)"></button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-content">
@@ -581,10 +723,33 @@
                     </div>
 
                     <!-- Alienoyes Kush -->
-                    <div class="strain-card">
-                        <div class="card-image purple-gradient">
-                            <div class="card-overlay">
-                                <div class="card-overlay-text">Alienoyes Kush</div>
+                    <div class="strain-card" data-strain="alienoyes-kush">
+                        <div class="card-image">
+                            <div class="image-carousel">
+                                <div class="carousel-track">
+                                    <div class="carousel-slide purple-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Alienoyes Kush</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide green-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Alienoyes Kush</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide orange-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Alienoyes Kush</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="carousel-nav carousel-prev" onclick="changeCarouselSlide('alienoyes-kush', -1)">‹</button>
+                                <button class="carousel-nav carousel-next" onclick="changeCarouselSlide('alienoyes-kush', 1)">›</button>
+                                <div class="carousel-dots">
+                                    <button class="carousel-dot active" onclick="setCarouselSlide('alienoyes-kush', 0)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('alienoyes-kush', 1)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('alienoyes-kush', 2)"></button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-content">
@@ -673,10 +838,33 @@
                     </div>
 
                     <!-- Shiny Rocks -->
-                    <div class="strain-card">
-                        <div class="card-image blue-gradient">
-                            <div class="card-overlay">
-                                <div class="card-overlay-text">Shiny Rocks</div>
+                    <div class="strain-card" data-strain="shiny-rocks">
+                        <div class="card-image">
+                            <div class="image-carousel">
+                                <div class="carousel-track">
+                                    <div class="carousel-slide blue-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Shiny Rocks</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide green-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Shiny Rocks</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide purple-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Shiny Rocks</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="carousel-nav carousel-prev" onclick="changeCarouselSlide('shiny-rocks', -1)">‹</button>
+                                <button class="carousel-nav carousel-next" onclick="changeCarouselSlide('shiny-rocks', 1)">›</button>
+                                <div class="carousel-dots">
+                                    <button class="carousel-dot active" onclick="setCarouselSlide('shiny-rocks', 0)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('shiny-rocks', 1)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('shiny-rocks', 2)"></button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-content">
@@ -714,10 +902,33 @@
                     </div>
 
                     <!-- Mango Aliens -->
-                    <div class="strain-card">
-                        <div class="card-image orange-gradient">
-                            <div class="card-overlay">
-                                <div class="card-overlay-text">Mango Aliens</div>
+                    <div class="strain-card" data-strain="mango-aliens">
+                        <div class="card-image">
+                            <div class="image-carousel">
+                                <div class="carousel-track">
+                                    <div class="carousel-slide orange-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Mango Aliens</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide purple-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Mango Aliens</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide green-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Mango Aliens</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="carousel-nav carousel-prev" onclick="changeCarouselSlide('mango-aliens', -1)">‹</button>
+                                <button class="carousel-nav carousel-next" onclick="changeCarouselSlide('mango-aliens', 1)">›</button>
+                                <div class="carousel-dots">
+                                    <button class="carousel-dot active" onclick="setCarouselSlide('mango-aliens', 0)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('mango-aliens', 1)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('mango-aliens', 2)"></button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-content">
@@ -765,10 +976,33 @@
 
                 <div class="strain-grid">
                     <!-- Loud Dreams -->
-                    <div class="strain-card">
-                        <div class="card-image blue-gradient">
-                            <div class="card-overlay">
-                                <div class="card-overlay-text">Loud Dreams</div>
+                    <div class="strain-card" data-strain="loud-dreams">
+                        <div class="card-image">
+                            <div class="image-carousel">
+                                <div class="carousel-track">
+                                    <div class="carousel-slide blue-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Loud Dreams</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide green-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Loud Dreams</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide orange-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Loud Dreams</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="carousel-nav carousel-prev" onclick="changeCarouselSlide('loud-dreams', -1)">‹</button>
+                                <button class="carousel-nav carousel-next" onclick="changeCarouselSlide('loud-dreams', 1)">›</button>
+                                <div class="carousel-dots">
+                                    <button class="carousel-dot active" onclick="setCarouselSlide('loud-dreams', 0)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('loud-dreams', 1)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('loud-dreams', 2)"></button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-content">
@@ -806,10 +1040,33 @@
                     </div>
 
                     <!-- Blueberry Fingers -->
-                    <div class="strain-card">
-                        <div class="card-image purple-gradient">
-                            <div class="card-overlay">
-                                <div class="card-overlay-text">Blueberry Fingers</div>
+                    <div class="strain-card" data-strain="blueberry-fingers">
+                        <div class="card-image">
+                            <div class="image-carousel">
+                                <div class="carousel-track">
+                                    <div class="carousel-slide purple-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Blueberry Fingers</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide blue-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Blueberry Fingers</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide orange-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Blueberry Fingers</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="carousel-nav carousel-prev" onclick="changeCarouselSlide('blueberry-fingers', -1)">‹</button>
+                                <button class="carousel-nav carousel-next" onclick="changeCarouselSlide('blueberry-fingers', 1)">›</button>
+                                <div class="carousel-dots">
+                                    <button class="carousel-dot active" onclick="setCarouselSlide('blueberry-fingers', 0)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('blueberry-fingers', 1)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('blueberry-fingers', 2)"></button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-content">
@@ -847,10 +1104,33 @@
                     </div>
 
                     <!-- Noyes OG -->
-                    <div class="strain-card">
-                        <div class="card-image green-gradient">
-                            <div class="card-overlay">
-                                <div class="card-overlay-text">Noyes OG</div>
+                    <div class="strain-card" data-strain="noyes-og">
+                        <div class="card-image">
+                            <div class="image-carousel">
+                                <div class="carousel-track">
+                                    <div class="carousel-slide green-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Noyes OG</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide purple-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Noyes OG</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide blue-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Noyes OG</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="carousel-nav carousel-prev" onclick="changeCarouselSlide('noyes-og', -1)">‹</button>
+                                <button class="carousel-nav carousel-next" onclick="changeCarouselSlide('noyes-og', 1)">›</button>
+                                <div class="carousel-dots">
+                                    <button class="carousel-dot active" onclick="setCarouselSlide('noyes-og', 0)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('noyes-og', 1)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('noyes-og', 2)"></button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-content">
@@ -980,10 +1260,33 @@
 
                 <div class="strain-grid">
                     <!-- Albino Skunk -->
-                    <div class="strain-card">
-                        <div class="card-image blue-gradient">
-                            <div class="card-overlay">
-                                <div class="card-overlay-text">Albino Skunk</div>
+                    <div class="strain-card" data-strain="albino-skunk">
+                        <div class="card-image">
+                            <div class="image-carousel">
+                                <div class="carousel-track">
+                                    <div class="carousel-slide blue-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Albino Skunk</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide green-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Albino Skunk</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide orange-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Albino Skunk</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="carousel-nav carousel-prev" onclick="changeCarouselSlide('albino-skunk', -1)">‹</button>
+                                <button class="carousel-nav carousel-next" onclick="changeCarouselSlide('albino-skunk', 1)">›</button>
+                                <div class="carousel-dots">
+                                    <button class="carousel-dot active" onclick="setCarouselSlide('albino-skunk', 0)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('albino-skunk', 1)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('albino-skunk', 2)"></button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-content">
@@ -1021,10 +1324,33 @@
                     </div>
 
                     <!-- Rainbow Skunk -->
-                    <div class="strain-card">
-                        <div class="card-image purple-gradient">
-                            <div class="card-overlay">
-                                <div class="card-overlay-text">Rainbow Skunk</div>
+                    <div class="strain-card" data-strain="rainbow-skunk">
+                        <div class="card-image">
+                            <div class="image-carousel">
+                                <div class="carousel-track">
+                                    <div class="carousel-slide purple-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Rainbow Skunk</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide orange-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Rainbow Skunk</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide blue-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Rainbow Skunk</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="carousel-nav carousel-prev" onclick="changeCarouselSlide('rainbow-skunk', -1)">‹</button>
+                                <button class="carousel-nav carousel-next" onclick="changeCarouselSlide('rainbow-skunk', 1)">›</button>
+                                <div class="carousel-dots">
+                                    <button class="carousel-dot active" onclick="setCarouselSlide('rainbow-skunk', 0)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('rainbow-skunk', 1)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('rainbow-skunk', 2)"></button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-content">
@@ -1062,10 +1388,33 @@
                     </div>
 
                     <!-- Skunk Breath -->
-                    <div class="strain-card">
-                        <div class="card-image green-gradient">
-                            <div class="card-overlay">
-                                <div class="card-overlay-text">Skunk Breath</div>
+                    <div class="strain-card" data-strain="skunk-breath">
+                        <div class="card-image">
+                            <div class="image-carousel">
+                                <div class="carousel-track">
+                                    <div class="carousel-slide green-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Skunk Breath</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide purple-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Skunk Breath</div>
+                                        </div>
+                                    </div>
+                                    <div class="carousel-slide orange-gradient">
+                                        <div class="card-overlay">
+                                            <div class="card-overlay-text">Skunk Breath</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="carousel-nav carousel-prev" onclick="changeCarouselSlide('skunk-breath', -1)">‹</button>
+                                <button class="carousel-nav carousel-next" onclick="changeCarouselSlide('skunk-breath', 1)">›</button>
+                                <div class="carousel-dots">
+                                    <button class="carousel-dot active" onclick="setCarouselSlide('skunk-breath', 0)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('skunk-breath', 1)"></button>
+                                    <button class="carousel-dot" onclick="setCarouselSlide('skunk-breath', 2)"></button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-content">
@@ -1107,6 +1456,97 @@
     </main>
 
     <script>
+        // Track current slide for each strain
+        const carouselIndexes = {};
+        const carouselTimers = {};
+
+        // Initialize all carousels
+        document.addEventListener('DOMContentLoaded', function() {
+            const strains = document.querySelectorAll('[data-strain]');
+            strains.forEach(strain => {
+                const strainName = strain.dataset.strain;
+                carouselIndexes[strainName] = 0;
+                startAutoRotation(strainName);
+            });
+        });
+
+        function startAutoRotation(strainName) {
+            // Clear any existing timer
+            if (carouselTimers[strainName]) {
+                clearInterval(carouselTimers[strainName]);
+            }
+            
+            // Start auto-rotation every 4 seconds
+            carouselTimers[strainName] = setInterval(() => {
+                changeCarouselSlide(strainName, 1);
+            }, 4000);
+        }
+
+        function stopAutoRotation(strainName) {
+            if (carouselTimers[strainName]) {
+                clearInterval(carouselTimers[strainName]);
+                carouselTimers[strainName] = null;
+            }
+        }
+
+        function changeCarouselSlide(strainName, direction) {
+            const currentIndex = carouselIndexes[strainName];
+            const newIndex = currentIndex + direction;
+            
+            // Loop around
+            if (newIndex < 0) {
+                carouselIndexes[strainName] = 2;
+            } else if (newIndex > 2) {
+                carouselIndexes[strainName] = 0;
+            } else {
+                carouselIndexes[strainName] = newIndex;
+            }
+            
+            updateCarousel(strainName);
+            
+            // Restart auto-rotation timer when user manually changes slide
+            startAutoRotation(strainName);
+        }
+
+        function setCarouselSlide(strainName, index) {
+            carouselIndexes[strainName] = index;
+            updateCarousel(strainName);
+            
+            // Restart auto-rotation timer when user manually changes slide
+            startAutoRotation(strainName);
+        }
+
+        function updateCarousel(strainName) {
+            const strain = document.querySelector(`[data-strain="${strainName}"]`);
+            const track = strain.querySelector('.carousel-track');
+            const dots = strain.querySelectorAll('.carousel-dot');
+            const currentIndex = carouselIndexes[strainName];
+            
+            // Update track position
+            track.style.transform = `translateX(-${currentIndex * 33.333}%)`;
+            
+            // Update dots
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        // Pause auto-rotation when hovering over a strain card
+        document.addEventListener('DOMContentLoaded', function() {
+            const strainCards = document.querySelectorAll('[data-strain]');
+            strainCards.forEach(card => {
+                const strainName = card.dataset.strain;
+                
+                card.addEventListener('mouseenter', () => {
+                    stopAutoRotation(strainName);
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    startAutoRotation(strainName);
+                });
+            });
+        });
+
         function showAllLines() {
             const lines = document.querySelectorAll('.genetic-line');
             const buttons = document.querySelectorAll('.filter-btn');
