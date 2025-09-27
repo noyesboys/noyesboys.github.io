@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noyes Boys Genetics - Premium Cannabis Strains Catalog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #0a0a0a;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4ade80;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover {
+            color: #4ade80;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 120px;
+            min-height: 100vh;
+            background: #111;
+        }
+
+        .page-header {
+            text-align: center;
+            padding: 60px 0;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-size: 3rem;
+            color: #4ade80;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0 20px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select, .search-input {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 1px solid #475569;
+            color: #cbd5e1;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-select:focus, .search-input:focus {
+            outline: none;
+            border-color: #4ade80;
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.3);
+        }
+
+        .filter-select option {
+            background: #1e293b;
+            color: #cbd5e1;
+        }
+
+        .search-input {
+            width: 280px;
+        }
+
+        .search-input::placeholder {
+            color: #64748b;
+        }
+
+        .sort-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .view-toggle {
+            display: flex;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .view-btn {
+            background: transparent;
+            border: none;
+            color: #cbd5e1;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn.active, .view-btn:hover {
+            background: #4ade80;
+            color: #0a0a0a;
+        }
+
+        /* Strain Grid */
+        .strain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            padding: 0 20px;
+            margin-bottom: 4rem;
+        }
+
+        .strain-grid.list-view {
+            grid-template-columns: 1fr;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+
+        .strain-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border: 1px solid #475569;
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .strain-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4ade80, #22c55e);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .strain-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(74, 222, 128, 0.2);
+            border-color: #4ade80;
+        }
+
+        .strain-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .list-view .strain-card {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .strain-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            background: linear-gradient(45deg, #1a4d3a, #2d5a27);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4ade80;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .list-view .strain-image {
+            width: 200px;
+            height: 150px;
+            margin: 0;
+            flex-shrink: 0;
+        }
+
+        .strain-card:hover .strain-image {
+            transform: scale(1.05);
+        }
+
+        .strain-info {
+            flex: 1;
+        }
+
+        .strain-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #4ade80;
+        }
+
+        .strain-genetics {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .strain-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat {
+            background: rgba(74, 222, 128, 0.1);
+            padding: 0.75rem;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(74, 222, 128, 0.2);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #4ade80;
+            font-size: 0.9rem;
+        }
+
+        .strain-effects {
+            margin-bottom: 1rem;
+        }
+
+        .effects-label {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .effects-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .effect-tag {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+
+        .strain-flavors {
+            margin-bottom: 1.5rem;
+        }
+
+        .flavors-label {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .flavor-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .flavor-tag {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .read-more-btn {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9rem;
+        }
+
+        .read-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+
+        .availability-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .available {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.4);
+        }
+
+        .limited {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(251, 191, 36, 0.4);
+        }
+
+        .unavailable {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        /* Line badges */
+        .line-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .line-1 { background: rgba(147, 51, 234, 0.2); color: #9333ea; border: 1px solid rgba(147, 51, 234, 0.4); }
+        .line-2 { background: rgba(59, 130, 246, 0.2); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.4); }
+        .line-3 { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); }
+        .line-4 { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.4); }
+
+        /* Filter Results */
+        .results-info {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #94a3b8;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+
+        /* Empty State */
+        .no-results {
+            text-align: center;
+            padding: 4rem;
+            color: #64748b;
+        }
+
+        .no-results h3 {
+            color: #4ade80;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filters, .sort-controls {
+                justify-content: center;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .strain-grid {
+                grid-template-columns: 1fr;
+                padding: 0 10px;
+            }
+
+            .list-view .strain-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .list-view .strain-image {
+                width: 100%;
+                height: 200px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .strain-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <a href="/" class="logo">
+                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+                The Noyes Boys
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/genetics" class="active">Genetics</a></li>
+                <li><a href="/deals">Deals</a></li>
+                <li><a href="/contact_us">Contact</a></li>
+                <li><a href="/reviews">Reviews</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <div class="container">
+                <h1 class="page-title">Premium Cannabis Genetics</h1>
+                <p class="page-subtitle">Hand-selected strains bred for superior plant structure, potency, and Canadian growing conditions</p>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="container">
+            <div class="controls">
+                <div class="filters">
+                    <select class="filter-select" id="lineFilter">
+                        <option value="">All Lines</option>
+                        <option value="1">Line 1 - Originals</option>
+                        <option value="2">Line 2 - Geode Crosses</option>
+                        <option value="3">Line 3 - OG Crosses</option>
+                        <option value="4">Line 4 - Skunk Crosses</option>
+                        <option value="5">Line 5 - Upcoming Releases</option>
+                    </select>
+                    
+                    <select class="filter-select" id="varietyFilter">
+                        <option value="">All Varieties</option>
+                        <option value="indica">Indica Dominant</option>
+                        <option value="sativa">Sativa Dominant</option>
+                        <option value="hybrid">Balanced Hybrid</option>
+                    </select>
+                    
+                    <select class="filter-select" id="availabilityFilter">
+                        <option value="">All Availability</option>
+                        <option value="available">Available</option>
+                        <option value="limited">Limited</option>
+                        <option value="unavailable">Coming Soon</option>
+                    </select>
+                    
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search strains...">
+                </div>
+
+                <div class="sort-controls">
+                    <select class="filter-select" id="sortSelect">
+                        <option value="name">Sort by Name</option>
+                        <option value="thc">Sort by THC %</option>
+                        <option value="flowering">Sort by Flowering Time</option>
+                        <option value="line">Sort by Line</option>
+                    </select>
+                    
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="grid">Grid</button>
+                        <button class="view-btn" data-view="list">List</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-info" id="resultsInfo">
+                Showing <span id="resultCount">0</span> strains
+            </div>
+
+            <!-- Strain Grid -->
+            <div class="strain-grid" id="strainGrid">
+                <!-- Strains will be populated by JavaScript -->
+            </div>
+
+            <div class="loading" id="loading" style="display: none;">
+                Loading strains...
+            </div>
+
+            <div class="no-results" id="noResults" style="display: none;">
+                <h3>No strains found</h3>
+                <p>Try adjusting your filters or search terms</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Complete strain data from your comprehensive list
+        const strains = [
+            // Line 1 - Originals
+            {
+                line: 1, name: "Purple Rainbow", genetics: "Alien Tech × Rainbow Belts × Wedding Cake",
+                sex: "Feminized", variety: "25% S / 75% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Medium", cbdContent: ">2%", thcContent: "25-27%", thcNum: 26,
+                effects: ["Motivated", "Energetic", "Happy", "Uplifted"], flavors: ["Gas", "Earthy", "Citrus"],
+                terpenes: ["Humulene", "Limonene"], breeder: "Available, BX2 - Noyes Boys", availability: "available"
+            },
+            {
+                line: 1, name: "Rainbow Cakes", genetics: "Noyes Breath × Biscotti × Wedding Cake",
+                sex: "Feminized", variety: "70% S / 30% I", varietyType: "sativa",
+                floweringTime: "68 days", plantHeight: "Medium", cbdContent: ">2%", thcContent: "24-26%", thcNum: 25,
+                effects: ["Motivated", "Energetic", "Happy", "Confident"], flavors: ["Grapes", "Citrus"],
+                terpenes: ["Linalool", "Valencene", "Limonene"], breeder: "Available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 1, name: "Cake Breath", genetics: "Wedding Cake × Meatbreath",
+                sex: "Feminized", variety: "15% S / 85% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "27-28%", thcNum: 27.5,
+                effects: ["Tired", "Sleepy", "Couch-lock"], flavors: ["Gas", "Earthy", "Pungent"],
+                terpenes: ["Humulene", "Limonene", "Terpinolene"], breeder: "Available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 1, name: "Alienoyes Kush", genetics: "Alien Tech × Noyes Kush",
+                sex: "Feminized", variety: "25% S / 75% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "27-28%", thcNum: 27.5,
+                effects: ["Comfy", "Restful", "Relaxed"], flavors: ["Gas", "Earthy", "Citrus"],
+                terpenes: ["Humulene", "Limonene"], breeder: "BX3 available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 1, name: "Mangonoyes Kush", genetics: "Mango Kush × Noyes Kush",
+                sex: "Feminized", variety: "50% S / 50% I", varietyType: "hybrid",
+                floweringTime: "65 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "25-26%", thcNum: 25.5,
+                effects: ["Motivated", "Energetic", "Happy", "Productive"], flavors: ["Mango", "Fruity", "Citrus"],
+                terpenes: ["Linalool", "Valencene", "Limonene"], breeder: "BX3 / BX4 nearly available", availability: "limited"
+            },
+            {
+                line: 1, name: "Citronoyes Haze", genetics: "Noyes Haze × Lemon Haze × Noyes Kush",
+                sex: "Feminized", variety: "75% S / 25% I", varietyType: "sativa",
+                floweringTime: "62-70 days", plantHeight: "Tall", cbdContent: ">3%", thcContent: "24-26%", thcNum: 25,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Lemons", "Fruit", "Citrus"],
+                terpenes: ["Linalool", "Limonene", "Valencene"], breeder: "BX3 available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 1, name: "Noyes Haze", genetics: "Noyes Kush × Lemon Haze",
+                sex: "Feminized", variety: "90% S / 10% I", varietyType: "sativa",
+                floweringTime: "68 days", plantHeight: "Tall", cbdContent: ">5%", thcContent: "25-28%", thcNum: 26.5,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Lemon", "Citrus"],
+                terpenes: ["Limonene"], breeder: "BX3 available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 1, name: "Noyes Breath", genetics: "Noyes Kush × Meatbreath",
+                sex: "Feminized", variety: "10% S / 90% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "25-28%", thcNum: 26.5,
+                effects: ["Relaxed", "Chill"], flavors: ["Gas", "Earthy"],
+                terpenes: ["Humulene"], breeder: "Available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 1, name: "Meat Cakes", genetics: "Meatbreath × Wedding Cake",
+                sex: "Feminized", variety: "20% S / 80% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "25-28%", thcNum: 26.5,
+                effects: ["Chill", "Relaxed", "Tired"], flavors: ["Gas", "Earthy", "Citrus"],
+                terpenes: ["Humulene", "Limonene"], breeder: "Available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 1, name: "Biscotti Rocks", genetics: "Rainbow Belts × Biscotti × Meatbreath",
+                sex: "Feminized", variety: "25% S / 75% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "24-25%", thcNum: 24.5,
+                effects: ["Tired", "Couch-lock"], flavors: ["Gas", "Citrus"],
+                terpenes: ["Valencene", "Humulene", "Limonene"], breeder: "Available - Noyes Boys", availability: "available"
+            },
+            // Line 2 - Geode Crosses
+            {
+                line: 2, name: "Yesno Kush", genetics: "Genetic Lottery of 5 Line1 strains",
+                sex: "Feminized", variety: "Unknown", varietyType: "hybrid",
+                floweringTime: "~65 days", plantHeight: "Unknown", cbdContent: "Unknown", thcContent: "Unknown", thcNum: 20,
+                effects: ["Phenohunting", "Experimentation"], flavors: ["Not disclosed"],
+                terpenes: ["Unknown"], breeder: "Available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 2, name: "Shiny Rocks", genetics: "Noyes Rocks × Noyes Pebbles",
+                sex: "Feminized", variety: "25% S / 75% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "27-28%", thcNum: 27.5,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Gas", "Earthy", "Citrus"],
+                terpenes: ["Humulene"], breeder: "Available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 2, name: "Noyes Rocks", genetics: "Noyes Kush × Biscotti",
+                sex: "Feminized", variety: "25% S / 75% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "25-28%", thcNum: 26.5,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Gas", "Earthy", "Citrus"],
+                terpenes: ["Humulene", "Limonene"], breeder: "Available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 2, name: "Noyes Pebbles", genetics: "Citronoyes Haze × Biscotti Rocks",
+                sex: "Feminized", variety: "40% S / 60% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "25-28%", thcNum: 26.5,
+                effects: ["Energetic", "Happy"], flavors: ["Gas", "Earthy", "Citrus"],
+                terpenes: ["Humulene", "Limonene"], breeder: "Available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 2, name: "Mango Rocks", genetics: "Mangonoyes Kush × Biscotti Rocks",
+                sex: "Feminized", variety: "25% S / 75% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "25-28%", thcNum: 26.5,
+                effects: ["Energetic", "Happy"], flavors: ["Gas", "Earthy", "Citrus"],
+                terpenes: ["Linalool", "Humulene", "Limonene"], breeder: "Available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 2, name: "Citrus Pebbles", genetics: "Citronoyes Haze × Noyes Pebbles",
+                sex: "Feminized", variety: "30% S / 70% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Medium", cbdContent: ">2%", thcContent: "27-28%", thcNum: 27.5,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Gas", "Earthy", "Citrus"],
+                terpenes: ["Humulene", "Limonene"], breeder: "Unavailable at time - Noyes Boys", availability: "unavailable"
+            },
+            {
+                line: 2, name: "Citrus Rocks", genetics: "Noyes Kush × Biscotti Rocks",
+                sex: "Feminized", variety: "25% S / 75% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "24-28%", thcNum: 26,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Gas", "Citrus"],
+                terpenes: ["Linalool", "Humulene", "Limonene"], breeder: "Available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 2, name: "Alien Rocks", genetics: "Alienoyes Kush × Biscotti Rocks",
+                sex: "Feminized", variety: "25% S / 75% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "27-28%", thcNum: 27.5,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Grapes", "Gas", "Earthy", "Citrus"],
+                terpenes: ["Humulene", "Limonene"], breeder: "Availability uncertain", availability: "limited"
+            },
+            {
+                line: 2, name: "Citrus Haze Breath", genetics: "Citronoyes Haze × Biscotti Rocks × Meatbreath",
+                sex: "Feminized", variety: "20% S / 80% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "27-28%", thcNum: 27.5,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Gas", "Earthy", "Citrus"],
+                terpenes: ["Linalool", "Humulene", "Limonene"], breeder: "Available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 2, name: "Mango Aliens", genetics: "Mangonoyes Kush × Alienoyes Kush",
+                sex: "Feminized", variety: "25% S / 75% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "25-28%", thcNum: 26.5,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Mango", "Fruit", "Gas", "Citrus"],
+                terpenes: ["Humulene", "Limonene"], breeder: "Available - Noyes Boys", availability: "available"
+            },
+            // Line 3 - OG Crosses
+            {
+                line: 3, name: "Loud Dreams", genetics: "Blue Dream × Noyes Kush",
+                sex: "Feminized", variety: "15% S / 85% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "19-21%", thcNum: 20,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Berries", "Gas", "Earthy"],
+                terpenes: ["Valencene", "Humulene", "Limonene"], breeder: "BX1 available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 3, name: "Afghani Noyes", genetics: "Afghan Kush × Noyes Kush",
+                sex: "Feminized", variety: "25% S / 75% I", varietyType: "indica",
+                floweringTime: "65 days", plantHeight: "Tall", cbdContent: ">4%", thcContent: "18-22%", thcNum: 20,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Gas", "Earthy"],
+                terpenes: ["Humulene"], breeder: "BX1 / BX2 available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 3, name: "White Noyes", genetics: "White Widow × Noyes Kush",
+                sex: "Feminized", variety: "40% S / 60% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "22-23%", thcNum: 22.5,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Gas", "Citrus"],
+                terpenes: ["Humulene", "Limonene"], breeder: "BX1 available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 3, name: "Blueberry Fingers", genetics: "Noyes Kush × Blueberry Kush",
+                sex: "Feminized", variety: "30% S / 70% I", varietyType: "indica",
+                floweringTime: "65 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "18-20%", thcNum: 19,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Blueberries", "Fruit", "Berries", "Gas", "Earthy", "Citrus"],
+                terpenes: ["Valencene", "Humulene", "Limonene"], breeder: "BX1 / BX2 available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 3, name: "Cheeto Fingers", genetics: "Noyes Kush × Orange Kush",
+                sex: "Feminized", variety: "25% S / 75% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "22-23%", thcNum: 22.5,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Fruity", "Gas", "Earthy", "Citrus"],
+                terpenes: ["Humulene", "Limonene"], breeder: "BX1 / BX2 available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 3, name: "Noyes OG", genetics: "Noyes Kush × OG Kush",
+                sex: "Feminized", variety: "10% S / 90% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "25-28%", thcNum: 26.5,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Gas", "Earthy", "Citrus"],
+                terpenes: ["Humulene", "Limonene"], breeder: "BX1 available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 3, name: "Bubba Noyes", genetics: "Noyes Kush × Bubba Kush",
+                sex: "Feminized", variety: "25% S / 75% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "22-25%", thcNum: 23.5,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Gas", "Earthy", "Citrus"],
+                terpenes: ["Humulene", "Limonene"], breeder: "BX1 available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 3, name: "Captain Noyes", genetics: "Noyes Kush × Trainwreck",
+                sex: "Feminized", variety: "25% S / 75% I", varietyType: "indica",
+                floweringTime: "65 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "20-21%", thcNum: 20.5,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Gas", "Earthy", "Citrus"],
+                terpenes: ["Humulene", "Limonene"], breeder: "BX1 / BX2 available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 3, name: "Hash Fingers", genetics: "Noyes Kush × Hash Plant",
+                sex: "Feminized", variety: "10% S / 90% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short", cbdContent: ">2%", thcContent: "25-28%", thcNum: 26.5,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Gas", "Earthy", "Citrus"],
+                terpenes: ["Humulene", "Limonene"], breeder: "BX1 available - Noyes Boys", availability: "available"
+            },
+            {
+                line: 3, name: "Noyes Poison", genetics: "Durban Poison × Noyes Kush",
+                sex: "Feminized", variety: "80% S / 20% I", varietyType: "sativa",
+                floweringTime: "65-68 days", plantHeight: "Medium", cbdContent: ">2%", thcContent: "23-24%", thcNum: 23.5,
+                effects: ["Motivated", "Energetic", "Happy"], flavors: ["Gas", "Earthy", "Citrus"],
+                terpenes: ["Humulene", "Limonene"], breeder: "BX1 available - Noyes Boys", availability: "available"
+            },
+            // Line 4 - Skunk Crosses
+            {
+                line: 4, name: "Albino Skunk", genetics: "Skunk × ATF × Noyes Breath",
+                sex: "Feminized", variety: "35% S / 65% I", varietyType: "indica",
+                floweringTime: "66-68 days", plantHeight: "Medium", cbdContent: ">2%", thcContent: "24-26%", thcNum: 25,
+                effects: ["Happy", "Energetic"], flavors: ["Skunky", "Gassy"],
+                terpenes: ["Humulene"], breeder: "Noyes Boys Genetics", availability: "available"
+            },
+            {
+                line: 4, name: "Rainbow Skunk", genetics: "Skunk × Rainbow Belts",
+                sex: "Feminized", variety: "30% S / 70% I", varietyType: "indica",
+                floweringTime: "66-68 days", plantHeight: "Tall", cbdContent: ">2%", thcContent: "21-22%", thcNum: 21.5,
+                effects: ["Happy", "Energetic"], flavors: ["Skunky", "Fruity"],
+                terpenes: ["Humulene"], breeder: "Noyes Boys Genetics", availability: "available"
+            },
+            {
+                line: 4, name: "Skunk Breath", genetics: "Skunk × Noyes Breath",
+                sex: "Feminized", variety: "20% S / 80% I", varietyType: "indica",
+                floweringTime: "64 days", plantHeight: "Short-Med", cbdContent: "0%", thcContent: "28%", thcNum: 28,
+                effects: ["Relaxed", "Sleepy", "Happy"], flavors: ["Skunky", "Gas", "Rubber"],
+                terpenes: ["Humulene", "Myrcene"], breeder: "Noyes Boys Genetics", availability: "available"
+            },
+            {
+                line: 4, name: "Blueberry Skunk", genetics: "Skunk × Blueberry Fingers",
+                sex: "Feminized", variety: "30% S / 70% I", varietyType: "indica",
+                floweringTime: "64-65 days", plantHeight: "Short-Med", cbdContent: "0%", thcContent: "24-26%", thcNum: 25,
+                effects: ["Relaxed", "Sleepy", "Happy"], flavors: ["Skunky", "Berries", "Sweet"],
+                terpenes: ["Humulene", "Limonene", "Myrcene"], breeder: "Noyes Boys Genetics", availability: "available"
+            },
+            {
+                line: 4, name: "Skunk Cake", genetics: "Skunk × Cake Breath",
+                sex: "Feminized", variety: "15% S / 85% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short-Med", cbdContent: "0%", thcContent: "28%", thcNum: 28,
+                effects: ["Relaxed"], flavors: ["Skunky", "Gas"],
+                terpenes: ["Humulene", "Caryophyllene"], breeder: "Noyes Boys Genetics", availability: "available"
+            },
+            {
+                line: 4, name: "Le Pew", genetics: "Skunk × Trainwreck",
+                sex: "Feminized", variety: "30% S / 70% I", varietyType: "indica",
+                floweringTime: "63 days", plantHeight: "Medium", cbdContent: "0%", thcContent: "19-21%", thcNum: 20,
+                effects: ["Energetic", "Motivated"], flavors: ["Skunky"],
+                terpenes: ["Humulene", "Terpinolene"], breeder: "Noyes Boys Genetics", availability: "available"
+            },
+            {
+                line: 4, name: "Stink", genetics: "Skunk × Hashplant",
+                sex: "Feminized", variety: "15% S / 85% I", varietyType: "indica",
+                floweringTime: "63 days", plantHeight: "Short-Med", cbdContent: "0%", thcContent: "24%", thcNum: 24,
+                effects: ["Relaxed", "Sleepy", "Tired"], flavors: ["Skunky", "Gas", "Cheesy"],
+                terpenes: ["Humulene", "Myrcene"], breeder: "Noyes Boys Genetics", availability: "available"
+            },
+            {
+                line: 4, name: "Skunk Capone", genetics: "Skunk × AK47",
+                sex: "Feminized", variety: "TBD", varietyType: "hybrid",
+                floweringTime: "TBD", plantHeight: "TBD", cbdContent: "TBD", thcContent: "TBD", thcNum: 20,
+                effects: ["TBD"], flavors: ["TBD"],
+                terpenes: ["TBD"], breeder: "Noyes Boys Genetics", availability: "unavailable"
+            },
+            {
+                line: 4, name: "Skunk Face", genetics: "Skunk × AK48",
+                sex: "Feminized", variety: "TBD", varietyType: "hybrid",
+                floweringTime: "TBD", plantHeight: "TBD", cbdContent: "TBD", thcContent: "TBD", thcNum: 20,
+                effects: ["TBD"], flavors: ["TBD"],
+                terpenes: ["TBD"], breeder: "Noyes Boys Genetics", availability: "unavailable"
+            },
+            {
+                line: 4, name: "Alienized Skunk", genetics: "Skunk × Alienoyes Kush",
+                sex: "Feminized", variety: "15% S / 85% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short-Med", cbdContent: "0%", thcContent: "23-28%", thcNum: 25.5,
+                effects: ["Relaxed", "Sleepy", "Happy"], flavors: ["Skunky", "Earthy"],
+                terpenes: ["Humulene", "Myrcene"], breeder: "Noyes Boys Genetics", availability: "available"
+            },
+            // Line 5 - Upcoming Releases
+            {
+                line: 5, name: "Citrus Squirts", genetics: "ATF × Citronoyes Haze",
+                sex: "Feminized", variety: "85% S / 15% I", varietyType: "sativa",
+                floweringTime: "65 days", plantHeight: "Tall", cbdContent: "0%", thcContent: "22%", thcNum: 22,
+                effects: ["Relaxed", "Happy", "Hungry"], flavors: ["Citrus", "Fruity", "Oranges"],
+                terpenes: ["Limonene"], breeder: "Noyes Boys Genetics", availability: "unavailable"
+            },
+            {
+                line: 5, name: "Noyes Thunder", genetics: "ATF × Noyes Kush",
+                sex: "Feminized", variety: "30% S / 70% I", varietyType: "indica",
+                floweringTime: "66 days", plantHeight: "Short-Med", cbdContent: "0%", thcContent: "23%", thcNum: 23,
+                effects: ["Energetic", "Happy", "Motivated"], flavors: ["Berries", "Fruity", "Lemony"],
+                terpenes: ["Limonene", "Valencene"], breeder: "Noyes Boys Genetics", availability: "unavailable"
+            },
+            {
+                line: 5, name: "Snowstorm", genetics: "ATF × Trainwreck",
+                sex: "Feminized", variety: "15% S / 85% I", varietyType: "indica",
+                floweringTime: "N/A", plantHeight: "Short-Med", cbdContent: "0%", thcContent: "28%", thcNum: 28,
+                effects: ["Happy", "Hungry"], flavors: ["Sweet", "Smooth"],
+                terpenes: ["Unknown"], breeder: "Noyes Boys Genetics", availability: "unavailable"
+            },
+            {
+                line: 5, name: "TFB", genetics: "ATF × Noyes Breath",
+                sex: "Feminized", variety: "15% S / 85% I", varietyType: "indica",
+                floweringTime: "62 days", plantHeight: "Short-Med", cbdContent: "0%", thcContent: "28%", thcNum: 28,
+                effects: ["Relaxed", "Sleepy", "Happy"], flavors: ["Gas", "Rubber"],
+                terpenes: ["Humulene", "Myrcene"], breeder: "Noyes Boys Genetics", availability: "unavailable"
+            }
+        ];
+
+        let filteredStrains = [...strains];
+        let currentView = 'grid';
+
+        // DOM Elements
+        const strainGrid = document.getElementById('strainGrid');
+        const searchInput = document.getElementById('searchInput');
+        const lineFilter = document.getElementById('lineFilter');
+        const varietyFilter = document.getElementById('varietyFilter');
+        const availabilityFilter = document.getElementById('availabilityFilter');
+        const sortSelect = document.getElementById('sortSelect');
+        const viewButtons = document.querySelectorAll('.view-btn');
+        const resultsInfo = document.getElementById('resultsInfo');
+        const resultCount = document.getElementById('resultCount');
+        const loading = document.getElementById('loading');
+        const noResults = document.getElementById('noResults');
+
+        // Initialize the page
+        function init() {
+            renderStrains();
+            attachEventListeners();
+            updateResultsInfo();
+        }
+
+        // Attach event listeners
+        function attachEventListeners() {
+            searchInput.addEventListener('input', debounce(filterStrains, 300));
+            lineFilter.addEventListener('change', filterStrains);
+            varietyFilter.addEventListener('change', filterStrains);
+            availabilityFilter.addEventListener('change', filterStrains);
+            sortSelect.addEventListener('change', sortStrains);
+            
+            viewButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    currentView = e.target.dataset.view;
+                    viewButtons.forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    strainGrid.className = currentView === 'list' ? 'strain-grid list-view' : 'strain-grid';
+                });
+            });
+        }
+
+        // Debounce function
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Filter strains
+        function filterStrains() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const lineValue = lineFilter.value;
+            const varietyValue = varietyFilter.value;
+            const availabilityValue = availabilityFilter.value;
+
+            filteredStrains = strains.filter(strain => {
+                const matchesSearch = strain.name.toLowerCase().includes(searchTerm) ||
+                                    strain.genetics.toLowerCase().includes(searchTerm) ||
+                                    strain.effects.some(effect => effect.toLowerCase().includes(searchTerm)) ||
+                                    strain.flavors.some(flavor => flavor.toLowerCase().includes(searchTerm));
+                
+                const matchesLine = !lineValue || strain.line.toString() === lineValue;
+                const matchesVariety = !varietyValue || strain.varietyType === varietyValue;
+                const matchesAvailability = !availabilityValue || strain.availability === availabilityValue;
+
+                return matchesSearch && matchesLine && matchesVariety && matchesAvailability;
+            });
+
+            sortStrains();
+        }
+
+        // Sort strains
+        function sortStrains() {
+            const sortValue = sortSelect.value;
+            
+            filteredStrains.sort((a, b) => {
+                switch (sortValue) {
+                    case 'name':
+                        return a.name.localeCompare(b.name);
+                    case 'thc':
+                        return b.thcNum - a.thcNum;
+                    case 'flowering':
+                        return parseInt(a.floweringTime) - parseInt(b.floweringTime);
+                    case 'line':
+                        return a.line - b.line;
+                    default:
+                        return 0;
+                }
+            });
+
+            renderStrains();
+            updateResultsInfo();
+        }
+
+        // Get availability badge HTML
+        function getAvailabilityBadge(availability) {
+            const badges = {
+                'available': '<span class="availability-badge available">Available</span>',
+                'limited': '<span class="availability-badge limited">Limited</span>',
+                'unavailable': '<span class="availability-badge unavailable">Coming Soon</span>'
+            };
+            return badges[availability] || badges['unavailable'];
+        }
+
+        // Get line badge HTML
+        function getLineBadge(line) {
+            const badges = {
+                1: '<span class="line-badge line-1">Line 1 - Originals</span>',
+                2: '<span class="line-badge line-2">Line 2 - Geodes</span>',
+                3: '<span class="line-badge line-3">Line 3 - OG Crosses</span>',
+                4: '<span class="line-badge line-4">Line 4 - Skunk</span>',
+                5: '<span class="line-badge line-1">Line 5 - Upcoming</span>'
+            };
+            return badges[line] || '';
+        }
+
+        // Create strain card HTML
+        function createStrainCard(strain) {
+            const strainNameForImage = strain.name.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
+            const imageUrl = `assets/blkbkg/${strainNameForImage}`;
+            
+            return `
+                <div class="strain-card">
+                    ${getAvailabilityBadge(strain.availability)}
+                    <div class="strain-image" style="background-image: url('${imageUrl}'); background-size: cover; background-position: center;">
+                        <div style="background: rgba(26, 77, 58, 0.8); padding: 10px; border-radius: 8px; margin: 10px;">
+                            ${strain.name}
+                        </div>
+                    </div>
+                    <div class="strain-info">
+                        ${getLineBadge(strain.line)}
+                        <h3 class="strain-name">${strain.name}</h3>
+                        <p class="strain-genetics">${strain.genetics}</p>
+                        
+                        <div class="strain-stats">
+                            <div class="stat">
+                                <div class="stat-label">THC</div>
+                                <div class="stat-value">${strain.thcContent}</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">CBD</div>
+                                <div class="stat-value">${strain.cbdContent}</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">Flowering</div>
+                                <div class="stat-value">${strain.floweringTime}</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-label">Height</div>
+                                <div class="stat-value">${strain.plantHeight}</div>
+                            </div>
+                        </div>
+
+                        <div class="strain-effects">
+                            <div class="effects-label">Effects</div>
+                            <div class="effects-tags">
+                                ${strain.effects.map(effect => `<span class="effect-tag">${effect}</span>`).join('')}
+                            </div>
+                        </div>
+
+                        <div class="strain-flavors">
+                            <div class="flavors-label">Flavors & Terpenes</div>
+                            <div class="flavor-tags">
+                                ${strain.flavors.map(flavor => `<span class="flavor-tag">${flavor}</span>`).join('')}
+                                ${strain.terpenes.map(terpene => `<span class="flavor-tag">${terpene}</span>`).join('')}
+                            </div>
+                        </div>
+
+                        <a href="/${strainNameForImage}" class="read-more-btn">Read More</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render strains
+        function renderStrains() {
+            if (filteredStrains.length === 0) {
+                strainGrid.style.display = 'none';
+                noResults.style.display = 'block';
+                loading.style.display = 'none';
+            } else {
+                strainGrid.style.display = 'grid';
+                noResults.style.display = 'none';
+                loading.style.display = 'none';
+                strainGrid.innerHTML = filteredStrains.map(strain => createStrainCard(strain)).join('');
+            }
+        }
+
+        // Update results info
+        function updateResultsInfo() {
+            resultCount.textContent = filteredStrains.length;
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
