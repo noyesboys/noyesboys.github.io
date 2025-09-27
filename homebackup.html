@@ -416,218 +416,6 @@
             color: #64748b;
         }
         
-        /* Corner Popup Styles */
-        .corner-popup {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 320px;
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 0 1px rgba(74, 222, 128, 0.2);
-            transform: translateX(400px);
-            opacity: 0;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 2000;
-            font-family: 'Arial', sans-serif;
-            overflow: hidden;
-        }
-        
-        .corner-popup.show {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        
-        /* Popup Header */
-        .popup-header {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-            padding: 15px 20px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .popup-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100px;
-            height: 100px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: pulse 3s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.2); opacity: 0.1; }
-        }
-        
-        .popup-title {
-            color: #0a0a0a;
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin: 0;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .popup-subtitle {
-            color: rgba(10, 10, 10, 0.8);
-            font-size: 0.85rem;
-            margin: 2px 0 0 0;
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* Close Button */
-        .popup-close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: #0a0a0a;
-            font-size: 1.2rem;
-            cursor: pointer;
-            width: 25px;
-            height: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: background-color 0.2s ease;
-            z-index: 2;
-        }
-        
-        .popup-close:hover {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Popup Body */
-        .popup-body {
-            padding: 20px;
-            color: #cbd5e1;
-        }
-        
-        .popup-offer {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        
-        .offer-text {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #4ade80;
-            margin-bottom: 5px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .offer-description {
-            font-size: 0.9rem;
-            color: #94a3b8;
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
-        
-        /* Popup Actions */
-        .popup-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .popup-btn {
-            flex: 1;
-            padding: 12px 16px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            text-align: center;
-            display: inline-block;
-        }
-        
-        .popup-btn-primary {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-            color: #0a0a0a;
-            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.3);
-        }
-        
-        .popup-btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
-        }
-        
-        .popup-btn-secondary {
-            background: transparent;
-            color: #4ade80;
-            border: 1px solid #4ade80;
-        }
-        
-        .popup-btn-secondary:hover {
-            background: rgba(74, 222, 128, 0.1);
-        }
-        
-        /* Progress Bar */
-        .popup-timer {
-            height: 3px;
-            background: rgba(74, 222, 128, 0.2);
-            margin: 15px 0 0 0;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        
-        .timer-progress {
-            height: 100%;
-            background: linear-gradient(90deg, #4ade80, #22c55e);
-            width: 100%;
-            border-radius: 2px;
-            animation: countdown 30s linear forwards;
-        }
-        
-        @keyframes countdown {
-            from { width: 100%; }
-            to { width: 0%; }
-        }
-        
-        /* Cannabis leaf decoration */
-        .popup-decoration {
-            position: absolute;
-            bottom: -10px;
-            left: -10px;
-            font-size: 2rem;
-            opacity: 0.1;
-            color: #4ade80;
-            transform: rotate(-15deg);
-        }
-        
-        /* Bounce animation for entrance */
-        .corner-popup.bounce-in {
-            animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-        
-        @keyframes bounceIn {
-            0% {
-                transform: translateX(400px) scale(0.3);
-                opacity: 0;
-            }
-            50% {
-                transform: translateX(-20px) scale(1.05);
-                opacity: 0.8;
-            }
-            70% {
-                transform: translateX(10px) scale(0.95);
-                opacity: 0.9;
-            }
-            100% {
-                transform: translateX(0) scale(1);
-                opacity: 1;
-            }
-        }
-        
         /* Responsive */
         @media (max-width: 768px) {
             .masthead h1 {
@@ -645,21 +433,6 @@
             
             .nav-links {
                 display: none;
-            }
-            
-            /* Mobile popup adjustments */
-            .corner-popup {
-                width: 300px;
-                right: 15px;
-                bottom: 15px;
-            }
-            
-            .offer-text {
-                font-size: 1.5rem;
-            }
-            
-            .popup-actions {
-                flex-direction: column;
             }
         }
         
@@ -895,31 +668,6 @@
         </div>
     </footer>
 
-    <!-- Corner Popup -->
-    <div id="cornerPopup" class="corner-popup">
-        <div class="popup-header">
-            <button class="popup-close" onclick="hidePopup()" aria-label="Close">&times;</button>
-            <h3 class="popup-title">🌱 FIRST-TIME GROWING NOYES BOYS GENETICS?</h3>
-            <p class="popup-subtitle">...Can we entice you a bit more?</p>
-        </div>
-        <div class="popup-body">
-            <div class="popup-offer">
-                <div class="offer-text">20% OFF</div>
-                <div class="offer-description">
-                    Your first order of beginner-friendly feminized seeds
-                </div>
-            </div>
-            <div class="popup-actions">
-                <a href="/deals" class="popup-btn popup-btn-primary">Claim Deal</a>
-                <a href="/genetics" class="popup-btn popup-btn-secondary">Browse Seeds</a>
-            </div>
-            <div class="popup-timer">
-                <div class="timer-progress" id="timerProgress"></div>
-            </div>
-        </div>
-        <div class="popup-decoration">🍃</div>
-    </div>
-
 <script>
 function checkForAffiliateLink() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -934,99 +682,22 @@ function checkForAffiliateLink() {
 
 checkForAffiliateLink();
 
-// Corner Popup Functionality
-let popupShown = false;
-let autoHideTimer;
-
-function showPopup() {
-    if (sessionStorage.getItem('popupDismissed')) {
-        return; // Don't show if user previously dismissed it
-    }
-    
-    const popup = document.getElementById('cornerPopup');
-    popup.classList.add('show', 'bounce-in');
-    popupShown = true;
-    
-    // Reset and start the progress bar animation
-    const progress = document.getElementById('timerProgress');
-    progress.style.animation = 'none';
-    progress.offsetHeight; // Trigger reflow
-    progress.style.animation = 'countdown 30s linear forwards';
-    
-    // Auto-hide after 30 seconds
-    clearTimeout(autoHideTimer);
-    autoHideTimer = setTimeout(() => {
-        hidePopup();
-    }, 30000);
-}
-
-function hidePopup() {
-    const popup = document.getElementById('cornerPopup');
-    popup.classList.remove('show', 'bounce-in');
-    popupShown = false;
-    
-    // Remember that user dismissed it
-    sessionStorage.setItem('popupDismissed', 'true');
-    
-    clearTimeout(autoHideTimer);
-}
-
-// Show popup after 5 seconds on page load
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        if (!popupShown && !sessionStorage.getItem('popupDismissed')) {
-            showPopup();
-        }
-    }, 5000);
-});
-
-// Close popup when clicking outside
-document.addEventListener('click', (e) => {
-    const popup = document.getElementById('cornerPopup');
-    if (popupShown && !popup.contains(e.target)) {
-        hidePopup();
-    }
-});
-
-// Close popup with Escape key
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && popupShown) {
-        hidePopup();
-    }
-});
-
-// Pause timer on hover
-document.getElementById('cornerPopup').addEventListener('mouseenter', () => {
-    const progress = document.getElementById('timerProgress');
-    progress.style.animationPlayState = 'paused';
-    clearTimeout(autoHideTimer);
-});
-
-document.getElementById('cornerPopup').addEventListener('mouseleave', () => {
-    const progress = document.getElementById('timerProgress');
-    progress.style.animationPlayState = 'running';
-    
-    // Resume auto-hide timer (simplified - in production you'd calculate remaining time)
-    autoHideTimer = setTimeout(() => {
-        hidePopup();
-    }, 10000); // Shorter time after hover
-});
-
 // Add this to track affiliate clicks
-if (typeof PHP !== 'undefined' && PHP.isset(PHP._GET['ref'])) {
-    var affiliate_ref = PHP._GET['ref'];
-    var current_page = PHP.basename(PHP._SERVER['PHP_SELF']);
-    var campaign = PHP.isset(PHP._GET['campaign']) ? PHP._GET['campaign'] : null;
+if (isset($_GET['ref'])) {
+    $affiliate_ref = $_GET['ref'];
+    $current_page = basename($_SERVER['PHP_SELF']);
+    $campaign = isset($_GET['campaign']) ? $_GET['campaign'] : null;
     
     // Store affiliate in session
-    PHP.session_start();
-    PHP._SESSION['affiliate_ref'] = affiliate_ref;
+    session_start();
+    $_SESSION['affiliate_ref'] = $affiliate_ref;
     
     // Track the click
-    // require_once = 'classes/Affiliate.php';
-    // var affiliate = new Affiliate();
-    // affiliate = recordClick(affiliate_ref, current_page, campaign);
+    require_once = 'classes/Affiliate.php';
+    $affiliate = new Affiliate();
+    $affiliate = recordClick($affiliate_ref, $current_page, $campaign);
 }
-</script>
+
+    </script>
 </body>
 </html>
