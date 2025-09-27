@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="The Noyes Boys Seed Bank - Premium feminized cannabis seeds, craft cannabis genetics hand-bred in Canada. Specializing in Canadian Purples, mildew resistant, beginner-friendly strains with superior plant structure.">
+    <meta name="keywords" content="feminized cannabis seeds canada, canadian seed bank, cannabis seeds online, marijuana seeds, craft cannabis genetics, feminized seeds, autoflower seeds, CBD seeds, cannabis seed bank canada, buy cannabis seeds">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="The Noyes Boys Seed Bank - Premium Canadian Cannabis Seeds">
+    <meta property="og:description" content="Hand-bred craft cannabis seeds specializing in Canadian Purples. Premium genetics with superior plant structure and mildew resistance.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.noyesboys.com">
+    <title>The Noyes Boys Seed Bank | Premium Feminized Cannabis Seeds Canada | Craft Cannabis Genetics</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #0a0a0a;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4ade80;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover {
+            color: #4ade80;
+        }
+        
+        /* Masthead Banner - matching genetics page style */
+        .masthead {
+            height: 100vh;
+            min-height: 500px;
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
+                        url('assets/img/bg-masthead.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            padding-top: 120px;
+        }
+        
+        .masthead-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .masthead h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 2.5rem;
+            line-height: 2.5rem;
+            letter-spacing: 0.8rem;
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+        
+        .masthead h2 {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 2rem;
+            max-width: 20rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.6);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #4ade80;
+            border: 2px solid #4ade80;
+        }
+        
+        .btn-secondary:hover {
+            background: #4ade80;
+            color: #0a0a0a;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background: #111;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #4ade80;
+        }
+        
+        .features-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 4rem;
+        }
+        
+        .features-subtitle {
+            font-size: 1.8rem;
+            color: #4ade80;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .features-tagline {
+            font-size: 1.3rem;
+            color: #cbd5e1;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+        
+        .features-description {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            line-height: 1.8;
+            margin-bottom: 0;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 2.5rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(74, 222, 128, 0.2);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #4ade80;
+        }
+        
+        .feature-card p {
+            color: #cbd5e1;
+            line-height: 1.8;
+        }
+        
+        /* Product Categories */
+        .categories {
+            padding: 100px 0;
+            background: #0a0a0a;
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .category-card {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(74, 222, 128, 0.15);
+        }
+        
+        .category-image {
+            height: 200px;
+            background: linear-gradient(45deg, #1a4d3a, #2d5a27);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #4ade80;
+        }
+        
+        .category-content {
+            padding: 1.5rem;
+        }
+        
+        .category-content h3 {
+            color: #4ade80;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .category-content p {
+            color: #cbd5e1;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        /* About Section */
+        .about {
+            padding: 100px 0;
+            background: #111;
+        }
+        
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .about-text {
+            color: #cbd5e1;
+        }
+        
+        .about-text h2 {
+            color: #4ade80;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .about-image {
+            background: linear-gradient(45deg, #1a4d3a, #2d5a27);
+            height: 400px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #4ade80;
+            background-image: url('assets/img/noyes boys logo.png');
+            background-size: 60%;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.9;
+        }
+        
+        /* Trust Indicators */
+        .trust {
+            padding: 50px 0;
+            background: #1e293b;
+            text-align: center;
+        }
+        
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .trust-item {
+            padding: 1.5rem;
+        }
+        
+        .trust-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4ade80;
+            margin-bottom: 0.5rem;
+        }
+        
+        .trust-text {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: #0a0a0a;
+            padding: 50px 0 20px;
+            border-top: 1px solid #334155;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h3 {
+            color: #4ade80;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-section p, .footer-section a {
+            color: #cbd5e1;
+            text-decoration: none;
+            line-height: 1.8;
+        }
+        
+        .footer-section a:hover {
+            color: #4ade80;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+            color: #64748b;
+        }
+        
+        /* Corner Popup Styles */
+        .corner-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 320px;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 0 1px rgba(74, 222, 128, 0.2);
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2000;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+        
+        .corner-popup.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        /* Popup Header */
+        .popup-header {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            padding: 15px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .popup-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.1; }
+        }
+        
+        .popup-title {
+            color: #0a0a0a;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .popup-subtitle {
+            color: rgba(10, 10, 10, 0.8);
+            font-size: 0.85rem;
+            margin: 2px 0 0 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Close Button */
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #0a0a0a;
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s ease;
+            z-index: 2;
+        }
+        
+        .popup-close:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Popup Body */
+        .popup-body {
+            padding: 20px;
+            color: #cbd5e1;
+        }
+        
+        .popup-offer {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .offer-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4ade80;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .offer-description {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        
+        /* Popup Actions */
+        .popup-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .popup-btn {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+        
+        .popup-btn-primary {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.3);
+        }
+        
+        .popup-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+        
+        .popup-btn-secondary {
+            background: transparent;
+            color: #4ade80;
+            border: 1px solid #4ade80;
+        }
+        
+        .popup-btn-secondary:hover {
+            background: rgba(74, 222, 128, 0.1);
+        }
+        
+        /* Progress Bar */
+        .popup-timer {
+            height: 3px;
+            background: rgba(74, 222, 128, 0.2);
+            margin: 15px 0 0 0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .timer-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #4ade80, #22c55e);
+            width: 100%;
+            border-radius: 2px;
+            animation: countdown 30s linear forwards;
+        }
+        
+        @keyframes countdown {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+        
+        /* Cannabis leaf decoration */
+        .popup-decoration {
+            position: absolute;
+            bottom: -10px;
+            left: -10px;
+            font-size: 2rem;
+            opacity: 0.1;
+            color: #4ade80;
+            transform: rotate(-15deg);
+        }
+        
+        /* Bounce animation for entrance */
+        .corner-popup.bounce-in {
+            animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        @keyframes bounceIn {
+            0% {
+                transform: translateX(400px) scale(0.3);
+                opacity: 0;
+            }
+            50% {
+                transform: translateX(-20px) scale(1.05);
+                opacity: 0.8;
+            }
+            70% {
+                transform: translateX(10px) scale(0.95);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .masthead h1 {
+                font-size: 2rem;
+                letter-spacing: 0.4rem;
+            }
+            
+            .masthead h2 {
+                font-size: 0.9rem;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            /* Mobile popup adjustments */
+            .corner-popup {
+                width: 300px;
+                right: 15px;
+                bottom: 15px;
+            }
+            
+            .offer-text {
+                font-size: 1.5rem;
+            }
+            
+            .popup-actions {
+                flex-direction: column;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .masthead h1 {
+                font-size: 4rem;
+                line-height: 4rem;
+            }
+            
+            .masthead h2 {
+                max-width: 30rem;
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <a href="FeminizedSeedsHomepage.html" class="logo">
+                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+                The Noyes Boys
+            </a>
+            <ul class="nav-links">
+                <li><a href=/FeminizedSeedsHomepage >Home</a></li>
+                <li><a href=/deals >Deals</a></li>
+                <li><a href=/order_now>Order Now</a></li>
+                <li><a href=/contact_us>Contact</a></li>
+                <li><a href=/affiliate/affiliates>Affiliate Program</a></li>
+                <li><a href=/reviews>Reviews</a></li>
+                <li><a href="https://en.seedfinder.eu/database/breeder/Noyes_Boys_Genetics/">Read More</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Masthead Banner -->
+    <section class="masthead" id="home">
+        <div class="container">
+            <div class="masthead-content">
+                <h1>NOYES BOYS GENETICS</h1>
+                <h2>Premium Canadian Cannabis Seeds</h2>
+                <div class="cta-buttons">
+                    <a href=/genetics class="btn btn-secondary">Shop Seeds</a>
+                    <a href=/deals class="btn btn-secondary">Pricing</a>
+                    <a href=/reviews class="btn btn-secondary">Reviews</a>
+                    <a href=/merch class="btn btn-secondary">Merch</a>
+                    <a href=/straincards class="btn btn-secondary">Strain Cards</a>
+                    <a href=/affiliate/affiliates class="btn btn-secondary">Affiliates</a>
+                    <a href=/readmore class="btn btn-secondary">Blog</a>
+                    </div>
+                </div>
+            <!-- Social Media Links -->
+            <div class="social-links">
+                <a href="#" class="social-link facebook" target="_blank" title="Facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="social-link instagram" target="_blank" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="social-link twitter" target="_blank" title="Twitter/X">
+                    <i class="fab fa-x-twitter"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose The Noyes Boys</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3>Premium Genetics</h3>
+                    <p>Hand-selected and bred for superior plant structure, mildew resistance, and exceptional yields. Our F8 genetics represent years of careful breeding and selection.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🇨🇦</div>
+                    <h3>Canadian Bred</h3>
+                    <p>Specifically developed for Canadian growing conditions. Our strains thrive in shorter seasons and are optimized for both indoor and outdoor cultivation.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌱</div>
+                    <h3>Beginner Friendly</h3>
+                    <p>Easy-to-grow strains with robust genetics, disease resistance, and forgiving growth characteristics. Perfect for first-time growers and veterans alike.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔬</div>
+                    <h3>Craft Quality</h3>
+                    <p>Small-batch breeding ensures quality over quantity. Each seed represents careful selection for potency, flavor, structure, and overall plant health.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📦</div>
+                    <h3>Discreet Shipping</h3>
+                    <p>Fast, secure, and completely discreet shipping across Canada. Your privacy is our priority with unmarked packaging and secure payment options.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <h3>Germination Guarantee</h3>
+                    <p>We stand behind our genetics with a germination guarantee. High-quality seeds with proven viability and consistent results every time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Categories -->
+    <section class="categories" id="seeds">
+        <div class="container">
+            <h2 class="section-title">Our Seed Collection</h2>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-image">🌸</div>
+                    <div class="category-content">
+                        <h3>Feminized Seeds</h3>
+                        <p>99.9% female plants guaranteed. Our feminized cannabis seeds eliminate the guesswork and maximize your growing space with productive female plants only.</p>
+                        <a class="btn btn-primary" href="genetics.html">Shop Feminized</a>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="category-image">⚡</div>
+                    <div class="category-content">
+                        <h3>Regular Seeds</h3>
+                        <p>To be added in the near future; by request.</p>
+                        <a class="btn btn-primary" href="nextstrains.html">Coming Soon</a>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="category-image">ORIGINALS</div>
+                    <div class="category-content">
+                        <h3>Original Noyes Boys Strains</h3>
+                        <p>Our signature purple strains bred specifically for Canadian conditions. Beautiful colors, exceptional flavor, and robust growth characteristics.</p>
+                        <a class="btn btn-primary" href="line1.html">Shop Originals</a>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="category-image">OG</div>
+                    <div class="category-content">
+                        <h3>OG crosses</h3>
+                        <p>Your old favourites; bred with Noyes Kush for potency, structure, and resilience.</p>
+                        <a class="btn btn-primary" href="line3.html">Shop OG Strains</a>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="category-image">GEODES🗿</div>
+                    <div class="category-content">
+                        <h3>"Geode" crosses</h3>
+                        <p>Rock Hard structure, Potency and Reilience!.</p>
+                        <a class="btn btn-primary" href="line2.html">Shop Geodes</a>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <div class="category-image">SKUNK🤢</div>
+                    <div class="category-content">
+                        <h3>Skunk crosses</h3>
+                        <p>Everything SKUNK.</p>
+                        <a class="btn btn-primary" href="line4.html">Shop Skunk</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>The Noyes Boys Story</h2>
+                    <p>Founded with a passion for cannabis genetics and a commitment to quality, The Noyes Boys Seed Bank has been serving Canadian growers since 2015. We believe that great cannabis starts with exceptional genetics.</p>
+                    <p>Our breeding program focuses on plant structure and resilience first, knowing that potency and flavor naturally follow when you work with the right genetics. Every strain in our collection has been carefully selected and bred for Canadian growing conditions.</p>
+                    <p>We breed for Canadian Purples, dense but well-spaced internoding, mildew resistance, and ease of growth. Our goal is to provide genetics that perform consistently, whether you're a first-time grower or a seasoned cultivator.</p>
+                </div>
+                <div class="about-image"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Indicators -->
+    <section class="trust">
+        <div class="container">
+            <div class="trust-grid">
+                <div class="trust-item">
+                    <div class="trust-number">15+</div>
+                    <div class="trust-text">Years of Breeding Experience</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-number">99%</div>
+                    <div class="trust-text">Customer Satisfaction Rate</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-number">95%+</div>
+                    <div class="trust-text">Germination Rate Guaranteed</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-number">100%</div>
+                    <div class="trust-text">Canadian Grown & Bred</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>The Noyes Boys Seed Bank</h3>
+                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                        <img src="assets/img/noyes boys logo.png" alt="Logo" style="width: 40px; height: 40px; margin-right: 10px;">
+                        <span style="color: #4ade80; font-weight: bold;">Est. 2015</span>
+                    </div>
+                    <p>Premium Canadian cannabis seeds hand-bred for quality, structure, and resilience. Serving growers across Canada with exceptional genetics.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <p><a href="genetics.html">Browse Seeds</a></p>
+                    <p><a href="contact_us.html">Socials</a></p>
+                    <p><a href="readmore.html">Growing Guide</a></p>
+                    <p><a href="noyeskush.html">Learn about Noyes Kush</a></p>
+                </div>
+                <div class="footer-section">
+                    <h3>Customer Service</h3>
+                    <p><a href="deals.html">Deals</a></p>
+                    <p><a href="deals.html">Shipping Info</a></p>
+                    <p><a href="readmore.html">Learning Centre</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 The Noyes Boys Seed Bank. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Corner Popup -->
+    <div id="cornerPopup" class="corner-popup">
+        <div class="popup-header">
+            <button class="popup-close" onclick="hidePopup()" aria-label="Close">&times;</button>
+            <h3 class="popup-title">🌱 FIRST-TIME GROWER?</h3>
+            <p class="popup-subtitle">Special deal for beginners!</p>
+        </div>
+        <div class="popup-body">
+            <div class="popup-offer">
+                <div class="offer-text">20% OFF</div>
+                <div class="offer-description">
+                    Your first order of beginner-friendly feminized seeds + FREE growing guide
+                </div>
+            </div>
+            <div class="popup-actions">
+                <a href="/deals" class="popup-btn popup-btn-primary">Claim Deal</a>
+                <a href="/genetics" class="popup-btn popup-btn-secondary">Browse Seeds</a>
+            </div>
+            <div class="popup-timer">
+                <div class="timer-progress" id="timerProgress"></div>
+            </div>
+        </div>
+        <div class="popup-decoration">🍃</div>
+    </div>
+
+<script>
+function checkForAffiliateLink() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const affiliateCode = urlParams.get('ref'); // Gets the "john123" part
+    
+    if (affiliateCode) {
+        // Remember this for 60 days
+        document.cookie = 'affiliate=${affiliateCode}; max-age=5184000; path=/';
+        console.log('Affiliate tracked:', affiliateCode);
+    }
+}
+
+checkForAffiliateLink();
+
+// Corner Popup Functionality
+let popupShown = false;
+let autoHideTimer;
+
+function showPopup() {
+    if (sessionStorage.getItem('popupDismissed')) {
+        return; // Don't show if user previously dismissed it
+    }
+    
+    const popup = document.getElementById('cornerPopup');
+    popup.classList.add('show', 'bounce-in');
+    popupShown = true;
+    
+    // Reset and start the progress bar animation
+    const progress = document.getElementById('timerProgress');
+    progress.style.animation = 'none';
+    progress.offsetHeight; // Trigger reflow
+    progress.style.animation = 'countdown 30s linear forwards';
+    
+    // Auto-hide after 30 seconds
+    clearTimeout(autoHideTimer);
+    autoHideTimer = setTimeout(() => {
+        hidePopup();
+    }, 30000);
+}
+
+function hidePopup() {
+    const popup = document.getElementById('cornerPopup');
+    popup.classList.remove('show', 'bounce-in');
+    popupShown = false;
+    
+    // Remember that user dismissed it
+    sessionStorage.setItem('popupDismissed', 'true');
+    
+    clearTimeout(autoHideTimer);
+}
+
+// Show popup after 5 seconds on page load
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        if (!popupShown && !sessionStorage.getItem('popupDismissed')) {
+            showPopup();
+        }
+    }, 5000);
+});
+
+// Close popup when clicking outside
+document.addEventListener('click', (e) => {
+    const popup = document.getElementById('cornerPopup');
+    if (popupShown && !popup.contains(e.target)) {
+        hidePopup();
+    }
+});
+
+// Close popup with Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && popupShown) {
+        hidePopup();
+    }
+});
+
+// Pause timer on hover
+document.getElementById('cornerPopup').addEventListener('mouseenter', () => {
+    const progress = document.getElementById('timerProgress');
+    progress.style.animationPlayState = 'paused';
+    clearTimeout(autoHideTimer);
+});
+
+document.getElementById('cornerPopup').addEventListener('mouseleave', () => {
+    const progress = document.getElementById('timerProgress');
+    progress.style.animationPlayState = 'running';
+    
+    // Resume auto-hide timer (simplified - in production you'd calculate remaining time)
+    autoHideTimer = setTimeout(() => {
+        hidePopup();
+    }, 10000); // Shorter time after hover
+});
+
+// Add this to track affiliate clicks
+if (typeof PHP !== 'undefined' && PHP.isset(PHP._GET['ref'])) {
+    var affiliate_ref = PHP._GET['ref'];
+    var current_page = PHP.basename(PHP._SERVER['PHP_SELF']);
+    var campaign = PHP.isset(PHP._GET['campaign']) ? PHP._GET['campaign'] : null;
+    
+    // Store affiliate in session
+    PHP.session_start();
+    PHP._SESSION['affiliate_ref'] = affiliate_ref;
+    
+    // Track the click
+    // require_once = 'classes/Affiliate.php';
+    // var affiliate = new Affiliate();
+    // affiliate = recordClick(affiliate_ref, current_page, campaign);
+}
+</script>
+</body>
+</html>
