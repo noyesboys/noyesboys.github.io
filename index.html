@@ -647,7 +647,8 @@
                 font-size: 1.25rem;
             }
         }
-        .monthly-deals-banner {
+        /* Monthly Deals Banner */
+.monthly-deals-banner {
     background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
     padding: 3rem 0;
     position: relative;
@@ -756,6 +757,7 @@
     transform: rotate(45deg);
     animation: shine 3s ease-in-out infinite;
 }
+
 @keyframes shine {
     0%, 100% { transform: rotate(45deg) translateX(-100%); }
     50% { transform: rotate(45deg) translateX(100%); }
@@ -1048,8 +1050,7 @@
                 Terms and conditions apply. Limited quantities available.
             </p>
         </div>
-        </div>
-        </section>
+    </div>
         <!-- Features -->
         <section class="features">
             <div class="container">
@@ -1292,7 +1293,7 @@
                 }
             }
         });
-        // Monthly deals configuration
+// Monthly deals configuration
 const monthlyDeals = {
     // January
     0: {
@@ -1303,16 +1304,16 @@ const monthlyDeals = {
             {
                 discount: "25%",
                 type: "OFF All Line 1 Strains",
-                description: "Get our original Noyes Boys genetics at an unbeatable price. Perfect for starting your year with proven performers.",
+                description: "Get our original Noyes Boys genetics at an unbeatable price. Purple Rainbow, Rainbow Cakes, Alienoyes Kush and more.",
                 code: "NEWYEAR25",
                 link: "/line1"
             },
             {
                 discount: "FREE",
-                type: "Tracking on Orders $100+",
-                description: "Free discreet shipping across Canada on all orders over $100. No minimum strain requirements.",
-                code: "FREETRACK",
-                link: "/deals"
+                type: "Shipping on Orders $100+",
+                description: "Free discreet shipping across Canada on all orders over $100. Stock up and save on delivery costs.",
+                code: "FREESHIP100",
+                link: "/genetics"
             }
         ]
     },
@@ -1324,11 +1325,11 @@ const monthlyDeals = {
         subtitle: "Show your plants some love this February!",
         deals: [
             {
-                discount: "20%",
-                type: "OFF Purple Strains",
-                description: "Fall in love with our beautiful purple genetics. Perfect romantic colors for your grow room.",
-                code: "PURPLE20",
-                link: "/genetics"
+                discount: "30%",
+                type: "OFF Purple Rainbow",
+                description: "Our most beautiful purple strain at massive savings. Perfect romantic colors with Alien Tech x Rainbow Belts genetics.",
+                code: "PURPLE30",
+                link: "/purplerainbow"
             },
             {
                 discount: "Buy 2",
@@ -1347,69 +1348,232 @@ const monthlyDeals = {
         subtitle: "Get ready for outdoor season with these deals!",
         deals: [
             {
-                discount: "15%",
-                type: "OFF for your Outdoor Starters",
-                description: "Perfect timing to prep for outdoor season. Our hardiest Canadian-bred genetics at massive savings.",
-                code: "OUTDOOR15",
-                link: "/genetics"
+                discount: "35%",
+                type: "OFF Citronoyes Haze",
+                description: "Perfect tall sativa for outdoor season. 75% Sativa with amazing lemon citrus flavors - bred for Canadian conditions.",
+                code: "OUTDOOR35",
+                link: "/citronoyeshaze"
             },
             {
-                discount: "FREE",
-                type: "STICKERS",
-                description: "Get a bundle free with any order over $50.",
-                code: "stickers50",
-                link: "/readmore"
+                discount: "20%",
+                type: "OFF All Tall Strains",
+                description: "Noyes Haze, Citronoyes Haze, and Afghani Noyes - perfect for outdoor growing with room to stretch.",
+                code: "TALL20",
+                link: "/genetics"
             }
         ]
     },
-    // April, May, June, July, August, September
-    1: {
-        title: "SUMMERS HEAT SALE",
-        badge: "HOT HOT HOT",
-        subtitle: "Hot Deals just like the heat!",
+    
+    // April
+    3: {
+        title: "April Showers Bring May Flowers",
+        badge: "Spring Growth Special",
+        subtitle: "Germination season is here - get growing!",
         deals: [
             {
-                discount: "25%",
-                type: "OFF Line 2 Strains",
-                description: "Let the Geodes Sparkle",
-                code: "GEODE25",
-                link: "/line2"
+                discount: "28%",
+                type: "OFF Noyes Haze",
+                description: "90% Sativa powerhouse with 5%+ CBD content. Perfect for medical growers seeking energetic, clear-headed effects.",
+                code: "HAZE28",
+                link: "/noyeshaze"
             },
             {
-                discount: "Buy 2",
-                type: "Get 1 FREE",
-                description: "Mix and match any Geode (line2). Third strain can be of any Line",
-                code: "321",
+                discount: "15%",
+                type: "OFF All Line 2 Geodes",
+                description: "Rock-solid genetics for reliable spring starts. Shiny Rocks, Noyes Rocks, Mango Rocks - our most stable strains.",
+                code: "GEODES15",
+                link: "/line2"
+            }
+        ]
+    },
+    
+    // May
+    4: {
+        title: "May the Growth Be With You",
+        badge: "Outdoor Season Kickoff",
+        subtitle: "Time to get those outdoor plants started!",
+        deals: [
+            {
+                discount: "32%",
+                type: "OFF Sativa Dominant",
+                description: "Rainbow Cakes (70% S), Citronoyes Haze (75% S), Noyes Haze (90% S) - perfect for long summer days.",
+                code: "SATIVA32",
+                link: "/genetics"
+            },
+            {
+                discount: "Buy 3",
+                type: "Get 2 FREE",
+                description: "Stock up for outdoor season! Mix any strains - free seeds must be equal or lesser value.",
+                code: "MAY532",
                 link: "/genetics"
             }
         ]
     },
-    // October, November, December (default/current example)
+    
+    // June
+    5: {
+        title: "Summer Solstice Sale",
+        badge: "Longest Day Special",
+        subtitle: "Celebrate the peak growing season!",
+        deals: [
+            {
+                discount: "33%",
+                type: "OFF All Line 3 OG Crosses",
+                description: "Classic genetics crossed with Noyes Kush: Noyes OG, Bubba Noyes, White Noyes, Hash Fingers and more!",
+                code: "SUMMER33",
+                link: "/line3"
+            },
+            {
+                discount: "25%",
+                type: "OFF Cake Breath",
+                description: "Wedding Cake x Meatbreath - our highest THC indica at 27-28%. Perfect couch-lock strain for summer evenings.",
+                code: "CAKE25",
+                link: "/cakebreath"
+            }
+        ]
+    },
+    
+    // July
+    6: {
+        title: "Canada Day Celebration",
+        badge: "Proudly Canadian Special",
+        subtitle: "Celebrating Canadian-bred genetics!",
+        deals: [
+            {
+                discount: "35%",
+                type: "OFF Mangonoyes Kush",
+                description: "50/50 hybrid with amazing mango flavors. Perfect balanced Canadian genetics - BX3/BX4 nearly available!",
+                code: "CANADA35",
+                link: "/mangonoyeskush"
+            },
+            {
+                discount: "30%",
+                type: "OFF All Noyes Kush Crosses",
+                description: "Celebrate our signature strain! Any strain with Noyes Kush genetics gets the Canada Day discount.",
+                code: "NOYES30",
+                link: "/genetics"
+            }
+        ]
+    },
+    
+    // August
+    7: {
+        title: "Late Summer Harvest Prep",
+        badge: "Pre-Harvest Special",
+        subtitle: "Get ready for the harvest season ahead!",
+        deals: [
+            {
+                discount: "22%",
+                type: "OFF All 62-Day Strains",
+                description: "Quick-finishing genetics: Purple Rainbow, Cake Breath, Alienoyes Kush, Noyes Rocks and many more!",
+                code: "FAST22",
+                link: "/genetics"
+            },
+            {
+                discount: "40%",
+                type: "OFF Biscotti Rocks",
+                description: "Rainbow Belts x Biscotti x Meatbreath - perfect couch-lock strain to help you relax during harvest stress.",
+                code: "BISCOTTI40",
+                link: "/biscottirocks"
+            }
+        ]
+    },
+    
+    // September
+    8: {
+        title: "Back to School Genetics",
+        badge: "Learning Season Special",
+        subtitle: "Time to learn some new strains!",
+        deals: [
+            {
+                discount: "26%",
+                type: "OFF Line 1 Originals",
+                description: "Perfect for new growers! Our most stable, beginner-friendly genetics. All the classics in one line.",
+                code: "LEARN26",
+                link: "/line1"
+            },
+            {
+                discount: "35%",
+                type: "OFF Yesno Kush",
+                description: "Genetic lottery of 5 Line 1 strains - perfect for phenohunting and experimentation. Learn by growing!",
+                code: "EXPERIMENT35",
+                link: "/yesnokush"
+            }
+        ]
+    },
+    
+    // October
+    9: {
+        title: "Spooky Season Specials",
+        badge: "Halloween Horror Deals",
+        subtitle: "Frightfully good deals on dark genetics!",
+        deals: [
+            {
+                discount: "27%",
+                type: "OFF Purple Rainbow",
+                description: "Our darkest, most mysterious purple genetics. Perfect spooky colors with 25-27% THC potency.",
+                code: "SPOOKY27",
+                link: "/purplerainbow"
+            },
+            {
+                discount: "25%",
+                type: "OFF All OG Strains",
+                description: "Line 3 terror! Noyes OG, Noyes Poison, And even Loud Dreams - if you dare to grow them!",
+                code: "OG25",
+                link: "/line3"
+            }
+        ]
+    },
+    
+    // November
+    10: {
+        title: "Thanksgiving Gratitude Sale",
+        badge: "Harvest Appreciation",
+        subtitle: "Giving thanks for another great growing season!",
+        deals: [
+            {
+                discount: "29%",
+                type: "OFF Everything",
+                description: "We're thankful for our customers! Enjoy savings on our entire catalog of premium feminized seeds.",
+                code: "THANKS29",
+                link: "/genetics"
+            },
+            {
+                discount: "Buy 4",
+                type: "Get 3 FREE",
+                description: "Stock up for next season with our biggest bulk deal! Mix and match any strains in our catalog.",
+                code: "BULK743",
+                link: "/genetics"
+            }
+        ]
+    },
+    
+    // December
     11: {
         title: "Holiday Harvest Sale",
         badge: "Year End Blowout",
         subtitle: "End the year with unbeatable deals on premium genetics!",
         deals: [
             {
-                discount: "25%",
+                discount: "40%",
                 type: "OFF Everything",
-                description: "Our biggest sale of the year! Stock up on all your favorite Noyes Boys genetics before the new year.",
-                code: "HOLIDAY25",
+                description: "Our biggest sale of the year! Stock up on all your favorite Noyes Boys feminized genetics before the new year.",
+                code: "HOLIDAY40",
                 link: "/genetics"
             },
             {
-                discount: "FREE",
-                type: "Mystery Seeds",
-                description: "Get 3 free mystery seeds with every order over $250!",
-                code: "MYSTERY250",
-                link: "/deals"
+                discount: "25%",
+                type: "OFF All Line 4 Skunk",
+                description: "Our stinkiest strains at a Discount! Skunk Breath, Le Pew, Stink, Alienized Skunk and more classics.",
+                code: "SKUNK25",
+                link: "/line4"
             },
             {
-                discount: "10%",
-                type: "OFF Line 3 OGS",
-                description: "Our Oldschool strains at a small discount; Perfect for those who wannt something nostalgic.",
-                code: "OG10",
-                link: "/line3"
+                discount: "Buy 5",
+                type: "Get 5 FREE",
+                description: "End the year with our most generous offer! Double your order with any combination of our strains.",
+                code: "DOUBLE555",
+                link: "/genetics"
             }
         ]
     }
@@ -1496,7 +1660,6 @@ function copyCode(code) {
 }
 
 // Initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', initializeMonthlyDeals);
     </script>
 </body>
 </html>
