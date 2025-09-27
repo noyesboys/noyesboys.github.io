@@ -647,6 +647,280 @@
                 font-size: 1.25rem;
             }
         }
+        .monthly-deals-banner {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    padding: 3rem 0;
+    position: relative;
+    overflow: hidden;
+    border-top: 3px solid #4ade80;
+    border-bottom: 3px solid #4ade80;
+}
+
+.monthly-deals-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(74, 222, 128, 0.05) 0%, rgba(34, 197, 94, 0.05) 100%);
+    animation: shimmer 3s ease-in-out infinite alternate;
+}
+
+@keyframes shimmer {
+    0% { opacity: 0.3; }
+    100% { opacity: 0.7; }
+}
+
+.deals-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.deals-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.deals-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.deals-title {
+    font-size: 2.5rem;
+    color: #4ade80;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.deals-subtitle {
+    color: #cbd5e1;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.deals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.deal-card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.deal-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(74, 222, 128, 0.3);
+    border-color: #4ade80;
+}
+
+.deal-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(74, 222, 128, 0.1), transparent);
+    transform: rotate(45deg);
+    animation: shine 3s ease-in-out infinite;
+}
+
+@keyframes shine {
+    0%, 100% { transform: rotate(45deg) translateX(-100%); }
+    50% { transform: rotate(45deg) translateX(100%); }
+}
+
+.deal-discount {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #4ade80;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+}
+
+.deal-type {
+    color: #cbd5e1;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.deal-description {
+    color: #94a3b8;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.deal-code {
+    background: rgba(74, 222, 128, 0.2);
+    color: #4ade80;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    border: 1px solid rgba(74, 222, 128, 0.4);
+    font-family: monospace;
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.deal-code:hover {
+    background: rgba(74, 222, 128, 0.3);
+    transform: scale(1.05);
+}
+
+.deal-btn {
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+    color: #0a0a0a;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.deal-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+}
+
+.deal-timer {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.timer-label {
+    color: #cbd5e1;
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.countdown {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.time-unit {
+    background: rgba(74, 222, 128, 0.1);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 80px;
+}
+
+.time-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4ade80;
+    display: block;
+    line-height: 1;
+}
+
+.time-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 0.5rem;
+}
+
+.deals-footer {
+    text-align: center;
+    border-top: 1px solid rgba(74, 222, 128, 0.2);
+    padding-top: 2rem;
+    margin-top: 2rem;
+}
+
+.deals-footer-text {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .deals-title {
+        font-size: 2rem;
+    }
+    
+    .deal-discount {
+        font-size: 2.5rem;
+    }
+    
+    .countdown {
+        gap: 0.5rem;
+    }
+    
+    .time-unit {
+        min-width: 60px;
+        padding: 0.75rem 0.5rem;
+    }
+    
+    .time-number {
+        font-size: 1.5rem;
+    }
+    
+    .deals-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+/* Copy Code Animation */
+.code-copied {
+    animation: codeCopied 2s ease-in-out;
+}
+
+@keyframes codeCopied {
+    0% { background: rgba(74, 222, 128, 0.2); }
+    50% { background: rgba(34, 197, 94, 0.4); transform: scale(1.1); }
+    100% { background: rgba(74, 222, 128, 0.2); }
+}
     </style>
 </head>
 <body class="age-not-verified">
@@ -735,7 +1009,48 @@
             </div>
             </div>
         </section>
-
+        <section class="monthly-deals-banner">
+    <div class="deals-container">
+        <div class="deals-header">
+            <div class="deals-badge" id="dealsBadge">Limited Time Offer</div>
+            <h2 class="deals-title" id="dealsTitle">December Specials</h2>
+            <p class="deals-subtitle" id="dealsSubtitle">Don't miss out on these exclusive monthly deals!</p>
+        </div>
+        
+        <div class="deals-grid" id="dealsGrid">
+            <!-- Deals will be populated by JavaScript -->
+        </div>
+        
+        <div class="deal-timer">
+            <div class="timer-label">Offer expires in:</div>
+            <div class="countdown" id="countdown">
+                <div class="time-unit">
+                    <span class="time-number" id="days">00</span>
+                    <span class="time-label">Days</span>
+                </div>
+                <div class="time-unit">
+                    <span class="time-number" id="hours">00</span>
+                    <span class="time-label">Hours</span>
+                </div>
+                <div class="time-unit">
+                    <span class="time-number" id="minutes">00</span>
+                    <span class="time-label">Minutes</span>
+                </div>
+                <div class="time-unit">
+                    <span class="time-number" id="seconds">00</span>
+                    <span class="time-label">Seconds</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="deals-footer">
+            <p class="deals-footer-text">
+                * Offers valid until end of month. Cannot be combined with other promotions. 
+                Terms and conditions apply. Limited quantities available.
+            </p>
+        </div>
+        </div>
+        </section>
         <!-- Features -->
         <section class="features">
             <div class="container">
@@ -978,6 +1293,190 @@
                 }
             }
         });
+        // Monthly deals configuration
+const monthlyDeals = {
+    // January
+    0: {
+        title: "New Year Genetics Sale",
+        badge: "Fresh Start Special",
+        subtitle: "Start the year right with premium genetics!",
+        deals: [
+            {
+                discount: "25%",
+                type: "OFF All Line 1 Strains",
+                description: "Get our original Noyes Boys genetics at an unbeatable price. Perfect for starting your year with proven performers.",
+                code: "NEWYEAR25",
+                link: "/line1"
+            },
+            {
+                discount: "FREE",
+                type: "Shipping on Orders $75+",
+                description: "Free discreet shipping across Canada on all orders over $75. No minimum strain requirements.",
+                code: "FREESHIP75",
+                link: "/deals"
+            }
+        ]
+    },
+    
+    // February
+    1: {
+        title: "Love Your Plants Sale",
+        badge: "Valentine's Special",
+        subtitle: "Show your plants some love this February!",
+        deals: [
+            {
+                discount: "30%",
+                type: "OFF Purple Strains",
+                description: "Fall in love with our beautiful purple genetics. Perfect romantic colors for your grow room.",
+                code: "PURPLE30",
+                link: "/genetics"
+            },
+            {
+                discount: "Buy 2",
+                type: "Get 1 FREE",
+                description: "Mix and match any strains in our catalog. Third strain must be of equal or lesser value.",
+                code: "LOVE321",
+                link: "/genetics"
+            }
+        ]
+    },
+    
+    // March
+    2: {
+        title: "Spring Growing Prep",
+        badge: "Early Bird Special",
+        subtitle: "Get ready for outdoor season with these deals!",
+        deals: [
+            {
+                discount: "35%",
+                type: "OFF Outdoor Strains",
+                description: "Perfect timing to prep for outdoor season. Our hardiest Canadian-bred genetics at massive savings.",
+                code: "OUTDOOR35",
+                link: "/genetics"
+            },
+            {
+                discount: "FREE",
+                type: "Growing Guide Bundle",
+                description: "Get our complete digital growing guide bundle free with any order over $50.",
+                code: "GUIDE50",
+                link: "/readmore"
+            }
+        ]
+    },
+    
+    // December (default/current example)
+    11: {
+        title: "Holiday Harvest Sale",
+        badge: "Year End Blowout",
+        subtitle: "End the year with unbeatable deals on premium genetics!",
+        deals: [
+            {
+                discount: "40%",
+                type: "OFF Everything",
+                description: "Our biggest sale of the year! Stock up on all your favorite Noyes Boys genetics before the new year.",
+                code: "HOLIDAY40",
+                link: "/genetics"
+            },
+            {
+                discount: "FREE",
+                type: "Mystery Seeds",
+                description: "Get 3 free mystery seeds with every order over $100. Could be unreleased genetics or rare phenos!",
+                code: "MYSTERY100",
+                link: "/deals"
+            },
+            {
+                discount: "50%",
+                type: "OFF Line 4 Skunk",
+                description: "Our stinkiest strains at half price! Perfect for those who love that classic skunk aroma.",
+                code: "SKUNK50",
+                link: "/line4"
+            }
+        ]
+    }
+};
+
+// Initialize deals
+function initializeMonthlyDeals() {
+    const currentMonth = new Date().getMonth();
+    const currentDeal = monthlyDeals[currentMonth] || monthlyDeals[11]; // Default to December if month not configured
+    
+    // Update header
+    document.getElementById('dealsBadge').textContent = currentDeal.badge;
+    document.getElementById('dealsTitle').textContent = currentDeal.title;
+    document.getElementById('dealsSubtitle').textContent = currentDeal.subtitle;
+    
+    // Generate deals HTML
+    const dealsGrid = document.getElementById('dealsGrid');
+    dealsGrid.innerHTML = currentDeal.deals.map(deal => `
+        <div class="deal-card">
+            <div class="deal-discount">${deal.discount}</div>
+            <div class="deal-type">${deal.type}</div>
+            <div class="deal-description">${deal.description}</div>
+            <div class="deal-code" onclick="copyCode('${deal.code}')" title="Click to copy">${deal.code}</div>
+            <a href="${deal.link}" class="deal-btn">Shop Now</a>
+        </div>
+    `).join('');
+    
+    // Start countdown timer
+    startCountdown();
+}
+
+// Countdown timer to end of month
+function startCountdown() {
+    const timer = setInterval(() => {
+        const now = new Date().getTime();
+        const endOfMonth = new Date();
+        endOfMonth.setMonth(endOfMonth.getMonth() + 1, 0);
+        endOfMonth.setHours(23, 59, 59, 999);
+        
+        const distance = endOfMonth - now;
+        
+        if (distance < 0) {
+            clearInterval(timer);
+            // Refresh deals for new month
+            initializeMonthlyDeals();
+            return;
+        }
+        
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        document.getElementById('days').textContent = days.toString().padStart(2, '0');
+        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+    }, 1000);
+}
+
+// Copy code to clipboard
+function copyCode(code) {
+    navigator.clipboard.writeText(code).then(() => {
+        // Visual feedback
+        const codeElement = event.target;
+        codeElement.classList.add('code-copied');
+        const originalText = codeElement.textContent;
+        codeElement.textContent = 'COPIED!';
+        
+        setTimeout(() => {
+            codeElement.textContent = originalText;
+            codeElement.classList.remove('code-copied');
+        }, 2000);
+    }).catch(err => {
+        console.error('Failed to copy code: ', err);
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = code;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+    });
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', initializeMonthlyDeals);
     </script>
 </body>
 </html>
