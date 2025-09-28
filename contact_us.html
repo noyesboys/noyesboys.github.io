@@ -30,7 +30,7 @@
         body {
             font-family: 'Arial', sans-serif;
             line-height: 1.6;
-            color: #008;
+            color: #333;
             background: #0a0a0a;
             padding-top: 80px;
         }
@@ -41,10 +41,13 @@
             padding: 0 20px;
         }
         
-        /* Header */
+        /* Header - Only place where background image should be */
         header {
             background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
                         url('assets/img/bg-masthead.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             padding: 1rem 0;
             position: fixed;
             width: 100%;
@@ -109,22 +112,34 @@
             border-color: #4ade80;
         }
         
-        /* Hero Section */
+        /* Hero Section - Should extend the header background */
         .hero {
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),;
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
+                        url('assets/img/bg-masthead.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             padding: 100px 0 80px;
             text-align: center;
             color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-content {
+            width: 100%;
         }
         
         .hero h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),;
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 50%, #16a34a 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             font-weight: bold;
+            text-shadow: none;
         }
         
         .hero p {
@@ -134,9 +149,10 @@
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
-        /* Navigation Buttons - Original Style */
+        /* Navigation Buttons */
         .nav-buttons {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -187,7 +203,7 @@
             justify-content: center;
             width: 60px;
             height: 60px;
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             color: white;
             font-size: 1.5rem;
@@ -231,9 +247,9 @@
             background: #111;
         }
 
-        /* Contact Form Section */
+        /* Contact Form Section - No background image */
         .contact-section {
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
             border-radius: 20px;
             padding: 40px;
             margin-bottom: 40px;
@@ -347,7 +363,7 @@
         }
 
         .info-card {
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             padding: 2rem;
             text-align: center;
@@ -376,9 +392,9 @@
             line-height: 1.6;
         }
 
-        /* FAQ Section */
+        /* FAQ Section - No background image */
         .faq-section {
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),;
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             padding: 40px;
             margin-top: 40px;
