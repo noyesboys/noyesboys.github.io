@@ -8,7 +8,7 @@
     <meta name="keywords" content="cannabis seeds canada, feminized seeds, craft cannabis, noyes boys, cannabis genetics, seed bank canada">
     <!-- Font Awesome icons -->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <style>
+        <style>
         * {
             margin: 0;
             padding: 0;
@@ -17,26 +17,28 @@
         
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
-                                                url('assets/img/bg-masthead.jpg');
-            color: #333;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+            color: #f5f5f5;
             line-height: 1.4;
             margin: 0;
             padding: 0;
             padding-top: 70px;
+            min-height: 100vh;
         }
 
-        /* Compact Header Navigation */
+        /* Header Navigation - Keep the masthead background */
         header {
             background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
-                                    url('assets/img/bg-masthead.jpg');
+                        url('assets/img/bg-masthead.jpg');
+            background-size: cover;
+            background-position: center;
             padding: 0.5rem 0;
             position: fixed;
             width: 100%;
             top: 0;
             left: 0;
             z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.5);
         }
         
         nav {
@@ -82,7 +84,7 @@
             font-size: 0.9rem;
             padding: 0.5rem 0.8rem;
             border-radius: 8px;
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),;
+            background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.2);
         }
@@ -100,7 +102,7 @@
             border-color: #4ade80;
         }
 
-        /* Compact Cart Button */
+        /* Cart Button - Keep gradient */
         .header-cart-button, .cart-button {
             background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
             color: #0a0a0a;
@@ -140,48 +142,51 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),;
+            background: transparent;
             min-height: calc(100vh - 70px);
         }
         
         .header {
             text-align: center;
             margin-bottom: 30px;
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),;
+            background: rgba(0,0,0,0.8);
+            color: #f5f5f5;
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border: 1px solid rgba(74, 222, 128, 0.2);
         }
         
         .header h1 {
-            color: #2d5a2d;
+            color: #4ade80;
             font-size: 2.2em;
             margin-bottom: 8px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         
         .header p {
-            color: #666;
+            color: #ccc;
             font-size: 1.1em;
             margin-bottom: 10px;
         }
         
         .payment-methods {
-            color: #666;
+            color: #4ade80;
             font-weight: bold;
             font-size: 0.95em;
         }
         
         .section-container {
-            background: rgba(255,255,255,0.95);
+            background: rgba(0,0,0,0.7);
             border-radius: 15px;
             margin-bottom: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
             overflow: hidden;
+            border: 1px solid rgba(74, 222, 128, 0.1);
         }
         
         .section-header {
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),;
+            background: linear-gradient(135deg, #2d5a2d 0%, #4a7c4a 100%);
             color: white;
             padding: 20px;
             text-align: center;
@@ -223,30 +228,40 @@
             max-width: 280px;
         }
         
+        /* Pricing Cards - Use masthead background for visual appeal */
         .pricing-card {
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),;
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%),
+                        url('assets/img/bg-masthead.jpg');
+            background-size: cover;
+            background-position: center;
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 2px solid transparent;
+            border: 2px solid rgba(74, 222, 128, 0.2);
             position: relative;
         }
         
         .pricing-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-            border-color: #4a7c4a;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            border-color: #4ade80;
         }
         
+        /* Featured cards - use green accent instead of red */
         .pricing-card.featured {
-            border-color: #e74c3c;
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
+            border-color: #4ade80;
+            background: linear-gradient(to bottom, rgba(74, 222, 128, 0.15) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%),
+                        url('assets/img/bg-masthead.jpg');
+            box-shadow: 0 0 15px rgba(74, 222, 128, 0.2);
         }
         
+        /* Promo cards - use purple/blue accent instead of orange */
         .pricing-card.promo {
-            border-color: #f39c12;
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
+            border-color: #8b5cf6;
+            background: linear-gradient(to bottom, rgba(139, 92, 246, 0.15) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%),
+                        url('assets/img/bg-masthead.jpg');
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
         }
         
         .card-header {
@@ -256,20 +271,22 @@
         
         .card-title {
             font-size: 1.3em;
-            color: #2d5a2d;
+            color: #4ade80;
             margin-bottom: 8px;
             font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
         
         .card-price {
             font-size: 2.2em;
-            color: #e74c3c;
+            color: #10b981; /* Green instead of red */
             font-weight: bold;
             margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
         
         .card-subtitle {
-            color: #666;
+            color: #ccc;
             font-size: 0.85em;
         }
         
@@ -277,11 +294,12 @@
             list-style: none;
             margin: 15px 0;
             font-size: 0.9em;
+            color: #f5f5f5;
         }
         
         .card-features li {
             padding: 5px 0;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             position: relative;
             padding-left: 20px;
         }
@@ -290,7 +308,7 @@
             content: "✓";
             position: absolute;
             left: 0;
-            color: #4a7c4a;
+            color: #4ade80;
             font-weight: bold;
         }
         
@@ -298,6 +316,7 @@
             border-bottom: none;
         }
         
+        /* Order Buttons - Keep gradient for visual appeal */
         .order-button {
             background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%);
             color: white;
@@ -310,17 +329,20 @@
             transition: all 0.3s ease;
             width: 100%;
             margin-top: 15px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         
         .order-button:hover {
             background: linear-gradient(135deg, #2d5a2d 0%, #1e3c1e 100%);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 124, 74, 0.4);
         }
 
         .order-button:disabled {
-            background: #ccc;
+            background: #666;
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
         
         .strain-grid {
@@ -331,17 +353,18 @@
         }
         
         .strain-item {
-            background: #f8f9fa;
+            background: rgba(74, 222, 128, 0.1);
             padding: 6px 8px;
             border-radius: 6px;
             text-align: center;
             font-weight: bold;
-            color: #2d5a2d;
+            color: #4ade80;
             font-size: 0.75em;
+            border: 1px solid rgba(74, 222, 128, 0.2);
         }
         
         .promo-banner {
-            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
             color: white;
             padding: 8px;
             border-radius: 6px;
@@ -352,7 +375,7 @@
         }
         
         .ended-banner {
-            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            background: linear-gradient(135deg, #666 0%, #555 100%);
         }
         
         .compact-card {
@@ -383,11 +406,12 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0,0,0,0.9);
         }
 
         .cart-modal-content {
-            background-color: white;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            color: #f5f5f5;
             margin: 5% auto;
             padding: 2rem;
             border-radius: 15px;
@@ -395,7 +419,7 @@
             max-width: 600px;
             max-height: 80vh;
             overflow-y: auto;
-            color: #333;
+            border: 1px solid rgba(74, 222, 128, 0.2);
         }
 
         .cart-close {
@@ -408,7 +432,7 @@
         }
 
         .cart-close:hover {
-            color: #2d5a2d;
+            color: #4ade80;
         }
 
         .cart-item {
@@ -416,8 +440,10 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             margin-bottom: 1rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
         }
 
         .cart-item-info {
@@ -425,18 +451,18 @@
         }
 
         .cart-item-name {
-            color: #2d5a2d;
+            color: #4ade80;
             font-weight: bold;
             margin-bottom: 0.5rem;
         }
 
         .cart-item-variant {
-            color: #666;
+            color: #ccc;
             font-size: 0.9rem;
         }
 
         .cart-item-price {
-            color: #2d5a2d;
+            color: #4ade80;
             font-weight: bold;
         }
 
@@ -470,10 +496,11 @@
             min-width: 30px;
             text-align: center;
             font-weight: bold;
+            color: #f5f5f5;
         }
 
         .remove-item {
-            background: #e74c3c;
+            background: #dc2626;
             color: white;
             border: none;
             border-radius: 5px;
@@ -485,11 +512,11 @@
             text-align: center;
             margin-top: 2rem;
             padding-top: 1rem;
-            border-top: 2px solid #eee;
+            border-top: 2px solid rgba(74, 222, 128, 0.2);
         }
 
         .cart-total h3 {
-            color: #2d5a2d;
+            color: #4ade80;
             font-size: 1.5rem;
             margin-bottom: 1rem;
         }
@@ -512,12 +539,15 @@
         .empty-cart {
             text-align: center;
             padding: 2rem;
-            color: #666;
+            color: #ccc;
         }
 
-        /* Masthead Section */
+        /* Masthead Section - Keep masthead background */
         .masthead {
-            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
+                        url('assets/img/bg-masthead.jpg');
+            background-size: cover;
+            background-position: center;
             padding: 2rem 0;
             text-align: center;
             margin-bottom: 2rem;
@@ -527,7 +557,7 @@
             color: #4ade80;
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
         }
 
         .masthead-content h2 {
@@ -535,6 +565,7 @@
             font-size: 1.2rem;
             margin-bottom: 2rem;
             opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
 
         .nav-buttons {
@@ -546,6 +577,7 @@
             margin: 0 auto;
         }
 
+        /* Navigation Buttons - Keep gradient for visual appeal */
         .btn {
             background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
             color: #0a0a0a;
