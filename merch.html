@@ -13,21 +13,29 @@
         }
         
         body {
-            font-family: Arial, sans-serif;
-            background: #0a0a0a;
-            color: #333;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+            color: #f5f5f5;
             line-height: 1.4;
+            margin: 0;
+            padding: 0;
             padding-top: 70px;
+            min-height: 100vh;
         }
 
+        /* Header Navigation - Matching deals page exactly */
         header {
-            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
+                        url('assets/img/bg-masthead.jpg');
+            background-size: cover;
+            background-position: center;
             padding: 0.5rem 0;
             position: fixed;
             width: 100%;
             top: 0;
+            left: 0;
             z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.5);
         }
         
         nav {
@@ -47,6 +55,7 @@
             font-weight: bold;
             color: #4ade80;
             text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         
         .logo-img {
@@ -60,31 +69,38 @@
             display: flex;
             list-style: none;
             gap: 1rem;
+            flex-wrap: wrap;
             align-items: center;
         }
         
         .nav-links a {
             color: white;
             text-decoration: none;
+            transition: all 0.3s ease;
             font-weight: 600;
             font-size: 0.9rem;
             padding: 0.5rem 0.8rem;
             border-radius: 8px;
             background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.2);
         }
         
         .nav-links a:hover {
             color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
             border-color: #4ade80;
+            transform: translateY(-2px);
         }
 
         .nav-links a.active {
             background: #4ade80;
             color: #0a0a0a;
+            border-color: #4ade80;
         }
 
-        .cart-button {
+        /* Cart Button - Keep gradient */
+        .header-cart-button, .cart-button {
             background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
             color: #0a0a0a;
             border: none;
@@ -95,9 +111,18 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .cart-count {
+        .header-cart-button:hover, .cart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+
+        .header-cart-count, .cart-count {
             background: #0a0a0a;
             color: #4ade80;
             border-radius: 50%;
@@ -114,28 +139,34 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
-            background: linear-gradient(135deg, #1e3c1e 0%, #2d5a2d 50%, #4a7c4a 100%);
+            background: transparent;
             min-height: calc(100vh - 70px);
         }
         
+        /* Masthead Section matching deals page */
         .masthead {
-            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
+                        url('assets/img/bg-masthead.jpg');
+            background-size: cover;
+            background-position: center;
             padding: 2rem 0;
             text-align: center;
             margin-bottom: 2rem;
         }
 
-        .masthead h1 {
+        .masthead-content h1 {
             color: #4ade80;
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
         }
 
-        .masthead h2 {
+        .masthead-content h2 {
             color: white;
             font-size: 1.2rem;
             margin-bottom: 2rem;
             opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
 
         .nav-buttons {
@@ -143,8 +174,11 @@
             flex-wrap: wrap;
             gap: 1rem;
             justify-content: center;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
+        /* Navigation Buttons matching deals page */
         .btn {
             background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
             color: #0a0a0a;
@@ -152,36 +186,56 @@
             padding: 0.75rem 1.5rem;
             border-radius: 25px;
             font-weight: bold;
+            transition: all 0.3s ease;
             font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
         }
         
+        /* Header section - matching deals page style */
         .header {
             text-align: center;
             margin-bottom: 30px;
-            background: rgba(255,255,255,0.95);
+            background: rgba(0,0,0,0.8);
+            color: #f5f5f5;
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border: 1px solid rgba(74, 222, 128, 0.2);
         }
         
         .header h1 {
-            color: #2d5a2d;
+            color: #4ade80;
             font-size: 2.2em;
             margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
         
         .header p {
-            color: #666;
+            color: #ccc;
             font-size: 1.1em;
             margin-bottom: 10px;
         }
+
+        .payment-methods {
+            color: #4ade80;
+            font-weight: bold;
+            font-size: 0.95em;
+        }
         
+        /* Section containers - matching deals page */
         .section-container {
-            background: rgba(255,255,255,0.95);
+            background: rgba(0,0,0,0.7);
             border-radius: 15px;
             margin-bottom: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
             overflow: hidden;
+            border: 1px solid rgba(74, 222, 128, 0.1);
         }
         
         .section-header {
@@ -192,13 +246,16 @@
         }
         
         .section-header h2, .section-header h3 {
+            font-size: 1.8em;
             margin-bottom: 5px;
         }
         
         .section-header p {
+            font-size: 1em;
             opacity: 0.9;
         }
 
+        /* Apparel layout using pricing card style */
         .apparel-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -207,24 +264,30 @@
         }
 
         .apparel-main, .apparel-options {
-            background: white;
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%),
+                        url('assets/img/bg-masthead.jpg');
+            background-size: cover;
+            background-position: center;
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 2px solid rgba(74, 222, 128, 0.2);
+            position: relative;
         }
 
         .merch-image-container {
             height: 300px;
-            background: #f8f9fa;
+            background: rgba(0,0,0,0.3);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #666;
+            color: #f5f5f5;
             font-weight: bold;
             border-radius: 8px;
             margin-bottom: 20px;
             overflow: hidden;
             position: relative;
+            border: 1px solid rgba(74, 222, 128, 0.2);
         }
 
         /* Fixed image styling */
@@ -257,13 +320,14 @@
 
         .merch-title {
             font-size: 1.4em;
-            color: #2d5a2d;
+            color: #4ade80;
             margin-bottom: 10px;
             font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
 
         .merch-description {
-            color: #666;
+            color: #f5f5f5;
             margin-bottom: 15px;
             line-height: 1.5;
         }
@@ -276,24 +340,32 @@
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
-            color: #2d5a2d;
+            color: #4ade80;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
 
         .merch-select {
             width: 100%;
             padding: 10px;
-            border: 2px solid #ddd;
+            border: 2px solid rgba(74, 222, 128, 0.2);
             border-radius: 8px;
-            background: white;
+            background: rgba(0,0,0,0.7);
+            color: #f5f5f5;
             font-size: 1rem;
             margin-bottom: 10px;
         }
 
+        .merch-select:focus {
+            border-color: #4ade80;
+            outline: none;
+        }
+
         .price-display {
             font-size: 1.8em;
-            color: #e74c3c;
+            color: #4ade80;
             font-weight: bold;
             margin: 10px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
 
         .order-button {
@@ -301,18 +373,29 @@
             color: white;
             padding: 12px 25px;
             border: none;
-            border-radius: 8px;
+            border-radius: 25px;
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .order-button:hover {
+            background: linear-gradient(135deg, #2d5a2d 0%, #1e3c1e 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 124, 74, 0.4);
         }
 
         .options-title {
-            color: #2d5a2d;
+            color: #4ade80;
             font-size: 1.3em;
             margin-bottom: 15px;
             font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
 
         .logo-grid {
@@ -324,19 +407,25 @@
 
         .logo-option {
             aspect-ratio: 1;
-            background: #f8f9fa;
-            border: 2px solid #ddd;
+            background: rgba(0,0,0,0.5);
+            border: 2px solid rgba(74, 222, 128, 0.2);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #666;
+            color: #f5f5f5;
             font-size: 0.8rem;
             text-align: center;
             padding: 3px;
             overflow: hidden;
             width: 80px;
             height: 80px;
+            transition: all 0.3s ease;
+        }
+
+        .logo-option:hover {
+            border-color: #4ade80;
+            transform: translateY(-2px);
         }
 
         /* Fixed logo option images */
@@ -355,10 +444,21 @@
         }
 
         .merch-item {
-            background: white;
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%),
+                        url('assets/img/bg-masthead.jpg');
+            background-size: cover;
+            background-position: center;
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 2px solid rgba(74, 222, 128, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .merch-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            border-color: #4ade80;
         }
 
         .merch-content {
@@ -373,15 +473,19 @@
         }
 
         .strain-selector, .strain-display {
-            background: white;
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%),
+                        url('assets/img/bg-masthead.jpg');
+            background-size: cover;
+            background-position: center;
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border: 2px solid rgba(74, 222, 128, 0.2);
         }
 
         .strain-card-preview {
-            background: #f8f9fa;
-            border: 2px solid #ddd;
+            background: rgba(0,0,0,0.3);
+            border: 2px solid rgba(74, 222, 128, 0.2);
             border-radius: 15px;
             padding: 20px;
             text-align: center;
@@ -390,21 +494,23 @@
         .strain-card-image {
             width: 100%;
             height: 200px;
-            background: #eee;
+            background: rgba(0,0,0,0.5);
             border-radius: 10px;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #666;
+            color: #f5f5f5;
             font-weight: bold;
+            border: 1px solid rgba(74, 222, 128, 0.2);
         }
 
         .strain-details {
-            background: rgba(74, 124, 74, 0.1);
+            background: rgba(74, 124, 74, 0.2);
             border-radius: 8px;
             padding: 15px;
             margin-top: 15px;
+            border: 1px solid rgba(74, 222, 128, 0.3);
         }
 
         .strain-details ul {
@@ -414,9 +520,11 @@
 
         .strain-details li {
             padding: 3px 0;
-            border-bottom: 1px solid rgba(74, 124, 74, 0.2);
+            border-bottom: 1px solid rgba(74, 222, 128, 0.2);
+            color: #f5f5f5;
         }
 
+        /* Cart Modal */
         .cart-modal {
             display: none;
             position: fixed;
@@ -425,11 +533,12 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0,0,0,0.9);
         }
 
         .cart-modal-content {
-            background-color: white;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            color: #f5f5f5;
             margin: 5% auto;
             padding: 2rem;
             border-radius: 15px;
@@ -437,7 +546,7 @@
             max-width: 600px;
             max-height: 80vh;
             overflow-y: auto;
-            color: #333;
+            border: 1px solid rgba(74, 222, 128, 0.2);
         }
 
         .cart-close {
@@ -446,6 +555,11 @@
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
+            line-height: 1;
+        }
+
+        .cart-close:hover {
+            color: #4ade80;
         }
 
         .cart-item {
@@ -453,8 +567,10 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             margin-bottom: 1rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
         }
 
         .cart-item-info {
@@ -462,14 +578,19 @@
         }
 
         .cart-item-name {
-            color: #2d5a2d;
+            color: #4ade80;
             font-weight: bold;
             margin-bottom: 0.5rem;
         }
 
         .cart-item-variant {
-            color: #666;
+            color: #ccc;
             font-size: 0.9rem;
+        }
+
+        .cart-item-price {
+            color: #4ade80;
+            font-weight: bold;
         }
 
         .cart-item-controls {
@@ -492,16 +613,21 @@
             width: 30px;
             height: 30px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
         }
 
         .quantity-display {
             min-width: 30px;
             text-align: center;
             font-weight: bold;
+            color: #f5f5f5;
         }
 
         .remove-item {
-            background: #e74c3c;
+            background: #dc2626;
             color: white;
             border: none;
             border-radius: 5px;
@@ -513,7 +639,13 @@
             text-align: center;
             margin-top: 2rem;
             padding-top: 1rem;
-            border-top: 2px solid #eee;
+            border-top: 2px solid rgba(74, 222, 128, 0.2);
+        }
+
+        .cart-total h3 {
+            color: #4ade80;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .checkout-btn {
@@ -524,6 +656,9 @@
             padding: 1rem 2rem;
             font-weight: bold;
             cursor: pointer;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             width: 100%;
             margin-top: 1rem;
         }
@@ -531,11 +666,40 @@
         .empty-cart {
             text-align: center;
             padding: 2rem;
-            color: #666;
+            color: #ccc;
         }
 
         /* Mobile responsiveness */
         @media (max-width: 768px) {
+            body {
+                padding-top: 80px;
+            }
+            
+            nav {
+                flex-direction: column;
+                gap: 8px;
+                min-height: 70px;
+                padding: 8px 20px;
+            }
+
+            .nav-links {
+                gap: 0.5rem;
+            }
+
+            .nav-links a {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.8rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .logo-img {
+                width: 30px;
+                height: 30px;
+            }
+
             .apparel-layout {
                 grid-template-columns: 1fr;
             }
@@ -551,6 +715,19 @@
             .logo-option {
                 width: 60px;
                 height: 60px;
+            }
+
+            .masthead-content h1 {
+                font-size: 2rem;
+            }
+
+            .nav-buttons {
+                gap: 0.5rem;
+            }
+
+            .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
             }
         }
 
