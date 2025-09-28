@@ -12,27 +12,6 @@
     <!-- EmailJS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
-    <!-- Schema.org markup for reviews -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": "Noyes Boys Cannabis Seeds",
-      "description": "Premium hand-bred feminized craft cannabis genetics",
-      "brand": {
-        "@type": "Brand",
-        "name": "The Noyes Boys"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.6",
-        "reviewCount": "284",
-        "bestRating": "5",
-        "worstRating": "4"
-      }
-    }
-    </script>
-
     <style>
         * {
             margin: 0;
@@ -52,7 +31,8 @@
 
         /* Header Navigation */
         header {
-            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
+                        url('assets/img/bg-masthead.jpg');
             padding: 1rem 0;
             position: fixed;
             width: 100%;
@@ -1404,6 +1384,23 @@
             currentlyDisplayed += 12;
             displayReviews();
         });
+        {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Noyes Boys Cannabis Seeds",
+      "description": "Premium hand-bred feminized craft cannabis genetics",
+      "brand": {
+        "@type": "Brand",
+        "name": "The Noyes Boys"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.6",
+        "reviewCount": "284",
+        "bestRating": "5",
+        "worstRating": "4"
+      }
+    }
     </script>
 </body>
 </html>
