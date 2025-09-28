@@ -13,10 +13,6 @@
     <!-- Font Awesome icons -->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     
-    <!-- Google fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
-    
     <style>
         * {
             margin: 0;
@@ -26,39 +22,44 @@
         
         body {
             font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #0a0a0a;
-            padding-top: 80px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+            color: #f5f5f5;
+            line-height: 1.4;
+            margin: 0;
+            padding: 0;
+            padding-top: 70px;
+            min-height: 100vh;
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header */
+
+        /* Header Navigation - Matching merch page */
         header {
-            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
-            padding: 1rem 0;
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
+                        url('assets/img/bg-masthead.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 0.5rem 0;
             position: fixed;
             width: 100%;
             top: 0;
+            left: 0;
             z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.5);
         }
         
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            min-height: 60px;
         }
         
         .logo {
             display: flex;
             align-items: center;
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: bold;
             color: #4ade80;
             text-decoration: none;
@@ -66,17 +67,18 @@
         }
         
         .logo-img {
-            width: 45px;
-            height: 45px;
-            margin-right: 10px;
+            width: 35px;
+            height: 35px;
+            margin-right: 8px;
             border-radius: 50%;
         }
         
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 1.5rem;
+            gap: 1rem;
             flex-wrap: wrap;
+            align-items: center;
         }
         
         .nav-links a {
@@ -84,8 +86,8 @@
             text-decoration: none;
             transition: all 0.3s ease;
             font-weight: 600;
-            font-size: 1rem;
-            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            padding: 0.5rem 0.8rem;
             border-radius: 8px;
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
@@ -105,104 +107,102 @@
             border-color: #4ade80;
         }
         
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #1e3c1e 0%, #2d5a2d 50%, #4a7c4a 100%);
-            padding: 100px 0 80px;
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background: transparent;
+            min-height: calc(100vh - 70px);
+        }
+        
+        /* Masthead Section */
+        .masthead {
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
+                        url('assets/img/bg-masthead.jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 2rem 0;
             text-align: center;
-            color: rgba(0, 0, 0, 0.378);
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.8rem;
-        }
-        
-        .hero h2 {
-            font-size: 1.2rem;
-            margin-bottom: 3rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            color: rgba(69, 67, 67, 0.5);
+            margin-bottom: 2rem;
         }
 
-        /* Navigation Buttons - Original Style */
+        .masthead-content h1 {
+            color: #4ade80;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .masthead-content h2 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
         .nav-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
             gap: 1rem;
-            margin-bottom: 3rem;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
+            justify-content: center;
+            max-width: 800px;
+            margin: 0 auto;
         }
-        
+
+        /* Navigation Buttons */
         .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: bold;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: inline-block;
-            text-align: center;
-        }
-        
-        .btn-primary {
             background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
             color: #0a0a0a;
-            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        
-        .btn-primary:hover {
+
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.6);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
         }
         
-        /* Main Content */
-        .main-content {
-            padding: 80px 0;
-            background: #111;
+        /* Section containers - matching merch page */
+        .section-container {
+            background: rgba(0,0,0,0.7);
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            overflow: hidden;
+            border: 1px solid rgba(74, 222, 128, 0.1);
         }
-
-        /* Story Section */
-        .story-section {
-            background: hsla(0, 3%, 11%, 0.833);
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-        }
-
-        .story-section h2 {
-            color: #2d5a2d;
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
+        
+        .section-header {
+            background: linear-gradient(135deg, #2d5a2d 0%, #4a7c4a 100%);
+            color: white;
+            padding: 20px;
             text-align: center;
         }
+        
+        .section-header h2 {
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+        
+        .section-header p {
+            font-size: 1em;
+            opacity: 0.9;
+        }
 
-        .story-intro {
-            color: #1b1b1b;
-            font-size: 1.2rem;
-            text-align: center;
-            margin-bottom: 3rem;
-            font-style: italic;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+        /* Story Content */
+        .story-content {
+            padding: 30px;
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%),
+                        url('assets/img/bg-masthead.jpg');
+            background-size: cover;
+            background-position: center;
         }
 
         /* Featured Image Section */
@@ -218,21 +218,26 @@
             width: 100%;
             height: auto;
             border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(74, 222, 128, 0.2);
         }
 
         .image-description {
             padding: 2rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            border: 1px solid rgba(74, 222, 128, 0.2);
         }
 
         .image-description h3 {
-            color: #2d5a2d;
+            color: #4ade80;
             font-size: 1.8rem;
             margin-bottom: 1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
 
         .image-description p {
-            color: #555;
+            color: #f5f5f5;
             font-size: 1.1rem;
             line-height: 1.7;
             margin-bottom: 1.5rem;
@@ -256,32 +261,43 @@
         }
 
         .timeline-item {
-            background: #1c1c1d;
+            background: rgba(0,0,0,0.5);
             border-radius: 15px;
             padding: 2rem;
-            border-left: 5px solid #4ade80;
+            border: 2px solid rgba(74, 222, 128, 0.2);
             position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            border-color: #4ade80;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 222, 128, 0.2);
         }
 
         .timeline-item h4 {
-            color: #2d5a2d;
+            color: #4ade80;
             font-size: 1.3rem;
             margin-bottom: 1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
 
         .timeline-item p {
-            color: #555;
+            color: #f5f5f5;
             font-size: 1.1rem;
             line-height: 1.6;
         }
 
         /* Philosophy Section */
         .philosophy-section {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%),
+                        url('assets/img/bg-masthead.jpg');
+            background-size: cover;
+            background-position: center;
             border-radius: 20px;
             padding: 40px;
-            margin-top: 40px;
             color: white;
+            border: 1px solid rgba(74, 222, 128, 0.2);
         }
 
         .philosophy-section h2 {
@@ -289,6 +305,7 @@
             font-size: 2.5rem;
             margin-bottom: 2rem;
             text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
         }
 
         .philosophy-content {
@@ -302,6 +319,7 @@
             line-height: 1.7;
             margin-bottom: 2rem;
             opacity: 0.9;
+            color: #f5f5f5;
         }
 
         .highlight-box {
@@ -310,18 +328,22 @@
             border-radius: 15px;
             padding: 2rem;
             margin: 2rem 0;
+            backdrop-filter: blur(10px);
         }
 
         .highlight-box h3 {
             color: #4ade80;
             margin-bottom: 1rem;
             font-size: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
 
         /* Footer */
         footer {
-            background: #0a0a0a;
+            background: rgba(0,0,0,0.8);
             padding: 50px 0 20px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(74, 222, 128, 0.2);
         }
 
         .footer-content {
@@ -334,72 +356,123 @@
         .footer-section h3 {
             color: #4ade80;
             margin-bottom: 1rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
         }
 
         .footer-section p, .footer-section a {
-            color: #cbd5e1;
+            color: #f5f5f5;
             text-decoration: none;
             line-height: 1.8;
         }
 
         .footer-section a:hover {
             color: #4ade80;
+            transition: color 0.3s ease;
         }
 
-        /* Footer Navigation */
-        .footer-nav-section {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+
+        .footer-logo span {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(74, 222, 128, 0.2);
+            color: #cbd5e1;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-                letter-spacing: 0.4rem;
+            body {
+                padding-top: 80px;
             }
             
-            .hero h2 {
-                font-size: 1rem;
-            }
-            
-            .nav-buttons {
-                grid-template-columns: 1fr;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .story-section,
-            .philosophy-section {
-                padding: 20px;
+            nav {
+                flex-direction: column;
+                gap: 8px;
+                min-height: 70px;
+                padding: 8px 20px;
             }
 
+            .nav-links {
+                gap: 0.5rem;
+            }
+
+            .nav-links a {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.8rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .logo-img {
+                width: 30px;
+                height: 30px;
+            }
+
+            .masthead-content h1 {
+                font-size: 2rem;
+            }
+
+            .nav-buttons {
+                gap: 0.5rem;
+            }
+
+            .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+            
             .featured-image-section {
                 grid-template-columns: 1fr;
                 gap: 2rem;
             }
 
-            .story-section h2,
+            .story-content,
+            .philosophy-section {
+                padding: 20px;
+            }
+
+            .section-header h2,
             .philosophy-section h2 {
-                font-size: 2rem;
+                font-size: 1.5rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
             }
         }
 
-        @media (min-width: 992px) {
-            .hero h1 {
-                font-size: 4rem;
-            }
-            
-            .hero h2 {
-                font-size: 1.25rem;
+        @media (max-width: 480px) {
+            .masthead-content h1 {
+                font-size: 1.8rem;
             }
             
             .nav-buttons {
-                grid-template-columns: repeat(3, 1fr);
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .btn {
+                width: 100%;
+                text-align: center;
             }
         }
     </style>
@@ -408,7 +481,7 @@
 <body>
     <!-- Header -->
     <header>
-        <nav class="container">
+        <nav>
             <a href="FeminizedSeedsHomepage.html" class="logo">
                 <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
                 The Noyes Boys
@@ -425,36 +498,34 @@
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>Noyes Boys Genetics</h1>
-            <h2>The Story Behind Our Flagship Strain</h2>
-            
+    <!-- Masthead Section -->
+    <section class="masthead">
+        <div class="masthead-content">
+            <h1>The Noyes Kush Story</h1>
+            <h2>Our Flagship Genetic - 10+ Years in the Making</h2>
             <div class="nav-buttons">
-                <a class="btn btn-primary" href="FeminizedSeedsHomepage.html">Home</a>
-                <a class="btn btn-primary" href="genetics.html">Genetic Lineups</a>
-                <a class="btn btn-primary" href="nextstrains.html">Next Release</a>
-                <a class="btn btn-primary" href="deals.html">DEALS</a>
-                <a class="btn btn-primary" href="order_now.html">Order Now</a>
-                <a class="btn btn-primary" href="contact_us.html">Socials</a>
-                <a class="btn btn-primary" href="readmore.html">Read More</a>
-                <a class="btn btn-primary" href="#disclaimers">Disclaimers</a>
+                <a class="btn" href="FeminizedSeedsHomepage.html">Home</a>
+                <a class="btn" href="genetics.html">Genetic Lineups</a>
+                <a class="btn" href="nextstrains.html">Next Release</a>
+                <a class="btn" href="deals.html">DEALS</a>
+                <a class="btn" href="order_now.html">Order Now</a>
+                <a class="btn" href="contact_us.html">Socials</a>
+                <a class="btn" href="readmore.html">Read More</a>
+                <a class="btn" href="#disclaimers">Disclaimers</a>
             </div>
         </div>
     </section>
 
     <!-- Main Content -->
-    <section class="main-content">
-        <div class="container">
-            
-            <!-- Story Section -->
-            <div class="story-section">
-                <h2>The Noyes Kush Story</h2>
-                <p class="story-intro">
-                    Our "stud" (reversed female) - A blend of at least 10+ strains developed over 10+ years of passionate hunting, crossing, and refinement.
-                </p>
-
+    <div class="container">
+        
+        <!-- Story Section -->
+        <div class="section-container">
+            <div class="section-header">
+                <h2>The Noyes Kush Origin Story</h2>
+                <p>A blend of at least 10+ strains developed over 10+ years of passionate hunting, crossing, and refinement</p>
+            </div>
+            <div class="story-content">
                 <!-- Featured Image and Description -->
                 <div class="featured-image-section">
                     <div>
@@ -463,7 +534,7 @@
                     <div class="image-description">
                         <h3>NOYES KUSH (F8)</h3>
                         <div class="not-for-sale">
-                            NOT for sale at this time
+                            <i class="fas fa-exclamation-triangle"></i> NOT for sale at this time
                         </div>
                         <p>
                             Our flagship genetic - a complex blend of at least 10+ strains that represents over a decade of careful selection, testing, and refinement. This is our "stud" (reversed female) that forms the backbone of many of our current offerings.
@@ -474,45 +545,50 @@
                 <!-- Story Timeline -->
                 <div class="story-timeline">
                     <div class="timeline-item">
-                        <h4>The Beginning - Genetic Lineage Explanation</h4>
+                        <h4><i class="fas fa-seedling"></i> The Beginning - Genetic Lineage Explanation</h4>
                         <p>
                             Noyes Kush is a blend of at least 10+ strains, developed over 10+ years of hunting. Even we didn't know exactly what some of them were sometimes - we just knew they were fire! Think seeds found in primo nugs or equivalents, like washed away labels in storage.
                         </p>
                     </div>
 
                     <div class="timeline-item">
-                        <h4>The Early Days - Learning and Discovery</h4>
+                        <h4><i class="fas fa-search"></i> The Early Days - Learning and Discovery</h4>
                         <p>
                             We never planned to sell genetics back then and were just popping beans and learning. Hidden through the trash, we started to find all sorts of gem traits, and felt the best way to save and share them with friends would be to start making seeds.
                         </p>
                     </div>
 
                     <div class="timeline-item">
-                        <h4>The Crossing Experiments</h4>
+                        <h4><i class="fas fa-flask"></i> The Crossing Experiments</h4>
                         <p>
                             A year or two in, we decided to take a hand at crossing some of the genetic oddities that we liked with hardier strains. We have thrown them together to see what sticks, what's trash, and what's worth keeping. We test it, stress test it, and taste it, then throw another genetic at it and decide if that blend is better or worse through testing, and then progress.
                         </p>
                     </div>
 
                     <div class="timeline-item">
-                        <h4>The Beautiful Chaos</h4>
+                        <h4><i class="fas fa-star"></i> The Beautiful Chaos</h4>
                         <p>
                             It's a bit of a cluster, yes, but for a personal project that was never meant to be more than shared, we've seen some beautiful phenos from our final cross and have back-crossed 3x for stability. At the end of the day, we still don't know "exactly" what it is per say, but we know what stuck to make this pheno so fire.
                         </p>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Philosophy Section -->
-            <div class="philosophy-section">
+        <!-- Philosophy Section -->
+        <div class="section-container">
+            <div class="section-header">
                 <h2>Our Breeding Philosophy</h2>
+                <p>Structure, resilience, and ease of growth - everything else follows naturally</p>
+            </div>
+            <div class="philosophy-section">
                 <div class="philosophy-content">
                     <p>
                         We breed for Canadian purples, dense, short plants with well-spaced internoding, all while looking for that perfect smell, profile and taste.
                     </p>
                     
                     <div class="highlight-box">
-                        <h3>Structure Over Everything</h3>
+                        <h3><i class="fas fa-tree"></i> Structure Over Everything</h3>
                         <p>
                             High THC and good flavour is getting common these days, so we decided to breed for proper plant structure, mildew resistance and ease of growth for beginners. Plant structure and resilience will always be our foremost goal over just simply high THC or good smell - those should just come naturally if you're working with the right genetics... like ours.
                         </p>
@@ -524,35 +600,35 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
-                <div class="footer-section" style="color: #cbd5e1;">
-                    <h3 style="color: #4ade80; margin-bottom: 1rem;">The Noyes Boys Seed Bank</h3>
-                    <div style="display: flex; align-items: center; margin-bottom: 1rem;">
-                        <img src="assets/img/noyes boys logo.png" alt="Logo" style="width: 40px; height: 40px; margin-right: 10px;">
-                        <span style="color: #4ade80; font-weight: bold;">Est. 2015</span>
+                <div class="footer-section">
+                    <h3>The Noyes Boys Seed Bank</h3>
+                    <div class="footer-logo">
+                        <img src="assets/img/noyes boys logo.png" alt="Logo">
+                        <span>Est. 2015</span>
                     </div>
                     <p>Premium Canadian cannabis seeds hand-bred for quality, structure, and resilience. Over 10 years of genetic development and refinement.</p>
                 </div>
-                <div class="footer-section" style="color: #cbd5e1;">
-                    <h3 style="color: #4ade80; margin-bottom: 1rem;">Our Genetics</h3>
-                    <p><a href="line1.html" style="color: #cbd5e1; text-decoration: none; line-height: 1.8;">Line 1 Strains</a></p>
-                    <p><a href="line2.html" style="color: #cbd5e1; text-decoration: none; line-height: 1.8;">Line 2 Strains</a></p>
-                    <p><a href="line3.html" style="color: #cbd5e1; text-decoration: none; line-height: 1.8;">Line 3 Strains</a></p>
-                    <p><a href="nextstrains.html" style="color: #cbd5e1; text-decoration: none; line-height: 1.8;">Next Release</a></p>
+                <div class="footer-section">
+                    <h3>Our Genetics</h3>
+                    <p><a href="line1.html">Line 1 Strains</a></p>
+                    <p><a href="line2.html">Line 2 Strains</a></p>
+                    <p><a href="line3.html">Line 3 Strains</a></p>
+                    <p><a href="nextstrains.html">Next Release</a></p>
                 </div>
-                <div class="footer-section" style="color: #cbd5e1;">
-                    <h3 style="color: #4ade80; margin-bottom: 1rem;">Customer Support</h3>
-                    <p><a href="reviews.html" style="color: #cbd5e1; text-decoration: none; line-height: 1.8;">Customer Reviews</a></p>
-                    <p><a href="readmore.html" style="color: #cbd5e1; text-decoration: none; line-height: 1.8;">Growing Guide</a></p>
-                    <p><a href="contact_us.html" style="color: #cbd5e1; text-decoration: none; line-height: 1.8;">Contact Us</a></p>
+                <div class="footer-section">
+                    <h3>Customer Support</h3>
+                    <p><a href="reviews.html">Customer Reviews</a></p>
+                    <p><a href="readmore.html">Growing Guide</a></p>
+                    <p><a href="contact_us.html">Contact Us</a></p>
                 </div>
             </div>
-            <div style="text-align: center; padding-top: 2rem; border-top: 1px solid #334155; color: #64748b;">
+            <div class="footer-bottom">
                 <p>&copy; 2024 The Noyes Boys Seed Bank. All rights reserved.</p>
             </div>
         </div>
