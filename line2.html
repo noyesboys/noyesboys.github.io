@@ -747,6 +747,37 @@
                 height: 600px;
             }
         }
+                /* Simple scroll hint */
+        .scroll-hint {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            animation: fade 3s ease-in-out infinite;
+        }
+
+        .scroll-hint:hover {
+            color: #4ade80;
+            transform: translateX(-50%) translateY(-3px);
+        }
+
+        @keyframes fade {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .scroll-hint.hidden {
+            opacity: 0;
+            transform: translateX(-50%) translateY(10px);
+            pointer-events: none;
+        }
+        
     </style>
     
     <!-- Google tag (gtag.js) -->
@@ -802,6 +833,9 @@
                     <script src="https://static.elfsight.com/platform/platform.js" data-use-service-core defer></script>
                     <div class="elfsight-app-f376e010-c0cf-4d4f-9e58-39e2b04e5335" data-elfsight-app-lazy></div>
                 </div>
+            </div>
+            <div class="scroll-hint" id="scrollHint" onclick="scrollToStrains()">
+            Scroll to explore strains
             </div>
         </div>
     </section>
@@ -1622,6 +1656,28 @@ window.debugCart = {
     clearCart: () => cartManager.clearCart(),
     exportCart: () => cartManager.exportCartForCheckout()
 };
+// Scroll to strains function
+function scrollToStrains() {
+    document.getElementById('strains').scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+}
+
+// Hide scroll hint after user scrolls
+function handleScrollHint() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollHint = document.getElementById('scrollHint');
+    
+    if (scrollTop > 50) { // Hide after scrolling 50px
+        scrollHint.classList.add('hidden');
+    } else {
+        scrollHint.classList.remove('hidden');
+    }
+}
+
+// Event listener
+window.addEventListener('scroll', handleScrollHint);
 </script>
 </body>
 </html>

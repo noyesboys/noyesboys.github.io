@@ -1505,6 +1505,28 @@
             }
         }
 
+        // Event listener
+        window.addEventListener('scroll', handleScrollHint);
+        // Scroll to strains function
+        function scrollToStrains() {
+            document.getElementById('strains').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Hide scroll hint after user scrolls
+        function handleScrollHint() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHint = document.getElementById('scrollHint');
+            
+            if (scrollTop > 50) { // Hide after scrolling 50px
+                scrollHint.classList.add('hidden');
+            } else {
+                scrollHint.classList.remove('hidden');
+            }
+        }
+
 // Event listener
 window.addEventListener('scroll', handleScrollHint);
     </script>

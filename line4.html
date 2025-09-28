@@ -466,6 +466,36 @@
                 height: 600px;
             }
         }
+                /* Simple scroll hint */
+        .scroll-hint {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            animation: fade 3s ease-in-out infinite;
+        }
+
+        .scroll-hint:hover {
+            color: #4ade80;
+            transform: translateX(-50%) translateY(-3px);
+        }
+
+        @keyframes fade {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .scroll-hint.hidden {
+            opacity: 0;
+            transform: translateX(-50%) translateY(10px);
+            pointer-events: none;
+        }
     </style>
     
     <!-- Google tag (gtag.js) -->
@@ -516,6 +546,9 @@
                     <div class="elfsight-app-f376e010-c0cf-4d4f-9e58-39e2b04e5335" data-elfsight-app-lazy></div>
                 </div>
             </div>
+            <div class="scroll-hint" id="scrollHint" onclick="scrollToStrains()">
+            Scroll to explore strains
+        </div>
         </div>
     </section>
 
@@ -615,6 +648,41 @@
                         </div>
                         
                         <a href="https://app.jointcommerce.com/blog/category/cannabis-101/rainbow-skunk-by-noyes-boys-genetics-a-comprehensive-strain-guide/" class="read-more">READ MORE</a>
+                    </div>
+                </div>
+
+                <!-- Alienized Skunk -->
+                <div class="strain-card">
+                    <img src="assets/new stickers/alienized skunk noyes boys.png" alt="Alienized Skunk - Skunk x Alienoyes Kush" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">ALIENIZED SKUNK</h4>
+                        <div class="strain-subtitle">(SKUNK X ALIENOYES KUSH)</div>
+                        <div class="strain-genetics">
+                            <a href="https://www.comparethestrain.ca/skunk-no-1/">Skunk</a> x 
+                            <a href="https://www.comparethestrain.ca/alien-dawg/">Alienoyes Kush</a>
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span>F1</span>
+                                <span class="almost-available">ALMOST AVAILABLE</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 15% Sativa / 85% Indica</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Short-Medium</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> 0%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 23-28%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Relaxed, Sleepy, Happy, Hungry</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Skunky, Earthy</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Myrcene</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="" class="read-more">READ MORE</a>
                     </div>
                 </div>
 
@@ -912,6 +980,28 @@
                   }
                 }
               });
+                            // Scroll to strains function
+                function scrollToStrains() {
+                    document.getElementById('strains').scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+
+                // Hide scroll hint after user scrolls
+                function handleScrollHint() {
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    const scrollHint = document.getElementById('scrollHint');
+                    
+                    if (scrollTop > 50) { // Hide after scrolling 50px
+                        scrollHint.classList.add('hidden');
+                    } else {
+                        scrollHint.classList.remove('hidden');
+                    }
+                }
+
+                // Event listener
+                window.addEventListener('scroll', handleScrollHint);
             </script>
             
             <div class="elfsight-widget">
@@ -948,38 +1038,5 @@
     </section>
 </body>
 </html>
-                            <div class="strain-detail"><strong>THC Content:</strong> 23-28%</div>
-                            <div class="strain-detail"><strong>Effect:</strong> Relaxed, Sleepy, Happy, Hungry</div>
-                            <div class="strain-detail"><strong>Taste:</strong> Skunky, Earthy</div>
-                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Myrcene</div>
-                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
-                        </div>
-                        
-                        <a href="" class="read-more">READ MORE</a>
-                    </div>
-                </div>
 
-                <!-- Alienized Skunk -->
-                <div class="strain-card">
-                    <img src="assets/new stickers/alienized skunk noyes boys.png" alt="Alienized Skunk - Skunk x Alienoyes Kush" class="strain-image">
-                    <div class="strain-content">
-                        <h4 class="strain-title">ALIENIZED SKUNK</h4>
-                        <div class="strain-subtitle">(SKUNK X ALIENOYES KUSH)</div>
-                        <div class="strain-genetics">
-                            <a href="https://www.comparethestrain.ca/skunk-no-1/">Skunk</a> x 
-                            <a href="https://www.comparethestrain.ca/alien-dawg/">Alienoyes Kush</a>
-                        </div>
-                        
-                        <div class="availability">
-                            <div class="availability-item">
-                                <span>F1</span>
-                                <span class="almost-available">ALMOST AVAILABLE</span>
-                            </div>
-                        </div>
-                        
-                        <div class="strain-details">
-                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
-                            <div class="strain-detail"><strong>Variety:</strong> 15% Sativa / 85% Indica</div>
-                            <div class="strain-detail"><strong>Flowering Time:</strong> 62 Days</div>
-                            <div class="strain-detail"><strong>Plant Height:</strong> Short-Medium</div>
-                            <div class="strain-detail"><strong>CBD Content:</strong> 0%</div
+                
