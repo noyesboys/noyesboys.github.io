@@ -249,22 +249,24 @@
 
         /* Contact Form Section - No background image */
         .contact-section {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.95) 100%);
+            background: linear-gradient(135deg, rgba(30, 30, 30, 0.9) 0%, rgba(20, 20, 20, 0.95) 100%);
             border-radius: 20px;
             padding: 40px;
             margin-bottom: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .contact-section h2 {
-            color: #2d5a2d;
+            color: #4ade80;
             font-size: 2.5rem;
             margin-bottom: 1rem;
             text-align: center;
         }
 
         .contact-section p {
-            color: #666;
+            color: rgba(255, 255, 255, 0.8);
             font-size: 1.1rem;
             text-align: center;
             margin-bottom: 2rem;
@@ -281,7 +283,7 @@
 
         .form-group label {
             display: block;
-            color: #2d5a2d;
+            color: #4ade80;
             font-weight: bold;
             margin-bottom: 0.5rem;
         }
@@ -291,11 +293,19 @@
         .form-group textarea {
             width: 100%;
             padding: 12px;
-            border: 2px solid #ddd;
+            border: 2px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
             font-size: 1rem;
             font-family: inherit;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(5px);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
 
         .form-group input:focus,
@@ -303,6 +313,8 @@
         .form-group textarea:focus {
             outline: none;
             border-color: #4ade80;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
         }
 
         .form-group textarea {
@@ -345,13 +357,14 @@
 
         .success-message {
             display: none;
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            color: #155724;
+            background: rgba(74, 222, 128, 0.2);
+            border: 1px solid rgba(74, 222, 128, 0.5);
+            color: #4ade80;
             padding: 15px;
             border-radius: 8px;
             margin-top: 1rem;
             text-align: center;
+            backdrop-filter: blur(10px);
         }
 
         /* Contact Info Grid */
@@ -363,12 +376,14 @@
         }
 
         .info-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(30, 30, 30, 0.9);
             border-radius: 15px;
             padding: 2rem;
             text-align: center;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .info-card:hover {
@@ -382,27 +397,29 @@
         }
 
         .info-card h3 {
-            color: #2d5a2d;
+            color: #4ade80;
             margin-bottom: 1rem;
             font-size: 1.5rem;
         }
 
         .info-card p {
-            color: #666;
+            color: rgba(255, 255, 255, 0.8);
             line-height: 1.6;
         }
 
         /* FAQ Section - No background image */
         .faq-section {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(30, 30, 30, 0.9);
             border-radius: 20px;
             padding: 40px;
             margin-top: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .faq-section h2 {
-            color: #2d5a2d;
+            color: #4ade80;
             font-size: 2.5rem;
             margin-bottom: 2rem;
             text-align: center;
@@ -410,7 +427,7 @@
 
         .faq-item {
             margin-bottom: 1.5rem;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             padding-bottom: 1.5rem;
         }
 
@@ -420,7 +437,7 @@
         }
 
         .faq-question {
-            color: #2d5a2d;
+            color: #4ade80;
             font-weight: bold;
             font-size: 1.2rem;
             margin-bottom: 0.5rem;
@@ -431,15 +448,16 @@
         }
 
         .faq-question:hover {
-            color: #4ade80;
+            color: #22c55e;
         }
 
         .faq-question i {
             transition: transform 0.3s ease;
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .faq-answer {
-            color: #666;
+            color: rgba(255, 255, 255, 0.8);
             line-height: 1.6;
             padding-left: 1rem;
         }
@@ -455,12 +473,13 @@
         .hours-table td {
             padding: 0.75rem;
             text-align: left;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.8);
         }
 
         .hours-table th {
-            background: #f8f9fa;
-            color: #2d5a2d;
+            background: rgba(255, 255, 255, 0.1);
+            color: #4ade80;
             font-weight: bold;
         }
 
