@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cannabis Growing Guide - The Noyes Boys | Feminized Seeds Cultivation</title>
-    <meta name="description" content="Complete cannabis growing guide from The Noyes Boys. Learn about feminized seeds, cultivation techniques, genetics, and maximizing yields with our premium Canadian cannabis seeds.">
-    <meta name="keywords" content="cannabis growing guide, feminized seeds guide, noyes boys genetics, cannabis cultivation, growing cannabis, seed cultivation, canadian cannabis seeds">
-    <!-- Font Awesome icons -->
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <title>The Noyes Boys Cannabis Blog | Expert Growing Tips & Cannabis Knowledge</title>
+    <meta name="description" content="Expert cannabis growing tips, feminized seed knowledge, and cultivation techniques from The Noyes Boys. Your trusted source for cannabis education and growing expertise.">
+    <meta name="keywords" content="cannabis blog, growing tips, feminized seeds, cannabis cultivation, noyes boys, growing guide, cannabis education">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     
     <style>
         * {
@@ -18,24 +17,25 @@
         
         body {
             font-family: 'Arial', sans-serif;
-            background: #0a0a0a;
-            color: #333;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+            color: #f5f5f5;
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            padding-top: 100px;
+            padding-top: 70px;
+            min-height: 100vh;
         }
 
         /* Header Navigation */
         header {
-            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
-            padding: 1rem 0;
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%);
+            padding: 0.5rem 0;
             position: fixed;
             width: 100%;
             top: 0;
             left: 0;
             z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.5);
         }
         
         nav {
@@ -45,12 +45,13 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 20px;
+            min-height: 60px;
         }
         
         .logo {
             display: flex;
             align-items: center;
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: bold;
             color: #4ade80;
             text-decoration: none;
@@ -58,16 +59,17 @@
         }
         
         .logo-img {
-            width: 45px;
-            height: 45px;
-            margin-right: 10px;
+            width: 35px;
+            height: 35px;
+            margin-right: 8px;
             border-radius: 50%;
+            background: linear-gradient(135deg, #4ade80, #22c55e);
         }
         
         .nav-links {
             display: flex;
             list-style: none;
-            gap: 1.5rem;
+            gap: 1rem;
             flex-wrap: wrap;
             align-items: center;
         }
@@ -77,8 +79,8 @@
             text-decoration: none;
             transition: all 0.3s ease;
             font-weight: 600;
-            font-size: 1rem;
-            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            padding: 0.5rem 0.8rem;
             border-radius: 8px;
             background: rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
@@ -98,20 +100,19 @@
             border-color: #4ade80;
         }
 
-        /* Cart Button in Header */
         .header-cart-button {
             background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
             color: #0a0a0a;
             border: none;
-            border-radius: 25px;
-            padding: 0.75rem 1.5rem;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
             font-weight: bold;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 0.5rem;
             transition: all 0.3s ease;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -125,271 +126,658 @@
             background: #0a0a0a;
             color: #4ade80;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: bold;
         }
+
+        /* Masthead */
+        .masthead {
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%);
+            padding: 4rem 0;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .masthead-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
         
+        .masthead h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 3rem;
+            line-height: 3rem;
+            letter-spacing: 0.8rem;
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+        
+        .masthead h2 {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+        }
+
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background: linear-gradient(135deg, #1e3c1e 0%, #2d5a2d 50%, #4a7c4a 100%);
-            min-height: calc(100vh - 100px);
         }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            background: rgba(255,255,255,0.95);
-            padding: 25px;
+
+        /* Interactive Tools Section */
+        .tools-section {
+            background: rgba(0,0,0,0.7);
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        .header h1 {
-            color: #2d5a2d;
-            font-size: 2.2em;
-            margin-bottom: 8px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .header p {
-            color: #666;
-            font-size: 1.1em;
-            margin-bottom: 10px;
+            padding: 2rem;
+            border: 1px solid rgba(74, 222, 128, 0.2);
+            margin-bottom: 3rem;
         }
 
-        /* Quick Navigation */
-        .quick-nav {
-            background: rgba(255,255,255,0.95);
-            border-radius: 15px;
-            margin-bottom: 25px;
-            padding: 20px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-
-        .quick-nav h3 {
-            color: #2d5a2d;
-            margin-bottom: 15px;
+        .tools-header {
             text-align: center;
+            margin-bottom: 2rem;
         }
 
-        .quick-nav-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
+        .tools-header h2 {
+            color: #4ade80;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
         }
 
-        .quick-nav-links a {
-            background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%);
-            color: white;
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tool-card {
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 2px solid rgba(74, 222, 128, 0.2);
+            text-align: center;
             transition: all 0.3s ease;
-        }
-
-        .quick-nav-links a:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        /* Accordion Styles */
-        .accordion-container {
-            background: rgba(255,255,255,0.95);
-            border-radius: 15px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            overflow: hidden;
-        }
-
-        .accordion-item {
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .accordion-item:last-child {
-            border-bottom: none;
-        }
-
-        .accordion-header {
-            background: linear-gradient(135deg, #2d5a2d 0%, #4a7c4a 100%);
-            color: white;
-            padding: 20px;
             cursor: pointer;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-3px);
+            border-color: #4ade80;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .tool-icon {
+            font-size: 2.5rem;
+            color: #4ade80;
+            margin-bottom: 1rem;
+        }
+
+        .tool-title {
+            color: #4ade80;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-description {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Blog Layout */
+        .blog-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+        }
+
+        .main-content {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        /* Featured Article */
+        .featured-article {
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid rgba(74, 222, 128, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             position: relative;
         }
 
-        .accordion-header:hover {
-            background: linear-gradient(135deg, #1e3c1e 0%, #2d5a2d 100%);
-        }
-
-        .accordion-header.active {
-            background: linear-gradient(135deg, #4a7c4a 0%, #22c55e 100%);
-        }
-
-        .accordion-title {
-            font-size: 1.3rem;
+        .featured-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
             font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .article-header h2 {
+            color: #4ade80;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-meta {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            color: #ccc;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
         }
 
-        .accordion-icon {
-            font-size: 1.1rem;
-            transition: transform 0.3s ease;
-        }
-
-        .accordion-header.active .accordion-icon {
-            transform: rotate(180deg);
-        }
-
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-            background: white;
-        }
-
-        .accordion-content.active {
-            max-height: 2000px;
-        }
-
-        .accordion-body {
-            padding: 30px;
-            color: #555;
-            line-height: 1.8;
-        }
-
-        .accordion-body h3 {
-            color: #2d5a2d;
-            margin-bottom: 15px;
-            margin-top: 25px;
-        }
-
-        .accordion-body h3:first-child {
-            margin-top: 0;
-        }
-
-        .accordion-body h4 {
-            color: #4a7c4a;
-            margin-bottom: 10px;
-            margin-top: 20px;
-        }
-
-        .accordion-body ul {
-            margin: 15px 0;
-            padding-left: 20px;
-        }
-
-        .accordion-body li {
-            margin-bottom: 8px;
-        }
-
-        .accordion-body p {
-            margin-bottom: 15px;
-        }
-
-        .strain-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .strain-card {
-            background: #f8f9fa;
-            border: 2px solid #e0e0e0;
+        .article-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(45deg, #4ade80, #22c55e);
             border-radius: 10px;
-            padding: 15px;
-            transition: all 0.3s ease;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a0a0a;
+            font-size: 4rem;
         }
 
-        .strain-card:hover {
-            border-color: #4a7c4a;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        /* Strain Reviews Slider */
+        .strain-reviews-section {
+            background: rgba(0,0,0,0.7);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid rgba(74, 222, 128, 0.1);
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            color: #4ade80;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: #ccc;
+        }
+
+        .strain-slider-container {
+            position: relative;
+        }
+
+        .strain-slider {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding-bottom: 1rem;
+        }
+
+        .strain-slider::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .strain-slider::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+
+        .strain-slider::-webkit-scrollbar-thumb {
+            background: #4ade80;
+            border-radius: 4px;
+        }
+
+        .strain-review-card {
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 100%);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(74, 222, 128, 0.2);
+            min-width: 300px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .strain-review-card:hover {
+            transform: translateY(-3px);
+            border-color: #4ade80;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
 
         .strain-name {
+            color: #4ade80;
+            font-size: 1.3rem;
             font-weight: bold;
-            color: #2d5a2d;
-            margin-bottom: 8px;
-            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
         }
 
-        .strain-details {
+        .strain-genetics {
+            color: #ccc;
             font-size: 0.9rem;
-            color: #666;
+            margin-bottom: 1rem;
         }
 
-        .tip-box {
-            background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
-            border-left: 4px solid #4a7c4a;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
+        .strain-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
         }
 
-        .warning-box {
-            background: linear-gradient(135deg, #fff3cd 0%, #fef8e7 100%);
-            border-left: 4px solid #f39c12;
-            padding: 15px;
-            margin: 20px 0;
+        .stat-item {
+            background: rgba(0,0,0,0.5);
+            padding: 0.5rem;
             border-radius: 5px;
+            text-align: center;
         }
 
-        .info-box {
-            background: linear-gradient(135deg, #d4edda 0%, #e8f5e8 100%);
-            border-left: 4px solid #22c55e;
-            padding: 15px;
-            margin: 20px 0;
-            border-radius: 5px;
+        .stat-label {
+            color: #ccc;
+            font-size: 0.8rem;
         }
-        
+
+        .stat-value {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .strain-effects {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .effect-tag {
+            background: rgba(139, 92, 246, 0.2);
+            color: #8b5cf6;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+        }
+
+        /* Blog Posts */
+        .blog-posts {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .blog-post {
+            background: rgba(0,0,0,0.7);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid rgba(74, 222, 128, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .blog-post:hover {
+            transform: translateY(-3px);
+            border-color: #4ade80;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .blog-post h3 {
+            color: #4ade80;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-post-meta {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-post-excerpt {
+            color: #f5f5f5;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .read-more-btn {
+            background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%);
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .read-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(74, 124, 74, 0.4);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar-section {
+            background: rgba(0,0,0,0.7);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(74, 222, 128, 0.1);
+        }
+
+        .sidebar-section h3 {
+            color: #4ade80;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .recent-posts {
+            list-style: none;
+        }
+
+        .recent-posts li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .recent-posts li:last-child {
+            border-bottom: none;
+        }
+
+        .recent-posts a {
+            color: #f5f5f5;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .recent-posts a:hover {
+            color: #4ade80;
+        }
+
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .category-tag {
+            background: rgba(74, 222, 128, 0.1);
+            color: #4ade80;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(74, 222, 128, 0.2);
+        }
+
+        .category-tag:hover {
+            background: rgba(74, 222, 128, 0.2);
+        }
+
+        /* Newsletter */
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .newsletter-input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: #f5f5f5;
+            font-size: 0.9rem;
+        }
+
+        .newsletter-input::placeholder {
+            color: #ccc;
+        }
+
+        .newsletter-btn {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+
+        /* Interactive Tool Modals */
+        .tool-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.95);
+            backdrop-filter: blur(5px);
+        }
+
+        .tool-modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            color: #f5f5f5;
+            margin: 3% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 95%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 2px solid rgba(74, 222, 128, 0.3);
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+        }
+
+        .tool-close {
+            position: absolute;
+            right: 1.5rem;
+            top: 1.5rem;
+            color: #ccc;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tool-close:hover {
+            color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+            transform: rotate(90deg);
+        }
+
+        .tool-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .tool-header h2 {
+            color: #4ade80;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-button {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .tool-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            padding: 1rem 0;
+        }
+
+        .quiz-question {
+            color: #4ade80;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-option {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: #f5f5f5;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            background: rgba(74, 222, 128, 0.1);
+            border-color: #4ade80;
+        }
+
+        .quiz-option.selected {
+            background: rgba(74, 222, 128, 0.2);
+            border-color: #4ade80;
+        }
+
+        .quiz-result {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        /* Full Article View */
+        .full-article {
+            display: none;
+            background: rgba(0,0,0,0.8);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid rgba(74, 222, 128, 0.3);
+            margin-bottom: 3rem;
+        }
+
+        .full-article.active {
+            display: block;
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+
+        /* Mobile Responsive */
         @media (max-width: 768px) {
             body {
-                padding-top: 120px;
+                padding-top: 80px;
             }
             
-            .header h1 {
-                font-size: 1.8em;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-
             nav {
                 flex-direction: column;
-                gap: 10px;
+                gap: 8px;
+                min-height: 70px;
+                padding: 8px 20px;
             }
 
-            .quick-nav-links {
-                flex-direction: column;
-                align-items: stretch;
+            .masthead h1 {
+                font-size: 2rem;
+                letter-spacing: 0.3rem;
             }
 
-            .quick-nav-links a {
-                text-align: center;
-            }
-
-            .accordion-title {
-                font-size: 1.1rem;
-            }
-
-            .strain-grid {
+            .blog-layout {
                 grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .strain-slider {
+                flex-direction: column;
+            }
+
+            .strain-review-card {
+                min-width: 100%;
+            }
+
+            .tool-modal-content {
+                margin: 5% auto;
+                width: 98%;
+                max-height: 85vh;
             }
         }
     </style>
@@ -398,7 +786,7 @@
     <header>
         <nav>
             <a href="FeminizedSeedsHomepage.html" class="logo">
-                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+                <div class="logo-img"></div>
                 Noyes Boys
             </a>
             <ul class="nav-links">
@@ -409,7 +797,7 @@
                 <li><a href="line3.html">Line 3</a></li>
                 <li><a href="contact_us.html">Contact</a></li>
                 <li><a href="reviews.html">Reviews</a></li>
-                <li><a href="readmore.html" class="active">Growing Guide</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
             </ul>
             <button class="header-cart-button" onclick="openCart()">
                 <i class="fas fa-shopping-cart"></i>
@@ -419,870 +807,439 @@
         </nav>
     </header>
 
+    <section class="masthead">
+        <div class="masthead-content">
+            <h1>Cannabis Blog</h1>
+            <h2>Expert growing tips, strain reviews, and cannabis cultivation knowledge</h2>
+        </div>
+    </section>
+
     <div class="container">
-        <div class="header">
-            <h1>Cannabis Growing Guide</h1>
-            <p>Complete guide to cultivating premium cannabis with Noyes Boys genetics</p>
-        </div>
+        <!-- Interactive Tools Section -->
+        <div class="tools-section">
+            <div class="tools-header">
+                <h2>Interactive Growing Tools</h2>
+                <p>Use our tools to optimize your grows and find the perfect strains</p>
+            </div>
+            <div class="tools-grid">
+                <div class="tool-card" onclick="openTool('strain-quiz')">
+                    <div class="tool-icon"><i class="fas fa-question-circle"></i></div>
+                    <h3 class="tool-title">Strain Finder Quiz</h3>
+                    <p class="tool-description">Find the perfect genetics for your setup and experience level</p>
+                </div>
 
-        <!-- Quick Navigation -->
-        <div class="quick-nav">
-            <h3>Quick Navigation</h3>
-            <div class="quick-nav-links">
-                <a href="#introduction">Introduction</a>
-                <a href="#noyes-genetics">Noyes Genetics</a>
-                <a href="#feminized-seeds">Feminized Seeds</a>
-                <a href="#growing-conditions">Growing Conditions</a>
-                <a href="#cultivation-techniques">Techniques</a>
-                <a href="#pest-management">Pest Management</a>
-                <a href="#harvesting">Harvesting & Curing</a>
-                <a href="#troubleshooting">Troubleshooting</a>
+                <div class="tool-card" onclick="openTool('grow-calendar')">
+                    <div class="tool-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <h3 class="tool-title">Growing Calendar</h3>
+                    <p class="tool-description">Month-by-month outdoor growing guide for Canadian climates</p>
+                </div>
+
+                <div class="tool-card" onclick="openTool('yield-calculator')">
+                    <div class="tool-icon"><i class="fas fa-calculator"></i></div>
+                    <h3 class="tool-title">Yield Calculator</h3>
+                    <p class="tool-description">Estimate your harvest based on setup and strain selection</p>
+                </div>
+
+                <div class="tool-card" onclick="openTool('plant-diagnostic')">
+                    <div class="tool-icon"><i class="fas fa-stethoscope"></i></div>
+                    <h3 class="tool-title">Plant Diagnostic</h3>
+                    <p class="tool-description">Identify plant problems and get treatment recommendations</p>
+                </div>
+
+                <div class="tool-card" onclick="openTool('harvest-predictor')">
+                    <div class="tool-icon"><i class="fas fa-calendar-check"></i></div>
+                    <h3 class="tool-title">Harvest Predictor</h3>
+                    <p class="tool-description">Plan planting dates and predict harvest windows for optimal timing</p>
+                </div>
+
+                <div class="tool-card" onclick="openTool('terpene-guide')">
+                    <div class="tool-icon"><i class="fas fa-leaf"></i></div>
+                    <h3 class="tool-title">Terpene Guide</h3>
+                    <p class="tool-description">Explore terpene profiles, aromas, effects and strain combinations</p>
+                </div>
             </div>
         </div>
 
-        <!-- Accordion Container -->
-        <div class="accordion-container">
-            
-            <!-- Introduction -->
-            <div class="accordion-item" id="introduction">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <div class="accordion-title">
-                        <i class="fas fa-seedling"></i>
-                        Introduction to Noyes Boys Genetics
-                    </div>
-                    <i class="fas fa-chevron-down accordion-icon"></i>
-                </div>
-                <div class="accordion-content">
-                    <div class="accordion-body">
-                        <p>Noyes Boys Genetics has earned its reputation as a standout Canadian seed bank, carving out a niche in the cannabis seeds market through its craft approach, rich genetics, and commitment to producing high-quality feminized seeds.</p>
-                        
-                        <h3>Our Story</h3>
-                        <p>What started as a humble passion project has transformed into something far greater, offering growers across Canada and beyond access to dense, flavorful, and stable cannabis genetics that reflect both heritage strains and modern crosses.</p>
-                        
-                        <h3>Our Philosophy</h3>
-                        <p>In an increasingly crowded landscape of online seed banks, Noyes Boys Genetics delivers a blend of nostalgia (think old-school landraces like Durban Poison and Blue Dream) and innovation (our own in-house crosses), all rooted in Canadian breeding culture and organic curiosity.</p>
-                        
-                        <div class="info-box">
-                            <strong>Our Mission:</strong> High THC and good flavor is getting common these days, so we decided to breed for proper plant structure, mildew resistance and ease of growth for beginners. Plant structure and resilience will always be our foremost goal over just high THC or good smell.
-                        </div>
-                        
-                        <h3>Why Choose Noyes Boys?</h3>
-                        <ul>
-                            <li><strong>Canadian-owned and operated</strong> with all genetics developed by hand</li>
-                            <li><strong>Small-batch production</strong> - no mass production or outsourcing</li>
-                            <li><strong>Focus on grower traits</strong> like mildew resistance and ease of growth</li>
-                            <li><strong>100% feminized seeds</strong> - no worry about male plants</li>
-                            <li><strong>Stealth packaging</strong> and reliable domestic shipping</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Noyes Genetics Lines -->
-            <div class="accordion-item" id="noyes-genetics">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <div class="accordion-title">
-                        <i class="fas fa-dna"></i>
-                        Noyes Boys Genetic Lines
-                    </div>
-                    <i class="fas fa-chevron-down accordion-icon"></i>
-                </div>
-                <div class="accordion-content">
-                    <div class="accordion-body">
-                        <h3>Line 1 - Originals & Starting Genetics</h3>
-                        <p>Our foundation line featuring fan favorites and starting genetics that set the bar for quality.</p>
-                        
-                        <div class="strain-grid">
-                            <div class="strain-card">
-                                <div class="strain-name">Purple Rainbow</div>
-                                <div class="strain-details">
-                                    Alien Tech × Rainbow Belts × Wedding Cake<br>
-                                    THC: 25-27% | Mostly Indica<br>
-                                    Effects: Energizing, Happy, Motivated
-                                </div>
-                            </div>
-                            <div class="strain-card">
-                                <div class="strain-name">Noyes Breath</div>
-                                <div class="strain-details">
-                                    Noyes Kush × Meatbreath<br>
-                                    THC: 25-28% | 90% Indica<br>
-                                    Effects: Chill, Relaxed
-                                </div>
-                            </div>
-                            <div class="strain-card">
-                                <div class="strain-name">Alienoyes Kush</div>
-                                <div class="strain-details">
-                                    Alien Tech × Noyes Kush<br>
-                                    THC: 27-28% | Indica-leaning<br>
-                                    Effects: Relaxed, Chill
-                                </div>
-                            </div>
-                        </div>
-
-                        <h3>Line 2 - Geode Crosses</h3>
-                        <p>Creative genetic lottery crosses featuring unique combinations and pheno-hunting opportunities.</p>
-                        
-                        <div class="strain-grid">
-                            <div class="strain-card">
-                                <div class="strain-name">YesNo Kush</div>
-                                <div class="strain-details">
-                                    Genetic Lottery Mix<br>
-                                    Unstable crosses for pheno exploration<br>
-                                    100% Feminized
-                                </div>
-                            </div>
-                            <div class="strain-card">
-                                <div class="strain-name">Noyes Rocks</div>
-                                <div class="strain-details">
-                                    Noyes Kush × Biscotti<br>
-                                    THC: 25-28% | 75% Indica<br>
-                                    Effects: Motivated, Energetic
-                                </div>
-                            </div>
-                            <div class="strain-card">
-                                <div class="strain-name">Mango Aliens</div>
-                                <div class="strain-details">
-                                    Mangonoyes Kush × Alienoyes Kush<br>
-                                    THC: 25-28% | 75% Indica<br>
-                                    Flavors: Mango, Fruity, Gas
-                                </div>
-                            </div>
-                        </div>
-
-                        <h3>Line 3 - OG Crosses</h3>
-                        <p>Classic OG genetics crossed with Noyes foundation strains for heavy indica effects and strong terpene profiles.</p>
-                        
-                        <div class="strain-grid">
-                            <div class="strain-card">
-                                <div class="strain-name">Noyes OG</div>
-                                <div class="strain-details">
-                                    OG Kush × Noyes Kush<br>
-                                    THC: 25-28% | 90% Indica<br>
-                                    Flavors: Gas, Earthy, Citrus
-                                </div>
-                            </div>
-                            <div class="strain-card">
-                                <div class="strain-name">White Noyes</div>
-                                <div class="strain-details">
-                                    White Widow × Noyes Kush<br>
-                                    THC: 22-23% | 60% Indica<br>
-                                    Known for trichome coverage
-                                </div>
-                            </div>
-                            <div class="strain-card">
-                                <div class="strain-name">Noyes Poison</div>
-                                <div class="strain-details">
-                                    Durban Poison × Noyes Kush<br>
-                                    THC: 23-24% | 80% Sativa<br>
-                                    Effects: Gas, Earthy, Citrus
-                                </div>
-                            </div>
-                        </div>
-
-                        <h3>Line 4 - Skunk Crosses</h3>
-                        <p>For growers who love the funk - bringing back classic skunk genetics with modern stability.</p>
-                        
-                        <div class="tip-box">
-                            <strong>Cultivation Notes:</strong> Most strains are compact and ideal for indoor growing, with typical flowering times of 60-70 days. Expected yields: 500-550 g/m² indoors, ~2 lbs per plant outdoors.
+        <div class="blog-layout">
+            <!-- Main Content -->
+            <div class="main-content" id="main-content">
+                <!-- Featured Article -->
+                <div class="featured-article">
+                    <div class="featured-badge">Featured</div>
+                    <div class="article-header">
+                        <h2>The Complete Guide to Feminized Cannabis Seeds</h2>
+                        <div class="article-meta">
+                            <span><i class="fas fa-calendar-alt"></i> December 15, 2024</span>
+                            <span><i class="fas fa-user"></i> Mr. Noyes</span>
+                            <span><i class="fas fa-tag"></i> Feminized Seeds</span>
+                            <span><i class="fas fa-clock"></i> 12 min read</span>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Feminized Seeds Guide -->
-            <div class="accordion-item" id="feminized-seeds">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <div class="accordion-title">
+                    <div class="article-image">
                         <i class="fas fa-venus"></i>
-                        Understanding Feminized Seeds
                     </div>
-                    <i class="fas fa-chevron-down accordion-icon"></i>
+                    <div class="article-excerpt">
+                        <p>After 15 years of breeding cannabis, I've seen the industry transform from predominantly regular seeds to feminized genetics dominating the market. Today, over 90% of home growers choose feminized seeds, and for good reason. This comprehensive guide covers everything from the science behind feminization to the advanced techniques I use to ensure genetic stability in every Noyes Boys strain.</p>
+                        
+                        <p>Whether you're planning your first grow or looking to optimize your current setup, understanding feminized genetics is crucial for consistent, high-quality harvests. I'll share the breeding methods, quality control processes, and growing strategies that have made feminized seeds the gold standard for both commercial and home cultivation.</p>
+                    </div>
+                    <a href="#" class="read-more-btn" onclick="openFullArticle('feminized-guide')">Read Complete Guide</a>
                 </div>
-                <div class="accordion-content">
-                    <div class="accordion-body">
-                        <h3>What Are Feminized Seeds?</h3>
-                        <p>Feminized seeds are genetically engineered to produce only female plants, ensuring that every plant in your garden will contribute to a bountiful harvest. This eliminates the unpredictability of regular seeds and maximizes growing efficiency.</p>
-                        
-                        <h3>The Science Behind Feminization</h3>
-                        <h4>Rodelization Method</h4>
-                        <p>Female plants are stressed in their final flowering stages to produce pollen sacs. This pollen contains only female chromosomes and is used to pollinate other female plants.</p>
-                        
-                        <h4>Colloidal Silver Method</h4>
-                        <p>Chemical solutions like colloidal silver or silver thiosulfate are applied to female plants to induce male pollen sac formation. This method is highly effective and widely used in the industry.</p>
-                        
-                        <div class="info-box">
-                            <strong>Key Advantage:</strong> With feminized seeds, you can focus 100% of your energy on nurturing plants that will produce buds, rather than worrying about identifying and removing males.
-                        </div>
-                        
-                        <h3>Benefits of Feminized Seeds</h3>
-                        <ul>
-                            <li><strong>Increased Yield Potential:</strong> Every plant produces buds</li>
-                            <li><strong>Simplified Cultivation:</strong> No need to identify and remove males</li>
-                            <li><strong>Space Efficiency:</strong> Maximize use of growing area</li>
-                            <li><strong>Resource Optimization:</strong> All nutrients and care go to productive plants</li>
-                            <li><strong>Genetic Stability:</strong> More consistent and predictable traits</li>
-                            <li><strong>Beginner Friendly:</strong> Reduces complexity for new growers</li>
-                        </ul>
-                        
-                        <h3>Choosing the Right Feminized Seeds</h3>
-                        <h4>Consider Your Growing Environment</h4>
-                        <ul>
-                            <li><strong>Indoor:</strong> Look for compact, high-yielding strains</li>
-                            <li><strong>Outdoor:</strong> Choose robust, weather-resistant varieties</li>
-                            <li><strong>Greenhouse:</strong> Balance of indoor control with natural light</li>
-                        </ul>
-                        
-                        <h4>Desired Effects and Characteristics</h4>
-                        <ul>
-                            <li>THC levels and potency requirements</li>
-                            <li>Indica vs. Sativa effects</li>
-                            <li>Flavor and aroma preferences</li>
-                            <li>Medical vs. recreational use</li>
-                        </ul>
-                        
-                        <h4>Growth Characteristics</h4>
-                        <ul>
-                            <li>Flowering time (short vs. long)</li>
-                            <li>Plant size and structure</li>
-                            <li>Yield potential</li>
-                            <li>Difficulty level</li>
-                        </ul>
+
+                <!-- Strain Reviews Slider -->
+                <div class="strain-reviews-section">
+                    <div class="section-header">
+                        <h2>Strain Reviews & Grow Reports</h2>
+                        <p>In-depth reviews of Noyes Boys genetics with real grow data and user experiences</p>
                     </div>
+                    
+                    <div class="strain-slider-container">
+                        <div class="strain-slider" id="strain-slider">
+                            <div class="strain-review-card" onclick="openStrainReview('purple-rainbow')">
+                                <h3 class="strain-name">Purple Rainbow</h3>
+                                <div class="strain-genetics">Alien Tech × Rainbow Belts × Wedding Cake</div>
+                                <div class="strain-stats">
+                                    <div class="stat-item"><div class="stat-label">THC</div><div class="stat-value">25-27%</div></div>
+                                    <div class="stat-item"><div class="stat-label">Yield</div><div class="stat-value">550g/m²</div></div>
+                                    <div class="stat-item"><div class="stat-label">Flowering</div><div class="stat-value">65 days</div></div>
+                                    <div class="stat-item"><div class="stat-label">Height</div><div class="stat-value">Medium</div></div>
+                                </div>
+                                <div class="strain-effects">
+                                    <span class="effect-tag">Energizing</span>
+                                    <span class="effect-tag">Creative</span>
+                                    <span class="effect-tag">Happy</span>
+                                </div>
+                                <p style="color: #ccc; font-size: 0.9rem;">Complete journey from seed to smoke - detailed analysis of color development, training response, and curing process...</p>
+                            </div>
+
+                            <div class="strain-review-card" onclick="openStrainReview('noyes-breath')">
+                                <h3 class="strain-name">Noyes Breath</h3>
+                                <div class="strain-genetics">Noyes Kush × Meatbreath</div>
+                                <div class="strain-stats">
+                                    <div class="stat-item"><div class="stat-label">THC</div><div class="stat-value">25-28%</div></div>
+                                    <div class="stat-item"><div class="stat-label">Yield</div><div class="stat-value">500g/m²</div></div>
+                                    <div class="stat-item"><div class="stat-label">Flowering</div><div class="stat-value">60 days</div></div>
+                                    <div class="stat-item"><div class="stat-label">Height</div><div class="stat-value">Compact</div></div>
+                                </div>
+                                <div class="strain-effects">
+                                    <span class="effect-tag">Relaxing</span>
+                                    <span class="effect-tag">Sleepy</span>
+                                    <span class="effect-tag">Pain Relief</span>
+                                </div>
+                                <p style="color: #ccc; font-size: 0.9rem;">Step-by-step beginner grow with detailed photos, nutrient schedules, and harvest analysis...</p>
+                            </div>
+
+                            <div class="strain-review-card" onclick="openStrainReview('mango-aliens')">
+                                <h3 class="strain-name">Mango Aliens</h3>
+                                <div class="strain-genetics">Mangonoyes Kush × Alienoyes Kush</div>
+                                <div class="strain-stats">
+                                    <div class="stat-item"><div class="stat-label">THC</div><div class="stat-value">25-28%</div></div>
+                                    <div class="stat-item"><div class="stat-label">Yield</div><div class="stat-value">600g/m²</div></div>
+                                    <div class="stat-item"><div class="stat-label">Flowering</div><div class="stat-value">70 days</div></div>
+                                    <div class="stat-item"><div class="stat-label">Height</div><div class="stat-value">Tall</div></div>
+                                </div>
+                                <div class="strain-effects">
+                                    <span class="effect-tag">Euphoric</span>
+                                    <span class="effect-tag">Tropical</span>
+                                    <span class="effect-tag">Uplifting</span>
+                                </div>
+                                <p style="color: #ccc; font-size: 0.9rem;">Advanced grow techniques showcase - SCROG setup, terpene preservation, and 8-week cure analysis...</p>
+                            </div>
+
+                            <div class="strain-review-card" onclick="openStrainReview('white-noyes')">
+                                <h3 class="strain-name">White Noyes</h3>
+                                <div class="strain-genetics">White Widow × Noyes Kush</div>
+                                <div class="strain-stats">
+                                    <div class="stat-item"><div class="stat-label">THC</div><div class="stat-value">22-25%</div></div>
+                                    <div class="stat-item"><div class="stat-label">Yield</div><div class="stat-value">450g/m²</div></div>
+                                    <div class="stat-item"><div class="stat-label">Flowering</div><div class="stat-value">55 days</div></div>
+                                    <div class="stat-item"><div class="stat-label">Height</div><div class="stat-value">Medium</div></div>
+                                </div>
+                                <div class="strain-effects">
+                                    <span class="effect-tag">Balanced</span>
+                                    <span class="effect-tag">Clear</span>
+                                    <span class="effect-tag">Focus</span>
+                                </div>
+                                <p style="color: #ccc; font-size: 0.9rem;">Classic genetics modernized - detailed phenotype comparison and long-term storage study...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blog Posts Grid -->
+                <div class="blog-posts">
+                    <div class="blog-post">
+                        <h3>Winter Growing in Canada: Beating the Cold Season Blues</h3>
+                        <div class="blog-post-meta">December 12, 2024 | By Sarah Chen | Seasonal Growing | 7 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>Canadian winters can be brutal for indoor growers. With heating costs skyrocketing and humidity levels plummeting, maintaining optimal growing conditions becomes a real challenge. After five winters of trial and error in my basement grow, I've learned some crucial lessons about maintaining healthy plants when it's -30°C outside.</p>
+                            <p>From managing dry air to dealing with increased electricity bills, here's how to keep your Noyes Boys genetics thriving through the harsh Canadian winter months...</p>
+                        </div>
+                        <a href="#" class="read-more-btn" onclick="openFullArticle('winter-growing')">Read More</a>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>My First Purple Rainbow Grow: A Beginner's Complete Journey</h3>
+                        <div class="blog-post-meta">December 8, 2024 | By Alex Thompson | Grow Journal | 9 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>Six months ago, I'd never grown anything more complex than basil on my windowsill. Today, I'm staring at the most beautiful purple and rainbow-colored buds I've ever seen, harvested from my very first cannabis plant. This is the complete story of my Purple Rainbow grow - mistakes, successes, and everything in between.</p>
+                            <p>If you're thinking about starting your first grow with feminized seeds, this detailed journal might help you avoid some of the rookie mistakes I made...</p>
+                        </div>
+                        <a href="#" class="read-more-btn" onclick="openFullArticle('purple-rainbow-journal')">Read More</a>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>The Science Behind Terpenes: Why Your Weed Smells Like Mango</h3>
+                        <div class="blog-post-meta">December 5, 2024 | By Dr. Jennifer Walsh | Cannabis Science | 11 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>Ever wondered why some strains smell like tropical fruit while others reek of diesel fuel? The answer lies in terpenes - aromatic compounds that do far more than just make your garden smell amazing. These molecular powerhouses are responsible for the "entourage effect" and can dramatically influence your cannabis experience.</p>
+                            <p>In this deep dive, we'll explore the most common cannabis terpenes, their effects, and practical tips for maximizing terpene production in your home grow...</p>
+                        </div>
+                        <a href="#" class="read-more-btn" onclick="openFullArticle('terpene-science')">Read More</a>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>LST vs HST: Which Training Method is Right for You?</h3>
+                        <div class="blog-post-meta">December 1, 2024 | By Mr. Noyes | Training Techniques | 8 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>Plant training can easily double your yields, but choosing the wrong technique for your experience level can stress your plants and reduce harvests. After breeding cannabis for over a decade, I've seen every training method imaginable - some brilliant, others disastrous.</p>
+                            <p>This guide breaks down Low Stress Training (LST) versus High Stress Training (HST) methods, helping you choose the right approach for your skill level and strain selection...</p>
+                        </div>
+                        <a href="#" class="read-more-btn" onclick="openFullArticle('training-guide')">Read More</a>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>Harvest Day Disaster: What I Learned from Cutting Too Early</h3>
+                        <div class="blog-post-meta">November 28, 2024 | By Jordan Martinez | Growing Mistakes | 6 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>Three months of careful growing, perfect environmental controls, and premium Noyes Boys genetics. Everything was going perfectly until harvest day, when impatience got the better of me. I cut my Alienoyes Kush two weeks too early and immediately regretted it.</p>
+                            <p>This is the story of my biggest growing mistake and the expensive lesson it taught me about reading trichomes and timing your harvest properly...</p>
+                        </div>
+                        <a href="#" class="read-more-btn" onclick="openFullArticle('harvest-timing')">Read More</a>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>Building the Perfect 4x4 Tent Setup on a Budget</h3>
+                        <div class="blog-post-meta">November 25, 2024 | By Chris Wilson | Equipment Reviews | 10 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>You don't need to spend $3000 to build a professional-quality grow setup. After testing dozens of lights, fans, and accessories over the past two years, I've identified the sweet spot for price-to-performance ratio. This complete 4x4 tent build comes in under $800 and produces results that rival setups costing twice as much.</p>
+                            <p>Complete with links, alternatives, and upgrade paths as your experience grows...</p>
+                        </div>
+                        <a href="#" class="read-more-btn" onclick="openFullArticle('budget-setup')">Read More</a>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>Organic vs Synthetic: The Great Nutrient Debate</h3>
+                        <div class="blog-post-meta">November 22, 2024 | By Lisa Park | Nutrients | 12 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>The organic vs synthetic nutrient debate has raged in cannabis circles for years. As someone who's grown the same strains with both methods, I can tell you the truth isn't as black and white as either side claims. Both approaches have merit, and the best choice depends on your priorities, experience level, and growing goals.</p>
+                            <p>This comprehensive comparison covers flavor, yields, difficulty, and cost to help you make an informed decision...</p>
+                        </div>
+                        <a href="#" class="read-more-btn" onclick="openFullArticle('organic-vs-synthetic')">Read More</a>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>Spider Mites from Hell: My 8-Week Battle and Victory</h3>
+                        <div class="blog-post-meta">November 18, 2024 | By Kevin Murphy | Pest Control | 9 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>It started with a few yellow spots on my lower fan leaves. Within two weeks, my entire 4-plant grow was covered in webbing and my beautiful Mango Aliens were looking more like ghost plants. This is the complete story of my spider mite infestation and the integrated pest management approach that finally saved my harvest.</p>
+                            <p>Learn from my mistakes and discover the early warning signs I missed that could have prevented this nightmare...</p>
+                        </div>
+                        <a href="#" class="read-more-btn" onclick="openFullArticle('spider-mite-battle')">Read More</a>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin: 2rem 0;">
+                    <button style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #ccc; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">← Previous</button>
+                    <span style="color: #4ade80; font-weight: bold;">Page 1 of 5</span>
+                    <button style="background: #4ade80; border: none; color: #0a0a0a; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">Next →</button>
                 </div>
             </div>
 
-            <!-- Growing Conditions -->
-            <div class="accordion-item" id="growing-conditions">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <div class="accordion-title">
-                        <i class="fas fa-thermometer-half"></i>
-                        Essential Growing Conditions
-                    </div>
-                    <i class="fas fa-chevron-down accordion-icon"></i>
-                </div>
-                <div class="accordion-content">
-                    <div class="accordion-body">
-                        <h3>Lighting Requirements</h3>
-                        <h4>Indoor Lighting</h4>
-                        <ul>
-                            <li><strong>LED Lights:</strong> Energy efficient, full spectrum, low heat</li>
-                            <li><strong>HPS Lights:</strong> High intensity, proven results, more heat</li>
-                            <li><strong>Fluorescent:</strong> Good for seedlings and small grows</li>
-                        </ul>
-                        
-                        <h4>Light Cycles</h4>
-                        <ul>
-                            <li><strong>Vegetative Stage:</strong> 18-24 hours of light daily</li>
-                            <li><strong>Flowering Stage:</strong> 12 hours light, 12 hours darkness</li>
-                        </ul>
-                        
-                        <div class="tip-box">
-                            <strong>Pro Tip:</strong> Position lights 12-24 inches from plants, adjusting based on heat output and plant response. Use reflective materials to maximize light distribution.
-                        </div>
-                        
-                        <h3>Temperature Control</h3>
-                        <h4>Optimal Temperature Ranges</h4>
-                        <ul>
-                            <li><strong>Daytime:</strong> 70-85°F (21-29°C)</li>
-                            <li><strong>Nighttime:</strong> 65-75°F (18-24°C)</li>
-                            <li><strong>Seedlings:</strong> 75-80°F (24-27°C)</li>
-                        </ul>
-                        
-                        <h4>Temperature Management</h4>
-                        <ul>
-                            <li>Use fans for air circulation</li>
-                            <li>Exhaust fans to remove hot air</li>
-                            <li>Air conditioning for cooling</li>
-                            <li>Heaters for warming (if needed)</li>
-                        </ul>
-                        
-                        <h3>Humidity Control</h3>
-                        <h4>Ideal Humidity Levels</h4>
-                        <ul>
-                            <li><strong>Seedling Stage:</strong> 65-70% RH</li>
-                            <li><strong>Vegetative Stage:</strong> 55-65% RH</li>
-                            <li><strong>Flowering Stage:</strong> 45-55% RH</li>
-                            <li><strong>Late Flowering:</strong> 40-45% RH</li>
-                        </ul>
-                        
-                        <h4>Humidity Management Tools</h4>
-                        <ul>
-                            <li>Dehumidifiers to reduce moisture</li>
-                            <li>Humidifiers to add moisture</li>
-                            <li>Proper ventilation</li>
-                            <li>Hygrometers for monitoring</li>
-                        </ul>
-                        
-                        <div class="warning-box">
-                            <strong>Warning:</strong> High humidity during flowering can lead to mold and bud rot. Always maintain proper airflow and monitor humidity levels closely.
-                        </div>
-                        
-                        <h3>Air Circulation and Ventilation</h3>
-                        <ul>
-                            <li><strong>Intake Fans:</strong> Bring fresh air into grow space</li>
-                            <li><strong>Exhaust Fans:</strong> Remove hot, humid air</li>
-                            <li><strong>Circulation Fans:</strong> Move air around plants</li>
-                            <li><strong>Carbon Filters:</strong> Control odors</li>
-                        </ul>
-                        
-                        <h3>Growing Medium Options</h3>
-                        <h4>Soil</h4>
-                        <ul>
-                            <li>Beginner-friendly</li>
-                            <li>Natural buffer for pH and nutrients</li>
-                            <li>Enhanced flavor profiles</li>
-                            <li>Slower nutrient uptake</li>
-                        </ul>
-                        
-                        <h4>Coco Coir</h4>
-                        <ul>
-                            <li>Fast drainage and aeration</li>
-                            <li>pH neutral</li>
-                            <li>Requires frequent feeding</li>
-                            <li>Faster growth than soil</li>
-                        </ul>
-                        
-                        <h4>Hydroponic Systems</h4>
-                        <ul>
-                            <li>Fastest growth and highest yields</li>
-                            <li>Precise nutrient control</li>
-                            <li>Requires more technical knowledge</li>
-                            <li>Higher initial setup costs</li>
-                        </ul>
-                    </div>
+            <!-- Full Article View -->
+            <div class="full-article" id="full-article">
+                <button class="back-button" onclick="closeFullArticle()">← Back to Blog</button>
+                <div id="full-article-content">
+                    <!-- Content will be dynamically inserted here -->
                 </div>
             </div>
 
-            <!-- Cultivation Techniques -->
-            <div class="accordion-item" id="cultivation-techniques">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <div class="accordion-title">
-                        <i class="fas fa-tools"></i>
-                        Advanced Cultivation Techniques
-                    </div>
-                    <i class="fas fa-chevron-down accordion-icon"></i>
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Search Box -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-search"></i> Search Blog</h3>
+                    <form style="display: flex; gap: 0.5rem;">
+                        <input type="text" placeholder="Search articles..." style="flex: 1; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; padding: 0.5rem; color: #f5f5f5; font-size: 0.9rem;">
+                        <button type="submit" style="background: #4ade80; border: none; color: #0a0a0a; padding: 0.5rem; border-radius: 5px; cursor: pointer;"><i class="fas fa-search"></i></button>
+                    </form>
                 </div>
-                <div class="accordion-content">
-                    <div class="accordion-body">
-                        <h3>Training Methods to Maximize Yield</h3>
-                        
-                        <h4>Topping</h4>
-                        <p>Cutting off the main stem's top to encourage multiple cola development. This creates a bushier plant with more bud sites.</p>
-                        <ul>
-                            <li>Best performed during vegetative stage</li>
-                            <li>Allow 1-2 weeks recovery time</li>
-                            <li>Can be repeated for even more colas</li>
-                            <li>Increases overall yield significantly</li>
-                        </ul>
-                        
-                        <h4>Low Stress Training (LST)</h4>
-                        <p>Gently bending and securing branches to create an even canopy and expose more bud sites to light.</p>
-                        <ul>
-                            <li>Start early in vegetative stage</li>
-                            <li>Use soft ties or plant wire</li>
-                            <li>Adjust ties as plant grows</li>
-                            <li>Perfect for limited vertical space</li>
-                        </ul>
-                        
-                        <div class="tip-box">
-                            <strong>LST Pro Tip:</strong> Begin when plants are young and flexible. Work slowly and check daily - cannabis stems can strengthen quickly and become harder to bend.
-                        </div>
-                        
-                        <h4>Screen of Green (SCROG)</h4>
-                        <p>Using a screen or net to train branches horizontally, creating an even canopy for optimal light exposure.</p>
-                        <ul>
-                            <li>Install screen 12-18 inches above plants</li>
-                            <li>Weave branches through screen openings</li>
-                            <li>Maintain during early flowering</li>
-                            <li>Excellent for maximizing yields in small spaces</li>
-                        </ul>
-                        
-                        <h4>Sea of Green (SOG)</h4>
-                        <p>Growing many small plants close together, focusing on single main colas.</p>
-                        <ul>
-                            <li>Use 4-16 plants per square meter</li>
-                            <li>Minimal vegetative time</li>
-                            <li>Quick turnaround times</li>
-                            <li>Requires more plants but faster harvests</li>
-                        </ul>
-                        
-                        <h4>Supercropping</h4>
-                        <p>High-stress training involving carefully damaging stems to increase yields and control height.</p>
-                        <ul>
-                            <li>Pinch and bend stems at nodes</li>
-                            <li>Creates knuckles that boost nutrient flow</li>
-                            <li>Use during vegetative stage only</li>
-                            <li>Allow recovery time between sessions</li>
-                        </ul>
-                        
-                        <div class="warning-box">
-                            <strong>Caution:</strong> High-stress techniques like supercropping can stunt growth if done incorrectly. Practice on less valuable plants first.
-                        </div>
-                        
-                        <h3>Nutrient Management</h3>
-                        
-                        <h4>Macronutrients (NPK)</h4>
-                        <ul>
-                            <li><strong>Nitrogen (N):</strong> Essential for vegetative growth and leaf development</li>
-                            <li><strong>Phosphorus (P):</strong> Critical for root development and flowering</li>
-                            <li><strong>Potassium (K):</strong> Supports overall plant health and bud production</li>
-                        </ul>
-                        
-                        <h4>Micronutrients</h4>
-                        <ul>
-                            <li><strong>Calcium:</strong> Cell wall strength and nutrient uptake</li>
-                            <li><strong>Magnesium:</strong> Chlorophyll production</li>
-                            <li><strong>Iron:</strong> Chlorophyll synthesis</li>
-                            <li><strong>Zinc:</strong> Enzyme function</li>
-                        </ul>
-                        
-                        <h4>Feeding Schedule</h4>
-                        <ul>
-                            <li><strong>Seedling Stage:</strong> Light nutrients or none at all</li>
-                            <li><strong>Vegetative Stage:</strong> Higher nitrogen ratios (3-1-2)</li>
-                            <li><strong>Early Flowering:</strong> Balanced NPK (1-1-1)</li>
-                            <li><strong>Late Flowering:</strong> Higher P-K ratios (1-3-2)</li>
-                        </ul>
-                        
-                        <h3>pH and Water Management</h3>
-                        
-                        <h4>Optimal pH Ranges</h4>
-                        <ul>
-                            <li><strong>Soil:</strong> 6.0-7.0 pH</li>
-                            <li><strong>Hydro/Coco:</strong> 5.5-6.5 pH</li>
-                            <li>Check pH before every feeding</li>
-                            <li>Adjust using pH up/down solutions</li>
-                        </ul>
-                        
-                        <h4>Water Quality</h4>
-                        <ul>
-                            <li>Use filtered or RO water when possible</li>
-                            <li>Check EC/PPM levels</li>
-                            <li>Let chlorinated water sit 24 hours before use</li>
-                            <li>Water temperature: 65-75°F (18-24°C)</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Pest Management -->
-            <div class="accordion-item" id="pest-management">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <div class="accordion-title">
-                        <i class="fas fa-bug"></i>
-                        Pest and Disease Management
-                    </div>
-                    <i class="fas fa-chevron-down accordion-icon"></i>
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-clock"></i> Recent Posts</h3>
+                    <ul class="recent-posts">
+                        <li><a href="#" onclick="openFullArticle('feminized-guide')">The Complete Guide to Feminized Cannabis Seeds</a></li>
+                        <li><a href="#" onclick="openFullArticle('winter-growing')">Winter Growing in Canada: Beating the Cold Season Blues</a></li>
+                        <li><a href="#" onclick="openFullArticle('purple-rainbow-journal')">My First Purple Rainbow Grow: A Beginner's Journey</a></li>
+                        <li><a href="#" onclick="openFullArticle('terpene-science')">The Science Behind Terpenes: Why Your Weed Smells Like Mango</a></li>
+                        <li><a href="#" onclick="openFullArticle('training-guide')">LST vs HST: Which Training Method is Right for You?</a></li>
+                        <li><a href="#" onclick="openFullArticle('harvest-timing')">Harvest Day Disaster: What I Learned from Cutting Too Early</a></li>
+                    </ul>
                 </div>
-                <div class="accordion-content">
-                    <div class="accordion-body">
-                        <h3>Common Pests</h3>
-                        
-                        <h4>Spider Mites</h4>
-                        <ul>
-                            <li><strong>Signs:</strong> Small yellow/white spots on leaves, fine webbing</li>
-                            <li><strong>Treatment:</strong> Insecticidal soap, neem oil, predatory mites</li>
-                            <li><strong>Prevention:</strong> Maintain humidity above 50%, good air circulation</li>
-                        </ul>
-                        
-                        <h4>Aphids</h4>
-                        <ul>
-                            <li><strong>Signs:</strong> Small green/black insects on leaves and stems</li>
-                            <li><strong>Treatment:</strong> Ladybugs, insecticidal soap, neem oil</li>
-                            <li><strong>Prevention:</strong> Yellow sticky traps, companion planting</li>
-                        </ul>
-                        
-                        <h4>Thrips</h4>
-                        <ul>
-                            <li><strong>Signs:</strong> Silver/bronze streaks on leaves, tiny black specks</li>
-                            <li><strong>Treatment:</strong> Blue sticky traps, predatory mites</li>
-                            <li><strong>Prevention:</strong> Clean growing environment, quarantine new plants</li>
-                        </ul>
-                        
-                        <h4>Fungus Gnats</h4>
-                        <ul>
-                            <li><strong>Signs:</strong> Small flying insects around soil, larvae in growing medium</li>
-                            <li><strong>Treatment:</strong> Yellow sticky traps, beneficial nematodes, reduce watering</li>
-                            <li><strong>Prevention:</strong> Don't overwater, use quality growing medium</li>
-                        </ul>
-                        
-                        <div class="tip-box">
-                            <strong>Integrated Pest Management:</strong> Combine multiple approaches - beneficial insects, organic sprays, environmental controls, and regular monitoring for best results.
-                        </div>
-                        
-                        <h3>Common Diseases</h3>
-                        
-                        <h4>Powdery Mildew</h4>
-                        <ul>
-                            <li><strong>Signs:</strong> White powdery coating on leaves</li>
-                            <li><strong>Treatment:</strong> Baking soda solution, sulfur-based fungicides</li>
-                            <li><strong>Prevention:</strong> Good air circulation, lower humidity, UV sterilization</li>
-                        </ul>
-                        
-                        <h4>Bud Rot (Botrytis)</h4>
-                        <ul>
-                            <li><strong>Signs:</strong> Gray/brown fuzzy mold on buds</li>
-                            <li><strong>Treatment:</strong> Remove affected areas immediately, improve airflow</li>
-                            <li><strong>Prevention:</strong> Control humidity, increase air circulation, harvest before full maturity in humid conditions</li>
-                        </ul>
-                        
-                        <h4>Root Rot</h4>
-                        <ul>
-                            <li><strong>Signs:</strong> Brown, mushy roots; yellowing leaves; stunted growth</li>
-                            <li><strong>Treatment:</strong> Reduce watering, improve drainage, beneficial bacteria</li>
-                            <li><strong>Prevention:</strong> Don't overwater, ensure proper drainage, oxygenate nutrient solutions</li>
-                        </ul>
-                        
-                        <div class="warning-box">
-                            <strong>Bud Rot Warning:</strong> This can destroy your entire harvest quickly. If found, remove affected buds and increase airflow immediately. Consider early harvest if conditions can't be improved.
-                        </div>
-                        
-                        <h3>Organic Treatment Options</h3>
-                        <ul>
-                            <li><strong>Neem Oil:</strong> Systemic treatment for various pests</li>
-                            <li><strong>Insecticidal Soap:</strong> Soft-bodied insect control</li>
-                            <li><strong>Diatomaceous Earth:</strong> Physical barrier against crawling insects</li>
-                            <li><strong>Beneficial Insects:</strong> Ladybugs, predatory mites, parasitic wasps</li>
-                            <li><strong>Essential Oils:</strong> Peppermint, rosemary for deterrence</li>
-                        </ul>
-                        
-                        <h3>Prevention Strategies</h3>
-                        <ul>
-                            <li>Maintain clean growing environment</li>
-                            <li>Quarantine new plants</li>
-                            <li>Regular plant inspection</li>
-                            <li>Proper environmental controls</li>
-                            <li>Avoid bringing outdoor clothes into grow space</li>
-                            <li>Use filtered air intake</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Harvesting and Curing -->
-            <div class="accordion-item" id="harvesting">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <div class="accordion-title">
-                        <i class="fas fa-cut"></i>
-                        Harvesting and Curing
-                    </div>
-                    <i class="fas fa-chevron-down accordion-icon"></i>
-                </div>
-                <div class="accordion-content">
-                    <div class="accordion-body">
-                        <h3>Determining Harvest Time</h3>
-                        
-                        <h4>Trichome Method (Most Accurate)</h4>
-                        <ul>
-                            <li><strong>Clear Trichomes:</strong> Too early - low potency</li>
-                            <li><strong>Milky/Cloudy:</strong> Peak THC - energetic effects</li>
-                            <li><strong>Amber Trichomes:</strong> CBD increases - sedating effects</li>
-                            <li><strong>Optimal Mix:</strong> 70% milky, 30% amber for balanced effects</li>
-                        </ul>
-                        
-                        <h4>Physical Signs</h4>
-                        <ul>
-                            <li>Pistils changing from white to orange/brown</li>
-                            <li>Fan leaves turning yellow (natural senescence)</li>
-                            <li>Buds feeling dense and sticky</li>
-                            <li>Strong aroma development</li>
-                        </ul>
-                        
-                        <div class="tip-box">
-                            <strong>Harvest Window:</strong> Most strains have a 1-2 week harvest window. Check trichomes daily once you see initial signs of readiness.
-                        </div>
-                        
-                        <h3>Harvesting Process</h3>
-                        
-                        <h4>Pre-Harvest Preparation</h4>
-                        <ul>
-                            <li>Stop feeding 1-2 weeks before harvest (flush with plain water)</li>
-                            <li>Maintain proper environment (temperature and humidity)</li>
-                            <li>Prepare drying space</li>
-                            <li>Gather harvesting tools</li>
-                        </ul>
-                        
-                        <h4>Harvesting Steps</h4>
-                        <ol>
-                            <li><strong>Cut the plant:</strong> Either whole plant or branch by branch</li>
-                            <li><strong>Wet trimming:</strong> Remove fan leaves and sugar leaves immediately</li>
-                            <li><strong>Dry trimming:</strong> Leave sugar leaves on during drying, trim after</li>
-                            <li><strong>Hang to dry:</strong> In controlled environment</li>
-                        </ol>
-                        
-                        <h3>Drying Process</h3>
-                        
-                        <h4>Optimal Drying Conditions</h4>
-                        <ul>
-                            <li><strong>Temperature:</strong> 60-70°F (15-21°C)</li>
-                            <li><strong>Humidity:</strong> 45-55% RH</li>
-                            <li><strong>Airflow:</strong> Gentle circulation, not direct on buds</li>
-                            <li><strong>Darkness:</strong> UV light degrades cannabinoids</li>
-                            <li><strong>Duration:</strong> 7-14 days depending on conditions</li>
-                        </ul>
-                        
-                        <h4>Drying Methods</h4>
-                        <ul>
-                            <li><strong>Hang Drying:</strong> Whole plant or large branches</li>
-                            <li><strong>Rack Drying:</strong> Individual buds on screens</li>
-                            <li><strong>Paper Bag Method:</strong> For small amounts or quick drying</li>
-                        </ul>
-                        
-                        <div class="warning-box">
-                            <strong>Avoid Fast Drying:</strong> Rushing the drying process will result in harsh, poor-tasting cannabis. Proper drying is crucial for quality.
-                        </div>
-                        
-                        <h3>Curing Process</h3>
-                        
-                        <h4>Why Cure?</h4>
-                        <ul>
-                            <li>Breaks down chlorophyll for smoother taste</li>
-                            <li>Develops terpene profiles</li>
-                            <li>Improves potency and effects</li>
-                            <li>Prevents mold and extends shelf life</li>
-                        </ul>
-                        
-                        <h4>Curing Steps</h4>
-                        <ol>
-                            <li><strong>Test for Dryness:</strong> Stems should snap, not bend</li>
-                            <li><strong>Trim if needed:</strong> Final manicuring</li>
-                            <li><strong>Fill Jars:</strong> Glass jars 75% full</li>
-                            <li><strong>Initial Cure:</strong> Seal jars for 24 hours</li>
-                            <li><strong>Burping:</strong> Open jars daily for first week</li>
-                            <li><strong>Continue Curing:</strong> 2-8 weeks minimum</li>
-                        </ol>
-                        
-                        <h4>Curing Schedule</h4>
-                        <ul>
-                            <li><strong>Week 1:</strong> Open jars daily for 5-10 minutes</li>
-                            <li><strong>Week 2:</strong> Open jars every 2-3 days</li>
-                            <li><strong>Week 3+:</strong> Open weekly or as needed</li>
-                            <li><strong>Monitor humidity:</strong> 58-62% RH in jars</li>
-                        </ul>
-                        
-                        <div class="info-box">
-                            <strong>Patience Pays Off:</strong> Well-cured cannabis can continue improving for months. The difference between 2-week and 2-month cured cannabis is substantial.
-                        </div>
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-tags"></i> Popular Topics</h3>
+                    <div class="categories">
+                        <a href="#" class="category-tag">Beginner Growing (12)</a>
+                        <a href="#" class="category-tag">Feminized Seeds (8)</a>
+                        <a href="#" class="category-tag">Strain Reviews (15)</a>
+                        <a href="#" class="category-tag">Equipment (9)</a>
+                        <a href="#" class="category-tag">Nutrients (7)</a>
+                        <a href="#" class="category-tag">Training (6)</a>
+                        <a href="#" class="category-tag">Harvest & Cure (5)</a>
+                        <a href="#" class="category-tag">Pest Control (4)</a>
+                        <a href="#" class="category-tag">Grow Journals (11)</a>
+                        <a href="#" class="category-tag">Canadian Growing (6)</a>
                     </div>
                 </div>
-            </div>
 
-            <!-- Troubleshooting -->
-            <div class="accordion-item" id="troubleshooting">
-                <div class="accordion-header" onclick="toggleAccordion(this)">
-                    <div class="accordion-title">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        Troubleshooting Common Issues
-                    </div>
-                    <i class="fas fa-chevron-down accordion-icon"></i>
-                </div>
-                <div class="accordion-content">
-                    <div class="accordion-body">
-                        <h3>Nutrient Deficiencies</h3>
-                        
-                        <h4>Nitrogen Deficiency</h4>
-                        <ul>
-                            <li><strong>Signs:</strong> Lower leaves turning yellow, slow growth</li>
-                            <li><strong>Solution:</strong> Increase nitrogen in nutrient solution</li>
-                            <li><strong>Note:</strong> Normal during late flowering</li>
-                        </ul>
-                        
-                        <h4>Phosphorus Deficiency</h4>
-                        <ul>
-                            <li><strong>Signs:</strong> Dark green/purple leaves, red stems</li>
-                            <li><strong>Solution:</strong> Increase phosphorus, check pH</li>
-                            <li><strong>Common in:</strong> Flowering stage</li>
-                        </ul>
-                        
-                        <h4>Potassium Deficiency</h4>
-                        <ul>
-                            <li><strong>Signs:</strong> Brown leaf edges, yellow between veins</li>
-                            <li><strong>Solution:</strong> Increase potassium, improve airflow</li>
-                            <li><strong>Often caused by:</strong> High temperatures, poor ventilation</li>
-                        </ul>
-                        
-                        <h4>Calcium Deficiency</h4>
-                        <ul>
-                            <li><strong>Signs:</strong> Brown spots on leaves, weak stems</li>
-                            <li><strong>Solution:</strong> Add calcium supplement, check pH</li>
-                            <li><strong>Common in:</strong> Hydro/coco grows</li>
-                        </ul>
-                        
-                        <h3>Environmental Issues</h3>
-                        
-                        <h4>Heat Stress</h4>
-                        <ul>
-                            <li><strong>Signs:</strong> Leaf edges curling up, bleaching near lights</li>
-                            <li><strong>Solutions:</strong> Increase ventilation, raise lights, add AC</li>
-                            <li><strong>Prevention:</strong> Monitor temperatures closely</li>
-                        </ul>
-                        
-                        <h4>Light Burn</h4>
-                        <ul>
-                            <li><strong>Signs:</strong> Yellow/white tops, crispy leaves</li>
-                            <li><strong>Solutions:</strong> Raise lights, reduce intensity</li>
-                            <li><strong>Different from:</strong> Nutrient burn (affects whole plant)</li>
-                        </ul>
-                        
-                        <h4>Overwatering</h4>
-                        <ul>
-                            <li><strong>Signs:</strong> Droopy leaves, slow growth, root rot</li>
-                            <li><strong>Solutions:</strong> Reduce watering frequency, improve drainage</li>
-                            <li><strong>Prevention:</strong> Water when top inch of soil is dry</li>
-                        </ul>
-                        
-                        <h4>Underwatering</h4>
-                        <ul>
-                            <li><strong>Signs:</strong> Wilting, dry soil, stunted growth</li>
-                            <li><strong>Solutions:</strong> Increase watering frequency</li>
-                            <li><strong>Note:</strong> Plants recover quickly from underwatering</li>
-                        </ul>
-                        
-                        <div class="tip-box">
-                            <strong>Diagnosis Tip:</strong> Change only one variable at a time when troubleshooting. Wait 3-7 days to see results before making additional changes.
-                        </div>
-                        
-                        <h3>pH and Nutrient Problems</h3>
-                        
-                        <h4>pH Lockout</h4>
-                        <ul>
-                            <li><strong>Cause:</strong> pH outside optimal range prevents nutrient uptake</li>
-                            <li><strong>Signs:</strong> Multiple deficiencies despite adequate feeding</li>
-                            <li><strong>Solution:</strong> Correct pH, flush if necessary</li>
-                        </ul>
-                        
-                        <h4>Nutrient Burn</h4>
-                        <ul>
-                            <li><strong>Signs:</strong> Leaf tips turning brown/crispy</li>
-                            <li><strong>Solution:</strong> Reduce nutrient concentration, flush with plain water</li>
-                            <li><strong>Prevention:</strong> Start with lower concentrations, increase gradually</li>
-                        </ul>
-                        
-                        <h4>Nutrient Lockout</h4>
-                        <ul>
-                            <li><strong>Cause:</strong> Too much of one nutrient blocks uptake of others</li>
-                            <li><strong>Solution:</strong> Flush growing medium, restart with balanced nutrients</li>
-                            <li><strong>Prevention:</strong> Don't overfeed, maintain proper pH</li>
-                        </ul>
-                        
-                        <h3>Flowering Issues</h3>
-                        
-                        <h4>Hermaphroditism</h4>
-                        <ul>
-                            <li><strong>Cause:</strong> Stress during flowering (light leaks, temperature, nutrients)</li>
-                            <li><strong>Signs:</strong> Pollen sacs appearing on female plants</li>
-                            <li><strong>Solution:</strong> Remove hermie plants or pollen sacs immediately</li>
-                        </ul>
-                        
-                        <h4>Slow Flowering</h4>
-                        <ul>
-                            <li><strong>Causes:</strong> Light leaks, temperature issues, genetics</li>
-                            <li><strong>Solutions:</strong> Ensure complete darkness, check environmental conditions</li>
-                            <li><strong>Be patient:</strong> Some strains naturally take longer</li>
-                        </ul>
-                        
-                        <div class="warning-box">
-                            <strong>Prevention is Key:</strong> Most problems are easier to prevent than to fix. Maintain consistent environmental conditions and monitor plants daily.
-                        </div>
-                        
-                        <h3>When to Seek Help</h3>
-                        <ul>
-                            <li>Problems persist after trying solutions</li>
-                            <li>Multiple issues appearing simultaneously</li>
-                            <li>Unsure about diagnosis</li>
-                            <li>First-time grower facing challenges</li>
-                            <li>Consider joining online growing communities</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        
-        <!-- Footer CTA -->
-        <div class="accordion-container">
-            <div class="accordion-body">
-                <div class="info-box">
-                    <h3 style="text-align: center; color: #2d5a2d; margin-bottom: 15px;">Think Your Ready to Start Growing?</h3>
-                    <p style="text-align: center; margin-bottom: 20px;">Browse our premium feminized genetics and start your cultivation journey with confidence.</p>
+                <!-- Author Spotlight -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-user-circle"></i> Author Spotlight</h3>
                     <div style="text-align: center;">
-                        <a href="deals.html" style="background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%); color: white; text-decoration: none; padding: 12px 30px; border-radius: 25px; font-weight: bold; display: inline-block; transition: all 0.3s ease;">
-                            Shop Seeds Now
+                        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #4ade80, #22c55e); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #0a0a0a;">
+                            MN
+                        </div>
+                        <h4 style="color: #4ade80; margin-bottom: 0.5rem;">Mr. Noyes</h4>
+                        <p style="font-size: 0.9rem; color: #ccc; margin-bottom: 1rem;">Master breeder with 15+ years experience. Creator of the Noyes Boys genetics line and passionate educator.</p>
+                        <div style="display: flex; justify-content: center; gap: 0.5rem;">
+                            <span style="background: rgba(74, 222, 128, 0.1); padding: 0.25rem 0.5rem; border-radius: 10px; font-size: 0.8rem; color: #4ade80;">23 Articles</span>
+                            <span style="background: rgba(74, 222, 128, 0.1); padding: 0.25rem 0.5rem; border-radius: 10px; font-size: 0.8rem; color: #4ade80;">Cannabis Expert</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Popular This Week -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-fire"></i> Trending This Week</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: #4ade80; color: #0a0a0a; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">1</span>
+                            <a href="#" onclick="openFullArticle('spider-mite-battle')" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">Spider Mites from Hell: My 8-Week Battle</a>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: rgba(255,255,255,0.2); color: #f5f5f5; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">2</span>
+                            <a href="#" onclick="openFullArticle('budget-setup')" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">Building the Perfect 4x4 Tent Setup</a>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: rgba(255,255,255,0.2); color: #f5f5f5; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">3</span>
+                            <a href="#" onclick="openFullArticle('winter-growing')" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">Winter Growing in Canada</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-envelope"></i> Weekly Newsletter</h3>
+                    <p>Get expert growing tips, strain spotlights, and exclusive discounts delivered every Tuesday.</p>
+                    <form class="newsletter-form">
+                        <input type="email" class="newsletter-input" placeholder="Your email address">
+                        <button type="submit" class="newsletter-btn">Subscribe Free</button>
+                    </form>
+                    <p style="font-size: 0.8rem; color: #ccc; margin-top: 0.5rem;">Join 2,847 growers already subscribed</p>
+                </div>
+
+                <!-- Social Links -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-share-alt"></i> Follow Us</h3>
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <a href="#" style="color: #4ade80; font-size: 1.5rem; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                            <i class="fab fa-instagram"></i>
                         </a>
+                        <a href="#" style="color: #4ade80; font-size: 1.5rem; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" style="color: #4ade80; font-size: 1.5rem; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                            <i class="fab fa-reddit"></i>
+                        </a>
+                        <a href="#" style="color: #4ade80; font-size: 1.5rem; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-star"></i> Featured Genetics</h3>
+                    <div style="text-align: center; padding: 1rem;">
+                        <div style="background: linear-gradient(45deg, #4ade80, #22c55e); border-radius: 10px; padding: 1rem; margin-bottom: 1rem;">
+                            <h4 style="color: #0a0a0a; margin-bottom: 0.5rem;">Purple Rainbow</h4>
+                            <p style="color: #0a0a0a; font-size: 0.9rem; margin-bottom: 0.5rem;">Most colorful strain in our lineup</p>
+                            <p style="color: #0a0a0a; font-size: 0.8rem; font-weight: bold;">Limited time: 25% off</p>
+                        </div>
+                        <a href="deals.html" style="background: #4ade80; color: #0a0a0a; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-weight: bold; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Shop Now</a>
+                    </div>
+                </div>
+
+                <!-- Comment of the Week -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-comment"></i> Comment of the Week</h3>
+                    <div style="background: rgba(74, 222, 128, 0.05); border-left: 3px solid #4ade80; padding: 1rem; border-radius: 5px;">
+                        <p style="font-style: italic; margin-bottom: 0.5rem;">"Just finished my first Purple Rainbow grow following Mr. Noyes' guide. 487g from 4 plants in a 4x4 tent - I'm absolutely blown away!"</p>
+                        <p style="color: #4ade80; font-weight: bold; font-size: 0.9rem;">- GrowMaster_TO</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Load cart count on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCartCount();
-        });
-
-        function updateCartCount() {
-            try {
-                const cart = localStorage.getItem('noyesboys_cart');
-                const cartItems = cart ? JSON.parse(cart) : [];
-                const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-                document.getElementById('cartCount').textContent = totalItems;
-            } catch (e) {
-                console.error('Error loading cart count:', e);
-                document.getElementById('cartCount').textContent = '0';
-            }
-        }
-
-        function openCart() {
-            window.location.href = 'pricing.html';
-        }
-
-        function toggleAccordion(header) {
-            const content = header.nextElementSibling;
-            const isActive = header.classList.contains('active');
+    <!-- Interactive Tool Modals -->
+    <!-- Strain Quiz Modal -->
+    <div class="tool-modal" id="strain-quiz-modal">
+        <div class="tool-modal-content">
+            <span class="tool-close" onclick="closeTool()">&times;</span>
+            <div class="tool-header">
+                <h2><i class="fas fa-question-circle"></i> Strain Finder Quiz</h2>
+                <p>Answer a few questions to find the perfect Noyes Boys genetics for your setup</p>
+            </div>
             
-            // Close all other accordion items
-            document.querySelectorAll('.accordion-header').forEach(h => {
-                h.classList.remove('active');
-                h.nextElementSibling.classList.remove('active');
-            });
-            
-            // Toggle current item
-            if (!isActive) {
-                header.classList.add('active');
-                content.classList.add('active');
-            }
-        }
-
-        // Quick navigation smooth scroll
-        document.querySelectorAll('.quick-nav-links a').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
+            <div class="quiz-container">
+                <div class="quiz-question">What's your growing experience level?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, 'beginner', 'experience')">Complete Beginner - First time growing</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, 'intermediate', 'experience')">Some Experience - 2-5 successful grows</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, 'expert', 'experience')">Experienced Grower - 5+ grows with advanced techniques</div>
+                </div>
                 
-                if (targetElement) {
-                    // Open the accordion first
-                    const header = targetElement.querySelector('.accordion-header');
-                    if (header) {
-                        document.querySelectorAll('.accordion-header').forEach(h => {
-                            h.classList.remove('active');
-                            h.nextElementSibling.classList.remove('active');
-                        });
-                        header.classList.add('active');
-                        header.nextElementSibling.classList.add('active');
-                    }
-                    
-                    // Scroll to element
-                    setTimeout(() => {
-                        targetElement.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }, 100);
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+                <div class="quiz-question" style="margin-top: 20px;">What's your growing environment?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, 'indoor', 'environment')">Indoor Tent/Room - Controlled environment</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, 'outdoor', 'environment')">Outdoor Garden - Natural sunlight</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, 'greenhouse', 'environment')">Greenhouse - Protected outdoor growing</div>
+                </div>
+                
+                <div class="quiz-question" style="margin-top: 20px;">What effects are you looking for?</div>
+                <div class="quiz-options">
+                    <div class="quiz-option" onclick="selectQuizOption(this, 'energizing', 'effects')">Energizing & Creative - Daytime use</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, 'relaxing', 'effects')">Relaxing & Calming - Evening use</div>
+                    <div class="quiz-option" onclick="selectQuizOption(this, 'balanced', 'effects')">Balanced - Any time use</div>
+                </div>
+                
+                <button class="tool-button" onclick="calculateQuizResult()">Get My Strain Recommendation</button>
+                <div class="quiz-result" id="quiz-result"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Growing Calendar Modal -->
+    <div class="tool-modal" id="grow-calendar-modal">
+        <div class="tool-modal-content">
+            <span class="tool-close" onclick="closeTool()">&times;</span>
+            <div class="tool-header">
+                <h2><i class="fas fa-calendar-alt"></i> Canadian Growing Calendar</h2>
+                <p>Month-by-month outdoor growing guide optimized for Canadian climates</p>
+            </div>
+            
+            <div class="calendar-nav" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <button onclick="changeMonth(-1)" class="tool-button" style="margin: 0;">← Previous</button>
+                <span class="month-title" id="month-title" style="color: #4ade80; font-size: 1.3rem; font-weight: bold;">March</span>
+                <button onclick="
