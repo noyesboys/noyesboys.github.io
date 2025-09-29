@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cannabis Blog - Page 2 | The Noyes Boys</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+            color: #f5f5f5;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            padding-top: 70px;
+            min-height: 100vh;
+        }
+
+        /* Header Navigation - Same as Page 1 */
+        header {
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%);
+            padding: 0.5rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            min-height: 60px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #4ade80;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .logo-img {
+            width: 35px;
+            height: 35px;
+            margin-right: 8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .nav-links a:hover {
+            color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+            border-color: #4ade80;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: #4ade80;
+            color: #0a0a0a;
+            border-color: #4ade80;
+        }
+
+        .header-cart-button {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header-cart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+
+        .header-cart-count {
+            background: #0a0a0a;
+            color: #4ade80;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #4ade80;
+            margin-bottom: 1rem;
+        }
+
+        .page-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .page-nav a {
+            background: rgba(255,255,255,0.1);
+            color: #f5f5f5;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .page-nav a.active {
+            background: #4ade80;
+            color: #0a0a0a;
+        }
+
+        .page-nav a:hover {
+            background: rgba(74, 222, 128, 0.2);
+        }
+
+        /* Blog Layout */
+        .blog-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Featured Article */
+        .featured-article {
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid rgba(74, 222, 128, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            position: relative;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .article-header h2 {
+            color: #4ade80;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            color: #ccc;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .article-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(45deg, #4ade80, #22c55e);
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0a0a0a;
+            font-size: 4rem;
+        }
+
+        /* Blog Posts */
+        .blog-posts {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .blog-post {
+            background: rgba(0,0,0,0.7);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid rgba(74, 222, 128, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .blog-post:hover {
+            transform: translateY(-3px);
+            border-color: #4ade80;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .blog-post h3 {
+            color: #4ade80;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-post-meta {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-post-excerpt {
+            color: #f5f5f5;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .read-more-btn {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .read-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+        }
+
+        /* Sidebar - Same as Page 1 */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar-section {
+            background: rgba(0,0,0,0.7);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(74, 222, 128, 0.1);
+        }
+
+        .sidebar-section h3 {
+            color: #4ade80;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin: 3rem 0;
+        }
+
+        .pagination button {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #f5f5f5;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pagination button:hover {
+            background: rgba(74, 222, 128, 0.2);
+            border-color: #4ade80;
+        }
+
+        .pagination button.active {
+            background: #4ade80;
+            color: #0a0a0a;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 80px;
+            }
+            
+            nav {
+                flex-direction: column;
+                gap: 8px;
+                min-height: 70px;
+                padding: 8px 20px;
+            }
+
+            .blog-layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="FeminizedSeedsHomepage.html" class="logo">
+                <div class="logo-img"></div>
+                Noyes Boys
+            </a>
+            <ul class="nav-links">
+                <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
+                <li><a href="deals.html">Pricing</a></li>
+                <li><a href="line1.html">Line 1</a></li>
+                <li><a href="line2.html">Line 2</a></li>
+                <li><a href="line3.html">Line 3</a></li>
+                <li><a href="contact_us.html">Contact</a></li>
+                <li><a href="reviews.html">Reviews</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
+            </ul>
+            <button class="header-cart-button" onclick="openCart()">
+                <i class="fas fa-shopping-cart"></i>
+                Cart
+                <span class="header-cart-count" id="cartCount">0</span>
+            </button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Cannabis Knowledge Base</h1>
+        </div>
+
+        <div class="page-nav">
+            <a href="blog.html">Page 1</a>
+            <a href="#" class="active">Page 2</a>
+            <a href="blog-page3.html">Page 3</a>
+            <a href="blog-page4.html">Page 4</a>
+            <a href="blog-page5.html">Page 5</a>
+        </div>
+
+        <div class="blog-layout">
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Featured Article -->
+                <div class="featured-article">
+                    <div class="featured-badge">Trending</div>
+                    <div class="article-header">
+                        <h2>Advanced SCROG Techniques: Maximizing Canopy Control</h2>
+                        <div class="article-meta">
+                            <span><i class="fas fa-calendar-alt"></i> November 15, 2024</span>
+                            <span><i class="fas fa-user"></i> Jake Morrison</span>
+                            <span><i class="fas fa-tag"></i> Training Techniques</span>
+                            <span><i class="fas fa-clock"></i> 14 min read</span>
+                        </div>
+                    </div>
+                    <div class="article-image">
+                        <i class="fas fa-th"></i>
+                    </div>
+                    <div class="article-excerpt">
+                        <p>Screen of Green (SCROG) is arguably the most effective training method for maximizing yields in limited space. After 8 years of perfecting this technique with Noyes Boys genetics, I've developed a systematic approach that consistently delivers 600+ grams from a single 4x4 tent.</p>
+                        
+                        <p>This comprehensive guide covers everything from screen construction to strain selection, with real-world examples using Purple Rainbow and Mango Aliens. Whether you're a beginner looking to try your first SCROG or an experienced grower wanting to optimize your technique, these methods will transform your harvests.</p>
+                    </div>
+                    <a href="#" class="read-more-btn" onclick="openFullArticle('scrog-guide')">Read Complete Guide</a>
+                </div>
+
+                <!-- Blog Posts Grid -->
+                <div class="blog-posts">
+                    <div class="blog-post">
+                        <h3>pH Problems: The Silent Grow Killer Nobody Talks About</h3>
+                        <div class="blog-post-meta">November 12, 2024 | By Dr. Maria Rodriguez | Plant Health | 9 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>I've analyzed over 500 failed grows in the past three years, and 73% had one thing in common: pH problems that went undiagnosed for weeks. Most growers focus on nutrients, lighting, and training while completely ignoring the foundation of nutrient uptake - pH balance.</p>
+                            <p>This deep dive into pH management covers the science behind nutrient lockout, how to fix common pH problems, and the monitoring systems that prevent issues before they start...</p>
+                        </div>
+                        <a href="#" class="read-more-btn">Read More</a>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>Curing Cannabis: The 8-Week Process That Doubles Potency</h3>
+                        <div class="blog-post-meta">November 10, 2024 | By Tommy Chen | Post-Harvest | 11 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>Most home growers ruin their harvest in the final stage. They spend months perfecting their grow, then rush the cure and end up with harsh, weak cannabis that tastes like hay. Proper curing isn't just about moisture content - it's a complex biochemical process that can literally double your THC levels.</p>
+                            <p>This guide covers my proven 8-week curing protocol, including temperature control, burping schedules, and how to test for optimal moisture levels...</p>
+                        </div>
+                        <a href="#" class="read-more-btn">Read More</a>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>LED vs HPS: The 2024 Lighting Comparison Every Grower Needs</h3>
+                        <div class="blog-post-meta">November 8, 2024 | By Mike Stevens | Equipment | 13 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>The lighting debate continues to evolve as LED technology improves and electricity costs soar. After running side-by-side comparisons for 18 months using identical Alienoyes Kush clones, I finally have definitive data on yields, quality, and total cost of ownership.</p>
+                            <p>Spoiler alert: the winner might surprise you. Modern LEDs have closed the gap significantly, but HPS still has some unexpected advantages that most reviews ignore...</p>
+                        </div>
+                        <a href="#" class="read-more-btn">Read More</a>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>The Great Flush Debate: Does Flushing Actually Improve Taste?</h3>
+                        <div class="blog-post-meta">November 5, 2024 | By Dr. Jennifer Walsh | Cannabis Science | 8 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>Flushing before harvest is one of the most controversial topics in cannabis cultivation. Some swear it improves taste and smoothness, while others claim it's pseudoscience that reduces yields. I decided to settle this debate with proper scientific testing.</p>
+                            <p>Using lab-grade analysis and blind taste tests with 50 participants, this study examines flushed vs unflushed White Noyes harvests. The results challenge everything you think you know about pre-harvest flushing...</p>
+                        </div>
+                        <a href="#" class="read-more-btn">Read More</a>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>Soil Living: Building No-Till Organic Super Soil</h3>
+                        <div class="blog-post-meta">November 3, 2024 | By Earth Mother Gardens | Organic Growing | 15 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>Industrial agriculture has taught us that soil is just a medium to hold roots while we pump in synthetic nutrients. But soil is a living ecosystem, and when we work with nature instead of against it, the results are extraordinary. My no-till super soil produces cannabis with terpene profiles that rival any hydro setup.</p>
+                            <p>This comprehensive guide covers mycorrhizal networks, beneficial bacteria, composting techniques, and the amendments that create soil biology. Plus, my complete recipe for building 100 gallons of living soil...</p>
+                        </div>
+                        <a href="#" class="read-more-btn">Read More</a>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>Outdoor Security: Protecting Your Garden Without Breaking the Law</h3>
+                        <div class="blog-post-meta">October 30, 2024 | By Security Steve | Outdoor Growing | 10 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>Legal outdoor growing comes with unique security challenges. You need to protect your plants from theft while staying within local regulations and avoiding booby traps that could land you in prison. After consulting with lawyers and security experts, here's how to protect your investment legally.</p>
+                            <p>This guide covers camera systems, motion lighting, legal deterrents, insurance considerations, and working with local law enforcement when problems arise...</p>
+                        </div>
+                        <a href="#" class="read-more-btn">Read More</a>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>Climate Change and Cannabis: Adapting Your Outdoor Grow</h3>
+                        <div class="blog-post-meta">October 28, 2024 | By Climate Cultivator | Environmental | 12 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>Extreme weather events are becoming the norm, and outdoor cannabis growers are on the front lines. Heat domes, unexpected frosts, and unpredictable rainfall patterns are forcing us to adapt our growing strategies. Traditional outdoor timelines no longer apply in many regions.</p>
+                            <p>This analysis covers climate resilient strain selection, adaptive growing techniques, and how to build flexibility into your outdoor setup for an uncertain climate future...</p>
+                        </div>
+                        <a href="#" class="read-more-btn">Read More</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Search Box -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-search"></i> Search Articles</h3>
+                    <form style="display: flex; gap: 0.5rem;">
+                        <input type="text" placeholder="Search..." style="flex: 1; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; padding: 0.5rem; color: #f5f5f5; font-size: 0.9rem;">
+                        <button type="submit" style="background: #4ade80; border: none; color: #0a0a0a; padding: 0.5rem; border-radius: 5px; cursor: pointer;"><i class="fas fa-search"></i></button>
+                    </form>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-fire"></i> Most Popular</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: #4ade80; color: #0a0a0a; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">1</span>
+                            <a href="#" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">Advanced SCROG Techniques: Maximizing Canopy Control</a>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: rgba(255,255,255,0.2); color: #f5f5f5; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">2</span>
+                            <a href="#" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">pH Problems: The Silent Grow Killer</a>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: rgba(255,255,255,0.2); color: #f5f5f5; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">3</span>
+                            <a href="#" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">The Great Flush Debate: Science vs Tradition</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-calendar"></i> Growing Calendar</h3>
+                    <div style="background: rgba(74, 222, 128, 0.05); border: 1px solid rgba(74, 222, 128, 0.2); border-radius: 8px; padding: 1rem;">
+                        <h4 style="color: #4ade80; margin-bottom: 0.5rem;">December Tasks</h4>
+                        <ul style="color: #ccc; font-size: 0.9rem; margin-left: 1rem;">
+                            <li>Plan next year's outdoor garden</li>
+                            <li>Order seeds for spring germination</li>
+                            <li>Maintain indoor grows through winter</li>
+                            <li>Perfect your curing technique</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-tags"></i> Categories</h3>
+                    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                        <a href="#" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Training (8)</a>
+                        <a href="#" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Equipment (12)</a>
+                        <a href="#" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Post-Harvest (6)</a>
+                        <a href="#" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Science (9)</a>
+                        <a href="#" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Outdoor (7)</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-star"></i> Featured Product</h3>
+                    <div style="text-align: center; padding: 1rem;">
+                        <div style="background: linear-gradient(45deg, #8b5cf6, #a855f7); border-radius: 10px; padding: 1rem; margin-bottom: 1rem;">
+                            <h4 style="color: white; margin-bottom: 0.5rem;">Alienoyes Kush</h4>
+                            <p style="color: white; font-size: 0.9rem; margin-bottom: 0.5rem;">Ultra-high THC powerhouse</p>
+                            <p style="color: white; font-size: 0.8rem; font-weight: bold;">30%+ THC potential</p>
+                        </div>
+                        <a href="deals.html" style="background: #4ade80; color: #0a0a0a; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-weight: bold; transition: all 0.3s ease;">View Genetics</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button onclick="window.location.href='blog.html'">← Previous</button>
+            <button onclick="window.location.href='blog.html'">1</button>
+            <button class="active">2</button>
+            <button onclick="window.location.href='blog-page3.html'">3</button>
+            <button onclick="window.location.href='blog-page4.html'">4</button>
+            <button onclick="window.location.href='blog-page5.html'">5</button>
+            <button onclick="window.location.href='blog-page3.html'">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        function updateCartCount() {
+            const cartCount = window.cartItems ? window.cartItems.reduce((sum, item) => sum + item.quantity, 0) : 0;
+            document.getElementById('cartCount').textContent = cartCount;
+        }
+
+        function openCart() {
+            window.location.href = 'deals.html';
+        }
+
+        function openFullArticle(articleKey) {
+            // Placeholder function - would be implemented with full article content
+            alert('Full article functionality would be implemented here');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+        });
+    </script>
+</body>
+</html>
