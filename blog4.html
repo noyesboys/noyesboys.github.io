@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cannabis Blog - Page 4 | The Noyes Boys</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+            color: #f5f5f5;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            padding-top: 70px;
+            min-height: 100vh;
+        }
+
+        /* Header Navigation */
+        header {
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%);
+            padding: 0.5rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            min-height: 60px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #4ade80;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .logo-img {
+            width: 35px;
+            height: 35px;
+            margin-right: 8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .nav-links a:hover {
+            color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+            border-color: #4ade80;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: #4ade80;
+            color: #0a0a0a;
+            border-color: #4ade80;
+        }
+
+        .header-cart-button {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header-cart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+
+        .header-cart-count {
+            background: #0a0a0a;
+            color: #4ade80;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: #4ade80;
+            margin-bottom: 1rem;
+        }
+
+        .page-nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .page-nav a {
+            background: rgba(255,255,255,0.1);
+            color: #f5f5f5;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .page-nav a.active {
+            background: #4ade80;
+            color: #0a0a0a;
+        }
+
+        .page-nav a:hover {
+            background: rgba(74, 222, 128, 0.2);
+        }
+
+        /* Blog Layout */
+        .blog-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 3rem;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Featured Article */
+        .featured-article {
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            position: relative;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .article-header h2 {
+            color: #4ade80;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            color: #ccc;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .article-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(45deg, #8b5cf6, #7c3aed);
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+        }
+
+        /* Blog Posts */
+        .blog-posts {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .blog-post {
+            background: rgba(0,0,0,0.7);
+            border-radius: 12px;
+            padding: 2rem;
+            border: 1px solid rgba(74, 222, 128, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .blog-post:hover {
+            transform: translateY(-3px);
+            border-color: #4ade80;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+        }
+
+        .blog-post h3 {
+            color: #4ade80;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-post-meta {
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-post-excerpt {
+            color: #f5f5f5;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .read-more-btn {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .read-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .sidebar-section {
+            background: rgba(0,0,0,0.7);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(74, 222, 128, 0.1);
+        }
+
+        .sidebar-section h3 {
+            color: #4ade80;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin: 3rem 0;
+        }
+
+        .pagination button {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #f5f5f5;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pagination button:hover {
+            background: rgba(74, 222, 128, 0.2);
+            border-color: #4ade80;
+        }
+
+        .pagination button.active {
+            background: #4ade80;
+            color: #0a0a0a;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 80px;
+            }
+            
+            nav {
+                flex-direction: column;
+                gap: 8px;
+                min-height: 70px;
+                padding: 8px 20px;
+            }
+
+            .blog-layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="FeminizedSeedsHomepage.html" class="logo">
+                <div class="logo-img"></div>
+                Noyes Boys
+            </a>
+            <ul class="nav-links">
+                <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
+                <li><a href="deals.html">Pricing</a></li>
+                <li><a href="line1.html">Line 1</a></li>
+                <li><a href="line2.html">Line 2</a></li>
+                <li><a href="line3.html">Line 3</a></li>
+                <li><a href="contact_us.html">Contact</a></li>
+                <li><a href="reviews.html">Reviews</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
+            </ul>
+            <button class="header-cart-button" onclick="openCart()">
+                <i class="fas fa-shopping-cart"></i>
+                Cart
+                <span class="header-cart-count" id="cartCount">0</span>
+            </button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Community & Culture</h1>
+        </div>
+
+        <div class="page-nav">
+            <a href="blog.html">Page 1</a>
+            <a href="blog-page2.html">Page 2</a>
+            <a href="blog-page3.html">Page 3</a>
+            <a href="#" class="active">Page 4</a>
+            <a href="blog-page5.html">Page 5</a>
+        </div>
+
+        <div class="blog-layout">
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Featured Article -->
+                <div class="featured-article">
+                    <div class="featured-badge">Community</div>
+                    <div class="article-header">
+                        <h2>The Cannabis Community: From Underground to Mainstream</h2>
+                        <div class="article-meta">
+                            <span><i class="fas fa-calendar-alt"></i> October 5, 2024</span>
+                            <span><i class="fas fa-user"></i> Culture Chronicler</span>
+                            <span><i class="fas fa-tag"></i> Cannabis Culture</span>
+                            <span><i class="fas fa-clock"></i> 10 min read</span>
+                        </div>
+                    </div>
+                    <div class="article-image">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="article-excerpt">
+                        <p>Watching cannabis culture transform from prohibition-era secrecy to legal mainstream acceptance has been extraordinary. The community that once gathered in basements and hidden forums now meets at expos, conferences, and legal retail locations.</p>
+                        
+                        <p>This retrospective explores how legalization has changed cannabis culture, the challenges of commercialization, and whether we've lost something valuable in the transition from underground to corporate...</p>
+                    </div>
+                    <button class="read-more-btn" onclick="openArticleModal('community-culture')">Read Full Article</button>
+                </div>
+
+                <!-- Blog Posts Grid -->
+                <div class="blog-posts">
+                    <div class="blog-post">
+                        <h3>Women in Cannabis: Breaking the Bro Culture</h3>
+                        <div class="blog-post-meta">October 3, 2024 | By Emma Green | Community | 8 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>The cannabis industry has a diversity problem. Despite women being 50% of consumers, they make up only 27% of executive positions in cannabis companies. This needs to change, and it starts with challenging the "bro culture" that dominates growing forums, retail spaces, and industry events.</p>
+                            <p>This article highlights female pioneers in cannabis cultivation, discusses barriers to entry, and provides actionable steps for making the community more inclusive...</p>
+                        </div>
+                        <button class="read-more-btn" onclick="openArticleModal('women-cannabis')">Read More</button>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>Medical Cannabis: Real Patient Stories</h3>
+                        <div class="blog-post-meta">October 1, 2024 | By Medical Advocate | Medical Use | 11 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>Behind every medical cannabis card is a person seeking relief when traditional medicine has failed. These are their stories - real patients dealing with chronic pain, PTSD, cancer, epilepsy, and other conditions who found help through cannabis.</p>
+                            <p>This collection includes dosing strategies, strain recommendations, and advice for navigating the medical cannabis system...</p>
+                        </div>
+                        <button class="read-more-btn" onclick="openArticleModal('medical-stories')">Read More</button>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>Cannabis Tourism: Top Destinations for Growers</h3>
+                        <div class="blog-post-meta">September 28, 2024 | By Travel Toker | Travel | 9 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>From Amsterdam coffeeshops to California dispensaries, cannabis tourism has become a billion-dollar industry. But for growers, the most interesting destinations aren't retail stores - they're cultivation facilities, seed banks, and cannabis museums.</p>
+                            <p>This guide covers the must-visit locations for cannabis enthusiasts, including behind-the-scenes grow tours and legendary seed banks...</p>
+                        </div>
+                        <button class="read-more-btn" onclick="openArticleModal('cannabis-tourism')">Read More</button>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>The Legal Landscape: Know Your Rights</h3>
+                        <div class="blog-post-meta">September 25, 2024 | By Legal Eagle | Law & Policy | 13 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>Cannabis legalization is complex, inconsistent, and constantly evolving. What's legal in one province might be illegal in another. Home growing limits vary wildly. Understanding your rights is crucial for staying compliant and avoiding legal problems.</p>
+                            <p>This comprehensive guide covers Canadian cannabis laws, provincial differences, home growing regulations, and what to do if you encounter legal issues...</p>
+                        </div>
+                        <button class="read-more-btn" onclick="openArticleModal('legal-landscape')">Read More</button>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>Cannabis and Creativity: Art from the Garden</h3>
+                        <div class="blog-post-meta">September 22, 2024 | By Artistic Cultivator | Culture | 7 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>The intersection of cannabis and creativity has produced some of the most interesting art, music, and literature of our time. But beyond consumption, the cultivation process itself is an art form - from strain selection to training techniques to photography.</p>
+                            <p>This article celebrates cannabis as creative inspiration and showcases stunning grow photography, artistic breeding projects, and the artists who work with cannabis...</p>
+                        </div>
+                        <button class="read-more-btn" onclick="openArticleModal('cannabis-creativity')">Read More</button>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>Building Your Grow Community: Online vs In-Person</h3>
+                        <div class="blog-post-meta">September 20, 2024 | By Community Builder | Networking | 10 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>Every grower needs a community for support, knowledge sharing, and troubleshooting. But should you connect online or find local growers? This guide helps you build a network of fellow cultivators while staying safe and maintaining privacy.</p>
+                            <p>Learn about forums, Discord servers, local meetups, grow clubs, and how to find mentors who can accelerate your growing journey...</p>
+                        </div>
+                        <button class="read-more-btn" onclick="openArticleModal('grow-community')">Read More</button>
+                    </div>
+
+                    <div class="blog-post">
+                        <h3>Cannabis Activism: The Fight Isn't Over</h3>
+                        <div class="blog-post-meta">September 18, 2024 | By Social Justice Warrior | Activism | 12 min read</div>
+                        <div class="blog-post-excerpt">
+                            <p>Legalization was a milestone, not the finish line. Thousands remain imprisoned for cannabis offenses. Expungement processes are slow and incomplete. Social equity programs are underfunded. The fight for true cannabis justice continues.</p>
+                            <p>This article covers ongoing activism efforts, how to get involved, organizations making a difference, and why the cannabis community must continue advocating for reform...</p>
+                        </div>
+                        <button class="read-more-btn" onclick="openArticleModal('cannabis-activism')">Read More</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-comments"></i> Join the Discussion</h3>
+                    <div style="background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px; padding: 1rem;">
+                        <p style="color: #ccc; font-size: 0.9rem; margin-bottom: 1rem;">Connect with thousands of growers in our community forums</p>
+                        <a href="#" style="background: #8b5cf6; color: white; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-weight: bold; display: inline-block;">Join Forums</a>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-calendar-alt"></i> Upcoming Events</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="background: rgba(74, 222, 128, 0.05); border-left: 3px solid #4ade80; padding: 1rem; border-radius: 5px;">
+                            <div style="color: #4ade80; font-weight: bold; font-size: 0.9rem;">Cannabis Expo 2025</div>
+                            <div style="color: #ccc; font-size: 0.8rem;">Toronto, ON - March 15-17</div>
+                        </div>
+                        <div style="background: rgba(74, 222, 128, 0.05); border-left: 3px solid #4ade80; padding: 1rem; border-radius: 5px;">
+                            <div style="color: #4ade80; font-weight: bold; font-size: 0.9rem;">Grow Workshop Series</div>
+                            <div style="color: #ccc; font-size: 0.8rem;">Online - Every Saturday</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-quote-left"></i> Community Quote</h3>
+                    <div style="background: rgba(139, 92, 246, 0.05); border-left: 3px solid #8b5cf6; padding: 1rem; border-radius: 5px;">
+                        <p style="font-style: italic; color: #ccc; margin-bottom: 0.5rem;">"The cannabis community taught me more than any book ever could. Finding my grow tribe changed everything."</p>
+                        <p style="color: #8b5cf6; font-weight: bold; font-size: 0.9rem;">- longtime_grower_2010</p>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-heart"></i> Give Back</h3>
+                    <div style="text-align: center; padding: 1rem;">
+                        <p style="color: #ccc; font-size: 0.9rem; margin-bottom: 1rem;">Support cannabis justice initiatives and expungement programs</p>
+                        <a href="#" style="background: #ef4444; color: white; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-weight: bold; display: inline-block;">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button onclick="window.location.href='blog-page3.html'">← Previous</button>
+            <button onclick="window.location.href='blog.html'">1</button>
+            <button onclick="window.location.href='blog-page2.html'">2</button>
+            <button onclick="window.location.href='blog-page3.html'">3</button>
+            <button class="active">4</button>
+            <button onclick="window.location.href='blog-page5.html'">5</button>
+            <button onclick="window.location.href='blog-page5.html'">Next →</button>
+        </div>
+    </div>
+
+    <!-- Article Modal -->
+    <div id="articleModal" style="display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); overflow-y: auto;">
+        <div style="background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%); margin: 3% auto; padding: 2rem; border-radius: 15px; max-width: 900px; border: 2px solid rgba(74, 222, 128, 0.3); position: relative;">
+            <span onclick="closeArticleModal()" style="position: absolute; right: 1.5rem; top: 1.5rem; color: #ccc; font-size: 32px; font-weight: bold; cursor: pointer; background: rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        const articleContent = {
+            'community-culture': `
+                <h1 style="color: #4ade80; margin-bottom: 1rem;">The Cannabis Community: From Underground to Mainstream</h1>
+                <div style="color: #ccc; margin-bottom: 2rem;">
+                    <span><i class="fas fa-calendar-alt"></i> October 5, 2024</span> | 
+                    <span><i class="fas fa-user"></i> Culture Chronicler</span>
+                </div>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">The cannabis community has undergone a remarkable transformation over the past two decades. What was once an underground network of growers, activists, and enthusiasts operating in secrecy has evolved into a legitimate industry with conferences, expos, and corporate backing.</p>
+                <h2 style="color: #4ade80; margin: 2rem 0 1rem;">The Underground Years</h2>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">Before legalization, cannabis cultivation was a clandestine activity. Growers shared knowledge through encrypted forums, secret meetings, and word-of-mouth. The community was tight-knit, built on trust and mutual support. Everyone understood the risks.</p>
+                <h2 style="color: #4ade80; margin: 2rem 0 1rem;">The Shift to Mainstream</h2>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">Legalization brought unprecedented access to information, genetics, and equipment. But it also brought corporatization, commercialization, and a flood of newcomers who lacked connection to the plant's cultural history.</p>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">The question remains: has mainstream acceptance come at the cost of community authenticity? This is a conversation worth having as we navigate the future of cannabis culture.</p>
+            `,
+            'women-cannabis': `
+                <h1 style="color: #4ade80; margin-bottom: 1rem;">Women in Cannabis: Breaking the Bro Culture</h1>
+                <div style="color: #ccc; margin-bottom: 2rem;">
+                    <span><i class="fas fa-calendar-alt"></i> October 3, 2024</span> | 
+                    <span><i class="fas fa-user"></i> Emma Green</span>
+                </div>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">The cannabis industry has a gender problem that needs addressing. Despite women representing approximately 50% of cannabis consumers, they hold only 27% of executive positions in cannabis companies and face numerous barriers to entry in cultivation, retail, and leadership roles.</p>
+                <h2 style="color: #4ade80; margin: 2rem 0 1rem;">The Current Landscape</h2>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">Cannabis spaces - from grow forums to retail shops to industry events - often perpetuate "bro culture" that can make women feel unwelcome or dismissed. This needs to change, and the responsibility falls on all of us to create more inclusive environments.</p>
+                <h2 style="color: #4ade80; margin: 2rem 0 1rem;">Women Pioneers</h2>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">Despite these challenges, women have been at the forefront of cannabis activism, cultivation innovation, and business leadership. From master growers to industry executives to grassroots activists, women continue to shape the cannabis landscape in profound ways.</p>
+            `,
+            'medical-stories': `
+                <h1 style="color: #4ade80; margin-bottom: 1rem;">Medical Cannabis: Real Patient Stories</h1>
+                <div style="color: #ccc; margin-bottom: 2rem;">
+                    <span><i class="fas fa-calendar-alt"></i> October 1, 2024</span> | 
+                    <span><i class="fas fa-user"></i> Medical Advocate</span>
+                </div>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">Behind every medical cannabis prescription is a patient seeking relief. These stories highlight real people who've found help through cannabis when traditional medicine couldn't provide adequate solutions.</p>
+                <h2 style="color: #4ade80; margin: 2rem 0 1rem;">Chronic Pain Management</h2>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">Many patients turn to cannabis after years of opioid prescriptions that provided inadequate relief or created dependency issues. Cannabis offers an alternative that allows many to manage pain while maintaining quality of life.</p>
+                <h2 style="color: #4ade80; margin: 2rem 0 1rem;">Mental Health Applications</h2>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">From PTSD to anxiety disorders, patients report significant benefits from properly dosed cannabis therapy. The key is finding the right strains, ratios, and consumption methods - a process that requires patience and careful experimentation.</p>
+            `,
+            'cannabis-tourism': `
+                <h1 style="color: #4ade80; margin-bottom: 1rem;">Cannabis Tourism: Top Destinations for Growers</h1>
+                <div style="color: #ccc; margin-bottom: 2rem;">
+                    <span><i class="fas fa-calendar-alt"></i> September 28, 2024</span> | 
+                    <span><i class="fas fa-user"></i> Travel Toker</span>
+                </div>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">Cannabis tourism has exploded globally, creating opportunities for enthusiasts to visit legendary cultivation sites, seed banks, and cannabis museums around the world.</p>
+                <h2 style="color: #4ade80; margin: 2rem 0 1rem;">Amsterdam: The Classic</h2>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">While coffeeshops get the attention, Amsterdam's real treasures for growers are the seed banks and grow shops that have been perfecting genetics for decades.</p>
+                <h2 style="color: #4ade80; margin: 2rem 0 1rem;">California: Innovation Hub</h2>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">From Humboldt County to Oakland, California offers cultivation tours, industry events, and access to cutting-edge growing technology and techniques.</p>
+            `,
+            'legal-landscape': `
+                <h1 style="color: #4ade80; margin-bottom: 1rem;">The Legal Landscape: Know Your Rights</h1>
+                <div style="color: #ccc; margin-bottom: 2rem;">
+                    <span><i class="fas fa-calendar-alt"></i> September 25, 2024</span> | 
+                    <span><i class="fas fa-user"></i> Legal Eagle</span>
+                </div>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">Understanding cannabis laws is crucial for legal compliance and protecting yourself. Canadian cannabis regulations are complex and vary significantly by province.</p>
+                <h2 style="color: #4ade80; margin: 2rem 0 1rem;">Home Growing Rights</h2>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">Federally, Canadians can grow up to 4 plants per household. However, provincial regulations add additional restrictions on where and how you can grow.</p>
+                <h2 style="color: #4ade80; margin: 2rem 0 1rem;">Transportation and Storage</h2>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">Laws governing how you transport and store cannabis vary by jurisdiction. Understanding these rules helps you avoid unintentional legal violations.</p>
+            `,
+            'cannabis-creativity': `
+                <h1 style="color: #4ade80; margin-bottom: 1rem;">Cannabis and Creativity: Art from the Garden</h1>
+                <div style="color: #ccc; margin-bottom: 2rem;">
+                    <span><i class="fas fa-calendar-alt"></i> September 22, 2024</span> | 
+                    <span><i class="fas fa-user"></i> Artistic Cultivator</span>
+                </div>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">Cannabis cultivation is an art form that combines horticulture, design, and creative problem-solving. From training techniques to photography, growers express creativity throughout the cultivation process.</p>
+                <h2 style="color: #4ade80; margin: 2rem 0 1rem;">The Art of Training</h2>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">LST, SCROG, and other training methods transform plants into living sculptures. Each grower develops their own aesthetic approach to canopy management.</p>
+                <h2 style="color: #4ade80; margin: 2rem 0 1rem;">Cannabis Photography</h2>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">Capturing the beauty of trichome-covered buds, vibrant colors, and intricate plant structures has become an art form unto itself, with dedicated communities sharing techniques and celebrating exceptional macro photography.</p>
+            `,
+            'grow-community': `
+                <h1 style="color: #4ade80; margin-bottom: 1rem;">Building Your Grow Community</h1>
+                <div style="color: #ccc; margin-bottom: 2rem;">
+                    <span><i class="fas fa-calendar-alt"></i> September 20, 2024</span> | 
+                    <span><i class="fas fa-user"></i> Community Builder</span>
+                </div>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">No grower succeeds alone. Building a network of fellow cultivators provides support, knowledge sharing, and troubleshooting assistance that accelerates your growing journey.</p>
+                <h2 style="color: #4ade80; margin: 2rem 0 1rem;">Online Communities</h2>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">Forums, Discord servers, and social media groups offer instant access to global growing knowledge. The anonymous nature of online communities allows for open discussion without privacy concerns.</p>
+                <h2 style="color: #4ade80; margin: 2rem 0 1rem;">Local Connections</h2>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">In-person relationships with local growers provide hands-on learning, clone sharing, and the kind of deep knowledge transfer that's difficult to replicate online.</p>
+            `,
+            'cannabis-activism': `
+                <h1 style="color: #4ade80; margin-bottom: 1rem;">Cannabis Activism: The Fight Isn't Over</h1>
+                <div style="color: #ccc; margin-bottom: 2rem;">
+                    <span><i class="fas fa-calendar-alt"></i> September 18, 2024</span> | 
+                    <span><i class="fas fa-user"></i> Social Justice Warrior</span>
+                </div>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">Legalization was a major victory, but the fight for cannabis justice continues. Thousands remain imprisoned for activities that are now legal. Social equity programs struggle with inadequate funding. Expungement processes move glacially.</p>
+                <h2 style="color: #4ade80; margin: 2rem 0 1rem;">Criminal Justice Reform</h2>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">Advocating for the release and record expungement of those imprisoned for cannabis offenses remains a critical priority. These individuals deserve justice and the opportunity to participate in the legal industry.</p>
+                <h2 style="color: #4ade80; margin: 2rem 0 1rem;">Social Equity</h2>
+                <p style="line-height: 1.8; margin-bottom: 1rem;">Communities most harmed by prohibition deserve priority access to the legal cannabis industry. Supporting social equity programs helps correct historical injustices.</p>
+            `
+        };
+
+        function openArticleModal(articleId) {
+            const modal = document.getElementById('articleModal');
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = articleContent[articleId] || '<p>Article content not available.</p>';
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeArticleModal() {
+            document.getElementById('articleModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function updateCartCount() {
+            const cartCount = window.cartItems ? window.cartItems.reduce((sum, item) => sum + item.quantity, 0) : 0;
+            document.getElementById('cartCount').textContent = cartCount;
+        }
+
+        function openCart() {
+            window.location.href = 'deals.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('articleModal');
+            if (event.target == modal) {
+                closeArticleModal();
+            }
+        }
+    </script>
+</body>
+</html>
