@@ -1638,6 +1638,31 @@ function startCountdown() {
     }, 1000);
 }
 
+    function verifyAge(isVerified) {
+        const overlay = document.getElementById('ageVerificationOverlay');
+        const body = document.body;
+        const underageMessage = document.getElementById('underageMessage');
+
+        if (isVerified) {
+            // User clicks "Yes, I'm over 19"
+            overlay.style.display = 'none';
+            body.classList.remove('age-not-verified');
+            body.classList.add('age-verified');
+        } else {
+            // User clicks "No, I'm under 19"
+            const buttons = document.querySelector('.age-verification-buttons');
+            buttons.style.display = 'none';
+            underageMessage.style.display = 'block';
+            
+            // Optionally redirect or prevent further interaction
+            setTimeout(() => {
+                // Example: Redirect to a safe site after 5 seconds
+                // window.location.href = 'https://www.google.com'; 
+            }, 5000); 
+        }
+    }
+
+
 // Copy code to clipboard
 function copyCode(code) {
     navigator.clipboard.writeText(code).then(() => {
@@ -1665,6 +1690,6 @@ function copyCode(code) {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeMonthlyDeals);
-    </script>
+</script>
 </body>
 </html>
