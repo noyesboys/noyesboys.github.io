@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cannabis Blog - Page 2 | The Noyes Boys</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    
     <style>
         * {
             margin: 0;
@@ -25,7 +24,6 @@
             zoom: 0.50;
         }
 
-        /* Header Navigation - Same as Page 1 */
         header {
             background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%);
             padding: 0.5rem 0;
@@ -156,6 +154,7 @@
             justify-content: center;
             gap: 1rem;
             margin-bottom: 3rem;
+            flex-wrap: wrap;
         }
 
         .page-nav a {
@@ -176,7 +175,6 @@
             background: rgba(74, 222, 128, 0.2);
         }
 
-        /* Blog Layout */
         .blog-layout {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -189,7 +187,6 @@
             gap: 2rem;
         }
 
-        /* Featured Article */
         .featured-article {
             background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 100%);
             border-radius: 15px;
@@ -241,7 +238,6 @@
             font-size: 4rem;
         }
 
-        /* Blog Posts */
         .blog-posts {
             display: grid;
             gap: 2rem;
@@ -289,6 +285,8 @@
             font-size: 0.9rem;
             transition: all 0.3s ease;
             display: inline-block;
+            cursor: pointer;
+            border: none;
         }
 
         .read-more-btn:hover {
@@ -296,7 +294,6 @@
             box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
         }
 
-        /* Sidebar - Same as Page 1 */
         .sidebar {
             display: flex;
             flex-direction: column;
@@ -316,13 +313,13 @@
             font-size: 1.2rem;
         }
 
-        /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 1rem;
             margin: 3rem 0;
+            flex-wrap: wrap;
         }
 
         .pagination button {
@@ -345,7 +342,125 @@
             color: #0a0a0a;
         }
 
-        /* Mobile Responsive */
+        .article-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .article-modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            margin: 2% auto;
+            padding: 3rem;
+            border: 2px solid rgba(74, 222, 128, 0.3);
+            border-radius: 15px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            position: relative;
+            color: #f5f5f5;
+        }
+
+        .article-modal-close {
+            color: #aaa;
+            float: right;
+            font-size: 40px;
+            font-weight: bold;
+            line-height: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: sticky;
+            top: 0;
+            right: 0;
+            background: rgba(26, 26, 26, 0.9);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            z-index: 10;
+            margin-left: auto;
+        }
+
+        .article-modal-close:hover,
+        .article-modal-close:focus {
+            color: #4ade80;
+            transform: scale(1.2);
+        }
+
+        .article-modal-content h2 {
+            color: #4ade80;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+            padding-right: 60px;
+        }
+
+        .article-modal-content h3 {
+            color: #4ade80;
+            font-size: 1.8rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-modal-content h4 {
+            color: #22c55e;
+            font-size: 1.4rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .article-modal-content p {
+            margin-bottom: 1.2rem;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .article-intro {
+            font-size: 1.2rem;
+            color: #ccc;
+            font-style: italic;
+            border-left: 4px solid #4ade80;
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .article-meta-modal {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            color: #aaa;
+            font-size: 0.95rem;
+            flex-wrap: wrap;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(74, 222, 128, 0.2);
+        }
+
+        .article-modal-content ul, .article-modal-content ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-modal-content li {
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+        }
+
+        .article-modal-content strong {
+            color: #4ade80;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding-top: 80px;
@@ -366,6 +481,20 @@
             .page-header h1 {
                 font-size: 2rem;
             }
+
+            .article-modal-content {
+                width: 95%;
+                padding: 1.5rem;
+                margin: 5% auto;
+            }
+
+            .article-modal-content h2 {
+                font-size: 1.8rem;
+            }
+
+            .article-modal-content h3 {
+                font-size: 1.4rem;
+            }
         }
     </style>
 </head>
@@ -378,6 +507,10 @@
             </a>
             <ul class="nav-links">
                 <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
+                <li><a href="deals.html">Pricing</a></li>
+                <li><a href="line1.html">Line 1</a></li>
+                <li><a href="line2.html">Line 2</a></li>
+                <li><a href="line3.html">Line 3</a></li>
                 <li><a href="contact_us.html">Contact</a></li>
                 <li><a href="reviews.html">Reviews</a></li>
                 <li><a href="blog.html" class="active">Blog</a></li>
@@ -390,23 +523,28 @@
         </nav>
     </header>
 
+    <div id="articleModal" class="article-modal">
+        <div class="article-modal-content">
+            <span class="article-modal-close" onclick="closeArticleModal()">&times;</span>
+            <div id="articleContent"></div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="page-header">
             <h1>Cannabis Knowledge Base</h1>
         </div>
 
         <div class="page-nav">
-            <a href="/readmore">Page 1</a>
+            <a href="blog.html">Page 1</a>
             <a href="#" class="active">Page 2</a>
-            <a href="/blog3">Page 3</a>
-            <a href="/blog4">Page 4</a>
-            <a href="/blog5">Page 5</a>
+            <a href="blog-page3.html">Page 3</a>
+            <a href="blog-page4.html">Page 4</a>
+            <a href="blog-page5.html">Page 5</a>
         </div>
 
         <div class="blog-layout">
-            <!-- Main Content -->
             <div class="main-content">
-                <!-- Featured Article -->
                 <div class="featured-article">
                     <div class="featured-badge">Trending</div>
                     <div class="article-header">
@@ -426,10 +564,9 @@
                         
                         <p>This comprehensive guide covers everything from screen construction to strain selection, with real-world examples using Purple Rainbow and Mango Aliens. Whether you're a beginner looking to try your first SCROG or an experienced grower wanting to optimize your technique, these methods will transform your harvests.</p>
                     </div>
-                    <a href="#" class="read-more-btn" onclick="openFullArticle('scrog-guide')">Read Complete Guide</a>
+                    <button class="read-more-btn" onclick="openFullArticle('scrog-guide')">Read Complete Guide</button>
                 </div>
 
-                <!-- Blog Posts Grid -->
                 <div class="blog-posts">
                     <div class="blog-post">
                         <h3>pH Problems: The Silent Grow Killer Nobody Talks About</h3>
@@ -438,7 +575,7 @@
                             <p>I've analyzed over 500 failed grows in the past three years, and 73% had one thing in common: pH problems that went undiagnosed for weeks. Most growers focus on nutrients, lighting, and training while completely ignoring the foundation of nutrient uptake - pH balance.</p>
                             <p>This deep dive into pH management covers the science behind nutrient lockout, how to fix common pH problems, and the monitoring systems that prevent issues before they start...</p>
                         </div>
-                        <a href="#" class="read-more-btn">Read More</a>
+                        <button class="read-more-btn" onclick="openFullArticle('ph-problems')">Read More</button>
                     </div>
 
                     <div class="blog-post">
@@ -448,7 +585,7 @@
                             <p>Most home growers ruin their harvest in the final stage. They spend months perfecting their grow, then rush the cure and end up with harsh, weak cannabis that tastes like hay. Proper curing isn't just about moisture content - it's a complex biochemical process that can literally double your THC levels.</p>
                             <p>This guide covers my proven 8-week curing protocol, including temperature control, burping schedules, and how to test for optimal moisture levels...</p>
                         </div>
-                        <a href="#" class="read-more-btn">Read More</a>
+                        <button class="read-more-btn" onclick="openFullArticle('curing-process')">Read More</button>
                     </div>
 
                     <div class="blog-post">
@@ -458,7 +595,7 @@
                             <p>The lighting debate continues to evolve as LED technology improves and electricity costs soar. After running side-by-side comparisons for 18 months using identical Alienoyes Kush clones, I finally have definitive data on yields, quality, and total cost of ownership.</p>
                             <p>Spoiler alert: the winner might surprise you. Modern LEDs have closed the gap significantly, but HPS still has some unexpected advantages that most reviews ignore...</p>
                         </div>
-                        <a href="#" class="read-more-btn">Read More</a>
+                        <button class="read-more-btn" onclick="openFullArticle('led-vs-hps')">Read More</button>
                     </div>
 
                     <div class="blog-post">
@@ -468,7 +605,7 @@
                             <p>Flushing before harvest is one of the most controversial topics in cannabis cultivation. Some swear it improves taste and smoothness, while others claim it's pseudoscience that reduces yields. I decided to settle this debate with proper scientific testing.</p>
                             <p>Using lab-grade analysis and blind taste tests with 50 participants, this study examines flushed vs unflushed White Noyes harvests. The results challenge everything you think you know about pre-harvest flushing...</p>
                         </div>
-                        <a href="#" class="read-more-btn">Read More</a>
+                        <button class="read-more-btn" onclick="openFullArticle('flush-debate')">Read More</button>
                     </div>
 
                     <div class="blog-post">
@@ -478,7 +615,7 @@
                             <p>Industrial agriculture has taught us that soil is just a medium to hold roots while we pump in synthetic nutrients. But soil is a living ecosystem, and when we work with nature instead of against it, the results are extraordinary. My no-till super soil produces cannabis with terpene profiles that rival any hydro setup.</p>
                             <p>This comprehensive guide covers mycorrhizal networks, beneficial bacteria, composting techniques, and the amendments that create soil biology. Plus, my complete recipe for building 100 gallons of living soil...</p>
                         </div>
-                        <a href="#" class="read-more-btn">Read More</a>
+                        <button class="read-more-btn" onclick="openFullArticle('living-soil')">Read More</button>
                     </div>
 
                     <div class="blog-post">
@@ -488,7 +625,7 @@
                             <p>Legal outdoor growing comes with unique security challenges. You need to protect your plants from theft while staying within local regulations and avoiding booby traps that could land you in prison. After consulting with lawyers and security experts, here's how to protect your investment legally.</p>
                             <p>This guide covers camera systems, motion lighting, legal deterrents, insurance considerations, and working with local law enforcement when problems arise...</p>
                         </div>
-                        <a href="#" class="read-more-btn">Read More</a>
+                        <button class="read-more-btn" onclick="openFullArticle('outdoor-security')">Read More</button>
                     </div>
 
                     <div class="blog-post">
@@ -498,17 +635,15 @@
                             <p>Extreme weather events are becoming the norm, and outdoor cannabis growers are on the front lines. Heat domes, unexpected frosts, and unpredictable rainfall patterns are forcing us to adapt our growing strategies. Traditional outdoor timelines no longer apply in many regions.</p>
                             <p>This analysis covers climate resilient strain selection, adaptive growing techniques, and how to build flexibility into your outdoor setup for an uncertain climate future...</p>
                         </div>
-                        <a href="#" class="read-more-btn">Read More</a>
+                        <button class="read-more-btn" onclick="openFullArticle('climate-change')">Read More</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Sidebar -->
             <div class="sidebar">
-                <!-- Search Box -->
                 <div class="sidebar-section">
                     <h3><i class="fas fa-search"></i> Search Articles</h3>
-                    <form style="display: flex; gap: 0.5rem;">
+                    <form style="display: flex; gap: 0.5rem;" onsubmit="event.preventDefault(); alert('Search functionality would be implemented with backend');">
                         <input type="text" placeholder="Search..." style="flex: 1; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; padding: 0.5rem; color: #f5f5f5; font-size: 0.9rem;">
                         <button type="submit" style="background: #4ade80; border: none; color: #0a0a0a; padding: 0.5rem; border-radius: 5px; cursor: pointer;"><i class="fas fa-search"></i></button>
                     </form>
@@ -519,15 +654,15 @@
                     <div style="display: flex; flex-direction: column; gap: 1rem;">
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <span style="background: #4ade80; color: #0a0a0a; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">1</span>
-                            <a href="#" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">Advanced SCROG Techniques: Maximizing Canopy Control</a>
+                            <a href="#" onclick="event.preventDefault(); openFullArticle('scrog-guide');" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">Advanced SCROG Techniques</a>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <span style="background: rgba(255,255,255,0.2); color: #f5f5f5; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">2</span>
-                            <a href="#" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">pH Problems: The Silent Grow Killer</a>
+                            <a href="#" onclick="event.preventDefault(); openFullArticle('ph-problems');" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">pH Problems: The Silent Killer</a>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <span style="background: rgba(255,255,255,0.2); color: #f5f5f5; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">3</span>
-                            <a href="#" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">The Great Flush Debate: Science vs Tradition</a>
+                            <a href="#" onclick="event.preventDefault(); openFullArticle('flush-debate');" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">The Great Flush Debate</a>
                         </div>
                     </div>
                 </div>
@@ -549,7 +684,7 @@
                     <h3><i class="fas fa-tags"></i> Categories</h3>
                     <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
                         <a href="#" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Training (8)</a>
-                        <a href="#" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Equipment (12)</a>
+<a href="#" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Equipment (12)</a>
                         <a href="#" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Post-Harvest (6)</a>
                         <a href="#" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Science (9)</a>
                         <a href="#" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Outdoor (7)</a>
@@ -564,13 +699,12 @@
                             <p style="color: white; font-size: 0.9rem; margin-bottom: 0.5rem;">Ultra-high THC powerhouse</p>
                             <p style="color: white; font-size: 0.8rem; font-weight: bold;">30%+ THC potential</p>
                         </div>
-                        <a href="deals.html" style="background: #4ade80; color: #0a0a0a; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-weight: bold; transition: all 0.3s ease;">View Genetics</a>
+                        <a href="deals.html" style="background: #4ade80; color: #0a0a0a; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-weight: bold; transition: all 0.3s ease; display: inline-block;">View Genetics</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Pagination -->
         <div class="pagination">
             <button onclick="window.location.href='blog.html'">← Previous</button>
             <button onclick="window.location.href='blog.html'">1</button>
@@ -583,6 +717,288 @@
     </div>
 
     <script>
+        // Complete article database with all 7 full articles
+        const articles = {
+            'scrog-guide': {
+                content: `<h2>Advanced SCROG Techniques: Maximizing Canopy Control</h2>
+                    <div class="article-meta-modal">
+                        <span><i class="fas fa-calendar-alt"></i> November 15, 2024</span>
+                        <span><i class="fas fa-user"></i> Jake Morrison</span>
+                        <span><i class="fas fa-tag"></i> Training Techniques</span>
+                        <span><i class="fas fa-clock"></i> 14 min read</span>
+                    </div>
+                    <p class="article-intro">Screen of Green (SCROG) is arguably the most effective training method for maximizing yields in limited space. After 8 years of perfecting this technique with Noyes Boys genetics, I've developed a systematic approach that consistently delivers 600+ grams from a single 4x4 tent.</p>
+                    
+                    <h3>Understanding the SCROG Philosophy</h3>
+                    <p>SCROG isn't just about tying plants to a screen—it's about creating an even canopy where every bud site receives optimal light. The goal is to transform vertical growth into horizontal spread, maximizing your light footprint efficiency. In a properly executed SCROG, there should be no wasted light, no shadowed branches, and no energy going to popcorn buds.</p>
+                    <p>The key principle: <strong>horizontal before vertical</strong>. During the vegetative phase, we train all growth horizontally across the screen. Only after filling 75-80% of your screen do you flip to flower and allow vertical growth. This creates that famous "sea of green" where hundreds of main colas all sit at the same height.</p>
+                    
+                    <h3>Screen Construction and Placement</h3>
+                    <p>Your screen material matters more than most guides suggest. I've tested everything from chicken wire to nylon netting, and here's what works best:</p>
+                    <p><strong>Optimal screen specifications:</strong></p>
+                    <ul>
+                        <li><strong>Material:</strong> 2-inch PVC pipe frame with nylon trellis netting (not metal—it can damage stems)</li>
+                        <li><strong>Grid size:</strong> 2-inch squares for most strains, 3-inch for heavy indica varieties</li>
+                        <li><strong>Height:</strong> 8-12 inches above pot rim for soil, 6-8 inches for hydro</li>
+                        <li><strong>Layers:</strong> Single layer for beginners, double layer 6 inches apart for advanced growers</li>
+                    </ul>
+                    <p>Screen height is critical. Too low and you can't access your pots for watering. Too high and you lose the ability to effectively train lower growth. For a 5-gallon fabric pot sitting on the ground, I place my first screen at exactly 10 inches from the soil surface.</p>
+                    
+                    <h3>Strain Selection for SCROG</h3>
+                    <p>Not all strains SCROG equally well. After testing every strain in the Noyes Boys catalog, here are my top performers:</p>
+                    <p><strong>Best SCROG strains:</strong></p>
+                    <ul>
+                        <li><strong>Purple Rainbow:</strong> Incredible lateral branching, fills screens fast, responds perfectly to training</li>
+                        <li><strong>Mango Aliens:</strong> Moderate stretch, dense bud structure, handles heavy defoliation</li>
+                        <li><strong>Alienoyes Kush:</strong> Vigorous growth, thick stems support heavy colas, minimal maintenance</li>
+                        <li><strong>White Noyes:</strong> Flexible branches, generous internodal spacing, massive yield potential</li>
+                    </ul>
+                    
+                    <h3>The Vegetative Training Process</h3>
+                    <p>This is where SCROG success is determined. Most growers rush to flower, but I spend 6-8 weeks in veg to properly fill my screen. Here's my day-by-day process:</p>
+                    <p><strong>Week 1-2:</strong> Let your plant grow naturally until it's 6-8 inches tall. Top once above the 4th or 5th node. This creates your initial main branches.</p>
+                    <p><strong>Week 3-4:</strong> As branches grow through the screen, gently weave them horizontally under squares, then up through adjacent squares. The goal is to spread branches outward in a radial pattern, like spokes on a wheel. Tuck any growth trying to go vertical back under the screen.</p>
+                    <p><strong>Week 5-6:</strong> Continue training but start selective defoliation. Remove any fan leaves blocking bud sites or preventing light penetration to lower growth. Your screen should be 60-70% filled.</p>
+                    <p><strong>Week 7-8:</strong> Final week before flip. Heavy defoliation—remove everything below the screen and thin the canopy above. Your screen should be 75-80% filled. Any more and you risk overcrowding during flower stretch.</p>
+                    
+                    <h3>Common SCROG Mistakes</h3>
+                    <p>Even experienced growers make these errors. Here's what to avoid:</p>
+                    <p><strong>1. Flipping too early:</strong> Patience wins in SCROG. If your screen is only 50% filled at flip, you'll end up with gaps and wasted light. Wait until you're at 75-80% capacity.</p>
+                    <p><strong>2. Under-defoliating:</strong> Many growers are scared to remove leaves. In SCROG, aggressive defoliation is essential. By harvest, I've removed 60-70% of the original foliage.</p>
+                    <p><strong>3. Using too many plants:</strong> One of the biggest SCROG mistakes is using 4-9 plants in a 4x4 tent. For SCROG, use 1-2 plants maximum. More plants = less control and more competition.</p>
+                    
+                    <h3>Final Thoughts</h3>
+                    <p>SCROG is the most labor-intensive training method, requiring daily attention during veg and early flower. But the results are unmatched. When executed properly, SCROG transforms light into bud more efficiently than any other technique.</p>`
+            },
+            
+            'ph-problems': {
+                content: `<h2>pH Problems: The Silent Grow Killer Nobody Talks About</h2>
+                    <div class="article-meta-modal">
+                        <span><i class="fas fa-calendar-alt"></i> November 12, 2024</span>
+                        <span><i class="fas fa-user"></i> Dr. Maria Rodriguez</span>
+                        <span><i class="fas fa-tag"></i> Plant Health</span>
+                        <span><i class="fas fa-clock"></i> 9 min read</span>
+                    </div>
+                    <p class="article-intro">I've analyzed over 500 failed grows in the past three years, and 73% had one thing in common: pH problems that went undiagnosed for weeks. Most growers focus on nutrients, lighting, and training while completely ignoring the foundation of nutrient uptake—pH balance.</p>
+                    
+                    <h3>The Science Nobody Explains</h3>
+                    <p>Here's what's actually happening at the molecular level: nutrients exist as ions in solution, and their availability to plant roots depends entirely on the electrical charge environment, which is determined by pH. When pH drifts outside the optimal range, these ions bind with other molecules and become "locked out"—physically present but biologically unavailable.</p>
+                    <p>Cannabis roots can only absorb nutrients within specific pH ranges:</p>
+                    <ul>
+                        <li><strong>Soil growing:</strong> 6.0-7.0 pH (optimal: 6.3-6.8)</li>
+                        <li><strong>Soilless/coco:</strong> 5.5-6.5 pH (optimal: 5.8-6.2)</li>
+                        <li><strong>Hydroponics:</strong> 5.5-6.5 pH (optimal: 5.8-6.0)</li>
+                    </ul>
+                    
+                    <h3>Why pH Drifts</h3>
+                    <p>pH isn't static. Every time you water, feed, or even breathe near your plants, pH changes. Here's what's causing drift in your grow:</p>
+                    <p><strong>Water source changes:</strong> Municipal water pH varies by season. Summer pH is often higher than winter as water treatment adjusts for demand.</p>
+                    <p><strong>Nutrient interactions:</strong> Some nutrients are acidic (pH down effect), others are basic (pH up effect). As plants consume nutrients unevenly, the remaining solution drifts.</p>
+                    
+                    <h3>Prevention: The pH Management System</h3>
+                    <p>Reactive pH management is exhausting. Here's my proactive system that prevents problems:</p>
+                    <p><strong>Daily tasks:</strong> Test reservoir pH, record readings in grow journal, adjust if drift exceeds 0.3 from target.</p>
+                    <p><strong>Weekly tasks:</strong> Calibrate pH pen, test source water pH, analyze pH trends from daily logs.</p>
+                    <p>Remember: pH problems are silent killers. By the time you see symptoms, you've already lost 2-3 weeks of optimal growth. Prevention through regular testing is always easier than trying to recover from lockout.</p>`
+            },
+            
+            'curing-process': {
+                content: `<h2>Curing Cannabis: The 8-Week Process That Doubles Potency</h2>
+                    <div class="article-meta-modal">
+                        <span><i class="fas fa-calendar-alt"></i> November 10, 2024</span>
+                        <span><i class="fas fa-user"></i> Tommy Chen</span>
+                        <span><i class="fas fa-tag"></i> Post-Harvest</span>
+                        <span><i class="fas fa-clock"></i> 11 min read</span>
+                    </div>
+                    <p class="article-intro">Most home growers ruin their harvest in the final stage. They spend months perfecting their grow, then rush the cure and end up with harsh, weak cannabis that tastes like hay. Proper curing isn't just about moisture content—it's a complex biochemical process that can literally double your THC levels.</p>
+                    
+                    <h3>What Actually Happens During Curing</h3>
+                    <p>Curing is controlled decomposition. After harvest, your buds are still alive and metabolically active. During the cure, several critical processes occur:</p>
+                    <p><strong>Chlorophyll breakdown:</strong> That harsh, green taste comes from chlorophyll. Proper curing breaks down chlorophyll into simpler, non-psychoactive compounds.</p>
+                    <p><strong>THC conversion:</strong> Fresh cannabis contains mostly THCA, which isn't psychoactive. During curing, THCA slowly converts to THC through decarboxylation. Lab testing shows THC content can increase 15-30% during an 8-week cure.</p>
+                    
+                    <h3>Week 1-2: Initial Cure</h3>
+                    <p><strong>Jar selection:</strong> Use glass mason jars (never plastic), fill jars 75% full, use multiple small jars rather than few large jars.</p>
+                    <p><strong>Week 1-2 burping schedule:</strong></p>
+                    <ul>
+                        <li><strong>Day 1-3:</strong> Burp 3x daily for 15 minutes each</li>
+                        <li><strong>Day 4-7:</strong> Burp 2x daily for 10 minutes each</li>
+                        <li><strong>Day 8-14:</strong> Burp 1x daily for 5 minutes</li>
+                    </ul>
+                    
+                    <h3>Week 3-4: The Critical Phase</h3>
+                    <p>This is where the magic happens. Chlorophyll is breaking down, THC is converting, and terpenes are developing complexity. By week 4, you'll notice significant improvement in smell. That grassy smell is gone, replaced by strain-specific terpenes. Smoke should be notably smoother.</p>
+                    
+                    <h3>Week 5-8: Premium Cure</h3>
+                    <p>This is patience territory. Most growers quit here, but weeks 5-8 create truly premium cannabis. During this phase, remaining starches and sugars continue breaking down. Smoke becomes increasingly smooth.</p>
+                    
+                    <h3>Final Thoughts</h3>
+                    <p>The 8-week cure isn't optional if you want maximum quality. Proper curing is the difference between weed and cannabis. Invest the time. Your lungs and your brain will thank you.</p>`
+            },
+            
+            'led-vs-hps': {
+                content: `<h2>LED vs HPS: The 2024 Lighting Comparison Every Grower Needs</h2>
+                    <div class="article-meta-modal">
+                        <span><i class="fas fa-calendar-alt"></i> November 8, 2024</span>
+                        <span><i class="fas fa-user"></i> Mike Stevens</span>
+                        <span><i class="fas fa-tag"></i> Equipment</span>
+                        <span><i class="fas fa-clock"></i> 13 min read</span>
+                    </div>
+                    <p class="article-intro">The lighting debate continues as LED technology improves and electricity costs soar. After 18 months of side-by-side testing, I have definitive data on yields, quality, and total cost of ownership.</p>
+                    
+                    <h3>Yield Comparison</h3>
+                    <p><strong>LED (450W):</strong> 542g average = 1.20 g/W</p>
+                    <p><strong>HPS (600W):</strong> 628g average = 1.05 g/W</p>
+                    <p>HPS produced 16% more total weight despite LED's better efficiency rating.</p>
+                    
+                    <h3>Power Consumption</h3>
+                    <p>HPS uses 270 kWh more per grow (33% more electricity). Combined with cooling costs: <strong>$240/year savings with LED</strong></p>
+                    
+                    <h3>The Verdict</h3>
+                    <p><strong>Choose LED if:</strong> You pay for electricity, grow in summer/warm climates, want set-it-and-forget-it simplicity, value maximum potency.</p>
+                    <p><strong>Choose HPS if:</strong> You want maximum total yield, grow in winter/cold climates, have tight budget, don't pay electricity.</p>`
+            },
+            
+            'flush-debate': {
+                content: `<h2>The Great Flush Debate: Does Flushing Actually Improve Taste?</h2>
+                    <div class="article-meta-modal">
+                        <span><i class="fas fa-calendar-alt"></i> November 5, 2024</span>
+                        <span><i class="fas fa-user"></i> Dr. Jennifer Walsh</span>
+                        <span><i class="fas fa-tag"></i> Cannabis Science</span>
+                        <span><i class="fas fa-clock"></i> 8 min read</span>
+                    </div>
+                    <p class="article-intro">Flushing before harvest is one of the most controversial topics. I decided to settle this debate with proper scientific testing using lab analysis and blind taste tests with 50 participants.</p>
+                    
+                    <h3>Blind Taste Test Results</h3>
+                    <p>Statistical analysis showed no significant difference between flushed and unflushed samples. Participants could not reliably identify which samples were flushed. Preferences were essentially random.</p>
+                    
+                    <h3>Yield Impact</h3>
+                    <ul>
+                        <li><strong>No flush:</strong> 156g average per plant</li>
+                        <li><strong>7-day flush:</strong> 148g average (5% reduction)</li>
+                        <li><strong>14-day flush:</strong> 138g average (12% reduction)</li>
+                    </ul>
+                    
+                    <h3>Conclusion</h3>
+                    <p>After comprehensive testing, the data is clear: Flushing reduces yield by 5-12%, does not improve taste in blind testing, and slightly reduces potency. Proper curing matters far more than flushing.</p>
+                    <p><strong>Bottom line: Feed your plants until harvest, dry properly, and cure patiently.</strong></p>`
+            },
+            
+            'living-soil': {
+                content: `<h2>Living Soil: Building No-Till Organic Super Soil</h2>
+                    <div class="article-meta-modal">
+                        <span><i class="fas fa-calendar-alt"></i> November 3, 2024</span>
+                        <span><i class="fas fa-user"></i> Earth Mother Gardens</span>
+                        <span><i class="fas fa-tag"></i> Organic Growing</span>
+                        <span><i class="fas fa-clock"></i> 15 min read</span>
+                    </div>
+                    <p class="article-intro">Soil is a living ecosystem. When we work with nature instead of against it, the results are extraordinary. My no-till super soil produces cannabis with terpene profiles that rival any hydro setup.</p>
+                    
+                    <h3>The Base Mix</h3>
+                    <p><strong>For 100 gallons:</strong></p>
+                    <ul>
+                        <li>40 gallons quality compost</li>
+                        <li>40 gallons peat moss or coco coir</li>
+                        <li>20 gallons perlite or rice hulls</li>
+                    </ul>
+                    
+                    <h3>Mineral Amendments</h3>
+                    <p><strong>Per 100 gallons:</strong> 8 cups kelp meal, 8 cups neem cake, 8 cups crustacean meal, 4 cups fish bone meal, 8 cups rock phosphate, 4 cups gypsum, 8 cups oyster shell flour, 2 cups azomite.</p>
+                    
+                    <h3>Results</h3>
+                    <p>After 5 years running no-till: Living soil yields 5-10% more by third cycle, produces 15-25% higher terpene content, and shows superior disease resistance. Living soil pays for itself by year 2.</p>
+                    
+                    <h3>Final Thoughts</h3>
+                    <p>After five years of no-till living soil, I'll never go back to synthetics. My soil is now richer than when I started, producing better cannabis with less effort.</p>`
+            },
+            
+            'outdoor-security': {
+                content: `<h2>Outdoor Security: Protecting Your Garden Without Breaking the Law</h2>
+                    <div class="article-meta-modal">
+                        <span><i class="fas fa-calendar-alt"></i> October 30, 2024</span>
+                        <span><i class="fas fa-user"></i> Security Steve</span>
+                        <span><i class="fas fa-tag"></i> Outdoor Growing</span>
+                        <span><i class="fas fa-clock"></i> 10 min read</span>
+                    </div>
+                    <p class="article-intro">Legal outdoor growing comes with unique security challenges. You need to protect your plants from theft while staying within local regulations.</p>
+                    
+                    <h3>What's Legal vs Illegal</h3>
+                    <p><strong>Legal:</strong> Cameras, fencing, locks, motion lights, dogs, warning signs, alarm systems</p>
+                    <p><strong>Illegal:</strong> Booby traps of any kind, electrified fences (most areas), punji pits/tripwires, excessive force</p>
+                    
+                    <h3>Layered Security Approach</h3>
+                    <p><strong>Layer 1:</strong> Visual deterrents (signage, visible cameras)</p>
+                    <p><strong>Layer 2:</strong> Physical barriers (fencing 6-8 feet high)</p>
+                    <p><strong>Layer 3:</strong> Electronic surveillance (camera systems with night vision)</p>
+                    <p><strong>Layer 4:</strong> Canine defense (trained guard dogs)</p>
+                    
+                    <h3>Budget Setup ($300-500)</h3>
+                    <ul>
+                        <li>6-foot privacy fence</li>
+                        <li>Quality padlock: $30</li>
+                        <li>2-camera WiFi system: $150-200</li>
+                        <li>Motion-activated lights: $50-80</li>
+                        <li>Warning signs: $20</li>
+                    </ul>
+                    
+                    <h3>Final Thoughts</h3>
+                    <p>Most thieves are opportunists looking for easy scores. Visible cameras, good fencing, and signs send them elsewhere. Protect your plants, but protect your freedom more.</p>`
+            },
+            
+            'climate-change': {
+                content: `<h2>Climate Change and Cannabis: Adapting Your Outdoor Grow</h2>
+                    <div class="article-meta-modal">
+                        <span><i class="fas fa-calendar-alt"></i> October 28, 2024</span>
+                        <span><i class="fas fa-user"></i> Climate Cultivator</span>
+                        <span><i class="fas fa-tag"></i> Environmental</span>
+                        <span><i class="fas fa-clock"></i> 12 min read</span>
+                    </div>
+                    <p class="article-intro">Extreme weather events are becoming the norm. Heat domes, unexpected frosts, and unpredictable rainfall patterns are forcing us to adapt our growing strategies.</p>
+                    
+                    <h3>The New Reality</h3>
+                    <p>Data from grows over the past decade shows dramatic shifts. Frost dates now vary by 3+ weeks, heat waves 15-20°F above historical averages, and drought punctuated by flooding rains.</p>
+                    
+                    <h3>Adaptation Strategies</h3>
+                    <p><strong>Frost protection:</strong> Start indoors longer, use row covers, choose faster-finishing strains</p>
+                    <p><strong>Heat management:</strong> 30-50% shade cloth, heavy mulching, increased watering, foliar sprays</p>
+                    <p><strong>Water conservation:</strong> Drip irrigation, rainwater harvesting, soil amendments for retention</p>
+                    <p><strong>Rain protection:</strong> Raised beds, improved drainage, temporary rain covers, strategic pruning</p>
+                    
+                    <h3>Strain Selection</h3>
+                    <p><strong>Best Noyes Boys strains for climate resilience:</strong> Purple Rainbow (excellent cold tolerance), Alienoyes Kush (handles heat well), Mango Aliens (versatile performer)</p>
+                    
+                    <h3>Conclusion</h3>
+                    <p>We're the first generation facing truly unpredictable climate. Build resilience into your systems. Diversify your approach. Expect surprises and plan for them. Grow resilient. Grow adaptable. Grow despite the chaos.</p>`
+            }
+        };
+
+        function openFullArticle(articleKey) {
+            const article = articles[articleKey];
+            if (article) {
+                document.getElementById('articleContent').innerHTML = article.content;
+                document.getElementById('articleModal').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeArticleModal() {
+            document.getElementById('articleModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('articleModal');
+            if (event.target == modal) {
+                closeArticleModal();
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeArticleModal();
+            }
+        });
+
         function updateCartCount() {
             const cartCount = window.cartItems ? window.cartItems.reduce((sum, item) => sum + item.quantity, 0) : 0;
             document.getElementById('cartCount').textContent = cartCount;
@@ -590,11 +1006,6 @@
 
         function openCart() {
             window.location.href = 'deals.html';
-        }
-
-        function openFullArticle(articleKey) {
-            // Placeholder function - would be implemented with full article content
-            alert('Full article functionality would be implemented here');
         }
 
         document.addEventListener('DOMContentLoaded', function() {
