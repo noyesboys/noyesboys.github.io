@@ -549,14 +549,9 @@
             </a>
             <ul class="nav-links">
                 <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
-                <li><a href="deals.html">Pricing</a></li>
-                <li><a href="line1.html">Line 1</a></li>
-                <li><a href="line2.html">Line 2</a></li>
-                <li><a href="line3.html">Line 3</a></li>
                 <li><a href="contact_us.html">Contact</a></li>
                 <li><a href="reviews.html">Reviews</a></li>
-                <li><a href="blog.html">Blog</a></li>
-                <li><a href="tools.html" class="active">Tools</a></li>
+                <li><a href="/readmore">Blog</a></li>
             </ul>
             <button class="header-cart-button" onclick="alert('Cart functionality')">
                 <i class="fas fa-shopping-cart"></i>
@@ -576,7 +571,7 @@
 
     <div class="container">
         <div class="tools-intro">
-            <h2>Choose Your Tool</h2>
+            <h2>Interactive Grow Tools</h2>
             <p>Each tool is designed to help you make better growing decisions based on your specific situation, experience level, and goals.</p>
         </div>
 
@@ -992,40 +987,194 @@
         }
         
         function getStrainRecommendation(answers) {
-            const key = `${answers.experience}-${answers.environment}-${answers.effects}`;
-            const recommendations = {
-                'beginner-indoor-energizing': {
-                    strain: 'White Noyes',
-                    reason: 'Perfect for beginners with its forgiving nature and balanced effects.',
-                    tips: 'Easy to grow, responds well to basic nutrients, harvests in 55 days.',
-                    effects: 'Clear-headed focus without overwhelming intensity.'
-                },
-                'beginner-indoor-relaxing': {
-                    strain: 'Noyes Breath',
-                    reason: 'Compact size perfect for small spaces, very beginner-friendly.',
-                    tips: 'Low maintenance, natural pest resistance, great for first-time growers.',
-                    effects: 'Relaxing body high, perfect for evening use.'
-                },
-                'intermediate-indoor-energizing': {
-                    strain: 'Purple Rainbow',
-                    reason: 'Beautiful colors develop with moderate growing skills.',
-                    tips: 'Benefits from LST training, loves cooler nights for color development.',
-                    effects: 'Creative and energizing with stunning visual appeal.'
-                },
-                'expert-outdoor-energizing': {
-                    strain: 'Mango Aliens',
-                    reason: 'High-yielding sativa that rewards experienced techniques.',
-                    tips: 'Responds excellently to SCROG, needs support for heavy branches.',
-                    effects: 'Tropical euphoric high with incredible mango terpenes.'
-                }
-            };
-            return recommendations[key] || {
-                strain: 'White Noyes',
-                reason: 'Great all-around strain for any grower.',
-                tips: 'Versatile and forgiving, perfect for learning.',
-                effects: 'Balanced effects suitable for any time.'
-            };
+    const key = `${answers.experience}-${answers.environment}-${answers.effects}`;
+    const recommendations = {
+        // ---------------- BEGINNER ----------------
+        // Indoor
+        'beginner-indoor-energizing': {
+            strain: 'White Noyes',
+            reason: 'Forgiving hybrid that thrives in small indoor grows.',
+            tips: 'Keep it short with topping or LST, harvest in 62 days.',
+            effects: 'Motivated, Energetic, Happy'
+        },
+        'beginner-indoor-relaxing': {
+            strain: 'Noyes Breath',
+            reason: 'Compact indica-dominant strain for first-time growers.',
+            tips: 'Low maintenance and naturally pest resistant.',
+            effects: 'Relaxed, Chill, Sleepy'
+        },
+        'beginner-indoor-happy': {
+            strain: 'Blueberry Fingers',
+            reason: 'Beginner-friendly, fruity aromas and manageable growth.',
+            tips: 'Simple topping boosts yields, loves indoor soil.',
+            effects: 'Happy, Motivated'
+        },
+
+        // Outdoor
+        'beginner-outdoor-energizing': {
+            strain: 'Mangonoyes Kush',
+            reason: 'Easy outdoor growth, resistant to pests and mold.',
+            tips: 'Thrives in warm climates with full sun.',
+            effects: 'Energetic, Productive, Happy'
+        },
+        'beginner-outdoor-relaxing': {
+            strain: 'Cake Breath',
+            reason: 'Hardy plant that thrives outdoors with indica strength.',
+            tips: 'Handles less controlled conditions, high yield potential.',
+            effects: 'Relaxed, Couch-lock, Sleepy'
+        },
+        'beginner-outdoor-happy': {
+            strain: 'Rainbow Cakes',
+            reason: 'Balanced strain with sweet flavors and uplifting effects.',
+            tips: 'Grows well with minimal training in outdoor soil.',
+            effects: 'Motivated, Happy, Confident'
+        },
+
+        // Greenhouse
+        'beginner-greenhouse-energizing': {
+            strain: 'Citronoyes Haze',
+            reason: 'Sativa dominant, loves greenhouse humidity and height.',
+            tips: 'Top early, give vertical space.',
+            effects: 'Motivated, Energetic, Uplifted'
+        },
+        'beginner-greenhouse-relaxing': {
+            strain: 'Meat Cakes',
+            reason: 'Compact and reliable, ideal for semi-controlled grows.',
+            tips: 'Prune often to avoid mold, 62-day finish.',
+            effects: 'Relaxed, Chill, Tired'
+        },
+        'beginner-greenhouse-happy': {
+            strain: 'Rainbow Skunk',
+            reason: 'Colorful hybrid with uplifting effects.',
+            tips: 'Cooler nighttime temps bring out its hues.',
+            effects: 'Uplifted, Happy, Creative'
+        },
+
+        // ---------------- INTERMEDIATE ----------------
+        // Indoor
+        'intermediate-indoor-energizing': {
+            strain: 'Purple Rainbow',
+            reason: 'Colorful hybrid that shines with moderate grow skills.',
+            tips: 'Loves cooler temps, low-stress training helps yield.',
+            effects: 'Creative, Energizing, Uplifted'
+        },
+        'intermediate-indoor-relaxing': {
+            strain: 'Alienoyes Kush',
+            reason: 'Indica-dominant strain for growers who want heavier effects.',
+            tips: 'Prefers stable conditions and consistent feeding.',
+            effects: 'Comfy, Restful, Relaxed'
+        },
+        'intermediate-indoor-happy': {
+            strain: 'Bubba Noyes',
+            reason: 'Classic kush flavors with a balanced, happy effect.',
+            tips: 'Does well in soil or coco, 62-day harvest.',
+            effects: 'Happy, Positive, Motivated'
+        },
+
+        // Outdoor
+        'intermediate-outdoor-energizing': {
+            strain: 'Citrus Rocks',
+            reason: 'Thrives outdoors with vigorous growth.',
+            tips: 'Plant in full sun and support heavy branches.',
+            effects: 'Motivated, Energetic, Happy'
+        },
+        'intermediate-outdoor-relaxing': {
+            strain: 'Stink',
+            reason: 'Robust skunk hybrid, handles variable climates.',
+            tips: 'Very hardy plant, protect buds from late-season moisture.',
+            effects: 'Relaxed, Sleepy, Tired'
+        },
+        'intermediate-outdoor-happy': {
+            strain: 'Captain Noyes',
+            reason: 'Trainwreck cross that rewards mid-level growers.',
+            tips: 'Strong growth outdoors, needs staking.',
+            effects: 'Happy, Motivated, Uplifted'
+        },
+
+        // Greenhouse
+        'intermediate-greenhouse-energizing': {
+            strain: 'Noyes Haze',
+            reason: 'Tall sativa with classic haze vigor, perfect for greenhouse.',
+            tips: 'Needs vertical space and long flower patience.',
+            effects: 'Energetic, Motivated, Happy'
+        },
+        'intermediate-greenhouse-relaxing': {
+            strain: 'Skunk Cake',
+            reason: 'Indica-heavy strain that thrives under controlled greenhouse grows.',
+            tips: 'Keep humidity low late in flower.',
+            effects: 'Relaxed, Sleepy, Calm'
+        },
+        'intermediate-greenhouse-happy': {
+            strain: 'Loud Dreams',
+            reason: 'Blue Dream × Noyes Kush, aromatic and balanced.',
+            tips: 'Responds well to topping and gentle training.',
+            effects: 'Happy, Creative, Motivated'
+        },
+
+        // ---------------- EXPERT ----------------
+        // Indoor
+        'expert-indoor-energizing': {
+            strain: 'Citrus Pebbles',
+            reason: 'Complex terp profile with high sativa vigor indoors.',
+            tips: 'Requires canopy management and precision feeding.',
+            effects: 'Motivated, Energetic, Uplifted'
+        },
+        'expert-indoor-relaxing': {
+            strain: 'Skunk Breath',
+            reason: 'High THC indica skunk cross, rewarding for skilled growers.',
+            tips: 'Keep airflow strong, very dense buds.',
+            effects: 'Relaxed, Sleepy, Happy'
+        },
+        'expert-indoor-happy': {
+            strain: 'Noyes Poison',
+            reason: 'Durban Poison hybrid, fast-growing with happy uplift.',
+            tips: 'Stretchy, thrives in expert-run indoor SCROG setups.',
+            effects: 'Happy, Motivated, Uplifted'
+        },
+
+        // Outdoor
+        'expert-outdoor-energizing': {
+            strain: 'Mango Aliens',
+            reason: 'High-yielding strain for experienced growers outdoors.',
+            tips: 'SCROG/trellising recommended to manage heavy colas.',
+            effects: 'Euphoric, Energetic, Motivated'
+        },
+        'expert-outdoor-relaxing': {
+            strain: 'Alienized Skunk',
+            reason: 'Tricky to grow, but exceptional relaxing payoff.',
+            tips: 'Needs dry climate and expert mold management.',
+            effects: 'Relaxed, Sleepy, Happy'
+        },
+        'expert-outdoor-happy': {
+            strain: 'Albino Skunk',
+            reason: 'Unique hybrid, thrives outdoors with experienced hands.',
+            tips: 'Cooler climates bring out frosty trichomes.',
+            effects: 'Happy, Energetic, Uplifted'
+        },
+
+        // Greenhouse
+        'expert-greenhouse-energizing': {
+            strain: 'Citrus Haze Breath',
+            reason: 'High-vigor sativa dominant strain for advanced training methods.',
+            tips: 'Demands careful defoliation and airflow in greenhouse.',
+            effects: 'Motivated, Energetic, Happy'
+        },
+        'expert-greenhouse-relaxing': {
+            strain: 'Hash Fingers',
+            reason: 'Dense indica hybrid with strong relaxing body stone.',
+            tips: 'Keep RH under control to prevent mold in greenhouse.',
+            effects: 'Relaxed, Heavy, Tired'
+        },
+        'expert-greenhouse-happy': {
+            strain: 'Purple Rainbow',
+            reason: 'Expert growers can bring out its stunning colors and euphoric effects.',
+            tips: 'Cool night temps enhance purple expression.',
+            effects: 'Happy, Creative, Uplifted'
         }
+    };
+
+    return recommendations[key];
+}
         
         const monthData = {
             0: { name: 'January', tips: [
