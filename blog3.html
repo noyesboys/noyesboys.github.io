@@ -25,7 +25,6 @@
             zoom: 0.50;
         }
 
-        /* Header Navigation - Same as previous pages */
         header {
             background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%);
             padding: 0.5rem 0;
@@ -176,7 +175,6 @@
             background: rgba(74, 222, 128, 0.2);
         }
 
-        /* Blog Layout */
         .blog-layout {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -189,7 +187,6 @@
             gap: 2rem;
         }
 
-        /* Featured Article */
         .featured-article {
             background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 100%);
             border-radius: 15px;
@@ -241,7 +238,6 @@
             font-size: 4rem;
         }
 
-        /* Blog Posts */
         .blog-posts {
             display: grid;
             gap: 2rem;
@@ -289,6 +285,8 @@
             font-size: 0.9rem;
             transition: all 0.3s ease;
             display: inline-block;
+            cursor: pointer;
+            border: none;
         }
 
         .read-more-btn:hover {
@@ -296,7 +294,6 @@
             box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
         }
 
-        /* Sidebar */
         .sidebar {
             display: flex;
             flex-direction: column;
@@ -316,36 +313,93 @@
             font-size: 1.2rem;
         }
 
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-            margin: 3rem 0;
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9);
         }
 
-        .pagination button {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #f5f5f5;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            margin: 2% auto;
+            padding: 0;
+            border: 2px solid #4ade80;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            background: rgba(0,0,0,0.5);
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(74, 222, 128, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            color: #4ade80;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .close-btn {
+            background: #ef4444;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s ease;
         }
 
-        .pagination button:hover {
-            background: rgba(74, 222, 128, 0.2);
-            border-color: #4ade80;
+        .close-btn:hover {
+            background: #dc2626;
+            transform: scale(1.1);
         }
 
-        .pagination button.active {
-            background: #4ade80;
-            color: #0a0a0a;
+        .modal-meta {
+            padding: 1rem 2rem;
+            background: rgba(0,0,0,0.3);
+            border-bottom: 1px solid rgba(74, 222, 128, 0.1);
+            color: #ccc;
+            font-size: 0.9rem;
         }
 
-        /* Mobile Responsive */
+        .modal-body {
+            padding: 2rem;
+            overflow-y: auto;
+            flex: 1;
+            color: #f5f5f5;
+            line-height: 1.8;
+        }
+
+        .modal-body h3 {
+            color: #4ade80;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body p {
+            margin-bottom: 1rem;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding-top: 80px;
@@ -394,6 +448,17 @@
         </nav>
     </header>
 
+    <div id="articleModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle"></h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-meta" id="modalMeta"></div>
+            <div class="modal-body" id="modalContent"></div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="page-header">
             <h1>Advanced Growing Techniques</h1>
@@ -408,9 +473,7 @@
         </div>
 
         <div class="blog-layout">
-            <!-- Main Content -->
             <div class="main-content">
-                <!-- Featured Article -->
                 <div class="featured-article">
                     <div class="featured-badge">Controversial</div>
                     <div class="article-header">
@@ -430,10 +493,9 @@
                         
                         <p>This exposé reveals the shocking truth about how lab shopping, sample preparation tricks, and financial pressure create a system where honest testing is nearly impossible. If you've ever wondered why your 30% THC flower doesn't feel stronger than the 20% you had last year, this investigation has your answers.</p>
                     </div>
-                    <a href="#" class="read-more-btn" onclick="openFullArticle('lab-truth')">Read Full Exposé</a>
+                    <button class="read-more-btn" onclick="openArticle(0)">Read Full Exposé</button>
                 </div>
 
-                <!-- Blog Posts Grid -->
                 <div class="blog-posts">
                     <div class="blog-post">
                         <h3>Hydroponic Nutrient Burns: Prevention and Recovery</h3>
@@ -442,7 +504,7 @@
                             <p>Nutrient burn is the #1 killer of hydroponic grows, yet it's completely preventable with proper monitoring. After losing my first three grows to nute burn, I developed a systematic approach that's saved me thousands of dollars and countless hours of frustration.</p>
                             <p>This guide covers EC monitoring, nutrient scheduling, early warning signs, and the recovery protocol that can save plants even after severe burns. Plus, my complete feeding chart for all growth stages...</p>
                         </div>
-                        <a href="#" class="read-more-btn">Read More</a>
+                        <button class="read-more-btn" onclick="openArticle(1)">Read More</button>
                     </div>
 
                     <div class="blog-post">
@@ -452,7 +514,7 @@
                             <p>Want to create the next Purple Rainbow or Alienoyes Kush? Breeding your own strains is the ultimate expression of cannabis cultivation, but it requires patience, space, and a scientific approach. This comprehensive guide takes you through the entire process from parent selection to stabilization.</p>
                             <p>Learn about phenotype hunting, pollination techniques, seed storage, and how to document your breeding projects for consistent results...</p>
                         </div>
-                        <a href="#" class="read-more-btn">Read More</a>
+                        <button class="read-more-btn" onclick="openArticle(2)">Read More</button>
                     </div>
 
                     <div class="blog-post">
@@ -462,7 +524,7 @@
                             <p>The autoflower revolution has changed cannabis growing forever, but are autos really better than photoperiod plants? After running side-by-side tests for two years, I have definitive data on yields, potency, ease of growing, and total harvest time.</p>
                             <p>This analysis covers the pros and cons of each type, helping you choose the right genetics for your goals, space, and experience level...</p>
                         </div>
-                        <a href="#" class="read-more-btn">Read More</a>
+                        <button class="read-more-btn" onclick="openArticle(3)">Read More</button>
                     </div>
 
                     <div class="blog-post">
@@ -472,7 +534,7 @@
                             <p>Growing great cannabis is only half the journey - processing your harvest into concentrates can multiply its value and potency. This guide covers safe, legal extraction methods you can use at home, from simple bubble hash to rosin pressing.</p>
                             <p>Learn about equipment, safety protocols, yield expectations, and the quality factors that separate amateur extracts from professional-grade concentrates...</p>
                         </div>
-                        <a href="#" class="read-more-btn">Read More</a>
+                        <button class="read-more-btn" onclick="openArticle(4)">Read More</button>
                     </div>
 
                     <div class="blog-post">
@@ -482,7 +544,7 @@
                             <p>Chemical pesticides are a short-term solution that creates long-term problems. Integrated Pest Management (IPM) uses biological controls, environmental manipulation, and companion planting to create ecosystems that naturally resist pests.</p>
                             <p>This comprehensive guide covers beneficial insects, predator mites, companion plants, and the environmental controls that prevent infestations before they start...</p>
                         </div>
-                        <a href="#" class="read-more-btn">Read More</a>
+                        <button class="read-more-btn" onclick="openArticle(5)">Read More</button>
                     </div>
 
                     <div class="blog-post">
@@ -492,7 +554,7 @@
                             <p>Is home growing really cheaper than buying? After tracking every expense for three years - from electricity to nutrients to equipment depreciation - I have the real numbers. The answer might surprise you.</p>
                             <p>This detailed cost analysis includes setup costs, ongoing expenses, yield calculations, and break-even timelines for different growing methods...</p>
                         </div>
-                        <a href="#" class="read-more-btn">Read More</a>
+                        <button class="read-more-btn" onclick="openArticle(6)">Read More</button>
                     </div>
 
                     <div class="blog-post">
@@ -502,18 +564,16 @@
                             <p>Modern grow lighting is becoming incredibly sophisticated, with full spectrum tuning, UV supplementation, and far-red triggering. This deep dive covers the latest lighting technologies and how they affect cannabinoid and terpene production.</p>
                             <p>Learn about PPFD mapping, spectrum manipulation for different growth phases, and the cutting-edge LED technologies that are revolutionizing indoor growing...</p>
                         </div>
-                        <a href="#" class="read-more-btn">Read More</a>
+                        <button class="read-more-btn" onclick="openArticle(7)">Read More</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Sidebar -->
             <div class="sidebar">
-                <!-- Search Box -->
                 <div class="sidebar-section">
                     <h3><i class="fas fa-search"></i> Search Articles</h3>
-                    <form style="display: flex; gap: 0.5rem;">
-                        <input type="text" placeholder="Search..." style="flex: 1; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; padding: 0.5rem; color: #f5f5f5; font-size: 0.9rem;">
+                    <form onsubmit="return searchArticles(event)" style="display: flex; gap: 0.5rem;">
+                        <input type="text" id="searchInput" placeholder="Search..." style="flex: 1; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; padding: 0.5rem; color: #f5f5f5; font-size: 0.9rem;">
                         <button type="submit" style="background: #4ade80; border: none; color: #0a0a0a; padding: 0.5rem; border-radius: 5px; cursor: pointer;"><i class="fas fa-search"></i></button>
                     </form>
                 </div>
@@ -523,15 +583,15 @@
                     <div style="display: flex; flex-direction: column; gap: 1rem;">
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <span style="background: #ef4444; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">1</span>
-                            <a href="#" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">The Truth About Cannabis Testing Labs</a>
+                            <a href="#" onclick="openArticle(0); return false;" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">The Truth About Cannabis Testing Labs</a>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <span style="background: rgba(255,255,255,0.2); color: #f5f5f5; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">2</span>
-                            <a href="#" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">Hydroponic Nutrient Burns: Prevention Guide</a>
+                            <a href="#" onclick="openArticle(1); return false;" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">Hydroponic Nutrient Burns: Prevention Guide</a>
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                             <span style="background: rgba(255,255,255,0.2); color: #f5f5f5; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem;">3</span>
-                            <a href="#" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">Breeding Basics: Create Your Own Strains</a>
+                            <a href="#" onclick="openArticle(2); return false;" style="color: #f5f5f5; text-decoration: none; font-size: 0.9rem; flex: 1;">Breeding Basics: Create Your Own Strains</a>
                         </div>
                     </div>
                 </div>
@@ -566,49 +626,586 @@
                 <div class="sidebar-section">
                     <h3><i class="fas fa-tags"></i> Advanced Topics</h3>
                     <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
-                        <a href="#" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Breeding (5)</a>
-                        <a href="#" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Extraction (4)</a>
-                        <a href="#" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Hydroponics (9)</a>
-                        <a href="#" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">IPM (6)</a>
-                        <a href="#" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Lighting (8)</a>
-                    </div>
-                </div>
-
-                <div class="sidebar-section">
-                    <h3><i class="fas fa-exclamation-triangle"></i> Disclaimer</h3>
-                    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 1rem;">
-                        <p style="color: #ccc; font-size: 0.9rem; margin-bottom: 0.5rem;">Some articles contain controversial opinions and industry criticism.</p>
-                        <p style="color: #ccc; font-size: 0.8rem;">Always verify information independently and follow local laws.</p>
-                    </div>
-                </div>
-
-                <div class="sidebar-section">
-                    <h3><i class="fas fa-star"></i> Premium Genetics</h3>
-                    <div style="text-align: center; padding: 1rem;">
-                        <div style="background: linear-gradient(45deg, #4ade80, #22c55e); border-radius: 10px; padding: 1rem; margin-bottom: 1rem;">
-                            <h4 style="color: #0a0a0a; margin-bottom: 0.5rem;">Mangonoyes Kush</h4>
-                            <p style="color: #0a0a0a; font-size: 0.9rem; margin-bottom: 0.5rem;">Perfect for breeding projects</p>
-                            <p style="color: #0a0a0a; font-size: 0.8rem; font-weight: bold;">Stable genetics guaranteed</p>
-                        </div>
-                        <a href="deals.html" style="background: #4ade80; color: #0a0a0a; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-weight: bold; transition: all 0.3s ease;">Shop Genetics</a>
+                        <a href="#" onclick="filterByTag('breeding'); return false;" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Breeding (5)</a>
+                        <a href="#" onclick="filterByTag('extraction'); return false;" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Extraction (3)</a>
+                        <a href="#" onclick="filterByTag('hydroponic'); return false;" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Hydroponics (8)</a>
+                        <a href="#" onclick="filterByTag('ipm'); return false;" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">IPM (6)</a>
+                        <a href="#" onclick="filterByTag('lighting'); return false;" style="background: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.5rem 1rem; border-radius: 20px; text-decoration: none; font-size: 0.8rem; transition: all 0.3s ease; border: 1px solid rgba(74, 222, 128, 0.2);">Lighting (4)</a>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Pagination -->
-        <div class="pagination">
-            <button onclick="window.location.href='blog-page2.html'">← Previous</button>
-            <button onclick="window.location.href='blog.html'">1</button>
-            <button onclick="window.location.href='blog-page2.html'">2</button>
-            <button class="active">3</button>
-            <button onclick="window.location.href='blog-page4.html'">4</button>
-            <button onclick="window.location.href='blog-page5.html'">5</button>
-            <button onclick="window.location.href='blog-page4.html'">Next →</button>
-        </div>
     </div>
 
     <script>
+        // Article data storage
+        const articles = {
+            'lab-truth': {
+                title: 'The Truth About Cannabis Testing: Why Lab Results Lie',
+                author: 'Lab Whistleblower',
+                date: 'October 25, 2024',
+                category: 'Industry Exposé',
+                content: `
+                    <h3>The Systematic Fraud in Cannabis Testing</h3>
+                    <p>After working in cannabis testing labs for 5 years, I can no longer stay silent about the systematic fraud occurring in this industry. THC percentages are routinely inflated, pesticide tests are manipulated, and consumers are being deceived on a massive scale.</p>
+                    
+                    <h3>Lab Shopping: The Industry's Dirty Secret</h3>
+                    <p>Dispensaries and growers engage in "lab shopping" - sending samples to multiple labs until they get the highest THC result. Labs that provide inflated numbers get more business, while honest labs lose clients. This creates a race to the bottom where accuracy is punished and fraud is rewarded.</p>
+                    
+                    <h3>Sample Preparation Tricks</h3>
+                    <p>Growers can manipulate samples by cherry-picking the frostiest nugs, hand-selecting perfect buds, or even adding kief to samples. These techniques can inflate THC results by 5-10% above what the actual batch contains. Some labs don't verify sample integrity, allowing this manipulation to go unchecked.</p>
+                    
+                    <h3>The Financial Pressure</h3>
+                    <p>Testing labs operate in a competitive market where losing a major client can mean bankruptcy. When a dispensary threatens to take their business elsewhere unless you "adjust" results, many labs cave to the pressure. I've witnessed lab directors override technicians to inflate results for important clients.</p>
+                    
+                    <h3>Pesticide Test Manipulation</h3>
+                    <p>Failed pesticide tests cost growers thousands of dollars in lost product. Some labs offer "retesting" services where samples mysteriously pass on the second try. Others use detection limits that are so high they miss dangerous pesticide levels that would fail at other labs.</p>
+                    
+                    <h3>What This Means for Consumers</h3>
+                    <p>That 30% THC flower you bought? It's probably closer to 20-25%. Those clean pesticide results? The lab might have used lax testing standards. The problem is so widespread that you can't trust any lab results without knowing the lab's reputation for honesty.</p>
+                    
+                    <h3>The Solution</h3>
+                    <p>We need independent oversight, standardized testing protocols, and severe penalties for labs that falsify results. Until then, treat THC percentages as marketing rather than science, and focus on how the flower actually affects you rather than what the label claims.</p>
+                    
+                    <h3>Red Flags to Watch For</h3>
+                    <p>• THC percentages over 30% (extremely rare in reality)<br>
+                    • Suspiciously round numbers (25.0%, 28.0%)<br>
+                    • No batch variation (every test identical)<br>
+                    • Labs that advertise "highest THC results"<br>
+                    • Dispensaries that only use one specific lab</p>
+                    
+                    <p><strong>The cannabis testing industry needs a complete overhaul. Until that happens, consumers need to be educated about these deceptive practices and demand better standards.</strong></p>
+                `
+            },
+            'nutrient-burns': {
+                title: 'Hydroponic Nutrient Burns: Prevention and Recovery',
+                author: 'Hydro Master',
+                date: 'October 22, 2024',
+                category: 'Plant Health',
+                content: `
+                    <h3>Understanding Nutrient Burn</h3>
+                    <p>Nutrient burn is the #1 killer of hydroponic grows, yet it's completely preventable with proper monitoring. After losing my first three grows to nute burn, I developed a systematic approach that's saved me thousands of dollars and countless hours of frustration.</p>
+                    
+                    <h3>Early Warning Signs</h3>
+                    <p>• Leaf tips turning yellow or brown<br>
+                    • Curling or "clawing" of leaves<br>
+                    • Dark green leaves (nitrogen excess)<br>
+                    • Stunted growth despite good conditions<br>
+                    • Crispy, burnt-looking leaf edges</p>
+                    
+                    <h3>EC Monitoring: Your First Line of Defense</h3>
+                    <p>Electrical conductivity (EC) monitoring is crucial for preventing nutrient burn. I check EC twice daily - morning and evening. Seedlings should be at 0.8-1.0 EC, vegetative plants at 1.2-1.6 EC, and flowering plants at 1.6-2.2 EC maximum.</p>
+                    
+                    <h3>The Recovery Protocol</h3>
+                    <p><strong>Day 1-2: Emergency Flush</strong><br>
+                    Flush your system with pH-balanced water (no nutrients) until runoff EC drops below 1.0. Check EC every few hours to monitor progress.</p>
+                    
+                    <p><strong>Day 3-5: Gradual Reintroduction</strong><br>
+                    Start feeding at 50% strength of your previous nutrient level. Monitor plants closely for improvement or continued stress.</p>
+                    
+                    <p><strong>Day 6+: Slow Ramp Up</strong><br>
+                    Increase nutrient strength by 10% every 2-3 days until you reach optimal levels. Never rush this process.</p>
+                    
+                    <h3>My Complete Feeding Chart</h3>
+                    <p><strong>Seedling (Week 1-2):</strong> EC 0.8-1.0, pH 5.8-6.2<br>
+                    <strong>Vegetative Early (Week 3-4):</strong> EC 1.2-1.4, pH 5.8-6.0<br>
+                    <strong>Vegetative Late (Week 5-6):</strong> EC 1.4-1.6, pH 5.8-6.0<br>
+                    <strong>Early Flower (Week 1-3):</strong> EC 1.6-1.8, pH 5.8-6.0<br>
+                    <strong>Mid Flower (Week 4-6):</strong> EC 1.8-2.0, pH 6.0-6.2<br>
+                    <strong>Late Flower (Week 7+):</strong> EC 1.6-1.8, pH 6.0-6.2<br>
+                    <strong>Flush (Final 1-2 weeks):</strong> EC 0.0-0.4, pH 6.0-6.2</p>
+                    
+                    <h3>Prevention Tips</h3>
+                    <p>1. Always start with lower nutrient levels than recommended<br>
+                    2. Invest in quality EC and pH meters<br>
+                    3. Keep detailed logs of feeding schedules and plant responses<br>
+                    4. Never increase nutrients more than 10% at a time<br>
+                    5. Watch your plants, not the feeding chart</p>
+                    
+                    <p><strong>Remember: It's always easier to add more nutrients than to fix nutrient burn. When in doubt, feed less.</strong></p>
+                `
+            },
+            'breeding-basics': {
+                title: 'Breeding Basics: Creating Your Own Cannabis Strains',
+                author: 'Genetic Explorer',
+                date: 'October 20, 2024',
+                category: 'Breeding',
+                content: `
+                    <h3>The Art and Science of Cannabis Breeding</h3>
+                    <p>Want to create the next Purple Rainbow or Alienoyes Kush? Breeding your own strains is the ultimate expression of cannabis cultivation, but it requires patience, space, and a scientific approach. This comprehensive guide takes you through the entire process from parent selection to stabilization.</p>
+                    
+                    <h3>Parent Selection: The Foundation</h3>
+                    <p>Choose parent plants based on:<br>
+                    • Desired traits (potency, flavor, structure, yield)<br>
+                    • Genetic stability (consistent phenotypes)<br>
+                    • Health and vigor<br>
+                    • Complementary characteristics<br>
+                    • Known lineage</p>
+                    
+                    <h3>Phenotype Hunting</h3>
+                    <p>Grow out at least 10-20 seeds from each parent line to find exceptional specimens. Document everything: growth patterns, flowering time, yield, potency, terpene profile, and resistance to stress. The best parents aren't always the most exotic - sometimes stable, reliable genetics produce the best offspring.</p>
+                    
+                    <h3>Pollination Techniques</h3>
+                    <p><strong>Controlled Pollination:</strong> Isolate male and female plants in separate spaces. Collect pollen from males using a clean paintbrush or by shaking branches over glass. Apply pollen to specific female branches (label them!) while keeping the rest of the plant unseeded for consumption.</p>
+                    
+                    <p><strong>Timing:</strong> Pollinate 2-3 weeks into flowering when pistils are white and receptive. Seeds will be mature 4-6 weeks after pollination.</p>
+                    
+                    <h3>The F1 Generation</h3>
+                    <p>Your first cross (F1) will show hybrid vigor and relatively uniform characteristics. All F1 plants from the same parents will be similar, but they're not stable - they'll produce varied offspring when bred further.</p>
+                    
+                    <h3>Stabilization Process</h3>
+                    <p><strong>F2 Generation:</strong> Breed F1 plants together. This generation shows the most variation - you'll see recessive traits appear. Grow out 50+ F2 plants to see the full genetic range.</p>
+                    
+                    <p><strong>F3-F5 Generations:</strong> Select the best F2 plants with your desired traits and breed them together. Repeat this process for 3-5 generations, always selecting for your target characteristics. By F5, you should have relatively stable genetics.</p>
+                    
+                    <h3>Seed Storage</h3>
+                    <p>Store seeds in airtight containers with silica gel packets in a cool, dark place. Properly stored seeds can remain viable for 5-10 years. Label everything with strain name, generation, and date.</p>
+                    
+                    <h3>Documentation</h3>
+                    <p>Keep detailed breeding records:<br>
+                    • Parent genetics and characteristics<br>
+                    • Pollination dates and methods<br>
+                    • Seed production numbers<br>
+                    • Germination rates by generation<br>
+                    • Phenotype descriptions with photos<br>
+                    • Selection criteria and decisions</p>
+                    
+                    <h3>Advanced Techniques</h3>
+                    <p><strong>Backcrossing:</strong> Breed offspring back to a parent to reinforce specific traits.<br>
+                    <strong>Cubing:</strong> Backcross three times to create near-identical copies of exceptional plants.<br>
+                    <strong>Line Breeding:</strong> Breed related plants to maintain desirable traits while avoiding inbreeding depression.</p>
+                    
+                    <p><strong>Creating stable, unique strains takes 2-4 years minimum. Patience and systematic selection are the keys to successful breeding.</strong></p>
+                `
+            },
+            'autoflower-comparison': {
+                title: 'Autoflower vs Photoperiod: The Complete Comparison',
+                author: 'Cycle Scientist',
+                date: 'October 18, 2024',
+                category: 'Strain Types',
+                content: `
+                    <h3>The Great Debate</h3>
+                    <p>The autoflower revolution has changed cannabis growing forever, but are autos really better than photoperiod plants? After running side-by-side tests for two years, I have definitive data on yields, potency, ease of growing, and total harvest time.</p>
+                    
+                    <h3>Autoflower Advantages</h3>
+                    <p>• Faster harvest (8-12 weeks seed to harvest)<br>
+                    • No light schedule changes required<br>
+                    • Smaller, more discreet plants<br>
+                    • Multiple outdoor harvests per season<br>
+                    • Highly resistant to stress<br>
+                    • Beginner-friendly</p>
+                    
+                    <h3>Photoperiod Advantages</h3>
+                    <p>• Larger yields per plant<br>
+                    • Can be kept in vegetative growth indefinitely<br>
+                    • Can be cloned for genetic consistency<br>
+                    • More training options available<br>
+                    • Generally higher potency ceiling<br>
+                    • Lower per-gram production costs</p>
+                    
+                    <h3>Yield Comparison (My Test Results)</h3>
+                    <p><strong>Autoflowers:</strong> Average 2-4 oz per plant (60-120g)<br>
+                    Top performers: 5-6 oz per plant</p>
+                    
+                    <p><strong>Photoperiods:</strong> Average 4-8 oz per plant (120-240g)<br>
+                    Top performers: 10-16 oz per plant</p>
+                    
+                    <p>However, autoflowers finish in 10 weeks while photoperiods take 14-18 weeks (including veg time). You can grow 2-3 auto crops in the time it takes for one photo crop.</p>
+                    
+                    <h3>Potency Analysis</h3>
+                    <p>Modern autoflowers have closed the potency gap significantly. My tests showed:<br>
+                    • Average auto THC: 18-22%<br>
+                    • Average photo THC: 20-25%<br>
+                    • Top autos: 24-27%<br>
+                    • Top photos: 26-30%</p>
+                    
+                    <p>The difference is minimal for most users. Terpene profiles are comparable when grown properly.</p>
+                    
+                    <h3>Ease of Growing</h3>
+                    <p><strong>Autoflowers win decisively for beginners:</strong><br>
+                    • No need to manage light schedules<br>
+                    • Very forgiving of mistakes<br>
+                    • Less planning required<br>
+                    • Faster feedback loop for learning</p>
+                    
+                    <p><strong>Photoperiods require more skill:</strong><br>
+                    • Must manage vegetative/flowering light cycles<br>
+                    • Mistakes can ruin entire crops<br>
+                    • More complex training required<br>
+                    • Longer commitment per crop</p>
+                    
+                    <h3>Cost Analysis</h3>
+                    <p><strong>Per plant costs:</strong> Photos are cheaper<br>
+                    <strong>Time efficiency:</strong> Autos produce more in same timeframe<br>
+                    <strong>Space efficiency:</strong> Autos allow perpetual harvests in same space<br>
+                    <strong>Electricity:</strong> Autos use more (18-24hr light vs 12hr in flower)</p>
+                    
+                    <h3>Best Use Cases</h3>
+                    <p><strong>Choose Autoflowers if you:</strong><br>
+                    • Are a beginner<br>
+                    • Want quick harvests<br>
+                    • Have limited space<br>
+                    • Want perpetual harvests<br>
+                    • Grow outdoors in short seasons</p>
+                    
+                    <p><strong>Choose Photoperiods if you:</strong><br>
+                    • Want maximum yield per plant<br>
+                    • Enjoy plant training and manipulation<br>
+                    • Want to create mother plants/clones<br>
+                    • Have space and time for larger plants<br>
+                    • Want the absolute highest potency</p>
+                    
+                    <p><strong>My recommendation: Try both! Many growers run autos for quick harvests while maintaining photo plants for maximum production.</strong></p>
+                `
+            },
+            'extraction-guide': {
+                title: 'Cannabis Extraction: From Flower to Concentrate',
+                author: 'Extract Artist',
+                date: 'October 15, 2024',
+                category: 'Processing',
+                content: `
+                    <h3>Beyond Flower: The World of Concentrates</h3>
+                    <p>Growing great cannabis is only half the journey - processing your harvest into concentrates can multiply its value and potency. This guide covers safe, legal extraction methods you can use at home, from simple bubble hash to rosin pressing.</p>
+                    
+                    <h3>Bubble Hash (Ice Water Extraction)</h3>
+                    <p><strong>Equipment needed:</strong><br>
+                    • Bubble bags (multiple micron sizes)<br>
+                    • 5-gallon buckets<br>
+                    • Ice and cold water<br>
+                    • Stirring device<br>
+                    • Drying screen</p>
+                    
+                    <p><strong>Process:</strong> Mix frozen trim/flower with ice and water, agitate gently for 15-20 minutes, strain through progressively finer bags (220μ → 190μ → 160μ → 120μ → 90μ → 73μ → 45μ → 25μ). The 73μ and 90μ bags typically produce the highest quality "full melt" hash.</p>
+                    
+                    <p><strong>Yield expectations:</strong> 10-20% by weight from trim, 20-30% from quality flower.</p>
+                    
+                    <h3>Rosin Pressing</h3>
+                    <p><strong>Equipment needed:</strong><br>
+                    • Rosin press (or hair straightener for small amounts)<br>
+                    • Parchment paper<br>
+                    • Collection tools<br>
+                    • Optional: 25-37μ rosin bags</p>
+                    
+                    <p><strong>Process:</strong> Place flower or hash in rosin bag, fold in parchment paper, press at 180-220°F with firm pressure for 30-90 seconds. Lower temps (160-180°F) preserve terpenes, higher temps (200-220°F) increase yield.</p>
+                    
+                    <p><strong>Yield expectations:</strong> 15-25% from flower, 50-70% from bubble hash.</p>
+                    
+                    <h3>Dry Sift</h3>
+                    <p><strong>Equipment needed:</strong><br>
+                    • Multiple mesh screens (100-150 microns)<br>
+                    • Collection tray<br>
+                    • Soft brush</p>
+                    
+                    <p><strong>Process:</strong> Gently work dried flower over screens to separate trichomes. Use progressively finer screens for higher purity. Work in a cool environment - warm trichomes stick together and reduce quality.</p>
+                    
+                    <h3>Quality Factors</h3>
+                    <p><strong>Starting material:</strong> Better input = better output. Use properly cured, properly stored flower.<br>
+                    <strong>Temperature control:</strong> Keep everything cold for bubble hash, precise temps for rosin.<br>
+                    <strong>Patience:</strong> Rushing extraction reduces quality and yield.<br>
+                    <strong>Storage:</strong> Store concentrates in airtight, light-proof containers in cool conditions.</p>
+                    
+                    <h3>Safety Protocols</h3>
+                    <p>• Never use flammable solvents (butane, propane) without professional equipment<br>
+                    • Work in well-ventilated areas<br>
+                    • Use food-grade materials only<br>
+                    • Keep extraction areas clean<br>
+                    • Follow all local laws and regulations</p>
+                    
+                    <h3>Troubleshooting Common Issues</h3>
+                    <p><strong>Dark/green rosin:</strong> Too much pressure or heat, or poor starting material<br>
+                    <strong>Low bubble hash yield:</strong> Agitation too gentle or insufficient mixing time<br>
+                    <strong>Sticky/won't collect:</strong> Too warm, needs more drying time<br>
+                    <strong>Harsh taste:</strong> Excessive heat or plant material contamination</p>
+                    
+                    <p><strong>Start with small batches to perfect your technique before processing your entire harvest!</strong></p>
+                `
+            },
+            'ipm-guide': {
+                title: 'Integrated Pest Management: Beyond Pesticides',
+                author: 'Eco Grower',
+                date: 'October 12, 2024',
+                category: 'Organic Methods',
+                content: `
+                    <h3>Rethinking Pest Control</h3>
+                    <p>Chemical pesticides are a short-term solution that creates long-term problems. Integrated Pest Management (IPM) uses biological controls, environmental manipulation, and companion planting to create ecosystems that naturally resist pests.</p>
+                    
+                    <h3>The IPM Philosophy</h3>
+                    <p>IPM focuses on prevention first, intervention second. By creating an environment hostile to pests but beneficial to predators, you minimize problems before they start. When intervention is needed, start with the least disruptive methods.</p>
+                    
+                    <h3>Beneficial Insects</h3>
+                    <p><strong>Ladybugs:</strong> Voracious aphid eaters. Release 1,500-3,000 at dusk when they're less likely to fly away. Mist plants first to give them water.</p>
+                    
+                    <p><strong>Predator Mites (Phytoseiulus persimilis):</strong> Target spider mites specifically. Release 2-5 per infested plant. They'll establish a breeding population if spider mites are present.</p>
+                    
+                    <p><strong>Parasitic Wasps (Encarsia formosa):</strong> Control whiteflies by laying eggs inside them. Release 3-5 per plant every 2 weeks for 6 weeks.</p>
+                    
+                    <p><strong>Green Lacewings:</strong> Generalist predators that eat aphids, mites, thrips, and more. Release larvae directly on plants.</p>
+                    
+                    <h3>Companion Planting</h3>
+                    <p><strong>Basil:</strong> Repels aphids, spider mites, and thrips. Plant around perimeter.<br>
+                    <strong>Marigolds:</strong> Deter aphids and whiteflies. Strong scent masks cannabis smell.<br>
+                    <strong>Dill & Fennel:</strong> Attract beneficial insects while repelling aphids.<br>
+                    <strong>Garlic & Chives:</strong> Natural fungicide and insect repellent.<br>
+                    <strong>Mint:</strong> Repels ants, aphids, and flea beetles (contain it - it spreads!).</p>
+                    
+                    <h3>Environmental Controls</h3>
+                    <p><strong>Temperature:</strong> Keep below 80°F - spider mites thrive in heat<br>
+                    <strong>Humidity:</strong> 40-60% RH prevents mold while discouraging mites<br>
+                    <strong>Air circulation:</strong> Strong fans prevent pest establishment<br>
+                    <strong>Cleanliness:</strong> Remove dead leaves, sanitize tools, quarantine new plants<br>
+                    <strong>Plant spacing:</strong> Good airflow between plants prevents pest spread</p>
+                    
+                    <h3>Organic Intervention Methods</h3>
+                    <p><strong>Neem Oil:</strong> Disrupts insect hormones. Spray every 7 days, stop 2 weeks before harvest.<br>
+                    <strong>Insecticidal Soap:</strong> Suffocates soft-bodied insects. Safe until harvest.<br>
+                    <strong>Diatomaceous Earth:</strong> Mechanical pest killer. Apply to soil surface for crawling insects.<br>
+                    <strong>Spinosad:</strong> Organic bacteria-based insecticide. Effective against thrips and caterpillars.</p>
+                    
+                    <h3>The IPM Schedule</h3>
+                    <p><strong>Prevention (Ongoing):</strong><br>
+                    • Daily visual inspections<br>
+                    • Maintain optimal environment<br>
+                    • Keep grow room clean<br>
+                    • Monitor beneficial insect populations</p>
+                    
+                    <p><strong>Early Detection (Weekly):</strong><br>
+                    • Inspect undersides of leaves<br>
+                    • Check new growth<br>
+                    • Use sticky traps to monitor flying insects<br>
+                    • Document any findings</p>
+                    
+                    <p><strong>Response (As Needed):</strong><br>
+                    • Identify pest correctly<br>
+                    • Start with least disruptive method<br>
+                    • Release appropriate beneficial insects<br>
+                    • Use organic sprays only if infestation is severe<br>
+                    • Increase monitoring frequency</p>
+                    
+                    <h3>Building Resilient Plants</h3>
+                    <p>Healthy plants resist pests better:<br>
+                    • Proper nutrition (avoid over-feeding)<br>
+                    • Correct watering (not too wet, not too dry)<br>
+                    • Good genetics (some strains naturally resist pests)<br>
+                    • No stress (temperature fluctuations, light stress weaken plants)</p>
+                    
+                    <p><strong>IPM requires patience and observation, but creates sustainable grows that need less intervention over time.</strong></p>
+                `
+            },
+            'growing-economics': {
+                title: 'The Economics of Home Growing: True Cost Analysis',
+                author: 'Cannabis Economist',
+                date: 'October 10, 2024',
+                category: 'Finance',
+                content: `
+                    <h3>The Real Numbers</h3>
+                    <p>Is home growing really cheaper than buying? After tracking every expense for three years - from electricity to nutrients to equipment depreciation - I have the real numbers. The answer might surprise you.</p>
+                    
+                    <h3>Initial Setup Costs</h3>
+                    <p><strong>Tent Setup (2x4 ft):</strong><br>
+                    • Grow tent: $100-200<br>
+                    • LED light (240W): $150-300<br>
+                    • Ventilation (fan + filter): $100-150<br>
+                    • Pots and medium: $50<br>
+                    • Nutrients: $50-100<br>
+                    • pH/EC meters: $50-100<br>
+                    • Misc (timer, hygrometer, etc): $50<br>
+                    <strong>Total: $550-1,050</strong></p>
+                    
+                    <p><strong>Room Setup (4x8 ft):</strong><br>
+                    • LED lights (2x 480W): $600-1,200<br>
+                    • Ventilation system: $300-500<br>
+                    • AC unit: $200-400<br>
+                    • Dehumidifier: $200-300<br>
+                    • Pots and medium: $100<br>
+                    • Nutrients: $100-200<br>
+                    • Monitoring equipment: $150<br>
+                    • Misc supplies: $100<br>
+                    <strong>Total: $1,750-3,050</strong></p>
+                    
+                    <h3>Per-Grow Operating Costs (12 weeks)</h3>
+                    <p><strong>2x4 Tent:</strong><br>
+                    • Electricity (240W x 18hr veg + 12hr flower): $45-90<br>
+                    • Nutrients: $30<br>
+                    • Growing medium: $20<br>
+                    • Water: $10<br>
+                    • Seeds: $30-100<br>
+                    <strong>Total per grow: $135-250</strong></p>
+                    
+                    <p><strong>4x8 Room:</strong><br>
+                    • Electricity (lights, fans, AC, dehumidifier): $180-350<br>
+                    • Nutrients: $60<br>
+                    • Growing medium: $40<br>
+                    • Water: $20<br>
+                    • Seeds: $60-200<br>
+                    <strong>Total per grow: $360-670</strong></p>
+                    
+                    <h3>Yield Expectations</h3>
+                    <p><strong>2x4 Tent (240W):</strong> 4-8 oz per harvest<br>
+                    <strong>4x8 Room (960W):</strong> 16-32 oz per harvest</p>
+                    
+                    <h3>Cost Per Gram Analysis</h3>
+                    <p><strong>2x4 Tent (First Grow):</strong><br>
+                    Setup: $800 (average) + Operating: $190 (average) = $990<br>
+                    Yield: 6 oz average (170g)<br>
+                    Cost: $5.82/gram</p>
+                    
+                    <p><strong>2x4 Tent (After 4 Grows):</strong><br>
+                    Amortized setup ($800/4): $200 + Operating: $190 = $390<br>
+                    Yield: 6 oz (170g)<br>
+                    Cost: $2.29/gram</p>
+                    
+                    <p><strong>4x8 Room (After 4 Grows):</strong><br>
+                    Amortized setup ($2,400/4): $600 + Operating: $515 = $1,115<br>
+                    Yield: 24 oz (680g)<br>
+                    Cost: $1.64/gram</p>
+                    
+                    <h3>Dispensary Comparison</h3>
+                    <p>Average dispensary prices: $8-15/gram ($225-425/oz)<br>
+                    Home grow (established): $1.64-2.29/gram ($46-65/oz)</p>
+                    
+                    <h3>Break-Even Timeline</h3>
+                    <p><strong>2x4 Tent:</strong> Break even after 2-3 harvests (6-9 months)<br>
+                    <strong>4x8 Room:</strong> Break even after 2-3 harvests (6-9 months)</p>
+                    
+                    <h3>Hidden Costs to Consider</h3>
+                    <p>• Equipment failures and replacements<br>
+                    • Crop failures (especially early on)<br>
+                    • Time investment (10-20 hrs per grow)<br>
+                    • Learning curve costs (mistakes)<br>
+                    • Increased home insurance (if disclosed)<br>
+                    • Occasional upgrades and improvements</p>
+                    
+                    <h3>Hidden Benefits</h3>
+                    <p>• Complete control over growing methods (organic, etc)<br>
+                    • Knowledge of exact genetics and no pesticides<br>
+                    • Fresh, properly cured product<br>
+                    • Strain variety not available at dispensaries<br>
+                    • Satisfaction and skill development<br>
+                    • Privacy and convenience</p>
+                    
+                    <h3>The Verdict</h3>
+                    <p><strong>Home growing becomes significantly cheaper after initial setup, typically saving 60-80% compared to dispensary prices. However, time investment and learning curve must be factored in. For regular consumers (1+ oz/month), home growing pays for itself within a year.</strong></p>
+                `
+            },
+            'advanced-lighting': {
+                title: 'Advanced Lighting: Beyond Basic LED vs HPS',
+                author: 'Light Spectrum',
+                date: 'October 8, 2024',
+                category: 'Equipment',
+                content: `
+                    <h3>The Lighting Revolution</h3>
+                    <p>Modern grow lighting is becoming incredibly sophisticated, with full spectrum tuning, UV supplementation, and far-red triggering. This deep dive covers the latest lighting technologies and how they affect cannabinoid and terpene production.</p>
+                    
+                    <h3>Understanding PPFD (Photosynthetic Photon Flux Density)</h3>
+                    <p><strong>Seedling/Clone:</strong> 200-400 μmol/m²/s<br>
+                    <strong>Vegetative:</strong> 400-600 μmol/m²/s<br>
+                    <strong>Flowering:</strong> 600-1000 μmol/m²/s<br>
+                    <strong>High-light strains:</strong> 1000-1500 μmol/m²/s (with CO2)</p>
+                    
+                    <p>More light isn't always better - exceeding optimal PPFD causes light stress and bleaching.</p>
+                    
+                    <h3>Spectrum Manipulation for Growth Phases</h3>
+                    <p><strong>Vegetative Growth (Blue-heavy):</strong><br>
+                    • 400-500nm (blue): Promotes compact, bushy growth<br>
+                    • Prevents stretching<br>
+                    • Increases leaf development<br>
+                    • Ratio: 35-40% blue, 40-45% red, 15-20% green</p>
+                    
+                    <p><strong>Early Flower (Balanced):</strong><br>
+                    • Gradual shift to red spectrum<br>
+                    • Maintains structure while initiating flowering<br>
+                    • Ratio: 25-30% blue, 50-55% red, 15-20% green</p>
+                    
+                    <p><strong>Mid-Late Flower (Red-heavy):</strong><br>
+                    • 600-700nm (red): Maximizes bud development<br>
+                    • Increases flowering speed<br>
+                    • Boosts resin production<br>
+                    • Ratio: 15-20% blue, 60-65% red, 15-20% green</p>
+                    
+                    <h3>UV Supplementation</h3>
+                    <p><strong>UVA (315-400nm):</strong><br>
+                    • Increases trichome density<br>
+                    • Boosts terpene production<br>
+                    • Add during last 2-3 weeks of flower<br>
+                    • 2-4 hours per day maximum</p>
+                    
+                    <p><strong>UVB (280-315nm):</strong><br>
+                    • Stimulates cannabinoid production (especially THC)<br>
+                    • Plants produce more trichomes as UV protection<br>
+                    • Use cautiously - can damage plants<br>
+                    • 15-30 minutes per day in late flower<br>
+                    • SAFETY: Requires protective eyewear</p>
+                    
+                    <h3>Far-Red (730nm) Triggering</h3>
+                    <p>Far-red light accelerates flowering response and can shorten dark periods. The "Emerson Effect" shows plants can use up to 13 hours of light with far-red supplementation instead of standard 12-hour darkness.</p>
+                    
+                    <p><strong>Implementation:</strong> Add 15-30 minutes of far-red at end of light cycle to simulate sunset. Can reduce flowering time by 5-10 days.</p>
+                    
+                    <h3>PPFD Mapping</h3>
+                    <p>Create a light map of your grow space:<br>
+                    1. Measure PPFD at multiple points (grid pattern)<br>
+                    2. Identify hot spots (too intense) and dead zones (too weak)<br>
+                    3. Adjust light height and placement<br>
+                    4. Position plants according to light needs</p>
+                    
+                    <p>Professional growers maintain <15% PPFD variation across canopy.</p>
+                    
+                    <h3>Cutting-Edge LED Technologies</h3>
+                    <p><strong>Samsung LM301H/LM301B:</strong> Industry-leading efficiency (2.7-3.0 μmol/J)<br>
+                    <strong>Osram SSL:</strong> High-quality red diodes for flowering<br>
+                    <strong>UV Diodes:</strong> Integrated UV supplementation<br>
+                    <strong>Controllable Spectrum:</strong> Adjust color ratios via app/controller<br>
+                    <strong>Quantum Boards:</strong> Even light distribution, no hot spots</p>
+                    
+                    <h3>Light Schedule Optimization</h3>
+                    <p><strong>Standard Photoperiod:</strong> 18/6 veg, 12/12 flower<br>
+                    <strong>Extended Veg:</strong> 20/4 or 24/0 for faster growth<br>
+                    <strong>Gas Lantern Routine:</strong> 12-5.5-1-5.5 (saves electricity in veg)<br>
+                    <strong>Flowering Boost:</strong> 11/13 or 10/14 for stubborn strains</p>
+                    
+                    <h3>DLI (Daily Light Integral)</h3>
+                    <p>Total amount of light per 24-hour period:<br>
+                    • Cannabis optimal: 40-65 mol/m²/day<br>
+                    • Calculate: PPFD × photoperiod × 0.0036<br>
+                    • Example: 600 PPFD × 12 hours × 0.0036 = 26 mol/m²/day</p>
+                    
+                    <h3>Heat Management</h3>
+                    <p>Modern LEDs produce less heat than HPS but still require cooling:<br>
+                    • Maintain 75-82°F canopy temperature<br>
+                    • Use leaf surface temperature (LST) monitoring<br>
+                    • LED sweet spot: 82-85°F ambient (cooler light doesn't warm leaves)<br>
+                    • Proper ventilation prevents heat accumulation</p>
+                    
+                    <p><strong>The future of cannabis lighting is programmable, spectrum-specific, and data-driven. Investing in quality lights with spectrum control pays dividends in quality and yield.</strong></p>
+                `
+            }
+        };
+
+        const articleKeys = ['lab-truth', 'nutrient-burns', 'breeding-basics', 'autoflower-comparison', 'extraction-guide', 'ipm-guide', 'growing-economics', 'advanced-lighting'];
+
+        function openArticle(index) {
+            const articleKey = articleKeys[index];
+            const article = articles[articleKey];
+            if (!article) return;
+            
+            const modal = document.getElementById('articleModal');
+            document.getElementById('modalTitle').textContent = article.title;
+            document.getElementById('modalMeta').innerHTML = `
+                <i class="fas fa-calendar-alt"></i> ${article.date} | 
+                <i class="fas fa-user"></i> ${article.author} | 
+                <i class="fas fa-tag"></i> ${article.category}
+            `;
+            document.getElementById('modalContent').innerHTML = article.content;
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('articleModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
         function updateCartCount() {
             const cartCount = window.cartItems ? window.cartItems.reduce((sum, item) => sum + item.quantity, 0) : 0;
             document.getElementById('cartCount').textContent = cartCount;
@@ -618,10 +1215,82 @@
             window.location.href = 'deals.html';
         }
 
-        function openFullArticle(articleKey) {
-            // Placeholder function - would be implemented with full article content
-            alert('Full article functionality would be implemented here');
+        function searchArticles(event) {
+            event.preventDefault();
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            filterArticles(searchTerm);
+            return false;
         }
+
+        function filterArticles(searchTerm) {
+            const blogPosts = document.querySelectorAll('.blog-post');
+            const featured = document.querySelector('.featured-article');
+            
+            let visibleCount = 0;
+            
+            if (featured) {
+                const featuredText = featured.textContent.toLowerCase();
+                if (featuredText.includes(searchTerm) || searchTerm === '') {
+                    featured.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    featured.style.display = 'none';
+                }
+            }
+            
+            blogPosts.forEach(post => {
+                const postText = post.textContent.toLowerCase();
+                if (postText.includes(searchTerm) || searchTerm === '') {
+                    post.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    post.style.display = 'none';
+                }
+            });
+            
+            const existingMessage = document.getElementById('noResultsMessage');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            if (visibleCount === 0) {
+                const message = document.createElement('div');
+                message.id = 'noResultsMessage';
+                message.style.cssText = 'text-align: center; padding: 3rem; color: #ccc; font-size: 1.2rem;';
+                message.innerHTML = `
+                    <i class="fas fa-search" style="font-size: 3rem; color: #4ade80; margin-bottom: 1rem;"></i>
+                    <p>No articles found matching "${searchTerm}"</p>
+                    <button onclick="clearSearch()" style="background: #4ade80; color: #0a0a0a; border: none; padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; font-weight: bold; margin-top: 1rem;">Clear Search</button>
+                `;
+                document.querySelector('.main-content').appendChild(message);
+            }
+        }
+
+        function clearSearch() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = '';
+                filterArticles('');
+            }
+        }
+
+        function filterByTag(tag) {
+            filterArticles(tag);
+            document.querySelector('.main-content').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('articleModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', function() {
             updateCartCount();
