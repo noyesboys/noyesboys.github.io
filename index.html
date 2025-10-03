@@ -1053,6 +1053,7 @@
                 * Offers valid until end of month. Cannot be combined with other promotions. 
                 Terms and conditions apply. Limited quantities available.
             </p>
+        </section>
         </div>
     </div>
         <!-- Features -->
@@ -1222,11 +1223,9 @@
             </div>
         </footer>
     </div>
+
     <!-- ADD THE JAVASCRIPT AT THE BOTTOM, BEFORE </body> -->
     <script>
-        // Session variable to track age verification (in-memory only)
-        let ageVerified = false;
-
         function verifyAge(isOfAge) {
             const overlay = document.getElementById('ageVerificationOverlay');
             const underageMessage = document.getElementById('underageMessage');
@@ -1238,7 +1237,10 @@
                     overlay.style.display = 'none';
                     document.body.classList.remove('age-not-verified');
                     document.body.classList.add('age-verified');
-                    ageVerified = true;
+                    
+                    // Set a cookie/localStorage to remember for the session
+                    localStorage.setItem('noyesboys_age_verified', 'true');
+                    localStorage.setItem('noyesboys_age_verified_time', Date.now());
                 }, 500);
             } else {
                 // User is under age - show warning message
@@ -1250,6 +1252,7 @@
                 }, 3000);
             }
         }
+
         // Check if user was already verified (session-based)
         function checkAgeVerification() {
             const verified = localStorage.getItem('noyesboys_age_verified');
