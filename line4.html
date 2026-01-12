@@ -1,211 +1,1387 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noyes Boys Line 4 - Skunk Collection</title>
+    <meta charset="utf-8" />
+    <meta name="title" content="Noyes Boys Line 4 - Skunk Collection" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Feminized Craft Canadian Cannabis Seeds - Skunk Collection" />
+    <meta name="author" content="The Noyes Boys" />
+    <title>Noyes Boys Line 4 - Skunk Collection | Classic Cannabis Seeds Canada</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/noyes boys logo.png" />
+    <!-- Font Awesome icons -->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #000; color: #fff; line-height: 1.6; }
-        header { background: #000; padding: 1rem 2rem; border-bottom: 2px solid #333; position: sticky; top: 0; z-index: 100; }
-        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { display: flex; align-items: center; text-decoration: none; color: #fff; font-size: 1.2rem; font-weight: bold; }
-        nav ul { display: flex; list-style: none; gap: 2rem; }
-        nav a { color: #fff; text-decoration: none; transition: color 0.3s; }
-        nav a:hover { color: #4CAF50; }
-        .cart-icon { cursor: pointer; position: relative; padding: 0.5rem 1rem; background: #333; border-radius: 5px; }
-        .cart-count { position: absolute; top: -8px; right: -8px; background: #4CAF50; color: #fff; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
-        .hero { text-align: center; padding: 3rem 2rem; background: linear-gradient(135deg, #1a1a1a 0%, #000 100%); }
-        .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; color: #4CAF50; }
-        .hero h2 { font-size: 1.5rem; color: #888; }
-        .strains-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-        .strain-card { background: #1a1a1a; border-radius: 10px; padding: 2rem; margin-bottom: 2rem; display: grid; grid-template-columns: 250px 1fr; gap: 2rem; border: 2px solid #333; }
-        .strain-card:hover { border-color: #4CAF50; }
-        .strain-image { width: 100%; border-radius: 10px; background: #222; padding: 1rem; }
-        .strain-info h3 { color: #4CAF50; font-size: 1.5rem; margin-bottom: 0.5rem; }
-        .strain-info h4 { color: #888; font-size: 0.9rem; margin-bottom: 1rem; }
-        .strain-badge { display: inline-block; padding: 0.3rem 0.8rem; background: #4CAF50; color: #fff; border-radius: 5px; margin-bottom: 1rem; font-size: 0.9rem; }
-        .strain-details { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; margin: 1rem 0; font-size: 0.9rem; }
-        .detail-item { background: #222; padding: 0.5rem; border-radius: 5px; }
-        .detail-label { color: #888; }
-        .detail-value { color: #fff; font-weight: bold; }
-        .pricing-section { margin: 1rem 0; padding: 1rem; background: #222; border-radius: 10px; }
-        .price-select { width: 100%; padding: 0.8rem; background: #333; color: #fff; border: 2px solid #444; border-radius: 5px; font-size: 0.9rem; margin: 0.5rem 0; cursor: pointer; }
-        .price-display { font-size: 1.3rem; color: #4CAF50; font-weight: bold; margin: 0.5rem 0; }
-        .add-to-cart-btn { width: 100%; padding: 0.8rem; background: #4CAF50; color: #fff; border: none; border-radius: 5px; font-size: 1rem; font-weight: bold; cursor: pointer; }
-        .add-to-cart-btn:hover { background: #45a049; }
-        .cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
-        .cart-modal.active { display: flex; }
-        .cart-content { background: #1a1a1a; padding: 2rem; border-radius: 10px; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; }
-        .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-        .close-cart { background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer; }
-        .cart-item { background: #222; padding: 1rem; margin-bottom: 1rem; border-radius: 5px; }
-        .cart-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
-        .cart-item-name { font-weight: bold; color: #4CAF50; }
-        .remove-item { background: #ff4444; color: #fff; border: none; padding: 0.3rem 0.8rem; border-radius: 5px; cursor: pointer; }
-        .cart-total { font-size: 1.5rem; color: #4CAF50; text-align: right; margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #333; }
-        .checkout-btn { width: 100%; padding: 1rem; background: #4CAF50; color: #fff; border: none; border-radius: 5px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 1rem; }
-        @media (max-width: 768px) { .strain-card { grid-template-columns: 1fr; } .strain-details { grid-template-columns: 1fr; } }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #0a0a0a;
+            zoom: 0.50;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
+                        url('assets/img/bg-masthead.jpg');
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4ade80;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+        }
+        
+        .nav-links a:hover {
+            color: #4ade80;
+        }
+
+        /* Cart Button */
+        .cart-button {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+
+        .cart-count {
+            background: #0a0a0a;
+            color: #4ade80;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        /* Masthead Banner */
+        .masthead {
+            height: 100vh;
+            min-height: 500px;
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
+                        url('assets/img/bg-masthead.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            padding-top: 120px;
+        }
+        
+        .masthead-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .masthead h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 2.5rem;
+            line-height: 2.5rem;
+            letter-spacing: 0.8rem;
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+        
+        .masthead h2 {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 2rem;
+            max-width: 20rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            box-shadow: 0 4px 15px rgba(74, 222, 128, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.6);
+        }
+        
+        /* About Section */
+        .about-section {
+            padding: 100px 0;
+            background: #000000;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #4ade80;
+        }
+        
+        .logo-section {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .logo-section img {
+            max-width: 200px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        
+        .logo-section h3 {
+            color: #4ade80;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+        }
+        
+        .legend {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .legend h5 {
+            color: #4ade80;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .legend p {
+            color: #cbd5e1;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        /* Strain Cards */
+        .strain-grid {
+            display: grid;
+            gap: 4rem;
+        }
+        
+        .strain-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            background: #000000;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 2rem;
+            border: 1px solid #333;
+        }
+        
+        .strain-card:nth-child(even) {
+            direction: rtl;
+        }
+        
+        .strain-card:nth-child(even) .strain-content {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        .strain-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            object-position: center;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 1.2rem;
+        }
+        
+        .strain-content {
+            padding: 2rem;
+            color: white;
+        }
+        
+        .strain-title {
+            color: #4ade80;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+        
+        .strain-genetics {
+            margin-bottom: 1rem;
+        }
+        
+        .strain-genetics a {
+            color: #4ade80;
+            text-decoration: none;
+        }
+        
+        .strain-genetics a:hover {
+            text-decoration: underline;
+        }
+        
+        .availability {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .availability-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .available {
+            color: #22c55e;
+        }
+        
+        .strain-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .strain-detail {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+        
+        .strain-detail strong {
+            color: #4ade80;
+        }
+
+        /* Product Selection */
+        .product-selection {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1rem 0;
+        }
+
+        .variant-select {
+            margin-bottom: 1rem;
+        }
+
+        .variant-select label {
+            display: block;
+            color: #4ade80;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .variant-select select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #475569;
+            border-radius: 10px;
+            background: #0f172a;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .variant-select select:focus {
+            outline: none;
+            border-color: #4ade80;
+        }
+
+        .price-display {
+            color: #4ade80;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        /* Add to Cart Button */
+        .add-to-cart-btn {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 25px;
+            padding: 0.75rem 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .cart-modal-content {
+            background-color: #1e293b;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            color: white;
+        }
+
+        .cart-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .cart-close:hover {
+            color: #4ade80;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #334155;
+            margin-bottom: 1rem;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            color: #4ade80;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-variant {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+
+        .cart-item-price {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .quantity-btn {
+            background: #4ade80;
+            color: #0a0a0a;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .quantity-display {
+            min-width: 30px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .remove-item {
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .cart-total {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid #334155;
+        }
+
+        .cart-total h3 {
+            color: #4ade80;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .checkout-btn {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: #0a0a0a;
+            border: none;
+            border-radius: 25px;
+            padding: 1rem 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            margin-top: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 2rem;
+            color: #cbd5e1;
+        }
+
+        .disclaimer-section {
+            padding: 50px 0;
+            background: #111;
+            text-align: center;
+        }
+
+        .disclaimer-content h2 {
+            color: #4ade80;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .disclaimer-content h4 {
+            color: #cbd5e1;
+            font-weight: normal;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            animation: fade 3s ease-in-out infinite;
+        }
+
+        .scroll-hint:hover {
+            color: #4ade80;
+            transform: translateX(-50%) translateY(-3px);
+        }
+
+        @keyframes fade {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .scroll-hint.hidden {
+            opacity: 0;
+            transform: translateX(-50%) translateY(10px);
+            pointer-events: none;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .strain-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .strain-card:nth-child(even) {
+                direction: ltr;
+            }
+            
+            .masthead h1 {
+                font-size: 2rem;
+                letter-spacing: 0.5rem;
+            }
+            
+            .nav-links {
+                gap: 0.5rem;
+            }
+            
+            .nav-links a {
+                font-size: 0.8rem;
+                padding: 0.25rem;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
-        <div class="header-content">
-            <a href="#" class="logo">🌿 The Noyes Boys</a>
-            <nav>
-                <ul>
-                    <li><a href="/FeminizedSeedsHomepage">Home</a></li>
-                    <li><a href="/ordernow">Deals</a></li>
-                </ul>
-            </nav>
-            <div class="cart-icon" onclick="toggleCart()">
-                🛒 Cart <span class="cart-count" id="cartCount">0</span>
-            </div>
-        </div>
+        <nav class="container">
+            <a href="FeminizedSeedsHomepage.html" class="logo">
+                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+                The Noyes Boys
+            </a>
+            <ul class="nav-links">
+                <li><a href="/FeminizedSeedsHomepage">Home</a></li>
+                <li><a href="/order_now">Order Now</a></li>
+            </ul>
+            <button class="cart-button" onclick="openCart()">
+                <i class="fas fa-shopping-cart"></i>
+                Cart
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+        </nav>
     </header>
 
-    <section class="hero">
-        <h1>LINE 4 - SKUNK COLLECTION</h1>
-        <h2>Classic Cannabis Genetics</h2>
-    </section>
-
-    <div class="strains-container" id="strainsContainer"></div>
-
-    <div class="cart-modal" id="cartModal">
-        <div class="cart-content">
-            <div class="cart-header">
-                <h2>Shopping Cart</h2>
-                <button class="close-cart" onclick="toggleCart()">×</button>
+    <section class="masthead" id="home">
+        <div class="masthead-content">
+            <h1>NOYES BOYS GENETICS</h1>
+            <h2>Line 4 - Skunk Collection - Classic Genetics</h2>
+            <div class="cta-buttons">
+                <a class="btn btn-primary" href="/FeminizedSeedsHomepage">Home</a>
+                <a class="btn btn-primary" href="/genetics">Genetic Lineups</a>
+                <a class="btn btn-primary" href="/nextstrains">Next Release</a>
+                <a class="btn btn-primary" href="/deals">DEALS</a>
+                <a class="btn btn-primary" href="/reviews">Reviews</a>
             </div>
-            <div id="cartItems"></div>
-            <div class="cart-total">Total: <span id="cartTotal">$0 CAD</span></div>
-            <button class="checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout</button>
         </div>
-    </div>
+        <div class="scroll-hint" id="scrollHint" onclick="scrollToStrains()">Scroll to explore strains</div>
+    </section>
+    
+    <section class="about-section" id="strains">
+        <div class="container">
+            <h2 class="section-title">Noyes Boys Genetic Line 4 - SKUNK LINE</h2>
+            
+            <div class="logo-section">
+                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo">
+                <h3>10 Noyes Boys original crosses featuring classic Skunk #1 genetics</h3>
+            </div>
 
-    <script>
-        const strains = [
-            {id: 'albino-skunk', name: 'ALBINO SKUNK', genetics: '(SKUNK X ALASKAN THUNDER FUCK X NOYES BREATH)', badge: 'BX1 - AVAILABLE', variety: '35% Sativa / 65% Indica', thc: '24-26%', flowering: '66-68 Days', effect: 'Happy, Energetic', taste: 'Skunky, Gassy', terpenes: 'Humulene', img: 'assets/blkbkg/albinoskunk.png'},
-            {id: 'rainbow-skunk', name: 'RAINBOW SKUNK', genetics: '(SKUNK X RAINBOW BELTS)', badge: 'BX1 - AVAILABLE', variety: '30% Sativa / 70% Indica', thc: '21-22%', flowering: '66-68 Days', effect: 'Energetic, Happy, Motivated', taste: 'Skunky, Gassy, Berries', terpenes: 'Humulene, Limonene', img: 'assets/new stickers/rainbow skunk noyes boys.png'},
-            {id: 'alienized-skunk', name: 'ALIENIZED SKUNK', genetics: '(SKUNK X ALIENOYES KUSH)', badge: 'F1 - AVAILABLE', variety: '15% Sativa / 85% Indica', thc: '23-28%', flowering: '62 Days', effect: 'Relaxed, Sleepy, Happy, Hungry', taste: 'Skunky, Earthy', terpenes: 'Humulene, Myrcene', img: 'assets/new stickers/alienized skunk noyes boys.png'},
-            {id: 'skunk-breath', name: 'SKUNK BREATH', genetics: '(SKUNK X NOYES BREATH)', badge: 'F1 - AVAILABLE', variety: '20% Sativa / 80% Indica', thc: '28%', flowering: '64 Days', effect: 'Relaxed, Sleepy, Happy, Hungry', taste: 'Skunky, Gas, Rubber', terpenes: 'Humulene, Myrcene', img: 'assets/new stickers/noyes boys skunk breath.png'},
-            {id: 'blueberry-skunk', name: 'BLUEBERRY SKUNK', genetics: '(SKUNK X BLUEBERRY FINGERS)', badge: 'F1 - AVAILABLE', variety: '30% Sativa / 70% Indica', thc: '24-26%', flowering: '64-65 Days', effect: 'Relaxed, Sleepy, Happy, Hungry', taste: 'Skunky, Berries, Sweet', terpenes: 'Humulene, Limonene, Myrcene', img: 'assets/new stickers/blueberry skunk.jpg'},
-            {id: 'skunk-cake', name: 'SKUNK CAKE', genetics: '(SKUNK X CAKE BREATH)', badge: 'F1 - AVAILABLE', variety: '15% Sativa / 85% Indica', thc: '28%', flowering: '62 Days', effect: 'Relaxed', taste: 'Skunky, Gas', terpenes: 'Humulene, Caryophyllene', img: 'assets/new stickers/skunk cake.jpg'},
-            {id: 'le-pew', name: 'LE PEW', genetics: '(SKUNK X TRAINWRECK)', badge: 'F1 - AVAILABLE', variety: '30% Sativa / 70% Indica', thc: '19-21%', flowering: '63 Days', effect: 'Energetic, Motivated', taste: 'Skunky', terpenes: 'Humulene, Terpinolene', img: 'assets/new stickers/le pew.png'},
-            {id: 'stink', name: 'STINK', genetics: '(SKUNK X HASHPLANT)', badge: 'F1 - AVAILABLE', variety: '15% Sativa / 85% Indica', thc: '24%', flowering: '63 Days', effect: 'Relaxed, Sleepy, Tired', taste: 'Skunky, Gas, Cheesy', terpenes: 'Humulene, Myrcene', img: 'assets/new stickers/stink  (1).png'},
-            {id: 'skunk-capone', name: 'SKUNK CAPONE', genetics: '(SKUNK X AK47)', badge: 'F1 - AVAILABLE', variety: 'TBD', thc: 'TBD', flowering: 'TBD', effect: 'TBD', taste: 'TBD', terpenes: 'TBD', img: 'assets/new stickers/skunk capone.png'},
-            {id: 'skunk-face', name: 'SKUNK FACE', genetics: '(SKUNK X AK48)', badge: 'F1 - AVAILABLE', variety: 'TBD', thc: 'TBD', flowering: 'TBD', effect: 'TBD', taste: 'TBD', terpenes: 'TBD', img: 'assets/new stickers/skunk face.png'}
-        ];
+            <div class="legend">
+                <h5>Legend:</h5>
+                <p><strong>F1:</strong> First generation cross between two distinct parent strains.</p>
+                <p><strong>F2:</strong> Second generation cross of F1 x F1.</p>
+                <p><strong>IBL:</strong> Inbred line (typically F5 and beyond), e.g., Noyes Kush.</p>
+                <p><strong>BX1:</strong> Backcrossed with one of its original parent strains for improved stability.</p>
+                <p><strong>BX2+:</strong> Further backcrossed for even greater stability and reduced genetic drift.</p>
+            </div>
 
-        let cart = {};
-        const priceOptions = {1: 40, 3: 100, 5: 150, 10: 200};
-
-        function renderStrains() {
-            const container = document.getElementById('strainsContainer');
-            container.innerHTML = strains.map(s => `
-                <div class="strain-card">
-                    <img src="${s.img}" alt="${s.name}" class="strain-image">
-                    <div class="strain-info">
-                        <h3>${s.name}</h3>
-                        <h4>${s.genetics}</h4>
-                        <span class="strain-badge">${s.badge}</span>
-                        <div class="strain-details">
-                            <div class="detail-item"><div class="detail-label">Variety</div><div class="detail-value">${s.variety}</div></div>
-                            <div class="detail-item"><div class="detail-label">THC</div><div class="detail-value">${s.thc}</div></div>
-                            <div class="detail-item"><div class="detail-label">Flowering</div><div class="detail-value">${s.flowering}</div></div>
-                            <div class="detail-item"><div class="detail-label">Effect</div><div class="detail-value">${s.effect}</div></div>
-                            <div class="detail-item"><div class="detail-label">Taste</div><div class="detail-value">${s.taste}</div></div>
-                            <div class="detail-item"><div class="detail-label">Terpenes</div><div class="detail-value">${s.terpenes}</div></div>
+            <div class="strain-grid">
+                <!-- Albino Skunk -->
+                <div class="strain-card" id="albino-skunk">
+                    <img src="assets/blkbkg/albinoskunk.png" alt="Albino Skunk" class="strain-image">
+                    <div class="strain-content">
+                        <h3 class="strain-title">ALBINO SKUNK</h3>
+                        <div class="strain-genetics">
+                            <a href="#">Skunk</a> x <a href="#">Alaskan Thunder Fuck</a> x <a href="#">Noyes Breath</a>
                         </div>
-                        <div class="pricing-section">
-                            <label>Select Quantity:</label>
-                            <select class="price-select" id="select-${s.id}" onchange="updatePrice('${s.id}')">
-                                <option value="1">1 Seed - $40 CAD</option>
-                                <option value="3">3 Seeds - $100 CAD</option>
-                                <option value="5">5 Seeds - $150 CAD</option>
-                                <option value="10">10 Seeds - $200 CAD</option>
-                            </select>
-                            <div class="price-display" id="price-${s.id}">$40 CAD</div>
-                            <button class="add-to-cart-btn" onclick="addToCart('${s.id}')">Add to Cart</button>
+                        <div class="availability">
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> BX1 - Available
+                            </div>
+                        </div>
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Variety:</strong> 35% Sativa / 65% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 24-26%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 66-68 Days</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Happy, Energetic</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Skunky, Gassy</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene (gassy/earthy)</div>
+                        </div>
+                        
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="albino-skunk-variant">Select Quantity:</label>
+                                <select id="albino-skunk-variant">
+                                    <option value="1-pack" data-price="40">1 Seed - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="albino-skunk-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('albino-skunk', 'Albino Skunk')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
                         </div>
                     </div>
                 </div>
-            `).join('');
-        }
 
-        function updatePrice(strainId) {
-            const select = document.getElementById(`select-${strainId}`);
-            const qty = parseInt(select.value);
-            const price = priceOptions[qty];
-            document.getElementById(`price-${strainId}`).textContent = `$${price} CAD`;
-        }
-
-        function addToCart(strainId) {
-            const strain = strains.find(s => s.id === strainId);
-            const select = document.getElementById(`select-${strainId}`);
-            const qty = parseInt(select.value);
-            const price = priceOptions[qty];
-            
-            const key = `${strainId}-${qty}`;
-            if (cart[key]) {
-                cart[key].count++;
-            } else {
-                cart[key] = {
-                    strainId,
-                    name: strain.name,
-                    qty,
-                    price,
-                    count: 1
-                };
-            }
-            
-            updateCartDisplay();
-            alert(`Added ${qty} seed(s) of ${strain.name} to cart!`);
-        }
-
-        function removeFromCart(key) {
-            delete cart[key];
-            updateCartDisplay();
-        }
-
-        function updateCartDisplay() {
-            const cartCount = Object.values(cart).reduce((sum, item) => sum + item.count, 0);
-            document.getElementById('cartCount').textContent = cartCount;
-            
-            const cartItems = document.getElementById('cartItems');
-            if (Object.keys(cart).length === 0) {
-                cartItems.innerHTML = '<p style="color:#888;text-align:center;">Your cart is empty</p>';
-            } else {
-                cartItems.innerHTML = Object.entries(cart).map(([key, item]) => `
-                    <div class="cart-item">
-                        <div class="cart-item-header">
-                            <span class="cart-item-name">${item.name}</span>
-                            <button class="remove-item" onclick="removeFromCart('${key}')">Remove</button>
+                <!-- Rainbow Skunk -->
+                <div class="strain-card" id="rainbow-skunk">
+                    <img src="assets/new stickers/rainbow skunk noyes boys.png" alt="Rainbow Skunk" class="strain-image">
+                    <div class="strain-content">
+                        <h3 class="strain-title">RAINBOW SKUNK</h3>
+                        <div class="strain-genetics">
+                            <a href="#">Skunk</a> x <a href="#">Rainbow Belts</a>
                         </div>
-                        <div style="color:#888;">${item.qty} seed(s) × ${item.count} = $${item.price * item.count} CAD</div>
+                        <div class="availability">
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> BX1 - Available
+                            </div>
+                        </div>
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Variety:</strong> 30% Sativa / 70% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 21-22%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 66-68 Days</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Energetic, Happy, Motivated</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Skunky, Gassy, Berries</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Limonene</div>
+                        </div>
+                        
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="rainbow-skunk-variant">Select Quantity:</label>
+                                <select id="rainbow-skunk-variant">
+                                    <option value="1-pack" data-price="40">1 Seed - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="rainbow-skunk-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('rainbow-skunk', 'Rainbow Skunk')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
                     </div>
-                `).join('');
+                </div>
+
+                <!-- Alienized Skunk -->
+                <div class="strain-card" id="alienized-skunk">
+                    <img src="assets/new stickers/alienized skunk noyes boys.png" alt="Alienized Skunk" class="strain-image">
+                    <div class="strain-content">
+                        <h3 class="strain-title">ALIENIZED SKUNK</h3>
+                        <div class="strain-genetics">
+                            <a href="#">Skunk</a> x <a href="#">Alienoyes Kush</a>
+                        </div>
+                        <div class="availability">
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> F1 - Available
+                            </div>
+                        </div>
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Variety:</strong> 15% Sativa / 85% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 23-28%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Relaxed, Sleepy, Happy, Hungry</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Skunky, Earthy</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Myrcene</div>
+                        </div>
+                        
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="alienized-skunk-variant">Select Quantity:</label>
+                                <select id="alienized-skunk-variant">
+                                    <option value="1-pack" data-price="40">1 Seed - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="alienized-skunk-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('alienized-skunk', 'Alienized Skunk')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skunk Breath -->
+                <div class="strain-card" id="skunk-breath">
+                    <img src="assets/new stickers/noyes boys skunk breath.png" alt="Skunk Breath" class="strain-image">
+                    <div class="strain-content">
+                        <h3 class="strain-title">SKUNK BREATH</h3>
+                        <div class="strain-genetics">
+                            <a href="#">Skunk</a> x <a href="#">Noyes Breath</a>
+                        </div>
+                        <div class="availability">
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> F1 - Available
+                            </div>
+                        </div>
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Variety:</strong> 20% Sativa / 80% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 28%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 64 Days</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Relaxed, Sleepy, Happy, Hungry</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Skunky, Gas, Rubber</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Myrcene</div>
+                        </div>
+                        
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="skunk-breath-variant">Select Quantity:</label>
+                                <select id="skunk-breath-variant">
+                                    <option value="1-pack" data-price="40">1 Seed - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="skunk-breath-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('skunk-breath', 'Skunk Breath')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Blueberry Skunk -->
+                <div class="strain-card" id="blueberry-skunk">
+                    <img src="assets/new stickers/blueberry skunk.jpg" alt="Blueberry Skunk" class="strain-image">
+                    <div class="strain-content">
+                        <h3 class="strain-title">BLUEBERRY SKUNK</h3>
+                        <div class="strain-genetics">
+                            <a href="#">Skunk</a> x <a href="#">Blueberry Fingers</a>
+                        </div>
+                        <div class="availability">
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> F1 - Available
+                            </div>
+                        </div>
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Variety:</strong> 30% Sativa / 70% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 24-26%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 64-65 Days</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Relaxed, Sleepy, Happy, Hungry</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Skunky, Berries, Sweet</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Limonene, Myrcene</div>
+                        </div>
+                        
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="blueberry-skunk-variant">Select Quantity:</label>
+                                <select id="blueberry-skunk-variant">
+                                    <option value="1-pack" data-price="40">1 Seed - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="blueberry-skunk-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('blueberry-skunk', 'Blueberry Skunk')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skunk Cake -->
+                <div class="strain-card" id="skunk-cake">
+                    <img src="assets/new stickers/skunk cake.jpg" alt="Skunk Cake" class="strain-image">
+                    <div class="strain-content">
+                        <h3 class="strain-title">SKUNK CAKE</h3>
+                        <div class="strain-genetics">
+                            <a href="#">Skunk</a> x <a href="#">Cake Breath</a>
+                        </div>
+                        <div class="availability">
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> F1 - Available
+                            </div>
+                        </div>
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Variety:</strong> 15% Sativa / 85% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 28%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Relaxed</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Skunky, Gas</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Caryophyllene</div>
+                        </div>
+                        
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="skunk-cake-variant">Select Quantity:</label>
+                                <select id="skunk-cake-variant">
+                                    <option value="1-pack" data-price="40">1 Seed - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="skunk-cake-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('skunk-cake', 'Skunk Cake')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Le Pew -->
+                <div class="strain-card" id="le-pew">
+                    <img src="assets/new stickers/le pew.png" alt="Le Pew" class="strain-image">
+                    <div class="strain-content">
+                        <h3 class="strain-title">LE PEW</h3>
+                        <div class="strain-genetics">
+                            <a href="#">Skunk</a> x <a href="#">Trainwreck</a>
+                        </div>
+                        <div class="availability">
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> F1 - Available
+                            </div>
+                        </div>
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Variety:</strong> 30% Sativa / 70% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 19-21%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 63 Days</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Energetic, Motivated</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Skunky</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Terpinolene</div>
+                        </div>
+                        
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="le-pew-variant">Select Quantity:</label>
+                                <select id="le-pew-variant">
+                                    <option value="1-pack" data-price="40">1 Seed - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="le-pew-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('le-pew', 'Le Pew')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stink -->
+                <div class="strain-card" id="stink">
+                    <img src="assets/new stickers/stink  (1).png" alt="Stink" class="strain-image">
+                    <div class="strain-content">
+                        <h3 class="strain-title">STINK</h3>
+                        <div class="strain-genetics">
+                            <a href="#">Skunk</a> x <a href="#">Hashplant</a>
+                        </div>
+                        <div class="availability">
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> F1 - Available
+                            </div>
+                        </div>
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Variety:</strong> 15% Sativa / 85% Indica</div>
+                            <div class="strain-detail"><strong>THC:</strong> 24%</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> 63 Days</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Relaxed, Sleepy, Tired</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Skunky, Gas, Cheesy</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> Humulene, Myrcene</div>
+                        </div>
+                        
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="stink-variant">Select Quantity:</label>
+                                <select id="stink-variant">
+                                    <option value="1-pack" data-price="40">1 Seed - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="stink-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('stink', 'Stink')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skunk Capone -->
+                <div class="strain-card" id="skunk-capone">
+                    <img src="assets/new stickers/skunk capone.png" alt="Skunk Capone" class="strain-image">
+                    <div class="strain-content">
+                        <h3 class="strain-title">SKUNK CAPONE</h3>
+                        <div class="strain-genetics">
+                            <a href="#">Skunk</a> x <a href="#">AK47</a>
+                        </div>
+                        <div class="availability">
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> F1 - Available
+                            </div>
+                        </div>
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Variety:</strong> TBD</div>
+                            <div class="strain-detail"><strong>THC:</strong> TBD</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> TBD</div>
+                            <div class="strain-detail"><strong>Effect:</strong> TBD</div>
+                            <div class="strain-detail"><strong>Taste:</strong> TBD</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> TBD</div>
+                        </div>
+                        
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="skunk-capone-variant">Select Quantity:</label>
+                                <select id="skunk-capone-variant">
+                                    <option value="1-pack" data-price="40">1 Seed - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="skunk-capone-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('skunk-capone', 'Skunk Capone')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skunk Face -->
+                <div class="strain-card" id="skunk-face">
+                    <img src="assets/new stickers/skunk face.png" alt="Skunk Face" class="strain-image">
+                    <div class="strain-content">
+                        <h3 class="strain-title">SKUNK FACE</h3>
+                        <div class="strain-genetics">
+                            <a href="#">Skunk</a> x <a href="#">AK48</a>
+                        </div>
+                        <div class="availability">
+                            <div class="availability-item available">
+                                <i class="fas fa-circle"></i> F1 - Available
+                            </div>
+                        </div>
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Variety:</strong> TBD</div>
+                            <div class="strain-detail"><strong>THC:</strong> TBD</div>
+                            <div class="strain-detail"><strong>Flowering:</strong> TBD</div>
+                            <div class="strain-detail"><strong>Effect:</strong> TBD</div>
+                            <div class="strain-detail"><strong>Taste:</strong> TBD</div>
+                            <div class="strain-detail"><strong>Terpenes:</strong> TBD</div>
+                        </div>
+                        
+                        <div class="product-selection">
+                            <div class="variant-select">
+                                <label for="skunk-face-variant">Select Quantity:</label>
+                                <select id="skunk-face-variant">
+                                    <option value="1-pack" data-price="40">1 Seed - $40 CAD</option>
+                                    <option value="3-pack" data-price="100">3 Seeds - $100 CAD</option>
+                                    <option value="5-pack" data-price="150">5 Seeds - $150 CAD</option>
+                                    <option value="10-pack" data-price="200">10 Seeds - $200 CAD</option>
+                                </select>
+                            </div>
+                            <div class="price-display" id="skunk-face-price">$40 CAD</div>
+                            <button class="add-to-cart-btn" onclick="addToCart('skunk-face', 'Skunk Face')">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="cart-modal">
+        <div class="cart-modal-content">
+            <span class="cart-close" onclick="closeCart()">&times;</span>
+            <h2 style="color: #4ade80; margin-bottom: 1rem;">Shopping Cart</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total">
+                <h3>Total: $<span id="cartTotal">0</span> CAD</h3>
+                <a href="checkout.html" class="checkout-btn" onclick="proceedToCheckout()">
+                    <i class="fas fa-credit-card"></i> Proceed to Checkout
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disclaimer Section -->
+    <section class="disclaimer-section">
+        <div class="container">
+            <div class="disclaimer-content">
+                <h2>These seeds are sold as adult collectibles and for genetic preservation purposes only. The Noyes Boys assumes no responsibility for any illegal use of these seeds.</h2>
+                <h4>Cannabis seeds are legal in Canada but germination may not be legal in all jurisdictions. Please check your local laws before purchase.</h4>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Cart Management System with Local Storage (Same as Line 1)
+        class CartManager {
+            constructor() {
+                this.storageKey = 'noyesboys_cart';
+                this.checkoutKey = 'noyesboys_checkout_data';
+                this.cart = this.loadCart();
+                this.updateCartDisplay();
             }
-            
-            const total = Object.values(cart).reduce((sum, item) => sum + (item.price * item.count), 0);
-            document.getElementById('cartTotal').textContent = `$${total} CAD`;
+
+            loadCart() {
+                try {
+                    const stored = localStorage.getItem(this.storageKey);
+                    return stored ? JSON.parse(stored) : [];
+                } catch (e) {
+                    console.error('Error loading cart:', e);
+                    return [];
+                }
+            }
+
+            saveCart() {
+                try {
+                    localStorage.setItem(this.storageKey, JSON.stringify(this.cart));
+                } catch (e) {
+                    console.error('Error saving cart:', e);
+                }
+            }
+
+            addItem(strainId, strainName) {
+                const select = document.getElementById(strainId + '-variant');
+                if (!select) return false;
+
+                const selectedOption = select.options[select.selectedIndex];
+                const variant = selectedOption.value;
+                const price = parseFloat(selectedOption.getAttribute('data-price'));
+                const variantText = selectedOption.textContent;
+
+                const existingItem = this.cart.find(item => 
+                    item.strainId === strainId && item.variant === variant
+                );
+
+                if (existingItem) {
+                    existingItem.quantity += 1;
+                } else {
+                    this.cart.push({
+                        strainId: strainId,
+                        strainName: strainName,
+                        variant: variant,
+                        variantText: variantText,
+                        price: price,
+                        quantity: 1,
+                        timestamp: Date.now()
+                    });
+                }
+
+                this.saveCart();
+                this.updateCartDisplay();
+                return true;
+            }
+
+            updateQuantity(index, change) {
+                if (index < 0 || index >= this.cart.length) return;
+                this.cart[index].quantity += change;
+                if (this.cart[index].quantity <= 0) {
+                    this.cart.splice(index, 1);
+                }
+                this.saveCart();
+                this.updateCartDisplay();
+            }
+
+            removeItem(index) {
+                if (index < 0 || index >= this.cart.length) return;
+                this.cart.splice(index, 1);
+                this.saveCart();
+                this.updateCartDisplay();
+            }
+
+            clearCart() {
+                this.cart = [];
+                this.saveCart();
+                this.updateCartDisplay();
+            }
+
+            getTotal() {
+                return this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            }
+
+            getTotalItems() {
+                return this.cart.reduce((sum, item) => sum + item.quantity, 0);
+            }
+
+            updateCartDisplay() {
+                const cartCount = document.getElementById('cartCount');
+                const cartItems = document.getElementById('cartItems');
+                const cartTotal = document.getElementById('cartTotal');
+
+                if (cartCount) {
+                    cartCount.textContent = this.getTotalItems();
+                }
+
+                if (cartItems && cartTotal) {
+                    if (this.cart.length === 0) {
+                        cartItems.innerHTML = '<div class="empty-cart"><p>Your cart is empty</p><p>Add some premium genetics to get started!</p></div>';
+                        cartTotal.textContent = '0.00';
+                        return;
+                    }
+
+                    const total = this.getTotal();
+                    cartItems.innerHTML = this.cart.map((item, index) => {
+                        return `
+                            <div class="cart-item">
+                                <div class="cart-item-info">
+                                    <div class="cart-item-name">${item.strainName}</div>
+                                    <div class="cart-item-variant">${item.variantText}</div>
+                                    <div class="cart-item-price">${item.price.toFixed(2)} CAD each</div>
+                                </div>
+                                <div class="cart-item-controls">
+                                    <div class="quantity-controls">
+                                        <button class="quantity-btn" onclick="cartManager.updateQuantity(${index}, -1)">-</button>
+                                        <span class="quantity-display">${item.quantity}</span>
+                                        <button class="quantity-btn" onclick="cartManager.updateQuantity(${index}, 1)">+</button>
+                                    </div>
+                                    <button class="remove-item" onclick="cartManager.removeItem(${index})">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    cartTotal.textContent = total.toFixed(2);
+                }
+            }
+
+            exportCartForCheckout() {
+                const cartData = {
+                    items: this.cart,
+                    total: this.getTotal(),
+                    itemCount: this.getTotalItems(),
+                    timestamp: Date.now(),
+                    currency: 'CAD'
+                };
+                
+                try {
+                    localStorage.setItem(this.checkoutKey, JSON.stringify(cartData));
+                } catch (e) {
+                    console.error('Error storing checkout data:', e);
+                }
+                
+                return cartData;
+            }
+
+            getCheckoutData() {
+                try {
+                    const stored = localStorage.getItem(this.checkoutKey);
+                    return stored ? JSON.parse(stored) : null;
+                } catch (e) {
+                    console.error('Error loading checkout data:', e);
+                    return null;
+                }
+            }
         }
 
-        function toggleCart() {
-            document.getElementById('cartModal').classList.toggle('active');
+        const cartManager = new CartManager();
+
+        function addToCart(strainId, strainName) {
+            if (cartManager.addItem(strainId, strainName)) {
+                const button = document.querySelector(`button[onclick="addToCart('${strainId}', '${strainName}')"]`);
+                if (button) {
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-check"></i> Added!';
+                    button.style.background = '#22c55e';
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.style.background = '';
+                    }, 1000);
+                }
+            }
+        }
+
+        function openCart() {
+            cartManager.updateCartDisplay();
+            document.getElementById('cartModal').style.display = 'block';
+        }
+
+        function closeCart() {
+            document.getElementById('cartModal').style.display = 'none';
         }
 
         function proceedToCheckout() {
-            if (Object.keys(cart).length === 0) {
+            if (cartManager.cart.length === 0) {
                 alert('Your cart is empty!');
-                return;
+                return false;
             }
-            const cartData = encodeURIComponent(JSON.stringify(cart));
-            window.location.href = `checkout.html?cart=${cartData}`;
+            cartManager.exportCartForCheckout();
+            return true;
         }
 
-        renderStrains();
-        updateCartDisplay();
+        function scrollToStrains() {
+            document.getElementById('strains').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function handleScrollHint() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHint = document.getElementById('scrollHint');
+            if (scrollTop > 50) {
+                scrollHint.classList.add('hidden');
+            } else {
+                scrollHint.classList.remove('hidden');
+            }
+        }
+
+        window.addEventListener('scroll', handleScrollHint);
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('cartModal');
+            if (event.target === modal) {
+                closeCart();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('select[id$="-variant"]').forEach(select => {
+                const priceDisplayId = select.id.replace('-variant', '-price');
+                const selectedOption = select.options[select.selectedIndex];
+                const price = selectedOption.getAttribute('data-price');
+                const priceDisplay = document.getElementById(priceDisplayId);
+                if (priceDisplay) {
+                    priceDisplay.textContent = `${price} CAD`;
+                }
+
+                select.addEventListener('change', function() {
+                    const priceDisplayId = this.id.replace('-variant', '-price');
+                    const selectedOption = this.options[this.selectedIndex];
+                    const price = selectedOption.getAttribute('data-price');
+                    const priceDisplay = document.getElementById(priceDisplayId);
+                    if (priceDisplay) {
+                        priceDisplay.textContent = `${price} CAD`;
+                    }
+                });
+            });
+
+            cartManager.updateCartDisplay();
+        });
+
+        window.getNoyesBoysCart = function() {
+            return new CartManager();
+        };
+
+        window.getNoyesBoysCheckoutData = function() {
+            const manager = new CartManager();
+            return manager.getCheckoutData();
+        };
     </script>
 </body>
 </html>
