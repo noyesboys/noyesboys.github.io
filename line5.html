@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Line 5 - Super Strains Collection from Noyes Boys Genetics. Premium Super Noyes crosses featuring enhanced potency and terpene profiles." />
+    <title>Line 5 - Super Strains | Noyes Boys Genetics</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/noyes boys logo.png" />
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #0a0a0a;
+            zoom: 0.50;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
+                        url('assets/img/bg-masthead.jpg');
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4ade80;
+            text-decoration: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .logo-img {
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+        }
+        
+        .nav-links a:hover {
+            color: #4ade80;
+        }
+        
+        /* Masthead Banner */
+        .masthead {
+            height: 100vh;
+            min-height: 500px;
+            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
+                        url('assets/img/bg-masthead.jpg');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            padding-top: 120px;
+        }
+        
+        .masthead-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .masthead h1 {
+            font-family: 'Arial', sans-serif;
+            font-size: 2.5rem;
+            line-height: 2.5rem;
+            letter-spacing: 0.8rem;
+            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+        
+        .masthead h2 {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 2rem;
+            max-width: 25rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .line-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+            margin-bottom: 2rem;
+        }
+        
+        /* About Section */
+        .about-section {
+            padding: 100px 0;
+            background: #000000;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #4ade80;
+        }
+        
+        /* Line Description */
+        .line-description {
+            text-align: center;
+            margin-bottom: 4rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .line-description h3 {
+            color: #4ade80;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .line-description p {
+            color: #cbd5e1;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        /* Strain Cards */
+        .strain-grid {
+            display: grid;
+            gap: 4rem;
+        }
+        
+        .strain-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            background: #000000;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 2rem;
+            border: 1px solid #333;
+        }
+        
+        .strain-card:nth-child(even) {
+            direction: rtl;
+        }
+        
+        .strain-card:nth-child(even) .strain-content {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        .strain-image {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            object-position: center;
+        }
+        
+        .strain-content {
+            padding: 2rem;
+            color: white;
+        }
+        
+        .strain-title {
+            color: #4ade80;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .strain-subtitle {
+            color: #22c55e;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        
+        .strain-genetics {
+            margin-bottom: 1rem;
+        }
+        
+        .strain-genetics a {
+            color: #4ade80;
+            text-decoration: none;
+        }
+        
+        .strain-genetics a:hover {
+            text-decoration: underline;
+        }
+        
+        .availability {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .availability-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .almost-available {
+            color: #f59e0b;
+        }
+        
+        .strain-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .strain-detail {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+        
+        .strain-detail strong {
+            color: #4ade80;
+        }
+        
+        .read-more {
+            color: #4ade80;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 1rem 0;
+            display: inline-block;
+        }
+        
+        .read-more:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .masthead h1 {
+                font-size: 2rem;
+                letter-spacing: 0.4rem;
+            }
+            
+            .masthead h2 {
+                font-size: 0.9rem;
+            }
+            
+            .strain-card {
+                grid-template-columns: 1fr;
+            }
+            
+            .strain-card:nth-child(even) {
+                direction: ltr;
+            }
+            
+            .strain-image {
+                height: 350px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .masthead h1 {
+                font-size: 4rem;
+                line-height: 4rem;
+            }
+            
+            .masthead h2 {
+                max-width: 30rem;
+                font-size: 1.25rem;
+            }
+            
+            .strain-image {
+                height: 600px;
+            }
+        }
+    </style>
+</head>
+
+<body id="page-top">
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <a href="assets/img/noyes boys logo.png" class="logo">
+                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+                The Noyes Boys
+            </a>
+            <ul class="nav-links">
+                <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
+                <li><a href="genetics.html">All Lines</a></li>
+                <li><a href="deals.html">Deals</a></li>
+                <li><a href="order_now.html">Order Now</a></li>
+                <li><a href="contact_us.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Masthead -->
+    <section class="masthead" id="home">
+        <div class="container">
+            <div class="masthead-content">
+                <div class="line-badge">Coming Soon</div>
+                <h1>LINE 5</h1>
+                <h2>Super Strains Collection - The Evolution of Excellence</h2>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <!-- Line Description -->
+            <div class="line-description">
+                <h3>SUPER STRAINS COLLECTION</h3>
+                <p>Line 5 represents the pinnacle of Noyes Boys Genetics breeding program. These Super Strains feature our legendary Super Noyes as a foundation, crossed with our most elite genetics to create next-level cannabis experiences with enhanced potency (25-33% THC), complex terpene profiles, and carefully selected phenotypes for maximum vigor and stability.</p>
+            </div>
+
+            <h2 class="section-title">Super Strains</h2>
+
+            <!-- Strain Grid -->
+            <div class="strain-grid">
+                <!-- Super Noyes -->
+                <div class="strain-card" id="supernoyes">
+                    <img src="assets/sept22edits/websiteimagedata/cards/finished/superstrains/supernoyes.jpg" alt="Super Noyes" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">SUPER NOYES</h4>
+                        <div class="strain-subtitle">(Super Tangie × Noyes Kush)</div>
+                        <div class="strain-genetics">
+                            <a href="https://www.comparethestrain.ca/super-tangie/">Super Tangie</a> × 
+                            <a href="https://www.comparethestrain.ca/noyes-kush/">Noyes Kush</a>
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span class="almost-available">COMING SOON</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 20% S / 80% I</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 68 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Short-Medium</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> 1.2%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 32%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Energetic, Happy, Motivated</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Berries, Fruity, Sweet</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="/supernoyes" class="read-more">READ MORE</a>
+                    </div>
+                </div>
+
+                <!-- Super Poison -->
+                <div class="strain-card" id="superpoison">
+                    <img src="assets/sept22edits/websiteimagedata/cards/finished/superstrains/superpoison.jpg" alt="Super Poison" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">SUPER POISON</h4>
+                        <div class="strain-subtitle">(Noyes Poison × Super Noyes)</div>
+                        <div class="strain-genetics">
+                            Noyes Poison × Super Noyes
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span class="almost-available">COMING SOON</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 35% S / 65% I</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 64 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Medium</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> 0%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 28%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Uplifting, Happy, Focus</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Lemon, Diesel, Sweet Pine</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="/superpoison" class="read-more">READ MORE</a>
+                    </div>
+                </div>
+
+                <!-- Super Noyes Runtz -->
+                <div class="strain-card" id="supernoyesruntz">
+                    <img src="assets/sept22edits/websiteimagedata/cards/finished/superstrains/supernoyesruntz.jpg" alt="Super Noyes Runtz" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">SUPER NOYES RUNTZ</h4>
+                        <div class="strain-subtitle">(Super Noyes × Animal Runtz)</div>
+                        <div class="strain-genetics">
+                            Super Noyes × Animal Runtz
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span class="almost-available">COMING SOON</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 10% S / 90% I</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Short-Medium</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> 0%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 33%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Energetic, Happy, Motivated</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Grape, Berries, Fruity</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="/supernoyesruntz" class="read-more">READ MORE</a>
+                    </div>
+                </div>
+
+                <!-- Super Captain Noyes -->
+                <div class="strain-card" id="supercaptainnoyes">
+                    <img src="assets/sept22edits/websiteimagedata/cards/finished/superstrains/supercaptainnoyes.jpg" alt="Super Captain Noyes" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">SUPER CAPTAIN NOYES</h4>
+                        <div class="strain-subtitle">(Super Noyes × Captain Noyes)</div>
+                        <div class="strain-genetics">
+                            Super Noyes × Captain Noyes
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span class="almost-available">COMING SOON</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 30% S / 70% I</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 62 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Short-Medium</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> 0%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 27%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Calm, Happy, In Control</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Gas, Rubber, Fuel</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="/supercaptainnoyes" class="read-more">READ MORE</a>
+                    </div>
+                </div>
+
+                <!-- Super Bubba -->
+                <div class="strain-card" id="superbubba">
+                    <img src="assets/sept22edits/websiteimagedata/cards/finished/superstrains/superbubba.jpg" alt="Super Bubba" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">SUPER BUBBA</h4>
+                        <div class="strain-subtitle">(Super Noyes × Bubba Noyes)</div>
+                        <div class="strain-genetics">
+                            Super Noyes × Bubba Noyes
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span class="almost-available">COMING SOON</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 20% S / 80% I</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 64 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Short</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> 0%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 26%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Sleepy, Restful, Calm</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Kush, Gas, Earthy</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="/superbubba" class="read-more">READ MORE</a>
+                    </div>
+                </div>
+
+                <!-- Super Breath -->
+                <div class="strain-card" id="superbreath">
+                    <img src="assets/sept22edits/websiteimagedata/cards/finished/superstrains/superbreath.jpg" alt="Super Breath" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">SUPER BREATH</h4>
+                        <div class="strain-subtitle">(Super Noyes × Noyes Breath)</div>
+                        <div class="strain-genetics">
+                            Super Noyes × Noyes Breath
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span class="almost-available">COMING SOON</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 30% S / 70% I</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 68 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Medium</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> 0%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 22-28%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Relaxed, Uplifted, Creative</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Gas, Earthy, Sweet Pine</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="/superbreath" class="read-more">READ MORE</a>
+                    </div>
+                </div>
+
+                <!-- Super Alienoyes -->
+                <div class="strain-card" id="superalienoyes">
+                    <img src="assets/sept22edits/websiteimagedata/cards/finished/superstrains/superalienoyes.jpg" alt="Super Alienoyes" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">SUPER ALIENOYES</h4>
+                        <div class="strain-subtitle">(Super Noyes × AlieNoyes Kush)</div>
+                        <div class="strain-genetics">
+                            Super Noyes × AlieNoyes Kush
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span class="almost-available">COMING SOON</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 20% S / 80% I</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 66 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Short-Medium</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> 0%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 28-30%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Energetic, Happy, Motivated</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Grape, Berries, Fruity</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="/superalienoyes" class="read-more">READ MORE</a>
+                    </div>
+                </div>
+
+                <!-- Super Rainbow Skunk -->
+                <div class="strain-card" id="superrainbowskunk">
+                    <img src="assets/sept22edits/websiteimagedata/cards/finished/superstrains/superrainbowskunk.jpg" alt="Super Rainbow Skunk" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">SUPER RAINBOW SKUNK</h4>
+                        <div class="strain-subtitle">(Super Noyes × Rainbow Skunk)</div>
+                        <div class="strain-genetics">
+                            Super Noyes × Rainbow Skunk
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span class="almost-available">COMING SOON</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 60% S / 40% I</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 69 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Tall</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> 0%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 26%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Energetic, Happy, Motivated</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Berries, Fruity, Trichome Packed</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="/superrainbowskunk" class="read-more">READ MORE</a>
+                    </div>
+                </div>
+
+                <!-- Super Albino Noyes -->
+                <div class="strain-card" id="superalbinonoyes">
+                    <img src="assets/sept22edits/websiteimagedata/cards/finished/superstrains/superalbinoskunk.jpg" alt="Super Albino Noyes" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">SUPER ALBINO NOYES</h4>
+                        <div class="strain-subtitle">(Super Noyes × Albino Skunk)</div>
+                        <div class="strain-genetics">
+                            Super Noyes × Albino Skunk
+                        </div>
+                        
+                        <div class="availability">
+                            <div class="availability-item">
+                                <span class="almost-available">COMING SOON</span>
+                            </div>
+                        </div>
+                        
+                        <div class="strain-details">
+                            <div class="strain-detail"><strong>Sex:</strong> Feminized</div>
+                            <div class="strain-detail"><strong>Variety:</strong> 30% S / 70% I</div>
+                            <div class="strain-detail"><strong>Flowering Time:</strong> 66 Days</div>
+                            <div class="strain-detail"><strong>Plant Height:</strong> Medium</div>
+                            <div class="strain-detail"><strong>CBD Content:</strong> 0%</div>
+                            <div class="strain-detail"><strong>THC Content:</strong> 25%</div>
+                            <div class="strain-detail"><strong>Effect:</strong> Energetic, Happy, Motivated</div>
+                            <div class="strain-detail"><strong>Taste:</strong> Berries, Fruity, Sweet</div>
+                            <div class="strain-detail"><strong>Breeder:</strong> Noyes Boys Genetics</div>
+                        </div>
+                        
+                        <a href="/superalbinonoyes" class="read-more">READ MORE</a>
+                    </div>
+                </div>
+
+                <!-- Super Larry Noyes -->
+                <div class="strain-card" id="superlarrynoyes">
+                    <img src="assets/sept22edits/websiteimagedata/cards/finished/superstrains/superlarry.jpg" alt="Super Larry Noyes" class="strain-image">
+                    <div class="strain-content">
+                        <h4 class="strain-title">SUPER LARRY NOYES</h4>
+                        <div class="strain-subtitle">(Super Noyes × Larry Noyes)</div>
+                        <div class="strain-genetics">
+                            Super Noyes × <a href="https
