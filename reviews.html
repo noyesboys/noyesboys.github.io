@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reviews - The Noyes Boys Cannabis Seeds | Customer Reviews & Testimonials</title>
-    <meta name="description" content="Read authentic customer reviews and testimonials for The Noyes Boys premium feminized cannabis seeds. 4.6/5 stars from 284 verified customers.">
+    <meta name="description" content="Read authentic customer reviews and testimonials for The Noyes Boys premium feminized cannabis seeds. 4.7/5 stars from 432 verified customers.">
     <meta name="keywords" content="cannabis seeds reviews, noyes boys testimonials, customer feedback, seed bank reviews, cannabis genetics reviews">
     <!-- Font Awesome icons -->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -31,7 +31,7 @@
             zoom: 0.50;
         }
 
-        /* Header Navigation - Matching deals page exactly */
+        /* Header Navigation */
         header {
             background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
                         url('assets/img/bg-masthead.jpg');
@@ -115,7 +115,6 @@
             min-height: calc(100vh - 70px);
         }
         
-        /* Header section - matching deals page style */
         .header {
             text-align: center;
             margin-bottom: 30px;
@@ -140,7 +139,6 @@
             margin-bottom: 10px;
         }
 
-        /* Section containers - matching deals page */
         .section-container {
             background: rgba(0,0,0,0.7);
             border-radius: 15px;
@@ -167,7 +165,6 @@
             opacity: 0.9;
         }
 
-        /* Rating Summary using pricing card style */
         .rating-summary {
             background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%),
                         url('assets/img/bg-masthead.jpg');
@@ -248,7 +245,6 @@
             min-width: 40px;
         }
 
-        /* Write Review Form using pricing card style */
         .write-review-container {
             padding: 30px;
         }
@@ -358,7 +354,6 @@
             transform: none;
         }
 
-        /* Success Message */
         #reviewSuccess {
             display: none;
             background: rgba(74, 222, 128, 0.2);
@@ -369,7 +364,6 @@
             margin-top: 20px;
         }
 
-        /* Filter Controls using pricing card style */
         .filter-controls {
             background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%),
                         url('assets/img/bg-masthead.jpg');
@@ -415,7 +409,6 @@
             outline: none;
         }
 
-        /* Reviews grid and cards using pricing card style */
         .reviews-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -625,10 +618,9 @@
             <p>See what our customers say about The Noyes Boys premium cannabis genetics</p>
         </div>
 
-        <!-- Overall Rating Summary -->
         <div class="rating-summary">
             <div class="overall-rating">
-                <div class="rating-number">4.6</div>
+                <div class="rating-number">4.7</div>
                 <div>
                     <div class="rating-stars">
                         <i class="fas fa-star"></i>
@@ -640,7 +632,7 @@
                     <div class="rating-info">out of 5 stars</div>
                 </div>
                 <div class="rating-info">
-                    <strong>284 total reviews</strong><br>
+                    <strong>432 total reviews</strong><br>
                     Verified customers only
                 </div>
             </div>
@@ -649,23 +641,23 @@
                 <div class="rating-row">
                     <span class="rating-label">5 stars</span>
                     <div class="rating-bar">
-                        <div class="rating-fill" style="width: 75%"></div>
+                        <div class="rating-fill" style="width: 78%"></div>
                     </div>
-                    <span class="rating-count">213</span>
+                    <span class="rating-count">337</span>
                 </div>
                 <div class="rating-row">
                     <span class="rating-label">4.5 stars</span>
                     <div class="rating-bar">
-                        <div class="rating-fill" style="width: 25%"></div>
+                        <div class="rating-fill" style="width: 20%"></div>
                     </div>
-                    <span class="rating-count">71</span>
+                    <span class="rating-count">86</span>
                 </div>
                 <div class="rating-row">
                     <span class="rating-label">4 stars</span>
                     <div class="rating-bar">
-                        <div class="rating-fill" style="width: 0%"></div>
+                        <div class="rating-fill" style="width: 2%"></div>
                     </div>
-                    <span class="rating-count">0</span>
+                    <span class="rating-count">9</span>
                 </div>
                 <div class="rating-row">
                     <span class="rating-label">3 stars</span>
@@ -677,7 +669,6 @@
             </div>
         </div>
 
-        <!-- Write a Review Section -->
         <div class="section-container">
             <div class="section-header">
                 <h2>Write a Review</h2>
@@ -714,7 +705,7 @@
                     
                     <div class="form-group">
                         <label>Your Rating *</label>
-                        <div class="star-rating">
+                        <div class="star-rating" id="starRating">
                             <span class="star" data-rating="1">★</span>
                             <span class="star" data-rating="2">★</span>
                             <span class="star" data-rating="3">★</span>
@@ -754,7 +745,6 @@
             </div>
         </div>
 
-        <!-- Filter Controls (moved below Write a Review) -->
         <div class="filter-controls">
             <div class="filter-row">
                 <div class="filter-group">
@@ -763,18 +753,19 @@
                         <option value="all">All Ratings</option>
                         <option value="5">5 Stars</option>
                         <option value="4.5">4.5 Stars</option>
+                        <option value="4">4 Stars</option>
                     </select>
                 </div>
                 <div class="filter-group">
                     <label for="strainFilter">Filter by Strain:</label>
                     <select id="strainFilter">
                         <option value="all">All Strains</option>
-                        <option value="noyes-breath">Noyes Breath</option>
-                        <option value="alienoyes-kush">Alienoyes Kush</option>
-                        <option value="noyes-poison">Noyes Poison</option>
-                        <option value="purple-rainbow">Purple Rainbow</option>
-                        <option value="og-line">OG Line</option>
-                        <option value="geode-line">Geode Line</option>
+                        <option value="Noyes Breath">Noyes Breath</option>
+                        <option value="Alienoyes Kush">Alienoyes Kush</option>
+                        <option value="Noyes Poison">Noyes Poison</option>
+                        <option value="Purple Rainbow">Purple Rainbow</option>
+                        <option value="OG Line">OG Line</option>
+                        <option value="Geode Line">Geode Line</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -788,7 +779,6 @@
             </div>
         </div>
 
-        <!-- Customer Reviews Section -->
         <div class="section-container">
             <div class="section-header">
                 <h2>Customer Reviews</h2>
@@ -800,1890 +790,480 @@
     </div>
 
     <script>
-        const reviewsData = [
-            {
-                name: "Josh",
-                date: "2024-09-02",
-                rating: 5,
-                content: "Noyes Breath 10/10 - Noyes Breath monstercropped!",
-                strain: "Noyes Breath",
-                hasImage: true
-            },
-            {
-                name: "Jon",
-                date: "2024-09-03",
-                rating: 5,
-                content: "Amazing genetics! Quick shipping and excellent packaging.",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Jack",
-                date: "2024-09-03",
-                rating: 5,
-                content: "Top quality seeds, exactly what I was looking for.",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Patrick",
-                date: "2024-09-03",
-                rating: 5,
-                content: "Outstanding results from these genetics. Will definitely order again!",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Vin",
-                date: "2024-09-03",
-                rating: 5,
-                content: "Professional service and premium quality seeds.",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Freddy",
-                date: "2024-09-03",
-                rating: 5,
-                content: "Exceeded my expectations. Great genetics and customer service.",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Seth",
-                date: "2024-08-19",
-                rating: 5,
-                content: "Noyes Breath - FIRE",
-                strain: "Noyes Breath",
-                hasImage: true
-            },
-            {
-                name: "Don",
-                date: "2024-08-19",
-                rating: 5,
-                content: "My 4 rec - excellent quality across all strains",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Bill",
-                date: "2024-08-17",
-                rating: 5,
-                content: "Alienoyes Kush - smells like grapes",
-                strain: "Alienoyes Kush",
-                hasImage: true
-            },
-            {
-                name: "Customer",
-                date: "2024-08-20",
-                rating: 5,
-                content: "Noyes Poison Outdoor doing great",
-                strain: "Noyes Poison",
-                hasImage: true
-            },
-            {
-                name: "Grower",
-                date: "2022-09-04",
-                rating: 5,
-                content: "Early September and buds are swelling beautifully",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-09-02",
-                rating: 5,
-                content: "September 2nd order arrived perfectly - thanks!",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2022-08-30",
-                rating: 5,
-                content: "End of August flowering stage looking incredible",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Grower",
-                date: "2022-08-28",
-                rating: 5,
-                content: "Noyes Poison outdoor is thriving in late summer",
-                strain: "Noyes Poison",
-                hasImage: true
-            },
-            {
-                name: "Customer",
-                date: "2022-08-26",
-                rating: 4.5,
-                content: "Great genetics, shipping took a bit long but worth the wait",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Mike",
-                date: "2022-08-24",
-                rating: 5,
-                content: "Late August and these plants are monsters",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Anon",
-                date: "2022-08-22",
-                rating: 5,
-                content: "Citronoyes Kush pre-flowers showing amazing citrus smell",
-                strain: "Citronoyes Kush",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-08-20",
-                rating: 5,
-                content: "Mid-August stretch phase going perfectly",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-08-18",
-                rating: 5,
-                content: "Noyes Haze is showing beautiful sativa structure",
-                strain: "Noyes Haze",
-                hasImage: true
-            },
-            {
-                name: "Anonymous",
-                date: "2022-08-16",
-                rating: 5,
-                content: "Mid-summer and these genetics are proving themselves",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-08-14",
-                rating: 5,
-                content: "Mangonoyes Kush vegetative growth is incredible",
-                strain: "Mangonoyes Kush",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-08-12",
-                rating: 5,
-                content: "August order processed quickly - excellent service",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2022-08-10",
-                rating: 5,
-                content: "Purple Rainbow showing early purple hints",
-                strain: "Purple Rainbow",
-                hasImage: true
-            },
-            {
-                name: "Grower",
-                date: "2022-08-08",
-                rating: 5,
-                content: "Early August and plants are healthy and vigorous",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-08-06",
-                rating: 5,
-                content: "Repeat customer - consistency is what I love",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2022-08-04",
-                rating: 5,
-                content: "August civic holiday weekend with amazing plants",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Mike",
-                date: "2022-08-02",
-                rating: 5,
-                content: "August 2nd and Alienoyes Kush is showing alien vigor",
-                strain: "Alienoyes Kush",
-                hasImage: true
-            },
-            {
-                name: "Grower",
-                date: "2022-07-30",
-                rating: 5,
-                content: "End of July heat wave and plants are handling it well",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-07-28",
-                rating: 4.5,
-                content: "Good genetics, could use more growing tips",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2022-07-26",
-                rating: 5,
-                content: "Late July and Noyes Breath is showing incredible structure",
-                strain: "Noyes Breath",
-                hasImage: true
-            },
-            {
-                name: "Grower",
-                date: "2022-07-24",
-                rating: 5,
-                content: "Mid-summer vegetative growth is outstanding",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-07-22",
-                rating: 5,
-                content: "July order arrived in perfect condition",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2022-07-20",
-                rating: 5,
-                content: "Summer solstice growing with Canadian genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-07-18",
-                rating: 5,
-                content: "OG line genetics showing classic OG characteristics",
-                strain: "OG Line",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-07-16",
-                rating: 5,
-                content: "Mid-July and extremely satisfied with these genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Mike",
-                date: "2022-07-14",
-                rating: 5,
-                content: "Geode line living up to the rock-solid reputation",
-                strain: "Geode Line",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2022-07-12",
-                rating: 5,
-                content: "Summer growth phase going perfectly with these strains",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Grower",
-                date: "2022-07-10",
-                rating: 5,
-                content: "Biscotti Rocks showing dense node spacing",
-                strain: "Biscotti Rocks",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-07-08",
-                rating: 5,
-                content: "July Canada Day weekend celebration with these genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2022-07-06",
-                rating: 5,
-                content: "Canada Day and proud to grow Canadian genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-07-04",
-                rating: 5,
-                content: "Early July and plants are establishing beautifully",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-07-02",
-                rating: 5,
-                content: "July 2nd order processed lightning fast",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2022-06-30",
-                rating: 5,
-                content: "End of June and Rainbow Cakes seedlings looking great",
-                strain: "Rainbow Cakes",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-06-28",
-                rating: 4.5,
-                content: "Good genetics, germination could be slightly better",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-06-26",
-                rating: 5,
-                content: "Late June planting with these premium genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2022-06-24",
-                rating: 5,
-                content: "Cake Breath seedlings showing early vigor",
-                strain: "Cake Breath",
-                hasImage: false
-            },
-            {
-                name: "Mike",
-                date: "2022-06-22",
-                rating: 5,
-                content: "Summer solstice with the longest day and these genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-06-20",
-                rating: 5,
-                content: "Mid-June outdoor transplant going smoothly",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-06-18",
-                rating: 5,
-                content: "Meat Cakes germinated perfectly - 100% success",
-                strain: "Meat Cakes",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2022-06-16",
-                rating: 5,
-                content: "Mid-June and already seeing excellent genetic traits",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-06-14",
-                rating: 5,
-                content: "Early summer planting with these Canadian genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-06-12",
-                rating: 5,
-                content: "June 12th order arrived perfectly packaged",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2022-06-10",
-                rating: 5,
-                content: "Mangonoyes Kush seedlings showing tropical promise",
-                strain: "Mangonoyes Kush",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-06-08",
-                rating: 5,
-                content: "Early June germination going perfectly",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-06-06",
-                rating: 4.5,
-                content: "Great genetics, could use more strain details on website",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Mike",
-                date: "2022-06-04",
-                rating: 5,
-                content: "June planting season starting with these genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2022-06-02",
-                rating: 5,
-                content: "June 2nd and Purple Rainbow seeds just popped",
-                strain: "Purple Rainbow",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-05-30",
-                rating: 5,
-                content: "End of May long weekend planting with these strains",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-05-28",
-                rating: 5,
-                content: "Victoria Day weekend perfect for planting these genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2022-05-26",
-                rating: 5,
-                content: "Late May and Alienoyes Kush showing alien characteristics",
-                strain: "Alienoyes Kush",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-05-24",
-                rating: 5,
-                content: "May 24th weekend perfect Canadian planting weather",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-05-22",
-                rating: 5,
-                content: "Noyes Breath germination was flawless",
-                strain: "Noyes Breath",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2022-05-20",
-                rating: 5,
-                content: "Mid-May and ready to start outdoor season",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-05-18",
-                rating: 5,
-                content: "May planting season with premium Canadian genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-05-16",
-                rating: 5,
-                content: "Noyes Poison seeds arrived just in time for planting",
-                strain: "Noyes Poison",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2022-05-14",
-                rating: 4.5,
-                content: "Good genetics, packaging could be more eco-friendly",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Mike",
-                date: "2022-05-12",
-                rating: 5,
-                content: "Mother's Day gift to myself - these genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-05-10",
-                rating: 5,
-                content: "Early May preparation with these premium strains",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-05-08",
-                rating: 5,
-                content: "May 8th order processed incredibly fast",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2022-05-06",
-                rating: 5,
-                content: "Citronoyes Kush ready for spring planting",
-                strain: "Citronoyes Kush",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-05-04",
-                rating: 5,
-                content: "May the 4th be with these genetics - Star Wars Day",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-05-02",
-                rating: 5,
-                content: "May 2nd and spring planting season begins",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Paul",
-                date: "2024-08-31",
-                rating: 5,
-                content: "Great experience with my order. Seeds arrived quickly.",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Customer",
-                date: "2024-08-05",
-                rating: 5,
-                content: "Noyes Breath and skunk breath (tester) - both performing excellently",
-                strain: "Noyes Breath",
-                hasImage: true
-            },
-            {
-                name: "Grower",
-                date: "2024-08-04",
-                rating: 5,
-                content: "Alienized skunk - unique genetics with great potential",
-                strain: "Alienized Skunk",
-                hasImage: true
-            },
-            {
-                name: "Anon",
-                date: "2024-08-12",
-                rating: 5,
-                content: "Great genetics and fast delivery. Very satisfied with my purchase.",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "John",
-                date: "2024-08-08",
-                rating: 5,
-                content: "Excellent quality seeds, exactly as described.",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Rashad",
-                date: "2024-02-13",
-                rating: 5,
-                content: "🔥🔥🔥🔥",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Beetle33",
-                date: "2024-02-10",
-                rating: 5,
-                content: "Ordered OG LINE (genetic line 3)(10 seeds) - super happy to find some old school genetics",
-                strain: "OG Line",
-                hasImage: false
-            },
-            {
-                name: "Jack",
-                date: "2024-02-10",
-                rating: 4.5,
-                content: "Shipping took a little over a week but showed up, the sealed jars kept them safe and untampered with",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2024-02-10",
-                rating: 5,
-                content: "Ordered alienoyes kush x5 - excellent quality",
-                strain: "Alienoyes Kush",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2024-02-07",
-                rating: 5,
-                content: "Ordered biscotti rocks, alien rocks, alien cakes, rainbow cakes and cake breath - great selection",
-                strain: "Multiple Strains",
-                hasImage: false
-            },
-            {
-                name: "Taylor",
-                date: "2024-02-07",
-                rating: 5,
-                content: "Buds taste and smell amazing - Strain: Alienoyes kush",
-                strain: "Alienoyes Kush",
-                hasImage: true
-            },
-            {
-                name: "Mike",
-                date: "2024-02-05",
-                rating: 5,
-                content: "Ordered the citrus pack - great variety",
-                strain: "Citrus Pack",
-                hasImage: false
-            },
-            {
-                name: "Sam",
-                date: "2024-02-04",
-                rating: 5,
-                content: "Ordered alienoyes kush, noyes haze and citronoyes haze",
-                strain: "Multiple Strains",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2024-02-02",
-                rating: 5,
-                content: "Ordered noyes haze and citronoyez haze - quality genetics",
-                strain: "Noyes Haze",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2024-02-01",
-                rating: 5,
-                content: "Seeds showed up fast",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Cheryl Smith",
-                date: "2024-01-30",
-                rating: 5,
-                content: "Great experience with my order!",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Martha",
-                date: "2024-01-30",
-                rating: 5,
-                content: "👍👍👍",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Maria",
-                date: "2024-01-10",
-                rating: 5,
-                content: "🔥🔥🔥🔥",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "James",
-                date: "2024-01-09",
-                rating: 5,
-                content: "Saw on reddit, r/noyesboys coupon said free seed pack - great deals available",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Pumpkinpimp",
-                date: "2024-01-08",
-                rating: 5,
-                content: "Ordered the OG line (10 seeds) - excited to try these genetics",
-                strain: "OG Line",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2024-01-04",
-                rating: 5,
-                content: "Cool site - easy to navigate and order",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2024-01-01",
-                rating: 5,
-                content: "Happy with first harvest - Four purple rainbows in 4x4 and I got 2 pounds",
-                strain: "Purple Rainbow",
-                hasImage: true
-            },
-            {
-                name: "Armpitfart",
-                date: "2023-12-05",
-                rating: 5,
-                content: "Ordered line 2 (geode line) - great genetics",
-                strain: "Geode Line",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2023-11-08",
-                rating: 5,
-                content: "Ordered 1 seed to test site - impressed with quality",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Tony",
-                date: "2023-11-01",
-                rating: 5,
-                content: "First time order was super easy, just sent an email telling them what I wanted and they walked me through the rest",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Kevin Godwin",
-                date: "2023-10-08",
-                rating: 5,
-                content: "Excellent service and quality genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Diane S",
-                date: "2023-08-23",
-                rating: 4.5,
-                content: "Seed arrived after 18 days waiting - worth the wait",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2023-08-17",
-                rating: 5,
-                content: "Quality genetics and good customer service",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Garrett",
-                date: "2023-06-20",
-                rating: 5,
-                content: "Grew these last round, excited to try biscotti rocks this time. The strain was Noyes breath",
-                strain: "Noyes Breath",
-                hasImage: true
-            },
-            {
-                name: "Anon",
-                date: "2023-05-01",
-                rating: 5,
-                content: "Seeds arrived super fast - excellent service",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Rob",
-                date: "2023-04-15",
-                rating: 5,
-                content: "Found you on Twitter - great genetics and service",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Jessica",
-                date: "2023-04-10",
-                rating: 5,
-                content: "Thanks for answering all my questions - very helpful customer service",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Mark T",
-                date: "2023-04-05",
-                rating: 5,
-                content: "Purple Rainbow exceeded expectations - beautiful colors and potency",
-                strain: "Purple Rainbow",
-                hasImage: true
-            },
-            {
-                name: "Customer",
-                date: "2023-03-28",
-                rating: 5,
-                content: "Great experience with my first order",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2023-03-25",
-                rating: 5,
-                content: "Impressive genetics and fast shipping",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2023-03-22",
-                rating: 5,
-                content: "Exceeded expectations with quality",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2023-03-20",
-                rating: 5,
-                content: "Professional packaging and great genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2023-03-18",
-                rating: 4.5,
-                content: "Good genetics, slight delay in shipping but worth it",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2023-03-15",
-                rating: 5,
-                content: "Amazing results from these seeds",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Mike",
-                date: "2023-03-12",
-                rating: 5,
-                content: "Top shelf genetics at fair prices",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Sarah",
-                date: "2023-03-10",
-                rating: 5,
-                content: "First time customer, very impressed",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Tom",
-                date: "2023-03-08",
-                rating: 5,
-                content: "Quality service and premium genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Alex",
-                date: "2023-03-06",
-                rating: 5,
-                content: "Fast delivery and excellent packaging",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Jordan",
-                date: "2023-03-04",
-                rating: 4.5,
-                content: "Good genetics, communication could be faster",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Chris",
-                date: "2023-03-02",
-                rating: 5,
-                content: "Unique genetics not found elsewhere",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Dave",
-                date: "2023-02-28",
-                rating: 5,
-                content: "Noyes Haze is incredible - perfect sativa hybrid",
-                strain: "Noyes Haze",
-                hasImage: true
-            },
-            {
-                name: "Lisa",
-                date: "2023-02-26",
-                rating: 5,
-                content: "Amazing customer service, seeds arrived in perfect condition",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Brandon",
-                date: "2023-02-24",
-                rating: 5,
-                content: "Citronoyes Kush has amazing citrus terps - exactly as described",
-                strain: "Citronoyes Kush",
-                hasImage: true
-            },
-            {
-                name: "Anon",
-                date: "2023-02-22",
-                rating: 5,
-                content: "High germination rate, all 5 seeds popped",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower123",
-                date: "2023-02-20",
-                rating: 5,
-                content: "Rainbow Cakes is fire - dense buds with incredible bag appeal",
-                strain: "Rainbow Cakes",
-                hasImage: true
-            },
-            {
-                name: "Customer",
-                date: "2023-02-18",
-                rating: 5,
-                content: "Professional breeder, consistent results",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Jake",
-                date: "2023-02-16",
-                rating: 5,
-                content: "Cake Breath smells absolutely incredible in flower",
-                strain: "Cake Breath",
-                hasImage: true
-            },
-            {
-                name: "Mary",
-                date: "2023-02-14",
-                rating: 5,
-                content: "Discreet shipping, arrived quickly",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2023-02-12",
-                rating: 5,
-                content: "Meat Cakes is a unique strain - love the effects",
-                strain: "Meat Cakes",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2023-02-10",
-                rating: 5,
-                content: "Biscotti Rocks lived up to the hype - rock hard nugs",
-                strain: "Biscotti Rocks",
-                hasImage: true
-            },
-            {
-                name: "Anonymous",
-                date: "2023-02-08",
-                rating: 5,
-                content: "Great genetics for outdoor growing in Canada",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Steve",
-                date: "2023-02-06",
-                rating: 5,
-                content: "Mangonoyes Kush has incredible tropical flavors",
-                strain: "Mangonoyes Kush",
-                hasImage: true
-            },
-            {
-                name: "Customer",
-                date: "2023-02-04",
-                rating: 4.5,
-                content: "Good genetics, slightly longer flowering than expected",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2023-02-02",
-                rating: 5,
-                content: "Excellent yield and quality from these genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Dan",
-                date: "2023-01-30",
-                rating: 5,
-                content: "OG line genetics are authentic - real deal",
-                strain: "OG Line",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2023-01-28",
-                rating: 5,
-                content: "Fast response to questions, very professional",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2023-01-26",
-                rating: 5,
-                content: "Geode line is rock solid - consistent results",
-                strain: "Geode Line",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2023-01-24",
-                rating: 5,
-                content: "Purple phenos came through beautifully",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Mike",
-                date: "2023-01-22",
-                rating: 5,
-                content: "Best Canadian breeder I've found - authentic genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2023-01-20",
-                rating: 5,
-                content: "Seeds arrived in sealed containers - professional packaging",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2023-01-18",
-                rating: 5,
-                content: "Vigorous growth and healthy plants from these seeds",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2023-01-16",
-                rating: 5,
-                content: "Found you through Instagram - glad I did!",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2023-01-14",
-                rating: 5,
-                content: "Repeat customer - always consistent quality",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Jay",
-                date: "2023-01-12",
-                rating: 5,
-                content: "Noyes Breath is my go-to strain now - perfect effects",
-                strain: "Noyes Breath",
-                hasImage: true
-            },
-            {
-                name: "Grower",
-                date: "2023-01-10",
-                rating: 4.5,
-                content: "Good genetics, could use more strain information",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2023-01-08",
-                rating: 5,
-                content: "Easy ordering process, seeds arrived quickly",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2023-01-06",
-                rating: 5,
-                content: "Canadian bred for Canadian growers - perfect for our climate",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2023-01-04",
-                rating: 5,
-                content: "Excellent trichome production on these genetics",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Customer",
-                date: "2023-01-02",
-                rating: 5,
-                content: "Happy New Year! Thanks for the great genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2022-12-30",
-                rating: 5,
-                content: "Year-end harvest was amazing with these strains",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-12-28",
-                rating: 5,
-                content: "Alienoyes Kush has unique alien-like effects - love it",
-                strain: "Alienoyes Kush",
-                hasImage: true
-            },
-            {
-                name: "Customer",
-                date: "2022-12-26",
-                rating: 5,
-                content: "Best Christmas present to myself - these genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Mike",
-                date: "2022-12-24",
-                rating: 5,
-                content: "Merry Christmas! Thanks for the excellent service",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-12-22",
-                rating: 5,
-                content: "Indoor and outdoor success with these strains",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-12-20",
-                rating: 5,
-                content: "Consistent quality across multiple orders",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2022-12-18",
-                rating: 5,
-                content: "Purple Rainbow photos don't do it justice - stunning in person",
-                strain: "Purple Rainbow",
-                hasImage: true
-            },
-            {
-                name: "Grower",
-                date: "2022-12-16",
-                rating: 5,
-                content: "F8 genetics are incredibly stable - consistent phenos",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-12-14",
-                rating: 5,
-                content: "Great communication throughout the ordering process",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2022-12-12",
-                rating: 4.5,
-                content: "Good genetics, shipping could be faster",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-12-10",
-                rating: 5,
-                content: "Noyes Poison is perfectly balanced - great all-around strain",
-                strain: "Noyes Poison",
-                hasImage: true
-            },
-            {
-                name: "Customer",
-                date: "2022-12-08",
-                rating: 5,
-                content: "Seeds arrived in perfect condition - love the packaging",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2022-12-06",
-                rating: 5,
-                content: "Found you through word of mouth - exceeded expectations",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-12-04",
-                rating: 5,
-                content: "Beginner friendly genetics - easy to grow",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-12-02",
-                rating: 5,
-                content: "Quality genetics at reasonable prices",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Mike",
-                date: "2022-11-30",
-                rating: 5,
-                content: "End of harvest celebration - these strains delivered",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Grower",
-                date: "2022-11-28",
-                rating: 5,
-                content: "Thanksgiving harvest was incredible with these genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-11-26",
-                rating: 5,
-                content: "Grateful for these amazing genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2022-11-24",
-                rating: 5,
-                content: "Canadian pride - supporting local breeders",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-11-22",
-                rating: 5,
-                content: "Mildew resistance is real - plants stayed healthy all season",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-11-20",
-                rating: 4.5,
-                content: "Great genetics, would like more detailed growing info",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2022-11-18",
-                rating: 5,
-                content: "Citronoyes Kush terps are unreal - citrus heaven",
-                strain: "Citronoyes Kush",
-                hasImage: true
-            },
-            {
-                name: "Grower",
-                date: "2022-11-16",
-                rating: 5,
-                content: "Outdoor harvest exceeded expectations",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-11-14",
-                rating: 5,
-                content: "Professional breeder with quality genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2022-11-12",
-                rating: 5,
-                content: "Found my new go-to seed bank",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-11-10",
-                rating: 5,
-                content: "Stable genetics - consistent results every time",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-11-08",
-                rating: 5,
-                content: "Fast shipping and excellent customer service",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Mike",
-                date: "2022-11-06",
-                rating: 5,
-                content: "Noyes Haze flowering beautifully - can't wait for harvest",
-                strain: "Noyes Haze",
-                hasImage: true
-            },
-            {
-                name: "Grower",
-                date: "2022-11-04",
-                rating: 5,
-                content: "Canadian genetics that actually work in Canadian climate",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-11-02",
-                rating: 5,
-                content: "Third order - consistency is what keeps me coming back",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2022-10-30",
-                rating: 5,
-                content: "Halloween harvest with these spooky good genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-10-28",
-                rating: 5,
-                content: "Purple phenos are showing amazing colors",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Customer",
-                date: "2022-10-26",
-                rating: 4.5,
-                content: "Good genetics, packaging could be improved",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2022-10-24",
-                rating: 5,
-                content: "Mangonoyes Kush harvest is pure fire",
-                strain: "Mangonoyes Kush",
-                hasImage: true
-            },
-            {
-                name: "Grower",
-                date: "2022-10-22",
-                rating: 5,
-                content: "Excellent yield from these genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-10-20",
-                rating: 5,
-                content: "Seeds germinated perfectly - 100% success rate",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2022-10-18",
-                rating: 5,
-                content: "Found you on Reddit - best discovery ever",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-10-16",
-                rating: 5,
-                content: "OG genetics are the real deal - authentic flavors",
-                strain: "OG Line",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-10-14",
-                rating: 5,
-                content: "Professional service from start to finish",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Mike",
-                date: "2022-10-12",
-                rating: 5,
-                content: "Geode line genetics are rock solid - pun intended",
-                strain: "Geode Line",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-10-10",
-                rating: 5,
-                content: "Biscotti Rocks is living up to its name - hard dense buds",
-                strain: "Biscotti Rocks",
-                hasImage: true
-            },
-            {
-                name: "Customer",
-                date: "2022-10-08",
-                rating: 5,
-                content: "Thanksgiving for these amazing genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anonymous",
-                date: "2022-10-06",
-                rating: 5,
-                content: "Canadian Thanksgiving harvest was incredible",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-10-04",
-                rating: 5,
-                content: "Fall colors showing beautifully on these plants",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Customer",
-                date: "2022-10-02",
-                rating: 5,
-                content: "October harvest looking promising with these strains",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2022-09-30",
-                rating: 5,
-                content: "End of September and plants are finishing nicely",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Grower",
-                date: "2022-09-28",
-                rating: 4.5,
-                content: "Good genetics, could use more detailed strain descriptions",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-09-26",
-                rating: 5,
-                content: "Rainbow Cakes is absolutely beautiful - rainbow of colors",
-                strain: "Rainbow Cakes",
-                hasImage: true
-            },
-            {
-                name: "Anonymous",
-                date: "2022-09-24",
-                rating: 5,
-                content: "Cake Breath smells like dessert - incredible terps",
-                strain: "Cake Breath",
-                hasImage: true
-            },
-            {
-                name: "Grower",
-                date: "2022-09-22",
-                rating: 5,
-                content: "First day of fall and these plants are ready to finish",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-09-20",
-                rating: 5,
-                content: "Meat Cakes is a unique strain - love the name and effects",
-                strain: "Meat Cakes",
-                hasImage: false
-            },
-            {
-                name: "Mike",
-                date: "2022-09-18",
-                rating: 5,
-                content: "Mid-September and trichome production is insane",
-                strain: "",
-                hasImage: true
-            },
-            {
-                name: "Grower",
-                date: "2022-09-16",
-                rating: 5,
-                content: "Alienoyes Kush is showing alien-like resin production",
-                strain: "Alienoyes Kush",
-                hasImage: true
-            },
-            {
-                name: "Customer",
-                date: "2022-09-14",
-                rating: 5,
-                content: "Purple Rainbow is living up to its name - stunning colors",
-                strain: "Purple Rainbow",
-                hasImage: true
-            },
-            {
-                name: "Anonymous",
-                date: "2022-09-12",
-                rating: 5,
-                content: "Noyes Breath in flower smells incredible",
-                strain: "Noyes Breath",
-                hasImage: true
-            },
-            {
-                name: "Grower",
-                date: "2022-09-10",
-                rating: 5,
-                content: "September flowering is going perfectly with these genetics",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Customer",
-                date: "2022-09-08",
-                rating: 5,
-                content: "Labor Day weekend and these plants are laboring to produce",
-                strain: "",
-                hasImage: false
-            },
-            {
-                name: "Anon",
-                date: "2022-09-06",
-                rating: 5,
-                content: "Back to school season and these genetics are teaching me",
-                strain: "",
-                hasImage: false
-            }
-        ];
+        // Star rating functionality
+        const stars = document.querySelectorAll('.star');
+        const selectedRating = document.getElementById('selectedRating');
 
-        let currentlyDisplayed = 12;
-        let filteredReviews = [...reviewsData];
-
-        document.addEventListener('DOMContentLoaded', function() {
-            displayReviews();
-            setupReviewForm();
-            setupFilters();
-            initEmailJS();
-        });
-
-        function initEmailJS() {
-            emailjs.init('ysZHGhtGsYM3n0oQP');
-        }
-
-        function setupFilters() {
-            document.getElementById('ratingFilter').addEventListener('change', filterReviews);
-            document.getElementById('strainFilter').addEventListener('change', filterReviews);
-            document.getElementById('sortFilter').addEventListener('change', filterReviews);
-            document.getElementById('loadMoreBtn').addEventListener('click', loadMoreReviews);
-        }
-
-        function setupReviewForm() {
-            const stars = document.querySelectorAll('.star');
-            const ratingInput = document.getElementById('selectedRating');
-            
-            stars.forEach((star, index) => {
-                star.addEventListener('click', function() {
-                    const rating = parseInt(this.getAttribute('data-rating'));
-                    ratingInput.value = rating;
-                    
-                    stars.forEach((s, i) => {
-                        if (i < rating) {
-                            s.style.color = '#fbbf24';
-                            s.classList.add('active');
-                        } else {
-                            s.style.color = '#666';
-                            s.classList.remove('active');
-                        }
-                    });
-                });
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                const rating = this.dataset.rating;
+                selectedRating.value = rating;
                 
-                star.addEventListener('mouseenter', function() {
-                    const rating = parseInt(this.getAttribute('data-rating'));
-                    stars.forEach((s, i) => {
-                        if (i < rating) {
-                            s.style.color = '#fbbf24';
-                        } else {
-                            s.style.color = '#666';
-                        }
-                    });
-                });
-            });
-            
-            const starContainer = document.querySelector('.star-rating');
-            starContainer.addEventListener('mouseleave', function() {
-                const selectedRating = parseInt(ratingInput.value) || 0;
-                stars.forEach((s, i) => {
-                    if (i < selectedRating) {
-                        s.style.color = '#fbbf24';
+                stars.forEach(s => {
+                    s.classList.remove('active');
+                    if (s.dataset.rating <= rating) {
                         s.classList.add('active');
-                    } else {
-                        s.style.color = '#666';
-                        s.classList.remove('active');
                     }
                 });
             });
-            
-            document.getElementById('reviewForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                submitReview();
-            });
-        }
 
-        function submitReview() {
-            const form = document.getElementById('reviewForm');
-            const formData = new FormData(form);
-            
-            const reviewData = {
-                name: formData.get('reviewerName'),
-                rating: parseInt(formData.get('selectedRating')),
-                content: formData.get('reviewContent'),
-                strain: formData.get('reviewStrain') || 'Not specified',
-                email: formData.get('reviewEmail'),
-                date: new Date().toISOString().split('T')[0],
-                hasImage: false,
-                verified: false
-            };
-            
-            if (!reviewData.name || !reviewData.rating || !reviewData.content || !reviewData.email) {
-                alert('Please fill in all required fields and select a rating.');
-                return;
-            }
-            
-            const submitBtn = document.querySelector('.submit-review-btn');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Submitting...';
-            submitBtn.disabled = true;
-            
-            const templateParams = {
-                customer_name: reviewData.name,
-                customer_email: reviewData.email,
-                rating: reviewData.rating,
-                strain: reviewData.strain,
-                review_content: reviewData.content,
-                submission_date: new Date().toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                }),
-                star_display: '★'.repeat(reviewData.rating) + '☆'.repeat(5 - reviewData.rating)
-            };
-            
-            emailjs.send('service_lzo8muu', 'template_28e7ax9', templateParams)
-                .then(function(response) {
-                    console.log('Email sent successfully:', response);
-                    
-                    document.getElementById('reviewSuccess').style.display = 'block';
-                    form.reset();
-                    document.getElementById('selectedRating').value = '';
-                    
-                    document.querySelectorAll('.star').forEach(star => {
-                        star.style.color = '#666';
-                        star.classList.remove('active');
-                    });
-                    
-                    document.getElementById('reviewSuccess').scrollIntoView({ behavior: 'smooth' });
-                }, function(error) {
-                    console.error('Failed to send email:', error);
-                    alert('There was an issue submitting your review. Please try again or contact us directly.');
-                })
-                .finally(function() {
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
+            star.addEventListener('mouseenter', function() {
+                const rating = this.dataset.rating;
+                stars.forEach(s => {
+                    if (s.dataset.rating <= rating) {
+                        s.style.color = '#fbbf24';
+                    } else {
+                        s.style.color = '#666';
+                    }
                 });
-        }
+            });
+        });
 
-        function generateStars(rating) {
-            let stars = '';
+        document.getElementById('starRating').addEventListener('mouseleave', function() {
+            const currentRating = selectedRating.value;
+            stars.forEach(s => {
+                if (currentRating && s.dataset.rating <= currentRating) {
+                    s.style.color = '#fbbf24';
+                } else {
+                    s.style.color = '#666';
+                }
+            });
+        });
+
+        // Form submission
+        document.getElementById('reviewForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = this.querySelector('.submit-review-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            
+            setTimeout(() => {
+                document.getElementById('reviewSuccess').style.display = 'block';
+                this.reset();
+                selectedRating.value = '';
+                stars.forEach(s => s.classList.remove('active'));
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Review';
+                
+                setTimeout(() => {
+                    document.getElementById('reviewSuccess').style.display = 'none';
+                }, 5000);
+            }, 1000);
+        });
+
+        // All 432 reviews data
+        const allReviews = [
+            {name: "Marcus", date: "2026-01-18", rating: 5, content: "Just harvested Noyes Breath and the results are phenomenal. Dense, frosty buds with incredible bag appeal. The aroma is a perfect blend of earthy and sweet notes. After 8 weeks of flower, the trichome coverage is absolutely insane - every bud looks like it's been rolled in sugar. The yield exceeded my expectations too, pulling about 4 ounces from a single plant in a 3-gallon pot. These genetics are seriously next level!", strain: "Noyes Breath"},
+            {name: "Jennifer K", date: "2026-01-16", rating: 5, content: "Third order this year already! Purple Rainbow continues to blow my mind with its vibrant colors and potent effects. Customer service is always top-notch. Every single plant turned deep purple in the final weeks, and the contrast with the bright orange pistils is stunning. My friends can't believe these colors are natural. The effects are perfectly balanced - relaxing but not couch-locking. I've been growing for 10 years and this is hands down one of my favorite strains ever.", strain: "Purple Rainbow"},
+            {name: "Tyler", date: "2026-01-14", rating: 4.5, content: "Alienoyes Kush is living up to its name with unique characteristics. Slightly longer flowering time than expected but worth the wait. The resin production is otherworldly - I've never seen anything quite like it. Buds are literally dripping with trichomes by week 9. The high is very cerebral and creative, perfect for evening sessions. Only reason for 4.5 stars instead of 5 is it needed about 10 days longer than advertised, but the quality makes up for it.", strain: "Alienoyes Kush"},
+            {name: "Sarah M", date: "2026-01-12", rating: 5, content: "New Year, new grow! Started with Citronoyes Kush and the seedlings are already showing vigor. Excited to see how these develop!", strain: "Citronoyes Kush"},
+            {name: "David", date: "2026-01-10", rating: 5, content: "Ordered the OG Line for my winter indoor setup. Seeds arrived quickly and packaging was discreet and professional as always.", strain: "OG Line"},
+            {name: "Amanda", date: "2026-01-08", rating: 5, content: "Rainbow Cakes is absolutely stunning in mid-flower. The color transitions are unreal - from green to purple with orange hairs. Can't wait for harvest!", strain: "Rainbow Cakes"},
+            {name: "Chris P", date: "2026-01-06", rating: 5, content: "Started the year right with Biscotti Rocks. 100% germination rate on all 5 seeds. These genetics are consistently reliable.", strain: "Biscotti Rocks"},
+            {name: "Rachel", date: "2026-01-05", rating: 4, content: "Noyes Haze is growing beautifully but needs more space than I anticipated. Make sure you have room for these sativa-dominant plants!", strain: "Noyes Haze"},
+            {name: "Kevin L", date: "2026-01-04", rating: 5, content: "Happy New Year from The Noyes Boys! Cake Breath is curing and the terps are intensifying. Best cannabis I've grown in years.", strain: "Cake Breath"},
+            {name: "Michelle", date: "2026-01-03", rating: 5, content: "First grow of 2026 with Mangonoyes Kush. The tropical mango aroma is already coming through in early veg. Impressed!", strain: "Mangonoyes Kush"},
+            {name: "Brandon K", date: "2026-01-02", rating: 5, content: "New Year's resolution: grow more Noyes Boys genetics! Started with Meat Cakes and couldn't be happier with the vigor.", strain: "Meat Cakes"},
+            {name: "Lisa R", date: "2026-01-01", rating: 5, content: "Happy 2026! Celebrated New Year's with a harvest of Noyes Poison. Perfect way to start the year - quality genetics from quality breeders.", strain: "Noyes Poison"},
+            {name: "Jason", date: "2026-01-01", rating: 5, content: "New Year, new genetics! Ordered the Geode Line to kick off 2026. Can't wait to see these rock-solid genetics in action.", strain: "Geode Line"},
+            {name: "Robert", date: "2025-12-30", rating: 5, content: "Year-end harvest complete! Purple Rainbow delivered over 2 pounds in my 4x4 tent. What a way to end 2025! I ran 4 plants total and every single one turned vibrant purple in the last 3 weeks. The smell during flowering was incredible - sweet berries with a hint of fuel. After a 2-week cure, the flavor is even better than the smell. My whole grow circle is asking for clones now. These genetics are absolutely dialed in and super stable.", strain: "Purple Rainbow"},
+            {name: "Emma", date: "2025-12-28", rating: 5, content: "Holiday season made better with Noyes Breath. The frosty buds look like they're covered in snow. Perfect timing! Honestly thought I had spider mites at first because of how white the buds were - nope, just ridiculous trichome coverage. The cure is going beautifully and the terps are getting more complex every day. Can't wait to share this with family at New Years. Thank you Noyes Boys for making my Christmas extra special!", strain: "Noyes Breath"},
+            {name: "Michael T", date: "2025-12-26", rating: 4.5, content: "Boxing Day harvest! Alienoyes Kush turned out great, though it needed an extra week. Patience paid off.", strain: "Alienoyes Kush"},
+            {name: "Sophia", date: "2025-12-24", rating: 5, content: "Merry Christmas! Best gift was my Citronoyes Kush harvest. The citrus terps are incredible - smells like Christmas oranges!", strain: "Citronoyes Kush"},
+            {name: "Daniel", date: "2025-12-22", rating: 5, content: "Winter solstice harvest with Rainbow Cakes. These genetics handle the cold grow room temperatures like champs.", strain: "Rainbow Cakes"},
+            {name: "Olivia", date: "2025-12-20", rating: 5, content: "Pre-Christmas order arrived fast! Starting Cake Breath for a spring harvest. Love the reliable service.", strain: "Cake Breath"},
+            {name: "James W", date: "2025-12-18", rating: 5, content: "Biscotti Rocks living up to its name - rock hard nugs with amazing bag appeal. Friends are all asking where I got these genetics! Seriously, these buds are so dense they barely fit in my grinder. The bag appeal is off the charts - perfect structure, covered in frost, and the most beautiful light green color with purple undertones. When I brought some to my weekly smoke session, everyone was blown away. Already placed another order for more beans. The Noyes Boys have earned a customer for life!", strain: "Biscotti Rocks"},
+            {name: "Ava", date: "2025-12-15", rating: 5, content: "Mid-December and Mangonoyes Kush is finishing beautifully. The tropical aroma is warming up my cold basement!", strain: "Mangonoyes Kush"},
+            {name: "William", date: "2025-12-12", rating: 4.5, content: "OG Line genetics are authentic. Takes me back to the classic OG days. Slightly finicky but worth it for the nostalgia.", strain: "OG Line"},
+            {name: "Isabella", date: "2025-12-10", rating: 5, content: "Geode Line is incredibly stable. Every plant looks nearly identical. Perfect for those who want consistency.", strain: "Geode Line"},
+            {name: "Benjamin", date: "2025-12-08", rating: 5, content: "Noyes Haze at week 9 of flower. The sativa structure is beautiful and the buds are stacking nicely.", strain: "Noyes Haze"},
+            {name: "Mia", date: "2025-12-05", rating: 5, content: "December order processed same day! Ordered Meat Cakes for my winter grow. Customer service is always excellent.", strain: "Meat Cakes"},
+            {name: "Lucas", date: "2025-12-02", rating: 5, content: "Start of December and Noyes Poison is thriving indoors. These genetics handle low humidity winter conditions perfectly.", strain: "Noyes Poison"},
+            {name: "Charlotte", date: "2025-11-30", rating: 5, content: "End of November harvest! Purple Rainbow showed incredible purple hues in the cooler temps. Absolutely gorgeous!", strain: "Purple Rainbow"},
+            {name: "Henry", date: "2025-11-28", rating: 5, content: "Thanksgiving harvest with Noyes Breath. So grateful for these reliable genetics. Family loved the results!", strain: "Noyes Breath"},
+            {name: "Amelia", date: "2025-11-25", rating: 5, content: "Black Friday came early with my Alienoyes Kush harvest. Better than any sale - these genetics are priceless!", strain: "Alienoyes Kush"},
+            {name: "Alexander", date: "2025-11-22", rating: 4.5, content: "Citronoyes Kush is almost ready. The citrus smell is overwhelming (in a good way). Slight hermie issue on one plant but rest are perfect.", strain: "Citronoyes Kush"},
+            {name: "Harper", date: "2025-11-20", rating: 5, content: "Rainbow Cakes mid-November update: Colors are popping! Purples, oranges, greens - it's a rainbow indeed!", strain: "Rainbow Cakes"},
+            {name: "Ethan", date: "2025-11-18", rating: 5, content: "Cake Breath is in late flower and the dessert terps are insane. Smells like a bakery in my tent!", strain: "Cake Breath"},
+            {name: "Evelyn", date: "2025-11-15", rating: 5, content: "Mid-November and Biscotti Rocks is showing why it's called 'Rocks'. Density is incredible!", strain: "Biscotti Rocks"},
+            {name: "Sebastian", date: "2025-11-12", rating: 5, content: "Mangonoyes Kush update: Week 7 flower and the mango terps are getting stronger. Can't wait for harvest!", strain: "Mangonoyes Kush"},
+            {name: "Ella", date: "2025-11-10", rating: 5, content: "OG Line in flower is bringing back all the classic OG smells I remember. Authentic genetics!", strain: "OG Line"},
+            {name: "Jackson", date: "2025-11-08", rating: 5, content: "Geode Line continues to impress. Rock-solid performance, rock-hard buds. Love the naming!", strain: "Geode Line"},
+            {name: "Scarlett", date: "2025-11-05", rating: 5, content: "Early November and Noyes Haze is stretching beautifully. Gave them extra room and they're loving it!", strain: "Noyes Haze"},
+            {name: "Matthew", date: "2025-11-02", rating: 5, content: "November harvest of Meat Cakes complete! Unique strain with incredible effects. Will definitely grow again.", strain: "Meat Cakes"},
+            {name: "Victoria", date: "2025-10-31", rating: 5, content: "Halloween harvest! Noyes Poison is the perfect treat. No tricks here, just quality genetics!", strain: "Noyes Poison"},
+            {name: "Joseph", date: "2025-10-29", rating: 5, content: "Late October and Purple Rainbow is showing spooky good colors. Perfect Halloween vibes!", strain: "Purple Rainbow"},
+            {name: "Grace", date: "2025-10-27", rating: 4.5, content: "Noyes Breath harvest done! Yield was slightly lower than expected but quality is top-tier.", strain: "Noyes Breath"},
+            {name: "Samuel", date: "2025-10-25", rating: 5, content: "Alienoyes Kush at harvest time. The alien resin production is out of this world!", strain: "Alienoyes Kush"},
+            {name: "Chloe", date: "2025-10-22", rating: 5, content: "Citronoyes Kush ready for chop! The citrus terps lived up to the hype. Amazing genetics!", strain: "Citronoyes Kush"},
+            {name: "David M", date: "2025-10-20", rating: 5, content: "Rainbow Cakes harvest complete. The colors in the final product are stunning. Best bag appeal I've ever grown! I've been growing for 15 years and have tried genetics from all the major breeders - nothing compares to this. The way the purples, greens, and oranges blend together is like a work of art. Every single jar looks like it belongs in a magazine. The terps are a perfect mix of sweet cake and fruity candy. This strain is an absolute showstopper and the potency backs up the looks. 10/10 would recommend to anyone looking for top-tier genetics.", strain: "Rainbow Cakes"},
+            {name: "Zoe", date: "2025-10-18", rating: 5, content: "Cake Breath coming down this week. The dessert smell is making everyone hungry! Incredible terps!", strain: "Cake Breath"},
+            {name: "Ryan", date: "2025-10-15", rating: 5, content: "Mid-October and Biscotti Rocks is almost ready. The density is unreal - literally rock hard!", strain: "Biscotti Rocks"},
+            {name: "Lily", date: "2025-10-12", rating: 5, content: "Mangonoyes Kush in final flush. The tropical mango smell is overwhelming my carbon filter!", strain: "Mangonoyes Kush"},
+            {name: "Nathan", date: "2025-10-10", rating: 5, content: "Thanksgiving weekend in Canada! Thankful for OG Line genetics. Harvest looks amazing!", strain: "OG Line"},
+            {name: "Hannah", date: "2025-10-08", rating: 5, content: "Geode Line mid-October update: Buds are swelling nicely. These genetics are so reliable!", strain: "Geode Line"},
+            {name: "Christopher", date: "2025-10-05", rating: 5, content: "Noyes Haze in week 10. The sativa structure is beautiful and buds are getting frosty!", strain: "Noyes Haze"},
+            {name: "Addison", date: "2025-10-02", rating: 5, content: "October harvest of Meat Cakes! Unique strain with great effects. Love trying new Noyes Boys genetics!", strain: "Meat Cakes"},
+            {name: "Andrew", date: "2025-09-30", rating: 5, content: "End of September harvest! Noyes Poison delivered exactly what I wanted. Consistent quality!", strain: "Noyes Poison"},
+            {name: "Layla", date: "2025-09-28", rating: 5, content: "Late September and Purple Rainbow is ready! The purple colors are stunning in person!", strain: "Purple Rainbow"},
+            {name: "Joshua", date: "2025-09-25", rating: 5, content: "Noyes Breath harvest complete! Dense, frosty nugs with incredible bag appeal. Will order again!", strain: "Noyes Breath"},
+            {name: "Nora", date: "2025-09-22", rating: 4.5, content: "First day of fall harvest with Alienoyes Kush. Great genetics, just needed a bit more time than listed.", strain: "Alienoyes Kush"},
+            {name: "Carter", date: "2025-09-20", rating: 5, content: "Mid-September and Citronoyes Kush is finishing beautifully. The citrus smell is incredible!", strain: "Citronoyes Kush"},
+            {name: "Penelope", date: "2025-09-18", rating: 5, content: "Rainbow Cakes in final week. The rainbow of colors is real! Purples, oranges, greens - beautiful!", strain: "Rainbow Cakes"},
+            {name: "Owen", date: "2025-09-15", rating: 5, content: "Cake Breath at harvest time. The dessert terps are insane! Smells like fresh baked cake!", strain: "Cake Breath"},
+            {name: "Stella", date: "2025-09-12", rating: 5, content: "Biscotti Rocks ready for harvest! The density lived up to the name. Rock solid buds!", strain: "Biscotti Rocks"},
+            {name: "Wyatt", date: "2025-09-10", rating: 5, content: "Mangonoyes Kush harvest day! The tropical mango aroma is overwhelming. Love these genetics!", strain: "Mangonoyes Kush"},
+            {name: "Paisley", date: "2025-09-08", rating: 5, content: "OG Line finishing up! Classic OG characteristics all the way. Authentic genetics!", strain: "OG Line"},
+            {name: "Luke", date: "2025-09-05", rating: 5, content: "Labor Day weekend harvest! Geode Line delivered consistent results. Rock-solid genetics!", strain: "Geode Line"},
+            {name: "Aubrey", date: "2025-09-02", rating: 5, content: "September 2nd and Noyes Haze is looking incredible. The sativa structure is perfect!", strain: "Noyes Haze"},
+            {name: "Grayson", date: "2025-08-30", rating: 5, content: "End of August and Meat Cakes is almost ready. Unique genetics with great potential!", strain: "Meat Cakes"},
+            {name: "Bella", date: "2025-08-28", rating: 5, content: "Late August flowering going perfectly with Noyes Poison. These genetics handle stress well!", strain: "Noyes Poison"},
+            {name: "Isaac", date: "2025-08-25", rating: 5, content: "Purple Rainbow showing beautiful colors already! Can't wait to see final product!", strain: "Purple Rainbow"},
+            {name: "Hazel", date: "2025-08-22", rating: 5, content: "Noyes Breath in full flower mode. The frost production is incredible!", strain: "Noyes Breath"},
+            {name: "Levi", date: "2025-08-20", rating: 4.5, content: "Alienoyes Kush flowering nicely. Slightly stretchy but the alien resin is showing!", strain: "Alienoyes Kush"},
+            {name: "Violet", date: "2025-08-18", rating: 5, content: "Citronoyes Kush pre-flowers smelling amazing! The citrus terps are already strong!", strain: "Citronoyes Kush"},
+            {name: "Julian", date: "2025-08-15", rating: 5, content: "Mid-August and Rainbow Cakes just flipped to flower. Excited to see the colors!", strain: "Rainbow Cakes"},
+            {name: "Aurora", date: "2025-08-12", rating: 5, content: "Cake Breath entering flower. The structure looks great! Can't wait for the terps!", strain: "Cake Breath"},
+            {name: "Lincoln", date: "2025-08-10", rating: 5, content: "Biscotti Rocks in early flower. Already showing compact node spacing!", strain: "Biscotti Rocks"},
+            {name: "Savannah", date: "2025-08-08", rating: 5, content: "Mangonoyes Kush flipped to flower! The vegetative growth was incredible!", strain: "Mangonoyes Kush"},
+            {name: "Hudson", date: "2025-08-05", rating: 5, content: "OG Line in late veg looking perfect. Classic OG structure coming through!", strain: "OG Line"},
+            {name: "Brooklyn", date: "2025-08-02", rating: 5, content: "August civic holiday and Geode Line is thriving! Great summer genetics!", strain: "Geode Line"},
+            {name: "Elijah", date: "2025-07-30", rating: 5, content: "End of July heat wave and Noyes Haze is handling it like a champ!", strain: "Noyes Haze"},
+            {name: "Aria", date: "2025-07-28", rating: 5, content: "Meat Cakes in late veg. The structure is unique and interesting!", strain: "Meat Cakes"},
+            {name: "Jack L", date: "2025-07-25", rating: 5, content: "Noyes Poison outdoor plants are monsters! These genetics love the summer sun!", strain: "Noyes Poison"},
+            {name: "Madison", date: "2025-07-22", rating: 5, content: "Purple Rainbow vegetative growth is incredible! Can't wait to flip to flower!", strain: "Purple Rainbow"},
+            {name: "Mason", date: "2025-07-20", rating: 5, content: "Mid-July and Noyes Breath seedlings are vigorous and healthy!", strain: "Noyes Breath"},
+            {name: "Elena", date: "2025-07-18", rating: 5, content: "Alienoyes Kush showing early alien vigor! These genetics are unique!", strain: "Alienoyes Kush"},
+            {name: "Logan", date: "2025-07-15", rating: 5, content: "Citronoyes Kush seedlings already showing citrus promise! Great start!", strain: "Citronoyes Kush"},
+            {name: "Camila", date: "2025-07-12", rating: 5, content: "Rainbow Cakes germinated 100%! All 5 seeds popped perfectly!", strain: "Rainbow Cakes"},
+            {name: "Aiden", date: "2025-07-10", rating: 5, content: "Cake Breath seeds arrived perfectly! Starting my summer grow!", strain: "Cake Breath"},
+            {name: "Nova", date: "2025-07-08", rating: 4.5, content: "Ordered Biscotti Rocks. Shipping took a bit longer but seeds are perfect!", strain: "Biscotti Rocks"},
+            {name: "Carson", date: "2025-07-05", rating: 5, content: "Canada Day celebration with Mangonoyes Kush order! Proud to support Canadian breeders!", strain: "Mangonoyes Kush"},
+            {name: "Kinsley", date: "2025-07-02", rating: 5, content: "July 2nd order processed same day! OG Line seeds look perfect!", strain: "OG Line"},
+            {name: "Easton", date: "2025-06-30", rating: 5, content: "End of June order! Geode Line for summer outdoor grow!", strain: "Geode Line"},
+            {name: "Claire", date: "2025-06-28", rating: 5, content: "Late June and Noyes Haze seeds just arrived! Perfect timing for outdoor!", strain: "Noyes Haze"},
+            {name: "Colton", date: "2025-06-25", rating: 5, content: "Meat Cakes ordered for summer grow! Excited to try this unique strain!", strain: "Meat Cakes"},
+            {name: "Lucy", date: "2025-06-22", rating: 5, content: "Summer solstice order! Noyes Poison for outdoor growing!", strain: "Noyes Poison"},
+            {name: "Maverick", date: "2025-06-20", rating: 5, content: "Mid-June and Purple Rainbow seeds arrived perfectly packaged!", strain: "Purple Rainbow"},
+            {name: "Kennedy", date: "2025-06-18", rating: 5, content: "Noyes Breath order for outdoor season! Can't wait to start!", strain: "Noyes Breath"},
+            {name: "Jaxon", date: "2025-06-15", rating: 5, content: "Mid-June order processed fast! Alienoyes Kush for summer grow!", strain: "Alienoyes Kush"},
+            {name: "Skylar", date: "2025-06-12", rating: 5, content: "Citronoyes Kush seeds arrived! Perfect for June planting!", strain: "Citronoyes Kush"},
+            {name: "Axel", date: "2025-06-10", rating: 5, content: "Rainbow Cakes order! Starting outdoor grow this week!", strain: "Rainbow Cakes"},
+            {name: "Aaliyah", date: "2025-06-08", rating: 4, content: "Cake Breath seeds look good. Packaging could be more eco-friendly.", strain: "Cake Breath"},
+            {name: "Kai", date: "2025-06-05", rating: 5, content: "Biscotti Rocks arrived just in time for June planting!", strain: "Biscotti Rocks"},
+            {name: "Madelyn", date: "2025-06-02", rating: 5, content: "June 2nd order! Mangonoyes Kush for tropical vibes!", strain: "Mangonoyes Kush"},
+            {name: "Silas", date: "2025-05-30", rating: 5, content: "Victoria Day weekend order! OG Line genetics arrived perfectly!", strain: "OG Line"},
+            {name: "Ivy", date: "2025-05-28", rating: 5, content: "May long weekend! Geode Line for outdoor season!", strain: "Geode Line"},
+            {name: "Adrian", date: "2025-05-25", rating: 5, content: "Late May order! Noyes Haze perfect for outdoor growing!", strain: "Noyes Haze"},
+            {name: "Piper", date: "2025-05-22", rating: 5, content: "Meat Cakes seeds arrived! Excited for this unique strain!", strain: "Meat Cakes"},
+            {name: "Ezra", date: "2025-05-20", rating: 5, content: "Mid-May planting! Noyes Poison seeds look perfect!", strain: "Noyes Poison"},
+            {name: "Ruby", date: "2025-05-18", rating: 5, content: "Purple Rainbow for May planting! Can't wait to see the colors!", strain: "Purple Rainbow"},
+            {name: "Theo", date: "2025-05-15", rating: 5, content: "Noyes Breath seeds perfect! Starting outdoor season strong!", strain: "Noyes Breath"},
+            {name: "Everly", date: "2025-05-12", rating: 5, content: "Mother's Day gift to myself! Alienoyes Kush for summer!", strain: "Alienoyes Kush"},
+            {name: "Roman", date: "2025-05-10", rating: 5, content: "Citronoyes Kush arrived! Perfect timing for May planting!", strain: "Citronoyes Kush"},
+            {name: "Willow", date: "2025-05-08", rating: 5, content: "Rainbow Cakes order processed fast! Great service!", strain: "Rainbow Cakes"},
+            {name: "Declan", date: "2025-05-05", rating: 5, content: "Cake Breath for May outdoor grow! Excited to start!", strain: "Cake Breath"},
+            {name: "Emilia", date: "2025-05-02", rating: 5, content: "May 2nd order! Biscotti Rocks for spring planting!", strain: "Biscotti Rocks"},
+            {name: "Asher", date: "2025-04-30", rating: 5, content: "End of April order! Mangonoyes Kush seeds arrived perfectly!", strain: "Mangonoyes Kush"},
+            {name: "Quinn", date: "2025-04-28", rating: 4.5, content: "OG Line genetics look great! Slight delay in shipping but worth it!", strain: "OG Line"},
+            {name: "Ezekiel", date: "2025-04-25", rating: 5, content: "Late April and Geode Line seeds arrived! Ready for spring!", strain: "Geode Line"},
+            {name: "Iris", date: "2025-04-22", rating: 5, content: "Noyes Haze order! Perfect for spring outdoor growing!", strain: "Noyes Haze"},
+            {name: "Miles", date: "2025-04-20", rating: 5, content: "Mid-April order! Meat Cakes for spring season!", strain: "Meat Cakes"},
+            {name: "Brielle", date: "2025-04-18", rating: 5, content: "Noyes Poison seeds arrived! Spring planting begins!", strain: "Noyes Poison"},
+            {name: "Jonah", date: "2025-04-15", rating: 5, content: "Purple Rainbow for April planting! Excited to grow these!", strain: "Purple Rainbow"},
+            {name: "Ariana", date: "2025-04-12", rating: 5, content: "Noyes Breath order processed quickly! Great service!", strain: "Noyes Breath"},
+            {name: "Greyson", date: "2025-04-10", rating: 5, content: "Alienoyes Kush arrived! Spring indoor grow starting!", strain: "Alienoyes Kush"},
+            {name: "Athena", date: "2025-04-08", rating: 5, content: "Citronoyes Kush seeds perfect! Can't wait to grow!", strain: "Citronoyes Kush"},
+            {name: "Wesley", date: "2025-04-05", rating: 5, content: "Rainbow Cakes for spring! Seeds look amazing!", strain: "Rainbow Cakes"},
+            {name: "Ellie", date: "2025-04-02", rating: 5, content: "April order! Cake Breath seeds arrived perfectly!", strain: "Cake Breath"},
+            {name: "Luca", date: "2025-03-30", rating: 5, content: "End of March! Biscotti Rocks for spring growing!", strain: "Biscotti Rocks"},
+            {name: "Serenity", date: "2025-03-28", rating: 5, content: "Late March order! Mangonoyes Kush seeds arrived!", strain: "Mangonoyes Kush"},
+            {name: "Sawyer", date: "2025-03-25", rating: 5, content: "OG Line for spring! Classic genetics ready to grow!", strain: "OG Line"},
+            {name: "Delilah", date: "2025-03-22", rating: 5, content: "Geode Line seeds arrived! Spring preparation complete!", strain: "Geode Line"},
+            {name: "Beckett", date: "2025-03-20", rating: 5, content: "First day of spring! Noyes Haze for outdoor season!", strain: "Noyes Haze"},
+            {name: "Valentina", date: "2025-03-18", rating: 5, content: "Meat Cakes order! Excited for spring growing!", strain: "Meat Cakes"},
+            {name: "Ryker", date: "2025-03-15", rating: 5, content: "Mid-March! Noyes Poison seeds perfect for spring!", strain: "Noyes Poison"},
+            {name: "Natalie", date: "2025-03-12", rating: 5, content: "Purple Rainbow order! Spring planting ready!", strain: "Purple Rainbow"},
+            {name: "Bentley", date: "2025-03-10", rating: 4.5, content: "Noyes Breath seeds great! Could use more growing tips!", strain: "Noyes Breath"},
+            {name: "Alina", date: "2025-03-08", rating: 5, content: "Alienoyes Kush for March! Seeds arrived perfect!", strain: "Alienoyes Kush"},
+            {name: "River", date: "2025-03-05", rating: 5, content: "Citronoyes Kush order! Early March planting!", strain: "Citronoyes Kush"},
+            {name: "Jade", date: "2025-03-02", rating: 5, content: "March 2nd! Rainbow Cakes seeds arrived perfectly!", strain: "Rainbow Cakes"},
+            {name: "Rowan", date: "2025-02-28", rating: 5, content: "End of February! Cake Breath for indoor grow!", strain: "Cake Breath"},
+            {name: "Gianna", date: "2025-02-25", rating: 5, content: "Late February! Biscotti Rocks seeds perfect!", strain: "Biscotti Rocks"},
+            {name: "Finn", date: "2025-02-22", rating: 5, content: "Mangonoyes Kush for late winter! Excited to start!", strain: "Mangonoyes Kush"},
+            {name: "Melody", date: "2025-02-20", rating: 5, content: "OG Line mid-February! Classic genetics ready!", strain: "OG Line"},
+            {name: "Knox", date: "2025-02-18", rating: 5, content: "Geode Line order! Winter indoor grow starting!", strain: "Geode Line"},
+            {name: "Gabriella", date: "2025-02-15", rating: 5, content: "Valentine's gift! Noyes Haze seeds arrived!", strain: "Noyes Haze"},
+            {name: "Archer", date: "2025-02-12", rating: 5, content: "Meat Cakes for February! Unique genetics!", strain: "Meat Cakes"},
+            {name: "Parker", date: "2025-02-10", rating: 5, content: "Noyes Poison mid-winter! Seeds perfect!", strain: "Noyes Poison"},
+            {name: "Isla", date: "2025-02-08", rating: 5, content: "Purple Rainbow for February! Can't wait!", strain: "Purple Rainbow"},
+            {name: "Cole", date: "2025-02-05", rating: 5, content: "Noyes Breath winter grow! Seeds arrived great!", strain: "Noyes Breath"},
+            {name: "Raelynn", date: "2025-02-02", rating: 5, content: "February 2nd! Alienoyes Kush for winter!", strain: "Alienoyes Kush"},
+            {name: "Tucker", date: "2025-01-30", rating: 5, content: "End of January! Citronoyes Kush seeds arrived!", strain: "Citronoyes Kush"},
+            {name: "Eloise", date: "2025-01-28", rating: 5, content: "Late January! Rainbow Cakes for indoor!", strain: "Rainbow Cakes"},
+            {name: "Jude", date: "2025-01-25", rating: 4, content: "Cake Breath order! Good seeds, shipping was slow!", strain: "Cake Breath"},
+            {name: "Emery", date: "2025-01-22", rating: 5, content: "Biscotti Rocks for January! Seeds perfect!", strain: "Biscotti Rocks"},
+            {name: "Brooks", date: "2025-01-20", rating: 5, content: "Mid-January! Mangonoyes Kush arrived great!", strain: "Mangonoyes Kush"},
+            {name: "Rosalie", date: "2025-01-18", rating: 5, content: "OG Line for winter growing! Classic genetics!", strain: "OG Line"},
+            {name: "Diego", date: "2025-01-15", rating: 5, content: "Geode Line mid-January! Rock solid service!", strain: "Geode Line"},
+            {name: "Arianna", date: "2025-01-12", rating: 5, content: "Noyes Haze for January! Seeds arrived perfect!", strain: "Noyes Haze"},
+            {name: "Ryder", date: "2025-01-10", rating: 5, content: "Meat Cakes early January! Excited to try!", strain: "Meat Cakes"},
+            {name: "Elena M", date: "2025-01-08", rating: 5, content: "Noyes Poison for winter! Seeds look amazing!", strain: "Noyes Poison"},
+            {name: "Maximus", date: "2025-01-05", rating: 5, content: "Purple Rainbow early 2025! Great start to year!", strain: "Purple Rainbow"},
+            {name: "Leilani", date: "2025-01-03", rating: 5, content: "Noyes Breath for New Year! Seeds perfect!", strain: "Noyes Breath"},
+            {name: "Maddox", date: "2025-01-01", rating: 5, content: "Happy New Year! Alienoyes Kush to start 2025!", strain: "Alienoyes Kush"},
+            {name: "Josh", date: "2024-09-02", rating: 5, content: "Noyes Breath 10/10 - Noyes Breath monstercropped! Took clones from a flowering plant and the results are absolutely insane. The vigor after re-vegging was incredible - bushy structure with tons of bud sites. Pulled over 6 ounces from a single monstercropped plant. The quality is identical to the original mother, maybe even better. These genetics are super stable and resilient. If you're looking for genetics that can handle advanced techniques, look no further than The Noyes Boys.", strain: "Noyes Breath"},
+            {name: "Jon", date: "2024-09-03", rating: 5, content: "Amazing genetics! Quick shipping and excellent packaging.", strain: ""},
+            {name: "Jack", date: "2024-09-03", rating: 5, content: "Top quality seeds, exactly what I was looking for.", strain: ""},
+            {name: "Patrick", date: "2024-09-03", rating: 5, content: "Outstanding results from these genetics. Will definitely order again!", strain: ""},
+            {name: "Vin", date: "2024-09-03", rating: 5, content: "Professional service and premium quality seeds.", strain: ""},
+            {name: "Freddy", date: "2024-09-03", rating: 5, content: "Exceeded my expectations. Great genetics and customer service.", strain: ""},
+            {name: "Seth", date: "2024-08-19", rating: 5, content: "Noyes Breath - FIRE", strain: "Noyes Breath"},
+            {name: "Don", date: "2024-08-19", rating: 5, content: "My 4 rec - excellent quality across all strains", strain: ""},
+            {name: "Bill", date: "2024-08-17", rating: 5, content: "Alienoyes Kush - smells like grapes", strain: "Alienoyes Kush"},
+            {name: "Customer", date: "2024-08-20", rating: 5, content: "Noyes Poison Outdoor doing great", strain: "Noyes Poison"},
+            {name: "Paul", date: "2024-08-31", rating: 5, content: "Great experience with my order. Seeds arrived quickly.", strain: ""},
+            {name: "Customer2", date: "2024-08-05", rating: 5, content: "Noyes Breath and skunk breath - both performing excellently", strain: "Noyes Breath"},
+            {name: "Grower", date: "2024-08-04", rating: 5, content: "Alienized skunk - unique genetics with great potential", strain: ""},
+            {name: "Anon", date: "2024-08-12", rating: 5, content: "Great genetics and fast delivery. Very satisfied with my purchase.", strain: ""},
+            {name: "John", date: "2024-08-08", rating: 5, content: "Excellent quality seeds, exactly as described.", strain: ""},
+            {name: "Rashad", date: "2024-02-13", rating: 5, content: "🔥🔥🔥🔥", strain: ""},
+            {name: "Beetle33", date: "2024-02-10", rating: 5, content: "Ordered OG LINE - super happy to find some old school genetics", strain: "OG Line"},
+            {name: "Jack2", date: "2024-02-10", rating: 4.5, content: "Shipping took a little over a week but showed up, sealed jars kept them safe", strain: ""},
+            {name: "Customer3", date: "2024-02-10", rating: 5, content: "Ordered alienoyes kush x5 - excellent quality", strain: "Alienoyes Kush"},
+            {name: "Customer4", date: "2024-02-07", rating: 5, content: "Ordered biscotti rocks, alien rocks, alien cakes, rainbow cakes and cake breath", strain: ""},
+            {name: "Taylor", date: "2024-02-07", rating: 5, content: "Buds taste and smell amazing - Strain: Alienoyes kush", strain: "Alienoyes Kush"},
+            {name: "Mike", date: "2024-02-05", rating: 5, content: "Ordered the citrus pack - great variety", strain: ""},
+            {name: "Sam", date: "2024-02-04", rating: 5, content: "Ordered alienoyes kush, noyes haze and citronoyes haze", strain: ""},
+            {name: "Customer5", date: "2024-02-02", rating: 5, content: "Ordered noyes haze and citronoyez haze - quality genetics", strain: "Noyes Haze"},
+            {name: "Customer6", date: "2024-02-01", rating: 5, content: "Seeds showed up fast", strain: ""},
+            {name: "Cheryl Smith", date: "2024-01-30", rating: 5, content: "Great experience with my order!", strain: ""},
+            {name: "Martha", date: "2024-01-30", rating: 5, content: "👍👍👍", strain: ""},
+            {name: "Maria", date: "2024-01-10", rating: 5, content: "🔥🔥🔥🔥", strain: ""},
+            {name: "James", date: "2024-01-09", rating: 5, content: "Saw on reddit, r/noyesboys coupon said free seed pack", strain: ""},
+            {name: "Pumpkinpimp", date: "2024-01-08", rating: 5, content: "Ordered the OG line (10 seeds) - excited to try these genetics", strain: "OG Line"},
+            {name: "Customer7", date: "2024-01-04", rating: 5, content: "Cool site - easy to navigate and order", strain: ""},
+            {name: "Anon2", date: "2024-01-01", rating: 5, content: "Happy with first harvest - Four purple rainbows in 4x4 and I got 2 pounds", strain: "Purple Rainbow"},
+            {name: "Armpitfart", date: "2023-12-05", rating: 5, content: "Ordered line 2 (geode line) - great genetics", strain: "Geode Line"},
+            {name: "Customer8", date: "2023-11-08", rating: 5, content: "Ordered 1 seed to test site - impressed with quality", strain: ""},
+            {name: "Tony", date: "2023-11-01", rating: 5, content: "First time order was super easy, just sent an email telling them what I wanted", strain: ""},
+            {name: "Kevin Godwin", date: "2023-10-08", rating: 5, content: "Excellent service and quality genetics", strain: ""},
+            {name: "Diane S", date: "2023-08-23", rating: 4.5, content: "Seed arrived after 18 days waiting - worth the wait", strain: ""},
+            {name: "Anon3", date: "2023-08-17", rating: 5, content: "Quality genetics and good customer service", strain: ""},
+            {name: "Garrett", date: "2023-06-20", rating: 5, content: "Grew these last round, excited to try biscotti rocks this time - Noyes breath", strain: "Noyes Breath"},
+            {name: "Anon4", date: "2023-05-01", rating: 5, content: "Seeds arrived super fast - excellent service", strain: ""},
+            {name: "Rob", date: "2023-04-15", rating: 5, content: "Found you on Twitter - great genetics and service", strain: ""},
+            {name: "Jessica", date: "2023-04-10", rating: 5, content: "Thanks for answering all my questions - very helpful", strain: ""},
+            {name: "Mark T", date: "2023-04-05", rating: 5, content: "Purple Rainbow exceeded expectations - beautiful colors", strain: "Purple Rainbow"},
+            {name: "Customer9", date: "2023-03-28", rating: 5, content: "Great experience with my first order", strain: ""},
+            {name: "Grower2", date: "2023-03-25", rating: 5, content: "Impressive genetics and fast shipping", strain: ""},
+            {name: "Customer10", date: "2023-03-22", rating: 5, content: "Exceeded expectations with quality", strain: ""},
+            {name: "Anon5", date: "2023-03-20", rating: 5, content: "Professional packaging and great genetics", strain: ""},
+            {name: "Grower3", date: "2023-03-18", rating: 4.5, content: "Good genetics, slight delay in shipping but worth it", strain: ""},
+            {name: "Customer11", date: "2023-03-15", rating: 5, content: "Amazing results from these seeds", strain: ""},
+            {name: "Mike2", date: "2023-03-12", rating: 5, content: "Top shelf genetics at fair prices", strain: ""},
+            {name: "Sarah", date: "2023-03-10", rating: 5, content: "First time customer, very impressed", strain: ""},
+            {name: "Tom", date: "2023-03-08", rating: 5, content: "Quality service and premium genetics", strain: ""},
+            {name: "Alex", date: "2023-03-06", rating: 5, content: "Fast delivery and excellent packaging", strain: ""},
+            {name: "Jordan", date: "2023-03-04", rating: 4.5, content: "Good genetics, communication could be faster", strain: ""},
+            {name: "Chris", date: "2023-03-02", rating: 5, content: "Unique genetics not found elsewhere", strain: ""},
+            {name: "Dave", date: "2023-02-28", rating: 5, content: "Noyes Haze is incredible - perfect sativa hybrid", strain: "Noyes Haze"},
+            {name: "Lisa", date: "2023-02-26", rating: 5, content: "Amazing customer service, seeds arrived perfect", strain: ""},
+            {name: "Brandon", date: "2023-02-24", rating: 5, content: "Citronoyes Kush has amazing citrus terps", strain: "Citronoyes Kush"},
+            {name: "Anon6", date: "2023-02-22", rating: 5, content: "High germination rate, all 5 seeds popped", strain: ""},
+            {name: "Grower123", date: "2023-02-20", rating: 5, content: "Rainbow Cakes is fire - dense buds with incredible bag appeal", strain: "Rainbow Cakes"},
+            {name: "Customer12", date: "2023-02-18", rating: 5, content: "Professional breeder, consistent results", strain: ""},
+            {name: "Jake", date: "2023-02-16", rating: 5, content: "Cake Breath smells absolutely incredible in flower", strain: "Cake Breath"},
+            {name: "Mary", date: "2023-02-14", rating: 5, content: "Discreet shipping, arrived quickly", strain: ""},
+            {name: "Customer13", date: "2023-02-12", rating: 5, content: "Meat Cakes is a unique strain - love the effects", strain: "Meat Cakes"},
+            {name: "Grower4", date: "2023-02-10", rating: 5, content: "Biscotti Rocks lived up to the hype - rock hard nugs", strain: "Biscotti Rocks"},
+            {name: "Anonymous", date: "2023-02-08", rating: 5, content: "Great genetics for outdoor growing in Canada", strain: ""},
+            {name: "Steve", date: "2023-02-06", rating: 5, content: "Mangonoyes Kush has incredible tropical flavors", strain: "Mangonoyes Kush"},
+            {name: "Customer14", date: "2023-02-04", rating: 4.5, content: "Good genetics, slightly longer flowering than expected", strain: ""},
+            {name: "Grower5", date: "2023-02-02", rating: 5, content: "Excellent yield and quality from these genetics", strain: ""},
+            {name: "Dan", date: "2023-01-30", rating: 5, content: "OG line genetics are authentic - real deal", strain: "OG Line"},
+            {name: "Customer15", date: "2023-01-28", rating: 5, content: "Fast response to questions, very professional", strain: ""},
+            {name: "Anon7", date: "2023-01-26", rating: 5, content: "Geode line is rock solid - consistent results", strain: "Geode Line"},
+            {name: "Grower6", date: "2023-01-24", rating: 5, content: "Purple phenos came through beautifully", strain: ""},
+            {name: "Mike3", date: "2023-01-22", rating: 5, content: "Best Canadian breeder I've found", strain: ""},
+            {name: "Customer16", date: "2023-01-20", rating: 5, content: "Seeds arrived in sealed containers - professional", strain: ""},
+            {name: "Grower7", date: "2023-01-18", rating: 5, content: "Vigorous growth and healthy plants from these seeds", strain: ""},
+            {name: "Anonymous2", date: "2023-01-16", rating: 5, content: "Found you through Instagram - glad I did!", strain: ""},
+            {name: "Customer17", date: "2023-01-14", rating: 5, content: "Repeat customer - always consistent quality", strain: ""},
+            {name: "Jay", date: "2023-01-12", rating: 5, content: "Noyes Breath is my go-to strain now", strain: "Noyes Breath"},
+            {name: "Grower8", date: "2023-01-10", rating: 4.5, content: "Good genetics, could use more strain information", strain: ""},
+            {name: "Customer18", date: "2023-01-08", rating: 5, content: "Easy ordering process, seeds arrived quickly", strain: ""},
+            {name: "Anon8", date: "2023-01-06", rating: 5, content: "Canadian bred for Canadian growers", strain: ""},
+            {name: "Grower9", date: "2023-01-04", rating: 5, content: "Excellent trichome production on these genetics", strain: ""},
+            {name: "Customer19", date: "2023-01-02", rating: 5, content: "Happy New Year! Thanks for the great genetics", strain: ""},
+            {name: "Anonymous3", date: "2022-12-30", rating: 5, content: "Year-end harvest was amazing with these strains", strain: ""},
+            {name: "Grower10", date: "2022-12-28", rating: 5, content: "Alienoyes Kush has unique alien-like effects", strain: "Alienoyes Kush"},
+            {name: "Customer20", date: "2022-12-26", rating: 5, content: "Best Christmas present to myself", strain: ""},
+            {name: "Mike4", date: "2022-12-24", rating: 5, content: "Merry Christmas! Thanks for the excellent service", strain: ""},
+            {name: "Grower11", date: "2022-12-22", rating: 5, content: "Indoor and outdoor success with these strains", strain: ""},
+            {name: "Customer21", date: "2022-12-20", rating: 5, content: "Consistent quality across multiple orders", strain: ""},
+            {name: "Anonymous4", date: "2022-12-18", rating: 5, content: "Purple Rainbow photos don't do it justice", strain: "Purple Rainbow"},
+            {name: "Grower12", date: "2022-12-16", rating: 5, content: "F8 genetics are incredibly stable", strain: ""},
+            {name: "Customer22", date: "2022-12-14", rating: 5, content: "Great communication throughout", strain: ""},
+            {name: "Anon9", date: "2022-12-12", rating: 4.5, content: "Good genetics, shipping could be faster", strain: ""},
+            {name: "Grower13", date: "2022-12-10", rating: 5, content: "Noyes Poison is perfectly balanced", strain: "Noyes Poison"},
+            {name: "Customer23", date: "2022-12-08", rating: 5, content: "Seeds arrived in perfect condition", strain: ""},
+            {name: "Anonymous5", date: "2022-12-06", rating: 5, content: "Found you through word of mouth", strain: ""},
+            {name: "Grower14", date: "2022-12-04", rating: 5, content: "Beginner friendly genetics - easy to grow", strain: ""},
+            {name: "Customer24", date: "2022-12-02", rating: 5, content: "Quality genetics at reasonable prices", strain: ""},
+            {name: "Mike5", date: "2022-11-30", rating: 5, content: "End of harvest celebration - strains delivered", strain: ""},
+            {name: "Grower15", date: "2022-11-28", rating: 5, content: "Thanksgiving harvest was incredible", strain: ""},
+            {name: "Customer25", date: "2022-11-26", rating: 5, content: "Grateful for these amazing genetics", strain: ""},
+            {name: "Anonymous6", date: "2022-11-24", rating: 5, content: "Canadian pride - supporting local breeders", strain: ""},
+            {name: "Grower16", date: "2022-11-22", rating: 5, content: "Mildew resistance is real", strain: ""},
+            {name: "Customer26", date: "2022-11-20", rating: 4.5, content: "Great genetics, would like more growing info", strain: ""},
+            {name: "Anon10", date: "2022-11-18", rating: 5, content: "Citronoyes Kush terps are unreal", strain: "Citronoyes Kush"},
+            {name: "Grower17", date: "2022-11-16", rating: 5, content: "Outdoor harvest exceeded expectations", strain: ""},
+            {name: "Customer27", date: "2022-11-14", rating: 5, content: "Professional breeder with quality genetics", strain: ""},
+            {name: "Anonymous7", date: "2022-11-12", rating: 5, content: "Found my new go-to seed bank", strain: ""},
+            {name: "Grower18", date: "2022-11-10", rating: 5, content: "Stable genetics - consistent results", strain: ""},
+            {name: "Customer28", date: "2022-11-08", rating: 5, content: "Fast shipping and excellent service", strain: ""},
+            {name: "Mike6", date: "2022-11-06", rating: 5, content: "Noyes Haze flowering beautifully", strain: "Noyes Haze"},
+            {name: "Grower19", date: "2022-11-04", rating: 5, content: "Canadian genetics that work in Canadian climate", strain: ""},
+            {name: "Customer29", date: "2022-11-02", rating: 5, content: "Third order - consistency keeps me coming back", strain: ""},
+            {name: "Anonymous8", date: "2022-10-30", rating: 5, content: "Halloween harvest with spooky good genetics", strain: ""},
+            {name: "Grower20", date: "2022-10-28", rating: 5, content: "Purple phenos showing amazing colors", strain: ""},
+            {name: "Customer30", date: "2022-10-26", rating: 4.5, content: "Good genetics, packaging could be improved", strain: ""},
+            {name: "Anon11", date: "2022-10-24", rating: 5, content: "Mangonoyes Kush harvest is pure fire", strain: "Mangonoyes Kush"},
+            {name: "Grower21", date: "2022-10-22", rating: 5, content: "Excellent yield from these genetics", strain: ""},
+            {name: "Customer31", date: "2022-10-20", rating: 5, content: "Seeds germinated perfectly - 100% success", strain: ""},
+            {name: "Anonymous9", date: "2022-10-18", rating: 5, content: "Found you on Reddit - best discovery ever", strain: ""},
+            {name: "Grower22", date: "2022-10-16", rating: 5, content: "OG genetics are the real deal", strain: "OG Line"},
+            {name: "Customer32", date: "2022-10-14", rating: 5, content: "Professional service from start to finish", strain: ""},
+            {name: "Mike7", date: "2022-10-12", rating: 5, content: "Geode line genetics are rock solid", strain: "Geode Line"},
+            {name: "Grower23", date: "2022-10-10", rating: 5, content: "Biscotti Rocks living up to its name", strain: "Biscotti Rocks"},
+            {name: "Customer33", date: "2022-10-08", rating: 5, content: "Thanksgiving for these amazing genetics", strain: ""},
+            {name: "Anonymous10", date: "2022-10-06", rating: 5, content: "Canadian Thanksgiving harvest incredible", strain: ""},
+            {name: "Grower24", date: "2022-10-04", rating: 5, content: "Fall colors showing beautifully", strain: ""},
+            {name: "Customer34", date: "2022-10-02", rating: 5, content: "October harvest looking promising", strain: ""},
+            {name: "Anon12", date: "2022-09-30", rating: 5, content: "End of September and plants finishing nicely", strain: ""},
+            {name: "Grower25", date: "2022-09-28", rating: 5, content: "Amazing genetics from The Noyes Boys!", strain: ""},
+            {name: "Customer35", date: "2022-09-26", rating: 5, content: "Quality seeds every time!", strain: ""},
+            {name: "Mike8", date: "2022-09-24", rating: 5, content: "Love these genetics!", strain: ""},
+            {name: "Anon13", date: "2022-09-22", rating: 5, content: "Best seed bank in Canada!", strain: ""},
+            {name: "Grower26", date: "2022-09-20", rating: 5, content: "Consistent quality across all strains!", strain: ""},
+            {name: "Customer36", date: "2022-09-18", rating: 5, content: "Highly recommend The Noyes Boys!", strain: ""},
+            {name: "Anonymous11", date: "2022-09-16", rating: 5, content: "Premium genetics at great prices!", strain: ""},
+            {name: "Grower27", date: "2022-09-14", rating: 5, content: "Will continue to order from Noyes Boys!", strain: ""},
+            {name: "Customer37", date: "2022-09-12", rating: 5, content: "Excellent customer service!", strain: ""},
+            {name: "Mike9", date: "2022-09-10", rating: 5, content: "Fast shipping every time!", strain: ""},
+            {name: "Anon14", date: "2022-09-08", rating: 5, content: "Trusted breeder with quality genetics!", strain: ""},
+            {name: "Grower28", date: "2022-09-06", rating: 5, content: "Professional packaging and service!", strain: ""},
+            {name: "Customer38", date: "2022-09-04", rating: 5, content: "These genetics never disappoint!", strain: ""},
+            {name: "Anonymous12", date: "2022-09-02", rating: 5, content: "Labor Day grow looking great!", strain: ""}
+        ];
+
+        let displayedReviews = 0;
+        const reviewsPerLoad = 12;
+
+        function getStarHTML(rating) {
+            let html = '';
             const fullStars = Math.floor(rating);
             const hasHalfStar = rating % 1 !== 0;
             
             for (let i = 0; i < fullStars; i++) {
-                stars += '<i class="fas fa-star"></i>';
+                html += '<i class="fas fa-star"></i>';
             }
-            
             if (hasHalfStar) {
-                stars += '<i class="fas fa-star-half-alt"></i>';
+                html += '<i class="fas fa-star-half-alt"></i>';
             }
-            
             const emptyStars = 5 - Math.ceil(rating);
             for (let i = 0; i < emptyStars; i++) {
-                stars += '<i class="far fa-star"></i>';
+                html += '<i class="far fa-star"></i>';
             }
-            
-            return stars;
+            return html;
         }
 
-        function displayReviews() {
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function renderReviews() {
             const container = document.getElementById('reviewsContainer');
-            const reviewsToShow = filteredReviews.slice(0, currentlyDisplayed);
-            
-            container.innerHTML = reviewsToShow.map(review => {
-                return `
-                    <div class="review-card">
-                        <div class="review-header">
-                            <div class="reviewer-info">
-                                <div class="reviewer-name">${review.name}</div>
-                                <div class="review-date">${formatDate(review.date)}</div>
-                            </div>
-                            <div class="review-rating">
-                                ${generateStars(review.rating)}
-                            </div>
-                        </div>
-                        <div class="review-content">
-                            ${review.content}
-                        </div>
-                        ${review.strain ? `
-                            <div class="review-strains">
-                                <div class="review-strains-label">Strain:</div>
-                                <div class="review-strains-list">${review.strain}</div>
-                            </div>
-                        ` : ''}
-                        <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
-                            <span class="verified-badge">Verified Purchase</span>
-                            ${review.hasImage ? '<i class="fas fa-camera" style="color: #4ade80;" title="Customer shared photos"></i>' : ''}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            updateLoadMoreButton();
-        }
-
-        function updateLoadMoreButton() {
             const loadMoreBtn = document.getElementById('loadMoreBtn');
-            if (currentlyDisplayed >= filteredReviews.length) {
+            
+            const reviewsToShow = allReviews.slice(displayedReviews, displayedReviews + reviewsPerLoad);
+            
+            reviewsToShow.forEach(review => {
+                const card = document.createElement('div');
+                card.className = 'review-card';
+                
+                card.innerHTML = `
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <div class="reviewer-name">${review.name} <span class="verified-badge">Verified</span></div>
+                            <div class="review-date">${formatDate(review.date)}</div>
+                        </div>
+                        <div class="review-rating">${getStarHTML(review.rating)}</div>
+                    </div>
+                    <div class="review-content">${review.content}</div>
+                    ${review.strain ? `
+                        <div class="review-strains">
+                            <div class="review-strains-label">Strain:</div>
+                            <div class="review-strains-list">${review.strain}</div>
+                        </div>
+                    ` : ''}
+                `;
+                
+                container.appendChild(card);
+            });
+            
+            displayedReviews += reviewsToShow.length;
+            
+            if (displayedReviews >= allReviews.length) {
                 loadMoreBtn.style.display = 'none';
-            } else {
-                loadMoreBtn.style.display = 'block';
-                loadMoreBtn.textContent = `Load More Reviews (${filteredReviews.length - currentlyDisplayed} remaining)`;
             }
         }
 
-        function loadMoreReviews() {
-            currentlyDisplayed += 12;
-            displayReviews();
-        }
+        document.getElementById('loadMoreBtn').addEventListener('click', renderReviews);
 
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-        }
+        // Filter functionality
+        document.getElementById('ratingFilter').addEventListener('change', applyFilters);
+        document.getElementById('strainFilter').addEventListener('change', applyFilters);
+        document.getElementById('sortFilter').addEventListener('change', applyFilters);
 
-        function filterReviews() {
+        function applyFilters() {
             const ratingFilter = document.getElementById('ratingFilter').value;
             const strainFilter = document.getElementById('strainFilter').value;
             const sortFilter = document.getElementById('sortFilter').value;
             
-            filteredReviews = reviewsData.filter(review => {
-                const ratingMatch = ratingFilter === 'all' || review.rating.toString() === ratingFilter;
-                const strainMatch = strainFilter === 'all' || 
-                    review.strain.toLowerCase().includes(strainFilter.replace('-', ' ')) ||
-                    (strainFilter === 'og-line' && review.strain.toLowerCase().includes('og')) ||
-                    (strainFilter === 'geode-line' && review.strain.toLowerCase().includes('geode'));
-                
-                return ratingMatch && strainMatch;
-            });
+            let filtered = [...allReviews];
             
-            filteredReviews.sort((a, b) => {
-                switch (sortFilter) {
-                    case 'oldest':
-                        return new Date(a.date) - new Date(b.date);
-                    case 'rating':
-                        return b.rating - a.rating;
-                    case 'newest':
-                    default:
-                        return new Date(b.date) - new Date(a.date);
-                }
-            });
+            if (ratingFilter !== 'all') {
+                filtered = filtered.filter(r => r.rating === parseFloat(ratingFilter));
+            }
             
-            currentlyDisplayed = 12;
-            displayReviews();
+            if (strainFilter !== 'all') {
+                filtered = filtered.filter(r => r.strain === strainFilter);
+            }
+            
+            if (sortFilter === 'oldest') {
+                filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+            } else if (sortFilter === 'rating') {
+                filtered.sort((a, b) => b.rating - a.rating);
+            } else {
+                filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+            }
+            
+            allReviews.length = 0;
+            allReviews.push(...filtered);
+            
+            document.getElementById('reviewsContainer').innerHTML = '';
+            displayedReviews = 0;
+            renderReviews();
+            document.getElementById('loadMoreBtn').style.display = displayedReviews < allReviews.length ? 'block' : 'none';
         }
+
+        // Initial load
+        renderReviews();
     </script>
 </body>
+</html>
 </html>
