@@ -169,11 +169,16 @@
         .success-order-id { font-family: monospace; background: var(--surface); padding: 0.5rem 1rem; border-radius: 6px; color: var(--green); font-size: 1rem; margin: 1rem 0; display: inline-block; }
 
         .paypal-zone { margin-top: 1.5rem; }
-
+ 
         @media (max-width: 768px) {
             .checkout-grid { grid-template-columns: 1fr; }
             .form-row { grid-template-columns: 1fr; }
             .checkout-title { font-size: 2rem; }
+            /* Fix PayPal iframe being clipped by body zoom:0.50 on mobile */
+            .paypal-zone {
+                zoom: 2;
+                -moz-transform: scale(1);
+            }
         }
     </style>
 </head>
