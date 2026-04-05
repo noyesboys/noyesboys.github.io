@@ -7,7 +7,16 @@
     <link rel="icon" type="image/x-icon" href="assets/img/noyes boys logo.png" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <script src="https://www.paypal.com/sdk/js?client-id=ASZdjwbxj390eUH7-L8EBCLnTjWpSxl-9_juJ2is6cr1GFrKAG7K7QMoEQLRPN64CBJvJJIwtwsWFzjJ&currency=CAD&intent=capture" defer></script>
+    <!--
+    ╔══════════════════════════════════════════════════════════╗
+    ║  PAYPAL SETUP — REPLACE YOUR_CLIENT_ID BELOW            ║
+    ║  1. Go to developer.paypal.com                          ║
+    ║  2. Log in → Apps & Credentials → Create App           ║
+    ║  3. Switch to "Live" tab, copy your Client ID           ║
+    ║  4. Paste it below replacing YOUR_CLIENT_ID             ║
+    ╚══════════════════════════════════════════════════════════╝
+    -->
+    <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=CAD&intent=capture&enable-funding=card,venmo&disable-funding=paylater" defer></script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
@@ -362,7 +371,7 @@
                         </div>
 
                         <div class="notice">
-                            <strong>How it works:</strong> Fill in the form, then pay securely below via PayPal or card. We'll email your Invoice within 3 business days. 🍁
+                            <strong>How it works:</strong> Fill in the form, then pay securely below via PayPal or card. We'll email your tracking number within 3 business days. 🍁
                         </div>
 
                         <!-- PayPal Zone -->
@@ -922,8 +931,18 @@ function attemptPayPal(){
 
     ppRendered=true;
 
+    // Generate one order ID up front — shared by both pre-payment and post-payment emails
+    const sharedOrderId = 'NB-'+Date.now()+'-'+Math.random().toString(36).substr(2,5).toUpperCase();
+
     paypal.Buttons({
         style:{ layout:'vertical', color:'gold', shape:'rect', label:'pay', height:48 },
+
+        // Fires the instant the customer clicks ANY of the three buttons (PayPal / card / etc.)
+        // Sends you their full order info BEFORE they complete payment
+        onClick(data, actions){
+            sendPrePaymentEmail(sharedOrderId); // fire-and-forget, don't block PayPal
+            return actions.resolve();
+        },
 
         createOrder(data, actions){
             const total = getFinalTotal();
@@ -937,11 +956,10 @@ function attemptPayPal(){
 
         async onApprove(data, actions){
             const details = await actions.order.capture();
-            const orderId = 'NB-'+Date.now()+'-'+Math.random().toString(36).substr(2,5).toUpperCase();
-            await sendOrderEmail(orderId, details);
+            await sendPostPaymentEmail(sharedOrderId, details);
             localStorage.removeItem('noyesboys_checkout_data');
             localStorage.removeItem('noyesboys_cart');
-            document.getElementById('successOrderId').textContent = orderId;
+            document.getElementById('successOrderId').textContent = sharedOrderId;
             document.getElementById('successOverlay').classList.add('show');
             setTimeout(()=>{ window.location.href='FeminizedSeedsHomepage.html'; },8000);
         },
@@ -955,38 +973,68 @@ function attemptPayPal(){
 
 // ══════════════════════════════════════════════════════════
 // EMAIL (EmailJS)
+// Two emails per order:
+//   1. sendPrePaymentEmail  — fires when customer clicks a PayPal button
+//      Subject in EmailJS template: "⚠ NEW ORDER STARTED — [order_id]"
+//   2. sendPostPaymentEmail — fires after PayPal confirms payment
+//      Subject in EmailJS template: "✅ PAYMENT CONFIRMED — [order_id]"
+// Both use the same EmailJS template. The "payment_status" variable
+// tells you which one it is.
 // ══════════════════════════════════════════════════════════
 emailjs.init({ publicKey:"ZiDmYogre9hNBY-bI" });
 
-async function sendOrderEmail(orderId, paypalDetails){
-    try {
-        const subtotal = cartData.total;
-        const result   = calcPromo(appliedPromo, cartData.items, subtotal);
-        let ship       = SHIP_COSTS[selectedShipping]||0;
-        if(result.freeShipping) ship=0;
-        const total    = Math.max(0, subtotal-result.discount+ship);
+function buildEmailParams(orderId, paymentStatus, paypalTxnId){
+    const subtotal = cartData.total;
+    const result   = calcPromo(appliedPromo, cartData.items, subtotal);
+    let ship       = SHIP_COSTS[selectedShipping]||0;
+    if(result.freeShipping) ship=0;
+    const total    = Math.max(0, subtotal-result.discount+ship);
 
-        await emailjs.send('service_viyn3ld','template_l8l5a4o',{
-            customer_name:      `${document.getElementById('firstName').value.trim()} ${document.getElementById('lastName').value.trim()}`,
-            customer_email:     document.getElementById('email').value.trim(),
-            customer_phone:     document.getElementById('phone').value.trim()||'Not provided',
-            customer_address:   `${document.getElementById('streetAddress').value.trim()}, ${document.getElementById('city').value.trim()}, ${document.getElementById('province').value} ${document.getElementById('postalCode').value.trim().toUpperCase()}`,
-            shipping_method:    selectedShipping,
-            payment_method:     'PayPal (paid online)',
-            paypal_txn_id:      paypalDetails?.id||'N/A',
-            order_items:        cartData.items.map(i=>`${i.quantity}x ${i.strainName} (${i.variant||i.variantText}) — $${(i.price*i.quantity).toFixed(2)} CAD`).join('\n'),
-            promo_code:         appliedPromo?.code||'None',
-            promo_discount:     result.discount>0?`-$${result.discount.toFixed(2)} CAD`:'None',
-            subtotal:           `$${subtotal.toFixed(2)} CAD`,
-            shipping:           ship>0?`$${ship.toFixed(2)} CAD`:'FREE',
-            total:              `$${total.toFixed(2)} CAD`,
-            additional_info:    document.getElementById('additionalInfo').value.trim()||'None',
-            newsletter:         document.getElementById('newsletter').checked?'Yes':'No',
-            order_id:           orderId,
-            order_date:         new Date().toLocaleDateString('en-CA'),
-            order_time:         new Date().toLocaleTimeString('en-CA')
-        });
-    } catch(e){ console.error('Email failed (payment still went through):',e); }
+    return {
+        // ── Who sent it
+        payment_status:     paymentStatus,   // "PENDING — not yet paid" or "CONFIRMED — payment received"
+        paypal_txn_id:      paypalTxnId||'Not yet completed',
+
+        // ── Customer
+        customer_name:      `${document.getElementById('firstName').value.trim()} ${document.getElementById('lastName').value.trim()}`,
+        customer_email:     document.getElementById('email').value.trim(),
+        customer_phone:     document.getElementById('phone').value.trim()||'Not provided',
+        customer_address:   `${document.getElementById('streetAddress').value.trim()}, ${document.getElementById('city').value.trim()}, ${document.getElementById('province').value} ${document.getElementById('postalCode').value.trim().toUpperCase()}`,
+
+        // ── Order
+        order_items:        cartData.items.map(i=>`${i.quantity}x ${i.strainName} (${i.variant||i.variantText}) — $${(i.price*i.quantity).toFixed(2)} CAD`).join('\n'),
+        promo_code:         appliedPromo?.code||'None',
+        promo_discount:     result.discount>0?`-$${result.discount.toFixed(2)} CAD`:'None',
+        shipping_method:    selectedShipping,
+        subtotal:           `$${subtotal.toFixed(2)} CAD`,
+        shipping:           ship>0?`$${ship.toFixed(2)} CAD`:'FREE',
+        total:              `$${total.toFixed(2)} CAD`,
+        additional_info:    document.getElementById('additionalInfo').value.trim()||'None',
+        newsletter:         document.getElementById('newsletter').checked?'Yes':'No',
+
+        // ── Meta
+        order_id:           orderId,
+        order_date:         new Date().toLocaleDateString('en-CA'),
+        order_time:         new Date().toLocaleTimeString('en-CA')
+    };
+}
+
+// Email #1 — fires the moment ANY PayPal button is clicked
+async function sendPrePaymentEmail(orderId){
+    try {
+        const params = buildEmailParams(orderId, '⚠ PENDING — customer has NOT paid yet', null);
+        await emailjs.send('service_viyn3ld','template_l8l5a4o', params);
+        console.log('Pre-payment email sent for', orderId);
+    } catch(e){ console.error('Pre-payment email failed:', e); }
+}
+
+// Email #2 — fires only after PayPal confirms the payment went through
+async function sendPostPaymentEmail(orderId, paypalDetails){
+    try {
+        const params = buildEmailParams(orderId, '✅ CONFIRMED — payment received via PayPal', paypalDetails?.id||'N/A');
+        await emailjs.send('service_viyn3ld','template_l8l5a4o', params);
+        console.log('Post-payment email sent for', orderId);
+    } catch(e){ console.error('Post-payment email failed (payment still went through):', e); }
 }
 
 // ── Init
