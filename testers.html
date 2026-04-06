@@ -474,6 +474,25 @@ nav {
     .upcoming-grid, .photo-grid { grid-template-columns: 1fr; }
     .masthead h1 { font-size: 1.8rem; letter-spacing: 0.4rem; }
 }
+.photo-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #111;
+}
+
+.photo-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.center-btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
 </style>
 </head>
 <body>
@@ -630,18 +649,39 @@ nav {
     <div class="two-col" style="padding: 0; margin-bottom: 25px;">
 
         <div class="section-container" style="margin-bottom: 0;">
-            <div class="section-header">
-                <h2>📸 Past Test Runs</h2>
-                <p>Real grows from real testers</p>
-            </div>
-            <div class="photo-grid">
-                <div class="photo-placeholder">
-                <div class="photo-placeholder"><img src="assets/testers/muskoka_grower/1.webp" alt="@muskokagrower" style="width:100%; height:100%; object-fit:cover; border-radius:10px;"></div>
-                <div class="photo-placeholder"><img src="assets/testers/muskoka_grower/2.webp" alt="@muskokagrower" style="width:100%; height:100%; object-fit:cover; border-radius:10px;"></div>
-                <div class="photo-placeholder"><img src="assets/testers/muskoka_grower/3.jpg" alt="@muskokagrower" style="width:100%; height:100%; object-fit:cover; border-radius:10px;"></div>
-            </div>
-            <a href="/gallery" class="btn-secondary">View All Grows</a>
-        </div>
+  <div class="section-header">
+    <h2>📸 Past Test Runs</h2>
+    <p>Real grows from real testers</p>
+  </div>
+
+  <div class="photo-grid">
+
+    <div class="photo-placeholder">
+      <img src="assets/testers/muskoka_grower/1.webp" alt="@muskokagrower">
+    </div>
+
+    <div class="photo-placeholder">
+      <img src="assets/testers/muskoka_grower/2.webp" alt="@muskokagrower">
+    </div>
+
+    <div class="photo-placeholder">
+      <img src="assets/testers/muskoka_grower/3.jpg" alt="@muskokagrower">
+    </div>
+
+    <div class="photo-placeholder">
+      <img src="assets/testers/muskoka_grower/4.jpg" alt="@muskokagrower">
+    </div>
+
+    <div class="photo-placeholder">
+      <img src="assets/testers/muskoka_grower/5.jpg" alt="@muskokagrower">
+    </div>
+
+  </div>
+
+  <div class="center-btn">
+    <a href="/gallery" class="btn-secondary">View All Grows</a>
+  </div>
+</div>
 
         <div class="section-container" style="margin-bottom: 0;">
             <div class="section-header">
@@ -860,6 +900,7 @@ nav {
 </div><!-- /container -->
 
 <script>
+    
 function toggleFaq(btn) {
     const answer = btn.nextElementSibling;
     const isOpen = btn.classList.contains('open');
