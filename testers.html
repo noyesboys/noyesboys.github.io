@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Become a Noyes Boys Seed Tester</title>
+<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+    color: #f5f5f5;
+    line-height: 1.5;
+    padding-top: 70px;
+    min-height: 100vh;
+    zoom: 0.50;
+}
+
+/* ── CANNABIS LEAF SVG BACKGROUND ── */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 100 100'%3E%3Cpath fill='%234ade80' d='M50 10 C50 10 42 25 30 28 C38 28 44 32 44 32 C44 32 32 38 28 50 C33 46 40 46 40 46 C40 46 34 56 36 65 C40 60 46 58 46 58 C46 58 46 72 50 78 C54 72 54 58 54 58 C54 58 60 60 64 65 C66 56 60 46 60 46 C60 46 67 46 72 50 C68 38 56 32 56 32 C56 32 62 28 70 28 C58 25 50 10 50 10Z'/%3E%3C/svg%3E");
+    background-size: 120px 120px;
+}
+
+.container, header, .masthead { position: relative; z-index: 1; }
+
+/* ── HEADER ── */
+header {
+    background: linear-gradient(to bottom, rgba(22,22,22,0.3) 0%, rgba(22,22,22,0.7) 75%, #161616 100%),
+                url('assets/img/bg-masthead.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 0.5rem 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    min-height: 60px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #4ade80;
+    text-decoration: none;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+.logo-img { width: 35px; height: 35px; margin-right: 8px; border-radius: 50%; }
+
+.nav-links { display: flex; list-style: none; gap: 1rem; flex-wrap: wrap; align-items: center; }
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: all 0.3s ease;
+}
+.nav-links a:hover { color: #4ade80; background: rgba(74,222,128,0.1); border-color: #4ade80; transform: translateY(-2px); }
+
+.cart-button {
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+    color: #0a0a0a;
+    border: none;
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+.cart-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(74,222,128,0.4); }
+.cart-count {
+    background: #0a0a0a; color: #4ade80; border-radius: 50%;
+    width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; font-weight: bold;
+}
+
+/* ── MASTHEAD ── */
+.masthead {
+    background: linear-gradient(to bottom, rgba(22,22,22,0.3) 0%, rgba(22,22,22,0.7) 75%, #161616 100%),
+                url('assets/img/bg-masthead.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 2rem 0;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.masthead-content { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+.masthead-leaf {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+    filter: drop-shadow(0 0 12px rgba(74,222,128,0.4));
+}
+.masthead h1 {
+    font-size: 2.5rem;
+    line-height: 2.5rem;
+    letter-spacing: 0.8rem;
+    background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0));
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+}
+.masthead h2 {
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 1rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+.masthead .tagline {
+    color: rgba(255,255,255,0.65);
+    font-size: 1rem;
+    margin-bottom: 1.8rem;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+.btn-apply {
+    display: inline-block;
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+    color: #0a0a0a;
+    text-decoration: none;
+    padding: 0.9rem 2.5rem;
+    border-radius: 25px;
+    font-weight: bold;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+.btn-apply:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(74,222,128,0.4); }
+
+/* ── CONTAINER ── */
+.container { max-width: 1300px; margin: 0 auto; padding: 0 20px 40px; }
+
+/* ── SECTION CONTAINERS ── */
+.section-container {
+    background: rgba(0,0,0,0.7);
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    overflow: hidden;
+    border: 1px solid rgba(74,222,128,0.1);
+}
+.section-header {
+    background: linear-gradient(135deg, #2d5a2d 0%, #4a7c4a 100%);
+    color: white;
+    padding: 22px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.section-header::before,
+.section-header::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px; height: 40px;
+    opacity: 0.15;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='white' d='M50 10 C50 10 42 25 30 28 C38 28 44 32 44 32 C44 32 32 38 28 50 C33 46 40 46 40 46 C40 46 34 56 36 65 C40 60 46 58 46 58 C46 58 46 72 50 78 C54 72 54 58 54 58 C54 58 60 60 64 65 C66 56 60 46 60 46 C60 46 67 46 72 50 C68 38 56 32 56 32 C56 32 62 28 70 28 C58 25 50 10 50 10Z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+.section-header::before { left: 20px; }
+.section-header::after  { right: 20px; }
+.section-header h2 { font-size: 1.7em; margin-bottom: 5px; letter-spacing: 0.03em; }
+.section-header p { font-size: 0.9em; opacity: 0.8; letter-spacing: 0.02em; }
+
+/* ── GRID LAYOUTS ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px; }
+.four-col { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 20px; }
+
+/* ── CARDS ── */
+.card {
+    background: linear-gradient(to bottom, rgba(22,22,22,0.85) 0%, rgba(22,22,22,0.95) 100%),
+                url('assets/img/bg-masthead.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
+    padding: 20px;
+    border: 2px solid rgba(74,222,128,0.2);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+.card:hover { transform: translateY(-3px); border-color: rgba(74,222,128,0.5); }
+.card.featured { border-color: #4ade80; box-shadow: 0 0 15px rgba(74,222,128,0.15); }
+.card h2 { color: #4ade80; font-size: 1.2rem; margin-bottom: 12px; }
+.card ul { padding-left: 20px; }
+.card ul li { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.07); font-size: 0.9rem; color: #e6edf3; }
+.card ul li:last-child { border-bottom: none; }
+
+/* ── TIER BADGE ── */
+.badge {
+    display: inline-block;
+    background: #3fb950;
+    color: #0a2e0a;
+    font-size: 0.65rem;
+    font-weight: bold;
+    padding: 2px 7px;
+    border-radius: 6px;
+}
+.badge.gold { background: gold; color: #2a1a00; }
+.badge.elite { background: linear-gradient(135deg, #4ade80, #22c55e); color: #0a2e0a; }
+
+/* ── TIER TABLE ── */
+.tier-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.tier-table th { background: rgba(74,222,128,0.15); color: #4ade80; padding: 10px 14px; text-align: left; border-bottom: 1px solid rgba(74,222,128,0.2); }
+.tier-table td { padding: 9px 14px; border-bottom: 1px solid rgba(255,255,255,0.06); color: #e6edf3; }
+.tier-table tr:last-child td { border-bottom: none; }
+.tier-table tr:hover td { background: rgba(74,222,128,0.04); }
+
+/* ── TESTER PROFILES ── */
+.tester-grid { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }
+.tester-card { text-align: center; width: 100px; }
+.tester-avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: #222;
+    overflow: hidden;
+    border: 2px solid #3fb950;
+    margin: 0 auto 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+    color: #3fb950;
+}
+.tester-avatar.featured { border: 3px solid gold; transform: scale(1.1); }
+.tester-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.tester-name { font-size: 0.75rem; color: #ccc; }
+.tester-card a { text-decoration: none; }
+
+/* ── PHOTO GRID ── */
+.photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 20px; }
+.photo-grid .photo-placeholder {
+    aspect-ratio: 4/3;
+    background: #1a2a1a;
+    border-radius: 8px;
+    border: 1px dashed rgba(74,222,128,0.3);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(74,222,128,0.4);
+    font-size: 0.8rem;
+}
+.photo-grid img { width: 100%; border-radius: 8px; object-fit: cover; aspect-ratio: 4/3; }
+
+/* ── UPCOMING STRAINS ── */
+.upcoming-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 20px; }
+.upcoming-card {
+    background: rgba(74,222,128,0.05);
+    border: 1px dashed rgba(74,222,128,0.3);
+    border-radius: 10px;
+    padding: 30px 15px;
+    text-align: center;
+    color: rgba(74,222,128,0.5);
+    font-weight: bold;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+.upcoming-card .lock-icon { font-size: 1.5rem; margin-bottom: 8px; display: block; }
+
+/* ── FORM ── */
+.form-section { padding: 28px 30px 30px; }
+.form-intro { 
+    font-size: 0.88rem; color: #9ca3af; 
+    margin-bottom: 22px; line-height: 1.6;
+    padding: 12px 16px;
+    background: rgba(74,222,128,0.05);
+    border-left: 3px solid rgba(74,222,128,0.4);
+    border-radius: 0 8px 8px 0;
+}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.form-grid .full-width { grid-column: 1 / -1; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { 
+    font-size: 0.78rem; color: #6ee7a0; font-weight: 700; 
+    letter-spacing: 0.08em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 6px;
+}
+.form-group label .req { color: #4ade80; font-size: 0.9em; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(74,222,128,0.18);
+    border-radius: 8px;
+    color: #e6edf3;
+    padding: 11px 14px;
+    font-size: 0.92rem;
+    font-family: Arial, sans-serif;
+    transition: border-color 0.2s, background 0.2s;
+    outline: none;
+    width: 100%;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: rgba(255,255,255,0.2); font-size: 0.88rem; }
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { 
+    border-color: #4ade80; 
+    background: rgba(74,222,128,0.06);
+    box-shadow: 0 0 0 3px rgba(74,222,128,0.08);
+}
+.form-group select { appearance: none; cursor: pointer; }
+.form-group select option { background: #1a1a1a; color: #e6edf3; }
+.form-group textarea { resize: vertical; min-height: 85px; line-height: 1.5; }
+.form-divider {
+    grid-column: 1 / -1;
+    border: none; border-top: 1px solid rgba(74,222,128,0.1);
+    margin: 4px 0;
+}
+.submit-btn {
+    margin-top: 22px;
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.submit-btn:hover { 
+    background: linear-gradient(135deg, #3d6b3d 0%, #1e3c1e 100%); 
+    transform: translateY(-2px); 
+    box-shadow: 0 8px 24px rgba(74,222,128,0.2); 
+}
+.submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ── BADGE INFO BOX ── */
+.badge-info-box {
+    background: rgba(74,222,128,0.07);
+    border: 1px solid rgba(74,222,128,0.2);
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 0.83rem;
+    color: #9ca3af;
+    line-height: 1.7;
+}
+.badge-info-box strong { color: #4ade80; }
+
+/* ── SCROLL / READ MORE BUTTONS ── */
+.btn-secondary {
+    display: block;
+    margin: 0 20px 20px;
+    padding: 12px;
+    background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%);
+    color: white;
+    text-align: center;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+.btn-secondary:hover { background: linear-gradient(135deg, #2d5a2d 0%, #1e3c1e 100%); transform: translateY(-2px); }
+
+/* ── FAQ ── */
+.faq-list { padding: 20px 25px 25px; }
+.faq-group-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #4ade80;
+    margin: 22px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(74,222,128,0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.faq-group-label:first-child { margin-top: 0; }
+.faq-item {
+    border: 1px solid rgba(74,222,128,0.1);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+.faq-item:hover { border-color: rgba(74,222,128,0.3); }
+.faq-q {
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: none;
+    color: #e6edf3;
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    transition: background 0.2s, color 0.2s;
+    font-family: Arial, sans-serif;
+    line-height: 1.4;
+}
+.faq-q:hover { background: rgba(74,222,128,0.06); color: #4ade80; }
+.faq-q.open { background: rgba(74,222,128,0.08); color: #4ade80; }
+.faq-arrow {
+    font-size: 1.1rem;
+    color: #4ade80;
+    transition: transform 0.25s;
+    flex-shrink: 0;
+}
+.faq-q.open .faq-arrow { transform: rotate(180deg); }
+.faq-a {
+    display: none;
+    padding: 0 18px 16px;
+    background: rgba(74,222,128,0.03);
+    border-top: 1px solid rgba(74,222,128,0.08);
+}
+.faq-a p {
+    font-size: 0.9rem;
+    color: #b0bec5;
+    line-height: 1.7;
+    padding-top: 14px;
+}
+.faq-a p strong { color: #4ade80; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+    .two-col, .three-col, .four-col { grid-template-columns: 1fr 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .upcoming-grid, .photo-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+    body { padding-top: 80px; }
+    nav { flex-direction: column; gap: 8px; padding: 8px 20px; }
+    .nav-links { gap: 0.5rem; }
+    .nav-links a { padding: 0.4rem 0.6rem; font-size: 0.8rem; }
+    .two-col, .three-col, .four-col { grid-template-columns: 1fr; }
+    .upcoming-grid, .photo-grid { grid-template-columns: 1fr; }
+    .masthead h1 { font-size: 1.8rem; letter-spacing: 0.4rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+    <nav>
+        <a href="FeminizedSeedsHomepage.html" class="logo">
+            <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+            The Noyes Boys
+        </a>
+        <ul class="nav-links">
+            <li><a href="/FeminizedSeedsHomepage">Home</a></li>
+            <li><a href="/order_now">Order</a></li>
+            <li><a href="/reviews">Reviews</a></li>
+            <li><a href="/contact_us">Contact</a></li>
+        </ul>
+        <button class="cart-button">
+            <i class="fas fa-shopping-cart"></i>
+            Cart
+            <span class="cart-count">0</span>
+        </button>
+    </nav>
+</header>
+
+<!-- ── MASTHEAD ── -->
+<section class="masthead">
+    <div class="masthead-content">
+        <span class="masthead-leaf">🌿</span>
+        <h1>Seed Testers</h1>
+        <h2>Noyes Boys Early Access Program</h2>
+        <p class="tagline">Get unreleased genetics before public drop — and help shape the next generation of Noyes Boys strains.</p>
+        <a href="#application" class="btn-apply">Apply Now</a>
+    </div>
+</section>
+
+<!-- ── MAIN CONTENT ── -->
+<div class="container">
+
+    <!-- Requirements & Tiers -->
+    <div class="two-col" style="padding: 0; margin-bottom: 25px;">
+
+        <div class="section-container" style="margin-bottom: 0;">
+            <div class="section-header">
+                <h2>📋 Tester Requirements</h2>
+                <p>What we expect from every tester</p>
+            </div>
+            <div style="padding: 20px;">
+                <div class="card featured" style="border-radius: 10px;">
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; gap: 10px; align-items: flex-start;"><span style="color:#4ade80;">🇨🇦</span> Must be located in Canada</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; gap: 10px; align-items: flex-start;"><span style="color:#4ade80;">📸</span> Document full grow — seed to harvest</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; gap: 10px; align-items: flex-start;"><span style="color:#4ade80;">📢</span> Post in our Facebook group <em>or</em> tag us on social</li>
+                        <li style="padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; gap: 10px; align-items: flex-start;"><span style="color:#4ade80;">🚫</span> No propagating or mothering test seeds</li>
+                        <li style="padding: 8px 0; display: flex; gap: 10px; align-items: flex-start;"><span style="color:#4ade80;">📝</span> Honest, detailed feedback required</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-container" style="margin-bottom: 0;">
+            <div class="section-header">
+                <h2>🏆 Tester Tiers</h2>
+                <p>Earn your badge — climb the ranks</p>
+            </div>
+            <div style="padding: 20px;">
+                <table class="tier-table">
+                    <thead>
+                        <tr>
+                            <th>Tier</th>
+                            <th>Badge</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>T1</td><td><span class="badge">T1</span></td><td>New tester — first run</td></tr>
+                        <tr><td>T2</td><td><span class="badge">T2</span></td><td>Consistent documenter</td></tr>
+                        <tr><td>T3</td><td><span class="badge">T3</span></td><td>Active poster & tagger</td></tr>
+                        <tr><td>T4</td><td><span class="badge">T4</span></td><td>Quality content creator</td></tr>
+                        <tr><td>T5</td><td><span class="badge">T5</span></td><td>Top-tier tester, featured</td></tr>
+                        <tr><td>T6</td><td><span class="badge gold">T6</span></td><td>🔒 Invite Only — Pre-Release Team</td></tr>
+                    </tbody>
+                </table>
+                <div class="badge-info-box" style="margin-top: 14px;">
+                    <strong>T6 Elite</strong> testers receive access to pre-release genetics before anyone else — plus direct line to the breeding team. Earned by invitation only based on outstanding contribution.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Current Testers -->
+    <div class="section-container">
+        <div class="section-header">
+            <h2>🌟 Current Testers</h2>
+            <p>Our active community grow team</p>
+        </div>
+        <div class="tester-grid">
+
+            <div class="tester-card">
+                <a href="INSERT_URL_HERE">
+                    <div class="tester-avatar featured">
+                        <img src="INSERT_IMAGE_HERE" alt="Featured tester" onerror="this.style.display='none'">
+                        <i class="fas fa-seedling" style="font-size:1.4rem;color:gold;"></i>
+                    </div>
+                </a>
+                <div class="tester-name">@featured <span class="badge gold">T5</span></div>
+            </div>
+
+            <div class="tester-card">
+                <a href="INSERT_URL_HERE">
+                    <div class="tester-avatar">
+                        <img src="INSERT_IMAGE_HERE" alt="Tester" onerror="this.style.display='none'">
+                        <i class="fas fa-user" style="font-size:1.4rem;"></i>
+                    </div>
+                </a>
+                <div class="tester-name">@tester2 <span class="badge">T3</span></div>
+            </div>
+
+            <div class="tester-card">
+                <a href="INSERT_URL_HERE">
+                    <div class="tester-avatar">
+                        <img src="INSERT_IMAGE_HERE" alt="Tester" onerror="this.style.display='none'">
+                        <i class="fas fa-user" style="font-size:1.4rem;"></i>
+                    </div>
+                </a>
+                <div class="tester-name">@tester3 <span class="badge">T2</span></div>
+            </div>
+
+            <div class="tester-card">
+                <a href="INSERT_URL_HERE">
+                    <div class="tester-avatar">
+                        <img src="INSERT_IMAGE_HERE" alt="Tester" onerror="this.style.display='none'">
+                        <i class="fas fa-user" style="font-size:1.4rem;"></i>
+                    </div>
+                </a>
+                <div class="tester-name">@tester4 <span class="badge">T4</span></div>
+            </div>
+
+            <div class="tester-card">
+                <a href="INSERT_URL_HERE">
+                    <div class="tester-avatar">
+                        <img src="INSERT_IMAGE_HERE" alt="Tester" onerror="this.style.display='none'">
+                        <i class="fas fa-user" style="font-size:1.4rem;"></i>
+                    </div>
+                </a>
+                <div class="tester-name">@tester5 <span class="badge">T1</span></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Past Runs & Upcoming Tests -->
+    <div class="two-col" style="padding: 0; margin-bottom: 25px;">
+
+        <div class="section-container" style="margin-bottom: 0;">
+            <div class="section-header">
+                <h2>📸 Past Test Runs</h2>
+                <p>Real grows from real testers</p>
+            </div>
+            <div class="photo-grid">
+                <div class="photo-placeholder"><i class="fas fa-camera" style="margin-right:6px;"></i> Photo</div>
+                <div class="photo-placeholder"><i class="fas fa-camera" style="margin-right:6px;"></i> Photo</div>
+                <div class="photo-placeholder"><i class="fas fa-camera" style="margin-right:6px;"></i> Photo</div>
+            </div>
+            <a href="#" class="btn-secondary">View All Grows</a>
+        </div>
+
+        <div class="section-container" style="margin-bottom: 0;">
+            <div class="section-header">
+                <h2>🔮 Upcoming Tests</h2>
+                <p>Unreleased genetics — testers only</p>
+            </div>
+            <div class="upcoming-grid" style="grid-template-columns: 1fr 1fr; padding: 20px;">
+                <div class="upcoming-card">
+                    <span class="lock-icon">🔒</span>
+                    STRAIN 1
+                </div>
+                <div class="upcoming-card">
+                    <span class="lock-icon">🔒</span>
+                    STRAIN 2
+                </div>
+                <div class="upcoming-card">
+                    <span class="lock-icon">🔒</span>
+                    STRAIN 3
+                </div>
+                <div class="upcoming-card">
+                    <span class="lock-icon">🔒</span>
+                    STRAIN 4
+                </div>
+            </div>
+            <a href="#application" class="btn-secondary">Apply to Test</a>
+        </div>
+
+    </div>
+
+    <!-- Application Form -->
+    <div id="application" class="section-container">
+        <div class="section-header">
+            <h2>📝 Tester Application</h2>
+            <p>We review every application personally — be thorough!</p>
+        </div>
+        <div class="form-section">
+            <p class="form-intro">🌿 All fields help us find the best testers. The more detail you give us, the better your chances. We typically respond within 1–2 weeks.</p>
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Full Name <span class="req">*</span></label>
+                    <input type="text" id="f-name" placeholder="Your name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address <span class="req">*</span></label>
+                    <input type="email" id="f-email" placeholder="you@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Province <span class="req">*</span></label>
+                    <select id="f-province" required>
+                        <option value="">— Select Province —</option>
+                        <option>Alberta</option>
+                        <option>British Columbia</option>
+                        <option>Manitoba</option>
+                        <option>New Brunswick</option>
+                        <option>Newfoundland & Labrador</option>
+                        <option>Nova Scotia</option>
+                        <option>Ontario</option>
+                        <option>Prince Edward Island</option>
+                        <option>Quebec</option>
+                        <option>Saskatchewan</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Previous Noyes Boys Customer?</label>
+                    <select id="f-customer">
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Years Growing</label>
+                    <input type="number" id="f-years" placeholder="e.g. 3" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Social Media Followers (approx)</label>
+                    <input type="number" id="f-followers" placeholder="e.g. 1500" min="0">
+                </div>
+
+                <hr class="form-divider">
+
+                <div class="form-group full-width">
+                    <label>Grow Setup</label>
+                    <textarea id="f-setup" placeholder="Indoor / outdoor, tent size, lights, medium, watering system, etc."></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Social Media Links</label>
+                    <textarea id="f-social" placeholder="Instagram, Facebook, YouTube, TikTok — paste any links"></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Why should we pick you? <span class="req">*</span></label>
+                    <textarea id="f-why" style="min-height: 120px;" placeholder="Tell us what makes you a great tester — documentation quality, community presence, grow experience, past test runs, etc." required></textarea>
+                </div>
+
+            </div>
+            <button class="submit-btn" type="button" id="submitBtn" onclick="submitApplication()">
+                <i class="fas fa-seedling"></i>
+                Submit Application
+            </button>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div id="faq" class="section-container">
+        <div class="section-header">
+            <h2>❓ Frequently Asked Questions</h2>
+            <p>Everything you need to know before applying</p>
+        </div>
+        <div class="faq-list">
+
+            <div class="faq-group-label">🌱 The Basics</div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">What do testers actually receive?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>Testers receive free seeds from unreleased genetics before they go to public drop. The number of seeds per run depends on the strain and your tier level. Seeds are provided at no cost — you just grow them, document the run, and share your results with the community.</p></div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Is there any cost to participate?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>The seeds themselves are free. <strong>[UPDATE: add your shipping policy here — covered by us / covered by tester / depends on order size.]</strong> Your only real investment is the time and effort to grow and document the run properly.</p></div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Do I have to be an experienced grower to apply?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>Not necessarily. We welcome growers of all experience levels — what matters more is your commitment to documenting the grow thoroughly and sharing honest feedback. That said, if you're a complete beginner, be upfront about it in your application so we can match you with appropriate genetics.</p></div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Do I need a large social media following to be accepted?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>No — follower count is one factor but it's not the most important one. A grower with 200 followers who posts detailed, high-quality content is more valuable to us than someone with 10,000 followers who posts nothing. Quality and consistency beat reach every time.</p></div>
+            </div>
+
+            <div class="faq-group-label">📋 Requirements & Commitments</div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">How long does a test run take?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>From seed to harvest you're typically looking at <strong>[UPDATE: X–X weeks]</strong> depending on the strain and your grow setup. We'll give you the expected flowering time for each test strain upfront so you can plan accordingly before committing to a run.</p></div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">What kind of documentation is required?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>We expect regular updates throughout the grow — at minimum: germination, early veg, late veg, early flower, mid flower, and harvest. Photos are essential. Notes on growth patterns, smell, structure, and any issues you encounter are hugely valuable. A final harvest report with yield and smoke report is required to complete a run.</p></div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Where do I post my updates?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>You can post in our private Facebook group, tag us on Instagram, or both. Posting publicly and tagging us helps the brand and helps your tier rating. If you prefer to keep things private, the Facebook group is the minimum requirement.</p></div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">What if my grow fails or I run into problems?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>Things happen — pests, equipment failure, life getting in the way. Just communicate with us early. A documented failed run is still useful data. What we can't work with is silence. If you ghost a run without reaching out, it will affect your standing in the program.</p></div>
+            </div>
+
+            <div class="faq-group-label">🔒 Rules & Restrictions</div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Can I clone or mother the test seeds?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>No. Absolutely not. This is a hard rule and a dealbreaker. Test seeds are provided strictly for personal grow documentation. No cloning, no mothering, no passing cuttings to anyone. Violations will result in immediate removal from the program.</p></div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Can I share or give away the seeds I receive?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>No. Test seeds are for your grow only. They are unreleased genetics and sharing them outside the program undermines the whole point of the test process. Keep them to yourself until you pop them.</p></div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Can I grow multiple test strains at the same time?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>Yes, as long as you can document each one properly and keep them separate and identifiable throughout the run. Don't commit to more than your setup can handle — a thorough run on one strain is better than a sloppy run on three.</p></div>
+            </div>
+
+            <div class="faq-group-label">⬆️ Tiers & Progression</div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">How do I move up tiers?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>Tier progression is based on a combination of: quality and consistency of your documentation, community engagement (posting, tagging, responding to comments), number of completed runs, and honest detailed feedback. We review tester standing periodically — you don't apply for a promotion, you earn it. <strong>[UPDATE: review period is approximately every X months.]</strong></p></div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">What does Tier 6 actually get you?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>T6 is our elite pre-release team — invite only. T6 testers get access to genetics before they're even announced publicly, have direct communication with the breeding team, and may be involved in naming or shaping future strains. It's the highest level of involvement we offer and it's earned, not applied for.</p></div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Can I lose my tier ranking?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>Yes. Inactivity, poor documentation, rule violations, or lack of communication can result in a tier demotion or removal from the program entirely. We want testers who are genuinely invested — not just collecting free seeds.</p></div>
+            </div>
+
+            <div class="faq-group-label">📬 Applications & Process</div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">How long does it take to hear back after applying?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>We aim to review all applications within 1–2 weeks. We read every one personally so it's not automated. If you haven't heard back after 2 weeks, feel free to follow up via our contact page.</p></div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">What happens after I'm accepted?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>You'll be contacted by email with next steps. We'll get you added to the private Facebook group, assign you a starting tier badge, and loop you in on the next available test run. We'll give you full strain info, expected timelines, and exactly what we're looking to learn from the grow.</p></div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-q" onclick="toggleFaq(this)">Can I reapply if I'm not accepted?<span class="faq-arrow">▾</span></button>
+                <div class="faq-a"><p>Yes. Not being accepted right away doesn't mean never — it might just be timing, capacity, or we need more info. Wait at least <strong>[UPDATE: X weeks/months]</strong> before reapplying and give us more detail the second time around.</p></div>
+            </div>
+
+        </div>
+    </div>
+
+</div><!-- /container -->
+
+<script>
+function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = btn.classList.contains('open');
+    btn.classList.toggle('open', !isOpen);
+    answer.style.display = isOpen ? 'none' : 'block';
+}
+
+function submitApplication() {
+    const name     = document.getElementById('f-name').value.trim();
+    const email    = document.getElementById('f-email').value.trim();
+    const province = document.getElementById('f-province').value;
+    const why      = document.getElementById('f-why').value.trim();
+
+    if (!name || !email || !province || !why) {
+        alert('Please fill in the required fields: Name, Email, Province, and "Why you?"');
+        return;
+    }
+
+    const customer  = document.getElementById('f-customer').value;
+    const years     = document.getElementById('f-years').value || 'Not specified';
+    const followers = document.getElementById('f-followers').value || 'Not specified';
+    const setup     = document.getElementById('f-setup').value.trim() || 'Not provided';
+    const social    = document.getElementById('f-social').value.trim() || 'Not provided';
+
+    const subject = encodeURIComponent('Noyes Boys Tester Application — ' + name);
+    const body = encodeURIComponent(
+        'NOYES BOYS TESTER APPLICATION\n' +
+        '================================\n\n' +
+        'NAME:             ' + name + '\n' +
+        'EMAIL:            ' + email + '\n' +
+        'PROVINCE:         ' + province + '\n' +
+        'PREVIOUS CUSTOMER: ' + customer + '\n' +
+        'YEARS GROWING:    ' + years + '\n' +
+        'FOLLOWERS (approx): ' + followers + '\n\n' +
+        '--- GROW SETUP ---\n' + setup + '\n\n' +
+        '--- SOCIAL MEDIA LINKS ---\n' + social + '\n\n' +
+        '--- WHY I SHOULD BE A TESTER ---\n' + why + '\n'
+    );
+
+    // ← Replace with your email address
+    window.location.href = 'mailto:YOUR@EMAIL.COM?subject=' + subject + '&body=' + body;
+
+    const btn = document.getElementById('submitBtn');
+    btn.innerHTML = '<i class="fas fa-check"></i> Opening Email Client...';
+    btn.style.background = 'linear-gradient(135deg, #22c55e, #16a34a)';
+    btn.disabled = true;
+    setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-seedling"></i> Submit Application';
+        btn.style.background = '';
+        btn.disabled = false;
+    }, 4000);
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+});
+</script>
+</body>
+</html>
