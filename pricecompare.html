@@ -417,7 +417,7 @@
                     </select>
                 </div>
 
-                <button class="calc-btn" onclick="calculate()">
+                <button class="calc-btn" onclick="calculate()" window.location.href = "/pricecompare#resultspanel";>
                     <i class="fas fa-calculator"></i> Compare Prices
                 </button>
 
@@ -466,7 +466,7 @@
                 </div>
 
                 <!-- Results table -->
-                <div class="panel" style="padding:0;overflow:hidden;">
+                <div class="panel" style="padding:0;overflow:hidden;" id="resultspanel">
                     <table class="results-table" id="resultsTable">
                         <thead>
                             <tr>
