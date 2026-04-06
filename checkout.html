@@ -34,26 +34,12 @@
             --muted: #94a3b8;
             --red: #ef4444;
             --orange: #f97316;
+            --gold: #fbbf24;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            padding-top: 80px;
-            min-height: 100vh;
-            zoom: 0.50;
-        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding-top: 80px; min-height: 100vh; zoom: 0.50; }
 
-        header {
-            background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%);
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.4);
-        }
+        header { background: linear-gradient(135deg, #1a4d3a 0%, #2d5a27 100%); padding: 1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 2px 20px rgba(0,0,0,0.4); }
         nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         .logo { display: flex; align-items: center; font-family: 'Oswald', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--green); text-decoration: none; }
         .logo-img { width: 42px; height: 42px; margin-right: 10px; border-radius: 50%; }
@@ -70,31 +56,64 @@
         .panel:last-child { margin-bottom: 0; }
         .panel-title { font-family: 'Oswald', sans-serif; font-size: 1.2rem; font-weight: 600; color: var(--green); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.5rem; }
 
+        /* Order summary */
         .order-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 0.85rem 0; border-bottom: 1px solid var(--border); }
         .order-item:last-child { border-bottom: none; }
         .item-name { font-weight: 600; color: var(--green); font-size: 0.92rem; margin-bottom: 0.15rem; }
         .item-meta { font-size: 0.8rem; color: var(--muted); }
         .item-price { font-weight: 700; color: var(--text); white-space: nowrap; padding-left: 1rem; font-size: 0.9rem; }
-
         .totals { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 2px solid var(--green); }
         .total-row { display: flex; justify-content: space-between; padding: 0.3rem 0; font-size: 0.88rem; color: var(--muted); }
         .total-row.discount { color: var(--green); font-weight: 500; }
         .total-row.grand { font-size: 1.15rem; font-weight: 700; color: var(--text); margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border); }
         .total-row.grand span:last-child { color: var(--green); }
 
+        /* ── TRUST PANEL ── */
+        .trust-panel { background: linear-gradient(135deg, rgba(74,222,128,0.06) 0%, rgba(34,197,94,0.03) 100%); border: 1px solid rgba(74,222,128,0.2); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.25rem; }
+        .trust-badges { display: flex; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+        .trust-badge { display: flex; align-items: center; gap: 0.4rem; background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.25); border-radius: 8px; padding: 0.5rem 0.75rem; font-size: 0.78rem; font-weight: 600; color: var(--green); flex: 1; min-width: 120px; justify-content: center; text-align: center; }
+        .trust-badge i { font-size: 0.9rem; }
+
+        .review-card { background: var(--surface); border-radius: 10px; padding: 1rem; border: 1px solid var(--border); }
+        .review-stars { color: var(--gold); font-size: 0.9rem; margin-bottom: 0.4rem; letter-spacing: 1px; }
+        .review-text { font-size: 0.83rem; color: var(--text); line-height: 1.6; font-style: italic; margin-bottom: 0.5rem; }
+        .review-author { font-size: 0.76rem; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
+        .review-link { color: var(--green); text-decoration: none; font-size: 0.76rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.3rem; margin-top: 0.75rem; }
+        .review-link:hover { text-decoration: underline; }
+
+        /* ── REVIEW CAROUSEL ── */
+        .review-carousel { position: relative; overflow: hidden; }
+        .review-slide { display: none; animation: fadeSlide 0.4s ease; }
+        .review-slide.active { display: block; }
+        @keyframes fadeSlide { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+        .carousel-dots { display: flex; justify-content: center; gap: 6px; margin-top: 0.75rem; }
+        .carousel-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); cursor: pointer; transition: background 0.2s; border: none; padding: 0; }
+        .carousel-dot.active { background: var(--green); }
+
+        /* ── ORDER PERKS ── */
+        .item-perks { margin-top: 0.3rem; display: flex; flex-direction: column; gap: 0.18rem; }
+        .perk-line { font-size: 0.74rem; display: flex; align-items: center; gap: 0.35rem; }
+        .perk-line.earned { color: var(--green); }
+        .perk-line.locked { color: var(--border); }
+        .perk-line i { font-size: 0.7rem; flex-shrink: 0; }
+
+        /* ── ORDER BONUS BARS (stickers / merch) ── */
+        .bonus-bars { margin-top: 1rem; padding-top: 0.85rem; border-top: 1px dashed var(--border); display: flex; flex-direction: column; gap: 0.5rem; }
+        .bonus-bar { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0.75rem; border-radius: 8px; font-size: 0.8rem; font-weight: 600; border: 1px solid; transition: all 0.3s; }
+        .bonus-bar.earned { background: rgba(74,222,128,0.1); border-color: rgba(74,222,128,0.35); color: var(--green); }
+        .bonus-bar.locked { background: rgba(255,255,255,0.02); border-color: var(--border); color: var(--border); }
+        .bonus-bar i { font-size: 0.85rem; flex-shrink: 0; }
+        .bonus-bar .bar-progress { flex: 1; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; margin-left: auto; max-width: 60px; }
+        .bonus-bar .bar-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width 0.5s ease; }
+
+        /* Form */
         .form-section { margin-bottom: 1.5rem; }
         .form-section-title { font-family: 'Oswald', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--green); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.85rem; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
         .form-group { margin-bottom: 0.7rem; }
         .form-group label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--muted); margin-bottom: 0.3rem; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 0.65rem 0.85rem; background: var(--surface);
-            border: 1.5px solid var(--border); border-radius: 8px; color: var(--text);
-            font-size: 0.88rem; font-family: 'Inter', sans-serif; transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(74,222,128,0.12);
-        }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.65rem 0.85rem; background: var(--surface); border: 1.5px solid var(--border); border-radius: 8px; color: var(--text); font-size: 0.88rem; font-family: 'Inter', sans-serif; transition: border-color 0.2s, box-shadow 0.2s; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(74,222,128,0.12); }
         .form-group input.err { border-color: var(--red) !important; }
         .form-group input.ok { border-color: var(--green-dark); }
         .err-msg { font-size: 0.76rem; color: var(--red); margin-top: 0.25rem; display: none; }
@@ -102,16 +121,23 @@
         .hint { font-size: 0.76rem; color: var(--muted); margin-top: 0.25rem; }
         select option { background: var(--surface); }
 
+        /* ── BILLING ADDRESS TAB ── */
+        .billing-toggle { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; cursor: pointer; }
+        .billing-toggle input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--green); cursor: pointer; }
+        .billing-toggle label { font-size: 0.85rem; color: var(--muted); cursor: pointer; font-weight: 500; }
+        .billing-section { display: none; background: rgba(249,115,22,0.05); border: 1px solid rgba(249,115,22,0.2); border-radius: 10px; padding: 1rem; margin-top: 0.5rem; }
+        .billing-section.show { display: block; }
+        .billing-note { font-size: 0.78rem; color: var(--orange); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.4rem; }
+
+        /* Address status */
         .address-status { display: none; align-items: center; gap: 0.5rem; padding: 0.55rem 0.85rem; border-radius: 8px; font-size: 0.81rem; font-weight: 500; margin-top: 0.4rem; }
         .address-status.checking { display: flex; background: rgba(74,222,128,0.06); color: var(--muted); border: 1px solid var(--border); }
         .address-status.valid { display: flex; background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.3); }
         .address-status.invalid { display: flex; background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
 
+        /* Shipping */
         .shipping-options { display: flex; flex-direction: column; gap: 0.65rem; }
-        .shipping-opt {
-            background: var(--surface); border: 2px solid var(--border); border-radius: 10px;
-            padding: 0.9rem 3.5rem 0.9rem 1rem; cursor: pointer; transition: all 0.2s; position: relative;
-        }
+        .shipping-opt { background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 0.9rem 3.5rem 0.9rem 1rem; cursor: pointer; transition: all 0.2s; position: relative; }
         .shipping-opt:hover { border-color: rgba(74,222,128,0.4); }
         .shipping-opt.selected { border-color: var(--green); background: rgba(74,222,128,0.06); }
         .shipping-opt input[type="radio"] { display: none; }
@@ -120,6 +146,7 @@
         .s-price { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); font-weight: 700; color: var(--green); font-size: 0.88rem; }
         .s-badge { display: inline-block; background: rgba(74,222,128,0.15); color: var(--green); font-size: 0.68rem; font-weight: 600; padding: 0.12rem 0.4rem; border-radius: 4px; margin-left: 0.35rem; text-transform: uppercase; }
 
+        /* Promo */
         .promo-row { display: flex; gap: 0.5rem; align-items: flex-start; }
         .promo-row .form-group { margin: 0; flex: 1; }
         .apply-btn { padding: 0.65rem 1.1rem; background: var(--surface); border: 1.5px solid var(--border); border-radius: 8px; color: var(--green); font-size: 0.83rem; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; font-family: 'Inter', sans-serif; flex-shrink: 0; }
@@ -138,28 +165,51 @@
         .check-item.done { color: var(--green); }
         .check-icon { width: 18px; text-align: center; font-size: 0.8rem; flex-shrink: 0; }
 
-        /* PayPal locked box */
-        .pp-locked {
-            background: rgba(74,222,128,0.03); border: 2px dashed var(--border); border-radius: 12px;
-            padding: 1.5rem; text-align: center; color: var(--muted); font-size: 0.86rem; line-height: 1.7;
-        }
+        /* PayPal lock */
+        .pp-locked { background: rgba(74,222,128,0.03); border: 2px dashed var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; color: var(--muted); font-size: 0.86rem; line-height: 1.7; }
         .pp-locked .lock-ico { font-size: 2rem; color: var(--border); margin-bottom: 0.5rem; display: block; }
         .lock-list { list-style: none; margin-top: 0.65rem; }
         .lock-list li { padding: 0.18rem 0; font-size: 0.83rem; }
         .lock-list li.done { color: var(--green); }
         .lock-list li.pending { color: var(--muted); }
-
         #paypal-button-container { min-height: 50px; }
-        .pp-note { text-align: center; font-size: 0.76rem; color: var(--muted); margin-top: 0.65rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
+        .pp-note { text-align: center; font-size: 0.76rem; color: var(--muted); margin-bottom: 0.6rem; display: none; align-items: center; justify-content: center; gap: 0.4rem; }
+        .paypal-zone { margin-top: 1.5rem; }
 
+        /* ── ORDER REVIEW MODAL ── */
+        .review-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 8000; align-items: center; justify-content: center; padding: 1rem; }
+        .review-overlay.show { display: flex; }
+        .review-modal { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: 2rem; max-width: 540px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; }
+        .review-modal h2 { font-family: 'Oswald', sans-serif; font-size: 1.6rem; color: var(--green); margin-bottom: 1.25rem; letter-spacing: 1px; display: flex; align-items: center; gap: 0.5rem; }
+        .review-section { margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
+        .review-section:last-of-type { border-bottom: none; margin-bottom: 0; }
+        .review-section-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 0.5rem; }
+        .review-section-value { font-size: 0.9rem; color: var(--text); line-height: 1.6; }
+        .review-section-value.green { color: var(--green); font-weight: 600; }
+        .review-item-line { display: flex; justify-content: space-between; padding: 0.3rem 0; font-size: 0.87rem; }
+        .review-total-line { display: flex; justify-content: space-between; padding: 0.5rem 0; font-size: 1rem; font-weight: 700; color: var(--green); border-top: 2px solid var(--green); margin-top: 0.5rem; }
+        .review-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+        .review-back-btn { flex: 1; padding: 0.85rem; background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; color: var(--muted); font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+        .review-back-btn:hover { border-color: var(--muted); color: var(--text); }
+        .review-confirm-btn { flex: 2; padding: 0.85rem; background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%); border: none; border-radius: 10px; color: #0a0a0a; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; }
+        .review-confirm-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(74,222,128,0.4); }
+
+        /* Review trigger button */
+        .review-order-btn { width: 100%; padding: 1rem; background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%); border: none; border-radius: 10px; color: #0a0a0a; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: 'Oswald', sans-serif; letter-spacing: 2px; text-transform: uppercase; transition: all 0.2s; display: none; margin-bottom: 0.75rem; }
+        .review-order-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(74,222,128,0.4); }
+        .review-order-btn.visible { display: block; }
+
+        /* Checkbox */
         .checkbox-group { display: flex; align-items: center; gap: 0.55rem; margin: 0.5rem 0; }
         .checkbox-group input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--green); }
         .checkbox-group label { font-size: 0.83rem; color: var(--muted); cursor: pointer; }
 
+        /* States */
         .state-box { text-align: center; padding: 4rem 2rem; color: var(--muted); }
         .state-box h3 { font-family: 'Oswald', sans-serif; color: var(--red); font-size: 1.6rem; margin-bottom: 1rem; }
         .state-box a { color: var(--green); text-decoration: none; font-weight: 600; }
 
+        /* Success overlay */
         .success-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.93); z-index: 9999; align-items: center; justify-content: center; }
         .success-overlay.show { display: flex; }
         .success-modal { background: var(--surface2); border: 2px solid var(--green); border-radius: 20px; padding: 3rem; max-width: 480px; width: 90%; text-align: center; }
@@ -168,17 +218,12 @@
         .success-modal p { color: var(--muted); line-height: 1.7; margin-bottom: 0.5rem; font-size: 0.88rem; }
         .success-order-id { font-family: monospace; background: var(--surface); padding: 0.5rem 1rem; border-radius: 6px; color: var(--green); font-size: 1rem; margin: 1rem 0; display: inline-block; }
 
-        .paypal-zone { margin-top: 1.5rem; }
- 
         @media (max-width: 768px) {
             .checkout-grid { grid-template-columns: 1fr; }
             .form-row { grid-template-columns: 1fr; }
             .checkout-title { font-size: 2rem; }
-            /* Fix PayPal iframe being clipped by body zoom:0.50 on mobile */
-            .paypal-zone {
-                zoom: 2;
-                -moz-transform: scale(1);
-            }
+            .trust-badges { gap: 0.5rem; }
+            .paypal-zone { zoom: 2; -moz-transform: scale(1); }
         }
     </style>
 </head>
@@ -217,7 +262,7 @@
 
             <div id="checkoutContent" class="checkout-grid" style="display:none;">
 
-                <!-- LEFT -->
+                <!-- ── LEFT COLUMN ── -->
                 <div>
                     <!-- Order Summary -->
                     <div class="panel">
@@ -241,9 +286,54 @@
                             <button class="apply-btn" onclick="applyPromo()">Apply</button>
                         </div>
                         <div id="promoStatus" class="promo-status"></div>
-                        <p class="hint" style="margin-top:0.5rem;">
-                            Current codes are on our <a href="FeminizedSeedsHomepage.html" style="color:var(--green);">homepage</a>. Only this month's codes work.
-                        </p>
+                        <p class="hint" style="margin-top:0.5rem;">Current codes on our <a href="FeminizedSeedsHomepage.html" style="color:var(--green);">homepage</a>. Only this month's codes work.</p>
+                    </div>
+
+                    <!-- ── TRUST PANEL ── -->
+                    <div class="trust-panel">
+                        <div class="trust-badges">
+                            <div class="trust-badge"><i class="fas fa-seedling"></i> 95%+ Germination Guaranteed</div>
+                            <div class="trust-badge"><i class="fas fa-shield-alt"></i> Discreet Packaging</div>
+                            <div class="trust-badge"><i class="fas fa-maple-leaf"></i> Canadian Bred</div>
+                        </div>
+                        <!-- Most recent reviews — rotating carousel -->
+                        <div class="review-carousel" id="reviewCarousel">
+
+                            <div class="review-slide active">
+                                <div class="review-card">
+                                    <div class="review-stars">★★★★★</div>
+                                    <div class="review-text">"Ordered the Purple Rainbow pack — 5/5 seeds popped within 48 hours. The plants are absolutely gorgeous, couldn't be happier with the genetics. Fast shipping too!"</div>
+                                    <div class="review-author"><span>— Mike T., Ontario 🇨🇦</span><span>Verified buyer</span></div>
+                                </div>
+                            </div>
+
+                            <div class="review-slide">
+                                <div class="review-card">
+                                    <div class="review-stars">★★★★★</div>
+                                    <div class="review-text">"Second time ordering from Noyes Boys and will not be the last. The Cake Breath is fire — dense, purple, and smells unreal. Collector cards are a nice touch too."</div>
+                                    <div class="review-author"><span>— Sarah K., BC 🇨🇦</span><span>Verified buyer</span></div>
+                                </div>
+                            </div>
+
+                            <div class="review-slide">
+                                <div class="review-card">
+                                    <div class="review-stars">★★★★★</div>
+                                    <div class="review-text">"Tried the Biscotti Rocks outdoor this summer — absolute unit of a plant. Mold resistant, finished early, and the yield was crazy. 100% Canadian genetics done right."</div>
+                                    <div class="review-author"><span>— Dave R., Alberta 🇨🇦</span><span>Verified buyer</span></div>
+                                </div>
+                            </div>
+
+                            <div class="review-slide">
+                                <div class="review-card">
+                                    <div class="review-stars">★★★★★</div>
+                                    <div class="review-text">"Germination rate was perfect, packaging was super discreet, and the waterproof plant tags were a thoughtful bonus. Already recommended to three friends."</div>
+                                    <div class="review-author"><span>— Jordan M., Quebec 🇨🇦</span><span>Verified buyer</span></div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="carousel-dots" id="carouselDots"></div>
+                        <a href="reviews.html" class="review-link"><i class="fas fa-star"></i> See all reviews</a>
                     </div>
 
                     <!-- Checklist -->
@@ -254,16 +344,17 @@
                         <div class="check-item" id="chk-address"><span class="check-icon"><i class="fas fa-circle" style="color:var(--border);"></i></span> Full Canadian address entered</div>
                         <div class="check-item" id="chk-verified"><span class="check-icon"><i class="fas fa-circle" style="color:var(--border);"></i></span> Address verified as Canadian</div>
                         <div class="check-item" id="chk-shipping"><span class="check-icon"><i class="fas fa-circle" style="color:var(--border);"></i></span> Shipping method selected</div>
-                        <p class="hint" style="margin-top:0.75rem;">All five must be green before PayPal unlocks.</p>
+                        <p class="hint" style="margin-top:0.75rem;">All five must be green to unlock payment.</p>
                     </div>
                 </div>
 
-                <!-- RIGHT -->
+                <!-- ── RIGHT COLUMN ── -->
                 <div class="panel">
                     <div class="panel-title"><i class="fas fa-user"></i> Your Information</div>
 
                     <form id="checkoutForm" novalidate>
 
+                        <!-- Personal -->
                         <div class="form-section">
                             <div class="form-section-title">Personal Details</div>
                             <div class="form-row">
@@ -286,6 +377,7 @@
                             </div>
                         </div>
 
+                        <!-- Shipping Address -->
                         <div class="form-section">
                             <div class="form-section-title">🇨🇦 Canadian Shipping Address</div>
                             <div class="notice canada">
@@ -329,8 +421,51 @@
                                 <i class="fas fa-circle-notch fa-spin"></i>
                                 <span id="addressStatusText">Verifying…</span>
                             </div>
+
+                            <!-- ── BILLING ADDRESS TOGGLE ── -->
+                            <div class="billing-toggle" style="margin-top:1rem;">
+                                <input type="checkbox" id="billingDifferent" onchange="toggleBilling()">
+                                <label for="billingDifferent">My billing address is different from my shipping address</label>
+                            </div>
+                            <div class="billing-section" id="billingSection">
+                                <div class="billing-note"><i class="fas fa-info-circle"></i> Enter the address your payment card is registered to. This helps PayPal approve your transaction.</div>
+                                <div class="form-group">
+                                    <label>Billing Street Address</label>
+                                    <input type="text" id="billingStreet" placeholder="456 Oak Avenue">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Billing City</label>
+                                        <input type="text" id="billingCity" placeholder="Vancouver">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Billing Postal Code</label>
+                                        <input type="text" id="billingPostal" placeholder="V6B 1A1" maxlength="7">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Billing Province</label>
+                                    <select id="billingProvince">
+                                        <option value="">Select province…</option>
+                                        <option value="AB">Alberta</option>
+                                        <option value="BC">British Columbia</option>
+                                        <option value="MB">Manitoba</option>
+                                        <option value="NB">New Brunswick</option>
+                                        <option value="NL">Newfoundland and Labrador</option>
+                                        <option value="NS">Nova Scotia</option>
+                                        <option value="NT">Northwest Territories</option>
+                                        <option value="NU">Nunavut</option>
+                                        <option value="ON">Ontario</option>
+                                        <option value="PE">Prince Edward Island</option>
+                                        <option value="QC">Quebec</option>
+                                        <option value="SK">Saskatchewan</option>
+                                        <option value="YT">Yukon</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
+                        <!-- Shipping Method -->
                         <div class="form-section">
                             <div class="form-section-title">Shipping Method *</div>
                             <div class="shipping-options">
@@ -355,14 +490,15 @@
                             </div>
                         </div>
 
+                        <!-- Order Items (readonly) -->
                         <div class="form-section">
                             <div class="form-section-title">Your Items</div>
                             <div class="form-group">
-                                <textarea id="orderDetails" rows="4" readonly
-                                    style="background:rgba(0,0,0,0.3);color:var(--green);resize:none;font-family:monospace;font-size:0.8rem;"></textarea>
+                                <textarea id="orderDetails" rows="4" readonly style="background:rgba(0,0,0,0.3);color:var(--green);resize:none;font-family:monospace;font-size:0.8rem;"></textarea>
                             </div>
                         </div>
 
+                        <!-- Notes -->
                         <div class="form-section">
                             <div class="form-section-title">Notes (optional)</div>
                             <div class="form-group">
@@ -370,14 +506,20 @@
                             </div>
                         </div>
 
+                        <!-- Newsletter -->
                         <div class="checkbox-group" style="margin-bottom:1.25rem;">
                             <input type="checkbox" id="newsletter">
                             <label for="newsletter">Notify me when a new strain drops</label>
                         </div>
 
                         <div class="notice">
-                            <strong>How it works:</strong> Fill in the form, then pay securely below via PayPal or card. We'll email your Invoice / Tracking number within 3 business days. 🍁
+                            <strong>How it works:</strong> Review your order, then pay securely via PayPal or card. We'll email your tracking number within 3 business days. 🍁
                         </div>
+
+                        <!-- ── ORDER REVIEW BUTTON (shows when checklist complete) ── -->
+                        <button type="button" class="review-order-btn" id="reviewOrderBtn" onclick="openReviewModal()">
+                            <i class="fas fa-eye"></i> Review Order Before Paying
+                        </button>
 
                         <!-- PayPal Zone -->
                         <div class="paypal-zone">
@@ -387,7 +529,7 @@
                                 Complete the checklist to unlock:
                                 <ul class="lock-list" id="lockList"></ul>
                             </div>
-                            <div class="pp-note" id="ppNote" style="display:none; margin-bottom:0.6rem;">
+                            <div class="pp-note" id="ppNote" style="margin-bottom:0.6rem;">
                                 <i class="fas fa-lock" style="color:var(--green);"></i>
                                 Secured by PayPal — Visa, Mastercard, debit, or PayPal account accepted
                             </div>
@@ -400,12 +542,54 @@
         </div>
     </section>
 
+    <!-- ── ORDER REVIEW MODAL ── -->
+    <div class="review-overlay" id="reviewOverlay">
+        <div class="review-modal">
+            <h2><i class="fas fa-clipboard-check"></i> Review Your Order</h2>
+
+            <div class="review-section">
+                <div class="review-section-label">Delivering To</div>
+                <div class="review-section-value" id="rv-address"></div>
+            </div>
+
+            <div class="review-section">
+                <div class="review-section-label">Items</div>
+                <div id="rv-items"></div>
+            </div>
+
+            <div class="review-section">
+                <div class="review-section-label">Shipping</div>
+                <div class="review-section-value" id="rv-shipping"></div>
+            </div>
+
+            <div class="review-section" id="rv-promo-section" style="display:none;">
+                <div class="review-section-label">Promo Applied</div>
+                <div class="review-section-value green" id="rv-promo"></div>
+            </div>
+
+            <div class="review-section">
+                <div class="review-section-label">Order Total</div>
+                <div class="review-total-line">
+                    <span>Total Due</span>
+                    <span id="rv-total"></span>
+                </div>
+            </div>
+
+            <div class="review-actions">
+                <button class="review-back-btn" onclick="closeReviewModal()"><i class="fas fa-arrow-left"></i> Go Back & Edit</button>
+                <button class="review-confirm-btn" onclick="confirmAndPay()"><i class="fas fa-lock"></i> Looks Good — Pay Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Overlay -->
     <div class="success-overlay" id="successOverlay">
         <div class="success-modal">
             <div class="success-icon">🌿</div>
             <h2>Order Confirmed!</h2>
             <div class="success-order-id" id="successOrderId"></div>
-            <p>Payment received! We'll email your Invoice / Tracking number within <strong>3 business days</strong>.</p>
+            <p>Payment received! We'll email your tracking number within <strong>3 business days</strong>.</p>
+            <p style="margin-top:0.5rem;">A confirmation has been sent to your email. 📧</p>
             <p style="margin-top:0.5rem;">Thank you for choosing Noyes Boys genetics! 🍁</p>
             <p style="margin-top:0.75rem;font-size:0.78rem;">Redirecting home shortly…</p>
         </div>
@@ -424,497 +608,380 @@ const MERCH_KEYWORDS = ["toque","sweater","shirt","flag","poster","merch","hoodi
 
 // ══════════════════════════════════════════════════════════
 // PROMO CODE DEFINITIONS
-// type options:
-//   "percent_all"      — % off entire order
-//   "percent_strains"  — % off only matching strains
-//   "percent_merch"    — % off merch items only
-//   "free_shipping"    — zeroes shipping cost, minOrder required
-//   "bogo"             — buy X get Y free from single seeds
 // ══════════════════════════════════════════════════════════
 const MONTHLY_DEALS = {
-    0:  { codes: {
-        "NEWYEAR25":  { type:"percent_strains", value:25, strains:LINE1,
-                        note:"25% OFF Line 1 strains only. Other items unaffected." },
-        "FREESHIP100":{ type:"free_shipping", minOrder:100,
-                        note:"Free shipping on orders $100+ CAD. (Usually requires $200 — enjoy the bonus!)" }
-    }},
-    1:  { codes: {
-        "PURPLE30":   { type:"percent_strains", value:30, strains:["purple rainbow"],
-                        note:"30% OFF Purple Rainbow only. Any quantity." },
-        "LOVE321":    { type:"bogo", buy:2, free:1, totalNeeded:3,
-                        note:"Buy 2 single seeds, get 1 FREE. Need exactly 3 single-seed items in cart." }
-    }},
-    2:  { codes: {
-        "OUTDOOR35":  { type:"percent_strains", value:35, strains:["citronoyes haze"],
-                        note:"35% OFF Citronoyes Haze only. Any quantity." },
-        "TALL20":     { type:"percent_strains", value:20, strains:TALL,
-                        note:"20% OFF tall strains: Citronoyes Haze, Noyes Haze, Larry Noyes, Super Larry, Citrus Squirts, Noyes Poison." }
-    }},
-    3:  { codes: {
-        "HAZE28":     { type:"percent_strains", value:28, strains:["noyes haze","citronoyes haze"],
-                        note:"28% OFF Noyes Haze or Citronoyes Haze. Any quantity." },
-        "GEODES15":   { type:"percent_strains", value:15, strains:LINE2,
-                        note:"15% OFF Line 2 Geode strains only." }
-    }},
-    4:  { codes: {
-        "SATIVA32":   { type:"percent_strains", value:32, strains:TALL,
-                        note:"32% OFF sativa strains: Citronoyes Haze, Noyes Haze, Larry Noyes, Super Larry, Citrus Squirts, Noyes Poison." },
-        "MAY532":     { type:"bogo", buy:3, free:2, totalNeeded:5,
-                        note:"Buy 3 get 2 FREE single seeds. Need 5 different single-seed strains in cart." }
-    }},
-    5:  { codes: {
-        "SUMMER33":   { type:"percent_strains", value:33, strains:LINE3,
-                        note:"33% OFF Line 3 OG strains only." },
-        "CAKE25":     { type:"percent_strains", value:25, strains:["cake breath"],
-                        note:"25% OFF Cake Breath only. Other items unaffected." }
-    }},
-    6:  { codes: {
-        "CANADA35":   { type:"percent_strains", value:35, strains:["mangonoyes kush"],
-                        note:"35% OFF Mangonoyes Kush only." },
-        "NOYES30":    { type:"percent_strains", value:30, strains:NOYES_CROSSES,
-                        note:"30% OFF all Noyes Kush crosses. Only eligible items discounted." }
-    }},
-    7:  { codes: {
-        "FAST22":     { type:"percent_all", value:22,
-                        note:"22% OFF your entire order (62-day strains special)." },
-        "BISCOTTI40": { type:"percent_strains", value:40, strains:["biscotti rocks"],
-                        note:"40% OFF Biscotti Rocks only." }
-    }},
-    8:  { codes: {
-        "LEARN26":    { type:"percent_strains", value:26, strains:LINE1,
-                        note:"26% OFF Line 1 strains only." },
-        "EXPERIMENT35":{ type:"percent_strains", value:35, strains:["yesno kush"],
-                        note:"35% OFF Yesno Kush only. Other items unaffected." }
-    }},
-    9:  { codes: {
-        "SPOOKY27":   { type:"percent_strains", value:27, strains:["purple rainbow"],
-                        note:"27% OFF Purple Rainbow only." },
-        "OG25":       { type:"percent_strains", value:25, strains:LINE3,
-                        note:"25% OFF Line 3 OG strains only." }
-    }},
-    10: { codes: {
-        "THANKS29":   { type:"percent_all", value:29,
-                        note:"29% OFF your entire order. Happy Thanksgiving! 🍂" },
-        "BULK743":    { type:"bogo", buy:4, free:3, totalNeeded:7,
-                        note:"Buy 4 single-seed strains, get 3 more FREE. Need 7 different single-seed strains in cart." }
-    }},
-    11: { codes: {
-        "HOLIDAY40":  { type:"percent_all", value:40,
-                        note:"40% OFF your entire order. Biggest sale of the year! 🎄" },
-        "MERCH25":    { type:"percent_merch", value:25,
-                        note:"25% OFF merch items (toques, sweaters, shirts, flags, posters)." },
-        "DOUBLE555":  { type:"bogo", buy:5, free:5, totalNeeded:5,
-                        note:"Buy 5 different single-seed strains, get 5 FREE (full double order). Need 5 different singles." }
-    }}
+    0:  { codes: { "NEWYEAR25":  { type:"percent_strains", value:25, strains:LINE1, note:"25% OFF Line 1 strains only." }, "FREESHIP100":{ type:"free_shipping", minOrder:100, note:"Free shipping on orders $100+ CAD." } }},
+    1:  { codes: { "PURPLE30":   { type:"percent_strains", value:30, strains:["purple rainbow"], note:"30% OFF Purple Rainbow only." }, "LOVE321":    { type:"bogo", buy:2, free:1, totalNeeded:3, note:"Buy 2 single seeds, get 1 FREE." } }},
+    2:  { codes: { "OUTDOOR35":  { type:"percent_strains", value:35, strains:["citronoyes haze"], note:"35% OFF Citronoyes Haze only." }, "TALL20":     { type:"percent_strains", value:20, strains:TALL, note:"20% OFF tall strains." } }},
+    3:  { codes: { "HAZE28":     { type:"percent_strains", value:28, strains:["noyes haze","citronoyes haze"], note:"28% OFF Noyes Haze or Citronoyes Haze." }, "GEODES15":   { type:"percent_strains", value:15, strains:LINE2, note:"15% OFF Line 2 Geode strains." } }},
+    4:  { codes: { "SATIVA32":   { type:"percent_strains", value:32, strains:TALL, note:"32% OFF sativa strains." }, "MAY532":     { type:"bogo", buy:3, free:2, totalNeeded:5, note:"Buy 3 get 2 FREE single seeds." } }},
+    5:  { codes: { "SUMMER33":   { type:"percent_strains", value:33, strains:LINE3, note:"33% OFF Line 3 OG strains." }, "CAKE25":     { type:"percent_strains", value:25, strains:["cake breath"], note:"25% OFF Cake Breath only." } }},
+    6:  { codes: { "CANADA35":   { type:"percent_strains", value:35, strains:["mangonoyes kush"], note:"35% OFF Mangonoyes Kush only." }, "NOYES30":    { type:"percent_strains", value:30, strains:NOYES_CROSSES, note:"30% OFF all Noyes Kush crosses." } }},
+    7:  { codes: { "FAST22":     { type:"percent_all", value:22, note:"22% OFF your entire order." }, "BISCOTTI40": { type:"percent_strains", value:40, strains:["biscotti rocks"], note:"40% OFF Biscotti Rocks only." } }},
+    8:  { codes: { "LEARN26":    { type:"percent_strains", value:26, strains:LINE1, note:"26% OFF Line 1 strains." }, "EXPERIMENT35":{ type:"percent_strains", value:35, strains:["yesno kush"], note:"35% OFF Yesno Kush only." } }},
+    9:  { codes: { "SPOOKY27":   { type:"percent_strains", value:27, strains:["purple rainbow"], note:"27% OFF Purple Rainbow only." }, "OG25":       { type:"percent_strains", value:25, strains:LINE3, note:"25% OFF Line 3 OG strains." } }},
+    10: { codes: { "THANKS29":   { type:"percent_all", value:29, note:"29% OFF your entire order." }, "BULK743":    { type:"bogo", buy:4, free:3, totalNeeded:7, note:"Buy 4 singles, get 3 FREE." } }},
+    11: { codes: { "HOLIDAY40":  { type:"percent_all", value:40, note:"40% OFF your entire order." }, "MERCH25":    { type:"percent_merch", value:25, note:"25% OFF merch items." }, "DOUBLE555":  { type:"bogo", buy:5, free:5, totalNeeded:5, note:"Buy 5 singles, get 5 FREE." } }}
 };
 
-const CUR_MONTH  = new Date().getMonth();
+const CUR_MONTH   = new Date().getMonth();
 const VALID_CODES = MONTHLY_DEALS[CUR_MONTH]?.codes || {};
 
 // ── State
-let appliedPromo    = null;
-let cartData        = null;
-let selectedShipping= null;
-let addressValidated= false;
-let addressValidating=false;
-let addrTimer       = null;
-let ppRendered      = false;
-let ppAttempts      = 0;
+let appliedPromo     = null;
+let cartData         = null;
+let selectedShipping = null;
+let addressValidated = false;
+let addressValidating= false;
+let addrTimer        = null;
+let ppRendered       = false;
+let ppAttempts       = 0;
+let billingDiff      = false;
 
 const SHIP_COSTS = { 'free-bubble':0, 'tracked-25':25, 'free-upgrade':0 };
+const SHIP_LABELS = { 'free-bubble':'No-Liability Bubble Mailer (FREE)', 'tracked-25':'Canada Post Box + Tracking (+$25 CAD)', 'free-upgrade':'FREE Canada Post Box + Tracking + Bonus Seeds' };
 
 // ══════════════════════════════════════════════════════════
 // HELPERS
 // ══════════════════════════════════════════════════════════
 function norm(s){ return (s||'').toLowerCase().trim().replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' '); }
-
-function itemMatchesStrains(item, list){
-    const n = norm(item.strainName || item.name || '');
-    return list.some(s => n===s || n.includes(s) || s.includes(n));
-}
-
-function getSingleSeedItems(){
-    if(!cartData) return [];
-    return cartData.items.filter(item => {
-        const v = norm(item.variant || item.variantText || '');
-        // Single seed = quantity 1 AND variant indicates single
-        return item.quantity === 1 && (
-            v.includes('single') || v.includes('1 seed') ||
-            v === 'standard' || v === '' || item.price <= 25
-        );
-    });
-}
-
+function itemMatchesStrains(item, list){ const n=norm(item.strainName||item.name||''); return list.some(s=>n===s||n.includes(s)||s.includes(n)); }
+function getSingleSeedItems(){ if(!cartData) return []; return cartData.items.filter(item=>{ const v=norm(item.variant||item.variantText||''); return item.quantity===1&&(v.includes('single')||v.includes('1 seed')||v==='standard'||v===''||item.price<=25); }); }
 function toTitle(s){ return s.replace(/\b\w/g,c=>c.toUpperCase()); }
 
 // ══════════════════════════════════════════════════════════
-// PROMO ENGINE
-// Returns { discount, label, message, warning, freeShipping }
+// BILLING TOGGLE
 // ══════════════════════════════════════════════════════════
-function calcPromo(promo, items, subtotal){
-    if(!promo) return { discount:0, label:'', message:'', warning:'', freeShipping:false };
-    const t = promo.type;
-    let discount=0, label='', message='', warning='', freeShipping=false;
+function toggleBilling(){
+    billingDiff = document.getElementById('billingDifferent').checked;
+    const section = document.getElementById('billingSection');
+    section.classList.toggle('show', billingDiff);
+}
 
-    if(t==='percent_all'){
-        discount = subtotal * promo.value/100;
-        label    = `${promo.value}% OFF everything`;
-        message  = `✓ ${promo.value}% applied to your whole order.`;
-    }
-
-    else if(t==='percent_strains'){
-        const elig    = items.filter(i => itemMatchesStrains(i, promo.strains));
-        const inelig  = items.filter(i => !itemMatchesStrains(i, promo.strains));
-        discount = elig.reduce((s,i)=>s+(i.price*i.quantity*promo.value/100),0);
-        label    = `${promo.value}% OFF eligible strains`;
-        if(elig.length===0){
-            warning  = `⚠ None of your cart items qualify for this code. Eligible: ${promo.strains.map(toTitle).join(', ')}.`;
-            discount = 0;
-        } else {
-            message = `✓ ${promo.value}% applied to: ${elig.map(i=>i.strainName).join(', ')}.`;
-            if(inelig.length) message += ` (Other items are not discounted.)`;
-        }
-    }
-
-    else if(t==='percent_merch'){
-        const elig = items.filter(i=>{
-            const n=norm(i.strainName||i.name||'');
-            return MERCH_KEYWORDS.some(m=>n.includes(m));
-        });
-        discount = elig.reduce((s,i)=>s+(i.price*i.quantity*promo.value/100),0);
-        label    = `${promo.value}% OFF merch`;
-        if(elig.length===0){
-            warning  = `⚠ No merch items in your cart. This code applies to toques, sweaters, shirts, flags, and posters.`;
-            discount = 0;
-        } else {
-            message = `✓ ${promo.value}% applied to merch items.`;
-        }
-    }
-
-    else if(t==='free_shipping'){
-        const min = promo.minOrder||0;
-        if(subtotal>=min){
-            freeShipping = true;
-            label        = `Free shipping (promo)`;
-            message      = `✓ Free shipping applied on your $${subtotal.toFixed(2)} order!`;
-        } else {
-            warning = `⚠ This code needs a minimum order of $${min} CAD. Your cart is $${subtotal.toFixed(2)}.`;
-        }
-    }
-
-    else if(t==='bogo'){
-        const singles = getSingleSeedItems();
-        const uniq    = [...new Set(singles.map(i=>norm(i.strainName)))];
-        const needed  = promo.totalNeeded;
-
-        if(promo.buy===2 && promo.free===1){
-            // LOVE321
-            if(uniq.length<2){
-                warning = `⚠ You need at least 2 single-seed items for this code. You have ${singles.length}.`;
-            } else if(uniq.length===2){
-                warning = `💡 You have 2 single seeds — add a 3rd different single seed and one will be FREE!`;
-            } else {
-                const sorted  = [...singles].sort((a,b)=>a.price-b.price);
-                discount      = sorted[0].price;
-                label         = `Buy 2 Get 1 Free`;
-                message       = `✓ ${sorted[0].strainName} (cheapest single seed) is FREE!`;
-            }
-        } else if(uniq.length<needed){
-            warning = `⚠ This code needs ${needed} different single-seed strains. You have ${uniq.length}. Add ${needed-uniq.length} more!`;
-        } else {
-            const sorted  = [...singles].sort((a,b)=>a.price-b.price);
-            const freePcs = sorted.slice(0, promo.free);
-            discount      = freePcs.reduce((s,i)=>s+i.price,0);
-            label         = `Buy ${promo.buy} Get ${promo.free} Free`;
-            message       = `✓ ${promo.free} single seed(s) are FREE! (${freePcs.map(i=>i.strainName).join(', ')})`;
-        }
-    }
-
-    return { discount:Math.max(0,discount), label, message, warning, freeShipping };
+function getBillingAddress(){
+    if(!billingDiff) return null;
+    return {
+        street: document.getElementById('billingStreet').value.trim(),
+        city:   document.getElementById('billingCity').value.trim(),
+        postal: document.getElementById('billingPostal').value.trim().toUpperCase(),
+        province: document.getElementById('billingProvince').value
+    };
 }
 
 // ══════════════════════════════════════════════════════════
-// APPLY PROMO
+// PROMO ENGINE
 // ══════════════════════════════════════════════════════════
-function applyPromo(){
-    const input  = document.getElementById('promoInput');
-    const code   = input.value.trim().toUpperCase();
-    const statEl = document.getElementById('promoStatus');
+function calcPromo(promo, items, subtotal){
+    if(!promo) return { discount:0, label:'', message:'', warning:'', freeShipping:false };
+    const t=promo.type; let discount=0,label='',message='',warning='',freeShipping=false;
 
-    if(!code){ showPromoStatus('invalid','Please enter a promo code.'); return; }
-
-    if(VALID_CODES[code]){
-        appliedPromo = { code, ...VALID_CODES[code] };
-        const result = calcPromo(appliedPromo, cartData?.items||[], cartData?.total||0);
-        if(result.warning){
-            showPromoStatus('info', result.warning);
+    if(t==='percent_all'){ discount=subtotal*promo.value/100; label=`${promo.value}% OFF everything`; message=`✓ ${promo.value}% applied to your whole order.`; }
+    else if(t==='percent_strains'){
+        const elig=items.filter(i=>itemMatchesStrains(i,promo.strains));
+        const inelig=items.filter(i=>!itemMatchesStrains(i,promo.strains));
+        discount=elig.reduce((s,i)=>s+(i.price*i.quantity*promo.value/100),0);
+        label=`${promo.value}% OFF eligible strains`;
+        if(elig.length===0){ warning=`⚠ None of your cart items qualify. Eligible: ${promo.strains.map(toTitle).join(', ')}.`; discount=0; }
+        else { message=`✓ ${promo.value}% applied to: ${elig.map(i=>i.strainName).join(', ')}.`; if(inelig.length) message+=` (Other items not discounted.)`; }
+    }
+    else if(t==='percent_merch'){
+        const elig=items.filter(i=>{ const n=norm(i.strainName||i.name||''); return MERCH_KEYWORDS.some(m=>n.includes(m)); });
+        discount=elig.reduce((s,i)=>s+(i.price*i.quantity*promo.value/100),0);
+        label=`${promo.value}% OFF merch`;
+        if(elig.length===0){ warning=`⚠ No merch items in cart. Applies to toques, sweaters, shirts, flags, posters.`; discount=0; }
+        else message=`✓ ${promo.value}% applied to merch items.`;
+    }
+    else if(t==='free_shipping'){
+        if(subtotal>=(promo.minOrder||0)){ freeShipping=true; label=`Free shipping (promo)`; message=`✓ Free shipping unlocked!`; }
+        else warning=`⚠ Minimum order $${promo.minOrder} CAD needed. Your cart is $${subtotal.toFixed(2)}.`;
+    }
+    else if(t==='bogo'){
+        const singles=getSingleSeedItems();
+        const uniq=[...new Set(singles.map(i=>norm(i.strainName)))];
+        const needed=promo.totalNeeded;
+        if(promo.buy===2&&promo.free===1){
+            if(uniq.length<2) warning=`⚠ Need at least 2 single-seed items. You have ${singles.length}.`;
+            else if(uniq.length===2) warning=`💡 Add a 3rd single seed and one will be FREE!`;
+            else { const sorted=[...singles].sort((a,b)=>a.price-b.price); discount=sorted[0].price; label=`Buy 2 Get 1 Free`; message=`✓ ${sorted[0].strainName} is FREE!`; }
+        } else if(uniq.length<needed){
+            warning=`⚠ Need ${needed} different single-seed strains. You have ${uniq.length}. Add ${needed-uniq.length} more!`;
         } else {
-            showPromoStatus('valid', result.message || `✓ Code "${code}" applied!`);
+            const sorted=[...singles].sort((a,b)=>a.price-b.price);
+            discount=sorted.slice(0,promo.free).reduce((s,i)=>s+i.price,0);
+            label=`Buy ${promo.buy} Get ${promo.free} Free`;
+            message=`✓ ${promo.free} seed(s) FREE! (${sorted.slice(0,promo.free).map(i=>i.strainName).join(', ')})`;
         }
+    }
+    return { discount:Math.max(0,discount), label, message, warning, freeShipping };
+}
+
+function applyPromo(){
+    const code=document.getElementById('promoInput').value.trim().toUpperCase();
+    if(!code){ showPromoStatus('invalid','Please enter a promo code.'); return; }
+    if(VALID_CODES[code]){
+        appliedPromo={code,...VALID_CODES[code]};
+        const result=calcPromo(appliedPromo,cartData?.items||[],cartData?.total||0);
+        showPromoStatus(result.warning?'info':result.discount>0||result.freeShipping?'valid':'info', result.warning||result.message||`✓ Code "${code}" applied!`);
     } else {
-        appliedPromo = null;
-        let foundOther = false;
-        for(let m=0;m<=11;m++){
-            if(m!==CUR_MONTH && MONTHLY_DEALS[m]?.codes?.[code]){ foundOther=true; break; }
-        }
-        showPromoStatus('invalid',
-            foundOther
-            ? `"${code}" is not active this month. Check the homepage for this month's deals!`
-            : `"${code}" is not a recognised code. Visit the homepage to see current deals.`
-        );
+        appliedPromo=null;
+        let foundOther=false;
+        for(let m=0;m<=11;m++){ if(m!==CUR_MONTH&&MONTHLY_DEALS[m]?.codes?.[code]){ foundOther=true; break; } }
+        showPromoStatus('invalid', foundOther?`"${code}" is not active this month. Check the homepage for current deals!`:`"${code}" is not recognised. Visit the homepage for current deals.`);
     }
     updateTotals();
 }
 
-function showPromoStatus(type, msg){
-    const el = document.getElementById('promoStatus');
-    el.className = 'promo-status '+type;
-    el.textContent = msg;
-}
+function showPromoStatus(type,msg){ const el=document.getElementById('promoStatus'); el.className='promo-status '+type; el.textContent=msg; }
 
 // ══════════════════════════════════════════════════════════
-// CART LOAD & RENDER
+// CART LOAD
 // ══════════════════════════════════════════════════════════
 function loadCartData(){
     try {
-        const chk = localStorage.getItem('noyesboys_checkout_data');
-        if(chk){ cartData = JSON.parse(chk); }
-        else {
-            const raw = localStorage.getItem('noyesboys_cart');
-            if(raw){
-                const items = JSON.parse(raw);
-                cartData = { items, total: items.reduce((s,i)=>s+i.price*i.quantity,0), itemCount: items.reduce((s,i)=>s+i.quantity,0), timestamp:Date.now() };
-            }
-        }
+        const chk=localStorage.getItem('noyesboys_checkout_data');
+        if(chk){ cartData=JSON.parse(chk); }
+        else { const raw=localStorage.getItem('noyesboys_cart'); if(raw){ const items=JSON.parse(raw); cartData={items,total:items.reduce((s,i)=>s+i.price*i.quantity,0),itemCount:items.reduce((s,i)=>s+i.quantity,0),timestamp:Date.now()}; } }
     } catch(e){ cartData=null; }
     renderPage();
 }
 
 function renderPage(){
     document.getElementById('loadingState').style.display='none';
-    if(!cartData?.items?.length){
-        document.getElementById('emptyCartState').style.display='block';
-    } else {
-        document.getElementById('checkoutContent').style.display='grid';
-        populateOrderSummary();
-        checkUpgrade();
-        updateTotals();
-        updateChecklist();
-    }
+    if(!cartData?.items?.length){ document.getElementById('emptyCartState').style.display='block'; }
+    else { document.getElementById('checkoutContent').style.display='grid'; populateOrderSummary(); checkUpgrade(); updateTotals(); updateChecklist(); }
 }
 
 function populateOrderSummary(){
-    document.getElementById('orderItems').innerHTML = cartData.items.map(item=>`
+    const sub = cartData?.total || 0;
+
+    document.getElementById('orderItems').innerHTML = cartData.items.map(item => {
+        const totalSeeds = item.quantity;
+        const plantTags  = totalSeeds >= 10 ? 3 : 1;
+        const tagText    = totalSeeds >= 10 ? `+3 Waterproof Plant Tags` : `+1 Waterproof Plant Tag`;
+        return `
         <div class="order-item">
-            <div>
+            <div style="flex:1;">
                 <div class="item-name">${item.strainName}</div>
                 <div class="item-meta">${item.variantText||item.variant} × ${item.quantity}</div>
+                <div class="item-perks">
+                    <div class="perk-line earned"><i class="fas fa-id-card"></i> +1 Collector Card</div>
+                    <div class="perk-line earned"><i class="fas fa-tag"></i> ${tagText}</div>
+                </div>
             </div>
             <div class="item-price">$${(item.price*item.quantity).toFixed(2)}</div>
-        </div>
-    `).join('');
+        </div>`;
+    }).join('');
+
+    // ── Bonus bars (stickers $50+, merch $500+)
+    const stickersEarned = sub >= 50;
+    const merchEarned    = sub >= 500;
+    const stickPct  = Math.min(100, (sub / 50)  * 100);
+    const merchPct  = Math.min(100, (sub / 500) * 100);
+    const stickMsg  = stickersEarned ? '🎉 Free sticker pack included!' : `+$${Math.max(0,(50-sub).toFixed(2))} away from free stickers`;
+    const merchMsg  = merchEarned    ? '🎉 Free merch included!'        : `+$${Math.max(0,(500-sub).toFixed(2))} away from free merch`;
+
+    const bonusHTML = `
+        <div class="bonus-bars">
+            <div class="bonus-bar ${stickersEarned?'earned':'locked'}">
+                <i class="fas fa-star${stickersEarned?'':'-half-alt'}"></i>
+                <span>${stickMsg}</span>
+                ${!stickersEarned ? `<div class="bar-progress"><div class="bar-fill" style="width:${stickPct}%"></div></div>` : ''}
+            </div>
+            <div class="bonus-bar ${merchEarned?'earned':'locked'}">
+                <i class="fas fa-gift"></i>
+                <span>${merchMsg}</span>
+                ${!merchEarned ? `<div class="bar-progress"><div class="bar-fill" style="width:${merchPct}%"></div></div>` : ''}
+            </div>
+        </div>`;
+
+    // Append bonus bars after order items, before totals
+    document.getElementById('orderItems').insertAdjacentHTML('afterend', bonusHTML);
+
+    // Readonly textarea for emails
     const ta = document.getElementById('orderDetails');
     if(ta) ta.value = cartData.items.map(i=>`${i.quantity}x ${i.strainName} (${i.variant||i.variantText})`).join('\n');
 }
 
 function checkUpgrade(){
-    const subtotal = cartData?.total||0;
-    const opt = document.getElementById('freeUpgradeOption');
-    if(subtotal>=200){ opt.style.display='block'; }
+    const sub=cartData?.total||0;
+    const opt=document.getElementById('freeUpgradeOption');
+    if(sub>=200){ opt.style.display='block'; }
     else { opt.style.display='none'; if(selectedShipping==='free-upgrade'){ selectedShipping=null; updateTotals(); } }
 }
 
 function selectShipping(method){
-    selectedShipping = method;
+    selectedShipping=method;
     document.querySelectorAll('.shipping-opt').forEach(el=>el.classList.remove('selected'));
-    document.querySelectorAll('.shipping-opt').forEach(el=>{
-        if(el.getAttribute('onclick')===`selectShipping('${method}')`) el.classList.add('selected');
-    });
-    const r = document.querySelector(`input[value="${method}"]`);
-    if(r) r.checked=true;
-    updateTotals();
-    updateChecklist();
+    document.querySelectorAll('.shipping-opt').forEach(el=>{ if(el.getAttribute('onclick')===`selectShipping('${method}')`) el.classList.add('selected'); });
+    const r=document.querySelector(`input[value="${method}"]`); if(r) r.checked=true;
+    updateTotals(); updateChecklist();
 }
 
 function updateTotals(){
     if(!cartData) return;
-    const subtotal = cartData.total;
-    const result   = calcPromo(appliedPromo, cartData.items, subtotal);
-    const discount = result.discount;
-    const freeShip = result.freeShipping;
-    let shipCost   = selectedShipping!==null ? (SHIP_COSTS[selectedShipping]||0) : null;
-    if(freeShip && shipCost!==null) shipCost=0;
-    const grand    = subtotal - discount + (shipCost||0);
-
-    document.getElementById('subtotalVal').textContent   = subtotal.toFixed(2);
-    document.getElementById('grandTotalVal').textContent = grand.toFixed(2);
-
-    const dRow = document.getElementById('discountRow');
-    if(discount>0){
-        dRow.style.display='flex';
-        document.getElementById('discountLabel').textContent = result.label||'Promo Discount';
-        document.getElementById('discountVal').textContent   = discount.toFixed(2);
-    } else { dRow.style.display='none'; }
-
-    const sEl = document.getElementById('shippingVal');
-    if(shipCost===null) sEl.textContent='—';
-    else if(shipCost===0) sEl.textContent='FREE';
-    else sEl.textContent=`$${shipCost.toFixed(2)} CAD`;
+    const sub=cartData.total;
+    const result=calcPromo(appliedPromo,cartData.items,sub);
+    const freeShip=result.freeShipping;
+    let ship=selectedShipping!==null?(SHIP_COSTS[selectedShipping]||0):null;
+    if(freeShip&&ship!==null) ship=0;
+    const grand=sub-result.discount+(ship||0);
+    document.getElementById('subtotalVal').textContent=sub.toFixed(2);
+    document.getElementById('grandTotalVal').textContent=grand.toFixed(2);
+    const dRow=document.getElementById('discountRow');
+    if(result.discount>0){ dRow.style.display='flex'; document.getElementById('discountLabel').textContent=result.label||'Promo Discount'; document.getElementById('discountVal').textContent=result.discount.toFixed(2); } else dRow.style.display='none';
+    const sEl=document.getElementById('shippingVal');
+    if(ship===null) sEl.textContent='—'; else if(ship===0) sEl.textContent='FREE'; else sEl.textContent=`$${ship.toFixed(2)} CAD`;
 }
 
 function getFinalTotal(){
     if(!cartData) return 0.01;
-    const subtotal = cartData.total;
-    const result   = calcPromo(appliedPromo, cartData.items, subtotal);
-    let ship       = selectedShipping!==null ? (SHIP_COSTS[selectedShipping]||0) : 0;
+    const sub=cartData.total;
+    const result=calcPromo(appliedPromo,cartData.items,sub);
+    let ship=selectedShipping!==null?(SHIP_COSTS[selectedShipping]||0):0;
     if(result.freeShipping) ship=0;
-    return Math.max(0.01, subtotal - result.discount + ship);
+    return Math.max(0.01,sub-result.discount+ship);
 }
 
 // ══════════════════════════════════════════════════════════
-// ADDRESS VALIDATION (Free — no API key needed)
+// ADDRESS VALIDATION
 // ══════════════════════════════════════════════════════════
-const FSA_MAP = {A:'NL',B:'NS',C:'PE',E:'NB',G:'QC',H:'QC',J:'QC',K:'ON',L:'ON',M:'ON',N:'ON',P:'ON',R:'MB',S:'SK',T:'AB',V:'BC',X:'NT_NU',Y:'YT'};
-
+const FSA_MAP={A:'NL',B:'NS',C:'PE',E:'NB',G:'QC',H:'QC',J:'QC',K:'ON',L:'ON',M:'ON',N:'ON',P:'ON',R:'MB',S:'SK',T:'AB',V:'BC',X:'NT_NU',Y:'YT'};
 function isCanadianPostal(p){ return /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(p.trim()); }
+function postalMatchesProvince(postal,prov){ const fsa=postal.replace(/\s/g,'').toUpperCase()[0]; const mapped=FSA_MAP[fsa]; if(!mapped) return false; if(mapped==='NT_NU') return prov==='NT'||prov==='NU'; return mapped===prov; }
+function showAddrStatus(type,html){ const el=document.getElementById('addressStatus'); el.className='address-status '+type; document.getElementById('addressStatusText').innerHTML=html; }
 
-function postalMatchesProvince(postal, prov){
-    const fsa = postal.replace(/\s/g,'').toUpperCase()[0];
-    const mapped = FSA_MAP[fsa];
-    if(!mapped) return false;
-    if(mapped==='NT_NU') return prov==='NT'||prov==='NU';
-    return mapped===prov;
-}
-
-function showAddrStatus(type, html){
-    const el   = document.getElementById('addressStatus');
-    const text = document.getElementById('addressStatusText');
-    el.className='address-status '+type;
-    text.innerHTML=html;
-}
-
-async function validateViaAPI(city, postal){
-    const clean = postal.replace(/\s/g,'').toUpperCase();
+async function validateViaAPI(city,postal){
+    const clean=postal.replace(/\s/g,'').toUpperCase();
     try {
-        const r = await fetch(`https://geocoder.ca/?city=${encodeURIComponent(city)}&postal=${clean}&json=1`, { signal:AbortSignal.timeout(5000) });
+        const r=await fetch(`https://geocoder.ca/?city=${encodeURIComponent(city)}&postal=${clean}&json=1`,{signal:AbortSignal.timeout(5000)});
         if(!r.ok) return {ok:null};
-        const d = await r.json();
-        if(d.error) return {ok:false, reason:'Address not found in Canadian records'};
+        const d=await r.json();
+        if(d.error) return {ok:false,reason:'Address not found in Canadian records'};
         if(d.latt&&d.longt) return {ok:true};
-        return {ok:false, reason:'Could not confirm as a Canadian address'};
+        return {ok:false,reason:'Could not confirm as Canadian address'};
     } catch(e){ return {ok:null}; }
 }
 
 async function triggerValidation(){
-    const postal = document.getElementById('postalCode').value.trim();
-    const prov   = document.getElementById('province').value;
-    const city   = document.getElementById('city').value.trim();
-
-    addressValidated=false;
-    updateChecklist();
-
+    const postal=document.getElementById('postalCode').value.trim();
+    const prov=document.getElementById('province').value;
+    const city=document.getElementById('city').value.trim();
+    addressValidated=false; updateChecklist();
     if(!postal) return;
-
-    if(!isCanadianPostal(postal)){
-        document.getElementById('postalError').classList.add('show');
-        document.getElementById('postalCode').classList.add('err');
-        showAddrStatus('invalid','Invalid postal code — use format: A1A 1A1');
-        return;
-    }
-    document.getElementById('postalError').classList.remove('show');
-    document.getElementById('postalCode').classList.remove('err');
-    document.getElementById('postalCode').classList.add('ok');
-
-    if(prov && !postalMatchesProvince(postal,prov)){
-        showAddrStatus('invalid',`Postal code ${postal.toUpperCase()} doesn't match ${prov}. Please check your address.`);
-        updateChecklist(); return;
-    }
-
-    if(city && postal && !addressValidating){
+    if(!isCanadianPostal(postal)){ document.getElementById('postalError').classList.add('show'); document.getElementById('postalCode').classList.add('err'); showAddrStatus('invalid','Invalid postal code — use format: A1A 1A1'); return; }
+    document.getElementById('postalError').classList.remove('show'); document.getElementById('postalCode').classList.remove('err'); document.getElementById('postalCode').classList.add('ok');
+    if(prov&&!postalMatchesProvince(postal,prov)){ showAddrStatus('invalid',`Postal code ${postal.toUpperCase()} doesn't match ${prov}.`); updateChecklist(); return; }
+    if(city&&postal&&!addressValidating){
         addressValidating=true;
         showAddrStatus('checking','<i class="fas fa-circle-notch fa-spin"></i>&nbsp; Verifying Canadian address…');
-        const res = await validateViaAPI(city,postal);
+        const res=await validateViaAPI(city,postal);
         addressValidating=false;
-        if(res.ok===true){
-            showAddrStatus('valid','✓ Canadian address verified');
-            addressValidated=true;
-        } else if(res.ok===null){
-            showAddrStatus('valid','✓ Address format verified (live check unavailable)');
-            addressValidated=true;
-        } else {
-            showAddrStatus('invalid',`⚠ ${res.reason||'Not a valid Canadian address'}. We only ship within Canada.`);
-            addressValidated=false;
-        }
+        if(res.ok===true){ showAddrStatus('valid','✓ Canadian address verified'); addressValidated=true; }
+        else if(res.ok===null){ showAddrStatus('valid','✓ Address format verified (live check unavailable)'); addressValidated=true; }
+        else { showAddrStatus('invalid',`⚠ ${res.reason||'Not a valid Canadian address'}.`); addressValidated=false; }
         updateChecklist();
     }
 }
 
-function scheduleValidation(){
-    clearTimeout(addrTimer);
-    addrTimer = setTimeout(triggerValidation,700);
-}
+function scheduleValidation(){ clearTimeout(addrTimer); addrTimer=setTimeout(triggerValidation,700); }
 
 // ══════════════════════════════════════════════════════════
 // CHECKLIST + PAYPAL UNLOCK
 // ══════════════════════════════════════════════════════════
-const CHECK_LABELS = {
-    'chk-name':     'Your name',
-    'chk-email':    'Valid email address',
-    'chk-address':  'Full Canadian address entered',
-    'chk-verified': 'Address verified as Canadian',
-    'chk-shipping': 'Shipping method selected'
-};
+const CHECK_LABELS={ 'chk-name':'Your name','chk-email':'Valid email address','chk-address':'Full Canadian address entered','chk-verified':'Address verified as Canadian','chk-shipping':'Shipping method selected' };
 
 function updateChecklist(){
-    const fn    = document.getElementById('firstName').value.trim();
-    const ln    = document.getElementById('lastName').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const st    = document.getElementById('streetAddress').value.trim();
-    const city  = document.getElementById('city').value.trim();
-    const prov  = document.getElementById('province').value;
-    const post  = document.getElementById('postalCode').value.trim();
-
-    const checks = {
-        'chk-name':     !!(fn&&ln),
-        'chk-email':    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
-        'chk-address':  !!(st&&city&&prov&&post),
-        'chk-verified': addressValidated,
-        'chk-shipping': !!selectedShipping
-    };
-
-    const allDone = Object.values(checks).every(Boolean);
+    const fn=document.getElementById('firstName').value.trim();
+    const ln=document.getElementById('lastName').value.trim();
+    const email=document.getElementById('email').value.trim();
+    const st=document.getElementById('streetAddress').value.trim();
+    const city=document.getElementById('city').value.trim();
+    const prov=document.getElementById('province').value;
+    const post=document.getElementById('postalCode').value.trim();
+    const checks={ 'chk-name':!!(fn&&ln), 'chk-email':/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email), 'chk-address':!!(st&&city&&prov&&post), 'chk-verified':addressValidated, 'chk-shipping':!!selectedShipping };
+    const allDone=Object.values(checks).every(Boolean);
 
     Object.entries(checks).forEach(([id,pass])=>{
-        const el   = document.getElementById(id);
-        if(!el) return;
-        el.className = 'check-item ' + (pass?'done':'');
-        const icon = el.querySelector('.check-icon');
-        if(icon) icon.innerHTML = pass
-            ? '<i class="fas fa-check-circle" style="color:var(--green);"></i>'
-            : '<i class="fas fa-circle" style="color:var(--border);"></i>';
+        const el=document.getElementById(id); if(!el) return;
+        el.className='check-item '+(pass?'done':'');
+        const icon=el.querySelector('.check-icon');
+        if(icon) icon.innerHTML=pass?'<i class="fas fa-check-circle" style="color:var(--green);"></i>':'<i class="fas fa-circle" style="color:var(--border);"></i>';
     });
 
-    const locked = document.getElementById('ppLocked');
-    const ppCon  = document.getElementById('paypal-button-container');
-    const ppNote = document.getElementById('ppNote');
+    const locked=document.getElementById('ppLocked');
+    const ppCon=document.getElementById('paypal-button-container');
+    const ppNote=document.getElementById('ppNote');
+    const reviewBtn=document.getElementById('reviewOrderBtn');
 
     if(allDone){
         locked.style.display='none';
         ppCon.style.display='block';
         ppNote.style.display='flex';
+        reviewBtn.classList.add('visible');
         if(!ppRendered) attemptPayPal();
     } else {
         locked.style.display='block';
         ppCon.style.display='none';
         ppNote.style.display='none';
-        ppRendered=false;
-        ppCon.innerHTML='';
-
-        document.getElementById('lockList').innerHTML =
-            Object.entries(checks).map(([id,pass])=>
-                `<li class="${pass?'done':'pending'}">${pass?'✓':'○'} ${CHECK_LABELS[id]}</li>`
-            ).join('');
+        reviewBtn.classList.remove('visible');
+        ppRendered=false; ppCon.innerHTML='';
+        document.getElementById('lockList').innerHTML=Object.entries(checks).map(([id,pass])=>`<li class="${pass?'done':'pending'}">${pass?'✓':'○'} ${CHECK_LABELS[id]}</li>`).join('');
     }
+}
+
+// ══════════════════════════════════════════════════════════
+// ORDER REVIEW MODAL
+// ══════════════════════════════════════════════════════════
+function openReviewModal(){
+    if(!cartData) return;
+    const sub=cartData.total;
+    const result=calcPromo(appliedPromo,cartData.items,sub);
+    let ship=SHIP_COSTS[selectedShipping]||0;
+    if(result.freeShipping) ship=0;
+    const total=Math.max(0,sub-result.discount+ship);
+
+    // Address
+    document.getElementById('rv-address').innerHTML=`
+        <strong>${document.getElementById('firstName').value.trim()} ${document.getElementById('lastName').value.trim()}</strong><br>
+        ${document.getElementById('streetAddress').value.trim()}<br>
+        ${document.getElementById('city').value.trim()}, ${document.getElementById('province').value} ${document.getElementById('postalCode').value.trim().toUpperCase()}<br>
+        <span style="color:var(--muted);font-size:0.82rem;">${document.getElementById('email').value.trim()}</span>
+    `;
+
+    // Items
+    document.getElementById('rv-items').innerHTML=cartData.items.map(item=>`
+        <div class="review-item-line">
+            <span>${item.quantity}× ${item.strainName} <span style="color:var(--muted);font-size:0.8rem;">(${item.variantText||item.variant})</span></span>
+            <span style="color:var(--green);font-weight:600;">$${(item.price*item.quantity).toFixed(2)}</span>
+        </div>
+    `).join('');
+
+    // Shipping
+    document.getElementById('rv-shipping').textContent=SHIP_LABELS[selectedShipping]||selectedShipping;
+
+    // Promo
+    const promoSection=document.getElementById('rv-promo-section');
+    if(result.discount>0||result.freeShipping){
+        promoSection.style.display='block';
+        document.getElementById('rv-promo').textContent=`${appliedPromo.code} — ${result.label}${result.discount>0?` (−$${result.discount.toFixed(2)} CAD)`:''}`;
+    } else promoSection.style.display='none';
+
+    // Total
+    document.getElementById('rv-total').textContent=`$${total.toFixed(2)} CAD`;
+
+    document.getElementById('reviewOverlay').classList.add('show');
+    document.body.style.overflow='hidden';
+}
+
+function closeReviewModal(){
+    document.getElementById('reviewOverlay').classList.remove('show');
+    document.body.style.overflow='';
+}
+
+function confirmAndPay(){
+    closeReviewModal();
+    // Scroll PayPal buttons into view smoothly
+    document.getElementById('paypal-button-container').scrollIntoView({behavior:'smooth',block:'center'});
 }
 
 // ══════════════════════════════════════════════════════════
@@ -924,129 +991,155 @@ function attemptPayPal(){
     if(ppRendered) return;
     if(typeof paypal==='undefined'){
         if(ppAttempts<40){ ppAttempts++; setTimeout(attemptPayPal,500); }
-        else {
-            document.getElementById('paypal-button-container').innerHTML=
-                `<div style="color:var(--red);text-align:center;padding:1rem;font-size:0.86rem;line-height:1.6;">
-                    ⚠ PayPal couldn't load. Please refresh or contact us at
-                    <a href="mailto:thenoyesboyz@gmail.com" style="color:var(--green);">thenoyesboyz@gmail.com</a>
-                </div>`;
-        }
+        else { document.getElementById('paypal-button-container').innerHTML=`<div style="color:var(--red);text-align:center;padding:1rem;font-size:0.86rem;line-height:1.6;">⚠ PayPal couldn't load. Please refresh or contact <a href="mailto:thenoyesboyz@gmail.com" style="color:var(--green);">thenoyesboyz@gmail.com</a></div>`; }
         return;
     }
-
     ppRendered=true;
-
-    // Generate one order ID up front — shared by both pre-payment and post-payment emails
-    const sharedOrderId = 'NB-'+Date.now()+'-'+Math.random().toString(36).substr(2,5).toUpperCase();
+    const sharedOrderId='NB-'+Date.now()+'-'+Math.random().toString(36).substr(2,5).toUpperCase();
 
     paypal.Buttons({
         style:{ layout:'vertical', color:'gold', shape:'rect', label:'pay', height:48 },
 
-        // Fires the instant the customer clicks ANY of the three buttons (PayPal / card / etc.)
-        // Sends you their full order info BEFORE they complete payment
-        onClick(data, actions){
-            sendPrePaymentEmail(sharedOrderId); // fire-and-forget, don't block PayPal
-            return actions.resolve();
+        onClick(data,actions){ sendPrePaymentEmail(sharedOrderId); return actions.resolve(); },
+
+        createOrder(data,actions){
+            return actions.order.create({ purchase_units:[{ description:'Noyes Boys Cannabis Seeds', amount:{ currency_code:'CAD', value:getFinalTotal().toFixed(2) } }] });
         },
 
-        createOrder(data, actions){
-            const total = getFinalTotal();
-            return actions.order.create({
-                purchase_units:[{
-                    description:'Noyes Boys Cannabis Seeds',
-                    amount:{ currency_code:'CAD', value:total.toFixed(2) }
-                }]
-            });
-        },
-
-        async onApprove(data, actions){
-            const details = await actions.order.capture();
-            await sendPostPaymentEmail(sharedOrderId, details);
+        async onApprove(data,actions){
+            const details=await actions.order.capture();
+            await sendPostPaymentEmail(sharedOrderId,details);
+            await sendCustomerConfirmationEmail(sharedOrderId,details); // ← confirmation to customer
             localStorage.removeItem('noyesboys_checkout_data');
             localStorage.removeItem('noyesboys_cart');
-            document.getElementById('successOrderId').textContent = sharedOrderId;
+            document.getElementById('successOrderId').textContent=sharedOrderId;
             document.getElementById('successOverlay').classList.add('show');
             setTimeout(()=>{ window.location.href='FeminizedSeedsHomepage.html'; },8000);
         },
 
-        onError(err){
-            console.error('PayPal error:',err);
-            alert('Payment error. Please try again or contact thenoyesboyz@gmail.com');
-        }
+        onError(err){ console.error('PayPal error:',err); alert('Payment error. Please try again or contact thenoyesboyz@gmail.com'); }
     }).render('#paypal-button-container');
 }
 
 // ══════════════════════════════════════════════════════════
-// EMAIL (EmailJS)
-// Two emails per order:
-//   1. sendPrePaymentEmail  — fires when customer clicks a PayPal button
-//      Subject in EmailJS template: "⚠ NEW ORDER STARTED — [order_id]"
-//   2. sendPostPaymentEmail — fires after PayPal confirms payment
-//      Subject in EmailJS template: "✅ PAYMENT CONFIRMED — [order_id]"
-// Both use the same EmailJS template. The "payment_status" variable
-// tells you which one it is.
+// EMAIL — Two to you + one to the customer
 // ══════════════════════════════════════════════════════════
 emailjs.init({ publicKey:"ZiDmYogre9hNBY-bI" });
 
-function buildEmailParams(orderId, paymentStatus, paypalTxnId){
-    const subtotal = cartData.total;
-    const result   = calcPromo(appliedPromo, cartData.items, subtotal);
-    let ship       = SHIP_COSTS[selectedShipping]||0;
-    if(result.freeShipping) ship=0;
-    const total    = Math.max(0, subtotal-result.discount+ship);
-
+function buildEmailParams(orderId,paymentStatus,paypalTxnId){
+    const sub=cartData.total;
+    const result=calcPromo(appliedPromo,cartData.items,sub);
+    let ship=SHIP_COSTS[selectedShipping]||0; if(result.freeShipping) ship=0;
+    const total=Math.max(0,sub-result.discount+ship);
+    const billing=getBillingAddress();
     return {
-        // ── Who sent it
-        payment_status:     paymentStatus,   // "PENDING — not yet paid" or "CONFIRMED — payment received"
-        paypal_txn_id:      paypalTxnId||'Not yet completed',
-
-        // ── Customer
-        customer_name:      `${document.getElementById('firstName').value.trim()} ${document.getElementById('lastName').value.trim()}`,
-        customer_email:     document.getElementById('email').value.trim(),
-        customer_phone:     document.getElementById('phone').value.trim()||'Not provided',
-        customer_address:   `${document.getElementById('streetAddress').value.trim()}, ${document.getElementById('city').value.trim()}, ${document.getElementById('province').value} ${document.getElementById('postalCode').value.trim().toUpperCase()}`,
-
-        // ── Order
-        order_items:        cartData.items.map(i=>`${i.quantity}x ${i.strainName} (${i.variant||i.variantText}) — $${(i.price*i.quantity).toFixed(2)} CAD`).join('\n'),
-        promo_code:         appliedPromo?.code||'None',
-        promo_discount:     result.discount>0?`-$${result.discount.toFixed(2)} CAD`:'None',
-        shipping_method:    selectedShipping,
-        subtotal:           `$${subtotal.toFixed(2)} CAD`,
-        shipping:           ship>0?`$${ship.toFixed(2)} CAD`:'FREE',
-        total:              `$${total.toFixed(2)} CAD`,
-        additional_info:    document.getElementById('additionalInfo').value.trim()||'None',
-        newsletter:         document.getElementById('newsletter').checked?'Yes':'No',
-
-        // ── Meta
-        order_id:           orderId,
-        order_date:         new Date().toLocaleDateString('en-CA'),
-        order_time:         new Date().toLocaleTimeString('en-CA')
+        payment_status:   paymentStatus,
+        paypal_txn_id:    paypalTxnId||'Not yet completed',
+        customer_name:    `${document.getElementById('firstName').value.trim()} ${document.getElementById('lastName').value.trim()}`,
+        customer_email:   document.getElementById('email').value.trim(),
+        customer_phone:   document.getElementById('phone').value.trim()||'Not provided',
+        customer_address: `${document.getElementById('streetAddress').value.trim()}, ${document.getElementById('city').value.trim()}, ${document.getElementById('province').value} ${document.getElementById('postalCode').value.trim().toUpperCase()}`,
+        billing_address:  billing ? `${billing.street}, ${billing.city}, ${billing.province} ${billing.postal}` : 'Same as shipping',
+        shipping_method:  SHIP_LABELS[selectedShipping]||selectedShipping,
+        order_items:      cartData.items.map(i=>`${i.quantity}x ${i.strainName} (${i.variant||i.variantText}) — $${(i.price*i.quantity).toFixed(2)} CAD`).join('\n'),
+        promo_code:       appliedPromo?.code||'None',
+        promo_discount:   result.discount>0?`-$${result.discount.toFixed(2)} CAD`:'None',
+        subtotal:         `$${sub.toFixed(2)} CAD`,
+        shipping:         ship>0?`$${ship.toFixed(2)} CAD`:'FREE',
+        total:            `$${total.toFixed(2)} CAD`,
+        additional_info:  document.getElementById('additionalInfo').value.trim()||'None',
+        newsletter:       document.getElementById('newsletter').checked?'Yes':'No',
+        order_id:         orderId,
+        order_date:       new Date().toLocaleDateString('en-CA'),
+        order_time:       new Date().toLocaleTimeString('en-CA')
     };
 }
 
-// Email #1 — fires the moment ANY PayPal button is clicked
+// Email to YOU — fires on button click (pre-payment)
 async function sendPrePaymentEmail(orderId){
-    try {
-        const params = buildEmailParams(orderId, '⚠ PENDING — customer has NOT paid yet', null);
-        await emailjs.send('service_viyn3ld','template_l8l5a4o', params);
-        console.log('Pre-payment email sent for', orderId);
-    } catch(e){ console.error('Pre-payment email failed:', e); }
+    try { await emailjs.send('service_viyn3ld','template_l8l5a4o',buildEmailParams(orderId,'⚠ PENDING — customer has NOT paid yet',null)); }
+    catch(e){ console.error('Pre-payment email failed:',e); }
 }
 
-// Email #2 — fires only after PayPal confirms the payment went through
-async function sendPostPaymentEmail(orderId, paypalDetails){
+// Email to YOU — fires after PayPal confirms
+async function sendPostPaymentEmail(orderId,paypalDetails){
+    try { await emailjs.send('service_viyn3ld','template_l8l5a4o',buildEmailParams(orderId,'✅ CONFIRMED — payment received via PayPal',paypalDetails?.id||'N/A')); }
+    catch(e){ console.error('Post-payment email failed:',e); }
+}
+
+// ══════════════════════════════════════════════════════════
+// CUSTOMER CONFIRMATION EMAIL
+// ──────────────────────────────────────────────────────────
+// This sends an auto-reply to the CUSTOMER after payment.
+// To set this up:
+//   1. Go to emailjs.com → Email Templates → Create New Template
+//   2. Set "To Email" to: {{customer_email}}
+//   3. Subject: "Your Noyes Boys Order is Confirmed — {{order_id}}"
+//   4. Body: use the variables below (customer_name, order_items, total, etc.)
+//   5. Copy the new Template ID and paste it below replacing CUSTOMER_TEMPLATE_ID
+// ══════════════════════════════════════════════════════════
+async function sendCustomerConfirmationEmail(orderId, paypalDetails){
     try {
-        const params = buildEmailParams(orderId, '✅ CONFIRMED — payment received via PayPal', paypalDetails?.id||'N/A');
-        await emailjs.send('service_viyn3ld','template_l8l5a4o', params);
-        console.log('Post-payment email sent for', orderId);
-    } catch(e){ console.error('Post-payment email failed (payment still went through):', e); }
+        const sub=cartData.total;
+        const result=calcPromo(appliedPromo,cartData.items,sub);
+        let ship=SHIP_COSTS[selectedShipping]||0; if(result.freeShipping) ship=0;
+        const total=Math.max(0,sub-result.discount+ship);
+
+        await emailjs.send('service_viyn3ld','template_hmha78e',{
+            customer_name:    `${document.getElementById('firstName').value.trim()} ${document.getElementById('lastName').value.trim()}`,
+            customer_email:   document.getElementById('email').value.trim(),
+            order_id:         orderId,
+            order_items:      cartData.items.map(i=>`${i.quantity}x ${i.strainName} (${i.variant||i.variantText}) — $${(i.price*i.quantity).toFixed(2)} CAD`).join('\n'),
+            shipping_address: `${document.getElementById('streetAddress').value.trim()}, ${document.getElementById('city').value.trim()}, ${document.getElementById('province').value} ${document.getElementById('postalCode').value.trim().toUpperCase()}`,
+            shipping_method:  SHIP_LABELS[selectedShipping]||selectedShipping,
+            promo_code:       appliedPromo?.code||'None',
+            subtotal:         `$${sub.toFixed(2)} CAD`,
+            shipping_cost:    ship>0?`$${ship.toFixed(2)} CAD`:'FREE',
+            total:            `$${total.toFixed(2)} CAD`,
+            paypal_txn_id:    paypalDetails?.id||'N/A',
+            order_date:       new Date().toLocaleDateString('en-CA'),
+            tracking_note:    "We'll send your tracking number within 3 business days. Questions? Reply to this email or reach us at thenoyesboyz@gmail.com 🌿"
+        });
+        console.log('Customer confirmation email sent via template_hmha78e.');
+    } catch(e){ console.error('Customer confirmation email failed:',e); }
 }
 
 // ── Init
 document.addEventListener('DOMContentLoaded',()=>{
     loadCartData();
     document.getElementById('promoInput')?.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); applyPromo(); } });
+    initCarousel();
 });
+
+// ══════════════════════════════════════════════════════════
+// REVIEW CAROUSEL
+// ══════════════════════════════════════════════════════════
+function initCarousel(){
+    const slides = document.querySelectorAll('.review-slide');
+    const dotsEl = document.getElementById('carouselDots');
+    if(!slides.length || !dotsEl) return;
+
+    let current = 0;
+
+    // Build dots
+    slides.forEach((_,i) => {
+        const btn = document.createElement('button');
+        btn.className = 'carousel-dot' + (i===0?' active':'');
+        btn.onclick = () => goTo(i);
+        dotsEl.appendChild(btn);
+    });
+
+    function goTo(n){
+        slides[current].classList.remove('active');
+        dotsEl.children[current].classList.remove('active');
+        current = (n + slides.length) % slides.length;
+        slides[current].classList.add('active');
+        dotsEl.children[current].classList.add('active');
+    }
+
+    // Auto-rotate every 5 seconds
+    setInterval(() => goTo(current + 1), 5000);
+}
 </script>
 </body>
 </html>
