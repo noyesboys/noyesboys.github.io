@@ -826,7 +826,7 @@ function calculate(){
                             '<span class="badge badge-eu">EU</span>';
         const tierBadge = TIER_HTML[r.tier]||'';
         let chip;
-        if(r.isNoyes) chip=`<span class="chip chip-best">⭐ Best Value</span>`;
+        if(r.isNoyes) chip=`<span class="chip chip-best">⭐ Our Seeds</span>`;
         else if(noyesPrice===null) chip='—';
         else {
             const d = r.perSeed - noyesPrice;
