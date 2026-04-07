@@ -21,7 +21,6 @@
 
         body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding-top:80px; zoom:0.75; }
 
-        /* Header */
         header { background:linear-gradient(135deg,#1a4d3a 0%,#2d5a27 100%); padding:1rem 0; position:fixed; width:100%; top:0; z-index:1000; box-shadow:0 2px 20px rgba(0,0,0,0.4); }
         nav { display:flex; justify-content:space-between; align-items:center; max-width:1200px; margin:0 auto; padding:0 20px; }
         .logo { display:flex; align-items:center; font-family:'Oswald',sans-serif; font-size:1.6rem; font-weight:700; color:var(--green); text-decoration:none; }
@@ -30,7 +29,6 @@
         .nav-links a { color:white; text-decoration:none; font-size:0.85rem; font-weight:500; padding:0.4rem 0.8rem; border-radius:6px; transition:all 0.2s; }
         .nav-links a:hover { color:var(--green); background:rgba(74,222,128,0.1); }
 
-        /* Layout */
         .page { max-width:1200px; margin:0 auto; padding:50px 20px 80px; }
         .page-title { font-family:'Oswald',sans-serif; font-size:2.6rem; font-weight:700; color:var(--green); letter-spacing:2px; text-transform:uppercase; text-align:center; margin-bottom:0.4rem; }
         .page-subtitle { text-align:center; color:var(--muted); font-size:0.9rem; margin-bottom:2.5rem; line-height:1.6; }
@@ -41,57 +39,61 @@
         .panel:last-child { margin-bottom:0; }
         .panel-title { font-family:'Oswald',sans-serif; font-size:1.05rem; font-weight:600; color:var(--green); letter-spacing:1px; text-transform:uppercase; margin-bottom:1.1rem; padding-bottom:0.65rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:0.5rem; }
 
-        /* Controls */
         .form-group { margin-bottom:0.9rem; }
         .form-group label { display:block; font-size:0.76rem; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:0.35rem; }
         .form-group select, .form-group input { width:100%; padding:0.65rem 0.85rem; background:var(--surface); border:1.5px solid var(--border); border-radius:8px; color:var(--text); font-size:0.88rem; font-family:'Inter',sans-serif; transition:border-color 0.2s; cursor:pointer; }
-        .form-group select:focus, .form-group input:focus { outline:none; border-color:var(--green); box-shadow:0 0 0 3px rgba(74,222,128,0.12); }
+        .form-group select:focus { outline:none; border-color:var(--green); box-shadow:0 0 0 3px rgba(74,222,128,0.12); }
         select option, select optgroup { background:var(--surface); }
 
-        /* Region filter pills */
-        .region-pills { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.9rem; }
+        /* region count badge */
+        .region-count { font-size:0.7rem; color:var(--muted); margin-top:0.3rem; }
+
+        .region-pills { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.3rem; }
         .region-pill { padding:0.45rem 1rem; border-radius:20px; border:1.5px solid var(--border); background:var(--surface); color:var(--muted); font-size:0.8rem; font-weight:600; cursor:pointer; transition:all 0.2s; font-family:'Inter',sans-serif; }
         .region-pill:hover { border-color:var(--green); color:var(--text); }
-        .region-pill.active { border-color:var(--green); background:rgba(74,222,128,0.12); color:var(--green); }
-        .region-pill.us.active { border-color:var(--blue); background:rgba(96,165,250,0.12); color:var(--blue); }
-        .region-pill.eu.active { border-color:var(--purple); background:rgba(167,139,250,0.12); color:var(--purple); }
-        .region-pill.all.active { border-color:var(--gold); background:rgba(251,191,36,0.12); color:var(--gold); }
+        .region-pill.ca.active  { border-color:var(--green);  background:rgba(74,222,128,0.12);  color:var(--green); }
+        .region-pill.us.active  { border-color:var(--blue);   background:rgba(96,165,250,0.12);  color:var(--blue); }
+        .region-pill.eu.active  { border-color:var(--purple); background:rgba(167,139,250,0.12); color:var(--purple); }
+        .region-pill.all.active { border-color:var(--gold);   background:rgba(251,191,36,0.12);  color:var(--gold); }
 
         .calc-btn { width:100%; padding:0.9rem; background:linear-gradient(135deg,var(--green) 0%,var(--green-dark) 100%); border:none; border-radius:10px; color:#0a0a0a; font-family:'Oswald',sans-serif; font-size:1.05rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; cursor:pointer; transition:all 0.2s; margin-top:0.5rem; }
         .calc-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(74,222,128,0.4); }
 
         .disclaimer { background:rgba(251,191,36,0.07); border:1px solid rgba(251,191,36,0.22); border-radius:10px; padding:0.8rem 1rem; font-size:0.75rem; color:var(--gold); line-height:1.6; margin-top:1rem; }
 
-        /* Region badges on banks */
         .badge { display:inline-block; padding:0.15rem 0.5rem; border-radius:4px; font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-left:0.3rem; vertical-align:middle; }
         .badge-ca { background:rgba(74,222,128,0.15); color:var(--green); }
         .badge-us { background:rgba(96,165,250,0.15); color:var(--blue); }
         .badge-eu { background:rgba(167,139,250,0.15); color:var(--purple); }
 
-        /* Winner */
+        /* tier indicator */
+        .tier { display:inline-block; padding:0.1rem 0.45rem; border-radius:4px; font-size:0.65rem; font-weight:700; text-transform:uppercase; margin-left:0.25rem; vertical-align:middle; }
+        .tier-craft  { background:rgba(251,191,36,0.15); color:var(--gold); }
+        .tier-budget { background:rgba(148,163,184,0.12); color:var(--muted); }
+        .tier-mid    { background:rgba(96,165,250,0.12);  color:var(--blue); }
+
         .winner-banner { background:linear-gradient(135deg,rgba(74,222,128,0.1) 0%,rgba(34,197,94,0.05) 100%); border:2px solid var(--green); border-radius:14px; padding:1.1rem 1.4rem; margin-bottom:1.25rem; display:flex; align-items:center; gap:1rem; }
         .winner-trophy { font-size:2.2rem; flex-shrink:0; }
         .winner-text h3 { font-family:'Oswald',sans-serif; font-size:1.25rem; color:var(--green); letter-spacing:1px; margin-bottom:0.15rem; }
         .winner-text p { font-size:0.82rem; color:var(--muted); }
 
-        /* Table */
         .results-table { width:100%; border-collapse:collapse; }
         .results-table th { font-family:'Oswald',sans-serif; font-size:0.73rem; font-weight:600; text-transform:uppercase; letter-spacing:0.8px; color:var(--muted); padding:0.55rem 0.75rem; text-align:left; border-bottom:1px solid var(--border); }
         .results-table td { padding:0.7rem 0.75rem; font-size:0.85rem; border-bottom:1px solid rgba(51,65,85,0.35); vertical-align:middle; }
         .results-table tr:last-child td { border-bottom:none; }
         .results-table tr.noyes-row { background:rgba(74,222,128,0.05); }
         .bank-name { font-weight:600; display:flex; align-items:center; flex-wrap:wrap; gap:0.2rem; }
-        .bank-region { font-size:0.72rem; color:var(--muted); display:block; margin-top:0.1rem; }
+        .bank-region-label { font-size:0.72rem; color:var(--muted); display:block; margin-top:0.1rem; }
         .price-cell { font-weight:700; font-size:0.95rem; }
         .price-cell.noyes { color:var(--green); }
         .deal-note { font-size:0.7rem; color:var(--green); display:block; }
         .pack-total { color:var(--muted); font-size:0.8rem; }
 
         .chip { display:inline-block; padding:0.18rem 0.55rem; border-radius:20px; font-size:0.72rem; font-weight:600; }
-        .chip-best { background:rgba(74,222,128,0.15); color:var(--green); }
-        .chip-more { background:rgba(239,68,68,0.12); color:var(--red); }
-        .chip-same { background:rgba(148,163,184,0.1); color:var(--muted); }
-        .chip-cheaper { background:rgba(96,165,250,0.12); color:var(--blue); }
+        .chip-best    { background:rgba(74,222,128,0.15);  color:var(--green); }
+        .chip-more    { background:rgba(239,68,68,0.12);   color:var(--red); }
+        .chip-same    { background:rgba(148,163,184,0.1);  color:var(--muted); }
+        .chip-cheaper { background:rgba(96,165,250,0.12);  color:var(--blue); }
 
         .rank-badge { display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; font-size:0.72rem; font-weight:700; }
         .r1 { background:var(--gold); color:#0a0a0a; }
@@ -99,45 +101,37 @@
         .r3 { background:#b45309; color:white; }
         .rn { background:var(--border); color:var(--muted); font-size:0.65rem; }
 
-        /* Deal box */
         .deal-info-box { background:rgba(74,222,128,0.05); border:1px solid rgba(74,222,128,0.18); border-radius:10px; padding:0.8rem 1rem; font-size:0.8rem; color:var(--muted); line-height:1.7; margin-bottom:1.1rem; display:none; }
         .deal-info-box.show { display:block; }
         .deal-info-box strong { color:var(--green); }
 
-        /* Chart */
-        .chart-wrap { position:relative; height:300px; }
+        .chart-wrap { position:relative; height:320px; }
 
-        /* Notes grid */
         .notes-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:0.75rem; margin-top:1.25rem; }
         .note-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:0.85rem; font-size:0.77rem; color:var(--muted); line-height:1.6; }
         .note-title { font-weight:600; color:var(--text); margin-bottom:0.25rem; font-size:0.8rem; }
 
-        /* CTA */
         .cta-panel { background:linear-gradient(135deg,rgba(74,222,128,0.08) 0%,rgba(34,197,94,0.03) 100%); border:1px solid rgba(74,222,128,0.22); border-radius:16px; padding:1.5rem; text-align:center; margin-top:1.25rem; }
         .cta-panel h3 { font-family:'Oswald',sans-serif; font-size:1.4rem; color:var(--green); letter-spacing:1px; margin-bottom:0.4rem; }
         .cta-panel p { color:var(--muted); font-size:0.85rem; margin-bottom:1rem; }
         .cta-btn { display:inline-block; background:linear-gradient(135deg,var(--green) 0%,var(--green-dark) 100%); color:#0a0a0a; font-family:'Oswald',sans-serif; font-size:1rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; text-decoration:none; padding:0.8rem 2rem; border-radius:25px; transition:all 0.2s; }
         .cta-btn:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(74,222,128,0.4); }
 
-        /* Results area */
         .results-area { display:none; }
         .results-area.show { display:block; }
-
-        /* Placeholder */
         #placeholder { text-align:center; padding:3rem 2rem; }
 
-        /* Included list */
         .included-list { margin-top:0.5rem; padding-left:1.1rem; font-size:0.8rem; color:var(--muted); line-height:2; }
         .included-list li::marker { color:var(--green); }
 
-        @media(max-width:900px){
-            .main-grid { grid-template-columns:1fr; }
-            .notes-grid { grid-template-columns:1fr 1fr; }
-        }
-        @media(max-width:600px){
-            .notes-grid { grid-template-columns:1fr; }
-            .region-pills { gap:0.35rem; }
-        }
+        /* scrollable table wrapper for many rows */
+        .table-scroll { max-height:600px; overflow-y:auto; }
+        .table-scroll::-webkit-scrollbar { width:6px; }
+        .table-scroll::-webkit-scrollbar-track { background:var(--surface); }
+        .table-scroll::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+        @media(max-width:900px){ .main-grid { grid-template-columns:1fr; } .notes-grid { grid-template-columns:1fr 1fr; } }
+        @media(max-width:600px){ .notes-grid { grid-template-columns:1fr; } .region-pills { gap:0.35rem; } }
     </style>
 </head>
 <body>
@@ -163,11 +157,10 @@
     <h1 class="page-title">🌿 Seed Price Calculator</h1>
     <p class="page-subtitle">
         Compare Noyes Boys against seed banks from Canada, the US, and Europe — per seed, pack for pack.<br>
-        <span style="color:var(--muted);font-size:0.82rem;">Competitor prices are estimates converted to CAD. Always verify on their site.</span>
+        <span style="font-size:0.82rem;">Competitor prices are estimates converted to CAD. Always verify on their site before purchasing.</span>
     </p>
 
     <div class="main-grid">
-
         <!-- LEFT -->
         <div>
             <div class="panel">
@@ -181,11 +174,12 @@
                         <button class="region-pill eu" onclick="setRegion('eu')">🌍 + Europe</button>
                         <button class="region-pill all" onclick="setRegion('all')">🌐 All</button>
                     </div>
+                    <div class="region-count" id="regionCount"></div>
                 </div>
 
                 <div class="form-group">
                     <label>Seed Type</label>
-                    <select id="seedType">
+                    <select id="seedType" onchange="calculate()">
                         <option value="fem">Feminized</option>
                         <option value="reg">Regular</option>
                     </select>
@@ -193,7 +187,7 @@
 
                 <div class="form-group">
                     <label>Pack Size</label>
-                    <select id="packSize">
+                    <select id="packSize" onchange="calculate()">
                         <option value="1">Single Seed (1)</option>
                         <option value="3">Small Pack (3 seeds)</option>
                         <option value="5" selected>Standard Pack (5 seeds)</option>
@@ -204,7 +198,7 @@
 
                 <div class="form-group">
                     <label>Apply a Noyes Boys Deal</label>
-                    <select id="deal">
+                    <select id="deal" onchange="calculate()">
                         <option value="none">No Deal / Full Price</option>
                         <optgroup label="── January">
                             <option value="jan_newyear25">NEWYEAR25 — 25% off Line 1</option>
@@ -257,13 +251,13 @@
                     </select>
                 </div>
 
-                <button class="calc-btn" onclick="calculate(); document.getElementById('resultsTable').scrollIntoView({behavior: 'smooth'});">
-                <i class="fas fa-calculator"></i> Compare Prices
+                <button class="calc-btn" onclick="calculate(); document.getElementById('resultsArea').scrollIntoView({behavior:'smooth'});">
+                    <i class="fas fa-calculator"></i> Compare Prices
                 </button>
 
                 <div class="disclaimer">
                     <i class="fas fa-info-circle"></i>
-                    <strong>Note:</strong> Competitor prices are approximations based on publicly available data as of early 2026, converted to CAD. Prices vary widely by strain. Only Noyes Boys prices are exact. Verify on each bank's website before purchasing.
+                    <strong>Note:</strong> Competitor prices are approximations based on publicly available data as of early 2026, converted to CAD. Only Noyes Boys prices are exact. Prices vary by strain — always verify on the competitor's website.
                 </div>
             </div>
 
@@ -292,7 +286,7 @@
             <div class="results-area" id="resultsArea">
                 <div class="deal-info-box" id="dealInfoBox"></div>
 
-                <div class="winner-banner" id="winnerBanner">
+                <div class="winner-banner">
                     <div class="winner-trophy">🏆</div>
                     <div class="winner-text">
                         <h3 id="winnerName">—</h3>
@@ -301,21 +295,23 @@
                 </div>
 
                 <div class="panel" style="padding:0;overflow:hidden;">
-                    <table class="results-table" id="resultsTable">
-                        <thead>
-                            <tr>
-                                <th style="width:30px;">#</th>
-                                <th>Seed Bank</th>
-                                <th>Per Seed (CAD)</th>
-                                <th>Pack Total</th>
-                                <th>vs Noyes Boys</th>
-                            </tr>
-                        </thead>
-                        <tbody id="resultsBody"></tbody>
-                    </table>
+                    <div class="table-scroll">
+                        <table class="results-table" id="resultsTable">
+                            <thead>
+                                <tr>
+                                    <th style="width:30px;">#</th>
+                                    <th>Seed Bank</th>
+                                    <th>Per Seed (CAD)</th>
+                                    <th>Pack Total</th>
+                                    <th>vs Noyes Boys</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsBody"></tbody>
+                        </table>
+                    </div>
                 </div>
 
-                <div class="panel" style="margin-top:1.25rem;" id="resultspanel">
+                <div class="panel" style="margin-top:1.25rem;">
                     <div class="panel-title"><i class="fas fa-chart-bar"></i> Price Per Seed — Visual</div>
                     <div class="chart-wrap"><canvas id="priceChart"></canvas></div>
                 </div>
@@ -333,188 +329,384 @@
 </div>
 
 <script>
-// ══════════════════════════════════════════════
-// PRICING DATA  (all figures in CAD per seed)
+// ═══════════════════════════════════════════════════════════════════
+// PRICING DATA  (all in CAD per seed, approximate as of early 2026)
 //
-// Exchange rates used (April 2026 approx.):
-//   1 USD = 1.39 CAD
-//   1 GBP = 1.75 CAD
-//   1 EUR = 1.53 CAD
+// Exchange rates used:  1 USD = 1.39 CAD  |  1 GBP = 1.75 CAD  |  1 EUR = 1.53 CAD
 //
-// region: 'ca' = Canadian bank
-//         'us' = US-based
-//         'eu' = European / international
-// ══════════════════════════════════════════════
+// Tier legend:
+//   "craft"  = small-batch, premium, hand-bred
+//   "mid"    = mid-market, established bank
+//   "budget" = value/volume bank, budget pricing
+//
+// ═══════════════════════════════════════════════════════════════════
 const BANKS = {
 
-    // ── CANADIAN ──────────────────────────────
+    // ══════════════════════════════
+    // 🇨🇦  CANADIAN  (26 banks)
+    // ══════════════════════════════
+
     noyes: {
-        name:"Noyes Boys",
-        region:"ca", regionLabel:"🇨🇦 Ontario, Canada",
+        name:"Noyes Boys", region:"ca", tier:"craft",
+        regionLabel:"🇨🇦 Ontario — hand-bred craft",
         isNoyes:true,
-        notes:"Hand-bred craft genetics. Includes collector cards, waterproof plant tags, and bonus extras with every order. 95%+ germination guaranteed.",
+        notes:"Hand-bred craft genetics. Includes collector cards, waterproof plant tags, sticker packs, and bonus extras with every order. 95%+ germination guaranteed. Ships to all of Canada.",
         fem:{ 1:20, 3:16.67, 5:15, 10:13, 30:10 },
         reg:{ 1:15, 3:13.33, 5:10, 10:8.5, 30:5 }
     },
+
     cropking: {
-        name:"Crop King Seeds",
-        region:"ca", regionLabel:"🇨🇦 Vancouver, BC — since 2005",
-        notes:"Established Canadian bank, 500+ strains. 80% germination guarantee. Sells in CAD, ships from Vancouver via Canada Post.",
+        name:"Crop King Seeds", region:"ca", tier:"mid",
+        regionLabel:"🇨🇦 Vancouver, BC — since 2005",
+        notes:"Established Canadian bank, 500+ strains. 80% germination guarantee. Ships from Vancouver via Canada Post. Sells in CAD.",
         fem:{ 1:22, 3:19, 5:18, 10:16, 30:13 },
         reg:{ 1:15, 3:13, 5:12, 10:10, 30:8 }
     },
+
     truenorth: {
-        name:"True North Seed Bank",
-        region:"ca", regionLabel:"🇨🇦 Canada — retailer, ships NA",
-        notes:"Large Canadian retailer carrying 250+ breeders. Bills in CAD. On the higher end price-wise but runs frequent free-seed promos. Loyalty points program.",
+        name:"True North Seed Bank", region:"ca", tier:"mid",
+        regionLabel:"🇨🇦 Canada — retailer, ships NA",
+        notes:"Large Canadian retailer carrying 250+ breeders. Bills in CAD. Higher-end pricing but runs frequent promos. Free seeds every order over CA$50. Loyalty points program.",
         fem:{ 1:24, 3:20, 5:18, 10:15, 30:12 },
         reg:{ 1:16, 3:14, 5:12, 10:10, 30:8 }
     },
+
     bcbuddepot: {
-        name:"BC Bud Depot",
-        region:"ca", regionLabel:"🇨🇦 British Columbia — since late 1990s",
-        notes:"Award-winning BC breeder with 200+ strains including the legendary BC God Bud. 25+ years of Canadian genetics. Prices in USD, converted to CAD.",
+        name:"BC Bud Depot", region:"ca", tier:"craft",
+        regionLabel:"🇨🇦 British Columbia — since late 1990s",
+        notes:"Award-winning BC breeder with 200+ strains. Creator of BC God Bud. 25+ years of Canadian genetics. Prices converted from USD.",
         fem:{ 1:21, 3:18, 5:16, 10:14, 30:11 },
         reg:{ 1:14, 3:12, 5:11, 10:9, 30:7 }
     },
+
     jordanislands: {
-        name:"Jordan of the Islands",
-        region:"ca", regionLabel:"🇨🇦 Vancouver Island — since 1992",
-        notes:"Pioneer Canadian breeder since 1992. Creator of the legendary God Bud — Cannabis Cup Best Indica. Old school genetics with proven outdoor performance.",
+        name:"Jordan of the Islands", region:"ca", tier:"craft",
+        regionLabel:"🇨🇦 Vancouver Island — since 1992",
+        notes:"Pioneer Canadian breeder since 1992. Creator of the legendary God Bud (Cannabis Cup Best Indica). Old-school proven outdoor genetics.",
         fem:{ 1:19, 3:16, 5:15, 10:13, 30:10 },
         reg:{ 1:13, 3:11, 5:10, 10:8, 30:6 }
     },
 
-    // ── AMERICAN ──────────────────────────────
+    quebeccannavis: {
+        name:"Quebec Cannabis Seeds", region:"ca", tier:"mid",
+        regionLabel:"🇨🇦 Quebec — since 2009, 500+ strains",
+        notes:"Well-regarded QC bank with 500+ strains. Focused on outdoor-friendly and Canadian-climate genetics. 80% germination guarantee. Ships worldwide free over $200.",
+        fem:{ 1:18, 3:15, 5:14, 10:12, 30:9 },
+        reg:{ 1:13, 3:11, 5:10, 10:8, 30:6 }
+    },
+
+    mjseeds: {
+        name:"MJ Seeds Canada", region:"ca", tier:"budget",
+        regionLabel:"🇨🇦 Canada — since 2009",
+        notes:"Established Canadian bank since 2009. Large feminized selection. Interac e-Transfer accepted. Free seeds with large orders. Budget-friendly pricing.",
+        fem:{ 1:16, 3:13, 5:12, 10:10, 30:8 },
+        reg:{ 1:11, 3:9, 5:8, 10:7, 30:5 }
+    },
+
+    beaverseeds: {
+        name:"Beaver Seeds", region:"ca", tier:"budget",
+        regionLabel:"🇨🇦 Canada — since 2009",
+        notes:"Top-rated Canadian bank for customer support. Same-day shipping. 24/7 support. Budget pricing with a wide variety of feminized, auto, and regular seeds.",
+        fem:{ 1:15, 3:12, 5:11, 10:9, 30:7 },
+        reg:{ 1:11, 3:9, 5:8, 10:7, 30:5 }
+    },
+
+    montreal: {
+        name:"Montreal Cannabis Seeds", region:"ca", tier:"mid",
+        regionLabel:"🇨🇦 Montreal, QC",
+        notes:"Montreal-based bank. 80%+ germination guarantee. Ships via Canada Post within 4-5 business days. Own strain lineup plus third-party breeders.",
+        fem:{ 1:17, 3:14, 5:13, 10:11, 30:8 },
+        reg:{ 1:12, 3:10, 5:9, 10:8, 30:6 }
+    },
+
+    i49: {
+        name:"i49 Seed Bank", region:"ca", tier:"budget",
+        regionLabel:"🇨🇦 Canada — newer bank",
+        notes:"Newer Canadian bank with fast-growing reputation. 80% germination guarantee with replacements. Wide variety of feminized seeds at competitive prices.",
+        fem:{ 1:15, 3:13, 5:12, 10:10, 30:8 },
+        reg:{ 1:11, 3:9, 5:8, 10:7, 30:5 }
+    },
+
+    sunwest: {
+        name:"Sunwest Genetics", region:"ca", tier:"mid",
+        regionLabel:"🇨🇦 Canada — 500+ strains",
+        notes:"500+ strains. 80% germination guarantee. Orders over $200 ship free, over $420 get free seeds. 24/7 support via live chat, email, and phone.",
+        fem:{ 1:16, 3:14, 5:13, 10:11, 30:9 },
+        reg:{ 1:11, 3:10, 5:9, 10:8, 30:6 }
+    },
+
+    vanseeds: {
+        name:"Vancouver Seed Bank", region:"ca", tier:"mid",
+        regionLabel:"🇨🇦 Vancouver, BC",
+        notes:"Local Vancouver seed bank. Nationwide Canadian delivery. Wide variety of feminized, auto, regular, and CBD seeds. Focus on superior genetics and quality control.",
+        fem:{ 1:17, 3:14, 5:13, 10:11, 30:8 },
+        reg:{ 1:12, 3:10, 5:9, 10:8, 30:6 }
+    },
+
+    gtaseedbank: {
+        name:"GTA Seed Bank", region:"ca", tier:"mid",
+        regionLabel:"🇨🇦 Greater Toronto Area — since 2008",
+        notes:"Toronto-area bank open since 2008. Original breeders packs. CBD, feminized, regular, and autoflowering seeds. 19+ age requirement.",
+        fem:{ 1:18, 3:15, 5:14, 10:12, 30:9 },
+        reg:{ 1:13, 3:11, 5:10, 10:8, 30:6 }
+    },
+
+    torontocannabis: {
+        name:"Toronto Cannabis Seeds", region:"ca", tier:"mid",
+        regionLabel:"🇨🇦 Toronto, ON — 15 years",
+        notes:"Toronto-based bank with 15 years of growing and selling Canadian cannabis seeds. Focus on Canadian-grown genetics.",
+        fem:{ 1:17, 3:14, 5:13, 10:11, 30:9 },
+        reg:{ 1:12, 3:10, 5:9, 10:8, 30:6 }
+    },
+
+    bcseedbank: {
+        name:"BC Seed Bank", region:"ca", tier:"mid",
+        regionLabel:"🇨🇦 British Columbia",
+        notes:"BC-focused feminized seed bank. Wide strain selection including many classic BC genetics. Discreet shipping across Canada.",
+        fem:{ 1:17, 3:15, 5:14, 10:12, 30:9 },
+        reg:{ 1:12, 3:10, 5:9, 10:8, 30:6 }
+    },
+
+    drseed: {
+        name:"Dr. Seeds", region:"ca", tier:"budget",
+        regionLabel:"🇨🇦 Canada — since 2019",
+        notes:"Smaller Canadian operation since 2019. Wide auto-flower, feminized, and CBD selection. Free shipping available with code. Also sells growing supplies.",
+        fem:{ 1:14, 3:12, 5:11, 10:9, 30:7 },
+        reg:{ 1:10, 3:8, 5:7, 10:6, 30:5 }
+    },
+
+    weedseedsexpress: {
+        name:"Weed Seeds Express", region:"ca", tier:"budget",
+        regionLabel:"🇨🇦 Canada — budget focus",
+        notes:"Budget Canadian bank with wide variety. Competitive pricing for feminized and auto seeds. Free seeds promos. Ships within Canada.",
+        fem:{ 1:14, 3:12, 5:11, 10:9, 30:7 },
+        reg:{ 1:10, 3:8, 5:7, 10:6, 30:5 }
+    },
+
+    canukseeds: {
+        name:"Canuk Seeds", region:"ca", tier:"mid",
+        regionLabel:"🇨🇦 Canada — in-house breeder",
+        notes:"Canadian in-house breeder available through True North and other retailers. Focuses on stable, consistent feminized genetics. Good mid-range value.",
+        fem:{ 1:18, 3:15, 5:14, 10:12, 30:9 },
+        reg:{ 1:13, 3:11, 5:10, 10:8, 30:6 }
+    },
+
+    greatlakesgenetics: {
+        name:"Great Lakes Genetics", region:"ca", tier:"craft",
+        regionLabel:"🇨🇦 Canada — craft breeder",
+        notes:"Associated with Quebec Cannabis Seeds. Craft Canadian breeder focusing on stable genetics suited to Canadian climates. Lower volume, higher quality focus.",
+        fem:{ 1:20, 3:17, 5:16, 10:14, 30:11 },
+        reg:{ 1:14, 3:12, 5:11, 10:9, 30:7 }
+    },
+
+    heritageseeds: {
+        name:"Heritage Seeds", region:"ca", tier:"craft",
+        regionLabel:"🇨🇦 Canada — heirloom/craft",
+        notes:"Canadian heirloom and craft genetics. Focuses on preserving classic and landrace-based genetics. Small operation, quality over quantity approach.",
+        fem:{ 1:21, 3:18, 5:16, 10:14, 30:11 },
+        reg:{ 1:15, 3:13, 5:11, 10:9, 30:7 }
+    },
+
+    seedfair: {
+        name:"The Seed Fair", region:"ca", tier:"budget",
+        regionLabel:"🇨🇦 Canada — online retailer",
+        notes:"Canadian online retailer shipping to Canada and the US. Broad catalogue of regular, feminized, and auto seeds. Competitive budget pricing.",
+        fem:{ 1:14, 3:12, 5:11, 10:9, 30:7 },
+        reg:{ 1:10, 3:8, 5:7, 10:6, 30:5 }
+    },
+
+    greenavenger: {
+        name:"Green Avenger Seeds", region:"ca", tier:"budget",
+        regionLabel:"🇨🇦 Canada — since 2020",
+        notes:"Canadian breeder since 2020. Reasonable pricing on feminized strains. Ships same week to all Canadian provinces. Novelty seed focus.",
+        fem:{ 1:15, 3:12, 5:11, 10:9, 30:7 },
+        reg:{ 1:10, 3:8, 5:7, 10:6, 30:5 }
+    },
+
+    mjseedscanada2: {
+        name:"MjSeeds Canada", region:"ca", tier:"budget",
+        regionLabel:"🇨🇦 Canada — since 2009",
+        notes:"Separate operation from MJ Seeds. Since 2009. Feminized, autoflowering, regular, fast version, and CBD cannabis seeds. High germination rate focus.",
+        fem:{ 1:15, 3:13, 5:12, 10:10, 30:7 },
+        reg:{ 1:11, 3:9, 5:8, 10:7, 30:5 }
+    },
+
+    subcool: {
+        name:"TGA / Subcool Seeds", region:"ca", tier:"craft",
+        regionLabel:"🇨🇦 Canadian roots — craft",
+        notes:"Canadian-rooted craft breeder with strong following. Known for Space Queen, Vortex, and other complex genetics. Premium craft pricing.",
+        fem:{ 1:22, 3:19, 5:17, 10:15, 30:12 },
+        reg:{ 1:16, 3:13, 5:12, 10:10, 30:8 }
+    },
+
+    djshort: {
+        name:"DJ Short Seeds", region:"ca", tier:"craft",
+        regionLabel:"🇨🇦 Canada — legendary breeder",
+        notes:"Legendary Canadian breeder, creator of Blueberry and F-13. Iconic genetics available through True North and other Canadian retailers. Premium pricing.",
+        fem:{ 1:25, 3:22, 5:20, 10:17, 30:14 },
+        reg:{ 1:18, 3:15, 5:14, 10:11, 30:9 }
+    },
+
+    afseeds: {
+        name:"Alberta Feminized Seeds", region:"ca", tier:"budget",
+        regionLabel:"🇨🇦 Alberta — regional bank",
+        notes:"Alberta-based feminized seed bank. Focus on strains suited to short Alberta growing seasons. Budget pricing for prairie growers.",
+        fem:{ 1:15, 3:12, 5:11, 10:9, 30:7 }
+    },
+
+    // ══════════════════════════════
+    // 🇺🇸  AMERICAN  (11 banks)
+    // ══════════════════════════════
+
     ethos: {
-        name:"Ethos Genetics",
-        region:"us", regionLabel:"🇺🇸 USA — premium craft",
-        notes:"Premium US craft bank. USD prices converted to CAD at ~1.39. Sells in 6-packs and 11-packs typically. High-demand drops sell out fast.",
+        name:"Ethos Genetics", region:"us", tier:"craft",
+        regionLabel:"🇺🇸 USA — premium craft",
+        notes:"Premium US craft bank. Typically sells 6-packs and 11-packs. High-demand drops sell fast. USD converted to CAD at 1.39.",
         fem:{ 3:28, 5:25, 10:22, 30:18 }
     },
+
     inhouse: {
-        name:"In House Genetics",
-        region:"us", regionLabel:"🇺🇸 USA — luxury craft",
-        notes:"High-end US breeder, typically sells 6-packs or 11-packs. USD converted to CAD. Known for Slurricane, Dosi-Do, and other heavy hitters.",
+        name:"In House Genetics", region:"us", tier:"craft",
+        regionLabel:"🇺🇸 USA — luxury craft",
+        notes:"High-end US breeder. Known for Slurricane, Dosi-Do. USD converted to CAD. Typically 6-pack or 11-pack format.",
         fem:{ 3:33, 5:29, 10:25, 30:21 }
     },
+
     compound: {
-        name:"Compound Genetics",
-        region:"us", regionLabel:"🇺🇸 Portland, OR — since 2017",
-        notes:"Leading US craft breeder. Collaborated with Cookies, Alien Labs, Connected, Runtz. USD converted to CAD. Drop model — limited packs, sells fast.",
+        name:"Compound Genetics", region:"us", tier:"craft",
+        regionLabel:"🇺🇸 Portland, OR — since 2017",
+        notes:"Leading US craft breeder. Collaborated with Cookies, Alien Labs, Connected, Runtz. Drop model, sells fast. USD converted to CAD.",
         fem:{ 3:35, 5:31, 10:27, 30:22 }
     },
+
     archive: {
-        name:"Archive Seed Bank",
-        region:"us", regionLabel:"🇺🇸 Portland, OR — craft",
-        notes:"US craft breeder known for Do-Si-Dos, Thick Mint GSC, and Face Off OG lines. USD converted to CAD. Sells regular and feminized in small packs.",
+        name:"Archive Seed Bank", region:"us", tier:"craft",
+        regionLabel:"🇺🇸 Portland, OR — craft",
+        notes:"Known for Do-Si-Dos, Thick Mint GSC, Face Off OG. USD converted to CAD.",
         fem:{ 3:30, 5:26, 10:23, 30:19 },
         reg:{ 3:20, 5:18, 10:15, 30:12 }
     },
+
     exoticgenetix: {
-        name:"Exotic Genetix",
-        region:"us", regionLabel:"🇺🇸 Tacoma, WA — since 2008",
-        notes:"20+ Cannabis Cup wins since 2012. Cookies & Cream, Kimbo Kush, Grease Monkey. USD converted to CAD. Special Batch packs ~$100 USD (5 seeds).",
+        name:"Exotic Genetix", region:"us", tier:"craft",
+        regionLabel:"🇺🇸 Tacoma, WA — since 2008",
+        notes:"20+ Cannabis Cup wins. Cookies & Cream, Kimbo Kush, Grease Monkey. USD converted to CAD.",
         fem:{ 3:32, 5:28, 10:24, 30:20 },
         reg:{ 3:22, 5:19, 10:17, 30:13 }
     },
+
     cannarado: {
-        name:"Cannarado Genetics",
-        region:"us", regionLabel:"🇺🇸 Colorado — craft",
-        notes:"Colorado craft breeder known for Zkittlez crosses and dessert genetics. USD converted to CAD. Sells in limited drops, typically 6 or 10 packs.",
+        name:"Cannarado Genetics", region:"us", tier:"craft",
+        regionLabel:"🇺🇸 Colorado — craft",
+        notes:"Colorado craft breeder, Zkittlez crosses and dessert genetics. USD converted to CAD.",
         fem:{ 3:31, 5:27, 10:24, 30:19 }
     },
+
     symbiotic: {
-        name:"Symbiotic Genetics",
-        region:"us", regionLabel:"🇺🇸 USA — boutique craft",
-        notes:"Boutique US breeder, highly regarded for Wedding Cake and Sundae Driver genetics. USD converted to CAD. Small run packs, limited availability.",
+        name:"Symbiotic Genetics", region:"us", tier:"craft",
+        regionLabel:"🇺🇸 USA — boutique craft",
+        notes:"Wedding Cake and Sundae Driver genetics. Small run packs. USD converted to CAD.",
         fem:{ 3:34, 5:30, 10:26, 30:21 }
     },
+
     bloom: {
-        name:"Bloom Seed Co.",
-        region:"us", regionLabel:"🇺🇸 USA — craft",
-        notes:"US craft bank known for Papaya, Lemon Tree, and fruity hybrids. USD converted to CAD. Typically sells 6-packs of feminized seeds.",
+        name:"Bloom Seed Co.", region:"us", tier:"craft",
+        regionLabel:"🇺🇸 USA — craft",
+        notes:"Known for Papaya, Lemon Tree, fruity hybrids. USD converted to CAD.",
         fem:{ 3:29, 5:26, 10:22, 30:18 }
     },
+
     oni: {
-        name:"Oni Seed Co.",
-        region:"us", regionLabel:"🇺🇸 USA — boutique craft",
-        notes:"Boutique US breeder known for Tropicana Cookies and exotic gas strains. USD converted to CAD. Limited drops, high demand.",
+        name:"Oni Seed Co.", region:"us", tier:"craft",
+        regionLabel:"🇺🇸 USA — boutique craft",
+        notes:"Tropicana Cookies and exotic gas strains. Limited drops. USD converted to CAD.",
         fem:{ 3:36, 5:32, 10:28, 30:23 }
     },
+
     swampboys: {
-        name:"Swamp Boys Seeds",
-        region:"us", regionLabel:"🇺🇸 Florida — craft",
-        notes:"Florida-based craft breeder. Known for Mango Smile, Shaman Breath, and other unique crosses. USD converted to CAD.",
+        name:"Swamp Boys Seeds", region:"us", tier:"craft",
+        regionLabel:"🇺🇸 Florida — craft",
+        notes:"Florida craft breeder. Mango Smile, Shaman Breath. USD converted to CAD.",
         fem:{ 3:27, 5:24, 10:21, 30:17 }
     },
+
     humboldt: {
-        name:"Humboldt Seed Co.",
-        region:"us", regionLabel:"🇺🇸 Humboldt, CA — ships worldwide",
-        notes:"Humboldt County California breeder, ships globally. Known for Blue Dream, Blueberry Muffin, Squirt. USD converted to CAD.",
+        name:"Humboldt Seed Co.", region:"us", tier:"mid",
+        regionLabel:"🇺🇸 Humboldt, CA — ships worldwide",
+        notes:"Humboldt County breeder, ships globally. Blue Dream, Blueberry Muffin. USD converted to CAD.",
         fem:{ 1:20, 3:17, 5:15, 10:13, 30:10 },
         reg:{ 1:14, 3:12, 5:11, 10:9, 30:7 }
     },
 
-    // ── EUROPEAN / INTERNATIONAL ──────────────
+    // ══════════════════════════════
+    // 🌍  EUROPEAN  (8 banks)
+    // ══════════════════════════════
+
     royalqueen: {
-        name:"Royal Queen Seeds",
-        region:"eu", regionLabel:"🇳🇱 Netherlands — since 2007",
-        notes:"One of Europe's largest seed banks, 100+ strains. EUR prices converted to CAD (~1.53). 3-packs from ~€9 (~$14 CAD), 5-packs from ~€14 (~$21 CAD). Ships worldwide.",
+        name:"Royal Queen Seeds", region:"eu", tier:"mid",
+        regionLabel:"🇳🇱 Netherlands — since 2007",
+        notes:"One of Europe's largest banks, 100+ strains. EUR converted to CAD (~1.53). Ships worldwide.",
         fem:{ 1:14, 3:13, 5:12, 10:10, 30:8 },
         reg:{ 1:10, 3:9, 5:8, 10:7, 30:6 }
     },
+
     dutchpassion: {
-        name:"Dutch Passion",
-        region:"eu", regionLabel:"🇳🇱 Amsterdam — since 1987",
-        notes:"One of the oldest seed banks, pioneers of feminized seeds since late 1990s. EUR converted to CAD. Classic genetics including Orange Bud, Auto Ultimate.",
+        name:"Dutch Passion", region:"eu", tier:"mid",
+        regionLabel:"🇳🇱 Amsterdam — since 1987",
+        notes:"Pioneer of feminized seeds. Orange Bud, Auto Ultimate. EUR converted to CAD.",
         fem:{ 1:16, 3:14, 5:13, 10:11, 30:9 },
         reg:{ 1:11, 3:10, 5:9, 10:8, 30:6 }
     },
+
     barneysfarm: {
-        name:"Barney's Farm",
-        region:"eu", regionLabel:"🇳🇱 Amsterdam — since 1992",
-        notes:"Amsterdam legend. 5-packs ~€10.50 ($16 CAD), premium strains up to €20/seed. EUR converted to CAD. Ships worldwide. Multiple Cannabis Cup winner.",
+        name:"Barney's Farm", region:"eu", tier:"mid",
+        regionLabel:"🇳🇱 Amsterdam — since 1992",
+        notes:"Amsterdam legend. 5-packs ~€10.50 (~$16 CAD). Multiple Cannabis Cup wins. EUR converted to CAD.",
         fem:{ 1:18, 3:15, 5:14, 10:12, 30:10 },
         reg:{ 1:12, 3:11, 5:10, 10:9, 30:7 }
     },
+
     fastbuds: {
-        name:"Fast Buds",
-        region:"eu", regionLabel:"🇪🇸 Spain — autoflower specialists",
-        notes:"Spanish autoflower specialist. EUR converted to CAD. Sells 3-packs and 5-packs at very competitive prices for autoflowers. Good value for auto genetics.",
+        name:"Fast Buds", region:"eu", tier:"budget",
+        regionLabel:"🇪🇸 Spain — autoflower specialist",
+        notes:"Spanish autoflower specialist. Competitive prices for auto genetics. EUR converted to CAD.",
         fem:{ 1:15, 3:13, 5:12, 10:10, 30:8 }
     },
+
     seedsman: {
-        name:"Seedsman",
-        region:"eu", regionLabel:"🇬🇧 UK — 5,000+ strains",
-        notes:"Mega-retailer carrying 250+ breeders and 5,000+ strains. GBP/EUR converted to CAD. Budget to premium range. Ships worldwide. Established 2002.",
+        name:"Seedsman", region:"eu", tier:"budget",
+        regionLabel:"🇬🇧 UK — 5,000+ strains",
+        notes:"Mega-retailer, 250+ breeders. Budget to premium range. GBP/EUR converted to CAD. Ships worldwide.",
         fem:{ 1:17, 3:14, 5:13, 10:11, 30:9 },
         reg:{ 1:12, 3:10, 5:9, 10:8, 30:7 }
     },
+
     msnl: {
-        name:"MSNL Seeds",
-        region:"eu", regionLabel:"🇬🇧 UK — Marijuana Seeds NL",
-        notes:"UK-based bank. GBP prices converted to CAD. Mid-range catalogue, ships globally but slower to Canada than domestic banks.",
+        name:"MSNL Seeds", region:"eu", tier:"budget",
+        regionLabel:"🇬🇧 UK — Marijuana Seeds NL",
+        notes:"UK-based bank. Mid-range catalogue, ships globally but slower to Canada. GBP converted to CAD.",
         fem:{ 1:16, 3:14, 5:13, 10:11, 30:8 },
         reg:{ 1:12, 3:10, 5:9, 10:8, 30:6 }
     },
+
     paradise: {
-        name:"Paradise Seeds",
-        region:"eu", regionLabel:"🇳🇱 Amsterdam — since 1994",
-        notes:"Dutch bank since 1994, known for Sensi Star, Wappa, and Delahaze. EUR converted to CAD. Award-winning genetics at mid-range pricing.",
+        name:"Paradise Seeds", region:"eu", tier:"mid",
+        regionLabel:"🇳🇱 Amsterdam — since 1994",
+        notes:"Dutch bank since 1994. Sensi Star, Wappa, Delahaze. EUR converted to CAD.",
         fem:{ 1:15, 3:13, 5:12, 10:10, 30:8 },
         reg:{ 1:10, 3:9, 5:8, 10:7, 30:5 }
     },
+
     greenhouse: {
-        name:"Greenhouse Seeds",
-        region:"eu", regionLabel:"🇳🇱 Amsterdam — since 1995",
-        notes:"Amsterdam coffeeshop-born bank. Known for Super Lemon Haze, White Rhino, and Himalayan Gold. EUR converted to CAD. Multiple Cannabis Cup wins.",
+        name:"Greenhouse Seeds", region:"eu", tier:"mid",
+        regionLabel:"🇳🇱 Amsterdam — since 1995",
+        notes:"Amsterdam coffeeshop-born bank. Super Lemon Haze, White Rhino. EUR converted to CAD.",
         fem:{ 1:16, 3:14, 5:13, 10:11, 30:9 },
         reg:{ 1:11, 3:10, 5:9, 10:8, 30:6 }
     }
 };
 
-// Deal multipliers applied to Noyes Boys price
+// Deal multipliers for Noyes Boys
 const DEAL_FX = {
     none:1, jan_newyear25:0.75, jan_ship:1, feb_purple30:0.70,
     feb_love321:0.667, mar_outdoor35:0.65, mar_tall20:0.80,
@@ -529,9 +721,9 @@ const DEAL_FX = {
 const DEAL_INFO = {
     none:null,
     jan_newyear25:{code:"NEWYEAR25",desc:"25% off Line 1 strains",note:"Applies to Line 1 strains only."},
-    jan_ship:{code:"FREESHIP100",desc:"Free shipping on orders $100+",note:"No per-seed change — shipping savings. Usually starts at $200, enjoy the bonus!"},
-    feb_purple30:{code:"PURPLE30",desc:"30% off Purple Rainbow",note:"Strain-specific. Other items full price."},
-    feb_love321:{code:"LOVE321",desc:"Buy 2 get 1 free (single seeds)",note:"Need 3 single seeds in cart. Cheapest is free. Effective per-seed shown."},
+    jan_ship:{code:"FREESHIP100",desc:"Free shipping on orders $100+",note:"No per-seed price change — shipping savings only. Usually starts at $200."},
+    feb_purple30:{code:"PURPLE30",desc:"30% off Purple Rainbow",note:"Strain-specific."},
+    feb_love321:{code:"LOVE321",desc:"Buy 2 get 1 free (single seeds)",note:"Need 3 single seeds in cart. Cheapest is free."},
     mar_outdoor35:{code:"OUTDOOR35",desc:"35% off Citronoyes Haze",note:"Strain-specific."},
     mar_tall20:{code:"TALL20",desc:"20% off tall strains",note:"Citronoyes Haze, Noyes Haze, Larry Noyes, Super Larry, Citrus Squirts, Noyes Poison."},
     apr_haze28:{code:"HAZE28",desc:"28% off Noyes Haze / Citronoyes Haze",note:"Strain-specific."},
@@ -551,11 +743,16 @@ const DEAL_INFO = {
     nov_thanks29:{code:"THANKS29",desc:"29% off everything",note:"Full order discount."},
     nov_bulk743:{code:"BULK743",desc:"Buy 4 get 3 free (single seeds)",note:"Need 7 different single-seed strains."},
     dec_holiday40:{code:"HOLIDAY40",desc:"40% off everything",note:"Biggest sale of the year."},
-    dec_double555:{code:"DOUBLE555",desc:"Buy 5 get 5 free (single seeds)",note:"Need 5 different single-seed strains. Pay for half, get double."}
+    dec_double555:{code:"DOUBLE555",desc:"Buy 5 get 5 free (single seeds)",note:"Need 5 different single-seed strains."}
 };
 
-const REGION_ORDER = ['ca','us','eu'];
-let activeRegion = 'ca'; // Default: Canada only
+const TIER_HTML = {
+    craft: '<span class="tier tier-craft">Craft</span>',
+    mid:   '<span class="tier tier-mid">Mid</span>',
+    budget:'<span class="tier tier-budget">Budget</span>'
+};
+
+let activeRegion = 'ca';
 let chartInstance = null;
 
 function setRegion(r){
@@ -565,94 +762,84 @@ function setRegion(r){
     calculate();
 }
 
-function getFilteredBanks(type, pack){
-    // Determine which regions to include
-    let allowed;
-    if(activeRegion === 'ca')  allowed = ['ca'];
-    else if(activeRegion === 'us') allowed = ['ca','us'];
-    else if(activeRegion === 'eu') allowed = ['ca','eu'];
-    else allowed = ['ca','us','eu']; // all
+function getAllowed(){
+    if(activeRegion==='ca')  return ['ca'];
+    if(activeRegion==='us')  return ['ca','us'];
+    if(activeRegion==='eu')  return ['ca','eu'];
+    return ['ca','us','eu'];
+}
 
+function getFiltered(type, pack){
+    const allowed = getAllowed();
     return Object.entries(BANKS)
-        .filter(([,b]) => allowed.includes(b.region))
-        .filter(([,b]) => b[type] && b[type][pack])
-        .map(([key,b]) => ({key, ...b}));
+        .filter(([,b]) => allowed.includes(b.region) && b[type]?.[pack])
+        .map(([key,b]) => ({key,...b}));
 }
 
 function calculate(){
     const type = document.getElementById('seedType').value;
     const pack = document.getElementById('packSize').value;
     const deal = document.getElementById('deal').value;
-
-    const banks = getFilteredBanks(type, pack);
+    const banks = getFiltered(type, pack);
     if(!banks.length) return;
+
+    // Update count display
+    const caCount = banks.filter(b=>b.region==='ca').length;
+    const usCount = banks.filter(b=>b.region==='us').length;
+    const euCount = banks.filter(b=>b.region==='eu').length;
+    let countParts = [`${caCount} Canadian`];
+    if(usCount) countParts.push(`${usCount} US`);
+    if(euCount) countParts.push(`${euCount} European`);
+    document.getElementById('regionCount').textContent = `Showing ${banks.length} banks: ${countParts.join(', ')}`;
 
     let results = banks.map(b => {
         let perSeed = b[type][pack];
-        const base = perSeed;
-        if(b.isNoyes && deal !== 'none') perSeed *= (DEAL_FX[deal] || 1);
-        return {
-            key: b.key, name: b.name, region: b.region,
-            regionLabel: b.regionLabel, notes: b.notes,
-            isNoyes: !!b.isNoyes, perSeed, base,
-            packTotal: perSeed * parseInt(pack)
-        };
+        if(b.isNoyes && deal!=='none') perSeed *= (DEAL_FX[deal]||1);
+        return { key:b.key, name:b.name, region:b.region, tier:b.tier,
+                 regionLabel:b.regionLabel, notes:b.notes,
+                 isNoyes:!!b.isNoyes, perSeed, packTotal:perSeed*parseInt(pack) };
     });
 
     results.sort((a,b) => a.perSeed - b.perSeed);
 
-    // Show results
     document.getElementById('placeholder').style.display = 'none';
     document.getElementById('resultsArea').classList.add('show');
 
-    // Winner
     const winner = results[0];
-    document.getElementById('winnerName').textContent = winner.name + (winner.isNoyes ? ' 🌿' : '');
     const dealInfo = DEAL_INFO[deal];
+    document.getElementById('winnerName').textContent = winner.name+(winner.isNoyes?' 🌿':'');
     document.getElementById('winnerDetail').textContent =
         `$${winner.perSeed.toFixed(2)} CAD per seed · $${winner.packTotal.toFixed(2)} CAD for ${pack} seed${pack>1?'s':''}` +
         (winner.isNoyes && dealInfo ? ` — with ${dealInfo.code}` : '');
 
-    // Deal box
     const dealBox = document.getElementById('dealInfoBox');
-    if(dealInfo){
-        dealBox.classList.add('show');
-        dealBox.innerHTML = `<strong>🏷 ${dealInfo.code}</strong> — ${dealInfo.desc}<br><span style="font-size:0.76rem;">${dealInfo.note}</span>`;
-    } else {
-        dealBox.classList.remove('show');
-    }
+    if(dealInfo){ dealBox.classList.add('show'); dealBox.innerHTML=`<strong>🏷 ${dealInfo.code}</strong> — ${dealInfo.desc}<br><span style="font-size:0.76rem;">${dealInfo.note}</span>`; }
+    else dealBox.classList.remove('show');
 
-    // Noyes price for comparison
-    const noyesResult = results.find(r => r.isNoyes);
-    const noyesPrice = noyesResult ? noyesResult.perSeed : null;
+    const noyesPrice = results.find(r=>r.isNoyes)?.perSeed ?? null;
 
-    // Table
     document.getElementById('resultsBody').innerHTML = results.map((r,i) => {
-        const rank = i + 1;
+        const rank = i+1;
         const rc = rank===1?'r1':rank===2?'r2':rank===3?'r3':'rn';
-        const regionBadge = r.region==='ca'
-            ? '<span class="badge badge-ca">CA</span>'
-            : r.region==='us'
-                ? '<span class="badge badge-us">US</span>'
-                : '<span class="badge badge-eu">EU</span>';
-
+        const regionBadge = r.region==='ca'?'<span class="badge badge-ca">CA</span>':
+                            r.region==='us'?'<span class="badge badge-us">US</span>':
+                            '<span class="badge badge-eu">EU</span>';
+        const tierBadge = TIER_HTML[r.tier]||'';
         let chip;
-        if(r.isNoyes){ chip = `<span class="chip chip-best">⭐ Best Value</span>`; }
-        else if(noyesPrice === null){ chip = '—'; }
+        if(r.isNoyes) chip=`<span class="chip chip-best">⭐ Best Value</span>`;
+        else if(noyesPrice===null) chip='—';
         else {
-            const diff = r.perSeed - noyesPrice;
-            if(diff > 0.01)      chip = `<span class="chip chip-more">+$${diff.toFixed(2)}/seed more</span>`;
-            else if(diff < -0.01) chip = `<span class="chip chip-cheaper">$${Math.abs(diff).toFixed(2)}/seed cheaper</span>`;
-            else                  chip = `<span class="chip chip-same">Same price</span>`;
+            const d = r.perSeed - noyesPrice;
+            chip = d>0.01 ? `<span class="chip chip-more">+$${d.toFixed(2)}/seed</span>` :
+                   d<-0.01? `<span class="chip chip-cheaper">$${Math.abs(d).toFixed(2)} cheaper</span>` :
+                             `<span class="chip chip-same">Same</span>`;
         }
-        const dealNote = r.isNoyes && deal!=='none' && dealInfo
-            ? `<span class="deal-note">with ${dealInfo.code}</span>` : '';
-
+        const dealNote = r.isNoyes&&deal!=='none'&&dealInfo ? `<span class="deal-note">with ${dealInfo.code}</span>` : '';
         return `<tr class="${r.isNoyes?'noyes-row':''}">
             <td><span class="rank-badge ${rc}">${rank}</span></td>
             <td>
-                <div class="bank-name">${r.name}${r.isNoyes?' 🌿':''}${regionBadge}</div>
-                <span class="bank-region">${r.regionLabel}</span>
+                <div class="bank-name">${r.name}${r.isNoyes?' 🌿':''}${regionBadge}${tierBadge}</div>
+                <span class="bank-region-label">${r.regionLabel}</span>
             </td>
             <td><span class="price-cell ${r.isNoyes?'noyes':''}">$${r.perSeed.toFixed(2)}</span>${dealNote}</td>
             <td><span class="pack-total">$${r.packTotal.toFixed(2)} CAD</span></td>
@@ -662,10 +849,9 @@ function calculate(){
 
     renderChart(results, pack, dealInfo);
 
-    // Notes
     document.getElementById('notesGrid').innerHTML = results.map(r => `
         <div class="note-card">
-            <div class="note-title">${r.isNoyes?'🌿 ':''}${r.name}</div>
+            <div class="note-title">${r.isNoyes?'🌿 ':''}${r.name} ${TIER_HTML[r.tier]||''}</div>
             <span style="font-size:0.7rem;color:var(--muted);display:block;margin-bottom:0.3rem;">${r.regionLabel}</span>
             ${r.notes}
         </div>`).join('');
@@ -676,53 +862,49 @@ function renderChart(results, pack, dealInfo){
     if(chartInstance) chartInstance.destroy();
 
     const colors = results.map(r => {
-        if(r.isNoyes) return 'rgba(74,222,128,0.85)';
-        if(r.region === 'us') return 'rgba(96,165,250,0.7)';
-        if(r.region === 'eu') return 'rgba(167,139,250,0.7)';
-        return 'rgba(251,191,36,0.7)';
+        if(r.isNoyes)       return 'rgba(74,222,128,0.9)';
+        if(r.region==='us') return 'rgba(96,165,250,0.7)';
+        if(r.region==='eu') return 'rgba(167,139,250,0.7)';
+        // Canadian non-Noyes — shade by tier
+        if(r.tier==='craft')  return 'rgba(251,191,36,0.7)';
+        if(r.tier==='budget') return 'rgba(148,163,184,0.5)';
+        return 'rgba(52,211,153,0.55)'; // mid CA
     });
 
     chartInstance = new Chart(ctx,{
         type:'bar',
         data:{
-            labels: results.map(r => r.name.length > 16 ? r.name.substring(0,15)+'…' : r.name),
-            datasets:[{
-                label:'Price per Seed (CAD)',
-                data: results.map(r => r.perSeed),
-                backgroundColor: colors,
-                borderColor: colors.map(c => c.replace('0.7','1').replace('0.85','1')),
-                borderWidth:2,
-                borderRadius:6
-            }]
+            labels: results.map(r => r.name.length>14 ? r.name.substring(0,13)+'…' : r.name),
+            datasets:[{ label:'Price/Seed (CAD)', data:results.map(r=>r.perSeed),
+                backgroundColor:colors, borderColor:colors.map(c=>c.replace(/[\d.]+\)$/,'1)')),
+                borderWidth:2, borderRadius:5 }]
         },
         options:{
-            responsive:true,
-            maintainAspectRatio:false,
+            responsive:true, maintainAspectRatio:false,
             plugins:{
                 legend:{display:false},
                 tooltip:{
                     callbacks:{
-                        title: ctx => results[ctx[0].dataIndex].name,
-                        label: ctx => {
-                            const r = results[ctx.dataIndex];
-                            const lines = [` $${r.perSeed.toFixed(2)} CAD per seed`, ` $${r.packTotal.toFixed(2)} CAD for ${pack} seeds`];
-                            if(r.isNoyes && dealInfo) lines.push(` (with ${dealInfo.code})`);
-                            return lines;
+                        title:ctx=>results[ctx[0].dataIndex].name,
+                        label:ctx=>{
+                            const r=results[ctx.dataIndex];
+                            const ls=[` $${r.perSeed.toFixed(2)} CAD per seed`,` $${r.packTotal.toFixed(2)} CAD for ${pack} seeds`];
+                            if(r.isNoyes&&dealInfo) ls.push(` (with ${dealInfo.code})`);
+                            return ls;
                         }
                     },
-                    backgroundColor:'#1e293b', borderColor:'#334155', borderWidth:1,
-                    titleColor:'#4ade80', bodyColor:'#cbd5e1', padding:10
+                    backgroundColor:'#1e293b',borderColor:'#334155',borderWidth:1,
+                    titleColor:'#4ade80',bodyColor:'#cbd5e1',padding:10
                 }
             },
             scales:{
-                x:{ ticks:{ color:'#94a3b8', font:{size:10} }, grid:{ color:'rgba(51,65,85,0.4)' } },
-                y:{ ticks:{ color:'#94a3b8', callback:v=>`$${v}` }, grid:{ color:'rgba(51,65,85,0.4)' }, beginAtZero:true }
+                x:{ ticks:{color:'#94a3b8',font:{size:9},maxRotation:35,minRotation:20}, grid:{color:'rgba(51,65,85,0.4)'} },
+                y:{ ticks:{color:'#94a3b8',callback:v=>`$${v}`}, grid:{color:'rgba(51,65,85,0.4)'}, beginAtZero:true }
             }
         }
     });
 }
 
-// Auto-run on load with defaults (Canada, feminized, 5-pack, no deal)
 window.addEventListener('DOMContentLoaded', calculate);
 </script>
 </body>
