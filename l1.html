@@ -1,0 +1,153 @@
+<style>
+    :root {
+        --accent: #2ecc71; /* Leafy Green */
+        --dark: #1a1a1a;
+        --light-gray: #f9f9f9;
+        --border: #e0e0e0;
+    }
+
+    .strain-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+        padding: 20px;
+    }
+
+    .strain-card {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        background: white;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .strain-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .strain-image {
+        width: 100%;
+        height: 200px;
+        object-fit: contain;
+        background: var(--dark); /* Matches your logo backgrounds */
+        padding: 10px;
+    }
+
+    .strain-content {
+        padding: 20px;
+        flex-grow: 1;
+    }
+
+    .availability {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        font-weight: bold;
+        color: var(--accent);
+        margin-bottom: 5px;
+    }
+
+    .strain-title {
+        font-size: 1.5rem;
+        margin: 0;
+        color: var(--dark);
+    }
+
+    .lineage {
+        font-style: italic;
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 15px;
+    }
+
+    .stats-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+    }
+
+    .badge {
+        background: var(--light-gray);
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: 1px solid #eee;
+    }
+
+    .description {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        color: #444;
+        margin-bottom: 15px;
+    }
+
+    .purchase-section {
+        background: var(--light-gray);
+        padding: 15px 20px;
+        border-top: 1px solid var(--border);
+    }
+
+    select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        margin-bottom: 10px;
+        font-family: inherit;
+    }
+
+    .btn-add {
+        width: 100%;
+        background: var(--dark);
+        color: white;
+        border: none;
+        padding: 12px;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .btn-add:hover {
+        background: var(--accent);
+    }
+</style>
+
+<div class="strain-grid">
+    
+    <div class="strain-card">
+        <img src="assets/logos/new logos/alienoyes kush.png" class="strain-image" alt="Alienoyes Kush">
+        <div class="strain-content">
+            <div class="availability">● In Stock</div>
+            <h3 class="strain-title">Alienoyes Kush</h3>
+            <div class="lineage">Alien Tech x Noyes Kush</div>
+            
+            <div class="stats-row">
+                <span class="badge">75% Indica</span>
+                <span class="badge">28% THC</span>
+                <span class="badge">62 Days</span>
+            </div>
+            
+            <p class="description">
+                <strong>Profile:</strong> Gas, Earthy, Citrus. <br>
+                <strong>Effects:</strong> Comfy, Restful, Happy, Relaxed. <br>
+                A powerful cross bringing together the best of both worlds with dense, resinous buds.
+            </p>
+        </div>
+        
+        <div class="purchase-section">
+            <select>
+                <option>1 Seed - $20 CAD</option>
+                <option>3 Seeds - $50 CAD</option>
+                <option>5 Seeds - $75 CAD</option>
+                <option>10 Seeds - $130 CAD</option>
+            </select>
+            <button class="btn-add">Add to Cart</button>
+        </div>
+    </div>
+
+    </div>
