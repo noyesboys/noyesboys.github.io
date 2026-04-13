@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Line 1 - Noyes Boys Premium Genetics</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/noyes boys logo.png" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --neon-green: #4ade80;
+            --glass-bg: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --carbon-dark: #0a0a0a;
+            --fire-glow: rgba(74, 222, 128, 0.4);
+        }
+
+        body {
+            background-color: var(--carbon-dark);
+            /* Dark Carbon Fiber Pattern */
+            background-image: 
+                linear-gradient(45deg, #111 25%, transparent 25%), 
+                linear-gradient(-45deg, #111 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #111 75%), 
+                linear-gradient(-45deg, transparent 75%, #111 75%);
+            background-size: 8px 8px;
+            color: #fff;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* --- Hero Banner --- */
+        header.masthead {
+            height: 50vh;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3), var(--carbon-dark)), 
+                        url('assets/img/bg-masthead.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-bottom: 3px solid var(--neon-green);
+        }
+
+        .logo-main {
+            max-width: 180px;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.8));
+            margin-bottom: 15px;
+        }
+
+        /* --- Filter Navigation --- */
+        .filter-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(15px);
+            padding: 15px 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .filter-btn {
+            background: transparent;
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+            padding: 10px 22px;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--neon-green);
+            color: #000;
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+
+        /* --- Grid System --- */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .strain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 40px;
+        }
+
+        /* --- 3D Flip Card --- */
+        .strain-card {
+            perspective: 1500px;
+            height: 620px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .strain-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        /* Fire Highlight on Hover */
+        .strain-card:hover .card-front, 
+        .strain-card:hover .card-back {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 30px var(--fire-glow);
+        }
+
+        /* Front: Product Info */
+        .card-front {
+            padding: 0;
+            z-index: 2;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            z-index: 1;
+        }
+
+        /* --- Card Details --- */
+        .img-wrapper {
+            width: 100%;
+            height: 280px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .img-wrapper img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .card-content {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sash {
+            position: absolute;
+            top: 25px;
+            right: -35px;
+            background: #e74c3c;
+            color: white;
+            padding: 5px 40px;
+            transform: rotate(45deg);
+            font-size: 0.65rem;
+            font-weight: 900;
+            z-index: 10;
+            text-transform: uppercase;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+        }
+
+        .strain-name {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin: 0;
+            color: var(--neon-green);
+            letter-spacing: -0.5px;
+        }
+
+        .lineage {
+            font-style: italic;
+            color: #aaa;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-badge {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* --- Purchase Section --- */
+        .purchase-controls {
+            margin-top: auto;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        select {
+            width: 100%;
+            background: #1a1a1a;
+            color: white;
+            border: 1px solid var(--glass-border);
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .btn-add {
+            width: 100%;
+            background: var(--neon-green);
+            color: #000;
+            border: none;
+            padding: 14px;
+            border-radius: 6px;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-add:hover {
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 80px 20px;
+            background: #050505;
+            color: #555;
+            font-size: 0.8rem;
+            border-top: 1px solid #1a1a1a;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .strain-card { height: auto; }
+            .card-inner { transform-style: flat; }
+            .strain-card:hover .card-inner { transform: none; }
+            .card-back { display: none; } /* Show collector card as a separate link or pop-up on mobile if desired */
+        }
+    </style>
+</head>
+<body>
+
+<header class="masthead">
+    <img src="assets/img/noyes boys logo.png" class="logo-main" alt="Logo">
+    <h1 style="font-size: 3.5rem; font-weight: 900; margin: 0;">LINE 1</h1>
+    <p style="color: var(--neon-green); letter-spacing: 5px; font-weight: 600;">PREMIUM GENETICS</p>
+</header>
+
+<nav class="filter-nav">
+    <button class="filter-btn active" onclick="filterStrains('all')">All</button>
+    <button class="filter-btn" onclick="filterStrains('sativa')">Sativa</button>
+    <button class="filter-btn" onclick="filterStrains('indica')">Indica</button>
+    <button class="filter-btn" onclick="filterStrains('hybrid')">Hybrid</button>
+</nav>
+
+<div class="container">
+    <div class="strain-grid" id="strainGrid">
+        
+        <div class="strain-card" data-type="indica">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="sash">Breeder's Choice</div>
+                    <div class="img-wrapper"><img src="assets/logos/new logos/alienoyes kush.png"></div>
+                    <div class="card-content">
+                        <h3 class="strain-name">Alienoyes Kush</h3>
+                        <span class="lineage">Alien Tech x Noyes Kush</span>
+                        <div class="stats-row">
+                            <span class="stat-badge">75% Indica</span>
+                            <span class="stat-badge">27-28% THC</span>
+                        </div>
+                        <div class="purchase-controls">
+                            <select id="qty-alienoyes">
+                                <option value="1|20">1 Seed - $20</option>
+                                <option value="3|50">3 Seeds - $50</option>
+                                <option value="5|75">5 Seeds - $75</option>
+                                <option value="10|130">10 Seeds - $130</option>
+                            </select>
+                            <button class="btn-add" onclick="handleAddToCart('Alienoyes Kush', 'qty-alienoyes', 'assets/logos/new logos/alienoyes kush.png')">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <img src="assets/sept22edits/websiteimagedata/cards/finished/alienoyeskushcard.jpg" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+            </div>
+        </div>
+
+        <div class="strain-card" data-type="indica">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="img-wrapper"><img src="assets/logos/new logos/purple rainbow.png"></div>
+                    <div class="card-content">
+                        <h3 class="strain-name">Purple Rainbow</h3>
+                        <span class="lineage">Alien Tech x Rainbow Belts x Wedding Cake</span>
+                        <div class="stats-row">
+                            <span class="stat-badge">75% Indica</span>
+                            <span class="stat-badge">25-27% THC</span>
+                        </div>
+                        <div class="purchase-controls">
+                            <select id="qty-purple">
+                                <option value="1|20">1 Seed - $20</option>
+                                <option value="3|50">3 Seeds - $50</option>
+                                <option value="5|75">5 Seeds - $75</option>
+                                <option value="10|130">10 Seeds - $130</option>
+                            </select>
+                            <button class="btn-add" onclick="handleAddToCart('Purple Rainbow', 'qty-purple', 'assets/logos/new logos/purple rainbow.png')">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <img src="assets/sept22edits/websiteimagedata/cards/finished/purplerainbowscard.png" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+            </div>
+        </div>
+
+        <div class="strain-card" data-type="indica">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="sash">Breeder's Choice</div>
+                    <div class="img-wrapper"><img src="assets/blkbkg/noyesbreath.png"></div>
+                    <div class="card-content">
+                        <h3 class="strain-name">Noyes Breath</h3>
+                        <span class="lineage">Noyes Kush x Meatbreath</span>
+                        <div class="stats-row">
+                            <span class="stat-badge">90% Indica</span>
+                            <span class="stat-badge">25-28% THC</span>
+                        </div>
+                        <div class="purchase-controls">
+                            <select id="qty-breath">
+                                <option value="1|20">1 Seed - $20</option>
+                                <option value="3|50">3 Seeds - $50</option>
+                                <option value="5|75">5 Seeds - $75</option>
+                                <option value="10|130">10 Seeds - $130</option>
+                            </select>
+                            <button class="btn-add" onclick="handleAddToCart('Noyes Breath', 'qty-breath', 'assets/blkbkg/noyesbreath.png')">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <img src="assets/sept22edits/websiteimagedata/cards/finished/noyesbreathcard.jpg" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+            </div>
+        </div>
+
+        <div class="strain-card" data-type="hybrid">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="sash">Breeder's Choice</div>
+                    <div class="img-wrapper"><img src="assets/logos/new logos/mangonoyes kush.png"></div>
+                    <div class="card-content">
+                        <h3 class="strain-name">Mangonoyes Kush</h3>
+                        <span class="lineage">Mango Kush x Noyes Kush</span>
+                        <div class="stats-row">
+                            <span class="stat-badge">50/50 Hybrid</span>
+                            <span class="stat-badge">25-26% THC</span>
+                        </div>
+                        <div class="purchase-controls">
+                            <select id="qty-mango">
+                                <option value="1|20">1 Seed - $20</option>
+                                <option value="3|50">3 Seeds - $50</option>
+                                <option value="5|75">5 Seeds - $75</option>
+                                <option value="10|130">10 Seeds - $130</option>
+                            </select>
+                            <button class="btn-add" onclick="handleAddToCart('Mangonoyes Kush', 'qty-mango', 'assets/logos/new logos/mangonoyes kush.png')">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <img src="assets/sept22edits/websiteimagedata/cards/finished/mangonoyeskushcard.png" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+            </div>
+        </div>
+
+        <div class="strain-card" data-type="sativa">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="img-wrapper"><img src="assets/logos/new logos/rainbow cakes.png"></div>
+                    <div class="card-content">
+                        <h3 class="strain-name">Rainbow Cakes</h3>
+                        <span class="lineage">Noyes Breath x Biscotti x Wedding Cake</span>
+                        <div class="stats-row">
+                            <span class="stat-badge">70% Sativa</span>
+                            <span class="stat-badge">24-26% THC</span>
+                        </div>
+                        <div class="purchase-controls">
+                            <select id="qty-rcakes">
+                                <option value="1|20">1 Seed - $20</option>
+                                <option value="3|50">3 Seeds - $50</option>
+                                <option value="5|75">5 Seeds - $75</option>
+                                <option value="10|130">10 Seeds - $130</option>
+                            </select>
+                            <button class="btn-add" onclick="handleAddToCart('Rainbow Cakes', 'qty-rcakes', 'assets/logos/new logos/rainbow cakes.png')">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <img src="assets/sept22edits/websiteimagedata/cards/finished/rainbowcakescard.png" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 Noyes Boys Genetics. All seeds sold as adult souvenir collectibles only.</p>
+</footer>
+
+<script>
+    // --- Filter Logic ---
+    function filterStrains(type) {
+        const cards = document.querySelectorAll('.strain-card');
+        const buttons = document.querySelectorAll('.filter-btn');
+        
+        buttons.forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        cards.forEach(card => {
+            if (type === 'all' || card.dataset.type === type) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // --- Cart Logic (Synced with your Checkout.html) ---
+    function handleAddToCart(name, selectId, imgPath) {
+        const select = document.getElementById(selectId);
+        const [qty, price] = select.value.split('|');
+        
+        const cartItem = {
+            id: Date.now(), // Unique ID for this entry
+            name: name,
+            packSize: qty + " Seeds",
+            price: parseFloat(price),
+            qty: 1,
+            img: imgPath
+        };
+
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart.push(cartItem);
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        alert(`${name} (${qty} Seeds) added to your collection!`);
+    }
+</script>
+
+</body>
+</html>
