@@ -280,24 +280,15 @@
 
                     <!-- Promo -->
                     <div class="panel">
-                        <div class="panel-title"><i class="fas fa-tag"></i> This Month's Deal</div>
-                        <!-- Active deal display — auto-populated on load -->
-                        <div id="activeDealDisplay" style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.25);border-radius:10px;padding:0.85rem 1rem;margin-bottom:0.75rem;display:none;">
-                            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.5rem;">
-                                <div>
-                                    <div style="font-family:'Oswald',sans-serif;font-size:0.85rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.2rem;">Auto-Applied Deal</div>
-                                    <div id="activeDealCode" style="font-family:monospace;font-size:1.05rem;font-weight:700;color:var(--green);letter-spacing:2px;"></div>
-                                    <div id="activeDealDesc" style="font-size:0.78rem;color:var(--muted);margin-top:0.2rem;"></div>
-                                </div>
-                                <span style="background:rgba(74,222,128,0.15);color:var(--green);font-size:0.72rem;font-weight:700;padding:0.25rem 0.6rem;border-radius:20px;border:1px solid rgba(74,222,128,0.3);">✓ APPLIED</span>
+                        <div class="panel-title"><i class="fas fa-tag"></i> Promo Code</div>
+                        <div class="promo-row">
+                            <div class="form-group">
+                                <input type="text" id="promoInput" placeholder="Enter this month's code" autocomplete="off" style="text-transform:uppercase;">
                             </div>
+                            <button class="apply-btn" onclick="applyPromo()">Apply</button>
                         </div>
                         <div id="promoStatus" class="promo-status"></div>
-                        <!-- Hidden input still needed for the promo engine -->
-                        <input type="text" id="promoInput" autocomplete="off" style="display:none;text-transform:uppercase;">
-                        <a href="FeminizedSeedsHomepage.html" style="display:inline-flex;align-items:center;gap:0.4rem;color:var(--green);font-size:0.8rem;font-weight:600;text-decoration:none;margin-top:0.25rem;">
-                            <i class="fas fa-ticket-alt"></i> Check out other Noyes Boys promo codes →
-                        </a>
+                        <p class="hint" style="margin-top:0.5rem;">Current codes on our <a href="FeminizedSeedsHomepage.html" style="color:var(--green);">homepage</a>. Only this month's codes work.</p>
                     </div>
 
                     <!-- ── TRUST PANEL ── -->
@@ -1142,70 +1133,11 @@ function removeCartItem(idx){
     if(appliedPromo){ const r=calcPromo(appliedPromo,cartData.items,cartData.total); showPromoStatus(r.warning?'info':r.discount>0||r.freeShipping?'valid':'info', r.warning||r.message||`✓ Code "${appliedPromo.code}" applied!`); }
 }
 
-// ══════════════════════════════════════════════════════════
-// AUTO-APPLY THIS MONTH'S PRIMARY DEAL
-// ══════════════════════════════════════════════════════════
-const DEFAULT_DEAL_BY_MONTH = {
-    0:'NEWYEAR25', 1:'PURPLE30',  2:'OUTDOOR35', 3:'HAZE28',
-    4:'SATIVA32',  5:'SUMMER33',  6:'CANADA35',  7:'FAST22',
-    8:'LEARN26',   9:'SPOOKY27', 10:'THANKS29', 11:'HOLIDAY40'
-};
-
-const DEAL_DESCRIPTIONS = {
-    'NEWYEAR25':'25% OFF Line 1 strains',    'FREESHIP100':'Free shipping on orders $100+',
-    'PURPLE30':'30% OFF Purple Rainbow',      'LOVE321':'Buy 2 single seeds, get 1 FREE',
-    'OUTDOOR35':'35% OFF Citronoyes Haze',    'TALL20':'20% OFF tall strains',
-    'HAZE28':'28% OFF Noyes Haze / Citronoyes Haze', 'GEODES15':'15% OFF Line 2 Geodes',
-    'SATIVA32':'32% OFF sativa strains',      'MAY532':'Buy 3 singles, get 2 FREE',
-    'SUMMER33':'33% OFF Line 3 OG strains',   'CAKE25':'25% OFF Cake Breath',
-    'CANADA35':'35% OFF Mangonoyes Kush',     'NOYES30':'30% OFF Noyes Kush crosses',
-    'FAST22':'22% OFF your entire order',     'BISCOTTI40':'40% OFF Biscotti Rocks',
-    'LEARN26':'26% OFF Line 1 strains',       'EXPERIMENT35':'35% OFF Yesno Kush',
-    'SPOOKY27':'27% OFF Purple Rainbow',      'OG25':'25% OFF Line 3 OG strains',
-    'THANKS29':'29% OFF your entire order',   'BULK743':'Buy 4 singles, get 3 FREE',
-    'HOLIDAY40':'40% OFF your entire order',  'MERCH25':'25% OFF merch',
-    'DOUBLE555':'Buy 5 singles, get 5 FREE'
-};
-
-function autoApplyMonthlyDeal(){
-    const code = DEFAULT_DEAL_BY_MONTH[CUR_MONTH];
-    if(!code || !VALID_CODES[code]) return;
-
-    // Set hidden input value so applyPromo() reads it
-    const promoInput = document.getElementById('promoInput');
-    if(promoInput) promoInput.value = code;
-
-    // Apply it
-    appliedPromo = { code, ...VALID_CODES[code] };
-    const result = calcPromo(appliedPromo, cartData?.items || [], cartData?.total || 0);
-
-    // Show the styled deal display card
-    const display = document.getElementById('activeDealDisplay');
-    const codeEl  = document.getElementById('activeDealCode');
-    const descEl  = document.getElementById('activeDealDesc');
-    if(display && codeEl && descEl){
-        codeEl.textContent = code;
-        descEl.textContent = DEAL_DESCRIPTIONS[code] || result.label || '';
-        display.style.display = 'block';
-    }
-
-    // Show any warning (e.g. no eligible items yet)
-    if(result.warning){
-        showPromoStatus('info', result.warning);
-    } else if(result.message){
-        showPromoStatus('valid', result.message);
-    }
-
-    updateTotals();
-}
-
 // ── Init
 document.addEventListener('DOMContentLoaded',()=>{
     loadCartData();
     document.getElementById('promoInput')?.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); applyPromo(); } });
     initCarousel();
-    // Auto-apply after cart is loaded (small delay to let renderPage finish)
-    setTimeout(autoApplyMonthlyDeal, 100);
 });
 
 // ══════════════════════════════════════════════════════════
