@@ -826,7 +826,7 @@ function calculate(){
                             '<span class="badge badge-eu">EU</span>';
         const tierBadge = TIER_HTML[r.tier]||'';
         let chip;
-        if(r.isNoyes) chip=`<span class="chip chip-best">⭐ Our Seeds</span>`;
+        if(r.isNoyes) chip=`<span class="chip chip-best">⭐ Best Value</span>`;
         else if(noyesPrice===null) chip='—';
         else {
             const d = r.perSeed - noyesPrice;
@@ -905,7 +905,30 @@ function renderChart(results, pack, dealInfo){
     });
 }
 
-window.addEventListener('DOMContentLoaded', calculate);
+window.addEventListener('DOMContentLoaded', () => {
+    // Auto-select this month's primary deal in the dropdown
+    const MONTH_TO_DEAL = {
+        0:  'jan_newyear25',
+        1:  'feb_purple30',
+        2:  'mar_outdoor35',
+        3:  'apr_haze28',
+        4:  'may_sativa32',
+        5:  'jun_summer33',
+        6:  'jul_canada35',
+        7:  'aug_fast22',
+        8:  'sep_learn26',
+        9:  'oct_spooky27',
+        10: 'nov_thanks29',
+        11: 'dec_holiday40'
+    };
+    const currentMonth = new Date().getMonth();
+    const dealForMonth = MONTH_TO_DEAL[currentMonth];
+    if(dealForMonth){
+        const dealSelect = document.getElementById('deal');
+        if(dealSelect) dealSelect.value = dealForMonth;
+    }
+    calculate();
+});
 </script>
 </body>
 </html>
