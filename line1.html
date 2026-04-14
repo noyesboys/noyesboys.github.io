@@ -483,6 +483,131 @@
             .masthead h1 { font-size: 1.8rem; letter-spacing: 0.4rem; }
             .strain-card { height: auto; }
         }
+        @media (max-width: 768px) {
+ 
+    /* Kill the zoom that was crushing cards */
+    body { zoom: 1 !important; }
+ 
+    /* Nav */
+    .nav-links { display: none; }
+    .header-inner { padding: 0 12px; }
+ 
+    /* Masthead */
+    .masthead { height: auto; min-height: 220px; padding: 80px 16px 24px; }
+    .masthead h1 { font-size: 1.6rem; letter-spacing: 0.3rem; }
+    .masthead h2 { font-size: 0.78rem; }
+    .cta-buttons { gap: 0.5rem; }
+    .btn { padding: 8px 14px; font-size: 0.7rem; }
+ 
+    /* Filter nav */
+    .filter-nav { top: 58px; flex-wrap: wrap; gap: 6px; padding: 8px 10px; }
+    .filter-btn { font-size: 0.65rem; padding: 5px 12px; }
+ 
+    /* Grid — single column on mobile */
+    .strain-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 0 4px;
+    }
+ 
+    /* ── CARD: drop the flip behaviour on mobile
+       Instead show everything stacked in one face ── */
+    .strain-card {
+        height: auto !important;
+        perspective: none;
+    }
+ 
+    .card-inner {
+        transform: none !important;
+        transition: none;
+        position: relative;
+        transform-style: flat;
+        height: auto;
+    }
+ 
+    /* Front face — normal flow */
+    .card-front {
+        position: relative;
+        backface-visibility: visible;
+        transform: none;
+        height: auto;
+        border-radius: 10px;
+    }
+ 
+    /* Hide the back face card image on mobile —
+       show it below the purchase zone as a preview instead */
+    .card-back {
+        display: none;
+    }
+ 
+    /* Image zone — slightly shorter on mobile */
+    .img-zone {
+        height: 180px;
+        cursor: default; /* tap to flip removed on mobile */
+    }
+ 
+    /* Card body — give it room to breathe */
+    .card-body {
+        padding: 14px 14px 12px;
+    }
+ 
+    .strain-title { font-size: 1rem; }
+    .lineage { font-size: 0.68rem; }
+    .description { font-size: 0.72rem; margin-bottom: 10px; }
+ 
+    .strain-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 4px 10px;
+        margin-bottom: 10px;
+    }
+    .stat-item { font-size: 0.65rem; }
+ 
+    /* Hide flip hint — no flip on mobile */
+    .flip-hint { display: none; }
+ 
+    /* Purchase zone */
+    .purchase-zone { padding: 10px 10px 12px; }
+    .price-display { font-size: 1rem; margin-bottom: 8px; }
+ 
+    select {
+        font-size: 0.78rem;
+        padding: 8px;
+        margin-bottom: 8px;
+    }
+ 
+    .btn-group { gap: 8px; }
+    .btn-cart {
+        padding: 11px 8px;
+        font-size: 0.68rem;
+    }
+    .btn-more {
+        padding: 11px 8px;
+        font-size: 0.68rem;
+    }
+ 
+    /* Sash — keep it but make it fit */
+    .sash {
+        font-size: 0.45rem;
+        padding: 2px 24px;
+        right: -22px;
+        top: 10px;
+    }
+ 
+    /* Cart modal */
+    .cart-modal-content {
+        margin: 10% auto;
+        padding: 1.25rem;
+        width: 94%;
+    }
+ 
+    .cart-item { flex-direction: column; gap: 0.75rem; align-items: flex-start; }
+    .cart-item-controls { width: 100%; justify-content: space-between; }
+ 
+    /* Disclaimer */
+    .disclaimer-section { padding: 24px 16px; }
+    .disclaimer-section h4 { font-size: 0.72rem; }
+    .disclaimer-section h5 { font-size: 0.64rem; }
+}
     </style>
 </head>
 <body>
