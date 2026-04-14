@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Noyes Boys Line 1 - Premium Canadian Cannabis Genetics</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/noyes boys logo.png" />
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --neon-green: #4ade80;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --carbon-dark: #0a0a0a;
+        }
+
+        body {
+            background-color: var(--carbon-dark);
+            background-image: linear-gradient(45deg, #111 25%, transparent 25%), linear-gradient(-45deg, #111 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #111 75%), linear-gradient(-45deg, transparent 75%, #111 75%);
+            background-size: 8px 8px;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- Cart Float --- */
+        .cart-status {
+            position: fixed; top: 20px; right: 20px; z-index: 2000;
+            background: var(--neon-green); color: black; border: none;
+            padding: 12px 20px; border-radius: 30px; cursor: pointer; 
+            font-weight: 900; box-shadow: 0 0 15px rgba(74, 222, 128, 0.5);
+            transition: 0.3s; display: flex; align-items: center; gap: 10px;
+            text-decoration: none;
+        }
+        .cart-status:hover { transform: scale(1.05); background: #fff; }
+
+        header.masthead {
+            height: 30vh;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), var(--carbon-dark)), url('assets/img/bg-masthead.jpg');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border-bottom: 2px solid var(--neon-green);
+        }
+
+        .filter-nav {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(10, 10, 10, 0.9); backdrop-filter: blur(10px);
+            padding: 10px; display: flex; justify-content: center; gap: 8px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .filter-btn {
+            background: transparent; color: var(--neon-green); border: 1px solid var(--neon-green);
+            padding: 6px 12px; font-weight: 800; cursor: pointer; border-radius: 4px; font-size: 0.7rem;
+        }
+        .filter-btn.active { background: var(--neon-green); color: #000; }
+
+        /* --- Grid & Neater Tiles --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 25px 15px; }
+        .strain-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
+            gap: 20px; 
+        }
+
+        .strain-card { perspective: 1500px; height: 660px; }
+        .card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
+        .strain-card.is-flipped .card-inner { transform: rotateY(180deg); }
+
+        .card-front, .card-back {
+            position: absolute; width: 100%; height: 100%; backface-visibility: hidden;
+            border-radius: 10px; background: var(--glass-bg); backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border); display: flex; flex-direction: column; overflow: hidden;
+        }
+        
+        /* Fixed Scaling: No stretching */
+        .card-back { 
+            transform: rotateY(180deg); background: #000; 
+            display: flex; align-items: center; justify-content: center;
+        }
+        .card-back img { width: 100%; height: 100%; object-fit: contain; }
+
+        /* --- Image Zone --- */
+        .img-zone { 
+            height: 180px; background: #000; position: relative; 
+            cursor: pointer; display: flex; align-items: center; justify-content: center; 
+        }
+        .img-zone img.main-img { max-width: 80%; max-height: 80%; object-fit: contain; }
+        
+        .terp-wrap { position: absolute; bottom: 8px; right: 8px; display: flex; gap: 4px; }
+        .terp-box {
+            background: rgba(0,0,0,0.8); border: 1px solid currentColor;
+            width: 28px; height: 28px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; position: relative; cursor: help;
+        }
+        .terp-box:hover::after {
+            content: attr(data-label); position: absolute; bottom: 32px; background: #fff; color: #000;
+            padding: 2px 6px; border-radius: 3px; font-size: 9px; font-weight: bold; white-space: nowrap; z-index: 10;
+        }
+
+        .card-body { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; }
+        .strain-title { color: var(--neon-green); font-size: 1.15rem; font-weight: 800; margin: 0; }
+        .lineage { color: #666; font-style: italic; font-size: 0.7rem; margin-bottom: 8px; display: block; }
+        .description { font-size: 0.75rem; color: #aaa; line-height: 1.3; margin-bottom: 10px; height: 45px; overflow: hidden; }
+
+        .sash {
+            position: absolute; top: 12px; right: -28px; background: #e74c3c; color: white;
+            padding: 3px 30px; transform: rotate(45deg); font-size: 0.5rem; font-weight: 900; z-index: 5;
+        }
+
+        .flip-hint { font-size: 0.55rem; color: var(--neon-green); text-align: center; margin-bottom: 8px; opacity: 0.6; font-weight: bold; }
+
+        /* --- Purchase Area --- */
+        .purchase-zone { margin-top: auto; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 6px; }
+        .btn-group { display: flex; gap: 6px; margin-top: 6px; }
+        .btn-cart { flex: 2; background: var(--neon-green); color: #000; border: none; padding: 10px; font-weight: 800; cursor: pointer; border-radius: 4px; font-size: 0.65rem; }
+        .btn-more { flex: 1; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--glass-border); padding: 10px; text-decoration: none; text-align: center; border-radius: 4px; font-size: 0.65rem; display: flex; align-items: center; justify-content: center; }
+        
+        select { width: 100%; background: #111; color: #fff; border: 1px solid var(--glass-border); padding: 8px; border-radius: 4px; font-size: 0.8rem; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+<a href="checkout.html" class="cart-status">
+    <i class="fas fa-shopping-basket"></i> CART: <span id="cartCount">0</span>
+</a>
+
+<header class="masthead">
+    <img src="assets/img/noyes boys logo.png" style="max-width:100px;">
+    <h1 style="font-size: 2.2rem; margin:0;">LINE 1</h1>
+</header>
+
+<nav class="filter-nav">
+    <button class="filter-btn active" onclick="filterStrains('all', event)">ALL</button>
+    <button class="filter-btn" onclick="filterStrains('sativa', event)">SATIVA</button>
+    <button class="filter-btn" onclick="filterStrains('indica', event)">INDICA</button>
+    <button class="filter-btn" onclick="filterStrains('hybrid', event)">HYBRID</button>
+</nav>
+
+<div class="container">
+    <div class="strain-grid" id="mainGrid"></div>
+</div>
+
+<script>
+    const strains = [
+        { name: "Purple Rainbow", lineage: "Alien Tech × Rainbow Belts × Wedding Cake", type: "indica", desc: "Heavy purple hues with a sweet candy finish. Deeply relaxing.", img: "assets/logos/new logos/purple rainbow.png", card: "purplerainbowscard.png", link: "purplerainbow", terps: [{i:"fa-candy-cane", l:"Caryophyllene", c:"#ff9edb"}, {i:"fa-leaf", l:"Myrcene", c:"#4ade80"}] },
+        { name: "Rainbow Cakes", lineage: "Noyes Breath × Biscotti × Wedding Cake", type: "sativa", desc: "Uplifting creamy head high. Great for creative tasks.", img: "assets/logos/new logos/rainbow cakes.png", card: "rainbowcakescard.png", link: "rainbowcakes", terps: [{i:"fa-birthday-cake", l:"Limonene", c:"#fef08a"}] },
+        { name: "Cake Breath", lineage: "Wedding Cake × Meatbreath", type: "indica", desc: "Vanilla-fuel aroma with heavy sedative medicinal power.", img: "assets/logos/new logos/cake breath.png", card: "cakebreathcard.png", link: "cakebreath", terps: [{i:"fa-cloud", l:"Humulene", c:"#bbf7d0"}] },
+        { name: "Alienoyes Kush", lineage: "Alien Tech × Noyes Kush", type: "indica", desc: "Classic kush gas meets earthy pine. Extreme potency.", img: "assets/logos/new logos/alienoyes kush.png", card: "alienoyeskushcard.jpg", link: "alienoyes", terps: [{i:"fa-flask", l:"Pinene", c:"#4ade80"}] },
+        { name: "Mangonoyes Kush", lineage: "Mango Kush × Noyes Kush", type: "hybrid", desc: "Tropical mango explosion with a balanced hybrid effect.", img: "assets/logos/new logos/mangonoyes kush.png", card: "mangonoyeskushcard.png", link: "mangonoyes", terps: [{i:"fa-sun", l:"Myrcene", c:"#fbbf24"}] },
+        { name: "Citronoyes Haze", lineage: "Noyes Haze × Lemon Haze × Noyes Kush", type: "sativa", desc: "Zesty citrus energy. Pure mental clarity and focus.", img: "assets/logos/new logos/citronoyes haze.png", card: "citronoyeshazecard.png", link: "citronoyes", terps: [{i:"fa-lemon", l:"Limonene", c:"#facc15"}] },
+        { name: "Noyes Haze", lineage: "Noyes Kush × Lemon Haze", type: "sativa", desc: "Pungent citrus aroma. Foundational sativa genetics.", img: "assets/blkbkg/noyeshaze.png", card: "noyeshazecard.png", link: "noyeshaze", terps: [{i:"fa-bolt", l:"Terpinolene", c:"#2dd4bf"}] },
+        { name: "Noyes Breath", lineage: "Noyes Kush × Meatbreath", type: "indica", desc: "Gassy, funky, and extremely potent. Elite resin coverage.", img: "assets/blkbkg/noyesbreath.png", card: "noyesbreathcard.jpg", link: "noyesbreath", terps: [{i:"fa-skull", l:"High THC", c:"#ef4444"}] },
+        { name: "Meat Cakes", lineage: "Meatbreath × Wedding Cake", type: "indica", desc: "Savory meat funk meets sweet dessert frosting.", img: "assets/blkbkg/meatcakes.png", card: "meatcakescard.png", link: "meatcakes", terps: [{i:"fa-drumstick-bite", l:"Humulene", c:"#d97706"}] },
+        { name: "Biscotti Rocks", lineage: "Rainbow Belts × Biscotti × Meatbreath", type: "indica", desc: "Rock-hard buds with heavy-hitting dessert terpenes.", img: "assets/blkbkg/biscottirocks.png", card: "biscottirockscard.png", link: "biscottirocks", terps: [{i:"fa-cookie", l:"Linalool", c:"#a855f7"}] }
+    ];
+
+    function renderStrains() {
+        const grid = document.getElementById('mainGrid');
+        grid.innerHTML = strains.map(s => `
+            <div class="strain-card" data-type="${s.type}">
+                <div class="card-inner">
+                    <div class="card-front">
+                        ${s.name.toLowerCase().includes('noyes') ? '<div class="sash">Breeder\'s Choice</div>' : ''}
+                        <div class="img-zone" onclick="toggleFlip(this.closest('.strain-card'))">
+                            <img src="${s.img}" class="main-img" onerror="this.src='assets/img/noyes boys logo.png'">
+                            <div class="terp-wrap">
+                                ${s.terps.map(t => `<div class="terp-box" data-label="${t.l}" style="color:${t.c}; border-color:${t.c}"><i class="fa-solid ${t.i}"></i></div>`).join('')}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="strain-title">${s.name}</h3>
+                            <span class="lineage">${s.lineage}</span>
+                            <p class="description">${s.desc}</p>
+                            <div class="flip-hint">* CLICK IMAGE FOR CARD *</div>
+                            <div class="purchase-zone">
+                                <select id="qty-${s.name.replace(/\s+/g, '')}">
+                                    <option value="1|20">1 Seed - $20</option>
+                                    <option value="3|50">3 Seeds - $50</option>
+                                    <option value="5|75">5 Seeds - $75</option>
+                                    <option value="10|130">10 Seeds - $130</option>
+                                </select>
+                                <div class="btn-group">
+                                    <button class="btn-cart" onclick="addToCart('${s.name}', 'qty-${s.name.replace(/\s+/g, '')}', '${s.img}')">ADD TO CART</button>
+                                    <a href="https://noyesboys.com/${s.link}" class="btn-more">INFO</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-back" onclick="toggleFlip(this.closest('.strain-card'))">
+                        <img src="assets/sept22edits/websiteimagedata/cards/finished/${s.card}" onerror="this.src='assets/img/noyes boys logo.png'">
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        updateCartCount();
+    }
+
+    function toggleFlip(card) { card.classList.toggle('is-flipped'); }
+
+    function filterStrains(type, e) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        document.querySelectorAll('.strain-card').forEach(card => {
+            card.style.display = (type === 'all' || card.dataset.type === type) ? 'block' : 'none';
+        });
+    }
+
+    function addToCart(name, selectId, imgPath) {
+        const select = document.getElementById(selectId);
+        const [seeds, price] = select.value.split('|');
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart.push({ id: Date.now(), name: name, packSize: seeds + " Seeds", price: parseFloat(price), qty: 1, img: imgPath });
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+        
+        const btn = event.target;
+        btn.innerText = "ADDED!";
+        btn.style.background = "#fff";
+        setTimeout(() => { 
+            btn.innerText = "ADD TO CART"; 
+            btn.style.background = "var(--neon-green)";
+        }, 800);
+    }
+
+    function updateCartCount() {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        document.getElementById('cartCount').innerText = cart.length;
+    }
+
+    renderStrains();
+</script>
+</body>
+</html>
