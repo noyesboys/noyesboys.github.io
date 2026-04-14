@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Noyes Boys: Pro Tech Grow</title>
+    <style>
+        :root {
+            --neon-green: #4ade80;
+            --warning-orange: #fbbf24;
+            --error-red: #ef4444;
+            --carbon: #0a0a0a;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body { background: var(--carbon); color: #fff; font-family: 'Inter', sans-serif; margin: 0; }
+        .game-header { background: #000; padding: 15px; display: flex; justify-content: space-around; border-bottom: 2px solid var(--neon-green); }
+        .nav { display: flex; background: #111; }
+        .nav-btn { flex: 1; padding: 15px; border: none; background: none; color: #666; cursor: pointer; font-weight: 800; }
+        .nav-btn.active { color: var(--neon-green); border-bottom: 2px solid var(--neon-green); }
+
+        .container { max-width: 1200px; margin: 20px auto; padding: 20px; }
+        .view { display: none; }
+        .view.active { display: block; }
+
+        /* --- Grow Card UI --- */
+        .pot-card { 
+            background: var(--glass); border: 1px solid #333; border-radius: 15px; 
+            padding: 20px; position: relative; transition: 0.3s;
+        }
+        .shield-active { border-color: var(--neon-green); box-shadow: 0 0 10px rgba(74, 222, 128, 0.2); }
+        
+        .event-banner { 
+            background: var(--error-red); color: white; padding: 5px; 
+            font-size: 0.7rem; text-align: center; border-radius: 5px; margin-bottom: 10px;
+        }
+
+        /* --- Resource Bars --- */
+        .resource-group { margin-top: 10px; }
+        .res-bar { height: 8px; background: #222; border-radius: 4px; overflow: hidden; margin-top: 4px; }
+        .res-fill { height: 100%; background: var(--neon-green); width: 100%; transition: 0.5s; }
+        .res-fill.low { background: var(--error-red); }
+
+        .btn { padding: 8px; border: none; border-radius: 4px; cursor: pointer; font-weight: 800; margin-top: 5px; width: 100%; font-size: 0.7rem; }
+        .btn-check { background: #3b82f6; color: white; }
+        .btn-fix { background: var(--warning-orange); color: black; }
+    </style>
+</head>
+<body>
+
+<div class="game-header">
+    <div>COINS: <span id="coinCount">1000</span></div>
+    <div>ACTIVE PROTECTION: <span id="shieldStatus">NONE</span></div>
+</div>
+
+<div class="nav">
+    <button class="nav-btn active" onclick="showView('room')">THE LAB</button>
+    <button class="nav-btn" onclick="showView('shop')">SHOP</button>
+</div>
+
+<div class="container">
+    <div id="room" class="view active">
+        <div id="potContainer" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:20px;">
+            </div>
+    </div>
+
+    <div id="shop" class="view">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+            <div class="pot-card">
+                <h3>Noyes Nutrient Bundle</h3>
+                <p>Includes Seedling, Veg, and Flower food.</p>
+                <button class="btn btn-check" onclick="buyNutes()">BUY (300¢)</button>
+            </div>
+            <div class="pot-card">
+                <h3>Auto-Humidifier</h3>
+                <p>Refills automatically (Saves your yield!)</p>
+                <button class="btn btn-check" onclick="buyItem('auto_hum')">BUY (1500¢)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let state = {
+        coins: 1000,
+        inventory: { nute_packs: 1, auto_hum: false },
+        plants: [
+            { 
+                id: 1, name: "Super Larry", stage: "Veg", health: 100, 
+                humidity: 100, fanStatus: true, lightStatus: true,
+                lastChecked: Date.now(), protectionActive: false,
+                yieldMod: 1.0, currentEvents: []
+            }
+        ]
+    };
+
+    function showView(id) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    // --- BABYING MECHANIC ---
+    function checkPlant(id) {
+        let p = state.plants.find(x => x.id === id);
+        p.lastChecked = Date.now();
+        p.protectionActive = true;
+        render();
+    }
+
+    // --- RANDOM EVENT ENGINE ---
+    function triggerRandomEvent() {
+        const p = state.plants[Math.floor(Math.random() * state.plants.length)];
+        if(!p) return;
+
+        const events = ["FAN_BURNOUT", "LIGHT_BURNOUT", "HUMIDIFIER_DRY"];
+        const event = events[Math.floor(Math.random() * events.length)];
+
+        // DEFENSE LOGIC
+        if (p.protectionActive) {
+            let roll = Math.random();
+            if (roll < 0.25) {
+                console.log("BLOCK! Plant was babied.");
+                return; // 25% Total Block
+            } else if (roll < 0.75) {
+                console.log("DIMINISHED! Power reduced by 25%");
+                p.yieldMod -= 0.05; // Instead of 0.20
+            } else {
+                applyEvent(p, event);
+            }
+        } else {
+            applyEvent(p, event);
+        }
+        render();
+    }
+
+    function applyEvent(p, type) {
+        if (type === "FAN_BURNOUT") p.fanStatus = false;
+        if (type === "LIGHT_BURNOUT") p.lightStatus = false;
+        if (type === "HUMIDIFIER_DRY") p.humidity = 10;
+        p.currentEvents.push(type);
+    }
+
+    function fixPlant(id, type) {
+        let p = state.plants.find(x => x.id === id);
+        if (type === "HUMIDIFIER_DRY") p.humidity = 100;
+        if (type === "FAN_BURNOUT") p.fanStatus = true;
+        if (type === "LIGHT_BURNOUT") p.lightStatus = true;
+        p.currentEvents = p.currentEvents.filter(e => e !== type);
+        render();
+    }
+
+    function render() {
+        const container = document.getElementById('potContainer');
+        container.innerHTML = state.plants.map(p => {
+            const isProtected = (Date.now() - p.lastChecked < 14400000); // 4 hours
+            return `
+                <div class="pot-card ${isProtected ? 'shield-active' : ''}">
+                    ${p.currentEvents.map(e => `<div class="event-banner">⚠️ ${e.replace('_',' ')}</div>`).join('')}
+                    <h3>${p.name}</h3>
+                    <div class="resource-group">
+                        <label>Humidity</label>
+                        <div class="res-bar"><div class="res-fill ${p.humidity < 30 ? 'low' : ''}" style="width:${p.humidity}%"></div></div>
+                        ${p.humidity < 30 ? `<button class="btn btn-fix" onclick="fixPlant(${p.id}, 'HUMIDIFIER_DRY')">REFILL TANK</button>` : ''}
+                    </div>
+                    <div style="margin-top:10px; font-size:0.7rem;">
+                        Status: ${p.lightStatus ? '💡 ON' : '❌ LIGHT OUT'} | ${p.fanStatus ? '🌬️ ON' : '❌ FAN OUT'}
+                    </div>
+                    ${!p.lightStatus ? `<button class="btn btn-fix" onclick="fixPlant(${p.id}, 'LIGHT_BURNOUT')">REPLACE BULB</button>` : ''}
+                    ${!p.fanStatus ? `<button class="btn btn-fix" onclick="fixPlant(${p.id}, 'FAN_BURNOUT')">REPAIR FAN</button>` : ''}
+                    
+                    <button class="btn btn-check" onclick="checkPlant(${p.id})">BABY PLANT (SHIELD)</button>
+                </div>
+            `;
+        }).join('');
+        document.getElementById('coinCount').innerText = state.coins;
+    }
+
+    setInterval(() => {
+        state.plants.forEach(p => { p.humidity -= 1; });
+        if(Math.random() > 0.98) triggerRandomEvent();
+        render();
+    }, 5000);
+
+    render();
+</script>
+</body>
+</html>
