@@ -2,185 +2,457 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Noyes Boys: Pro Tech Grow</title>
+    <title>Noyes Boys: Strategy Grow-Off</title>
     <style>
         :root {
             --neon-green: #4ade80;
-            --warning-orange: #fbbf24;
-            --error-red: #ef4444;
+            --shiny-gold: #fbbf24;
+            --epic-purple: #a855f7;
+            --alert-red: #ef4444;
             --carbon: #0a0a0a;
             --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.15);
         }
 
-        body { background: var(--carbon); color: #fff; font-family: 'Inter', sans-serif; margin: 0; }
-        .game-header { background: #000; padding: 15px; display: flex; justify-content: space-around; border-bottom: 2px solid var(--neon-green); }
+        body { background: var(--carbon); color: #fff; font-family: 'Inter', sans-serif; margin: 0; font-size: 14px; }
+        
+        /* --- Header & Nav --- */
+        .game-header { background: #000; padding: 15px 20px; display: flex; justify-content: space-between; border-bottom: 2px solid var(--neon-green); position: sticky; top: 0; z-index: 1000; }
+        .stat-badge { background: #111; padding: 8px 15px; border: 1px solid var(--border); border-radius: 5px; font-weight: bold; }
+        .currency { color: var(--neon-green); font-weight: 900; }
+        
         .nav { display: flex; background: #111; }
-        .nav-btn { flex: 1; padding: 15px; border: none; background: none; color: #666; cursor: pointer; font-weight: 800; }
-        .nav-btn.active { color: var(--neon-green); border-bottom: 2px solid var(--neon-green); }
+        .nav-btn { flex: 1; padding: 12px; border: none; background: none; color: #888; cursor: pointer; font-weight: 900; text-transform: uppercase; transition: 0.3s; }
+        .nav-btn.active { color: var(--neon-green); background: var(--glass); border-bottom: 2px solid var(--neon-green); }
 
-        .container { max-width: 1200px; margin: 20px auto; padding: 20px; }
+        .container { max-width: 1300px; margin: 20px auto; padding: 0 15px; }
         .view { display: none; }
         .view.active { display: block; }
 
-        /* --- Grow Card UI --- */
-        .pot-card { 
-            background: var(--glass); border: 1px solid #333; border-radius: 15px; 
-            padding: 20px; position: relative; transition: 0.3s;
-        }
-        .shield-active { border-color: var(--neon-green); box-shadow: 0 0 10px rgba(74, 222, 128, 0.2); }
+        /* --- Global Button Styles --- */
+        .btn { padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; width: 100%; margin-top: 5px; transition: 0.2s; }
+        .btn:hover { filter: brightness(1.2); }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .btn-green { background: var(--neon-green); color: #000; }
+        .btn-blue { background: #3b82f6; color: #fff; }
+        .btn-gold { background: var(--shiny-gold); color: #000; }
+        .btn-dark { background: #222; color: #fff; border: 1px solid #444; }
+        .btn-red { background: var(--alert-red); color: #fff; }
+
+        /* --- Grow Room Grid --- */
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
         
-        .event-banner { 
-            background: var(--error-red); color: white; padding: 5px; 
-            font-size: 0.7rem; text-align: center; border-radius: 5px; margin-bottom: 10px;
-        }
+        .pot-card { background: #111; border: 1px solid #333; border-radius: 10px; padding: 15px; position: relative; }
+        .pot-card.shielded { border-color: var(--neon-green); box-shadow: 0 0 15px rgba(74,222,128,0.15); }
+        .pot-card.danger { border-color: var(--alert-red); box-shadow: 0 0 15px rgba(239,68,68,0.15); }
+        
+        .status-bar { height: 6px; background: #222; border-radius: 3px; overflow: hidden; margin: 5px 0 15px 0; }
+        .status-fill { height: 100%; background: var(--neon-green); transition: 0.3s; }
+        
+        .event-tag { background: var(--alert-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-bottom: 5px; display: inline-block; }
 
-        /* --- Resource Bars --- */
-        .resource-group { margin-top: 10px; }
-        .res-bar { height: 8px; background: #222; border-radius: 4px; overflow: hidden; margin-top: 4px; }
-        .res-fill { height: 100%; background: var(--neon-green); width: 100%; transition: 0.5s; }
-        .res-fill.low { background: var(--error-red); }
+        /* --- Inventory & Shop --- */
+        .shop-item { background: var(--glass); border: 1px solid var(--border); padding: 15px; border-radius: 8px; text-align: center; }
+        .inv-bar { background: #000; padding: 10px; margin-bottom: 20px; border-radius: 5px; display: flex; gap: 15px; font-size: 0.8rem; overflow-x: auto; border: 1px solid #333; }
 
-        .btn { padding: 8px; border: none; border-radius: 4px; cursor: pointer; font-weight: 800; margin-top: 5px; width: 100%; font-size: 0.7rem; }
-        .btn-check { background: #3b82f6; color: white; }
-        .btn-fix { background: var(--warning-orange); color: black; }
+        /* --- Cards --- */
+        .strain-card { border: 2px solid #444; border-radius: 8px; overflow: hidden; background: #000; text-align: center; }
+        .strain-card.Shiny { border-color: var(--shiny-gold); box-shadow: 0 0 10px var(--shiny-gold); }
+        .strain-card.EP { border-color: var(--epic-purple); box-shadow: 0 0 10px var(--epic-purple); }
+        .strain-card img { width: 100%; height: 150px; object-fit: cover; border-bottom: 1px solid #333; }
+        .card-stats { padding: 10px; font-size: 0.75rem; }
     </style>
 </head>
 <body>
 
 <div class="game-header">
-    <div>COINS: <span id="coinCount">1000</span></div>
-    <div>ACTIVE PROTECTION: <span id="shieldStatus">NONE</span></div>
+    <div class="stat-badge">COINS: <span class="currency" id="ui-coins">1500</span>¢</div>
+    <div class="stat-badge">ENV: <span id="ui-env" style="color:var(--neon-green)">CLOSET (Max 48")</span></div>
+    <div class="stat-badge">SHIELD LOG: <span id="ui-log" style="color:#888;">Standby...</span></div>
 </div>
 
 <div class="nav">
-    <button class="nav-btn active" onclick="showView('room')">THE LAB</button>
-    <button class="nav-btn" onclick="showView('shop')">SHOP</button>
+    <button class="nav-btn active" onclick="switchTab('lab')">THE LAB</button>
+    <button class="nav-btn" onclick="switchTab('curing')">CURING ROOM</button>
+    <button class="nav-btn" onclick="switchTab('shop')">GROW SHOP</button>
+    <button class="nav-btn" onclick="switchTab('vault')">BATCH VAULT</button>
 </div>
 
 <div class="container">
-    <div id="room" class="view active">
-        <div id="potContainer" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:20px;">
-            </div>
+    
+    <div class="inv-bar" id="inventory-bar">
+        </div>
+
+    <div id="lab" class="view active">
+        <button class="btn btn-green" style="width:200px; margin-bottom:20px;" onclick="plantRandomSeed()">+ PLANT SEED</button>
+        <div class="grid-layout" id="garden-grid"></div>
+    </div>
+
+    <div id="curing" class="view">
+        <h2 style="color:var(--neon-green)">Curing Jars</h2>
+        <p style="font-size:0.8rem; color:#888;">Burp jars to keep humidity below 75%. Mold destroys 5% quality per tick!</p>
+        <div class="grid-layout" id="curing-grid"></div>
     </div>
 
     <div id="shop" class="view">
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
-            <div class="pot-card">
-                <h3>Noyes Nutrient Bundle</h3>
-                <p>Includes Seedling, Veg, and Flower food.</p>
-                <button class="btn btn-check" onclick="buyNutes()">BUY (300¢)</button>
+        <h2>Nutrients & Upgrades</h2>
+        <div class="grid-layout">
+            <div class="shop-item">
+                <h3>Veg Nutrients</h3><p>Required to enter Veg Phase.</p>
+                <button class="btn btn-dark" onclick="buy('veg_nute', 50)">BUY (50¢)</button>
             </div>
-            <div class="pot-card">
-                <h3>Auto-Humidifier</h3>
-                <p>Refills automatically (Saves your yield!)</p>
-                <button class="btn btn-check" onclick="buyItem('auto_hum')">BUY (1500¢)</button>
+            <div class="shop-item">
+                <h3>Flower Nutrients</h3><p>Required to enter Flower Phase.</p>
+                <button class="btn btn-dark" onclick="buy('flower_nute', 100)">BUY (100¢)</button>
+            </div>
+            <div class="shop-item">
+                <h3>Neem Oil</h3><p>Cures Spider Mites.</p>
+                <button class="btn btn-dark" onclick="buy('neem', 75)">BUY (75¢)</button>
+            </div>
+            <div class="shop-item">
+                <h3>Fungicide</h3><p>Cures Powdery Mildew.</p>
+                <button class="btn btn-dark" onclick="buy('fungicide', 120)">BUY (120¢)</button>
+            </div>
+            <div class="shop-item">
+                <h3>Blackout Tape</h3><p>Fixes Light Leaks.</p>
+                <button class="btn btn-dark" onclick="buy('tape', 30)">BUY (30¢)</button>
+            </div>
+            <div class="shop-item" style="border-color:var(--neon-green)">
+                <h3>Grow Tent (Upgrade)</h3><p>Increases Max Height to 84" (7ft).</p>
+                <button class="btn btn-green" onclick="upgradeEnv('Tent', 84, 2500)">UPGRADE (2500¢)</button>
             </div>
         </div>
     </div>
+
+    <div id="vault" class="view">
+        <h2>Finished Harvests</h2>
+        <div class="grid-layout" id="vault-grid"></div>
+    </div>
+
 </div>
 
 <script>
-    let state = {
-        coins: 1000,
-        inventory: { nute_packs: 1, auto_hum: false },
-        plants: [
-            { 
-                id: 1, name: "Super Larry", stage: "Veg", health: 100, 
-                humidity: 100, fanStatus: true, lightStatus: true,
-                lastChecked: Date.now(), protectionActive: false,
-                yieldMod: 1.0, currentEvents: []
-            }
-        ]
+    // --- 1. FULL DATABASE EXAMPLES (Line 1 to Line 4) ---
+    const STRAINS = [
+        { name: "Purple Rainbow", line: "Line 1", thcBase: 25, yieldBase: 400, img: "assets/sept22edits/websiteimagedata/cards/finished/purplerainbowscard.png" },
+        { name: "Cake Breath", line: "Line 1", thcBase: 27, yieldBase: 450, img: "assets/sept22edits/websiteimagedata/cards/finished/cakebreathcard.png" },
+        { name: "Citrus Pebbles", line: "Line 2", thcBase: 27, yieldBase: 420, img: "assets/sept22edits/websiteimagedata/cards/finished/temp/citruspebbles.png" },
+        { name: "Loud Dreams", line: "Line 3", thcBase: 20, yieldBase: 500, img: "assets/sept22edits/websiteimagedata/cards/finished/louddreamscard.png" },
+        { name: "Albino Skunk", line: "Line 4", thcBase: 25, yieldBase: 480, img: "assets/sept22edits/websiteimagedata/cards/finished/albinoskunkcard.jpg" }
+    ];
+
+    // --- 2. GAME STATE ---
+    let GAME = {
+        coins: 1500,
+        env: { name: 'CLOSET', maxHeight: 48 }, // 48 inches
+        inventory: { veg_nute: 2, flower_nute: 1, neem: 1, fungicide: 0, tape: 1 },
+        plants: [],
+        jars: [],
+        vault: []
     };
 
-    function showView(id) {
+    // --- 3. UI NAVIGATION & UPDATES ---
+    function switchTab(tabId) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        event.target.classList.add('active');
+        renderAll();
     }
 
-    // --- BABYING MECHANIC ---
-    function checkPlant(id) {
-        let p = state.plants.find(x => x.id === id);
-        p.lastChecked = Date.now();
-        p.protectionActive = true;
-        render();
+    function updateUI() {
+        document.getElementById('ui-coins').innerText = GAME.coins;
+        document.getElementById('ui-env').innerText = `${GAME.env.name} (Max ${GAME.env.maxHeight}")`;
+        
+        const invStr = Object.entries(GAME.inventory).map(([k, v]) => `<b>${k.toUpperCase().replace('_',' ')}:</b> ${v}`).join(' | ');
+        document.getElementById('inventory-bar').innerHTML = invStr;
     }
 
-    // --- RANDOM EVENT ENGINE ---
-    function triggerRandomEvent() {
-        const p = state.plants[Math.floor(Math.random() * state.plants.length)];
-        if(!p) return;
+    function logAction(msg) {
+        const logEl = document.getElementById('ui-log');
+        logEl.innerText = msg;
+        logEl.style.color = "var(--neon-green)";
+        setTimeout(() => logEl.style.color = "#888", 2000);
+    }
 
-        const events = ["FAN_BURNOUT", "LIGHT_BURNOUT", "HUMIDIFIER_DRY"];
-        const event = events[Math.floor(Math.random() * events.length)];
-
-        // DEFENSE LOGIC
-        if (p.protectionActive) {
-            let roll = Math.random();
-            if (roll < 0.25) {
-                console.log("BLOCK! Plant was babied.");
-                return; // 25% Total Block
-            } else if (roll < 0.75) {
-                console.log("DIMINISHED! Power reduced by 25%");
-                p.yieldMod -= 0.05; // Instead of 0.20
-            } else {
-                applyEvent(p, event);
-            }
+    // --- 4. SHOP & INVENTORY LOGIC ---
+    function buy(item, cost) {
+        if(GAME.coins >= cost) {
+            GAME.coins -= cost;
+            GAME.inventory[item]++;
+            logAction(`Bought ${item.replace('_',' ')}`);
+            updateUI();
         } else {
-            applyEvent(p, event);
+            alert("Not enough coins!");
         }
-        render();
     }
 
-    function applyEvent(p, type) {
-        if (type === "FAN_BURNOUT") p.fanStatus = false;
-        if (type === "LIGHT_BURNOUT") p.lightStatus = false;
-        if (type === "HUMIDIFIER_DRY") p.humidity = 10;
-        p.currentEvents.push(type);
+    function upgradeEnv(name, limit, cost) {
+        if(GAME.coins >= cost) {
+            GAME.coins -= cost;
+            GAME.env.name = name;
+            GAME.env.maxHeight = limit;
+            logAction(`Upgraded to ${name}!`);
+            updateUI();
+        } else alert("Not enough coins!");
     }
 
-    function fixPlant(id, type) {
-        let p = state.plants.find(x => x.id === id);
-        if (type === "HUMIDIFIER_DRY") p.humidity = 100;
-        if (type === "FAN_BURNOUT") p.fanStatus = true;
-        if (type === "LIGHT_BURNOUT") p.lightStatus = true;
-        p.currentEvents = p.currentEvents.filter(e => e !== type);
-        render();
+    // --- 5. GROWING MECHANICS (Planting, Topping, Nutrients) ---
+    function plantRandomSeed() {
+        const strain = STRAINS[Math.floor(Math.random() * STRAINS.length)];
+        
+        // Rarity Roll
+        const roll = Math.random();
+        let rarity = "Standard";
+        let rarityBonus = 1.0;
+        if(roll > 0.95) { rarity = "Shiny"; rarityBonus = 1.2; }
+        else if(roll > 0.80) { rarity = "EP"; rarityBonus = 1.1; }
+
+        GAME.plants.push({
+            id: Date.now(),
+            strain: strain,
+            rarity: rarity,
+            rarityBonus: rarityBonus,
+            stage: "Seedling", // Seedling -> Veg -> Flower -> Ready
+            progress: 0, // 0 to 100 per stage
+            height: 5,
+            tops: 0,
+            yieldMod: 1.0,
+            thcMod: 1.0,
+            lastBabied: 0,
+            events: []
+        });
+        updateUI(); renderGarden();
     }
 
-    function render() {
-        const container = document.getElementById('potContainer');
-        container.innerHTML = state.plants.map(p => {
-            const isProtected = (Date.now() - p.lastChecked < 14400000); // 4 hours
+    function topPlant(id) {
+        let p = GAME.plants.find(x => x.id === id);
+        if(p.stage === "Flower" || p.stage === "Ready") return alert("Too late to top!");
+        
+        p.tops++;
+        p.height = Math.max(5, p.height - 4); // Reduces height by 4 inches
+        
+        // Mathematical Optimal LST logic
+        if(p.tops >= 2 && p.tops <= 4) p.yieldMod += 0.10; // +10% yield
+        if(p.tops > 4) p.yieldMod -= 0.15; // Over-stressed
+        
+        logAction(`Topped ${p.strain.name}. Total tops: ${p.tops}`);
+        renderGarden();
+    }
+
+    function advanceStage(id) {
+        let p = GAME.plants.find(x => x.id === id);
+        if(p.stage === "Seedling" && GAME.inventory.veg_nute > 0) {
+            GAME.inventory.veg_nute--; p.stage = "Veg"; p.progress = 0;
+        } else if(p.stage === "Veg" && GAME.inventory.flower_nute > 0) {
+            GAME.inventory.flower_nute--; p.stage = "Flower"; p.progress = 0;
+        } else {
+            alert("You need the correct Nutrients from the Shop!");
+        }
+        updateUI(); renderGarden();
+    }
+
+    // --- 6. BABYING SHIELD & SABOTAGE EVENTS ---
+    function babyPlant(id) {
+        let p = GAME.plants.find(x => x.id === id);
+        p.lastBabied = Date.now(); // Shield active for next 4 "simulated" hours
+        logAction(`Shield activated on ${p.strain.name}!`);
+        renderGarden();
+    }
+
+    function triggerEvent(p) {
+        const eventTypes = ["SPIDER_MITES", "LIGHT_LEAK", "POWDERY_MILDEW"];
+        const evt = eventTypes[Math.floor(Math.random() * eventTypes.length)];
+        
+        // Is shield active? (Assuming 1 real minute = 4 game hours for this demo)
+        const isShielded = (Date.now() - p.lastBabied) < 60000; 
+
+        if(isShielded) {
+            const roll = Math.random();
+            if(roll < 0.25) {
+                logAction(`Shield BLOCKED ${evt}!`);
+                return; // Total Block
+            } else if (roll < 0.75) {
+                logAction(`Shield DIMINISHED ${evt}!`);
+                p.yieldMod -= 0.05; // Diminished penalty
+                return;
+            }
+        }
+        
+        // Full penalty applied
+        if(!p.events.includes(evt)) p.events.push(evt);
+        logAction(`WARNING: ${evt} hit ${p.strain.name}!`);
+        renderGarden();
+    }
+
+    function cureEvent(id, evt) {
+        let p = GAME.plants.find(x => x.id === id);
+        if(evt === "SPIDER_MITES" && GAME.inventory.neem > 0) { GAME.inventory.neem--; }
+        else if(evt === "LIGHT_LEAK" && GAME.inventory.tape > 0) { GAME.inventory.tape--; }
+        else if(evt === "POWDERY_MILDEW" && GAME.inventory.fungicide > 0) { GAME.inventory.fungicide--; }
+        else return alert("Buy the cure from the shop first!");
+
+        p.events = p.events.filter(e => e !== evt);
+        logAction(`Cured ${evt}!`);
+        updateUI(); renderGarden();
+    }
+
+    // --- 7. HARVESTING & CURING MECHANICS ---
+    function harvestToJars(id) {
+        let p = GAME.plants.find(x => x.id === id);
+        GAME.plants = GAME.plants.filter(x => x.id !== id);
+        
+        GAME.jars.push({
+            id: Date.now(),
+            strain: p.strain,
+            rarity: p.rarity,
+            baseYield: p.strain.yieldBase * p.yieldMod * p.rarityBonus,
+            baseTHC: p.strain.thcBase * p.thcMod,
+            humidity: 60, // Starts at 60%
+            qualityMod: 1.0, // Mold degrades this
+            cureProgress: 0
+        });
+        logAction(`Harvested! Moved to Curing Jars.`);
+        renderGarden(); renderCuring();
+    }
+
+    function burpJar(id) {
+        let j = GAME.jars.find(x => x.id === id);
+        j.humidity = Math.max(50, j.humidity - 15); // Drops humidity
+        logAction(`Burped Jar. Humidity dropped.`);
+        renderCuring();
+    }
+
+    function collectBatch(id) {
+        let j = GAME.jars.find(x => x.id === id);
+        GAME.jars = GAME.jars.filter(x => x.id !== id);
+        
+        const finalTHC = (j.baseTHC * j.qualityMod).toFixed(1);
+        const finalYield = Math.floor(j.baseYield * j.qualityMod);
+        
+        // Generate final Card
+        GAME.vault.push({
+            strain: j.strain,
+            rarity: j.rarity,
+            batchId: `BATCH-#${Math.floor(Math.random()*9999)}`,
+            thc: finalTHC,
+            weight: finalYield
+        });
+        
+        // Payout Economy
+        GAME.coins += Math.floor(finalYield * 2); // 2 coins per gram
+        
+        logAction(`Batch Collected! +${Math.floor(finalYield * 2)} Coins`);
+        updateUI(); renderCuring(); renderVault();
+    }
+
+    // --- 8. GAME LOOP (The Ticker) ---
+    setInterval(() => {
+        // Process Plants
+        GAME.plants.forEach(p => {
+            // Apply un-cured event penalties over time
+            if(p.events.includes("SPIDER_MITES")) p.yieldMod -= 0.01;
+            if(p.events.includes("LIGHT_LEAK")) p.thcMod -= 0.01;
+            
+            // Closet Height Penalty Logic
+            if(p.height > GAME.env.maxHeight) p.yieldMod -= 0.02;
+
+            if(p.stage !== "Ready") {
+                p.progress += 5; 
+                p.height += 1;
+                if(p.progress >= 100) {
+                    if(p.stage === "Flower") p.stage = "Ready";
+                    else p.progress = 100; // Locked until nutrient fed
+                }
+            }
+            
+            // 2% chance for random event per tick
+            if(Math.random() < 0.02) triggerEvent(p);
+        });
+
+        // Process Jars
+        GAME.jars.forEach(j => {
+            j.humidity += 2; // Rises naturally
+            if(j.humidity > 75) j.qualityMod -= 0.05; // MOLD DAMAGE!
+            
+            j.cureProgress += 10;
+        });
+
+        renderGarden();
+        renderCuring();
+    }, 5000); // 5 seconds = 1 tick
+
+    // --- 9. RENDERING UI ---
+    function renderGarden() {
+        if(document.getElementById('lab').classList.contains('active') === false) return;
+        const grid = document.getElementById('garden-grid');
+        grid.innerHTML = GAME.plants.map(p => {
+            const isShielded = (Date.now() - p.lastBabied) < 60000;
+            const heightDanger = p.height > GAME.env.maxHeight;
+            
             return `
-                <div class="pot-card ${isProtected ? 'shield-active' : ''}">
-                    ${p.currentEvents.map(e => `<div class="event-banner">⚠️ ${e.replace('_',' ')}</div>`).join('')}
-                    <h3>${p.name}</h3>
-                    <div class="resource-group">
-                        <label>Humidity</label>
-                        <div class="res-bar"><div class="res-fill ${p.humidity < 30 ? 'low' : ''}" style="width:${p.humidity}%"></div></div>
-                        ${p.humidity < 30 ? `<button class="btn btn-fix" onclick="fixPlant(${p.id}, 'HUMIDIFIER_DRY')">REFILL TANK</button>` : ''}
-                    </div>
-                    <div style="margin-top:10px; font-size:0.7rem;">
-                        Status: ${p.lightStatus ? '💡 ON' : '❌ LIGHT OUT'} | ${p.fanStatus ? '🌬️ ON' : '❌ FAN OUT'}
-                    </div>
-                    ${!p.lightStatus ? `<button class="btn btn-fix" onclick="fixPlant(${p.id}, 'LIGHT_BURNOUT')">REPLACE BULB</button>` : ''}
-                    ${!p.fanStatus ? `<button class="btn btn-fix" onclick="fixPlant(${p.id}, 'FAN_BURNOUT')">REPAIR FAN</button>` : ''}
+                <div class="pot-card ${isShielded ? 'shielded' : ''} ${heightDanger ? 'danger' : ''}">
+                    ${p.events.map(e => `<div class="event-tag">${e} <button onclick="cureEvent(${p.id}, '${e}')" style="background:none; border:none; color:white; cursor:pointer;">[FIX]</button></div>`).join('')}
                     
-                    <button class="btn btn-check" onclick="checkPlant(${p.id})">BABY PLANT (SHIELD)</button>
+                    <h3 style="margin:0; color:var(--neon-green);">${p.strain.name}</h3>
+                    <div style="font-size:0.7rem; color:#888;">${p.rarity} | Tops: ${p.tops} | Yield Mod: ${p.yieldMod.toFixed(2)}x</div>
+                    
+                    <div style="margin:10px 0; font-size:0.8rem;">
+                        <strong>Stage:</strong> ${p.stage} <br>
+                        <strong>Height:</strong> <span style="color:${heightDanger?'red':'white'}">${p.height}"</span> / ${GAME.env.maxHeight}"
+                    </div>
+                    
+                    <div class="status-bar"><div class="status-fill" style="width:${p.progress}%"></div></div>
+                    
+                    <div style="display:flex; gap:5px;">
+                        ${p.stage === "Ready" 
+                            ? `<button class="btn btn-green" onclick="harvestToJars(${p.id})">HARVEST</button>`
+                            : `<button class="btn btn-blue" onclick="topPlant(${p.id})">TOP/PRUNE</button>
+                               <button class="btn btn-gold" onclick="advanceStage(${p.id})" ${p.progress<100 ? 'disabled':''}>FEED TO ADVANCE</button>`
+                        }
+                    </div>
+                    <button class="btn btn-dark" onclick="babyPlant(${p.id})">BABY PLANT (ACTIVATE SHIELD)</button>
                 </div>
             `;
         }).join('');
-        document.getElementById('coinCount').innerText = state.coins;
     }
 
-    setInterval(() => {
-        state.plants.forEach(p => { p.humidity -= 1; });
-        if(Math.random() > 0.98) triggerRandomEvent();
-        render();
-    }, 5000);
+    function renderCuring() {
+        if(document.getElementById('curing').classList.contains('active') === false) return;
+        const grid = document.getElementById('curing-grid');
+        grid.innerHTML = GAME.jars.map(j => `
+            <div class="pot-card ${j.humidity > 70 ? 'danger' : ''}">
+                <h3 style="margin:0; color:var(--shiny-gold)">${j.strain.name}</h3>
+                <div style="font-size:2rem; font-weight:900; color:${j.humidity > 75 ? 'var(--alert-red)' : 'white'}">${j.humidity}% RH</div>
+                <div style="font-size:0.7rem; color:#888;">Quality: ${(j.qualityMod*100).toFixed(0)}% | Progress: ${j.cureProgress}%</div>
+                
+                <div class="status-bar"><div class="status-fill" style="width:${Math.min(j.cureProgress, 100)}%"></div></div>
+                
+                <button class="btn btn-blue" onclick="burpJar(${j.id})">BURP JAR</button>
+                <button class="btn btn-green" onclick="collectBatch(${j.id})" ${j.cureProgress < 100 ? 'disabled' : ''}>COLLECT BATCH</button>
+            </div>
+        `).join('');
+    }
 
-    render();
+    function renderVault() {
+        const grid = document.getElementById('vault-grid');
+        grid.innerHTML = GAME.vault.map(v => `
+            <div class="strain-card ${v.rarity}">
+                <img src="${v.strain.img}" onerror="this.src='https://via.placeholder.com/180x220?text=${v.strain.name}'">
+                <div class="card-stats">
+                    <strong style="color:var(--neon-green)">${v.strain.name}</strong><br>
+                    <span style="color:#aaa">${v.rarity} | ${v.batchId}</span><br>
+                    <hr style="border-color:#333; margin:5px 0;">
+                    THC: ${v.thc}% | WGT: ${v.weight}g
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function renderAll() { updateUI(); renderGarden(); renderCuring(); renderVault(); }
+    
+    // Init
+    updateUI();
 </script>
 </body>
 </html>
