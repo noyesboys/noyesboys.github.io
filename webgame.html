@@ -835,7 +835,7 @@ function setLoginTab(tab){
 }
 function doLogin(){
   const user=document.getElementById('login-user').value.trim();
-  const pass=document.getElementById('login-pass').value;
+  const pass=document.getElementById('login-pass').value.trim();
   const err=document.getElementById('login-err');
   if(!user||!pass){err.textContent='Please fill all fields';return}
   const accounts=getAccounts();
@@ -873,12 +873,14 @@ function doLogout(){
   saveGame();
   clearInterval(tickInterval);
   tickInterval=null;
+  localStorage.removeItem('nb_last_user');
   G=null;
   activeUser=null;
   document.getElementById('screen-game').classList.remove('active');
   document.getElementById('screen-login').classList.add('active');
 }
 function startGame(user){
+  localStorage.setItem('nb_last_user',user);
   activeUser=user;
   G=loadGame(user);
   if(!G){
@@ -915,9 +917,14 @@ function startGame(user){
 // ============================================================
 function ensureModAccount(){
   const accounts=getAccounts();
+  // Always ensure mod account exists with correct password
   if(!accounts['The Noyes Boys']){
     const game=newGameState('The Noyes Boys',true);
     accounts['The Noyes Boys']={password:'tnb123',seedPhrase:'noyes boys mod crown master grower account seed phrase recovery test',game};
+    saveAccounts(accounts);
+  } else {
+    // Force-correct the password in case it got corrupted
+    accounts['The Noyes Boys'].password='tnb123';
     saveAccounts(accounts);
   }
 }
@@ -2034,36 +2041,12 @@ function showToast(msg,type='ok'){
 // ============================================================
 // INIT
 // ============================================================
-// Check if user was already logged in (session persistence)
 window.addEventListener('load',()=>{
   const lastUser=localStorage.getItem('nb_last_user');
   if(lastUser&&loadGame(lastUser)){
     startGame(lastUser);
   }
 });
-// Save last user on game start
-const origStart=startGame;
-// patch: save last user
-function saveLastUser(u){localStorage.setItem('nb_last_user',u);}
-// Override logout to clear last user
-const origLogout=doLogout;
-function doLogout(){
-  saveGame();
-  clearInterval(tickInterval);
-  tickInterval=null;
-  localStorage.removeItem('nb_last_user');
-  G=null;activeUser=null;
-  document.getElementById('screen-game').classList.remove('active');
-  document.getElementById('screen-login').classList.add('active');
-}
-
-// patch startGame to save last user
-const _sg=startGame;
-function startGame(user){
-  localStorage.setItem('nb_last_user',user);
-  _sg(user);
-}
-
 window.addEventListener('beforeunload',saveGame);
 </script>
 </body>
