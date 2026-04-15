@@ -1,458 +1,2070 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>Noyes Boys: Strategy Grow-Off</title>
-    <style>
-        :root {
-            --neon-green: #4ade80;
-            --shiny-gold: #fbbf24;
-            --epic-purple: #a855f7;
-            --alert-red: #ef4444;
-            --carbon: #0a0a0a;
-            --glass: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.15);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noyes Boys: Grow-Off</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #4ade80;
+  --green-dim: #22c55e;
+  --green-dark: #166534;
+  --gold: #fbbf24;
+  --gold-dim: #d97706;
+  --purple: #a855f7;
+  --purple-dim: #7c3aed;
+  --red: #ef4444;
+  --red-dim: #dc2626;
+  --blue: #3b82f6;
+  --carbon: #080c08;
+  --card-bg: #0d1a0d;
+  --panel: #0f1f0f;
+  --border: rgba(74,222,128,0.2);
+  --border-bright: rgba(74,222,128,0.6);
+  --text: #e2f5e2;
+  --muted: #6b9b6b;
+  --font-hud: 'Orbitron', monospace;
+  --font-body: 'Rajdhani', sans-serif;
+  --font-mono: 'Share Tech Mono', monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--carbon);color:var(--text);font-family:var(--font-body);font-size:15px;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,40,0,0.03) 2px,rgba(0,40,0,0.03) 4px);pointer-events:none;z-index:0}
 
-        body { background: var(--carbon); color: #fff; font-family: 'Inter', sans-serif; margin: 0; font-size: 14px; }
-        
-        /* --- Header & Nav --- */
-        .game-header { background: #000; padding: 15px 20px; display: flex; justify-content: space-between; border-bottom: 2px solid var(--neon-green); position: sticky; top: 0; z-index: 1000; }
-        .stat-badge { background: #111; padding: 8px 15px; border: 1px solid var(--border); border-radius: 5px; font-weight: bold; }
-        .currency { color: var(--neon-green); font-weight: 900; }
-        
-        .nav { display: flex; background: #111; }
-        .nav-btn { flex: 1; padding: 12px; border: none; background: none; color: #888; cursor: pointer; font-weight: 900; text-transform: uppercase; transition: 0.3s; }
-        .nav-btn.active { color: var(--neon-green); background: var(--glass); border-bottom: 2px solid var(--neon-green); }
+/* ===== SCREEN SYSTEM ===== */
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex;flex-direction:column}
 
-        .container { max-width: 1300px; margin: 20px auto; padding: 0 15px; }
-        .view { display: none; }
-        .view.active { display: block; }
+/* ===== LOGIN SCREEN ===== */
+#screen-login{align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#0d2a0d 0%,#040a04 70%)}
+.login-box{background:var(--panel);border:1px solid var(--border-bright);border-radius:16px;padding:40px;width:420px;max-width:95vw;position:relative;overflow:hidden}
+.login-box::before{content:'';position:absolute;top:-1px;left:20%;right:20%;height:2px;background:linear-gradient(90deg,transparent,var(--green),transparent)}
+.login-logo{text-align:center;margin-bottom:30px}
+.login-logo h1{font-family:var(--font-hud);font-size:28px;color:var(--green);letter-spacing:3px;text-shadow:0 0 30px rgba(74,222,128,0.5)}
+.login-logo p{color:var(--muted);font-size:13px;margin-top:5px;letter-spacing:2px;text-transform:uppercase}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-family:var(--font-hud)}
+.field input{width:100%;background:rgba(0,20,0,0.8);border:1px solid var(--border);border-radius:8px;padding:12px 14px;color:var(--text);font-family:var(--font-body);font-size:15px;outline:none;transition:.2s}
+.field input:focus{border-color:var(--green);box-shadow:0 0 0 2px rgba(74,222,128,0.15)}
+.tabs-login{display:flex;gap:4px;margin-bottom:24px;background:rgba(0,0,0,0.4);border-radius:8px;padding:4px}
+.tab-login-btn{flex:1;padding:8px;border:none;background:none;color:var(--muted);cursor:pointer;border-radius:6px;font-family:var(--font-hud);font-size:11px;letter-spacing:1px;transition:.2s}
+.tab-login-btn.active{background:var(--green);color:#000;font-weight:700}
+.btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,var(--green-dark),var(--green-dim));border:1px solid var(--green);border-radius:8px;color:#000;font-family:var(--font-hud);font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:.2s;margin-top:8px}
+.btn-primary:hover{filter:brightness(1.15);transform:translateY(-1px)}
+.btn-secondary{width:100%;padding:10px;background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:var(--font-hud);font-size:11px;letter-spacing:1px;cursor:pointer;transition:.2s;margin-top:8px}
+.btn-secondary:hover{border-color:var(--green);color:var(--green)}
+.login-error{color:var(--red);font-size:12px;margin-top:8px;text-align:center;min-height:18px;font-family:var(--font-mono)}
+.seed-field{position:relative}
+.seed-field textarea{width:100%;background:rgba(0,20,0,0.8);border:1px solid var(--border);border-radius:8px;padding:12px 14px;color:var(--green);font-family:var(--font-mono);font-size:11px;outline:none;resize:none;height:80px;line-height:1.6}
+.seed-hint{font-size:11px;color:var(--muted);margin-top:6px;font-family:var(--font-mono)}
 
-        /* --- Global Button Styles --- */
-        .btn { padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; width: 100%; margin-top: 5px; transition: 0.2s; }
-        .btn:hover { filter: brightness(1.2); }
-        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
-        .btn-green { background: var(--neon-green); color: #000; }
-        .btn-blue { background: #3b82f6; color: #fff; }
-        .btn-gold { background: var(--shiny-gold); color: #000; }
-        .btn-dark { background: #222; color: #fff; border: 1px solid #444; }
-        .btn-red { background: var(--alert-red); color: #fff; }
+/* ===== MAIN GAME HEADER ===== */
+.game-header{background:#000;border-bottom:1px solid var(--border-bright);padding:0 16px;display:flex;align-items:center;gap:12px;height:56px;position:sticky;top:0;z-index:100;flex-shrink:0}
+.header-logo{font-family:var(--font-hud);font-size:14px;color:var(--green);letter-spacing:2px;white-space:nowrap}
+.header-logo span{color:var(--gold)}
+.header-stats{display:flex;gap:8px;flex:1;justify-content:center;flex-wrap:wrap}
+.stat-pill{background:rgba(0,20,0,0.8);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-family:var(--font-hud);font-size:11px;white-space:nowrap}
+.stat-pill .val{color:var(--green);font-weight:700}
+.stat-pill .val.gold{color:var(--gold)}
+.stat-pill .val.purple{color:var(--purple)}
+.header-user{display:flex;align-items:center;gap:8px}
+.crown{font-size:16px;line-height:1}
+.username-tag{font-family:var(--font-hud);font-size:11px;color:var(--gold)}
+.btn-logout{background:none;border:1px solid rgba(239,68,68,0.3);color:rgba(239,68,68,0.6);border-radius:4px;padding:4px 8px;font-size:10px;cursor:pointer;font-family:var(--font-hud);letter-spacing:1px;transition:.2s}
+.btn-logout:hover{border-color:var(--red);color:var(--red)}
 
-        /* --- Grow Room Grid --- */
-        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        
-        .pot-card { background: #111; border: 1px solid #333; border-radius: 10px; padding: 15px; position: relative; }
-        .pot-card.shielded { border-color: var(--neon-green); box-shadow: 0 0 15px rgba(74,222,128,0.15); }
-        .pot-card.danger { border-color: var(--alert-red); box-shadow: 0 0 15px rgba(239,68,68,0.15); }
-        
-        .status-bar { height: 6px; background: #222; border-radius: 3px; overflow: hidden; margin: 5px 0 15px 0; }
-        .status-fill { height: 100%; background: var(--neon-green); transition: 0.3s; }
-        
-        .event-tag { background: var(--alert-red); color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-bottom: 5px; display: inline-block; }
+/* ===== NAV ===== */
+.game-nav{display:flex;background:#000;border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0}
+.nav-tab{flex:1;min-width:80px;padding:10px 8px;border:none;background:none;color:var(--muted);cursor:pointer;font-family:var(--font-hud);font-size:10px;letter-spacing:1px;text-transform:uppercase;transition:.2s;border-bottom:2px solid transparent;white-space:nowrap}
+.nav-tab.active{color:var(--green);border-bottom-color:var(--green);background:rgba(74,222,128,0.05)}
+.nav-tab:hover:not(.active){color:var(--text)}
 
-        /* --- Inventory & Shop --- */
-        .shop-item { background: var(--glass); border: 1px solid var(--border); padding: 15px; border-radius: 8px; text-align: center; }
-        .inv-bar { background: #000; padding: 10px; margin-bottom: 20px; border-radius: 5px; display: flex; gap: 15px; font-size: 0.8rem; overflow-x: auto; border: 1px solid #333; }
+/* ===== TAB CONTENT ===== */
+.game-content{flex:1;overflow-y:auto}
+.tab-panel{display:none;padding:16px}
+.tab-panel.active{display:block}
 
-        /* --- Cards --- */
-        .strain-card { border: 2px solid #444; border-radius: 8px; overflow: hidden; background: #000; text-align: center; }
-        .strain-card.Shiny { border-color: var(--shiny-gold); box-shadow: 0 0 10px var(--shiny-gold); }
-        .strain-card.EP { border-color: var(--epic-purple); box-shadow: 0 0 10px var(--epic-purple); }
-        .strain-card img { width: 100%; height: 150px; object-fit: cover; border-bottom: 1px solid #333; }
-        .card-stats { padding: 10px; font-size: 0.75rem; }
-    </style>
+/* ===== GROW ROOM ===== */
+.room-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.room-title{font-family:var(--font-hud);font-size:16px;color:var(--green);letter-spacing:2px}
+.room-badge{background:rgba(74,222,128,0.1);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--muted);font-family:var(--font-hud)}
+
+.env-panel{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px}
+.env-title{font-family:var(--font-hud);font-size:11px;color:var(--muted);letter-spacing:2px;margin-bottom:12px;text-transform:uppercase}
+.env-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.env-stat{background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center}
+.env-stat label{display:block;font-size:10px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;font-family:var(--font-hud)}
+.env-stat .env-val{font-family:var(--font-hud);font-size:18px;font-weight:700;color:var(--green)}
+.env-stat .env-unit{font-size:10px;color:var(--muted)}
+.env-stat.warn .env-val{color:var(--gold)}
+.env-stat.danger .env-val{color:var(--red)}
+
+.env-controls{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:12px}
+.ctrl-row{display:flex;align-items:center;gap:8px}
+.ctrl-row label{font-size:11px;color:var(--muted);font-family:var(--font-hud);letter-spacing:1px;min-width:80px}
+.ctrl-row input[type=range]{flex:1;accent-color:var(--green);height:4px}
+.ctrl-row .ctrl-val{font-family:var(--font-hud);font-size:12px;color:var(--green);min-width:40px;text-align:right}
+
+/* ===== PLANT GRID ===== */
+.plant-slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.pot-slot{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:.2s;position:relative}
+.pot-slot:hover{border-color:var(--border-bright);box-shadow:0 0 20px rgba(74,222,128,0.08)}
+.pot-slot.empty{border-style:dashed;display:flex;align-items:center;justify-content:center;min-height:280px;cursor:pointer;flex-direction:column;gap:8px;color:var(--muted)}
+.pot-slot.empty:hover{border-color:var(--green);color:var(--green)}
+.pot-slot.empty .plus{font-size:32px;opacity:.5}
+.pot-slot.empty .empty-label{font-family:var(--font-hud);font-size:11px;letter-spacing:2px}
+.pot-slot.danger-state{border-color:rgba(239,68,68,0.5);box-shadow:0 0 15px rgba(239,68,68,0.1)}
+.pot-slot.shielded{border-color:rgba(74,222,128,0.6);box-shadow:0 0 15px rgba(74,222,128,0.15)}
+
+/* plant card internals */
+.plant-art{height:180px;display:flex;align-items:flex-end;justify-content:center;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 90%,rgba(0,40,0,0.8) 0%,transparent 70%)}
+.plant-art .stage-label{position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.7);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-family:var(--font-hud);font-size:9px;letter-spacing:1px;color:var(--green)}
+.plant-art .day-label{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.7);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-family:var(--font-hud);font-size:9px;color:var(--muted)}
+.plant-svg-wrap{width:120px;height:160px;position:relative;filter:drop-shadow(0 0 8px rgba(74,222,128,0.3))}
+
+.plant-info{padding:12px}
+.plant-name{font-family:var(--font-hud);font-size:13px;color:var(--green);letter-spacing:1px}
+.plant-genetics{font-size:11px;color:var(--muted);margin-top:2px;font-style:italic}
+
+.bars{margin:10px 0;display:flex;flex-direction:column;gap:5px}
+.bar-row{display:flex;align-items:center;gap:8px}
+.bar-row label{font-size:10px;color:var(--muted);font-family:var(--font-hud);width:60px;letter-spacing:.5px}
+.bar-track{flex:1;height:5px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:.3s}
+.bar-fill.green{background:var(--green)}
+.bar-fill.blue{background:var(--blue)}
+.bar-fill.gold{background:var(--gold)}
+.bar-fill.red{background:var(--red)}
+.bar-val{font-family:var(--font-mono);font-size:10px;width:32px;text-align:right;color:var(--muted)}
+
+.event-tags{display:flex;gap:4px;flex-wrap:wrap;margin:6px 0}
+.event-tag{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);border-radius:4px;padding:2px 6px;font-size:10px;color:var(--red);font-family:var(--font-hud);letter-spacing:.5px}
+
+.plant-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:0 12px 12px}
+.btn-action{padding:7px 4px;border:1px solid var(--border);background:rgba(0,20,0,0.6);color:var(--text);border-radius:6px;cursor:pointer;font-family:var(--font-hud);font-size:9px;letter-spacing:.5px;text-transform:uppercase;transition:.2s}
+.btn-action:hover{border-color:var(--green);color:var(--green)}
+.btn-action.green{border-color:rgba(74,222,128,0.5);background:rgba(74,222,128,0.1);color:var(--green)}
+.btn-action.gold{border-color:rgba(251,191,36,0.5);background:rgba(251,191,36,0.08);color:var(--gold)}
+.btn-action.red{border-color:rgba(239,68,68,0.4);background:rgba(239,68,68,0.06);color:var(--red)}
+.btn-action.full{grid-column:span 2}
+.btn-action:disabled{opacity:.3;cursor:not-allowed}
+
+.inspect-btn{grid-column:span 2;padding:8px;border:1px solid rgba(74,222,128,0.4);background:rgba(74,222,128,0.08);color:var(--green);border-radius:6px;cursor:pointer;font-family:var(--font-hud);font-size:10px;letter-spacing:1px;transition:.2s;position:relative;overflow:hidden}
+.inspect-btn.active{background:rgba(74,222,128,0.2);border-color:var(--green);box-shadow:0 0 12px rgba(74,222,128,0.2)}
+.inspect-btn.cooldown{opacity:.5;cursor:not-allowed}
+.inspect-cooldown{font-size:9px;color:var(--muted);margin-top:2px}
+
+/* water/feed controls */
+.feed-row{display:flex;align-items:center;gap:6px;padding:0 12px;margin-bottom:10px}
+.feed-row label{font-size:10px;color:var(--muted);font-family:var(--font-hud);width:50px}
+.feed-row .ppm-display{font-family:var(--font-hud);font-size:11px;padding:3px 8px;background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:4px;min-width:60px;text-align:center}
+.feed-row .ppm-display.ok{color:var(--green)}
+.feed-row .ppm-display.high{color:var(--gold)}
+.feed-row .ppm-display.burn{color:var(--red)}
+
+/* water bar */
+.water-row{padding:0 12px;margin-bottom:8px}
+.water-label-row{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:var(--font-hud);margin-bottom:4px}
+.water-bar-track{height:8px;background:rgba(255,255,255,0.05);border-radius:4px;overflow:hidden;border:1px solid var(--border)}
+.water-bar-fill{height:100%;background:linear-gradient(90deg,#2563eb,#60a5fa);transition:.5s}
+
+/* light controls */
+.light-ctrl{padding:0 12px;margin-bottom:8px}
+.light-ctrl-row{display:flex;align-items:center;gap:8px}
+.light-icon{font-size:14px}
+.light-val{font-family:var(--font-hud);font-size:11px;color:var(--gold);min-width:32px}
+
+/* ===== SEED PANEL ===== */
+.code-entry-box{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+.code-entry-box h3{font-family:var(--font-hud);font-size:13px;color:var(--green);letter-spacing:2px;margin-bottom:12px}
+.code-input-row{display:flex;gap:8px}
+.code-input{flex:1;background:rgba(0,20,0,0.8);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--green);font-family:var(--font-mono);font-size:13px;outline:none}
+.code-input:focus{border-color:var(--green)}
+.btn-redeem{padding:10px 20px;background:rgba(74,222,128,0.15);border:1px solid var(--green);border-radius:8px;color:var(--green);font-family:var(--font-hud);font-size:11px;letter-spacing:1px;cursor:pointer;transition:.2s;white-space:nowrap}
+.btn-redeem:hover{background:rgba(74,222,128,0.25)}
+.code-result{margin-top:8px;font-family:var(--font-mono);font-size:12px;min-height:18px}
+.code-result.ok{color:var(--green)}
+.code-result.err{color:var(--red)}
+
+.seed-inventory{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.seed-item{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:14px;display:flex;gap:12px;align-items:center}
+.seed-icon-wrap{width:48px;height:48px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(0,40,0,0.6);border-radius:8px;border:1px solid var(--border)}
+.seed-item-info{flex:1;min-width:0}
+.seed-item-name{font-family:var(--font-hud);font-size:11px;color:var(--green);letter-spacing:.5px}
+.seed-item-genetics{font-size:10px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seed-item-qty{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.seed-qty-val{font-family:var(--font-hud);font-size:14px;font-weight:700;color:var(--gold)}
+.btn-plant-seed{padding:4px 10px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.4);border-radius:4px;color:var(--green);font-family:var(--font-hud);font-size:9px;cursor:pointer;transition:.2s}
+.btn-plant-seed:hover{background:rgba(74,222,128,0.2)}
+.btn-plant-seed:disabled{opacity:.3;cursor:not-allowed}
+
+/* ===== SHOP ===== */
+.shop-section{margin-bottom:24px}
+.shop-section-title{font-family:var(--font-hud);font-size:12px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:12px}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.shop-card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:14px;transition:.2s}
+.shop-card:hover{border-color:var(--border-bright)}
+.shop-card-icon{font-size:28px;margin-bottom:8px}
+.shop-card-name{font-family:var(--font-hud);font-size:12px;color:var(--text);letter-spacing:.5px}
+.shop-card-desc{font-size:11px;color:var(--muted);margin:4px 0 10px;line-height:1.5}
+.shop-card-price{font-family:var(--font-hud);font-size:13px;color:var(--gold)}
+.shop-card-price span{color:var(--muted);font-size:10px}
+.btn-buy{width:100%;margin-top:8px;padding:7px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.4);border-radius:6px;color:var(--gold);font-family:var(--font-hud);font-size:10px;letter-spacing:1px;cursor:pointer;transition:.2s}
+.btn-buy:hover{background:rgba(251,191,36,0.2)}
+.btn-buy:disabled{opacity:.3;cursor:not-allowed}
+.btn-upgrade{width:100%;margin-top:8px;padding:7px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.4);border-radius:6px;color:var(--green);font-family:var(--font-hud);font-size:10px;letter-spacing:1px;cursor:pointer;transition:.2s}
+.btn-upgrade:hover{background:rgba(74,222,128,0.2)}
+
+/* ===== VAULT / INVENTORY ===== */
+.vault-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.vault-card{background:var(--card-bg);border:2px solid var(--border);border-radius:12px;overflow:hidden;transition:.2s}
+.vault-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(74,222,128,0.1)}
+.vault-card.Shiny{border-color:var(--gold)}
+.vault-card.EP{border-color:var(--purple)}
+.vault-card-img{width:100%;height:140px;object-fit:cover}
+.vault-card-body{padding:12px}
+.vault-card-name{font-family:var(--font-hud);font-size:12px;color:var(--green);letter-spacing:.5px}
+.vault-card-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.vault-card-stats{margin-top:8px;font-family:var(--font-mono);font-size:11px;display:flex;flex-direction:column;gap:3px}
+.vault-stat{display:flex;justify-content:space-between}
+.vault-stat .k{color:var(--muted)}
+.vault-stat .v{color:var(--green)}
+.vault-card-footer{padding:8px 12px 12px;display:flex;gap:6px}
+.btn-sell{flex:1;padding:6px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.4);border-radius:5px;color:var(--gold);font-family:var(--font-hud);font-size:9px;cursor:pointer;transition:.2s}
+.btn-sell:hover{background:rgba(251,191,36,0.2)}
+.empty-vault{text-align:center;padding:60px 20px;color:var(--muted);font-family:var(--font-hud);font-size:12px;letter-spacing:2px}
+
+/* ===== STATUS TAB ===== */
+.status-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.status-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:16px}
+.status-card-name{font-family:var(--font-hud);font-size:13px;color:var(--green);letter-spacing:1px;margin-bottom:12px}
+.status-record{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
+.status-record:last-child{border:none}
+.status-record .sk{color:var(--muted);font-family:var(--font-hud);font-size:10px;letter-spacing:.5px}
+.status-record .sv{color:var(--gold);font-family:var(--font-hud);font-size:12px}
+
+/* ===== EVENT LOG TAB ===== */
+.event-log-list{display:flex;flex-direction:column;gap:8px;max-width:800px}
+.event-entry{background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start}
+.event-entry.warning{border-color:rgba(251,191,36,0.4);background:rgba(251,191,36,0.03)}
+.event-entry.danger{border-color:rgba(239,68,68,0.4);background:rgba(239,68,68,0.03)}
+.event-entry.success{border-color:rgba(74,222,128,0.4);background:rgba(74,222,128,0.03)}
+.event-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.event-dot.warning{background:var(--gold)}
+.event-dot.danger{background:var(--red)}
+.event-dot.success{background:var(--green)}
+.event-dot.info{background:var(--blue)}
+.event-text{flex:1;font-size:12px;line-height:1.5}
+.event-time{font-family:var(--font-mono);font-size:10px;color:var(--muted);white-space:nowrap}
+
+/* ===== TOAST ===== */
+#toast{position:fixed;bottom:20px;right:20px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast-msg{background:var(--panel);border:1px solid var(--border-bright);border-radius:8px;padding:10px 16px;font-family:var(--font-hud);font-size:11px;letter-spacing:.5px;animation:slideIn .3s ease,fadeOut .3s 2.7s ease forwards;max-width:300px}
+.toast-msg.ok{border-color:rgba(74,222,128,0.6);color:var(--green)}
+.toast-msg.warn{border-color:rgba(251,191,36,0.6);color:var(--gold)}
+.toast-msg.err{border-color:rgba(239,68,68,0.6);color:var(--red)}
+@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes fadeOut{to{opacity:0;transform:translateX(20px)}}
+
+/* ===== MODAL ===== */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:500;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--panel);border:1px solid var(--border-bright);border-radius:16px;padding:28px;width:460px;max-width:95vw;max-height:80vh;overflow-y:auto}
+.modal-title{font-family:var(--font-hud);font-size:16px;color:var(--green);letter-spacing:2px;margin-bottom:16px}
+.modal-actions{display:flex;gap:8px;margin-top:20px}
+.btn-modal{flex:1;padding:10px;border-radius:8px;font-family:var(--font-hud);font-size:11px;letter-spacing:1px;cursor:pointer;transition:.2s;border:1px solid}
+.btn-modal.confirm{background:rgba(74,222,128,0.15);border-color:var(--green);color:var(--green)}
+.btn-modal.cancel{background:transparent;border-color:var(--border);color:var(--muted)}
+.btn-modal:hover{filter:brightness(1.2)}
+
+/* strain selector */
+.strain-select-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin:12px 0;max-height:320px;overflow-y:auto}
+.strain-option{background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:10px;cursor:pointer;transition:.2s;text-align:center}
+.strain-option:hover,.strain-option.selected{border-color:var(--green);background:rgba(74,222,128,0.08)}
+.strain-option-name{font-family:var(--font-hud);font-size:10px;color:var(--green);letter-spacing:.5px}
+.strain-option-thc{font-size:10px;color:var(--muted);margin-top:3px}
+.strain-option-qty{font-family:var(--font-hud);font-size:14px;color:var(--gold);margin-top:2px}
+
+/* pack size modal */
+.pack-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.pack-opt{border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center;cursor:pointer;transition:.2s}
+.pack-opt:hover,.pack-opt.selected{border-color:var(--green);background:rgba(74,222,128,0.08)}
+.pack-seeds{font-family:var(--font-hud);font-size:18px;color:var(--green)}
+.pack-label{font-size:10px;color:var(--muted);font-family:var(--font-hud);margin-top:2px}
+
+/* ===== GROW OFF TAB ===== */
+.battle-coming{text-align:center;padding:60px 20px}
+.battle-coming h2{font-family:var(--font-hud);font-size:20px;color:var(--purple);letter-spacing:3px;margin-bottom:12px}
+.battle-coming p{color:var(--muted);font-size:13px;max-width:400px;margin:0 auto}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(74,222,128,0.2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(74,222,128,0.4)}
+
+/* ===== LEVEL PROGRESS BAR ===== */
+.level-bar-wrap{display:flex;align-items:center;gap:8px;margin:0 8px}
+.level-bar-track{width:80px;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
+.level-bar-fill{height:100%;background:var(--purple);transition:.5s}
+
+/* ===== ROOM UPGRADE NOTICE ===== */
+.room-upgrade-card{background:linear-gradient(135deg,rgba(74,222,128,0.05),rgba(0,40,0,0.3));border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;margin-bottom:16px}
+.room-upgrade-card h3{font-family:var(--font-hud);color:var(--green);font-size:14px;letter-spacing:2px}
+.room-upgrade-card p{color:var(--muted);font-size:12px;margin:8px 0}
+
+/* ===== NUTRITION MIXER ===== */
+.nute-mixer{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
+.nute-mixer h4{font-family:var(--font-hud);font-size:11px;color:var(--muted);letter-spacing:2px;margin-bottom:10px}
+.nute-sliders{display:grid;gap:8px}
+.nute-row{display:flex;align-items:center;gap:8px}
+.nute-label{font-size:10px;color:var(--muted);font-family:var(--font-hud);width:50px;letter-spacing:.5px}
+.nute-row input[type=range]{flex:1;accent-color:var(--blue)}
+.nute-total{font-family:var(--font-hud);font-size:13px;padding:8px;background:rgba(0,0,0,0.4);border-radius:6px;text-align:center;margin-top:8px}
+
+/* ===== HARVEST MARKET ===== */
+.market-buyers{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.buyer-card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:14px}
+.buyer-name{font-family:var(--font-hud);font-size:11px;color:var(--text);letter-spacing:.5px}
+.buyer-rate{font-family:var(--font-hud);font-size:20px;color:var(--gold);margin:6px 0}
+.buyer-note{font-size:10px;color:var(--muted);line-height:1.4}
+.buyer-timer{font-size:10px;color:var(--red);font-family:var(--font-mono);margin-top:4px}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:600px){
+  .plant-slots{grid-template-columns:1fr}
+  .env-grid{grid-template-columns:repeat(2,1fr)}
+  .header-stats{display:none}
+}
+</style>
 </head>
 <body>
 
-<div class="game-header">
-    <div class="stat-badge">COINS: <span class="currency" id="ui-coins">1500</span>¢</div>
-    <div class="stat-badge">ENV: <span id="ui-env" style="color:var(--neon-green)">CLOSET (Max 48")</span></div>
-    <div class="stat-badge">SHIELD LOG: <span id="ui-log" style="color:#888;">Standby...</span></div>
+<!-- ======================== LOGIN SCREEN ======================== -->
+<div id="screen-login" class="screen active">
+  <div class="login-box">
+    <div class="login-logo">
+      <h1>🌿 NOYES BOYS</h1>
+      <p>Grow-Off // Virtual Cultivation RPG</p>
+    </div>
+    <div class="tabs-login">
+      <button class="tab-login-btn active" onclick="setLoginTab('login')">LOGIN</button>
+      <button class="tab-login-btn" onclick="setLoginTab('register')">CREATE ACCOUNT</button>
+      <button class="tab-login-btn" onclick="setLoginTab('seed')">SEED PHRASE</button>
+    </div>
+
+    <div id="login-form">
+      <div class="field"><label>Username</label><input type="text" id="login-user" placeholder="Enter username" /></div>
+      <div class="field"><label>Password</label><input type="password" id="login-pass" placeholder="Enter password" /></div>
+      <div class="login-error" id="login-err"></div>
+      <button class="btn-primary" onclick="doLogin()">ENTER THE LAB</button>
+    </div>
+
+    <div id="register-form" style="display:none">
+      <div class="field"><label>Username</label><input type="text" id="reg-user" placeholder="Choose a username" /></div>
+      <div class="field"><label>Password</label><input type="password" id="reg-pass" placeholder="Choose a password" /></div>
+      <div class="field"><label>Confirm Password</label><input type="password" id="reg-pass2" placeholder="Confirm password" /></div>
+      <div class="login-error" id="reg-err"></div>
+      <button class="btn-primary" onclick="doRegister()">CREATE ACCOUNT</button>
+    </div>
+
+    <div id="seed-form" style="display:none">
+      <div class="field">
+        <label>Seed Phrase (12 words)</label>
+        <div class="seed-field"><textarea id="seed-input" placeholder="Enter your 12-word seed phrase to recover your account on any device..."></textarea></div>
+        <div class="seed-hint">Your seed phrase restores your full account on any device</div>
+      </div>
+      <div class="login-error" id="seed-err"></div>
+      <button class="btn-primary" onclick="doSeedLogin()">RESTORE ACCOUNT</button>
+    </div>
+  </div>
 </div>
 
-<div class="nav">
-    <button class="nav-btn active" onclick="switchTab('lab')">THE LAB</button>
-    <button class="nav-btn" onclick="switchTab('curing')">CURING ROOM</button>
-    <button class="nav-btn" onclick="switchTab('shop')">GROW SHOP</button>
-    <button class="nav-btn" onclick="switchTab('vault')">BATCH VAULT</button>
-</div>
+<!-- ======================== MAIN GAME SCREEN ======================== -->
+<div id="screen-game" class="screen">
+  <!-- Header -->
+  <div class="game-header">
+    <div class="header-logo">NOYES<span>BOYS</span></div>
+    <div class="header-stats">
+      <div class="stat-pill">COINS: <span class="val gold" id="hud-coins">0</span>¢</div>
+      <div class="stat-pill">LVL: <span class="val purple" id="hud-level">1</span></div>
+      <div class="stat-pill">ROOM: <span class="val" id="hud-room">CLOSET</span></div>
+      <div class="level-bar-wrap">
+        <div class="level-bar-track"><div class="level-bar-fill" id="hud-xp-bar" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div class="header-user">
+      <span class="crown" id="hud-crown"></span>
+      <span class="username-tag" id="hud-username">—</span>
+      <button class="btn-logout" onclick="doLogout()">LOGOUT</button>
+    </div>
+  </div>
 
-<div class="container">
-    
-    <div class="inv-bar" id="inventory-bar">
+  <!-- Nav -->
+  <div class="game-nav">
+    <button class="nav-tab active" onclick="switchTab('grow')">🌱 GROW ROOM</button>
+    <button class="nav-tab" onclick="switchTab('seeds')">🌰 SEEDS</button>
+    <button class="nav-tab" onclick="switchTab('shop')">🛒 SHOP</button>
+    <button class="nav-tab" onclick="switchTab('vault')">📦 VAULT</button>
+    <button class="nav-tab" onclick="switchTab('status')">📊 STATS</button>
+    <button class="nav-tab" onclick="switchTab('events')">📋 EVENT LOG</button>
+    <button class="nav-tab" onclick="switchTab('battle')">⚔️ GROW-OFF</button>
+  </div>
+
+  <!-- Game Content -->
+  <div class="game-content">
+
+    <!-- ===== GROW ROOM TAB ===== -->
+    <div id="tab-grow" class="tab-panel active">
+      <div class="room-header">
+        <div>
+          <div class="room-title" id="room-title-display">🏠 CLOSET GROW</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px;font-family:var(--font-hud)" id="room-subtitle-display">2 plant slots • Basic bulb</div>
         </div>
+        <div class="room-badge" id="room-season-badge">🌿 STANDARD MODE</div>
+      </div>
 
-    <div id="lab" class="view active">
-        <button class="btn btn-green" style="width:200px; margin-bottom:20px;" onclick="plantRandomSeed()">+ PLANT SEED</button>
-        <div class="grid-layout" id="garden-grid"></div>
-    </div>
-
-    <div id="curing" class="view">
-        <h2 style="color:var(--neon-green)">Curing Jars</h2>
-        <p style="font-size:0.8rem; color:#888;">Burp jars to keep humidity below 75%. Mold destroys 5% quality per tick!</p>
-        <div class="grid-layout" id="curing-grid"></div>
-    </div>
-
-    <div id="shop" class="view">
-        <h2>Nutrients & Upgrades</h2>
-        <div class="grid-layout">
-            <div class="shop-item">
-                <h3>Veg Nutrients</h3><p>Required to enter Veg Phase.</p>
-                <button class="btn btn-dark" onclick="buy('veg_nute', 50)">BUY (50¢)</button>
-            </div>
-            <div class="shop-item">
-                <h3>Flower Nutrients</h3><p>Required to enter Flower Phase.</p>
-                <button class="btn btn-dark" onclick="buy('flower_nute', 100)">BUY (100¢)</button>
-            </div>
-            <div class="shop-item">
-                <h3>Neem Oil</h3><p>Cures Spider Mites.</p>
-                <button class="btn btn-dark" onclick="buy('neem', 75)">BUY (75¢)</button>
-            </div>
-            <div class="shop-item">
-                <h3>Fungicide</h3><p>Cures Powdery Mildew.</p>
-                <button class="btn btn-dark" onclick="buy('fungicide', 120)">BUY (120¢)</button>
-            </div>
-            <div class="shop-item">
-                <h3>Blackout Tape</h3><p>Fixes Light Leaks.</p>
-                <button class="btn btn-dark" onclick="buy('tape', 30)">BUY (30¢)</button>
-            </div>
-            <div class="shop-item" style="border-color:var(--neon-green)">
-                <h3>Grow Tent (Upgrade)</h3><p>Increases Max Height to 84" (7ft).</p>
-                <button class="btn btn-green" onclick="upgradeEnv('Tent', 84, 2500)">UPGRADE (2500¢)</button>
-            </div>
+      <!-- Environment Panel -->
+      <div class="env-panel">
+        <div class="env-title">Environment Monitor</div>
+        <div class="env-grid">
+          <div class="env-stat" id="env-temp-card">
+            <label>Temp</label>
+            <span class="env-val" id="env-temp">24</span><span class="env-unit">°C</span>
+          </div>
+          <div class="env-stat" id="env-humid-card">
+            <label>Humidity</label>
+            <span class="env-val" id="env-humid">55</span><span class="env-unit">%</span>
+          </div>
+          <div class="env-stat" id="env-co2-card">
+            <label>CO₂</label>
+            <span class="env-val" id="env-co2">400</span><span class="env-unit">ppm</span>
+          </div>
+          <div class="env-stat" id="env-vpd-card">
+            <label>VPD</label>
+            <span class="env-val" id="env-vpd">1.1</span><span class="env-unit">kPa</span>
+          </div>
         </div>
+        <div class="env-controls">
+          <div>
+            <div class="ctrl-row">
+              <label>LIGHT %</label>
+              <input type="range" min="25" max="100" value="75" id="ctrl-light" oninput="updateEnvCtrl('light',this.value)" />
+              <span class="ctrl-val" id="ctrl-light-val">75%</span>
+            </div>
+            <div class="ctrl-row">
+              <label>HUMID %</label>
+              <input type="range" min="20" max="90" value="55" id="ctrl-humid" oninput="updateEnvCtrl('humid',this.value)" />
+              <span class="ctrl-val" id="ctrl-humid-val">55%</span>
+            </div>
+          </div>
+          <div>
+            <div class="ctrl-row">
+              <label>TEMP °C</label>
+              <input type="range" min="16" max="35" value="24" id="ctrl-temp" oninput="updateEnvCtrl('temp',this.value)" />
+              <span class="ctrl-val" id="ctrl-temp-val">24°C</span>
+            </div>
+            <div class="ctrl-row">
+              <label>HEIGHT</label>
+              <input type="range" min="12" max="48" value="24" id="ctrl-lightheight" oninput="updateEnvCtrl('lightheight',this.value)" />
+              <span class="ctrl-val" id="ctrl-lightheight-val">24"</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gear Status Row -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px" id="gear-status-row">
+        <!-- populated by JS -->
+      </div>
+
+      <!-- Plant Grid -->
+      <div class="plant-slots" id="plant-grid">
+        <!-- populated by JS -->
+      </div>
     </div>
 
-    <div id="vault" class="view">
-        <h2>Finished Harvests</h2>
-        <div class="grid-layout" id="vault-grid"></div>
+    <!-- ===== SEEDS TAB ===== -->
+    <div id="tab-seeds" class="tab-panel">
+      <div class="code-entry-box">
+        <h3>🌱 REDEEM SEED CODE</h3>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Each physical seed pack includes a unique code. Enter it here to add seeds to your virtual inventory.</p>
+        <div class="code-input-row">
+          <input type="text" class="code-input" id="seed-code-input" placeholder="Enter your pack code (e.g. NBG-CAKEBR-5X-A4K9)" maxlength="30" />
+          <button class="btn-redeem" onclick="redeemCode()">REDEEM</button>
+        </div>
+        <div class="code-result" id="code-result-msg"></div>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+          <div style="font-size:11px;color:var(--muted);font-family:var(--font-hud);letter-spacing:1px;margin-bottom:8px">DEMO CODES (for testing):</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <span onclick="fillCode('NBG-PURRAIN-3X-TEST')" style="font-family:var(--font-mono);font-size:10px;color:var(--green);background:rgba(74,222,128,0.08);border:1px solid var(--border);border-radius:4px;padding:3px 8px;cursor:pointer">NBG-PURRAIN-3X-TEST</span>
+            <span onclick="fillCode('NBG-CAKEBR-5X-TEST')" style="font-family:var(--font-mono);font-size:10px;color:var(--green);background:rgba(74,222,128,0.08);border:1px solid var(--border);border-radius:4px;padding:3px 8px;cursor:pointer">NBG-CAKEBR-5X-TEST</span>
+            <span onclick="fillCode('NBG-ALBSKUNK-1X-TEST')" style="font-family:var(--font-mono);font-size:10px;color:var(--green);background:rgba(74,222,128,0.08);border:1px solid var(--border);border-radius:4px;padding:3px 8px;cursor:pointer">NBG-ALBSKUNK-1X-TEST</span>
+            <span onclick="fillCode('NBG-LOUDDREAM-10X-TEST')" style="font-family:var(--font-mono);font-size:10px;color:var(--green);background:rgba(74,222,128,0.08);border:1px solid var(--border);border-radius:4px;padding:3px 8px;cursor:pointer">NBG-LOUDDREAM-10X-TEST</span>
+          </div>
+        </div>
+      </div>
+      <h3 style="font-family:var(--font-hud);font-size:12px;color:var(--muted);letter-spacing:2px;margin-bottom:12px">YOUR SEED INVENTORY</h3>
+      <div class="seed-inventory" id="seed-inventory-grid">
+        <!-- populated by JS -->
+      </div>
     </div>
 
+    <!-- ===== SHOP TAB ===== -->
+    <div id="tab-shop" class="tab-panel">
+
+      <div class="shop-section">
+        <div class="shop-section-title">💡 Lighting</div>
+        <div class="shop-grid" id="shop-lights"></div>
+      </div>
+      <div class="shop-section">
+        <div class="shop-section-title">🌬️ Climate Control</div>
+        <div class="shop-grid" id="shop-climate"></div>
+      </div>
+      <div class="shop-section">
+        <div class="shop-section-title">🌿 Nutrients & Supplies</div>
+        <div class="shop-grid" id="shop-nutes"></div>
+      </div>
+      <div class="shop-section">
+        <div class="shop-section-title">🏗️ Room Upgrades</div>
+        <div class="shop-grid" id="shop-rooms"></div>
+      </div>
+      <div class="shop-section">
+        <div class="shop-section-title">🃏 Power-Up Cards</div>
+        <div class="shop-grid" id="shop-cards"></div>
+      </div>
+    </div>
+
+    <!-- ===== VAULT TAB ===== -->
+    <div id="tab-vault" class="tab-panel">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+        <h2 style="font-family:var(--font-hud);font-size:15px;color:var(--green);letter-spacing:2px">HARVEST VAULT</h2>
+        <div style="display:flex;gap:8px">
+          <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-family:var(--font-hud);font-size:11px">
+            TOTAL: <span id="vault-total-weight" style="color:var(--gold)">0g</span>
+          </div>
+          <button onclick="switchTab('market')" style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.4);border-radius:8px;padding:8px 14px;color:var(--gold);font-family:var(--font-hud);font-size:11px;cursor:pointer">🏪 MARKET</button>
+        </div>
+      </div>
+      <div class="vault-grid" id="vault-grid">
+        <div class="empty-vault">No harvests yet. Grow something!</div>
+      </div>
+    </div>
+
+    <!-- ===== STATS TAB ===== -->
+    <div id="tab-status" class="tab-panel">
+      <h2 style="font-family:var(--font-hud);font-size:15px;color:var(--green);letter-spacing:2px;margin-bottom:16px">GROWER PROFILE</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:20px" id="profile-stats"></div>
+      <h3 style="font-family:var(--font-hud);font-size:12px;color:var(--muted);letter-spacing:2px;margin-bottom:12px;text-transform:uppercase">Best Grows Per Strain</h3>
+      <div class="status-grid" id="status-grid">
+        <div style="color:var(--muted);font-family:var(--font-hud);font-size:11px;padding:20px">No completed grows yet.</div>
+      </div>
+    </div>
+
+    <!-- ===== EVENT LOG TAB ===== -->
+    <div id="tab-events" class="tab-panel">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px">
+        <h2 style="font-family:var(--font-hud);font-size:15px;color:var(--green);letter-spacing:2px">EVENT LOG</h2>
+        <button onclick="clearLog()" style="background:none;border:1px solid rgba(239,68,68,0.3);color:rgba(239,68,68,0.6);border-radius:6px;padding:5px 10px;font-family:var(--font-hud);font-size:10px;cursor:pointer">CLEAR LOG</button>
+      </div>
+      <div class="event-log-list" id="event-log-list">
+        <div style="color:var(--muted);font-family:var(--font-hud);font-size:11px;padding:20px">No events yet.</div>
+      </div>
+    </div>
+
+    <!-- ===== BATTLE TAB ===== -->
+    <div id="tab-battle" class="tab-panel">
+      <div class="battle-coming">
+        <h2>⚔️ GROW-OFF ARENA</h2>
+        <p style="margin-bottom:16px">Challenge other growers, use strategy cards, and compete for the best THC%, yield, and health scores.</p>
+        <p style="font-size:12px;color:rgba(168,85,247,0.5);font-family:var(--font-hud);letter-spacing:2px">COMING SOON — PHASE 2</p>
+        <div style="margin-top:24px;background:rgba(168,85,247,0.05);border:1px solid rgba(168,85,247,0.2);border-radius:12px;padding:20px;text-align:left;max-width:500px;margin-left:auto;margin-right:auto">
+          <div style="font-family:var(--font-hud);font-size:11px;color:var(--purple);letter-spacing:1px;margin-bottom:10px">PLANNED FEATURES:</div>
+          <div style="font-size:12px;color:var(--muted);line-height:2">
+            • 1v1 grow-off matchmaking<br>
+            • Character battle cards (strain mascots)<br>
+            • Power-up cards: Mildew, Spider Mites, Pesticide...<br>
+            • Season leaderboard & swag prizes<br>
+            • Live head-to-head strain comparisons<br>
+            • Card trading system
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== MARKET TAB (hidden) ===== -->
+    <div id="tab-market" class="tab-panel">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+        <button onclick="switchTab('vault')" style="background:none;border:1px solid var(--border);border-radius:6px;padding:6px 12px;color:var(--muted);font-family:var(--font-hud);font-size:10px;cursor:pointer">← BACK</button>
+        <h2 style="font-family:var(--font-hud);font-size:15px;color:var(--green);letter-spacing:2px">HARVEST MARKET</h2>
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:16px;font-family:var(--font-mono)">Small batch buyers offer higher rates but disappear soon. Bulk buyers are always open for lower rates.</p>
+      <div class="market-buyers" id="market-buyers"></div>
+      <h3 style="font-family:var(--font-hud);font-size:12px;color:var(--muted);letter-spacing:2px;margin-bottom:12px">SELECT HARVEST TO SELL</h3>
+      <div class="vault-grid" id="market-vault-grid"></div>
+    </div>
+
+  </div><!-- end game-content -->
+</div><!-- end screen-game -->
+
+<!-- ===== MODAL: Plant Seed ===== -->
+<div class="modal-overlay" id="modal-plant">
+  <div class="modal-box">
+    <div class="modal-title">🌱 PLANT A SEED</div>
+    <div id="modal-plant-content">
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Select a strain from your seed inventory:</p>
+      <div class="strain-select-grid" id="modal-strain-list"></div>
+      <p id="modal-no-seeds" style="display:none;color:var(--red);font-family:var(--font-hud);font-size:12px">No seeds available. Redeem a code in the Seeds tab.</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal confirm" id="modal-plant-confirm" onclick="confirmPlant()">PLANT SEED</button>
+      <button class="btn-modal cancel" onclick="closeModal('modal-plant')">CANCEL</button>
+    </div>
+  </div>
 </div>
+
+<!-- ===== MODAL: Harvest Confirm ===== -->
+<div class="modal-overlay" id="modal-harvest">
+  <div class="modal-box">
+    <div class="modal-title">✂️ HARVEST PLANT</div>
+    <div id="modal-harvest-info" style="font-size:13px;line-height:1.8;color:var(--text)"></div>
+    <div class="modal-actions">
+      <button class="btn-modal confirm" onclick="confirmHarvest()">HARVEST NOW</button>
+      <button class="btn-modal cancel" onclick="closeModal('modal-harvest')">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: Prune/Top ===== -->
+<div class="modal-overlay" id="modal-prune">
+  <div class="modal-box">
+    <div class="modal-title">✂️ TRAINING / PRUNING</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6">Choose your technique. Timing matters — right choices reward, wrong ones penalize.</div>
+    <div id="modal-prune-content"></div>
+    <div class="modal-actions">
+      <button class="btn-modal cancel" onclick="closeModal('modal-prune')">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast"></div>
 
 <script>
-    // --- 1. FULL DATABASE EXAMPLES (Line 1 to Line 4) ---
-    const STRAINS = [
-        { name: "Purple Rainbow", line: "Line 1", thcBase: 25, yieldBase: 400, img: "assets/sept22edits/websiteimagedata/cards/finished/purplerainbowscard.png" },
-        { name: "Cake Breath", line: "Line 1", thcBase: 27, yieldBase: 450, img: "assets/sept22edits/websiteimagedata/cards/finished/cakebreathcard.png" },
-        { name: "Citrus Pebbles", line: "Line 2", thcBase: 27, yieldBase: 420, img: "assets/sept22edits/websiteimagedata/cards/finished/temp/citruspebbles.png" },
-        { name: "Loud Dreams", line: "Line 3", thcBase: 20, yieldBase: 500, img: "assets/sept22edits/websiteimagedata/cards/finished/louddreamscard.png" },
-        { name: "Albino Skunk", line: "Line 4", thcBase: 25, yieldBase: 480, img: "assets/sept22edits/websiteimagedata/cards/finished/albinoskunkcard.jpg" }
+// ============================================================
+// STRAIN DATABASE
+// ============================================================
+const STRAINS = {
+  "Purple Rainbow": {genetics:"Alien Tech × Rainbow Belts × Wedding Cake",line:1,thcBase:26,yieldBase:420,flowerDays:62,height:"Medium",variety:"indica",emoji:"🌈",cardImg:"assets/sept22edits/websiteimagedata/cards/finished/purplerainbowscard.png",plantColor:"#9333ea",budIcon:"rainbow"},
+  "Rainbow Cakes":  {genetics:"Noyes Breath × Biscotti × Wedding Cake",line:1,thcBase:25,yieldBase:380,flowerDays:68,height:"Medium",variety:"sativa",emoji:"🎂",cardImg:"assets/sept22edits/websiteimagedata/cards/finished/rainbowcakescard.png",plantColor:"#e879f9",budIcon:"cake"},
+  "Cake Breath":    {genetics:"Wedding Cake × Meatbreath",line:1,thcBase:27.5,yieldBase:400,flowerDays:62,height:"Short",variety:"indica",emoji:"🎂",cardImg:"assets/sept22edits/websiteimagedata/cards/finished/cakebreathcard.png",plantColor:"#a16207",budIcon:"cake"},
+  "Alienoyes Kush": {genetics:"Alien Tech × Noyes Kush",line:1,thcBase:27.5,yieldBase:360,flowerDays:62,height:"Short",variety:"indica",emoji:"👽",cardImg:"assets/sept22edits/websiteimagedata/cards/finished/alienoyeskushcard.jpg",plantColor:"#65a30d",budIcon:"alien"},
+  "Loud Dreams":    {genetics:"Blue Dream × Noyes Kush",line:3,thcBase:20,yieldBase:480,flowerDays:62,height:"Short",variety:"indica",emoji:"💤",cardImg:"assets/sept22edits/websiteimagedata/cards/finished/louddreamscard.png",plantColor:"#2563eb",budIcon:"dream"},
+  "Albino Skunk":   {genetics:"Skunk × ATF × Noyes Breath",line:4,thcBase:25,yieldBase:440,flowerDays:67,height:"Medium",variety:"hybrid",emoji:"🦨",cardImg:"assets/sept22edits/websiteimagedata/cards/finished/albinoskunkcard.jpg",plantColor:"#94a3b8",budIcon:"skunk"},
+  "Noyes Haze":     {genetics:"Noyes Kush × Lemon Haze",line:1,thcBase:26.5,yieldBase:350,flowerDays:68,height:"Tall",variety:"sativa",emoji:"☀️",cardImg:"assets/sept22edits/websiteimagedata/cards/finished/noyeshazecard.png",plantColor:"#eab308",budIcon:"haze"},
+  "Skunk Breath":   {genetics:"Skunk × Noyes Breath",line:4,thcBase:28,yieldBase:410,flowerDays:64,height:"Short",variety:"indica",emoji:"🦨",cardImg:"assets/sept22edits/websiteimagedata/cards/finished/skunkbreathcard.png",plantColor:"#6b7280",budIcon:"skunk"},
+  "Citrus Pebbles": {genetics:"Citronoyes Haze × Noyes Pebbles",line:2,thcBase:27.5,yieldBase:430,flowerDays:62,height:"Medium",variety:"indica",emoji:"🍊",cardImg:"assets/sept22edits/websiteimagedata/cards/finished/temp/citruspebbles.png",plantColor:"#ea580c",budIcon:"citrus"},
+  "Noyes OG":       {genetics:"Noyes Kush × OG Kush",line:3,thcBase:26.5,yieldBase:390,flowerDays:62,height:"Short",variety:"indica",emoji:"🌿",cardImg:"assets/sept22edits/websiteimagedata/cards/finished/noyesogcard.png",plantColor:"#16a34a",budIcon:"og"},
+};
+
+// CODE → {strainName, qty} mapping
+const SEED_CODES = {
+  "NBG-PURRAIN-3X-TEST":   {strain:"Purple Rainbow",qty:3},
+  "NBG-CAKEBR-5X-TEST":    {strain:"Cake Breath",qty:5},
+  "NBG-ALBSKUNK-1X-TEST":  {strain:"Albino Skunk",qty:1},
+  "NBG-LOUDDREAM-10X-TEST":{strain:"Loud Dreams",qty:10},
+  "NBG-NOYESHAZE-3X-TEST": {strain:"Noyes Haze",qty:3},
+  "NBG-SKUNKBR-5X-TEST":   {strain:"Skunk Breath",qty:5},
+  "NBG-CITRPEB-3X-TEST":   {strain:"Citrus Pebbles",qty:3},
+  "NBG-NOYOG-5X-TEST":     {strain:"Noyes OG",qty:5},
+};
+
+// ROOM CONFIGS
+const ROOMS = [
+  {id:"closet",name:"CLOSET GROW",sub:"2 plant slots • Basic bulb",slots:2,reqLevel:0,icon:"🏠",maxHeight:48,desc:"Your humble beginning. A repurposed closet with one basic bulb. Max 50% yield potential."},
+  {id:"tent4x4",name:"4×4 GROW TENT",sub:"4 plant slots • Up to 2 lights",slots:4,reqLevel:10,icon:"⛺",maxHeight:84,desc:"A proper 4×4 grow tent. More space, better control. Full yield potential unlocked."},
+  {id:"bigtent",name:"BIG TENT (8×8)",sub:"8 plant slots • Multiple lights",slots:8,reqLevel:25,icon:"🏕️",maxHeight:96,desc:"Serious hobbyist setup. 8 plants, precision control, pro-grade results."},
+  {id:"room",name:"GROW ROOM",sub:"12 plant slots • Full climate control",slots:12,reqLevel:50,icon:"🏗️",maxHeight:120,desc:"Dedicated grow room. 12 plants, HVAC, the real deal."},
+  {id:"greenhouse",name:"GREENHOUSE",sub:"20 plant slots • 100 at max",slots:20,reqLevel:100,icon:"🌿",maxHeight:200,desc:"Full commercial greenhouse. Up to 100 plants at Level 100."},
+];
+
+const SHOP_ITEMS = {
+  lights:[
+    {id:"bulb",name:"Basic Bulb",icon:"💡",desc:"Starter 60W incandescent. Weak but cheap.",price:0,owned:true,stat:"50% efficiency",type:"light"},
+    {id:"cfl",name:"CFL (200W)",icon:"💡",desc:"Compact fluorescent. Good for seedling/veg.",price:200,owned:false,stat:"70% efficiency",type:"light"},
+    {id:"led_small",name:"LED Panel (300W)",icon:"⚡",desc:"Efficient LED for 2×2 area. Low heat.",price:800,owned:false,stat:"85% efficiency",type:"light"},
+    {id:"led_med",name:"LED Panel (600W)",icon:"⚡",desc:"Mid-size LED for 4×4 area. Best value.",price:1800,owned:false,stat:"90% efficiency",type:"light"},
+    {id:"led_large",name:"HPS 1000W",icon:"☀️",desc:"High pressure sodium. Huge yield but heat risk.",price:3500,owned:false,stat:"95% efficiency + heat",type:"light"},
+  ],
+  climate:[
+    {id:"fan_small",name:"Clip Fan (Small)",icon:"🌀",desc:"Basic oscillating clip fan. Prevents mildew.",price:50,owned:false,stat:"Reduces mildew 30%",type:"fan"},
+    {id:"fan_med",name:"Inline Fan (Medium)",icon:"🌀",desc:"4\" inline. Good for tents. Slight wind stress.",price:200,owned:false,stat:"Reduces mildew 60%",type:"fan"},
+    {id:"fan_large",name:"Large Exhaust Fan",icon:"🌀",desc:"6\" exhaust. Keeps big rooms ventilated. High wind risk if plants are small.",price:500,owned:false,stat:"Reduces mildew 80%",type:"fan"},
+    {id:"humidifier",name:"Humidifier (Small)",icon:"💧",desc:"Maintains target humidity. Needs refilling every 5 days.",price:150,owned:false,stat:"Humidity control",type:"humid"},
+    {id:"dehumidifier",name:"Dehumidifier",icon:"🏜️",desc:"Removes moisture. Essential during flower.",price:350,owned:false,stat:"Prevents late mold",type:"dehu"},
+    {id:"ac_unit",name:"Portable AC",icon:"❄️",desc:"Keeps temps in check under hot lights.",price:1200,owned:false,stat:"Temp control ±3°C",type:"ac"},
+    {id:"co2_tank",name:"CO₂ Injector",icon:"🫧",desc:"Boosts growth 15-20% with proper light.",price:2500,owned:false,stat:"+20% growth speed",type:"co2"},
+  ],
+  nutes:[
+    {id:"veg_nute",name:"Veg Nutrients (A)",icon:"🌿",desc:"N-P-K for vegetative growth. Required for veg phase. 300-600 ppm.",price:50,owned:false,stat:"Feeds 1 plant",type:"consumable",qty:0},
+    {id:"flower_nute",name:"Bloom Nutrients",icon:"🌸",desc:"High P-K for flowering. Required for flower phase. 800-1500 ppm.",price:100,owned:false,stat:"Feeds 1 plant",type:"consumable",qty:0},
+    {id:"neem",name:"Neem Oil",icon:"🛢️",desc:"Organic pest control. Cures spider mites.",price:75,owned:false,stat:"Cures SPIDER_MITES",type:"consumable",qty:0},
+    {id:"fungicide",name:"Fungicide",icon:"🧪",desc:"Prevents & cures powdery mildew.",price:120,owned:false,stat:"Cures MILDEW",type:"consumable",qty:0},
+    {id:"tape",name:"Blackout Tape",icon:"🖤",desc:"Seals light leaks. Essential for flower.",price:30,owned:false,stat:"Cures LIGHT_LEAK",type:"consumable",qty:0},
+    {id:"trellis",name:"Trellis Net",icon:"🕸️",desc:"Spreads canopy for better yields. +10% yield.",price:80,owned:false,stat:"+10% yield mod",type:"upgrade"},
+    {id:"revive",name:"REVIVE CARD",icon:"💚",desc:"One-time use. Saves a dying plant. Powerful but expensive.",price:5000,owned:false,stat:"Revives dying plant",type:"consumable",qty:0},
+  ],
+  cards:[
+    {id:"card_potency",name:"Potency Boost",icon:"🃏",desc:"Add +3% THC to one harvest. Single use per grow.",price:300,owned:false,stat:"+3% THC",type:"card"},
+    {id:"card_yield",name:"Big Bud Card",icon:"🌱",desc:"Add +50g yield to one harvest.",price:350,owned:false,stat:"+50g yield",type:"card"},
+    {id:"card_speed",name:"Accelerate Card",icon:"⚡",desc:"Reduces flower time by 5 days.",price:500,owned:false,stat:"-5 flower days",type:"card"},
+    {id:"card_shield",name:"Pest Shield",icon:"🛡️",desc:"Prevents all pest events for 2 weeks.",price:400,owned:false,stat:"Pest immunity 14d",type:"card"},
+    {id:"card_mildew",name:"Mildew Card",icon:"🦠",desc:"(Battle) Forces mildew on opponent's plant.",price:600,owned:false,stat:"Battle: MILDEW",type:"battle_card"},
+    {id:"card_mites",name:"Spider Mite Card",icon:"🕷️",desc:"(Battle) Unleash mites on opponent.",price:600,owned:false,stat:"Battle: MITES",type:"battle_card"},
+  ],
+};
+
+// ============================================================
+// GAME STATE
+// ============================================================
+let G = null; // active game state, loaded per user
+let activeUser = null;
+let selectedSlot = null;
+let selectedStrain = null;
+let harvestTargetId = null;
+let pruneTargetId = null;
+let tickInterval = null;
+
+// ============================================================
+// PERSISTENCE
+// ============================================================
+function getAccounts(){return JSON.parse(localStorage.getItem('nb_accounts')||'{}')}
+function saveAccounts(a){localStorage.setItem('nb_accounts',JSON.stringify(a))}
+function loadGame(user){
+  const accounts=getAccounts();
+  if(!accounts[user])return null;
+  return accounts[user].game;
+}
+function saveGame(){
+  if(!activeUser||!G)return;
+  const accounts=getAccounts();
+  if(!accounts[activeUser])return;
+  accounts[activeUser].game=G;
+  saveAccounts(accounts);
+}
+function generateSeedPhrase(){
+  const words=["apple","bridge","cloud","delta","echo","flame","grove","haze","indigo","jungle","karma","lemon","mango","nectar","orbit","prism","quartz","resin","skunk","trichome","ultra","vapor","willow","xenon","yield","zenith"];
+  let phrase=[];
+  for(let i=0;i<12;i++) phrase.push(words[Math.floor(Math.random()*words.length)]);
+  return phrase.join(' ');
+}
+function phraseToUser(phrase){
+  // derive username from seed phrase hash
+  let h=0;
+  for(let c of phrase) h=(h*31+c.charCodeAt(0))&0x7FFFFFFF;
+  return 'grower_'+h.toString(36);
+}
+
+function newGameState(username, isMod=false){
+  return {
+    username,
+    isMod,
+    coins: isMod ? 999999 : 500,
+    level: isMod ? 100 : 1,
+    xp: 0,
+    xpToNext: 100,
+    room: 'closet',
+    plants: [],
+    seeds: isMod ? genModSeeds() : {},
+    vault: [],
+    gear: {
+      light:'bulb',
+      fan:null,
+      humidifier:null,
+      dehumidifier:null,
+      ac:null,
+      co2:null,
+      trellis:false,
+    },
+    inventory:{
+      veg_nute: isMod ? 999 : 0,
+      flower_nute: isMod ? 999 : 0,
+      neem: isMod ? 99 : 0,
+      fungicide: isMod ? 99 : 0,
+      tape: isMod ? 99 : 0,
+      revive: 0,
+      card_potency:0,card_yield:0,card_speed:0,card_shield:0,
+      card_mildew:0,card_mites:0,
+    },
+    env:{
+      lightPct:75,
+      humidTarget:55,
+      tempTarget:24,
+      lightHeight:24,
+    },
+    bestGrows:{},
+    redeemedCodes:[],
+    eventLog:[],
+    lastTick: Date.now(),
+    totalHarvests:0,
+    totalGrams:0,
+    yieldMultiplier: isMod ? 1.5 : 1.0,
+    showYieldMultiplier: isMod,
+  };
+}
+
+function genModSeeds(){
+  let s={};
+  Object.keys(STRAINS).forEach(k=>s[k]=10);
+  return s;
+}
+
+// ============================================================
+// LOGIN / REGISTER
+// ============================================================
+function setLoginTab(tab){
+  document.querySelectorAll('.tab-login-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('login-form').style.display='none';
+  document.getElementById('register-form').style.display='none';
+  document.getElementById('seed-form').style.display='none';
+  if(tab==='login') document.getElementById('login-form').style.display='block';
+  else if(tab==='register') document.getElementById('register-form').style.display='block';
+  else document.getElementById('seed-form').style.display='block';
+}
+function doLogin(){
+  const user=document.getElementById('login-user').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  const err=document.getElementById('login-err');
+  if(!user||!pass){err.textContent='Please fill all fields';return}
+  const accounts=getAccounts();
+  if(!accounts[user]){err.textContent='Account not found';return}
+  if(accounts[user].password!==pass){err.textContent='Incorrect password';return}
+  startGame(user);
+}
+function doRegister(){
+  const user=document.getElementById('reg-user').value.trim();
+  const pass=document.getElementById('reg-pass').value;
+  const pass2=document.getElementById('reg-pass2').value;
+  const err=document.getElementById('reg-err');
+  if(!user||!pass){err.textContent='Please fill all fields';return}
+  if(pass!==pass2){err.textContent='Passwords do not match';return}
+  if(user.length<3){err.textContent='Username too short';return}
+  const accounts=getAccounts();
+  if(accounts[user]){err.textContent='Username taken';return}
+  const seedPhrase=generateSeedPhrase();
+  const game=newGameState(user,false);
+  accounts[user]={password:pass,seedPhrase,game};
+  saveAccounts(accounts);
+  alert(`Account created!\n\n🔑 YOUR SEED PHRASE (save this!):\n\n${seedPhrase}\n\nThis lets you recover your account on any device.`);
+  startGame(user);
+}
+function doSeedLogin(){
+  const phrase=document.getElementById('seed-input').value.trim().toLowerCase();
+  const err=document.getElementById('seed-err');
+  if(!phrase){err.textContent='Enter your seed phrase';return}
+  const accounts=getAccounts();
+  const found=Object.entries(accounts).find(([u,a])=>a.seedPhrase===phrase);
+  if(!found){err.textContent='Seed phrase not found on this device. If you used another device, your data is stored there.';return}
+  startGame(found[0]);
+}
+function doLogout(){
+  saveGame();
+  clearInterval(tickInterval);
+  tickInterval=null;
+  G=null;
+  activeUser=null;
+  document.getElementById('screen-game').classList.remove('active');
+  document.getElementById('screen-login').classList.add('active');
+}
+function startGame(user){
+  activeUser=user;
+  G=loadGame(user);
+  if(!G){
+    const isMod=(user==='The Noyes Boys');
+    G=newGameState(user,isMod);
+    saveGame();
+  }
+  // Ensure mod account has correct state
+  if(user==='The Noyes Boys'){
+    if(G.level<100) G.level=100;
+    if(G.coins<999999) G.coins=999999;
+    G.isMod=true;
+    G.showYieldMultiplier=true;
+    G.yieldMultiplier=1.5;
+    if(!G.seeds||Object.keys(G.seeds).length===0) G.seeds=genModSeeds();
+    saveGame();
+  }
+  document.getElementById('screen-login').classList.remove('active');
+  document.getElementById('screen-game').classList.add('active');
+  updateHUD();
+  renderGrow();
+  renderSeeds();
+  renderShop();
+  renderVault();
+  renderStatus();
+  renderEventLog();
+  renderGearStatus();
+  startTicker();
+  logEvent('success',`Welcome back, ${user}! Your grow is running.`);
+}
+
+// ============================================================
+// PRESET: The Noyes Boys mod account
+// ============================================================
+function ensureModAccount(){
+  const accounts=getAccounts();
+  if(!accounts['The Noyes Boys']){
+    const game=newGameState('The Noyes Boys',true);
+    accounts['The Noyes Boys']={password:'tnb123',seedPhrase:'noyes boys mod crown master grower account seed phrase recovery test',game};
+    saveAccounts(accounts);
+  }
+}
+ensureModAccount();
+
+// ============================================================
+// TICK ENGINE
+// ============================================================
+function startTicker(){
+  if(tickInterval) clearInterval(tickInterval);
+  tickInterval=setInterval(gameTick,5000);
+}
+
+function gameTick(){
+  if(!G)return;
+  const now=Date.now();
+  const elapsed=(now-G.lastTick)/1000; // seconds
+  G.lastTick=now;
+
+  G.plants.forEach(p=>{
+    tickPlant(p,elapsed);
+  });
+
+  // humdifier water usage
+  if(G.gear.humidifier&&G.humidifierWater>0){
+    G.humidifierWater=Math.max(0,(G.humidifierWater||100)-(elapsed/7200)*100);
+    if(G.humidifierWater<=0) logEvent('warning','Humidifier is empty! Refill it.');
+  }
+
+  updateHUD();
+  renderGrow();
+  saveGame();
+}
+
+function tickPlant(p,elapsed){
+  const room=ROOMS.find(r=>r.id===G.room);
+  const strain=STRAINS[p.strainName];
+  if(!strain)return;
+
+  // Advance days
+  p.dayAge+=(elapsed/86400);
+
+  // Advance stage progress
+  const stageSpeedBase=elapsed/86400;
+  let envMod=1;
+
+  // Light quality modifier
+  const lightMods={bulb:0.5,cfl:0.75,led_small:0.9,led_med:1.0,led_large:1.05};
+  const lm=lightMods[G.gear.light]||0.5;
+
+  if(p.stage==='Seedling'){
+    p.stageProgress+=stageSpeedBase*lm*100;
+    if(p.stageProgress>=100&&p.dayAge>=4){
+      // ready to transplant
+    }
+    if(p.dayAge>20&&p.stage==='Seedling'){
+      p.health=Math.max(0,p.health-5);
+      logEvent('danger',`${p.strainName} seedling is dying! Needs to be in veg (transplant).`);
+    }
+  } else if(p.stage==='Veg'){
+    p.stageProgress+=stageSpeedBase*lm*100;
+    p.height+=stageSpeedBase*(strain.height==='Tall'?4:strain.height==='Short'?1.5:2.5);
+    // veg nutrient drain
+    if(p.vegDaysLeft>0){
+      p.vegDaysLeft-=(elapsed/86400);
+    } else {
+      p.yieldMod=Math.max(0.3,p.yieldMod-0.005);
+      if(!p._warnedVeg){p._warnedVeg=true;logEvent('warning',`${p.strainName}: veg nutrients depleted. Add more nutrients.`);}
+    }
+    // wilting if too long
+    if(p.stageProgress>100&&p.dayAge>60){
+      p.health=Math.max(0,p.health-2);
+    }
+  } else if(p.stage==='Flower'){
+    p.stageProgress+=stageSpeedBase*lm*100;
+    p.flowerDay+=(elapsed/86400);
+    // ppm check
+    const ppm=calcPPM(p);
+    if(ppm>1500){
+      p.yieldMod=Math.max(0.1,p.yieldMod-0.003);
+      if(!p._warnedBurn){p._warnedBurn=true;logEvent('danger',`${p.strainName}: NUTRIENT BURN! PPM too high (${Math.round(ppm)}).`);}
+    } else if(ppm<300&&p.flowerDay>2){
+      p.thcMod=Math.max(0.5,p.thcMod-0.002);
+    }
+    // late flower fade
+    if(p.flowerDay>70){p.yieldMod=Math.max(0.3,p.yieldMod-0.004);}
+    if(p.flowerDay>80){p.thcMod=Math.max(0.5,p.thcMod-0.003);}
+    if(p.flowerDay>=strain.flowerDays&&p.stage==='Flower'){p.stage='Ready';logEvent('success',`🌟 ${p.strainName} is READY TO HARVEST!`);}
+    if(p.flowerDay>120){p.health=Math.max(0,p.health-10);logEvent('danger',`${p.strainName} is rotting! Harvest immediately.`);}
+  }
+
+  // Height penalty
+  if(room&&p.height>room.maxHeight){
+    p.yieldMod=Math.max(0.1,p.yieldMod-0.004);
+    p.events=p.events||[];
+    if(!p.events.includes('HEIGHT')){p.events.push('HEIGHT');logEvent('warning',`${p.strainName} hitting canopy limit! LST or harvest soon.`);}
+  }
+
+  // Water drain
+  const lightHeat=(G.env.lightPct/100)*0.5;
+  const tempMod=(G.env.tempTarget-20)*0.03;
+  const drainRate=0.008+lightHeat*0.005+Math.max(0,tempMod)*0.003;
+  p.waterLevel=Math.max(0,p.waterLevel-drainRate*elapsed);
+  if(p.waterLevel<=0&&!p._overDryLogged){
+    p.health=Math.max(0,p.health-3);
+    logEvent('warning',`${p.strainName} is thirsty! Water your plant.`);
+    p._overDryLogged=true;
+    setTimeout(()=>p._overDryLogged=false,60000);
+  }
+
+  // Inspect bonus/penalty
+  const now=Date.now();
+  const hrSinceInspect=(now-(p.lastInspected||0))/3600000;
+  if(hrSinceInspect>24&&p.stage!=='Seedling'){
+    // Random event chance
+    if(Math.random()<0.015*elapsed/60){
+      triggerRandomEvent(p);
+    }
+  } else {
+    // inspected recently = lower chance
+    if(Math.random()<0.004*elapsed/60) triggerRandomEvent(p);
+  }
+
+  // Event damage
+  p.events=p.events||[];
+  if(p.events.includes('SPIDER_MITES')){p.yieldMod=Math.max(0.1,p.yieldMod-0.003);}
+  if(p.events.includes('MILDEW')){p.thcMod=Math.max(0.5,p.thcMod-0.002);p.yieldMod=Math.max(0.1,p.yieldMod-0.002);}
+  if(p.events.includes('LIGHT_LEAK')&&p.stage==='Flower'){p.thcMod=Math.max(0.5,p.thcMod-0.003);}
+
+  // Fan prevents mildew
+  if(!G.gear.fan&&p.stage==='Flower'&&Math.random()<0.005*elapsed/60){
+    if(!p.events.includes('MILDEW')){p.events.push('MILDEW');logEvent('danger',`${p.strainName}: Powdery mildew detected! No fan = air stagnation.`);}
+  }
+
+  p.yieldMod=Math.max(0.05,Math.min(2,p.yieldMod));
+  p.thcMod=Math.max(0.5,Math.min(1.3,p.thcMod));
+  p.health=Math.max(0,Math.min(100,p.health));
+}
+
+function calcPPM(p){
+  return (p.nBase||0)+(p.nFlower||0);
+}
+
+function triggerRandomEvent(p){
+  const events=['SPIDER_MITES','MILDEW','LIGHT_LEAK'];
+  const evt=events[Math.floor(Math.random()*events.length)];
+  p.events=p.events||[];
+  if(!p.events.includes(evt)){
+    p.events.push(evt);
+    logEvent('danger',`⚠️ ${p.strainName}: ${evt.replace('_',' ')} detected!`);
+  }
+}
+
+// ============================================================
+// PLANT CREATION & PLANTING
+// ============================================================
+function plantSeed(strainName,slotIndex){
+  const strain=STRAINS[strainName];
+  if(!strain)return;
+  if(!G.seeds[strainName]||G.seeds[strainName]<=0){showToast('No seeds of this strain!','err');return;}
+  G.seeds[strainName]--;
+  if(G.seeds[strainName]<=0) delete G.seeds[strainName];
+
+  const rarity=rollRarity();
+  const rarityMod={Standard:1,Shiny:1.2,EP:1.1}[rarity];
+
+  const plant={
+    id:Date.now()+'_'+Math.random().toString(36).substr(2,5),
+    slotIndex,
+    strainName,
+    rarity,
+    rarityMod,
+    stage:'Seedling',
+    stageProgress:0,
+    dayAge:0,
+    flowerDay:0,
+    height:2,
+    waterLevel:100,
+    health:100,
+    yieldMod:1.0,
+    thcMod:1.0,
+    topCount:0,
+    leavesRemoved:0,
+    events:[],
+    nBase:0,
+    nFlower:0,
+    vegDaysLeft:14,
+    lastInspected:Date.now(),
+    inspectBonus:0,
+    usedCards:[],
+    isTrellised:false,
+  };
+  G.plants.push(plant);
+  logEvent('success',`🌱 ${strainName} seed planted in slot ${slotIndex+1}! (${rarity} phenotype)`);
+  saveGame();
+  renderGrow();
+  renderSeeds();
+}
+
+function rollRarity(){
+  const r=Math.random();
+  if(r>0.97)return 'Shiny';
+  if(r>0.85)return 'EP';
+  return 'Standard';
+}
+
+// ============================================================
+// ACTIONS
+// ============================================================
+function waterPlant(id){
+  const p=G.plants.find(x=>x.id===id);
+  if(!p)return;
+  if(p.waterLevel>80){
+    p.waterLevel=Math.min(100,p.waterLevel+20);
+    p.yieldMod=Math.max(0.1,p.yieldMod-0.08);
+    p.health=Math.max(0,p.health-5);
+    logEvent('warning',`${p.strainName}: Overwatered! Plants need to dry between watering.`);
+  } else {
+    p.waterLevel=Math.min(100,p.waterLevel+60);
+    p._overDryLogged=false;
+    logEvent('success',`${p.strainName} watered. 💧`);
+  }
+  saveGame();renderGrow();
+}
+
+function feedPlant(id){
+  const p=G.plants.find(x=>x.id===id);
+  if(!p)return;
+  if(p.stage==='Seedling'){showToast('Cannot feed seedlings','warn');return;}
+  if(p.stage==='Veg'||p.stage==='Flower'){
+    if(p.stage==='Veg'){
+      if(G.inventory.veg_nute<=0){showToast('No Veg Nutrients! Buy some in the Shop.','err');return;}
+      G.inventory.veg_nute--;
+      p.nBase=450;
+      p.vegDaysLeft=14;
+      p._warnedVeg=false;
+      logEvent('success',`${p.strainName} fed veg nutes. 450 PPM.`);
+    } else {
+      if(p.flowerDay>50){
+        if(G.inventory.veg_nute>0){
+          G.inventory.veg_nute--;
+          p.nBase=200;
+          logEvent('info',`${p.strainName}: Late flush — lowering nutes.`);
+        }
+      } else {
+        if(G.inventory.flower_nute<=0){showToast('No Flower Nutrients! Buy some in the Shop.','err');return;}
+        G.inventory.flower_nute--;
+        p.nFlower=900;
+        logEvent('success',`${p.strainName} fed bloom nutes. 900 PPM.`);
+      }
+    }
+  }
+  saveGame();renderGrow();
+}
+
+function advanceStage(id){
+  const p=G.plants.find(x=>x.id===id);
+  if(!p)return;
+  if(p.stage==='Seedling'){
+    if(p.dayAge<4){showToast('Seedling needs 4+ days before transplanting','warn');return;}
+    p.stage='Veg';p.stageProgress=0;
+    logEvent('success',`${p.strainName} moved to VEG! 🌿`);
+  } else if(p.stage==='Veg'){
+    if(G.inventory.flower_nute<=0){showToast('Need Flower Nutrients to initiate 12/12!','err');return;}
+    G.inventory.flower_nute--;
+    p.stage='Flower';p.stageProgress=0;p.flowerDay=0;
+    p.nFlower=900;p.nBase=0;
+    logEvent('success',`${p.strainName} flipped to FLOWER! 🌸 Day 1 of ~${STRAINS[p.strainName]?.flowerDays||62} days.`);
+  }
+  saveGame();renderGrow();
+}
+
+function inspectPlant(id){
+  const p=G.plants.find(x=>x.id===id);
+  if(!p)return;
+  const now=Date.now();
+  const hrSince=(now-(p.lastInspected||0))/3600000;
+  if(hrSince<12){showToast(`Next inspection available in ${Math.round(12-hrSince)}h`,'warn');return;}
+  p.lastInspected=now;
+  p.inspectBonus=(p.inspectBonus||0)+0.02;
+  p.yieldMod=Math.min(2,p.yieldMod+0.02);
+  logEvent('success',`${p.strainName} inspected! +2% yield bonus. Shield active 8hrs.`);
+  saveGame();renderGrow();
+}
+
+function harvestPlant(id){
+  harvestTargetId=id;
+  const p=G.plants.find(x=>x.id===id);
+  if(!p)return;
+  const strain=STRAINS[p.strainName];
+  const baseYield=strain.yieldBase*p.yieldMod*p.rarityMod*G.yieldMultiplier;
+  const baseTHC=strain.thcBase*p.thcMod;
+  document.getElementById('modal-harvest-info').innerHTML=`
+    <div style="display:grid;gap:8px">
+      <div style="background:rgba(0,40,0,0.4);border-radius:8px;padding:12px">
+        <div style="font-family:var(--font-hud);color:var(--green);font-size:13px;margin-bottom:6px">${p.strainName}</div>
+        <div style="font-size:12px;color:var(--muted)">Stage: ${p.stage} | Day ${Math.floor(p.dayAge)} | Flower Day ${Math.floor(p.flowerDay||0)}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center">
+        <div style="background:rgba(0,0,0,0.4);border-radius:8px;padding:10px">
+          <div style="font-size:10px;color:var(--muted);font-family:var(--font-hud)">EST. YIELD</div>
+          <div style="font-family:var(--font-hud);font-size:18px;color:var(--gold)">${Math.round(baseYield)}g</div>
+        </div>
+        <div style="background:rgba(0,0,0,0.4);border-radius:8px;padding:10px">
+          <div style="font-size:10px;color:var(--muted);font-family:var(--font-hud)">EST. THC</div>
+          <div style="font-family:var(--font-hud);font-size:18px;color:var(--green)">${baseTHC.toFixed(1)}%</div>
+        </div>
+        <div style="background:rgba(0,0,0,0.4);border-radius:8px;padding:10px">
+          <div style="font-size:10px;color:var(--muted);font-family:var(--font-hud)">HEALTH</div>
+          <div style="font-family:var(--font-hud);font-size:18px;color:${p.health>60?'var(--green)':p.health>30?'var(--gold)':'var(--red)'}">${Math.round(p.health)}%</div>
+        </div>
+      </div>
+      ${p.events&&p.events.length>0?`<div style="color:var(--red);font-size:11px;font-family:var(--font-hud)">Active issues: ${p.events.join(', ')}</div>`:''}
+    </div>`;
+  document.getElementById('modal-harvest').classList.add('open');
+}
+
+function confirmHarvest(){
+  const p=G.plants.find(x=>x.id===harvestTargetId);
+  if(!p){closeModal('modal-harvest');return;}
+  const strain=STRAINS[p.strainName];
+  const finalYield=Math.round(strain.yieldBase*p.yieldMod*p.rarityMod*G.yieldMultiplier);
+  const finalTHC=parseFloat((strain.thcBase*p.thcMod).toFixed(1));
+
+  const batch={
+    id:'BATCH-'+Math.floor(Math.random()*99999),
+    strainName:p.strainName,
+    rarity:p.rarity,
+    weight:finalYield,
+    thc:finalTHC,
+    health:Math.round(p.health),
+    flowerDays:Math.round(p.flowerDay||0),
+    vegDays:Math.round((p.dayAge||0)-(p.flowerDay||0)),
+    harvestDate:new Date().toLocaleDateString(),
+    events:p.events||[],
+    cardImg:strain.cardImg,
+  };
+  G.vault.push(batch);
+  G.plants=G.plants.filter(x=>x.id!==harvestTargetId);
+
+  // XP
+  const xpGain=calcHarvestXP(p,finalYield,finalTHC,p.health);
+  gainXP(xpGain);
+
+  // Stat records
+  if(!G.bestGrows[p.strainName]||finalTHC>G.bestGrows[p.strainName].thc){
+    G.bestGrows[p.strainName]={thc:finalTHC,yield:finalYield,health:Math.round(p.health),date:batch.harvestDate};
+  }
+  G.totalHarvests++;G.totalGrams+=finalYield;
+
+  logEvent('success',`✂️ Harvested ${p.strainName}: ${finalYield}g | ${finalTHC}% THC | +${xpGain}XP`);
+  closeModal('modal-harvest');
+  saveGame();renderGrow();renderVault();renderStatus();
+  showToast(`Harvested ${finalYield}g of ${p.strainName}!`,'ok');
+}
+
+function calcHarvestXP(p,weight,thc,health){
+  let xp=10;
+  const strain=STRAINS[p.strainName];
+  if(!strain)return xp;
+  const yieldPct=weight/(strain.yieldBase*1.5);
+  const thcPct=thc/strain.thcBase;
+  xp+=Math.round(yieldPct*40+thcPct*30+(health/100)*30);
+  if(p.events&&p.events.length===0)xp+=15;
+  return Math.min(100,Math.max(5,xp));
+}
+
+function gainXP(amount){
+  G.xp+=amount;
+  while(G.xp>=G.xpToNext){
+    G.xp-=G.xpToNext;
+    G.level++;
+    G.xpToNext=Math.round(G.xpToNext*1.15);
+    logEvent('success',`🎉 LEVEL UP! Now Level ${G.level}!`);
+    showToast(`LEVEL UP → ${G.level}!`,'ok');
+    checkRoomUnlocks();
+  }
+  updateHUD();
+}
+
+function checkRoomUnlocks(){
+  const unlocked=ROOMS.filter(r=>r.reqLevel<=G.level&&r.id!==G.room);
+  if(unlocked.length>0){
+    const next=unlocked[unlocked.length-1];
+    if(next.id!==G.room) logEvent('success',`🏗️ New room unlocked: ${next.name}! Upgrade in the Shop.`);
+  }
+}
+
+// ============================================================
+// PRUNE / TOP
+// ============================================================
+function openPruneModal(id){
+  pruneTargetId=id;
+  const p=G.plants.find(x=>x.id===id);
+  if(!p)return;
+  const str=STRAINS[p.strainName];
+
+  const actions=[
+    {name:'TOP',desc:'Cut the main cola. +10-30% yield if done in veg, −15% if done in flower.',fn:`doTraining('top','${id}')`,valid:true},
+    {name:'LOW STRESS TRAIN (LST)',desc:'Tie down branches. +15% yield. Best in veg.',fn:`doTraining('lst','${id}')`,valid:p.stage==='Veg'},
+    {name:'REMOVE FAN LEAVES',desc:'Open canopy for light. +5% yield if healthy, −5% if stressed.',fn:`doTraining('defoliate','${id}')`,valid:p.stage==='Flower'&&p.flowerDay<21},
+    {name:'TUCK LEAVES',desc:'Tuck fan leaves to expose bud sites. Subtle +3% yield.',fn:`doTraining('tuck','${id}')`,valid:p.stage==='Flower'},
+    {name:'LOLLIPOP',desc:'Remove lower growth. +20% top yield, −10% total. Done in early flower.',fn:`doTraining('lollipop','${id}')`,valid:p.stage==='Flower'&&p.flowerDay<14},
+  ];
+
+  document.getElementById('modal-prune-content').innerHTML=actions.map(a=>`
+    <div style="background:var(--card-bg);border:1px solid ${a.valid?'var(--border)':'rgba(255,255,255,0.03)'};border-radius:8px;padding:12px;margin-bottom:8px;opacity:${a.valid?1:0.4}">
+      <div style="font-family:var(--font-hud);font-size:11px;color:var(--green);letter-spacing:.5px;margin-bottom:4px">${a.name}</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px">${a.desc}</div>
+      <button onclick="${a.fn}" ${a.valid?'':'disabled'} style="padding:5px 12px;background:rgba(74,222,128,0.1);border:1px solid ${a.valid?'rgba(74,222,128,0.4)':'var(--border)'};border-radius:5px;color:var(--green);font-family:var(--font-hud);font-size:9px;cursor:${a.valid?'pointer':'not-allowed'};letter-spacing:1px">${a.valid?'APPLY':'UNAVAILABLE IN '+p.stage.toUpperCase()}</button>
+    </div>`).join('');
+  document.getElementById('modal-prune').classList.add('open');
+}
+
+function doTraining(type,id){
+  const p=G.plants.find(x=>x.id===id);
+  if(!p)return;
+  let msg='';
+  if(type==='top'){
+    p.topCount++;
+    if(p.stage==='Veg'){
+      const bonus=p.topCount<=3?0.1:p.topCount<=5?0.05:-0.15;
+      p.yieldMod+=bonus;
+      msg=`Topped ${p.strainName}. ${bonus>0?'+'+Math.round(bonus*100)+'% yield.':'Over-topped! -15% yield.'}`;
+    } else {
+      p.yieldMod-=0.15;
+      msg=`Topped in flower — −15% yield on ${p.strainName}.`;
+    }
+  } else if(type==='lst'){
+    p.yieldMod+=0.15;
+    msg=`LST applied to ${p.strainName}. +15% yield.`;
+  } else if(type==='defoliate'){
+    const bonus=p.health>70?0.05:-0.05;
+    p.yieldMod+=bonus;
+    msg=`Fan leaves removed from ${p.strainName}. ${bonus>0?'+5%':'-5%'} yield.`;
+  } else if(type==='tuck'){
+    p.yieldMod+=0.03;
+    msg=`Tucked leaves on ${p.strainName}. +3% yield.`;
+  } else if(type==='lollipop'){
+    p.yieldMod+=0.10;
+    p.thcMod+=0.03;
+    msg=`Lollipopped ${p.strainName}. +10% top yield, +3% potency.`;
+  }
+  logEvent('info',msg);
+  closeModal('modal-prune');
+  saveGame();renderGrow();
+}
+
+// ============================================================
+// CURING PLANT EVENTS
+// ============================================================
+function cureEvent(id,evt){
+  const p=G.plants.find(x=>x.id===id);
+  if(!p)return;
+  const cureMap={SPIDER_MITES:'neem',MILDEW:'fungicide',LIGHT_LEAK:'tape'};
+  const itemKey=cureMap[evt];
+  if(!itemKey){showToast('No cure available','err');return;}
+  if((G.inventory[itemKey]||0)<=0){showToast(`Need ${itemKey.replace('_',' ')} from Shop!`,'err');return;}
+  G.inventory[itemKey]--;
+  p.events=p.events.filter(e=>e!==evt);
+  logEvent('success',`${evt.replace(/_/g,' ')} cured on ${p.strainName}.`);
+  saveGame();renderGrow();
+}
+
+// ============================================================
+// SEED CODES
+// ============================================================
+function redeemCode(){
+  const code=document.getElementById('seed-code-input').value.trim().toUpperCase();
+  const el=document.getElementById('code-result-msg');
+  if(!code){el.className='code-result err';el.textContent='Enter a code first.';return;}
+  if(G.redeemedCodes.includes(code)){el.className='code-result err';el.textContent='This code has already been redeemed.';return;}
+  const entry=SEED_CODES[code];
+  if(!entry){el.className='code-result err';el.textContent='Invalid code.';return;}
+  G.seeds[entry.strain]=(G.seeds[entry.strain]||0)+entry.qty;
+  G.redeemedCodes.push(code);
+  el.className='code-result ok';el.textContent=`✓ Redeemed! Added ${entry.qty}× ${entry.strain} seed${entry.qty>1?'s':''} to inventory.`;
+  logEvent('success',`Code redeemed: ${entry.qty}× ${entry.strain}`);
+  document.getElementById('seed-code-input').value='';
+  saveGame();renderSeeds();
+}
+function fillCode(code){document.getElementById('seed-code-input').value=code;}
+
+// ============================================================
+// SHOP
+// ============================================================
+function buyItem(id,price,category){
+  if(G.coins<price){showToast('Not enough coins!','err');return;}
+  G.coins-=price;
+
+  if(category==='consumable'){
+    G.inventory[id]=(G.inventory[id]||0)+1;
+    showToast(`Bought ${id.replace(/_/g,' ')}!`,'ok');
+  } else if(category==='light'){
+    G.gear.light=id;
+    showToast(`Light upgraded to ${id}!`,'ok');
+    logEvent('success',`Upgraded light to ${id}.`);
+  } else if(category==='fan'){
+    G.gear.fan=id;
+    showToast('Fan installed!','ok');
+    logEvent('success',`Fan installed: ${id}`);
+  } else if(category==='humid'){
+    G.gear.humidifier=id;
+    G.humidifierWater=100;
+    showToast('Humidifier installed!','ok');
+  } else if(category==='dehu'){
+    G.gear.dehumidifier=id;
+    showToast('Dehumidifier installed!','ok');
+  } else if(category==='ac'){
+    G.gear.ac=id;
+    showToast('AC unit installed!','ok');
+  } else if(category==='co2'){
+    G.gear.co2=id;
+    showToast('CO₂ system online!','ok');
+  } else if(category==='upgrade'){
+    if(id==='trellis') G.gear.trellis=true;
+    showToast('Upgrade applied!','ok');
+  } else if(category==='card'){
+    G.inventory[id]=(G.inventory[id]||0)+1;
+    showToast(`Card acquired!`,'ok');
+  } else if(category==='battle_card'){
+    G.inventory[id]=(G.inventory[id]||0)+1;
+    showToast(`Battle card acquired!`,'ok');
+  }
+  saveGame();renderShop();renderGearStatus();updateHUD();
+}
+
+function upgradeRoom(id,cost){
+  const room=ROOMS.find(r=>r.id===id);
+  if(!room)return;
+  if(G.level<room.reqLevel){showToast(`Need Level ${room.reqLevel} to unlock!`,'err');return;}
+  if(G.coins<cost){showToast('Not enough coins!','err');return;}
+  G.coins-=cost;
+  G.room=id;
+  logEvent('success',`🏗️ Upgraded to ${room.name}!`);
+  showToast(`Room upgraded to ${room.name}!`,'ok');
+  saveGame();renderGrow();renderShop();updateHUD();
+}
+
+// ============================================================
+// SELL / MARKET
+// ============================================================
+function sellBatch(batchId,pricePerG){
+  const batch=G.vault.find(b=>b.id===batchId);
+  if(!batch)return;
+  const total=Math.round(batch.weight*pricePerG);
+  G.vault=G.vault.filter(b=>b.id!==batchId);
+  G.coins+=total;
+  logEvent('success',`Sold ${batch.weight}g of ${batch.strainName} for ${total}¢!`);
+  showToast(`Sold for ${total}¢!`,'ok');
+  saveGame();renderVault();renderMarket();updateHUD();
+}
+
+// ============================================================
+// RENDER ENGINE
+// ============================================================
+function updateHUD(){
+  if(!G)return;
+  document.getElementById('hud-coins').textContent=G.coins.toLocaleString();
+  document.getElementById('hud-level').textContent=G.level;
+  document.getElementById('hud-room').textContent=ROOMS.find(r=>r.id===G.room)?.name||G.room;
+  document.getElementById('hud-username').textContent=G.username;
+  document.getElementById('hud-crown').textContent=G.isMod?'👑':'';
+  const xpPct=Math.round((G.xp/G.xpToNext)*100);
+  document.getElementById('hud-xp-bar').style.width=xpPct+'%';
+}
+
+function renderGearStatus(){
+  const row=document.getElementById('gear-status-row');
+  if(!row||!G)return;
+  const items=[
+    {icon:'💡',label:G.gear.light||'No Light',ok:!!G.gear.light},
+    {icon:'🌀',label:G.gear.fan||'No Fan',ok:!!G.gear.fan},
+    {icon:'💧',label:G.gear.humidifier||'No Humidifier',ok:!!G.gear.humidifier},
+    {icon:'❄️',label:G.gear.ac||'No AC',ok:!!G.gear.ac},
+    {icon:'🫧',label:G.gear.co2||'No CO₂',ok:!!G.gear.co2},
+  ];
+  row.innerHTML=items.map(i=>`
+    <div style="background:${i.ok?'rgba(74,222,128,0.08)':'rgba(239,68,68,0.05)'};border:1px solid ${i.ok?'var(--border)':'rgba(239,68,68,0.2)'};border-radius:6px;padding:4px 10px;font-size:10px;color:${i.ok?'var(--green)':'var(--muted)'};font-family:var(--font-hud);white-space:nowrap">
+      ${i.icon} ${i.label.toUpperCase()}
+    </div>`).join('');
+}
+
+function renderGrow(){
+  if(!G)return;
+  const room=ROOMS.find(r=>r.id===G.room)||ROOMS[0];
+  document.getElementById('room-title-display').innerHTML=`${room.icon} ${room.name}`;
+  document.getElementById('room-subtitle-display').textContent=room.sub;
+
+  // Update env display
+  const temp=G.env.tempTarget;
+  const humid=G.env.humidTarget;
+  const lightPct=G.env.lightPct;
+  const heatFromLight=(lightPct/100)*(G.gear.light==='led_large'?8:G.gear.light==='led_med'?5:3);
+  const realTemp=temp+heatFromLight-(G.gear.ac?3:0);
+  const realHumid=G.gear.humidifier&&(G.humidifierWater||0)>0?humid:humid-(Math.random()*5+2);
+
+  const tempEl=document.getElementById('env-temp');
+  const humidEl=document.getElementById('env-humid');
+  if(tempEl){tempEl.textContent=Math.round(realTemp);}
+  if(humidEl){humidEl.textContent=Math.round(realHumid);}
+
+  const tempCard=document.getElementById('env-temp-card');
+  const humidCard=document.getElementById('env-humid-card');
+  if(tempCard){tempCard.className='env-stat'+(realTemp>30?' danger':realTemp>27?' warn':'');}
+  if(humidCard){humidCard.className='env-stat'+(realHumid>75?' danger':realHumid>65?' warn':'');}
+
+  // Generate plant slots
+  const grid=document.getElementById('plant-grid');
+  if(!grid)return;
+  grid.innerHTML='';
+
+  for(let i=0;i<room.slots;i++){
+    const plant=G.plants.find(p=>p.slotIndex===i);
+    const slot=document.createElement('div');
+    slot.className='pot-slot';
+
+    if(!plant){
+      slot.classList.add('empty');
+      slot.innerHTML=`<div class="plus">＋</div><div class="empty-label">EMPTY SLOT ${i+1}</div><div style="font-size:10px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Click to plant</div>`;
+      slot.onclick=()=>openPlantModal(i);
+    } else {
+      const strain=STRAINS[plant.strainName];
+      if(!strain)return;
+      const pct=Math.min(100,plant.stageProgress);
+      const waterPct=plant.waterLevel;
+      const hasEvent=plant.events&&plant.events.length>0;
+      const now=Date.now();
+      const isShielded=(now-(plant.lastInspected||0))<28800000;
+      const inspectAvail=(now-(plant.lastInspected||0))>=43200000;
+
+      if(hasEvent) slot.classList.add('danger-state');
+      else if(isShielded) slot.classList.add('shielded');
+
+      const ppm=calcPPM(plant);
+      const ppmClass=ppm>1500?'burn':ppm>600?'high':'ok';
+
+      slot.innerHTML=`
+        <div class="plant-art" style="background:radial-gradient(ellipse at 50% 95%,${strain.plantColor}22 0%,transparent 65%)">
+          <div class="stage-label">${plant.stage.toUpperCase()}</div>
+          <div class="day-label">DAY ${Math.floor(plant.dayAge)}</div>
+          <div class="plant-svg-wrap">
+            ${getPlantSVG(plant.strainName,plant.stage,plant.health,plant.height)}
+          </div>
+        </div>
+        <div class="plant-info">
+          <div class="plant-name">${strain.emoji} ${plant.strainName} <span style="font-size:9px;color:${plant.rarity==='Shiny'?'var(--gold)':plant.rarity==='EP'?'var(--purple)':'var(--muted)'};font-family:var(--font-hud)">${plant.rarity}</span></div>
+          <div class="plant-genetics">${strain.genetics}</div>
+          ${hasEvent?`<div class="event-tags">${plant.events.map(e=>`<div class="event-tag" onclick="cureEvent('${plant.id}','${e}')">${e.replace(/_/g,' ')} [FIX]</div>`).join('')}</div>`:''}
+          <div class="bars">
+            <div class="bar-row"><label>HEALTH</label><div class="bar-track"><div class="bar-fill ${plant.health>60?'green':plant.health>30?'gold':'red'}" style="width:${plant.health}%"></div></div><span class="bar-val">${Math.round(plant.health)}%</span></div>
+            <div class="bar-row"><label>WATER</label><div class="bar-track"><div class="bar-fill blue" style="width:${waterPct}%"></div></div><span class="bar-val">${Math.round(waterPct)}%</span></div>
+            <div class="bar-row"><label>STAGE</label><div class="bar-track"><div class="bar-fill green" style="width:${pct}%"></div></div><span class="bar-val">${Math.round(pct)}%</span></div>
+            <div class="bar-row"><label>YIELD</label><div class="bar-track"><div class="bar-fill gold" style="width:${Math.min(100,plant.yieldMod*50)}%"></div></div><span class="bar-val">${plant.yieldMod.toFixed(2)}x</span></div>
+          </div>
+          <div style="padding:0 0 6px;font-family:var(--font-hud);font-size:9px;color:${ppmClass==='burn'?'var(--red)':ppmClass==='high'?'var(--gold)':'var(--muted)'}">PPM: ${Math.round(ppm)} ${ppmClass==='burn'?'⚠ BURN RISK':ppmClass==='high'?'HIGH':''} | H: ${plant.height.toFixed(0)}" / ${ROOMS.find(r=>r.id===G.room)?.maxHeight||48}"</div>
+        </div>
+        <div style="padding:0 12px 8px">
+          <button class="inspect-btn ${isShielded?'active':''} ${!inspectAvail?'cooldown':''}" onclick="${inspectAvail?`inspectPlant('${plant.id}')`:'void(0)'}">
+            🔍 INSPECT PLANT ${isShielded?'[SHIELD ACTIVE]':''}
+            ${!inspectAvail?`<div class="inspect-cooldown">Cooldown: ${Math.round(12-((now-(plant.lastInspected||0))/3600000))}h remaining</div>`:''}
+          </button>
+        </div>
+        <div class="plant-actions">
+          <button class="btn-action" onclick="waterPlant('${plant.id}')">💧 WATER</button>
+          <button class="btn-action" onclick="feedPlant('${plant.id}')">🌿 FEED</button>
+          <button class="btn-action" onclick="openPruneModal('${plant.id}')">✂️ TRAIN</button>
+          ${plant.stage==='Ready'
+            ?`<button class="btn-action green" onclick="harvestPlant('${plant.id}')">✂️ HARVEST</button>`
+            :`<button class="btn-action gold" onclick="advanceStage('${plant.id}')" ${(plant.stage==='Seedling'&&plant.dayAge<4)||plant.stage==='Ready'?'disabled':''}>➜ ADVANCE</button>`
+          }
+          ${G.showYieldMultiplier?`<div style="grid-column:span 2;font-family:var(--font-hud);font-size:9px;color:var(--purple);padding:4px 0">YIELD MULTIPLIER: ${G.yieldMultiplier}x (MOD)</div>`:''}
+          <button class="btn-action red full" onclick="harvestPlant('${plant.id}')">⚡ HARVEST NOW (EARLY)</button>
+        </div>`;
+    }
+    grid.appendChild(slot);
+  }
+}
+
+// ============================================================
+// CARTOON PLANT SVG ICONS
+// ============================================================
+function getPlantSVG(strainName,stage,health,height){
+  const strain=STRAINS[strainName];
+  const color=strain?.plantColor||'#4ade80';
+  const bud=strain?.budIcon||'og';
+  const h=Math.min(100,Math.max(10,height));
+  const hPct=Math.min(1,h/60);
+  const healthAlpha=0.4+health/100*0.6;
+
+  const stemH=Math.round(40+hPct*80);
+
+  if(stage==='Seedling'){
+    return `<svg width="120" height="160" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="45" y="130" width="30" height="20" rx="4" fill="#5c3a1e"/>
+      <rect x="53" y="115" width="14" height="20" rx="3" fill="#6b4423"/>
+      <ellipse cx="60" cy="108" rx="10" ry="8" fill="${color}" opacity="${healthAlpha}"/>
+      <path d="M60 112 Q45 100 50 88 Q55 100 60 104" fill="${color}" opacity="${healthAlpha*0.8}"/>
+      <path d="M60 112 Q75 100 70 88 Q65 100 60 104" fill="${color}" opacity="${healthAlpha*0.8}"/>
+      <circle cx="60" cy="104" r="4" fill="${color}" opacity="${healthAlpha}"/>
+      <text x="60" y="155" font-size="9" fill="#6b4423" text-anchor="middle" font-family="monospace">🪴</text>
+    </svg>`;
+  }
+
+  if(stage==='Veg'){
+    const leafCount=Math.min(7,Math.max(3,Math.round(3+hPct*4)));
+    let leaves='';
+    for(let i=0;i<leafCount;i++){
+      const y=130-i*(stemH/(leafCount+1));
+      const side=i%2===0?-1:1;
+      const lx=60+side*20;
+      const ctrl=60+side*38;
+      leaves+=`<path d="M60 ${y} Q${ctrl} ${y-10} ${lx} ${y-20} Q${ctrl} ${y-5} 60 ${y}" fill="${color}" opacity="${healthAlpha*0.9}"/>
+      <line x1="60" y1="${y}" x2="${lx}" y2="${y-20}" stroke="${color}" stroke-width="0.8" opacity="0.5"/>`;
+    }
+    return `<svg width="120" height="160" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="42" y="135" width="36" height="18" rx="5" fill="#5c3a1e"/>
+      <rect x="55" y="${135-stemH}" width="10" height="${stemH}" rx="3" fill="#4a7a2a"/>
+      ${leaves}
+      <ellipse cx="60" cy="${135-stemH}" rx="12" ry="10" fill="${color}" opacity="${healthAlpha}"/>
+    </svg>`;
+  }
+
+  // Flower / Ready
+  const budColor=color;
+  const budGlow=stage==='Ready'?`<circle cx="60" cy="${135-stemH-5}" r="22" fill="${budColor}" opacity="0.15"/>
+    <circle cx="60" cy="${135-stemH-5}" r="16" fill="${budColor}" opacity="0.12"/>`:'';
+
+  const trichomes=stage==='Ready'?Array.from({length:8},(_,i)=>{
+    const angle=(i/8)*Math.PI*2;
+    const r=14+Math.random()*4;
+    const x=60+Math.cos(angle)*r;
+    const y=(135-stemH-5)+Math.sin(angle)*r*0.7;
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.5" fill="white" opacity="0.7"/>`;
+  }).join(''):'';
+
+  const budEmoji=getBudEmoji(bud,budColor,healthAlpha,135-stemH-5);
+
+  let leaves='';
+  for(let i=0;i<5;i++){
+    const y=130-i*(stemH/6);
+    const side=i%2===0?-1:1;
+    const lx=60+side*22;
+    leaves+=`<path d="M60 ${y} Q${60+side*40} ${y-8} ${lx} ${y-18} Q${60+side*42} ${y-2} 60 ${y}" fill="${color}" opacity="${healthAlpha*0.7}"/>`;
+  }
+
+  return `<svg width="120" height="160" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="42" y="135" width="36" height="18" rx="5" fill="#5c3a1e"/>
+    <rect x="55" y="${135-stemH}" width="10" height="${stemH}" rx="3" fill="#4a7a2a"/>
+    ${leaves}
+    ${budGlow}
+    ${budEmoji}
+    ${trichomes}
+  </svg>`;
+}
+
+function getBudEmoji(budType,color,alpha,cy){
+  const cx=60;
+  switch(budType){
+    case 'cake':
+      return `<ellipse cx="${cx}" cy="${cy}" rx="16" ry="12" fill="${color}" opacity="${alpha}"/>
+      <rect x="${cx-8}" y="${cy-16}" width="16" height="8" rx="3" fill="${color}" opacity="${alpha*0.85}"/>
+      <rect x="${cx-5}" y="${cy-22}" width="10" height="6" rx="2" fill="${color}" opacity="${alpha*0.7}"/>
+      <circle cx="${cx}" cy="${cy-24}" r="2.5" fill="#fff" opacity="0.6"/>`;
+    case 'alien':
+      return `<ellipse cx="${cx}" cy="${cy+2}" rx="15" ry="13" fill="${color}" opacity="${alpha}"/>
+      <ellipse cx="${cx-8}" cy="${cy-8}" rx="6" ry="8" fill="${color}" opacity="${alpha*0.8}"/>
+      <ellipse cx="${cx+8}" cy="${cy-8}" rx="6" ry="8" fill="${color}" opacity="${alpha*0.8}"/>
+      <ellipse cx="${cx-8}" cy="${cy-12}" rx="3" ry="4" fill="#000" opacity="0.6"/>
+      <ellipse cx="${cx+8}" cy="${cy-12}" rx="3" ry="4" fill="#000" opacity="0.6"/>`;
+    case 'rainbow':
+      return `<ellipse cx="${cx}" cy="${cy}" rx="17" ry="13" fill="${color}" opacity="${alpha}"/>
+      <path d="M${cx-12} ${cy-4} Q${cx} ${cy-18} ${cx+12} ${cy-4}" stroke="#e879f9" stroke-width="2" fill="none" opacity="0.7"/>
+      <path d="M${cx-10} ${cy-4} Q${cx} ${cy-14} ${cx+10} ${cy-4}" stroke="#60a5fa" stroke-width="1.5" fill="none" opacity="0.6"/>`;
+    case 'skunk':
+      return `<ellipse cx="${cx}" cy="${cy+2}" rx="14" ry="12" fill="${color}" opacity="${alpha}"/>
+      <ellipse cx="${cx}" cy="${cy+2}" rx="8" ry="6" fill="#fff" opacity="0.2"/>
+      <path d="M${cx-5} ${cy-10} Q${cx} ${cy-22} ${cx+5} ${cy-10}" stroke="${color}" stroke-width="3" fill="none" opacity="${alpha*0.7}"/>`;
+    case 'haze':
+      return `<ellipse cx="${cx}" cy="${cy}" rx="12" ry="16" fill="${color}" opacity="${alpha}"/>
+      <circle cx="${cx}" cy="${cy-10}" r="8" fill="${color}" opacity="${alpha*0.8}"/>
+      <circle cx="${cx-6}" cy="${cy-5}" r="5" fill="${color}" opacity="${alpha*0.7}"/>
+      <circle cx="${cx+6}" cy="${cy-5}" r="5" fill="${color}" opacity="${alpha*0.7}"/>`;
+    case 'citrus':
+      return `<circle cx="${cx}" cy="${cy}" r="14" fill="${color}" opacity="${alpha}"/>
+      <circle cx="${cx}" cy="${cy}" r="10" fill="${color}" opacity="${alpha*0.6}"/>
+      <line x1="${cx}" y1="${cy-14}" x2="${cx}" y2="${cy+14}" stroke="#fff" stroke-width="0.8" opacity="0.3"/>
+      <line x1="${cx-14}" y1="${cy}" x2="${cx+14}" y2="${cy}" stroke="#fff" stroke-width="0.8" opacity="0.3"/>`;
+    case 'dream':
+      return `<ellipse cx="${cx}" cy="${cy}" rx="14" ry="12" fill="${color}" opacity="${alpha}"/>
+      <circle cx="${cx-5}" cy="${cy-10}" r="6" fill="${color}" opacity="${alpha*0.8}"/>
+      <circle cx="${cx+5}" cy="${cy-10}" r="6" fill="${color}" opacity="${alpha*0.8}"/>
+      <circle cx="${cx}" cy="${cy-14}" r="5" fill="#fff" opacity="0.15"/>`;
+    default: // og
+      return `<ellipse cx="${cx}" cy="${cy}" rx="15" ry="13" fill="${color}" opacity="${alpha}"/>
+      <circle cx="${cx-5}" cy="${cy-8}" r="6" fill="${color}" opacity="${alpha*0.75}"/>
+      <circle cx="${cx+5}" cy="${cy-8}" r="6" fill="${color}" opacity="${alpha*0.75}"/>
+      <circle cx="${cx}" cy="${cy-12}" r="5" fill="${color}" opacity="${alpha*0.65}"/>`;
+  }
+}
+
+function renderSeeds(){
+  const grid=document.getElementById('seed-inventory-grid');
+  if(!grid||!G)return;
+  const entries=Object.entries(G.seeds||{}).filter(([k,v])=>v>0);
+  if(entries.length===0){
+    grid.innerHTML=`<div style="color:var(--muted);font-family:var(--font-hud);font-size:11px;padding:20px">No seeds yet. Redeem a code above!</div>`;
+    return;
+  }
+  grid.innerHTML=entries.map(([strainName,qty])=>{
+    const s=STRAINS[strainName]||{emoji:'🌱',genetics:'Unknown'};
+    const room=ROOMS.find(r=>r.id===G.room)||ROOMS[0];
+    const plantCount=G.plants.filter(p=>p.slotIndex>=0).length;
+    const canPlant=plantCount<room.slots;
+    return `<div class="seed-item">
+      <div class="seed-icon-wrap"><span style="font-size:22px">${s.emoji}</span></div>
+      <div class="seed-item-info">
+        <div class="seed-item-name">${strainName}</div>
+        <div class="seed-item-genetics">${s.genetics}</div>
+        <div class="seed-item-qty">
+          <span class="seed-qty-val">${qty}× seeds</span>
+          <button class="btn-plant-seed" onclick="quickPlantSeed('${strainName}')" ${canPlant&&qty>0?'':'disabled'}>PLANT</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function quickPlantSeed(strainName){
+  const room=ROOMS.find(r=>r.id===G.room)||ROOMS[0];
+  for(let i=0;i<room.slots;i++){
+    if(!G.plants.find(p=>p.slotIndex===i)){
+      plantSeed(strainName,i);
+      switchTab('grow');
+      return;
+    }
+  }
+  showToast('All slots full! Harvest or upgrade room.','warn');
+}
+
+function openPlantModal(slotIndex){
+  selectedSlot=slotIndex;
+  selectedStrain=null;
+  const list=document.getElementById('modal-strain-list');
+  const noSeeds=document.getElementById('modal-no-seeds');
+  const entries=Object.entries(G.seeds||{}).filter(([k,v])=>v>0);
+  if(entries.length===0){
+    list.innerHTML='';noSeeds.style.display='block';
+  } else {
+    noSeeds.style.display='none';
+    list.innerHTML=entries.map(([n,q])=>{
+      const s=STRAINS[n]||{emoji:'🌱',thcBase:20};
+      return `<div class="strain-option" onclick="selectStrain('${n}',this)">
+        <div style="font-size:24px">${s.emoji}</div>
+        <div class="strain-option-name">${n}</div>
+        <div class="strain-option-thc">THC ${s.thcBase}%</div>
+        <div class="strain-option-qty">${q} seeds</div>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('modal-plant').classList.add('open');
+}
+
+function selectStrain(name,el){
+  selectedStrain=name;
+  document.querySelectorAll('#modal-strain-list .strain-option').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function confirmPlant(){
+  if(!selectedStrain){showToast('Select a strain first!','warn');return;}
+  if(selectedSlot===null){closeModal('modal-plant');return;}
+  plantSeed(selectedStrain,selectedSlot);
+  closeModal('modal-plant');
+}
+
+function renderShop(){
+  if(!G)return;
+
+  function shopItem(item){
+    const isConsumable=item.type==='consumable';
+    const isGear=['light','fan','humid','dehu','ac','co2'].includes(item.type);
+    const isOwned=isGear&&(
+      (item.type==='light'&&G.gear.light===item.id)||
+      (item.type==='fan'&&G.gear.fan===item.id)||
+      (item.type==='humid'&&G.gear.humidifier===item.id)||
+      (item.type==='dehu'&&G.gear.dehumidifier===item.id)||
+      (item.type==='ac'&&G.gear.ac===item.id)||
+      (item.type==='co2'&&G.gear.co2===item.id)
+    )||item.owned;
+    const qtyOwned=isConsumable?` (own: ${G.inventory[item.id]||0})`:isGear&&isOwned?' [INSTALLED]':'';
+    return `<div class="shop-card">
+      <div class="shop-card-icon">${item.icon}</div>
+      <div class="shop-card-name">${item.name}</div>
+      <div class="shop-card-desc">${item.desc}</div>
+      <div class="shop-card-price">${item.price}¢ <span>${item.stat}${qtyOwned}</span></div>
+      ${isOwned&&!isConsumable?`<div style="padding:6px 0;font-family:var(--font-hud);font-size:9px;color:var(--green);letter-spacing:1px">✓ OWNED</div>`
+        :`<button class="btn-buy" onclick="buyItem('${item.id}',${item.price},'${item.type}')" ${G.coins<item.price&&!isConsumable?'disabled':''}>BUY (${item.price}¢)</button>`}
+    </div>`;
+  }
+
+  ['lights','climate','nutes','cards'].forEach(cat=>{
+    const el=document.getElementById(`shop-${cat}`);
+    if(el) el.innerHTML=SHOP_ITEMS[cat].map(shopItem).join('');
+  });
+
+  // Room upgrades
+  const roomsEl=document.getElementById('shop-rooms');
+  if(roomsEl) roomsEl.innerHTML=ROOMS.slice(1).map(room=>{
+    const cost=room.reqLevel*200+1000;
+    const unlocked=G.level>=room.reqLevel;
+    const owned=G.room===room.id||ROOMS.findIndex(r=>r.id===G.room)>=ROOMS.findIndex(r=>r.id===room.id);
+    return `<div class="shop-card" style="${!unlocked?'opacity:.5':''}">
+      <div class="shop-card-icon">${room.icon}</div>
+      <div class="shop-card-name">${room.name}</div>
+      <div class="shop-card-desc">${room.desc}</div>
+      <div class="shop-card-price">${cost}¢ <span>Req. Level ${room.reqLevel}</span></div>
+      ${owned?`<div style="padding:6px 0;font-family:var(--font-hud);font-size:9px;color:var(--green)">✓ OWNED</div>`
+        :`<button class="btn-upgrade" onclick="upgradeRoom('${room.id}',${cost})" ${!unlocked||G.coins<cost?'disabled':''}>
+          ${!unlocked?`LOCKED (LVL ${room.reqLevel})`:'UPGRADE'}
+        </button>`}
+    </div>`;
+  }).join('');
+}
+
+function renderVault(){
+  const grid=document.getElementById('vault-grid');
+  if(!grid||!G)return;
+  if(G.vault.length===0){
+    grid.innerHTML=`<div class="empty-vault">🌿 No harvests yet.<br><span style="font-size:10px">Grow something!</span></div>`;
+    const tw=document.getElementById('vault-total-weight');
+    if(tw) tw.textContent='0g';
+    return;
+  }
+  const totalW=G.vault.reduce((s,b)=>s+b.weight,0);
+  const tw=document.getElementById('vault-total-weight');
+  if(tw) tw.textContent=totalW+'g';
+
+  grid.innerHTML=G.vault.map(b=>{
+    const strain=STRAINS[b.strainName];
+    return `<div class="vault-card ${b.rarity}">
+      <div style="width:100%;height:120px;background:linear-gradient(135deg,${strain?.plantColor||'#166534'}33,${strain?.plantColor||'#166534'}11);display:flex;align-items:center;justify-content:center;font-size:40px">${strain?.emoji||'🌿'}</div>
+      <div class="vault-card-body">
+        <div class="vault-card-name">${b.strainName}</div>
+        <div class="vault-card-sub">${b.rarity} • ${b.harvestDate}</div>
+        <div class="vault-card-stats">
+          <div class="vault-stat"><span class="k">Yield</span><span class="v">${b.weight}g</span></div>
+          <div class="vault-stat"><span class="k">THC</span><span class="v">${b.thc}%</span></div>
+          <div class="vault-stat"><span class="k">Health</span><span class="v">${b.health}%</span></div>
+          <div class="vault-stat"><span class="k">Flower</span><span class="v">${b.flowerDays}d</span></div>
+        </div>
+      </div>
+      <div class="vault-card-footer">
+        <button class="btn-sell" onclick="sellBatch('${b.id}',2)">BULK SELL (2¢/g)</button>
+        <button class="btn-sell" style="border-color:rgba(168,85,247,0.4);color:var(--purple)" onclick="sellBatch('${b.id}',4)">PREMIUM (4¢/g)</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderMarket(){
+  const buyersEl=document.getElementById('market-buyers');
+  const vaultEl=document.getElementById('market-vault-grid');
+  if(!buyersEl||!vaultEl||!G)return;
+
+  const buyers=[
+    {name:'🏪 BULK DISPENSARY',rate:2,note:'Always available. No questions asked.',timer:'Always open',color:'var(--muted)'},
+    {name:'⭐ LOCAL PREMIUM',rate:4,note:'Quality buyers. Pay more for premium batches.',timer:'Always open',color:'var(--gold)'},
+    {name:'🎰 SMALL BATCH BUYER',rate:6,note:'High-end buyer! Disappears every few hours.',timer:getRandomTimer(),color:'var(--purple)'},
+  ];
+  buyersEl.innerHTML=buyers.map(b=>`
+    <div class="buyer-card" style="border-color:${b.color}44">
+      <div class="buyer-name">${b.name}</div>
+      <div class="buyer-rate" style="color:${b.color}">${b.rate}¢/g</div>
+      <div class="buyer-note">${b.note}</div>
+      <div class="buyer-timer">${b.timer}</div>
+    </div>`).join('');
+
+  vaultEl.innerHTML=G.vault.length===0?`<div class="empty-vault">No harvests to sell.</div>`:G.vault.map(b=>{
+    const strain=STRAINS[b.strainName];
+    return `<div class="vault-card ${b.rarity}">
+      <div style="width:100%;height:80px;background:linear-gradient(135deg,${strain?.plantColor||'#166534'}33,transparent);display:flex;align-items:center;justify-content:center;font-size:30px">${strain?.emoji||'🌿'}</div>
+      <div class="vault-card-body">
+        <div class="vault-card-name">${b.strainName} • ${b.weight}g</div>
+        <div class="vault-card-sub">THC: ${b.thc}% | Health: ${b.health}%</div>
+      </div>
+      <div class="vault-card-footer">
+        <button class="btn-sell" onclick="sellBatch('${b.id}',2)">2¢/g (${b.weight*2}¢)</button>
+        <button class="btn-sell" style="color:var(--gold);border-color:rgba(251,191,36,0.4)" onclick="sellBatch('${b.id}',4)">4¢/g (${b.weight*4}¢)</button>
+        <button class="btn-sell" style="color:var(--purple);border-color:rgba(168,85,247,0.4)" onclick="sellBatch('${b.id}',6)">6¢/g (${b.weight*6}¢)</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function getRandomTimer(){
+  const h=Math.floor(Math.random()*4+1);
+  return `⏰ Expires in ~${h}h`;
+}
+
+function renderStatus(){
+  const grid=document.getElementById('status-grid');
+  const profileGrid=document.getElementById('profile-stats');
+  if(!G)return;
+
+  if(profileGrid){
+    const stats=[
+      {label:'Level',val:G.level,color:'var(--purple)'},
+      {label:'Coins',val:G.coins.toLocaleString()+'¢',color:'var(--gold)'},
+      {label:'Harvests',val:G.totalHarvests,color:'var(--green)'},
+      {label:'Total Grams',val:(G.totalGrams||0)+'g',color:'var(--green)'},
+      {label:'XP',val:`${G.xp}/${G.xpToNext}`,color:'var(--purple)'},
+      {label:'Active Plants',val:G.plants.length,color:'var(--green)'},
     ];
+    profileGrid.innerHTML=stats.map(s=>`
+      <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center">
+        <div style="font-size:10px;color:var(--muted);font-family:var(--font-hud);letter-spacing:1px;margin-bottom:4px">${s.label.toUpperCase()}</div>
+        <div style="font-family:var(--font-hud);font-size:16px;color:${s.color}">${s.val}</div>
+      </div>`).join('');
+  }
 
-    // --- 2. GAME STATE ---
-    let GAME = {
-        coins: 1500,
-        env: { name: 'CLOSET', maxHeight: 48 }, // 48 inches
-        inventory: { veg_nute: 2, flower_nute: 1, neem: 1, fungicide: 0, tape: 1 },
-        plants: [],
-        jars: [],
-        vault: []
-    };
-
-    // --- 3. UI NAVIGATION & UPDATES ---
-    function switchTab(tabId) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        event.target.classList.add('active');
-        renderAll();
+  if(grid){
+    const entries=Object.entries(G.bestGrows||{});
+    if(entries.length===0){
+      grid.innerHTML=`<div style="color:var(--muted);font-family:var(--font-hud);font-size:11px;padding:20px">No completed grows yet.</div>`;
+      return;
     }
+    grid.innerHTML=entries.map(([name,data])=>{
+      const s=STRAINS[name];
+      return `<div class="status-card">
+        <div class="status-card-name">${s?.emoji||'🌿'} ${name}</div>
+        <div class="status-record"><span class="sk">Best THC</span><span class="sv">${data.thc}%</span></div>
+        <div class="status-record"><span class="sk">Best Yield</span><span class="sv">${data.yield}g</span></div>
+        <div class="status-record"><span class="sk">Best Health</span><span class="sv">${data.health}%</span></div>
+        <div class="status-record"><span class="sk">Date</span><span class="sv">${data.date}</span></div>
+      </div>`;
+    }).join('');
+  }
+}
 
-    function updateUI() {
-        document.getElementById('ui-coins').innerText = GAME.coins;
-        document.getElementById('ui-env').innerText = `${GAME.env.name} (Max ${GAME.env.maxHeight}")`;
-        
-        const invStr = Object.entries(GAME.inventory).map(([k, v]) => `<b>${k.toUpperCase().replace('_',' ')}:</b> ${v}`).join(' | ');
-        document.getElementById('inventory-bar').innerHTML = invStr;
-    }
+function renderEventLog(){
+  const list=document.getElementById('event-log-list');
+  if(!list||!G)return;
+  if(!G.eventLog||G.eventLog.length===0){
+    list.innerHTML=`<div style="color:var(--muted);font-family:var(--font-hud);font-size:11px;padding:20px">No events yet.</div>`;
+    return;
+  }
+  list.innerHTML=[...G.eventLog].reverse().slice(0,50).map(e=>`
+    <div class="event-entry ${e.type}">
+      <div class="event-dot ${e.type}"></div>
+      <div class="event-text">${e.msg}</div>
+      <div class="event-time">${e.time}</div>
+    </div>`).join('');
+}
 
-    function logAction(msg) {
-        const logEl = document.getElementById('ui-log');
-        logEl.innerText = msg;
-        logEl.style.color = "var(--neon-green)";
-        setTimeout(() => logEl.style.color = "#888", 2000);
-    }
+function logEvent(type,msg){
+  if(!G)return;
+  G.eventLog=G.eventLog||[];
+  G.eventLog.push({type,msg,time:new Date().toLocaleTimeString()});
+  if(G.eventLog.length>200) G.eventLog=G.eventLog.slice(-200);
+  const list=document.getElementById('event-log-list');
+  if(list&&document.getElementById('tab-events')?.classList.contains('active')) renderEventLog();
+}
 
-    // --- 4. SHOP & INVENTORY LOGIC ---
-    function buy(item, cost) {
-        if(GAME.coins >= cost) {
-            GAME.coins -= cost;
-            GAME.inventory[item]++;
-            logAction(`Bought ${item.replace('_',' ')}`);
-            updateUI();
-        } else {
-            alert("Not enough coins!");
-        }
-    }
+function clearLog(){
+  if(!G)return;
+  G.eventLog=[];
+  renderEventLog();
+  saveGame();
+}
 
-    function upgradeEnv(name, limit, cost) {
-        if(GAME.coins >= cost) {
-            GAME.coins -= cost;
-            GAME.env.name = name;
-            GAME.env.maxHeight = limit;
-            logAction(`Upgraded to ${name}!`);
-            updateUI();
-        } else alert("Not enough coins!");
-    }
+// ============================================================
+// ENVIRONMENT CONTROLS
+// ============================================================
+function updateEnvCtrl(key,val){
+  if(!G)return;
+  G.env=G.env||{};
+  if(key==='light'){G.env.lightPct=parseInt(val);document.getElementById('ctrl-light-val').textContent=val+'%';}
+  else if(key==='humid'){G.env.humidTarget=parseInt(val);document.getElementById('ctrl-humid-val').textContent=val+'%';}
+  else if(key==='temp'){G.env.tempTarget=parseInt(val);document.getElementById('ctrl-temp-val').textContent=val+'°C';}
+  else if(key==='lightheight'){G.env.lightHeight=parseInt(val);document.getElementById('ctrl-lightheight-val').textContent=val+'"';}
+  saveGame();
+}
 
-    // --- 5. GROWING MECHANICS (Planting, Topping, Nutrients) ---
-    function plantRandomSeed() {
-        const strain = STRAINS[Math.floor(Math.random() * STRAINS.length)];
-        
-        // Rarity Roll
-        const roll = Math.random();
-        let rarity = "Standard";
-        let rarityBonus = 1.0;
-        if(roll > 0.95) { rarity = "Shiny"; rarityBonus = 1.2; }
-        else if(roll > 0.80) { rarity = "EP"; rarityBonus = 1.1; }
+// ============================================================
+// UI UTILITIES
+// ============================================================
+function switchTab(name){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+  const panel=document.getElementById('tab-'+name);
+  if(panel) panel.classList.add('active');
+  const navBtns=document.querySelectorAll('.nav-tab');
+  navBtns.forEach(b=>{if(b.textContent.toLowerCase().includes(name.replace('-',''))||b.getAttribute('onclick')?.includes(`'${name}'`))b.classList.add('active');});
+  if(name==='grow')renderGrow();
+  else if(name==='seeds')renderSeeds();
+  else if(name==='shop')renderShop();
+  else if(name==='vault')renderVault();
+  else if(name==='status')renderStatus();
+  else if(name==='events')renderEventLog();
+  else if(name==='market')renderMarket();
+}
 
-        GAME.plants.push({
-            id: Date.now(),
-            strain: strain,
-            rarity: rarity,
-            rarityBonus: rarityBonus,
-            stage: "Seedling", // Seedling -> Veg -> Flower -> Ready
-            progress: 0, // 0 to 100 per stage
-            height: 5,
-            tops: 0,
-            yieldMod: 1.0,
-            thcMod: 1.0,
-            lastBabied: 0,
-            events: []
-        });
-        updateUI(); renderGarden();
-    }
+function closeModal(id){document.getElementById(id)?.classList.remove('open');}
 
-    function topPlant(id) {
-        let p = GAME.plants.find(x => x.id === id);
-        if(p.stage === "Flower" || p.stage === "Ready") return alert("Too late to top!");
-        
-        p.tops++;
-        p.height = Math.max(5, p.height - 4); // Reduces height by 4 inches
-        
-        // Mathematical Optimal LST logic
-        if(p.tops >= 2 && p.tops <= 4) p.yieldMod += 0.10; // +10% yield
-        if(p.tops > 4) p.yieldMod -= 0.15; // Over-stressed
-        
-        logAction(`Topped ${p.strain.name}. Total tops: ${p.tops}`);
-        renderGarden();
-    }
+function showToast(msg,type='ok'){
+  const c=document.getElementById('toast');
+  const el=document.createElement('div');
+  el.className=`toast-msg ${type}`;el.textContent=msg;
+  c.appendChild(el);
+  setTimeout(()=>el.remove(),3100);
+}
 
-    function advanceStage(id) {
-        let p = GAME.plants.find(x => x.id === id);
-        if(p.stage === "Seedling" && GAME.inventory.veg_nute > 0) {
-            GAME.inventory.veg_nute--; p.stage = "Veg"; p.progress = 0;
-        } else if(p.stage === "Veg" && GAME.inventory.flower_nute > 0) {
-            GAME.inventory.flower_nute--; p.stage = "Flower"; p.progress = 0;
-        } else {
-            alert("You need the correct Nutrients from the Shop!");
-        }
-        updateUI(); renderGarden();
-    }
+// ============================================================
+// INIT
+// ============================================================
+// Check if user was already logged in (session persistence)
+window.addEventListener('load',()=>{
+  const lastUser=localStorage.getItem('nb_last_user');
+  if(lastUser&&loadGame(lastUser)){
+    startGame(lastUser);
+  }
+});
+// Save last user on game start
+const origStart=startGame;
+// patch: save last user
+function saveLastUser(u){localStorage.setItem('nb_last_user',u);}
+// Override logout to clear last user
+const origLogout=doLogout;
+function doLogout(){
+  saveGame();
+  clearInterval(tickInterval);
+  tickInterval=null;
+  localStorage.removeItem('nb_last_user');
+  G=null;activeUser=null;
+  document.getElementById('screen-game').classList.remove('active');
+  document.getElementById('screen-login').classList.add('active');
+}
 
-    // --- 6. BABYING SHIELD & SABOTAGE EVENTS ---
-    function babyPlant(id) {
-        let p = GAME.plants.find(x => x.id === id);
-        p.lastBabied = Date.now(); // Shield active for next 4 "simulated" hours
-        logAction(`Shield activated on ${p.strain.name}!`);
-        renderGarden();
-    }
+// patch startGame to save last user
+const _sg=startGame;
+function startGame(user){
+  localStorage.setItem('nb_last_user',user);
+  _sg(user);
+}
 
-    function triggerEvent(p) {
-        const eventTypes = ["SPIDER_MITES", "LIGHT_LEAK", "POWDERY_MILDEW"];
-        const evt = eventTypes[Math.floor(Math.random() * eventTypes.length)];
-        
-        // Is shield active? (Assuming 1 real minute = 4 game hours for this demo)
-        const isShielded = (Date.now() - p.lastBabied) < 60000; 
-
-        if(isShielded) {
-            const roll = Math.random();
-            if(roll < 0.25) {
-                logAction(`Shield BLOCKED ${evt}!`);
-                return; // Total Block
-            } else if (roll < 0.75) {
-                logAction(`Shield DIMINISHED ${evt}!`);
-                p.yieldMod -= 0.05; // Diminished penalty
-                return;
-            }
-        }
-        
-        // Full penalty applied
-        if(!p.events.includes(evt)) p.events.push(evt);
-        logAction(`WARNING: ${evt} hit ${p.strain.name}!`);
-        renderGarden();
-    }
-
-    function cureEvent(id, evt) {
-        let p = GAME.plants.find(x => x.id === id);
-        if(evt === "SPIDER_MITES" && GAME.inventory.neem > 0) { GAME.inventory.neem--; }
-        else if(evt === "LIGHT_LEAK" && GAME.inventory.tape > 0) { GAME.inventory.tape--; }
-        else if(evt === "POWDERY_MILDEW" && GAME.inventory.fungicide > 0) { GAME.inventory.fungicide--; }
-        else return alert("Buy the cure from the shop first!");
-
-        p.events = p.events.filter(e => e !== evt);
-        logAction(`Cured ${evt}!`);
-        updateUI(); renderGarden();
-    }
-
-    // --- 7. HARVESTING & CURING MECHANICS ---
-    function harvestToJars(id) {
-        let p = GAME.plants.find(x => x.id === id);
-        GAME.plants = GAME.plants.filter(x => x.id !== id);
-        
-        GAME.jars.push({
-            id: Date.now(),
-            strain: p.strain,
-            rarity: p.rarity,
-            baseYield: p.strain.yieldBase * p.yieldMod * p.rarityBonus,
-            baseTHC: p.strain.thcBase * p.thcMod,
-            humidity: 60, // Starts at 60%
-            qualityMod: 1.0, // Mold degrades this
-            cureProgress: 0
-        });
-        logAction(`Harvested! Moved to Curing Jars.`);
-        renderGarden(); renderCuring();
-    }
-
-    function burpJar(id) {
-        let j = GAME.jars.find(x => x.id === id);
-        j.humidity = Math.max(50, j.humidity - 15); // Drops humidity
-        logAction(`Burped Jar. Humidity dropped.`);
-        renderCuring();
-    }
-
-    function collectBatch(id) {
-        let j = GAME.jars.find(x => x.id === id);
-        GAME.jars = GAME.jars.filter(x => x.id !== id);
-        
-        const finalTHC = (j.baseTHC * j.qualityMod).toFixed(1);
-        const finalYield = Math.floor(j.baseYield * j.qualityMod);
-        
-        // Generate final Card
-        GAME.vault.push({
-            strain: j.strain,
-            rarity: j.rarity,
-            batchId: `BATCH-#${Math.floor(Math.random()*9999)}`,
-            thc: finalTHC,
-            weight: finalYield
-        });
-        
-        // Payout Economy
-        GAME.coins += Math.floor(finalYield * 2); // 2 coins per gram
-        
-        logAction(`Batch Collected! +${Math.floor(finalYield * 2)} Coins`);
-        updateUI(); renderCuring(); renderVault();
-    }
-
-    // --- 8. GAME LOOP (The Ticker) ---
-    setInterval(() => {
-        // Process Plants
-        GAME.plants.forEach(p => {
-            // Apply un-cured event penalties over time
-            if(p.events.includes("SPIDER_MITES")) p.yieldMod -= 0.01;
-            if(p.events.includes("LIGHT_LEAK")) p.thcMod -= 0.01;
-            
-            // Closet Height Penalty Logic
-            if(p.height > GAME.env.maxHeight) p.yieldMod -= 0.02;
-
-            if(p.stage !== "Ready") {
-                p.progress += 5; 
-                p.height += 1;
-                if(p.progress >= 100) {
-                    if(p.stage === "Flower") p.stage = "Ready";
-                    else p.progress = 100; // Locked until nutrient fed
-                }
-            }
-            
-            // 2% chance for random event per tick
-            if(Math.random() < 0.02) triggerEvent(p);
-        });
-
-        // Process Jars
-        GAME.jars.forEach(j => {
-            j.humidity += 2; // Rises naturally
-            if(j.humidity > 75) j.qualityMod -= 0.05; // MOLD DAMAGE!
-            
-            j.cureProgress += 10;
-        });
-
-        renderGarden();
-        renderCuring();
-    }, 5000); // 5 seconds = 1 tick
-
-    // --- 9. RENDERING UI ---
-    function renderGarden() {
-        if(document.getElementById('lab').classList.contains('active') === false) return;
-        const grid = document.getElementById('garden-grid');
-        grid.innerHTML = GAME.plants.map(p => {
-            const isShielded = (Date.now() - p.lastBabied) < 60000;
-            const heightDanger = p.height > GAME.env.maxHeight;
-            
-            return `
-                <div class="pot-card ${isShielded ? 'shielded' : ''} ${heightDanger ? 'danger' : ''}">
-                    ${p.events.map(e => `<div class="event-tag">${e} <button onclick="cureEvent(${p.id}, '${e}')" style="background:none; border:none; color:white; cursor:pointer;">[FIX]</button></div>`).join('')}
-                    
-                    <h3 style="margin:0; color:var(--neon-green);">${p.strain.name}</h3>
-                    <div style="font-size:0.7rem; color:#888;">${p.rarity} | Tops: ${p.tops} | Yield Mod: ${p.yieldMod.toFixed(2)}x</div>
-                    
-                    <div style="margin:10px 0; font-size:0.8rem;">
-                        <strong>Stage:</strong> ${p.stage} <br>
-                        <strong>Height:</strong> <span style="color:${heightDanger?'red':'white'}">${p.height}"</span> / ${GAME.env.maxHeight}"
-                    </div>
-                    
-                    <div class="status-bar"><div class="status-fill" style="width:${p.progress}%"></div></div>
-                    
-                    <div style="display:flex; gap:5px;">
-                        ${p.stage === "Ready" 
-                            ? `<button class="btn btn-green" onclick="harvestToJars(${p.id})">HARVEST</button>`
-                            : `<button class="btn btn-blue" onclick="topPlant(${p.id})">TOP/PRUNE</button>
-                               <button class="btn btn-gold" onclick="advanceStage(${p.id})" ${p.progress<100 ? 'disabled':''}>FEED TO ADVANCE</button>`
-                        }
-                    </div>
-                    <button class="btn btn-dark" onclick="babyPlant(${p.id})">BABY PLANT (ACTIVATE SHIELD)</button>
-                </div>
-            `;
-        }).join('');
-    }
-
-    function renderCuring() {
-        if(document.getElementById('curing').classList.contains('active') === false) return;
-        const grid = document.getElementById('curing-grid');
-        grid.innerHTML = GAME.jars.map(j => `
-            <div class="pot-card ${j.humidity > 70 ? 'danger' : ''}">
-                <h3 style="margin:0; color:var(--shiny-gold)">${j.strain.name}</h3>
-                <div style="font-size:2rem; font-weight:900; color:${j.humidity > 75 ? 'var(--alert-red)' : 'white'}">${j.humidity}% RH</div>
-                <div style="font-size:0.7rem; color:#888;">Quality: ${(j.qualityMod*100).toFixed(0)}% | Progress: ${j.cureProgress}%</div>
-                
-                <div class="status-bar"><div class="status-fill" style="width:${Math.min(j.cureProgress, 100)}%"></div></div>
-                
-                <button class="btn btn-blue" onclick="burpJar(${j.id})">BURP JAR</button>
-                <button class="btn btn-green" onclick="collectBatch(${j.id})" ${j.cureProgress < 100 ? 'disabled' : ''}>COLLECT BATCH</button>
-            </div>
-        `).join('');
-    }
-
-    function renderVault() {
-        const grid = document.getElementById('vault-grid');
-        grid.innerHTML = GAME.vault.map(v => `
-            <div class="strain-card ${v.rarity}">
-                <img src="${v.strain.img}" onerror="this.src='https://via.placeholder.com/180x220?text=${v.strain.name}'">
-                <div class="card-stats">
-                    <strong style="color:var(--neon-green)">${v.strain.name}</strong><br>
-                    <span style="color:#aaa">${v.rarity} | ${v.batchId}</span><br>
-                    <hr style="border-color:#333; margin:5px 0;">
-                    THC: ${v.thc}% | WGT: ${v.weight}g
-                </div>
-            </div>
-        `).join('');
-    }
-
-    function renderAll() { updateUI(); renderGarden(); renderCuring(); renderVault(); }
-    
-    // Init
-    updateUI();
+window.addEventListener('beforeunload',saveGame);
 </script>
 </body>
 </html>
