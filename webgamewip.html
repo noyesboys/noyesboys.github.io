@@ -3043,3 +3043,1710 @@ function harvestPlant(id){
     <div style="background:rgba(0,40,0,0.4);border-radius:8px;padding:12px;margin-bottom:10px">
       <div style="font-family:var(--font-hud);color:var(--green);font-size:12px;margin-bottom:4px">${strain.emoji} ${p.strainName} — ${p.rarity}</div>
       <div style="font-size:10px;color:var(--muted)">Stage:
+${p.stage} | Day ${Math.floor(p.dayAge)} | Flower Day ${Math.floor(p.flowerDay||0)}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;margin-bottom:10px">
+      <div style="background:rgba(0,0,0,0.4);border-radius:8px;padding:10px">
+        <div style="font-size:9px;color:var(--muted);font-family:var(--font-hud)">EST. YIELD</div>
+        <div style="font-family:var(--font-hud);font-size:18px;color:var(--gold)">${estYield}g</div>
+      </div>
+      <div style="background:rgba(0,0,0,0.4);border-radius:8px;padding:10px">
+        <div style="font-size:9px;color:var(--muted);font-family:var(--font-hud)">EST. THC</div>
+        <div style="font-family:var(--font-hud);font-size:18px;color:var(--green)">${estTHC}%</div>
+      </div>
+      <div style="background:rgba(0,0,0,0.4);border-radius:8px;padding:10px">
+        <div style="font-size:9px;color:var(--muted);font-family:var(--font-hud)">HEALTH</div>
+        <div style="font-family:var(--font-hud);font-size:18px;color:${p.health>60?'var(--green)':p.health>30?'var(--gold)':'var(--red)'}">${Math.round(p.health)}%</div>
+      </div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);font-family:var(--font-mono);margin-bottom:6px">Pot: ${POT_SIZES[p.potSize]?.name||'5 Gal'} | Tops: ${p.topCount} | LST: ${p.lstApplied?'Yes':'No'} | Lollipop: ${p.lollipopped?'Yes':'No'}</div>
+    ${p.events&&p.events.length>0?`<div style="color:var(--red);font-size:10px;font-family:var(--font-hud);margin-bottom:6px">⚠️ Active issues: ${p.events.join(', ')} — will reduce final quality</div>`:''}
+    ${p.stage!=='Ready'?`<div style="color:var(--gold);font-size:10px;font-family:var(--font-mono)">⚠️ Not at peak harvest time — early harvest may reduce yield/potency</div>`:''}`;
+  document.getElementById('modal-harvest').classList.add('open');
+}
+
+function confirmHarvest(){
+  const p=getPlant(harvestTargetId);
+  if(!p){closeModal('modal-harvest');return;}
+  const strain=STRAINS[p.strainName];
+  const pot=POT_SIZES[p.potSize]||POT_SIZES['5gal'];
+  const finalYield=Math.round(strain.yieldBase*p.yieldMod*(p.rarityYieldMod||1)*pot.yieldMod*G.yieldMultiplier);
+  const finalTHC=parseFloat(Math.min(strain.thcBase+3,strain.thcBase*p.thcMod+(p.rarityThcBonus||0)).toFixed(1));
+  const finalHealth=Math.round(p.health);
+
+  const batch={
+    id:'BATCH-'+Math.floor(Math.random()*999999),
+    strainName:p.strainName,
+    rarity:p.rarity,
+    weight:finalYield,
+    thc:finalTHC,
+    health:finalHealth,
+    flowerDays:Math.round(p.flowerDay||0),
+    vegDays:Math.round((p.dayAge||0)-(p.flowerDay||0)),
+    harvestDate:new Date().toLocaleDateString(),
+    events:p.events||[],
+    yieldMod:p.yieldMod,
+    topCount:p.topCount,
+    potSize:p.potSize,
+    growCost:Math.round(G.growCost||0),
+  };
+
+  G.vault.push(batch);
+
+  // Remove plant from room
+  const roomId=findPlantRoom(harvestTargetId);
+  if(roomId&&G.rooms[roomId]){
+    G.rooms[roomId].plants=G.rooms[roomId].plants.filter(x=>x.id!==harvestTargetId);
+  }
+
+  // XP reward
+  const xpGain=calcHarvestXP(p,finalYield,finalTHC,finalHealth);
+  gainXP(xpGain);
+
+  // Best grow record
+  if(!G.bestGrows[p.strainName]||finalTHC>G.bestGrows[p.strainName].thc){
+    G.bestGrows[p.strainName]={thc:finalTHC,yield:finalYield,health:finalHealth,date:batch.harvestDate,rarity:p.rarity};
+  }
+
+  // Stat tracking
+  G.totalHarvests++;
+  G.totalGrams+=finalYield;
+  if(finalTHC>=25) G.harvests25thc=(G.harvests25thc||0)+1;
+  if((p.events||[]).length===0) G.cleanGrows=(G.cleanGrows||0)+1;
+
+  // Reset grow cost after harvest
+  G.growCost=0;
+
+  // Post-grow analysis
+  const analysis=generatePostGrowAnalysis(p,batch);
+  G.pendingAnalysis=G.pendingAnalysis||[];
+  G.pendingAnalysis.push(analysis);
+
+  // Scoreboard update
+  updateScoreboard(p.strainName,G.username,finalTHC,finalYield,finalHealth);
+
+  // Perfect grow check
+  if(finalTHC>=strain.thcBase&&finalYield>=strain.yieldBase*0.95){
+    logEvent('success',`🏆 PERFECT GROW on ${p.strainName}! 5x sell bonus unlocked!`);
+    batch.perfectGrow=true;
+    showToast('PERFECT GROW! 5x sell price unlocked!','ok');
+  }
+
+  logEvent('success',`✂️ Harvested ${p.strainName}: ${finalYield}g | ${finalTHC}% THC | ${finalHealth}% health | +${xpGain}XP`);
+  checkMissions();
+  closeModal('modal-harvest');
+  saveGame();
+  renderGrow();renderVault();renderStatus();
+  showToast(`Harvested ${finalYield}g of ${p.strainName}!`,'ok');
+
+  // Show analysis
+  setTimeout(()=>showPostGrowAnalysis(analysis),500);
+}
+
+function calcHarvestXP(p,weight,thc,health){
+  const strain=STRAINS[p.strainName];
+  if(!strain)return 10;
+  let xp=10;
+  xp+=Math.round((weight/strain.yieldBase)*40);
+  xp+=Math.round((thc/strain.thcBase)*30);
+  xp+=Math.round((health/100)*20);
+  if((p.events||[]).length===0)xp+=15;
+  if(p.topCount>0)xp+=5;
+  if(p.lstApplied)xp+=5;
+  const diffBonus={easy:1,normal:1.25,hard:1.75}[G.difficulty]||1;
+  return Math.round(Math.min(150,Math.max(5,xp))*diffBonus);
+}
+
+function gainXP(amount){
+  G.xp+=amount;
+  while(G.xp>=G.xpToNext){
+    G.xp-=G.xpToNext;
+    G.level++;
+    G.xpToNext=Math.round(G.xpToNext*1.15+50);
+    const unlocked=ROOMS.find(r=>r.reqLevel===G.level);
+    const unlockMsg=unlocked?`🏗️ ${unlocked.name} unlocked!`:'';
+    document.getElementById('modal-levelup-body').innerHTML=`You are now <strong style="color:var(--gold)">Level ${G.level}</strong>!<br>+XP rewards increase, new features unlock.`;
+    document.getElementById('modal-levelup-unlock').textContent=unlockMsg;
+    document.getElementById('modal-levelup').classList.add('open');
+    logEvent('success',`🎉 LEVEL UP → ${G.level}!${unlockMsg?' '+unlockMsg:''}`);
+  }
+  updateHUD();
+}
+
+function generatePostGrowAnalysis(p,batch){
+  const strain=STRAINS[p.strainName];
+  const items=[];
+  // Yield analysis
+  const yieldPct=Math.round((batch.weight/strain.yieldBase)*100);
+  items.push({icon:'⚖️',label:'Yield',value:`${batch.weight}g (${yieldPct}% of max)`,
+    grade:yieldPct>=90?'A':yieldPct>=70?'B':yieldPct>=50?'C':'D',
+    tip:yieldPct<70?'Try LST, topping in veg, and trellis nets to boost yield.':''});
+  // THC analysis
+  const thcPct=Math.round((batch.thc/strain.thcBase)*100);
+  items.push({icon:'💎',label:'Potency',value:`${batch.thc}% THC (${thcPct}% of max)`,
+    grade:thcPct>=95?'A':thcPct>=80?'B':thcPct>=65?'C':'D',
+    tip:thcPct<80?'Flush in the final week and harvest at peak ripeness for max potency.':''});
+  // Health analysis
+  items.push({icon:'💚',label:'Plant Health',value:`${batch.health}%`,
+    grade:batch.health>=85?'A':batch.health>=65?'B':batch.health>=45?'C':'D',
+    tip:batch.health<65?'Inspect plants daily, keep environment dialled in, treat pests immediately.':''});
+  // Events analysis
+  items.push({icon:'⚠️',label:'Issues',value:batch.events.length===0?'None! Clean grow 🏆':`${batch.events.length} issue(s): ${batch.events.join(', ')}`,
+    grade:batch.events.length===0?'A':batch.events.length<=1?'B':batch.events.length<=2?'C':'D',
+    tip:batch.events.length>0?'Inspect more often and keep humidity in range to prevent mildew and pests.':''});
+  // Veg time
+  const vegDays=Math.round((p.dayAge||0)-(p.flowerDay||0));
+  const vegGrade=vegDays>=30&&vegDays<=60?'A':vegDays>=20?'B':'C';
+  items.push({icon:'🌿',label:'Veg Time',value:`${vegDays} days`,grade:vegGrade,
+    tip:vegGrade!=='A'?`Ideal veg time is 30-60 days for ${strain.height} plants.`:''});
+  return {strainName:p.strainName,batch,items,date:new Date().toLocaleDateString()};
+}
+
+function showPostGrowAnalysis(analysis){
+  if(!analysis)return;
+  const gradeColors={A:'var(--green)',B:'var(--cyan)',C:'var(--gold)',D:'var(--red)'};
+  document.getElementById('modal-analysis-body').innerHTML=`
+    <div style="font-family:var(--font-hud);font-size:11px;color:var(--muted);margin-bottom:12px">${analysis.strainName} — Harvested ${analysis.date}</div>
+    ${analysis.items.map(item=>`
+      <div class="analysis-section" style="margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:8px;padding:8px;background:rgba(0,0,0,0.3);border-radius:7px">
+          <span style="font-size:16px">${item.icon}</span>
+          <span style="font-family:var(--font-hud);font-size:10px;color:var(--text);flex:1">${item.label}: ${item.value}</span>
+          <span style="font-family:var(--font-hud);font-size:14px;font-weight:700;color:${gradeColors[item.grade]}">${item.grade}</span>
+        </div>
+        ${item.tip?`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);padding:5px 8px;margin-top:3px">💡 ${item.tip}</div>`:''}
+      </div>`).join('')}`;
+  document.getElementById('modal-analysis').classList.add('open');
+}
+
+function updateScoreboard(strainName,username,thc,weight,health){
+  G.scoreboard=G.scoreboard||{};
+  if(!G.scoreboard[strainName]) G.scoreboard[strainName]=[];
+  G.scoreboard[strainName].push({username,thc,weight,health,date:new Date().toLocaleDateString()});
+  // Keep top 20 per strain
+  G.scoreboard[strainName].sort((a,b)=>b.thc-a.thc);
+  if(G.scoreboard[strainName].length>20) G.scoreboard[strainName]=G.scoreboard[strainName].slice(0,20);
+}
+
+// ================================================================
+// SELL
+// ================================================================
+function openSellModal(batchId,rate){
+  sellTargetId=batchId;
+  sellTargetRate=rate;
+  const batch=G.vault.find(b=>b.id===batchId);
+  if(!batch)return;
+  const isPerfect=batch.perfectGrow;
+  const finalRate=isPerfect?rate*5:rate;
+  const total=Math.round(batch.weight*finalRate);
+  document.getElementById('modal-sell-body').innerHTML=`
+    <div style="font-family:var(--font-hud);color:var(--green);font-size:12px;margin-bottom:8px">${batch.strainName} — ${batch.weight}g</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+      <div style="background:rgba(0,0,0,0.4);border-radius:6px;padding:8px;text-align:center">
+        <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud)">RATE</div>
+        <div style="font-family:var(--font-hud);font-size:16px;color:var(--gold)">${finalRate}¢/g${isPerfect?' <span style="color:var(--purple);font-size:9px">(5x PERFECT!)</span>':''}</div>
+      </div>
+      <div style="background:rgba(0,0,0,0.4);border-radius:6px;padding:8px;text-align:center">
+        <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud)">TOTAL</div>
+        <div style="font-family:var(--font-hud);font-size:16px;color:var(--gold)">${total}¢</div>
+      </div>
+    </div>
+    <div style="font-size:10px;color:var(--muted);font-family:var(--font-mono)">THC: ${batch.thc}% | Health: ${batch.health}% | ${batch.rarity}</div>`;
+  document.getElementById('modal-sell').classList.add('open');
+}
+
+function confirmSell(){
+  const batch=G.vault.find(b=>b.id===sellTargetId);
+  if(!batch){closeModal('modal-sell');return;}
+  const isPerfect=batch.perfectGrow;
+  const finalRate=isPerfect?sellTargetRate*5:sellTargetRate;
+  const total=Math.round(batch.weight*finalRate);
+  G.coins+=total;
+  G.totalCoinsEarned=(G.totalCoinsEarned||0)+total;
+  G.vault=G.vault.filter(b=>b.id!==sellTargetId);
+  logEvent('success',`💰 Sold ${batch.weight}g of ${batch.strainName} for ${total}¢!${isPerfect?' [PERFECT GROW BONUS]':''}`);
+  showToast(`Sold for ${total}¢!`,'ok');
+  closeModal('modal-sell');
+  saveGame();renderVault();renderMarket();updateHUD();
+}
+
+// ================================================================
+// SEED CODES
+// ================================================================
+function redeemCode(){
+  const code=(document.getElementById('seed-code-input')?.value||'').trim().toUpperCase();
+  const el=document.getElementById('code-result-msg');
+  if(!code){if(el){el.className='code-result err';el.textContent='Enter a code first.';}return;}
+  if(G.redeemedCodes.includes(code)){if(el){el.className='code-result err';el.textContent='This code has already been redeemed.';}return;}
+  const entry=SEED_CODES[code];
+  if(!entry){if(el){el.className='code-result err';el.textContent='Invalid code. Check spelling and try again.';}return;}
+  G.seeds[entry.strain]=(G.seeds[entry.strain]||0)+entry.qty;
+  G.redeemedCodes.push(code);
+  if(el){el.className='code-result ok';el.textContent=`✓ Redeemed! Added ${entry.qty}× ${entry.strain} seed${entry.qty>1?'s':''}.`;}
+  logEvent('success',`🌱 Code redeemed: ${entry.qty}× ${entry.strain}`);
+  const inp=document.getElementById('seed-code-input');
+  if(inp)inp.value='';
+  saveGame();renderSeeds();
+}
+
+// ================================================================
+// SHOP PURCHASE
+// ================================================================
+function buyShopItem(id,price,category){
+  if(G.coins<price){showToast('Not enough coins!','err');return;}
+  G.coins-=price;
+
+  if(category==='light'){
+    if(!G.gear.lightsOwned.includes(id)) G.gear.lightsOwned.push(id);
+    if(!G.gear.lightLifespan[id]) G.gear.lightLifespan[id]=100;
+    // Auto-add to current room if room allows
+    const roomData=ROOMS.find(r=>r.id===activeRoomId)||ROOMS[0];
+    const curRoom=G.rooms[activeRoomId];
+    if(curRoom&&curRoom.lightsInstalled.length<roomData.maxLights){
+      curRoom.lightsInstalled.push(id);
+    }
+    showToast(`${LIGHTS.find(l=>l.id===id)?.name||'Light'} purchased!`,'ok');
+    logEvent('success',`💡 Purchased ${LIGHTS.find(l=>l.id===id)?.name||'light'}.`);
+  } else if(category==='fan'){
+    if(!G.gear.fans) G.gear.fans=[];
+    if(!G.gear.fans.includes(id)) G.gear.fans.push(id);
+    G.gear.fanSpeeds=G.gear.fanSpeeds||{};
+    G.gear.fanSpeeds[id]=80;
+    showToast('Fan installed!','ok');
+    logEvent('success',`🌀 Fan installed: ${FANS.find(f=>f.id===id)?.name||id}`);
+  } else if(category==='humidifier'){
+    G.gear.humidifier=id;
+    G.gear.humidWater=100;
+    G._warnedHumidEmpty=false;
+    showToast('Humidifier installed!','ok');
+  } else if(category==='dehumidifier'){
+    G.gear.dehumidifier=id;
+    G.gear.dehuCapacity=0;
+    showToast('Dehumidifier installed!','ok');
+  } else if(category==='ac'){
+    G.gear.ac=id;
+    showToast('AC unit installed!','ok');
+  } else if(category==='co2'){
+    G.gear.co2Tank=id;
+    G.gear.co2Level=100;
+    G._warnedCO2=false;
+    document.getElementById('ctrl-group-co2').style.display='block';
+    showToast('CO₂ system online!','ok');
+  } else if(category==='soil'||category==='consumable'||category==='upgrade'||category==='card'){
+    G.inventory[id]=(G.inventory[id]||0)+1;
+    showToast(`${id.replace(/_/g,' ')} acquired!`,'ok');
+  }
+
+  saveGame();renderShop();renderGearPanels();updateHUD();
+}
+
+function upgradeRoom(id,cost){
+  const room=ROOMS.find(r=>r.id===id);
+  if(!room)return;
+  if(G.level<room.reqLevel){showToast(`Need Level ${room.reqLevel}!`,'err');return;}
+  if(G.coins<cost){showToast('Not enough coins!','err');return;}
+  G.coins-=cost;
+  if(!G.rooms[id]) G.rooms[id]={active:true,plants:[],lightsInstalled:["bulb"]};
+  G.rooms[id].active=true;
+  logEvent('success',`🏗️ ${room.name} unlocked!`);
+  showToast(`${room.name} unlocked!`,'ok');
+  saveGame();renderShop();renderRoomSelector();updateHUD();
+}
+
+// ================================================================
+// GEAR PANEL ACTIONS
+// ================================================================
+function refillHumidifier(){
+  G.gear.humidWater=100;
+  G._warnedHumidEmpty=false;
+  logEvent('success','💧 Humidifier refilled to 100%.');
+  showToast('Humidifier refilled!','ok');
+  saveGame();renderGearPanels();
+}
+
+function emptyDehumidifier(){
+  G.gear.dehuCapacity=0;
+  G._warnedDehuFull=false;
+  logEvent('success','🏜️ Dehumidifier emptied.');
+  showToast('Dehumidifier emptied!','ok');
+  saveGame();renderGearPanels();
+}
+
+function refillCO2(){
+  if(G.coins<200){showToast('Need 200¢ to refill CO₂!','err');return;}
+  G.coins-=200;
+  G.gear.co2Level=100;
+  G._warnedCO2=false;
+  logEvent('success','🫧 CO₂ tank refilled.');
+  showToast('CO₂ refilled!','ok');
+  saveGame();renderGearPanels();updateHUD();
+}
+
+function setFanSpeed(fanId,speed){
+  G.gear.fanSpeeds=G.gear.fanSpeeds||{};
+  G.gear.fanSpeeds[fanId]=parseInt(speed);
+  saveGame();
+}
+
+function addLightToRoom(lightId){
+  const roomData=ROOMS.find(r=>r.id===activeRoomId)||ROOMS[0];
+  const curRoom=G.rooms[activeRoomId];
+  if(!curRoom)return;
+  if(curRoom.lightsInstalled.length>=roomData.maxLights){
+    showToast(`Max ${roomData.maxLights} lights for this room!`,'warn');return;
+  }
+  curRoom.lightsInstalled.push(lightId);
+  logEvent('info',`💡 Added ${LIGHTS.find(l=>l.id===lightId)?.name||lightId} to ${roomData.name}.`);
+  saveGame();renderGearPanels();renderLightConfig();
+}
+
+function removeLightFromRoom(idx){
+  const curRoom=G.rooms[activeRoomId];
+  if(!curRoom||curRoom.lightsInstalled.length<=1){showToast('Need at least 1 light!','warn');return;}
+  curRoom.lightsInstalled.splice(idx,1);
+  saveGame();renderGearPanels();renderLightConfig();
+}
+
+function addLightSlot(){
+  // Show a picker of owned lights
+  const owned=G.gear.lightsOwned||["bulb"];
+  const roomData=ROOMS.find(r=>r.id===activeRoomId)||ROOMS[0];
+  const curRoom=G.rooms[activeRoomId];
+  if(curRoom.lightsInstalled.length>=roomData.maxLights){
+    showToast(`Max ${roomData.maxLights} lights for this room!`,'warn');return;
+  }
+  // Default add first owned light
+  addLightToRoom(owned[0]);
+}
+
+// ================================================================
+// WARNINGS
+// ================================================================
+let _currentWarningId=null;
+function showWarningModal(title,body,loss,warningId){
+  _currentWarningId=warningId;
+  document.getElementById('modal-warning-title').textContent=title;
+  document.getElementById('modal-warning-body').textContent=body;
+  document.getElementById('modal-warning-loss').textContent=loss||'';
+  document.getElementById('modal-warning').classList.add('open');
+}
+function acknowledgeWarning(){
+  closeModal('modal-warning');
+  _currentWarningId=null;
+}
+function dismissWarning(){
+  if(_currentWarningId){
+    G.warningsAcknowledged=G.warningsAcknowledged||{};
+    G.warningsAcknowledged[_currentWarningId]=true;
+  }
+  closeModal('modal-warning');
+  _currentWarningId=null;
+}
+
+// ================================================================
+// MISSIONS
+// ================================================================
+function checkMissions(){
+  if(!G)return;
+  [...DAILY_MISSIONS,...PERM_MISSIONS].forEach(m=>{
+    if(G.missionsDone.includes(m.id))return;
+    let progress=0;
+    if(m.metric==='waters_today'||m.metric==='inspects_today'||m.metric==='clean_feeds_today'||m.metric==='logins_today'){
+      progress=G.missionProgress[m.metric]||0;
+    } else if(m.metric==='totalHarvests') progress=G.totalHarvests;
+    else if(m.metric==='totalGrams') progress=G.totalGrams;
+    else if(m.metric==='level') progress=G.level;
+    else if(m.metric==='uniqueStrains') progress=G.uniqueStrains.length;
+    else if(m.metric==='cleanGrows') progress=G.cleanGrows;
+    else if(m.metric==='harvests25thc') progress=G.harvests25thc;
+    if(progress>=m.target){
+      G.missionsDone.push(m.id);
+      G.coins+=(m.reward.coins||0);
+      if(m.reward.xp) gainXP(m.reward.xp);
+      document.getElementById('modal-mission-body').innerHTML=`<strong style="color:var(--green)">${m.name}</strong><br>${m.desc}<br><br>Reward: <span style="color:var(--gold)">+${m.reward.coins}¢${m.reward.xp?' +'+m.reward.xp+' XP':''}</span>`;
+      document.getElementById('modal-mission').classList.add('open');
+      logEvent('success',`🏅 Mission complete: ${m.name}! +${m.reward.coins}¢`);
+    }
+  });
+}
+
+// ================================================================
+// MAIL
+// ================================================================
+function sendMail(){
+  const to=document.getElementById('mail-to')?.value.trim();
+  const body=document.getElementById('mail-body')?.value.trim();
+  const type=document.getElementById('mail-type')?.value;
+  if(!to||!body){showToast('Fill in recipient and message','warn');return;}
+  const accounts=getAccounts();
+  if(!accounts[to]){showToast('Recipient not found','err');return;}
+  const mail={from:G.username,body,type,time:new Date().toLocaleTimeString(),read:false,id:Date.now()};
+  if(type==='coins'){
+    const amt=parseInt(document.getElementById('mail-coins-amt')?.value||0);
+    if(amt>0&&G.coins>=amt){G.coins-=amt;mail.coinsAmount=amt;mail.body=`[${amt}¢ gift] ${body}`;}
+    else{showToast('Invalid coin amount','err');return;}
+  }
+  accounts[to].game=accounts[to].game||{};
+  accounts[to].game.mailbox=accounts[to].game.mailbox||[];
+  accounts[to].game.mailbox.push(mail);
+  saveAccounts(accounts);
+  if(document.getElementById('mail-to')) document.getElementById('mail-to').value='';
+  if(document.getElementById('mail-body')) document.getElementById('mail-body').value='';
+  showToast(`Message sent to ${to}!`,'ok');
+  logEvent('success',`📨 Message sent to ${to}.`);
+  saveGame();
+}
+
+function renderMailbox(){
+  const list=document.getElementById('mailbox-list');
+  if(!list||!G)return;
+  const mails=G.mailbox||[];
+  if(mails.length===0){list.innerHTML=`<div style="color:var(--muted);font-family:var(--font-hud);font-size:10px;padding:20px">No mail yet.</div>`;return;}
+  list.innerHTML=[...mails].reverse().map(m=>`
+    <div class="mail-item${m.read?'':' unread'}">
+      <div class="mail-from">From: ${m.from}</div>
+      <div class="mail-body">${m.body}</div>
+      <div class="mail-time">${m.time}</div>
+      ${!m.read?`<div class="mail-actions"><button class="btn-mail-action" onclick="markMailRead('${m.id}')">MARK READ</button></div>`:''}
+    </div>`).join('');
+  // Update badge
+  const unread=mails.filter(m=>!m.read).length;
+  const badge=document.getElementById('mail-badge');
+  if(badge){badge.textContent=unread;badge.classList.toggle('hidden',unread===0);}
+}
+
+function markMailRead(id){
+  const m=G.mailbox.find(m=>m.id==id);
+  if(m){m.read=true;saveGame();renderMailbox();}
+}
+
+// ================================================================
+// RANDOM EVENTS (visual)
+// ================================================================
+function spawnRandomEvents(){
+  if(!G)return;
+  // 1/500 chance of meteor on each login
+  if(Math.random()<0.002){
+    setTimeout(()=>spawnMeteor(),3000+Math.random()*5000);
+  }
+  // 1/50 chance of golden leaf
+  if(Math.random()<0.02){
+    setTimeout(()=>spawnGoldenLeaf(),8000+Math.random()*10000);
+  }
+}
+
+function spawnMeteor(){
+  const overlay=document.getElementById('random-event-overlay');
+  if(!overlay)return;
+  const meteor=document.createElement('div');
+  meteor.className='meteor-anim';
+  meteor.textContent='☄️';
+  meteor.style.left=Math.random()*20+'vw';
+  meteor.style.top=Math.random()*20+'vh';
+  meteor.onclick=()=>{
+    meteor.remove();
+    // Give Alienoyes Kush seed
+    G.seeds['Alienoyes Kush']=(G.seeds['Alienoyes Kush']||0)+1;
+    document.getElementById('modal-random-event-icon').textContent='☄️';
+    document.getElementById('modal-random-event-title').textContent='ALIEN METEOR STRIKE!';
+    document.getElementById('modal-random-event-body').textContent='A mysterious meteor flew through your grow! It contained an Alienoyes Kush seed!';
+    document.getElementById('modal-random-event-reward').textContent='+1 Alienoyes Kush seed added to inventory!';
+    document.getElementById('modal-random-event').classList.add('open');
+    logEvent('success','☄️ Alien meteor event! +1 Alienoyes Kush seed!');
+    saveGame();renderSeeds();
+  };
+  overlay.appendChild(meteor);
+  setTimeout(()=>meteor.remove(),3500);
+}
+
+function spawnGoldenLeaf(){
+  const overlay=document.getElementById('random-event-overlay');
+  if(!overlay)return;
+  const leaf=document.createElement('div');
+  leaf.style.cssText=`position:absolute;font-size:28px;cursor:pointer;top:${20+Math.random()*60}vh;left:${10+Math.random()*80}vw;animation:plantShake 2s ease-in-out infinite;pointer-events:all;z-index:801`;
+  leaf.textContent='🍂';
+  leaf.title='Click the golden leaf!';
+  leaf.onclick=()=>{
+    leaf.remove();
+    G.coins+=500;
+    document.getElementById('modal-random-event-icon').textContent='🍂';
+    document.getElementById('modal-random-event-title').textContent='GOLDEN LEAF FOUND!';
+    document.getElementById('modal-random-event-body').textContent='A rare golden leaf fell from one of your plants!';
+    document.getElementById('modal-random-event-reward').textContent='+500¢ added to your balance!';
+    document.getElementById('modal-random-event').classList.add('open');
+    logEvent('success','🍂 Golden leaf found! +500¢');
+    saveGame();updateHUD();
+  };
+  overlay.appendChild(leaf);
+  setTimeout(()=>leaf.remove(),15000);
+}
+
+// ================================================================
+// MARKET
+// ================================================================
+let marketBuyers=[];
+function scheduleMarketRefresh(){
+  generateMarketBuyers();
+  setInterval(()=>{
+    // Refresh small batch buyers
+    generateMarketBuyers();
+    if(document.getElementById('tab-market')?.classList.contains('active')) renderMarket();
+  },7200000); // 2 hours
+}
+
+function generateMarketBuyers(){
+  const celebrity=Math.random()<0.02;
+  marketBuyers=[
+    {name:'🏪 BULK DISPENSARY',rate:2,note:'Always open. Buys anything.',timer:'Always open',color:'var(--muted)',minThc:0,maxGrams:9999,available:true},
+    {name:'⭐ PREMIUM BUYER',rate:4,note:'Wants 22%+ THC.',timer:'Always open',color:'var(--gold)',minThc:22,maxGrams:9999,available:true},
+    {name:'🎰 SMALL BATCH',rate:6,note:`Buys 50-150g. Back in ~${1+Math.floor(Math.random()*3)}h.`,timer:`⏰ ~${1+Math.floor(Math.random()*3)}h`,color:'var(--purple)',minThc:0,maxGrams:150,available:Math.random()<0.5},
+    {name:'🌿 CRAFT BUYER',rate:5,note:`Wants specific strains. Today: ${Object.keys(STRAINS)[Math.floor(Math.random()*Object.keys(STRAINS).length)]}`,timer:`⏰ Gone by midnight`,color:'var(--cyan)',minThc:20,maxGrams:200,available:Math.random()<0.4,
+     wantedStrain:Object.keys(STRAINS)[Math.floor(Math.random()*Object.keys(STRAINS).length)]},
+  ];
+  if(celebrity){
+    marketBuyers.push({name:'🌟 CELEBRITY BUYER',rate:10,note:'Once-in-a-lifetime buyer! Pays top dollar for anything.',timer:'⚡ VERY LIMITED',color:'var(--pink)',minThc:0,maxGrams:500,available:true,celebrity:true});
+    logEvent('success','🌟 CELEBRITY BUYER in the market! Check the Market tab!');
+    showToast('CELEBRITY BUYER appeared!','ok');
+  }
+}
+
+// ================================================================
+// DAILY GOAL
+// ================================================================
+function generateDailyGoal(){
+  const goals=[
+    {text:'Water all your plants today',reward:'+50¢',metric:'waters_today',target:1},
+    {text:'Inspect at least 2 plants',reward:'+75¢',metric:'inspects_today',target:2},
+    {text:'Keep temps below 28°C all day',reward:'+100¢ if temp stays in range'},
+    {text:'Feed a plant without burning it',reward:'+50¢',metric:'clean_feeds_today',target:1},
+    {text:`Harvest a ${Object.keys(STRAINS)[Math.floor(Math.random()*Object.keys(STRAINS).length)]} today`,reward:'+200¢'},
+  ];
+  const goal=goals[Math.floor(Math.random()*goals.length)];
+  const textEl=document.getElementById('daily-goal-text');
+  const rewardEl=document.getElementById('daily-goal-reward');
+  if(textEl)textEl.textContent=`🎯 Daily Goal: ${goal.text}`;
+  if(rewardEl)rewardEl.textContent=goal.reward;
+}
+
+// ================================================================
+// RENDER ENGINE
+// ================================================================
+function renderAll(){
+  renderRoomSelector();
+  renderGrow();
+  renderGearPanels();
+  renderLightConfig();
+  renderSeeds();
+  renderShop();
+  renderVault();
+  renderMarket();
+  renderMissions();
+  renderStatus();
+  renderEventLog();
+  renderScoreboard();
+  renderMailbox();
+  updateEnvDisplay();
+}
+
+function updateHUD(){
+  if(!G)return;
+  const el=id=>document.getElementById(id);
+  el('hud-coins')&&(el('hud-coins').textContent=G.coins.toLocaleString());
+  el('hud-level')&&(el('hud-level').textContent=G.level);
+  el('hud-username')&&(el('hud-username').textContent=G.username);
+  el('hud-crown')&&(el('hud-crown').textContent=G.isMod?'👑':'');
+  el('hud-season')&&(el('hud-season').textContent=G.season||'SPRING');
+  el('hud-room')&&(el('hud-room').textContent=(ROOMS.find(r=>r.id===activeRoomId)||ROOMS[0]).name);
+  const xpPct=Math.round((G.xp/G.xpToNext)*100);
+  el('hud-xp-bar')&&(el('hud-xp-bar').style.width=xpPct+'%');
+  const watt=calcTotalWattage();
+  const dayRate=Math.round(watt/1000*24*0.12*100)/100;
+  el('hud-elec-val')&&(el('hud-elec-val').textContent=dayRate.toFixed(1));
+  el('shop-coin-display')&&(el('shop-coin-display').textContent=G.coins.toLocaleString());
+  // Difficulty badge
+  const db=el('hud-diff-badge');
+  if(db){db.textContent=(G.difficulty||'easy').toUpperCase();db.className=`difficulty-badge ${G.difficulty||'easy'}`;}
+  // Unread mail badge
+  const unread=(G.mailbox||[]).filter(m=>!m.read).length;
+  const mailBadge=el('mail-badge');
+  if(mailBadge){mailBadge.textContent=unread;mailBadge.classList.toggle('hidden',unread===0);}
+}
+
+function updateEnvDisplay(){
+  if(!G)return;
+  const rT=calcRealTemp();
+  const rH=calcRealHumid();
+  const co2=calcCO2();
+  const vpd=calcVPD(rT,rH);
+  const watt=calcTotalWattage();
+  const dayRate=Math.round(watt/1000*24*0.12*100)/100;
+
+  function setEnvCard(cardId,valId,val,okMin,okMax,warnMin,warnMax,suffix){
+    const card=document.getElementById(cardId);
+    const valEl=document.getElementById(valId);
+    if(!card||!valEl)return;
+    const v=parseFloat(val);
+    let cls='ok';
+    if(v<warnMin||v>warnMax) cls='danger';
+    else if(v<okMin||v>okMax) cls='warn';
+    card.className=`env-card ${cls}`;
+    valEl.className=`env-val-big ${cls}`;
+    valEl.textContent=Math.round(v);
+  }
+
+  setEnvCard('env-card-temp','env-temp-val',rT,22,28,18,35);
+  setEnvCard('env-card-humid','env-humid-val',rH,45,70,30,85);
+  setEnvCard('env-card-co2','env-co2-val',co2,800,1500,400,2000);
+  setEnvCard('env-card-vpd','env-vpd-val',vpd,0.8,1.2,0.4,1.8);
+
+  const el=id=>document.getElementById(id);
+  el('env-temp-f')&&(el('env-temp-f').textContent=Math.round(rT*9/5+32));
+  el('env-temp-target')&&(el('env-temp-target').textContent=G.env.tempTarget+'°C');
+  el('env-humid-target')&&(el('env-humid-target').textContent=G.env.humidTarget+'%');
+  el('env-co2-boost')&&(el('env-co2-boost').textContent=co2>800?`+${co2-400}ppm boost`:'None');
+  el('env-vpd-status')&&(el('env-vpd-status').textContent=vpd<0.4?'Too Low':vpd<0.8?'Low':vpd<=1.2?'Optimal':vpd<=1.8?'High':'Too High — stress!');
+
+  // Lights
+  const lightsOnNow=new Date().getHours()>=6&&new Date().getHours()<(G.rooms[activeRoomId]?.plants.some(p=>p.stage==='Flower'||p.stage==='Ready')?18:24);
+  const lightsCard=document.getElementById('env-card-lights');
+  const lightsVal=document.getElementById('env-lights-val');
+  if(lightsCard&&lightsVal){
+    lightsCard.className=`env-card ${lightsOnNow?'ok':''}`;
+    lightsVal.className=`env-val-big ${lightsOnNow?'ok':''}`;
+    lightsVal.textContent=lightsOnNow?'ON':'OFF';
+    lightsVal.style.color=lightsOnNow?'var(--gold)':'var(--muted)';
+  }
+  el('env-lights-cycle')&&(el('env-lights-cycle').textContent=G.rooms[activeRoomId]?.plants.some(p=>p.stage==='Flower'||p.stage==='Ready')?'12/12':'18/6');
+  el('env-power-val')&&(el('env-power-val').textContent=Math.round(watt));
+  el('env-elec-cost')&&(el('env-elec-cost').textContent=`Cost: ${dayRate.toFixed(1)}¢/day`);
+  el('env-elec-total')&&(el('env-elec-total').textContent=`Total: ${Math.round(G.growCost||0)}¢`);
+
+  // CO2 tank level
+  el('co2-tank-level')&&(el('co2-tank-level').textContent=Math.round(G.gear.co2Level||0)+'%');
+
+  // Update chart
+  updateEnvChart();
+}
+
+function updateEnvChart(){
+  const tempPath=document.getElementById('chart-temp-path');
+  const humidPath=document.getElementById('chart-humid-path');
+  if(!tempPath||!humidPath||!G.envHistory)return;
+  const tArr=G.envHistory.temp||[];
+  const hArr=G.envHistory.humid||[];
+  if(tArr.length<2)return;
+  const w=600,h=80;
+  const buildPath=(arr,min,max)=>{
+    return arr.map((v,i)=>{
+      const x=(i/(arr.length-1))*w;
+      const y=h-((v-min)/(max-min))*h;
+      return `${i===0?'M':'L'}${x.toFixed(1)},${Math.max(0,Math.min(h,y)).toFixed(1)}`;
+    }).join(' ');
+  };
+  tempPath.setAttribute('d',buildPath(tArr,10,40));
+  humidPath.setAttribute('d',buildPath(hArr,10,100));
+}
+
+function renderRoomSelector(){
+  const bar=document.getElementById('room-selector-bar');
+  if(!bar||!G)return;
+  bar.innerHTML=ROOMS.map(r=>{
+    const unlocked=G.level>=r.reqLevel&&G.rooms[r.id]?.active;
+    const isActive=r.id===activeRoomId;
+    const plantCount=(G.rooms[r.id]?.plants||[]).length;
+    return `<button class="room-tab-btn${isActive?' active':''}${!unlocked?' locked':''}"
+      onclick="${unlocked?`switchRoom('${r.id}')`:'void(0)'}"
+      title="${!unlocked?`Unlock at Level ${r.reqLevel}`:''}">
+      ${r.icon} ${r.name}
+      <span class="room-tab-slots">${unlocked?`${plantCount}/${r.slots} plants`:`LVL ${r.reqLevel}`}</span>
+    </button>`;
+  }).join('');
+}
+
+function switchRoom(roomId){
+  activeRoomId=roomId;
+  G.activeRoomId=roomId;
+  renderRoomSelector();
+  renderGrow();
+  renderGearPanels();
+  renderLightConfig();
+  updateEnvDisplay();
+  saveGame();
+}
+
+function renderGearPanels(){
+  const container=document.getElementById('gear-panels');
+  if(!container||!G)return;
+  const panels=[];
+
+  // Lights panel
+  const roomLights=G.rooms[activeRoomId]?.lightsInstalled||["bulb"];
+  const lightsData=roomLights.map(lid=>LIGHTS.find(l=>l.id===lid)||{name:lid,icon:'💡'});
+  const lifespan=roomLights.map(lid=>Math.round(G.gear.lightLifespan[lid]||100));
+  panels.push({
+    icon:'💡',name:`LIGHTS (${roomLights.length})`,
+    status:`${Math.round(G.env.lightPct)}% • ${lightsData.map(l=>l.name).join(', ')}`,
+    statusCls:G.env.lightPct>90?'warn':'ok',
+    barPct:Math.min(...lifespan),barColor:Math.min(...lifespan)>30?'var(--gold)':'var(--red)',
+    barLabel:`Lifespan: ${Math.min(...lifespan)}%`,
+    actions:[],cls:'installed',
+    extra:`<div class="light-slot-indicator">${roomLights.map((_,i)=>`<div class="light-slot-dot filled" title="${lightsData[i]?.name||''}"></div>`).join('')}</div>`
+  });
+
+  // Fan panel
+  if(G.gear.fans&&G.gear.fans.length>0){
+    const fanId=G.gear.fans[0];
+    const fanData=FANS.find(f=>f.id===fanId)||{name:'Fan',icon:'🌀'};
+    const spd=G.gear.fanSpeeds[fanId]||80;
+    panels.push({
+      icon:'🌀',name:fanData.name,
+      status:`Speed: ${spd}%`,statusCls:spd>90?'warn':'ok',
+      barPct:spd,barColor:'var(--blue)',barLabel:'Speed',
+      actions:[],cls:'installed',
+      extra:`<div class="gear-speed-ctrl"><span>SPD</span><input type="range" min="20" max="100" value="${spd}" oninput="setFanSpeed('${fanId}',this.value);document.getElementById('fan-spd-val-${fanId}').textContent=this.value+'%'"/><span class="gear-speed-val" id="fan-spd-val-${fanId}">${spd}%</span></div>
+      <div class="gear-lifespan">Wind stress at >${fanData.windRisk?'70':'95'}% speed</div>`
+    });
+  } else {
+    panels.push({icon:'🌀',name:'NO FAN',status:'Buy a fan in Shop',statusCls:'off',barPct:0,barColor:'var(--muted)',barLabel:'',actions:[],cls:'empty',extra:''});
+  }
+
+  // Humidifier panel
+  if(G.gear.humidifier){
+    const hData=HUMIDIFIERS.find(h=>h.id===G.gear.humidifier)||{name:'Humidifier'};
+    const water=Math.round(G.gear.humidWater||0);
+    panels.push({
+      icon:'💧',name:hData.name,
+      status:`Water: ${water}%`,statusCls:water<20?'danger':water<40?'warn':'ok',
+      barPct:water,barColor:water<20?'var(--red)':water<40?'var(--gold)':'var(--blue)',barLabel:'Water level',
+      actions:[{label:'REFILL',fn:'refillHumidifier()',cls:''}],
+      cls:water<20?'danger':'installed',extra:''
+    });
+  } else {
+    panels.push({icon:'💧',name:'NO HUMIDIFIER',status:'Optional but helpful',statusCls:'off',barPct:0,barColor:'var(--muted)',barLabel:'',actions:[],cls:'empty',extra:''});
+  }
+
+  // Dehumidifier panel
+  if(G.gear.dehumidifier){
+    const dData=DEHUMIDIFIERS.find(d=>d.id===G.gear.dehumidifier)||{name:'Dehumidifier'};
+    const cap=Math.round(G.gear.dehuCapacity||0);
+    panels.push({
+      icon:'🏜️',name:dData.name,
+      status:`Capacity: ${cap}%`,statusCls:cap>90?'danger':cap>70?'warn':'ok',
+      barPct:cap,barColor:cap>90?'var(--red)':cap>70?'var(--gold)':'var(--green)',barLabel:'Tank fill',
+      actions:[{label:'EMPTY',fn:'emptyDehumidifier()',cls:'red'}],
+      cls:cap>90?'danger':'installed',extra:''
+    });
+  }
+
+  // AC panel
+  if(G.gear.ac){
+    const aData=AC_UNITS.find(a=>a.id===G.gear.ac)||{name:'AC Unit',coolBoost:3};
+    panels.push({icon:'❄️',name:aData.name,status:`Cooling −${aData.coolBoost}°C`,statusCls:'ok',barPct:100,barColor:'var(--blue)',barLabel:'Active',actions:[],cls:'installed',extra:''});
+  }
+
+  // CO2 panel
+  if(G.gear.co2Tank){
+    const cData=CO2_TANKS.find(c=>c.id===G.gear.co2Tank)||{name:'CO₂ Tank',ppmMax:1300};
+    const lvl=Math.round(G.gear.co2Level||0);
+    panels.push({
+      icon:'🫧',name:cData.name,
+      status:`Level: ${lvl}% | Max: ${cData.ppmMax}ppm`,statusCls:lvl<10?'danger':lvl<25?'warn':'ok',
+      barPct:lvl,barColor:lvl<10?'var(--red)':lvl<25?'var(--gold)':'var(--cyan)',barLabel:'Tank level',
+      actions:[{label:'REFILL (200¢)',fn:'refillCO2()',cls:'gold'}],
+      cls:lvl<10?'danger':'installed',extra:''
+    });
+  }
+
+  container.innerHTML=panels.map(p=>`
+    <div class="gear-panel ${p.cls}" ${p.cls==='empty'?'':'onclick="void(0)"'}>
+      <div class="gear-icon">${p.icon}</div>
+      <div class="gear-name">${p.name}</div>
+      <div class="gear-status ${p.statusCls}">${p.status}</div>
+      ${p.barLabel?`<div class="gear-bar"><div class="gear-bar-fill" style="width:${p.barPct}%;background:${p.barColor}"></div></div>
+      <div class="gear-lifespan">${p.barLabel}: <span>${p.barPct}%</span></div>`:''}
+      ${p.extra}
+      ${p.actions.length>0?`<div class="gear-action-row">${p.actions.map(a=>`<button class="btn-gear-action ${a.cls}" onclick="${a.fn}">${a.label}</button>`).join('')}</div>`:''}
+    </div>`).join('');
+}
+
+function renderLightConfig(){
+  const area=document.getElementById('light-config-area');
+  const slots=document.getElementById('light-config-slots');
+  if(!area||!slots||!G)return;
+  const roomData=ROOMS.find(r=>r.id===activeRoomId)||ROOMS[0];
+  const curRoom=G.rooms[activeRoomId];
+  if(!curRoom){area.style.display='none';return;}
+  if(roomData.maxLights>1){
+    area.style.display='block';
+    slots.innerHTML=(curRoom.lightsInstalled||[]).map((lid,i)=>{
+      const lData=LIGHTS.find(l=>l.id===lid)||{name:lid,icon:'💡'};
+      const lifespan=Math.round(G.gear.lightLifespan[lid]||100);
+      return `<div class="light-config-row">
+        <span>${lData.icon}</span>
+        <label>${lData.name} <span style="color:var(--muted);font-size:8px">(Life: ${lifespan}%)</span></label>
+        <select onchange="changeLightInSlot(${i},this.value)">
+          ${(G.gear.lightsOwned||["bulb"]).map(lo=>`<option value="${lo}" ${lo===lid?'selected':''}>${LIGHTS.find(l=>l.id===lo)?.name||lo}</option>`).join('')}
+        </select>
+        <button class="remove-btn" onclick="removeLightFromRoom(${i})">✕</button>
+      </div>`;
+    }).join('');
+  } else {
+    area.style.display='none';
+  }
+}
+
+function changeLightInSlot(slotIdx,newLightId){
+  const curRoom=G.rooms[activeRoomId];
+  if(curRoom&&curRoom.lightsInstalled[slotIdx]!==undefined){
+    curRoom.lightsInstalled[slotIdx]=newLightId;
+    saveGame();renderGearPanels();
+  }
+}
+
+function renderGrow(){
+  if(!G)return;
+  const room=ROOMS.find(r=>r.id===activeRoomId)||ROOMS[0];
+  const roomConfig=G.rooms[activeRoomId]||{plants:[],lightsInstalled:["bulb"]};
+  const plants=roomConfig.plants||[];
+
+  // Update counters
+  const countEl=document.getElementById('plants-count-display');
+  const badgeEl=document.getElementById('plants-slots-badge');
+  if(countEl) countEl.textContent=plants.length;
+  if(badgeEl) badgeEl.textContent=`${plants.length}/${room.slots} SLOTS`;
+
+  // CO2 control visibility
+  const co2ctrl=document.getElementById('ctrl-group-co2');
+  if(co2ctrl) co2ctrl.style.display=G.gear.co2Tank?'block':'none';
+
+  const grid=document.getElementById('plant-grid');
+  if(!grid)return;
+  grid.innerHTML='';
+
+  for(let i=0;i<room.slots;i++){
+    const plant=plants.find(p=>p.slotIndex===i);
+    const slot=document.createElement('div');
+
+    if(!plant){
+      slot.className='pot-slot empty-slot';
+      slot.innerHTML=`<div class="plus-icon">＋</div><div class="empty-label">SLOT ${i+1}</div><div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:3px">Tap to plant</div>`;
+      slot.onclick=()=>openPlantModal(i);
+    } else {
+      const strain=STRAINS[plant.strainName];
+      if(!strain){grid.appendChild(slot);continue;}
+      const now=Date.now();
+      const hasEvent=(plant.events||[]).length>0;
+      const isShielded=now<(plant.shieldUntil||0);
+      const isReady=plant.stage==='Ready';
+      const ppm=plant.soilPPM||0;
+      const ppmCls=ppm>1500?'danger':ppm>800?'warn':'ok';
+      const lightsOn=isLightsOn(plant);
+      const hrSinceInspect=(now-(plant.lastInspected||0))/3600000;
+      const inspectReady=hrSinceInspect>=12;
+      const pot=POT_SIZES[plant.potSize]||POT_SIZES['5gal'];
+
+      let slotClass='pot-slot';
+      if(hasEvent)slotClass+=' danger-state';
+      else if(isShielded)slotClass+=' shielded-state';
+      if(isReady)slotClass+=' ready-state';
+      if(plant.rarity==='Shiny'||plant.rarity==='GOD')slotClass+=' shiny-border';
+      else if(plant.rarity==='EP'||plant.rarity==='Sparkling'||plant.rarity==='Glowing')slotClass+=' ep-border';
+      slot.className=slotClass;
+
+      const stageProgress=Math.min(100,plant.stageProgress||0);
+
+      slot.innerHTML=`
+        <!-- Art area with card bg -->
+        <div class="plant-art-area" onclick="shakePlant('${plant.id}',this)">
+          <div class="plant-art-bg" style="background-image:url('${strain.cardImg||''}')"></div>
+          <div class="plant-art-bg-overlay"></div>
+          <div class="plant-stage-badge">${plant.stage.toUpperCase()}</div>
+          <div class="plant-day-badge">DAY ${Math.floor(plant.dayAge)}</div>
+          <div class="plant-rarity-badge ${plant.rarity}">${plant.rarity!=='Standard'?plant.rarity:''}</div>
+          <div class="plant-svg-wrap" id="plant-svg-${plant.id}">
+            ${getPlantSVG(plant)}
+          </div>
+          <div class="plant-interact-hint">TAP TO INTERACT</div>
+        </div>
+
+        <!-- Info -->
+        <div class="plant-info-section">
+          <div class="plant-name-row">
+            <span class="plant-name">${strain.emoji} ${plant.strainName}</span>
+          </div>
+          <div class="plant-genetics">${strain.genetics}</div>
+          ${hasEvent?`<div class="event-tags-row">${plant.events.map(e=>`<span class="event-tag" onclick="openSprayModal('${plant.id}')">${e.replace(/_/g,' ')} ⚠️</span>`).join('')}</div>`:''}
+          <div class="stat-bars">
+            <div class="bar-row"><span class="bar-label">HEALTH</span><div class="bar-track"><div class="bar-fill ${plant.health>60?'green':plant.health>30?'gold':'red'}" style="width:${plant.health}%"></div></div><span class="bar-val">${Math.round(plant.health)}%</span></div>
+            <div class="bar-row"><span class="bar-label">WATER</span><div class="bar-track"><div class="bar-fill blue" style="width:${plant.waterLevel}%"></div></div><span class="bar-val">${Math.round(plant.waterLevel)}%</span></div>
+            <div class="bar-row"><span class="bar-label">STAGE</span><div class="bar-track"><div class="bar-fill green" style="width:${stageProgress}%"></div></div><span class="bar-val">${Math.round(stageProgress)}%</span></div>
+            <div class="bar-row"><span class="bar-label">YIELD</span><div class="bar-track"><div class="bar-fill gold" style="width:${Math.min(100,plant.yieldMod*50)}%"></div></div><span class="bar-val">${plant.yieldMod.toFixed(2)}x</span></div>
+          </div>
+          <div class="plant-meta-row">
+            <span class="meta-chip ${ppmCls}">SOIL: ${Math.round(ppm)}ppm</span>
+            <span class="meta-chip">H: ${Math.round(plant.heightIn||0)}"</span>
+            <span class="meta-chip">${pot.name}</span>
+            ${plant.topCount>0?`<span class="meta-chip ok">Topped ×${plant.topCount}</span>`:''}
+            ${plant.lstApplied?'<span class="meta-chip ok">LST</span>':''}
+            ${lightsOn?'<span class="meta-chip ok">💡 ON</span>':'<span class="meta-chip">🌙 OFF</span>'}
+            ${G.showYieldMultiplier?`<span class="meta-chip" style="color:var(--purple)">×${G.yieldMultiplier} MOD</span>`:''}
+          </div>
+        </div>
+
+        <!-- Inspect button -->
+        <div class="inspect-btn-area">
+          <button class="inspect-btn ${isShielded?'shielded':''} ${!inspectReady?'cooldown':''}"
+            onclick="${inspectReady?`openInspectModal('${plant.id}')`:' void(0)'}">
+            🔍 INSPECT PLANT ${isShielded?'[PROTECTED]':''}
+          </button>
+          ${!inspectReady?`<div class="inspect-cooldown-txt">Cooldown: ${Math.round(12-hrSinceInspect)}h remaining</div>`:''}
+        </div>
+
+        <!-- Light cycle bar -->
+        <div class="night-mode-bar">
+          <span>${lightsOn?'💡 LIGHTS ON':'🌙 LIGHTS OFF'}</span>
+          <div class="light-cycle-indicator">
+            ${Array.from({length:24},(_,h)=>`<div class="lc-segment ${plant.stage==='Flower'||plant.stage==='Ready'?(h>=6&&h<18?'lc-on':'lc-off'):(h>=6&&h<24?'lc-on':'lc-off')}"></div>`).join('')}
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="plant-actions">
+          <button class="btn-action btn-blue" onclick="openWaterModal('${plant.id}')">💧 WATER</button>
+          <button class="btn-action" onclick="openFeedModal('${plant.id}')" ${plant.stage==='Seedling'?'disabled':''}>🌿 FEED</button>
+          <button class="btn-action" onclick="openSprayModal('${plant.id}')">🧴 SPRAY</button>
+          <button class="btn-action" onclick="openPruneModal('${plant.id}')">✂️ TRAIN</button>
+          <button class="btn-action" onclick="openTransplantModal('${plant.id}')">🪴 POT UP</button>
+          ${plant.stage==='Ready'
+            ?`<button class="btn-action btn-green" onclick="harvestPlant('${plant.id}')">🌟 HARVEST</button>`
+            :`<button class="btn-action btn-gold" onclick="advanceStage('${plant.id}')"
+              ${(plant.stage==='Seedling'&&plant.dayAge<4)?'disabled':''}>
+              ➜ ${plant.stage==='Seedling'?'TO VEG':plant.stage==='Veg'?'TO FLOWER':'ADVANCE'}
+            </button>`}
+          <button class="btn-action btn-red full-width" onclick="harvestPlant('${plant.id}')">⚡ HARVEST NOW (EARLY/DISCARD)</button>
+        </div>`;
+    }
+    grid.appendChild(slot);
+  }
+
+  // Show come-back message if all plants watered/inspected
+  const comebackEl=document.getElementById('comeback-msg');
+  if(comebackEl){
+    const allDone=plants.length>0&&plants.every(p=>p.waterLevel>60&&(Date.now()-(p.lastInspected||0))<43200000);
+    comebackEl.style.display=allDone?'block':'none';
+  }
+}
+
+function shakePlant(id,artEl){
+  const svg=document.getElementById(`plant-svg-${id}`);
+  if(!svg)return;
+  svg.classList.remove('shake-anim');
+  void svg.offsetWidth;
+  svg.classList.add('shake-anim');
+  setTimeout(()=>svg.classList.remove('shake-anim'),500);
+  // Small random bonus
+  if(Math.random()<0.05){
+    const p=getPlant(id);
+    if(p){
+      p.yieldMod=Math.min(2.5,p.yieldMod+0.005);
+      showToast('🍃 Dead leaf removed! +0.5% yield','ok');
+      saveGame();
+    }
+  }
+}
+
+// ================================================================
+// PLANT SVG GENERATOR
+// ================================================================
+function getPlantSVG(plant){
+  const strain=STRAINS[plant.strainName];
+  if(!strain)return '';
+  const color=strain.plantColor||'#4ade80';
+  const h=Math.min(140,Math.max(16,plant.heightIn||8));
+  const hPct=Math.min(1,h/80);
+  const healthAlpha=0.35+(plant.health/100)*0.65;
+  const stage=plant.stage;
+  const stemH=Math.round(30+hPct*90);
+
+  // Seedling
+  if(stage==='Seedling'){
+    const leafSize=Math.min(14,4+plant.dayAge*0.8);
+    return `<svg width="140" height="180" viewBox="0 0 140 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="54" y="148" width="32" height="22" rx="5" fill="#5c3a1e" opacity="0.8"/>
+      <rect x="63" y="128" width="14" height="26" rx="3" fill="#5a7a2a"/>
+      <ellipse cx="70" cy="${122-leafSize*0.3}" rx="${leafSize}" ry="${leafSize*0.8}" fill="${color}" opacity="${healthAlpha}"/>
+      <path d="M70 ${125} Q${70-leafSize*1.5} ${118-leafSize} ${70-leafSize*0.5} ${112-leafSize}" fill="${color}" opacity="${healthAlpha*0.75}"/>
+      <path d="M70 ${125} Q${70+leafSize*1.5} ${118-leafSize} ${70+leafSize*0.5} ${112-leafSize}" fill="${color}" opacity="${healthAlpha*0.75}"/>
+      ${plant.dayAge>3?`<ellipse cx="70" cy="${108-leafSize}" rx="${leafSize*0.6}" ry="${leafSize*0.5}" fill="${color}" opacity="${healthAlpha*0.9}"/>
+      <path d="M70 ${111-leafSize} Q${70-leafSize} ${104-leafSize} ${70-leafSize*0.5} ${98-leafSize}" fill="${color}" opacity="${healthAlpha*0.7}"/>
+      <path d="M70 ${111-leafSize} Q${70+leafSize} ${104-leafSize} ${70+leafSize*0.5} ${98-leafSize}" fill="${color}" opacity="${healthAlpha*0.7}"/>`:''}
+      <text x="70" y="172" font-size="9" fill="#6b4423" text-anchor="middle" font-family="monospace">seedling</text>
+    </svg>`;
+  }
+
+  // Veg stage — branching plant
+  if(stage==='Veg'){
+    const topCount=Math.min(plant.topCount||0,4);
+    const branches=Math.min(6,3+Math.floor(hPct*4)+topCount);
+    let leavesHtml='';
+    for(let i=0;i<branches;i++){
+      const y=148-i*(stemH/(branches+1));
+      const side=i%2===0?-1:1;
+      const lx=70+side*28;
+      const leafLen=18+i*2;
+      leavesHtml+=`<path d="M70 ${y} Q${70+side*leafLen*1.2} ${y-8} ${lx} ${y-22} Q${70+side*leafLen} ${y-2} 70 ${y}" fill="${color}" opacity="${healthAlpha*0.85}"/>
+      <line x1="70" y1="${y}" x2="${lx}" y2="${y-22}" stroke="${color}" stroke-width="1" opacity="0.4"/>`;
+      // Fan leaf fingers
+      for(let f=0;f<3;f++){
+        const fx=lx+side*f*5;const fy=y-22-f*6;
+        leavesHtml+=`<line x1="${lx}" y1="${y-22}" x2="${fx}" y2="${fy-8}" stroke="${color}" stroke-width="1" opacity="${healthAlpha*0.5}"/>`;
+      }
+    }
+    return `<svg width="140" height="180" viewBox="0 0 140 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="52" y="150" width="36" height="22" rx="5" fill="#5c3a1e" opacity="0.8"/>
+      <rect x="64" y="${148-stemH}" width="12" height="${stemH}" rx="4" fill="#4a7a2a"/>
+      ${leavesHtml}
+      <ellipse cx="70" cy="${148-stemH-8}" rx="12" ry="10" fill="${color}" opacity="${healthAlpha}"/>
+      ${topCount>0?`<line x1="64" y1="${148-stemH-8}" x2="76" y2="${148-stemH-8}" stroke="#333" stroke-width="2" opacity="0.6"/>`:'' }
+    </svg>`;
+  }
+
+  // Flower / Ready — bud clusters
+  const isReady=stage==='Ready';
+  const budSize=14+hPct*10+(isReady?6:0);
+  const glow=isReady?`<circle cx="70" cy="${148-stemH-12}" r="${budSize+12}" fill="${color}" opacity="0.12"/>
+    <circle cx="70" cy="${148-stemH-12}" r="${budSize+6}" fill="${color}" opacity="0.1"/>`:'';
+  const trichomes=isReady?Array.from({length:10},(_,i)=>{
+    const a=(i/10)*Math.PI*2;const r=budSize+2+Math.random()*4;
+    const x=70+Math.cos(a)*r;const y=(148-stemH-12)+Math.sin(a)*r*0.7;
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.8" fill="white" opacity="0.65"/>`;
+  }).join(''):'';
+  let leavesHtml='';
+  for(let i=0;i<4;i++){
+    const y=148-i*(stemH/5);const side=i%2===0?-1:1;
+    const lx=70+side*24;
+    leavesHtml+=`<path d="M70 ${y} Q${70+side*38} ${y-7} ${lx} ${y-20} Q${70+side*40} ${y-1} 70 ${y}" fill="${color}" opacity="${healthAlpha*0.7}"/>`;
+  }
+
+  return `<svg width="140" height="180" viewBox="0 0 140 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="52" y="150" width="36" height="22" rx="5" fill="#5c3a1e" opacity="0.8"/>
+    <rect x="64" y="${148-stemH}" width="12" height="${stemH}" rx="4" fill="#4a7a2a"/>
+    ${leavesHtml}
+    ${glow}
+    ${getBudSVG(strain.budIcon||'og',color,healthAlpha,148-stemH-12,budSize)}
+    ${trichomes}
+    ${isReady?`<text x="70" y="${148-stemH-budSize-16}" font-size="8" fill="${color}" text-anchor="middle" font-family="monospace" opacity="0.8">READY ✓</text>`:''}
+  </svg>`;
+}
+
+function getBudSVG(budType,color,alpha,cy,size){
+  const cx=70;const s=size||16;
+  switch(budType){
+    case 'cake':return `<ellipse cx="${cx}" cy="${cy}" rx="${s}" ry="${s*0.85}" fill="${color}" opacity="${alpha}"/>
+      <rect x="${cx-s*0.6}" y="${cy-s*1.1}" width="${s*1.2}" height="${s*0.6}" rx="3" fill="${color}" opacity="${alpha*0.85}"/>
+      <rect x="${cx-s*0.4}" y="${cy-s*1.6}" width="${s*0.8}" height="${s*0.5}" rx="2" fill="${color}" opacity="${alpha*0.7}"/>
+      <circle cx="${cx}" cy="${cy-s*1.9}" r="3" fill="white" opacity="0.5"/>`;
+    case 'alien':return `<ellipse cx="${cx}" cy="${cy+s*0.1}" rx="${s}" ry="${s*0.9}" fill="${color}" opacity="${alpha}"/>
+      <ellipse cx="${cx-s*0.6}" cy="${cy-s*0.7}" rx="${s*0.5}" ry="${s*0.65}" fill="${color}" opacity="${alpha*0.8}"/>
+      <ellipse cx="${cx+s*0.6}" cy="${cy-s*0.7}" rx="${s*0.5}" ry="${s*0.65}" fill="${color}" opacity="${alpha*0.8}"/>
+      <ellipse cx="${cx-s*0.6}" cy="${cy-s}" rx="${s*0.22}" ry="${s*0.3}" fill="#000" opacity="0.55"/>
+      <ellipse cx="${cx+s*0.6}" cy="${cy-s}" rx="${s*0.22}" ry="${s*0.3}" fill="#000" opacity="0.55"/>`;
+    case 'rainbow':return `<ellipse cx="${cx}" cy="${cy}" rx="${s*1.1}" ry="${s}" fill="${color}" opacity="${alpha}"/>
+      <path d="M${cx-s*0.85} ${cy-s*0.3} Q${cx} ${cy-s*1.5} ${cx+s*0.85} ${cy-s*0.3}" stroke="#e879f9" stroke-width="2.5" fill="none" opacity="0.7"/>
+      <path d="M${cx-s*0.65} ${cy-s*0.3} Q${cx} ${cy-s*1.2} ${cx+s*0.65} ${cy-s*0.3}" stroke="#60a5fa" stroke-width="2" fill="none" opacity="0.6"/>
+      <path d="M${cx-s*0.45} ${cy-s*0.3} Q${cx} ${cy-s*0.9} ${cx+s*0.45} ${cy-s*0.3}" stroke="#fbbf24" stroke-width="1.5" fill="none" opacity="0.5"/>`;
+    case 'skunk':return `<ellipse cx="${cx}" cy="${cy+s*0.15}" rx="${s}" ry="${s*0.85}" fill="${color}" opacity="${alpha}"/>
+      <ellipse cx="${cx}" cy="${cy+s*0.15}" rx="${s*0.55}" ry="${s*0.45}" fill="white" opacity="0.18"/>
+      <path d="M${cx-s*0.35} ${cy-s*0.7} Q${cx} ${cy-s*1.7} ${cx+s*0.35} ${cy-s*0.7}" stroke="${color}" stroke-width="3.5" fill="none" opacity="${alpha*0.7}"/>`;
+    case 'haze':return `<ellipse cx="${cx}" cy="${cy}" rx="${s*0.85}" ry="${s*1.1}" fill="${color}" opacity="${alpha}"/>
+      <circle cx="${cx}" cy="${cy-s*0.75}" r="${s*0.6}" fill="${color}" opacity="${alpha*0.8}"/>
+      <circle cx="${cx-s*0.45}" cy="${cy-s*0.35}" r="${s*0.4}" fill="${color}" opacity="${alpha*0.7}"/>
+      <circle cx="${cx+s*0.45}" cy="${cy-s*0.35}" r="${s*0.4}" fill="${color}" opacity="${alpha*0.7}"/>`;
+    case 'citrus':return `<circle cx="${cx}" cy="${cy}" r="${s}" fill="${color}" opacity="${alpha}"/>
+      <circle cx="${cx}" cy="${cy}" r="${s*0.7}" fill="${color}" opacity="${alpha*0.55}"/>
+      <line x1="${cx}" y1="${cy-s}" x2="${cx}" y2="${cy+s}" stroke="white" stroke-width="0.8" opacity="0.25"/>
+      <line x1="${cx-s}" y1="${cy}" x2="${cx+s}" y2="${cy}" stroke="white" stroke-width="0.8" opacity="0.25"/>`;
+    case 'dream':return `<ellipse cx="${cx}" cy="${cy}" rx="${s}" ry="${s*0.85}" fill="${color}" opacity="${alpha}"/>
+      <circle cx="${cx-s*0.4}" cy="${cy-s*0.75}" r="${s*0.45}" fill="${color}" opacity="${alpha*0.8}"/>
+      <circle cx="${cx+s*0.4}" cy="${cy-s*0.75}" r="${s*0.45}" fill="${color}" opacity="${alpha*0.8}"/>
+      <circle cx="${cx}" cy="${cy-s}" r="${s*0.35}" fill="white" opacity="0.12"/>`;
+    default:return `<ellipse cx="${cx}" cy="${cy}" rx="${s}" ry="${s*0.9}" fill="${color}" opacity="${alpha}"/>
+      <circle cx="${cx-s*0.4}" cy="${cy-s*0.65}" r="${s*0.5}" fill="${color}" opacity="${alpha*0.75}"/>
+      <circle cx="${cx+s*0.4}" cy="${cy-s*0.65}" r="${s*0.5}" fill="${color}" opacity="${alpha*0.75}"/>
+      <circle cx="${cx}" cy="${cy-s*0.9}" r="${s*0.38}" fill="${color}" opacity="${alpha*0.65}"/>`;
+  }
+}
+
+function renderSeeds(){
+  const grid=document.getElementById('seed-inventory-grid');
+  if(!grid||!G)return;
+  const entries=Object.entries(G.seeds||{}).filter(([,v])=>v>0);
+  if(entries.length===0){grid.innerHTML=`<div style="color:var(--muted);font-family:var(--font-hud);font-size:10px;padding:16px">No seeds yet. Redeem a code above!</div>`;return;}
+  const room=ROOMS.find(r=>r.id===activeRoomId)||ROOMS[0];
+  const plantCount=(G.rooms[activeRoomId]?.plants||[]).length;
+  const canPlant=plantCount<room.slots;
+  grid.innerHTML=entries.map(([name,qty])=>{
+    const s=STRAINS[name]||{emoji:'🌱',genetics:'Unknown',thcBase:20};
+    return `<div class="seed-item">
+      <div class="seed-icon-wrap">${s.emoji}</div>
+      <div class="seed-item-info">
+        <div class="seed-item-name">${name}</div>
+        <div class="seed-item-genetics">${s.genetics}</div>
+        <div style="font-size:9px;color:var(--muted);font-family:var(--font-hud);margin-top:2px">THC ${s.thcBase}% • ${s.variety||'hybrid'} • ${s.height||'Medium'}</div>
+        <div class="seed-item-qty-row">
+          <span class="seed-qty-val">${qty}×</span>
+          <button class="btn-plant-seed" onclick="quickPlantSeed('${name}')" ${canPlant&&qty>0?'':'disabled'}>PLANT</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function quickPlantSeed(strainName){
+  const room=ROOMS.find(r=>r.id===activeRoomId)||ROOMS[0];
+  const plants=G.rooms[activeRoomId]?.plants||[];
+  for(let i=0;i<room.slots;i++){
+    if(!plants.find(p=>p.slotIndex===i)){
+      plantSeed(strainName,i,'5gal',activeRoomId);
+      switchTab('grow');
+      return;
+    }
+  }
+  showToast('All slots full! Harvest or upgrade room.','warn');
+}
+
+function openPlantModal(slotIndex){
+  selectedSlot=slotIndex;
+  selectedStrain=null;
+  selectedPotSize='5gal';
+  const list=document.getElementById('modal-strain-list');
+  const noSeeds=document.getElementById('modal-no-seeds');
+  const entries=Object.entries(G.seeds||{}).filter(([,v])=>v>0);
+  if(entries.length===0){
+    if(list)list.innerHTML='';
+    if(noSeeds)noSeeds.style.display='block';
+  } else {
+    if(noSeeds)noSeeds.style.display='none';
+    if(list)list.innerHTML=entries.map(([n,q])=>{
+      const s=STRAINS[n]||{emoji:'🌱',thcBase:20};
+      return `<div class="strain-option" onclick="selectStrain('${n}',this)">
+        <div class="strain-option-emoji">${s.emoji}</div>
+        <div class="strain-option-name">${n}</div>
+        <div class="strain-option-thc">THC ${s.thcBase}%</div>
+        <div class="strain-option-qty">${q} seeds</div>
+      </div>`;
+    }).join('');
+  }
+  // Reset pot selection
+  document.querySelectorAll('#modal-pot-grid .pot-size-opt').forEach(e=>e.classList.remove('selected'));
+  const defaultPot=document.querySelector('#modal-pot-grid [data-pot="5gal"]');
+  if(defaultPot)defaultPot.classList.add('selected');
+  document.getElementById('modal-plant').classList.add('open');
+}
+
+function selectStrain(name,el){
+  selectedStrain=name;
+  document.querySelectorAll('#modal-strain-list .strain-option').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function selectPotSize(el,potId){
+  selectedPotSize=potId;
+  document.querySelectorAll('#modal-pot-grid .pot-size-opt').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  const pot=POT_SIZES[potId];
+  const infoEl=document.getElementById('modal-pot-info');
+  if(infoEl&&pot) infoEl.textContent=`${pot.name}: ${pot.desc} — Yield mod: ${pot.yieldMod}x`;
+}
+
+function confirmPlant(){
+  if(!selectedStrain){showToast('Select a strain first!','warn');return;}
+  if(selectedSlot===null){closeModal('modal-plant');return;}
+  plantSeed(selectedStrain,selectedSlot,selectedPotSize||'5gal',activeRoomId);
+  closeModal('modal-plant');
+}
+
+function renderShop(){
+  if(!G)return;
+  // Lights
+  const ownedLightsLabel=document.getElementById('shop-owned-lights-label');
+  if(ownedLightsLabel) ownedLightsLabel.textContent=`Own: ${(G.gear.lightsOwned||['bulb']).map(id=>LIGHTS.find(l=>l.id===id)?.name||id).join(', ')}`;
+
+  const shopLightsEl=document.getElementById('shop-lights');
+  if(shopLightsEl) shopLightsEl.innerHTML=LIGHTS.map(l=>{
+    const owned=(G.gear.lightsOwned||[]).includes(l.id);
+    const ownedCount=(G.gear.lightsOwned||[]).filter(x=>x===l.id).length;
+    return `<div class="shop-card${owned?' owned':''}">
+      ${ownedCount>0?`<div class="qty-owned-badge">Own: ${ownedCount}</div>`:''}
+      <div class="shop-card-icon">${l.icon}</div>
+      <div class="shop-card-name">${l.name}</div>
+      <div class="shop-card-desc">${l.desc}</div>
+      <div class="shop-card-stat">${l.watt}W • Eff: ${Math.round(l.eff*100)}% • Heat: +${l.heat}°C/light • Max ${l.plantsMax} plants</div>
+      <div class="shop-card-price">${l.price===0?'FREE':l.price+'¢'}</div>
+      ${l.price===0&&owned?`<div class="shop-owned-badge">✓ DEFAULT LIGHT</div>`
+        :`<button class="btn-buy" onclick="buyShopItem('${l.id}',${l.price},'light')" ${G.coins<l.price?'disabled':''}>BUY${owned?' ANOTHER':''} (${l.price}¢)</button>`}
+    </div>`;
+  }).join('');
+
+  // Climate
+  const climateEl=document.getElementById('shop-climate');
+  if(climateEl){
+    const allClimate=[
+      ...FANS.map(f=>({...f,cat:'fan'})),
+      ...HUMIDIFIERS.map(h=>({...h,cat:'humidifier'})),
+      ...DEHUMIDIFIERS.map(d=>({...d,cat:'dehumidifier'})),
+      ...AC_UNITS.map(a=>({...a,cat:'ac'})),
+      ...CO2_TANKS.map(c=>({...c,cat:'co2'})),
+    ];
+    climateEl.innerHTML=allClimate.map(item=>{
+      const isInstalled=(item.cat==='fan'&&G.gear.fans?.includes(item.id))||(item.cat==='humidifier'&&G.gear.humidifier===item.id)||(item.cat==='dehumidifier'&&G.gear.dehumidifier===item.id)||(item.cat==='ac'&&G.gear.ac===item.id)||(item.cat==='co2'&&G.gear.co2Tank===item.id);
+      return `<div class="shop-card${isInstalled?' owned':''}">
+        <div class="shop-card-icon">${item.icon}</div>
+        <div class="shop-card-name">${item.name}</div>
+        <div class="shop-card-desc">${item.desc}</div>
+        <div class="shop-card-stat">${item.watt}W</div>
+        <div class="shop-card-price">${item.price}¢</div>
+        ${isInstalled?`<div class="shop-owned-badge">✓ INSTALLED</div>`
+          :`<button class="btn-buy" onclick="buyShopItem('${item.id}',${item.price},'${item.cat}')" ${G.coins<item.price?'disabled':''}>BUY (${item.price}¢)</button>`}
+      </div>`;
+    }).join('');
+  }
+
+  // Supplies / Nutes
+  const nutesEl=document.getElementById('shop-nutes');
+  if(nutesEl) nutesEl.innerHTML=SUPPLIES.map(item=>{
+    const qty=G.inventory[item.id]||0;
+    return `<div class="shop-card">
+      ${qty>0?`<div class="qty-owned-badge">${qty} owned</div>`:''}
+      <div class="shop-card-icon">${item.icon}</div>
+      <div class="shop-card-name">${item.name}</div>
+      <div class="shop-card-desc">${item.desc}</div>
+      <div class="shop-card-price">${item.price}¢</div>
+      <button class="btn-buy" onclick="buyShopItem('${item.id}',${item.price},'${item.type}')" ${G.coins<item.price?'disabled':''}>BUY (${item.price}¢)</button>
+    </div>`;
+  }).join('');
+
+  // Pots
+  const potsEl=document.getElementById('shop-pots');
+  if(potsEl) potsEl.innerHTML=[
+    {id:'soil_sm',name:'Soil Bag (Small)',icon:'🌍',desc:'Fills 1×5gal or 2×3gal pots.',price:30,type:'soil'},
+    {id:'soil_lg',name:'Soil Bag (Large)',icon:'🌍',desc:'Fills 1×10gal or 3×5gal pots.',price:70,type:'soil'},
+  ].map(item=>`<div class="shop-card">
+    <div class="qty-owned-badge">${G.inventory[item.id]||0} owned</div>
+    <div class="shop-card-icon">${item.icon}</div>
+    <div class="shop-card-name">${item.name}</div>
+    <div class="shop-card-desc">${item.desc}</div>
+    <div class="shop-card-price">${item.price}¢</div>
+    <button class="btn-buy" onclick="buyShopItem('${item.id}',${item.price},'${item.type}')" ${G.coins<item.price?'disabled':''}>BUY (${item.price}¢)</button>
+  </div>`).join('');
+
+  // Rooms
+  const roomsEl=document.getElementById('shop-rooms');
+  if(roomsEl) roomsEl.innerHTML=ROOMS.slice(1).map(room=>{
+    const cost=(room.reqLevel*200)+1000;
+    const unlocked=G.level>=room.reqLevel;
+    const owned=G.rooms[room.id]?.active;
+    return `<div class="shop-card" style="${!unlocked?'opacity:.5':''}">
+      <div class="shop-card-icon">${room.icon}</div>
+      <div class="shop-card-name">${room.name}</div>
+      <div class="shop-card-desc">${room.desc}</div>
+      <div class="shop-card-price">${cost}¢ <span>Req. Level ${room.reqLevel}</span></div>
+      ${owned?`<div class="shop-owned-badge">✓ UNLOCKED</div>`
+        :`<button class="btn-upgrade-room" onclick="upgradeRoom('${room.id}',${cost})" ${(!unlocked||G.coins<cost)?'disabled':''}>
+          ${!unlocked?`LOCKED (Lvl ${room.reqLevel})`:`UNLOCK (${cost}¢)`}
+        </button>`}
+    </div>`;
+  }).join('');
+
+  // Cards
+  const cardsEl=document.getElementById('shop-cards');
+  if(cardsEl) cardsEl.innerHTML=POWERUP_CARDS.map(item=>{
+    const qty=G.inventory[item.id]||0;
+    return `<div class="shop-card">
+      ${qty>0?`<div class="qty-owned-badge">${qty} owned</div>`:''}
+      <div class="shop-card-icon">${item.icon}</div>
+      <div class="shop-card-name">${item.name}</div>
+      <div class="shop-card-desc">${item.desc}</div>
+      <div class="shop-card-stat">${item.stat}</div>
+      <div class="shop-card-price">${item.price}¢</div>
+      <button class="btn-buy" onclick="buyShopItem('${item.id}',${item.price},'card')" ${G.coins<item.price?'disabled':''}>BUY (${item.price}¢)</button>
+    </div>`;
+  }).join('');
+}
+
+function renderVault(){
+  const grid=document.getElementById('vault-grid');
+  if(!grid||!G)return;
+  const totalW=(G.vault||[]).reduce((s,b)=>s+b.weight,0);
+  const twEl=document.getElementById('vault-total-weight');
+  if(twEl)twEl.textContent=totalW+'g';
+  if(!G.vault||G.vault.length===0){grid.innerHTML=`<div class="empty-vault">🌿 No harvests yet.<br><span style="font-size:9px">Grow something!</span></div>`;return;}
+  grid.innerHTML=G.vault.map(b=>{
+    const strain=STRAINS[b.strainName]||{emoji:'🌿',plantColor:'#166534'};
+    const isPerfect=b.perfectGrow;
+    return `<div class="vault-card ${b.rarity}">
+      <div class="vault-card-art" style="background:linear-gradient(135deg,${strain.plantColor}33,${strain.plantColor}11)">
+        ${b.cardImg?`<div class="vault-card-art-bg" style="background-image:url('${b.cardImg}')"></div>`:''}
+        <span style="font-size:34px;position:relative;z-index:1">${strain.emoji}</span>
+        ${isPerfect?`<div style="position:absolute;top:6px;left:6px;background:rgba(168,85,247,0.8);border-radius:4px;padding:2px 6px;font-family:var(--font-hud);font-size:8px;color:white">PERFECT</div>`:''}
+      </div>
+      <div class="vault-card-body">
+        <div class="vault-card-name">${b.strainName}</div>
+        <div class="vault-card-sub">${b.rarity} • ${b.harvestDate}</div>
+        <div class="vault-card-stats">
+          <div class="vault-stat-row"><span class="vsk">Yield</span><span class="vsv">${b.weight}g</span></div>
+          <div class="vault-stat-row"><span class="vsk">THC</span><span class="vsv">${b.thc}%</span></div>
+          <div class="vault-stat-row"><span class="vsk">Health</span><span class="vsv">${b.health}%</span></div>
+          <div class="vault-stat-row"><span class="vsk">Flower</span><span class="vsv">${b.flowerDays}d</span></div>
+        </div>
+      </div>
+      <div class="vault-card-footer">
+        <button class="btn-sell" onclick="openSellModal('${b.id}',2)">BULK 2¢/g</button>
+        <button class="btn-sell" style="color:var(--gold);border-color:rgba(251,191,36,0.4)" onclick="openSellModal('${b.id}',4)">PREMIUM 4¢/g</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderMarket(){
+  const buyersEl=document.getElementById('market-buyers');
+  const vaultEl=document.getElementById('market-vault-grid');
+  if(!buyersEl||!G)return;
+  buyersEl.innerHTML=(marketBuyers.length>0?marketBuyers:[
+    {name:'🏪 BULK DISPENSARY',rate:2,note:'Always open.',timer:'Always open',color:'var(--muted)',available:true},
+    {name:'⭐ PREMIUM BUYER',rate:4,note:'22%+ THC required.',timer:'Always open',color:'var(--gold)',available:true},
+  ]).map(b=>`
+    <div class="buyer-card" style="border-color:${b.color}44;opacity:${b.available?1:0.4}">
+      <div class="buyer-name">${b.name}</div>
+      <div class="buyer-rate" style="color:${b.color}">${b.rate}¢/g</div>
+      <div class="buyer-note">${b.note}</div>
+      <div class="buyer-timer" style="color:${b.available?'var(--muted)':'var(--red)'}">${b.timer}</div>
+    </div>`).join('');
+  if(!vaultEl)return;
+  if(!G.vault||G.vault.length===0){vaultEl.innerHTML=`<div class="empty-vault">No harvests to sell.</div>`;return;}
+  vaultEl.innerHTML=G.vault.map(b=>{
+    const strain=STRAINS[b.strainName]||{emoji:'🌿',plantColor:'#166534'};
+    return `<div class="vault-card ${b.rarity}">
+      <div class="vault-card-art" style="background:linear-gradient(135deg,${strain.plantColor}33,transparent)">
+        <span style="font-size:28px">${strain.emoji}</span>
+      </div>
+      <div class="vault-card-body">
+        <div class="vault-card-name">${b.strainName} • ${b.weight}g</div>
+        <div class="vault-card-sub">THC: ${b.thc}% | Health: ${b.health}%</div>
+      </div>
+      <div class="vault-card-footer">
+        <button class="btn-sell" onclick="openSellModal('${b.id}',2)">2¢/g</button>
+        <button class="btn-sell" style="color:var(--gold);border-color:rgba(251,191,36,0.4)" onclick="openSellModal('${b.id}',4)">4¢/g</button>
+        <button class="btn-sell" style="color:var(--purple);border-color:rgba(168,85,247,0.4)" onclick="openSellModal('${b.id}',6)">6¢/g</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderMissions(){
+  const dailyGrid=document.getElementById('daily-missions-grid');
+  const permGrid=document.getElementById('perm-missions-grid');
+  const perfectGrid=document.getElementById('perfect-grow-grid');
+  if(!G)return;
+
+  function missionCard(m,isDone){
+    let progress=0;
+    if(m.metric==='waters_today'||m.metric==='inspects_today'||m.metric==='clean_feeds_today'||m.metric==='logins_today') progress=G.missionProgress[m.metric]||0;
+    else if(m.metric==='totalHarvests') progress=G.totalHarvests;
+    else if(m.metric==='totalGrams') progress=G.totalGrams;
+    else if(m.metric==='level') progress=G.level;
+    else if(m.metric==='uniqueStrains') progress=G.uniqueStrains.length;
+    else if(m.metric==='cleanGrows') progress=G.cleanGrows;
+    else if(m.metric==='harvests25thc') progress=G.harvests25thc;
+    const pct=Math.min(100,Math.round((progress/m.target)*100));
+    return `<div class="mission-card${isDone?' completed':pct>0?' active':''}">
+      <div class="mission-icon">${m.icon}</div>
+      <div class="mission-name">${m.name}</div>
+      <div class="mission-desc">${m.desc}</div>
+      <div class="mission-progress-bar"><div class="mission-progress-fill" style="width:${pct}%"></div></div>
+      <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-bottom:5px">${progress}/${m.target}</div>
+      <div class="mission-reward">Reward: +${m.reward.coins}¢${m.reward.xp?' +'+m.reward.xp+' XP':''}</div>
+      ${isDone?`<div class="mission-completed-badge">✓ COMPLETED</div>`:''}
+    </div>`;
+  }
+
+  if(dailyGrid) dailyGrid.innerHTML=DAILY_MISSIONS.map(m=>missionCard(m,G.missionsDone.includes(m.id))).join('');
+  if(permGrid) permGrid.innerHTML=PERM_MISSIONS.map(m=>missionCard(m,G.missionsDone.includes(m.id))).join('');
+  if(perfectGrid) perfectGrid.innerHTML=Object.entries(STRAINS).map(([name,s])=>{
+    const best=G.bestGrows[name];
+    const done=best&&best.thc>=s.thcBase&&best.yield>=s.yieldBase*0.95;
+    return `<div class="mission-card${done?' completed':''}">
+      <div class="mission-icon">${s.emoji}</div>
+      <div class="mission-name">PERFECT ${name.toUpperCase()}</div>
+      <div class="mission-desc">Hit ${s.thcBase}% THC with ${s.yieldBase}g+ yield</div>
+      ${best?`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono)">Best: ${best.thc}% THC | ${best.yield}g</div>`:'<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono)">Not attempted yet</div>'}
+      <div class="mission-reward">5× sell price + Real seed pack credit</div>
+      ${done?`<div class="mission-completed-badge">✓ PERFECTED!</div>`:''}
+    </div>`;
+  }).join('');
+
+  // Timer
+  const timerEl=document.getElementById('missions-timer');
+  if(timerEl&&G.dailyResetTime){
+    const remaining=Math.max(0,G.dailyResetTime-Date.now());
+    const h=Math.floor(remaining/3600000);
+    const m=Math.floor((remaining%3600000)/60000);
+    const s=Math.floor((remaining%60000)/1000);
+    timerEl.textContent=`${h}h ${m}m ${s}s`;
+  }
+}
+
+function renderStatus(){
+  const profileGrid=document.getElementById('profile-stats');
+  const statusGrid=document.getElementById('status-grid');
+  if(!G)return;
+  if(profileGrid){
+    const totalPlants=Object.values(G.rooms||{}).reduce((s,r)=>s+(r.plants||[]).length,0);
+    const stats=[
+      {label:'Level',val:G.level,color:'var(--purple)'},
+      {label:'Coins',val:G.coins.toLocaleString()+'¢',color:'var(--gold)'},
+      {label:'Harvests',val:G.totalHarvests,color:'var(--green)'},
+      {label:'Total Grams',val:(G.totalGrams||0)+'g',color:'var(--green)'},
+      {label:'XP',val:`${G.xp}/${G.xpToNext}`,color:'var(--purple)'},
+      {label:'Active Plants',val:totalPlants,color:'var(--green)'},
+      {label:'Clean Grows',val:G.cleanGrows||0,color:'var(--cyan)'},
+      {label:'25%+ Harvests',val:G.harvests25thc||0,color:'var(--gold)'},
+      {label:'Grow Cost',val:Math.round(G.growCost||0)+'¢',color:'var(--red)'},
+      {label:'Season',val:G.season||'SPRING',color:'var(--cyan)'},
+      {label:'Difficulty',val:(G.difficulty||'easy').toUpperCase(),color:G.difficulty==='hard'?'var(--red)':G.difficulty==='normal'?'var(--gold)':'var(--green)'},
+      {label:'Strains Grown',val:G.uniqueStrains?.length||0,color:'var(--green)'},
+    ];
+    profileGrid.innerHTML=stats.map(s=>`
+      <div class="profile-stat-card">
+        <div class="profile-stat-label">${s.label}</div>
+        <div class="profile-stat-val" style="color:${s.color}">${s.val}</div>
+      </div>`).join('');
+  }
+  if(statusGrid){
+    const entries=Object.entries(G.bestGrows||{});
+    if(entries.length===0){statusGrid.innerHTML=`<div style="color:var(--muted);font-family:var(--font-hud);font-size:10px;padding:20px">No grows completed yet.</div>`;return;}
+    statusGrid.innerHTML=entries.map(([name,data])=>{
+      const s=STRAINS[name];
+      return `<div class="best-grow-card">
+        <div class="best-grow-strain">${s?.emoji||'🌿'} ${name}</div>
+        <div class="best-grow-record"><span class="bgr-k">BEST THC</span><span class="bgr-v">${data.thc}%</span></div>
+        <div class="best-grow-record"><span class="bgr-k">BEST YIELD</span><span class="bgr-v">${data.yield}g</span></div>
+        <div class="best-grow-record"><span class="bgr-k">BEST HEALTH</span><span class="bgr-v">${data.health}%</span></div>
+        <div class="best-grow-record"><span class="bgr-k">DATE</span><span class="bgr-v">${data.date}</span></div>
+        <div class="best-grow-record"><span class="bgr-k">RARITY</span><span class="bgr-v" style="color:${RARITY_CONFIG[data.rarity||'Standard']?.color||'var(--muted)'}">${data.rarity||'Standard'}</span></div>
+      </div>`;
+    }).join('');
+  }
+}
+
+function renderEventLog(){
+  const list=document.getElementById('event-log-list');
+  if(!list||!G)return;
+  const filter=document.getElementById('log-filter')?.value||'all';
+  let logs=[...(G.eventLog||[])].reverse().slice(0,80);
+  if(filter!=='all') logs=logs.filter(e=>e.type===filter);
+  if(logs.length===0){list.innerHTML=`<div style="color:var(--muted);font-family:var(--font-hud);font-size:10px;padding:16px">No events${filter!=='all'?' of this type':''} yet.</div>`;return;}
+  list.innerHTML=logs.map(e=>`
+    <div class="event-entry ${e.type}">
+      <div class="event-dot ${e.type}"></div>
+      <div class="event-text">${e.msg}</div>
+      <div class="event-time">${e.time}</div>
+    </div>`).join('');
+}
+
+function renderScoreboard(){
+  const list=document.getElementById('scoreboard-list');
+  const strainFilter=document.getElementById('score-strain-filter');
+  const metricFilter=document.getElementById('score-metric-filter');
+  if(!list||!G)return;
+
+  // Populate strain filter
+  if(strainFilter&&strainFilter.options.length<=1){
+    Object.keys(STRAINS).forEach(s=>{
+      const opt=document.createElement('option');
+      opt.value=s;opt.textContent=s;
+      strainFilter.appendChild(opt);
+    });
+  }
+
+  const strain=strainFilter?.value||'all';
+  const metric=metricFilter?.value||'thc';
+  const scoreboard=G.scoreboard||{};
+
+  let entries=[];
+  if(strain==='all'){
+    Object.entries(scoreboard).forEach(([sName,arr])=>{
+      arr.forEach(e=>entries.push({...e,strainName:sName}));
+    });
+  } else {
+    entries=(scoreboard[strain]||[]).map(e=>({...e,strainName:strain}));
+  }
+  entries.sort((a,b)=>b[metric]-a[metric]);
+  entries=entries.slice(0,20);
+
+  if(entries.length===0){list.innerHTML=`<div style="color:var(--muted);font-family:var(--font-hud);font-size:10px;padding:16px">No scores yet. Complete a grow to appear here!</div>`;return;}
+  list.innerHTML=entries.map((e,i)=>{
+    const rankCls=i===0?'gold':i===1?'silver':i===2?'bronze':'';
+    return `<div class="score-row">
+      <span class="score-rank ${rankCls}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</span>
+      <div>
+        <div class="score-name">${e.username||'Unknown'}</div>
+        <div class="score-strain">${e.strainName}</div>
+      </div>
+      <div class="score-thc">${e.thc}%</div>
+      <div class="score-yield">${e.weight}g</div>
+      <span class="score-trophy">${i<3?'🏆':''}</span>
+    </div>`;
+  }).join('');
+}
+
+function logEvent(type,msg){
+  if(!G)return;
+  G.eventLog=G.eventLog||[];
+  G.eventLog.push({type,msg,time:new Date().toLocaleTimeString()});
+  if(G.eventLog.length>300) G.eventLog=G.eventLog.slice(-300);
+  if(document.getElementById('tab-events')?.classList.contains('active')) renderEventLog();
+}
+
+function clearLog(){
+  if(!G)return;
+  G.eventLog=[];
+  renderEventLog();
+  saveGame();
+}
+
+// ================================================================
+// ENV CONTROLS
+// ================================================================
+function updateEnvCtrl(key,val){
+  if(!G)return;
+  G.env=G.env||{};
+  if(key==='light'){
+    G.env.lightPct=parseInt(val);
+    document.getElementById('ctrl-light-val').textContent=val+'%';
+    const note=document.getElementById('ctrl-light-note');
+    if(note)note.textContent=val>90?'⚠️ High intensity — watch temps & lifespan':val>60?'Good range for veg/flower':'Low light — seedlings only';
+  } else if(key==='humid'){
+    G.env.humidTarget=parseInt(val);
+    document.getElementById('ctrl-humid-val').textContent=val+'%';
+    const note=document.getElementById('ctrl-humid-note');
+    if(note)note.textContent=val>70?'⚠️ High — mildew risk in flower':val>50?'Good for veg':'Low — stress risk for seedlings';
+  } else if(key==='temp'){
+    G.env.tempTarget=parseInt(val);
+    document.getElementById('ctrl-temp-val').textContent=val+'°C';
+    const note=document.getElementById('ctrl-temp-note');
+    if(note)note.textContent=val>30?'⚠️ Hot — check AC & fan':val>22?'Good range':'Too cold — stunted growth';
+  } else if(key==='lightheight'){
+    G.env.lightHeightIn=parseInt(val);
+    document.getElementById('ctrl-lightheight-val').textContent=val+'"';
+    const note=document.getElementById('ctrl-lightheight-note');
+    if(note)note.textContent=val<12?'⚠️ TOO CLOSE — burn risk!':val<18?'Close — watch canopy':val>36?'Far — reduced intensity':'Good height';
+  } else if(key==='co2target'){
+    G.env.co2Target=parseInt(val);
+    document.getElementById('ctrl-co2-val').textContent=val+'ppm';
+  }
+  updateEnvDisplay();
+  saveGame();
+}
+
+// ================================================================
+// UI UTILITIES
+// ================================================================
+function switchTab(name){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+  const panel=document.getElementById('tab-'+name);
+  if(panel) panel.classList.add('active');
+  const navBtn=document.getElementById('nav-'+name);
+  if(navBtn) navBtn.classList.add('active');
+  // Refresh the relevant tab
+  if(name==='grow'){renderGrow();updateEnvDisplay();}
+  else if(name==='seeds')renderSeeds();
+  else if(name==='shop')renderShop();
+  else if(name==='vault')renderVault();
+  else if(name==='market')renderMarket();
+  else if(name==='missions')renderMissions();
+  else if(name==='status')renderStatus();
+  else if(name==='events')renderEventLog();
+  else if(name==='scoreboard')renderScoreboard();
+  else if(name==='mailbox')renderMailbox();
+}
+
+function closeModal(id){
+  document.getElementById(id)?.classList.remove('open');
+}
+
+function showToast(msg,type='ok'){
+  const c=document.getElementById('toast');
+  if(!c)return;
+  const el=document.createElement('div');
+  el.className=`toast-msg ${type}`;
+  el.textContent=msg;
+  c.appendChild(el);
+  setTimeout(()=>el.remove(),3200);
+}
+
+function getPlant(id){
+  for(const room of Object.values(G.rooms||{})){
+    const p=(room.plants||[]).find(p=>p.id===id);
+    if(p)return p;
+  }
+  return null;
+}
+
+function findPlantRoom(id){
+  for(const [roomId,room] of Object.entries(G.rooms||{})){
+    if((room.plants||[]).find(p=>p.id===id))return roomId;
+  }
+  return null;
+}
+
+function generateLoginParticles(){
+  const container=document.getElementById('login-particles');
+  if(!container)return;
+  container.innerHTML='';
+  for(let i=0;i<20;i++){
+    const p=document.createElement('div');
+    p.className='login-particle';
+    p.style.cssText=`left:${Math.random()*100}%;animation-duration:${4+Math.random()*8}s;animation-delay:${Math.random()*4}s;width:${1+Math.random()*3}px;height:${1+Math.random()*3}px`;
+    container.appendChild(p);
+  }
+}
+
+// ================================================================
+// INIT
+// ================================================================
+// Missions timer update
+setInterval(()=>{
+  if(!G)return;
+  const timerEl=document.getElementById('missions-timer');
+  if(timerEl&&G.dailyResetTime){
+    const remaining=Math.max(0,G.dailyResetTime-Date.now());
+    const h=Math.floor(remaining/3600000);
+    const m=Math.floor((remaining%3600000)/60000);
+    const s=Math.floor((remaining%60000)/1000);
+    timerEl.textContent=`${h}h ${m}m ${s}s`;
+  }
+  checkDailyReset();
+},1000);
+
+window.addEventListener('load',()=>{
+  const lastUser=localStorage.getItem('nb_last_user');
+  if(lastUser){
+    const accounts=getAccounts();
+    if(accounts[lastUser]){
+      startGame(lastUser);
+      return;
+    }
+  }
+});
+
+window.addEventListener('beforeunload',saveGame);
+window.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='hidden') saveGame();
+});
+
+console.log('%c🌿 NOYES BOYS GROW-OFF v2.0 loaded','color:#4ade80;font-family:monospace;font-size:14px');
+</script>
+</body>
+</html>
