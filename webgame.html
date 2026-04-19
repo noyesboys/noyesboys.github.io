@@ -5259,24 +5259,144 @@ window.addEventListener('load', ()=>{
   }
 });
 </script>
+
 <script>
 // ============================================================
-// PART 6 OF 6 — FINAL HELPERS, MISSING RENDERS, CLOSE
-// Paste immediately after Part 5's closing </script>
+// PART 6 OF 6 — FINAL HELPERS & FIXES (REVISED)
+// Paste immediately after Part 5's closing 
 // ============================================================
 
-// ===== SPRAY TARGET LIST (rendered when modal opens) =====
-document.addEventListener('click', function(e) {
-  if (e.target.closest('#sb-spray') || e.target.closest('[onclick*="modal-spray"]')) {
-    setTimeout(renderSprayTargets, 50);
-  }
-});
+// ===== SAFE GUARD: ensure GS always exists before any render =====
+if (typeof GS === 'undefined') window.GS = {};
+if (typeof BUYERS === 'undefined') window.BUYERS = [];
 
+// ===== FIXED LOGIN — replaces Part 5 versions in-place =====
+// (Part 5 declared these as function declarations so we can safely redefine)
+
+function doLogin() {
+  const user = document.getElementById('li-user')?.value.trim();
+  const pass = document.getElementById('li-pass')?.value;
+  const err  = document.getElementById('li-err');
+  if (!user || !pass) { if (err) err.textContent = 'Enter username and password.'; return; }
+
+  // Mod bypass
+  if (user === MOD_USER && pass === MOD_PASS) { loginSuccess(user, true); return; }
+
+  let accounts = {};
+  try { accounts = JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || '{}'); } catch(e) {}
+
+  if (!accounts[user]) { if (err) err.textContent = 'Account not found.'; return; }
+  if (accounts[user].passwordHash !== simpleHash(pass)) {
+    if (err) err.textContent = 'Wrong password.';
+    return;
+  }
+  loginSuccess(user, false);
+}
+
+function doRegister() {
+  const user  = document.getElementById('reg-user')?.value.trim();
+  const pass  = document.getElementById('reg-pass')?.value;
+  const pass2 = document.getElementById('reg-pass2')?.value;
+  const err   = document.getElementById('reg-err');
+  if (!user || user.length < 3) { if (err) err.textContent = 'Username must be at least 3 characters.'; return; }
+  if (!pass || pass.length < 6) { if (err) err.textContent = 'Password must be at least 6 characters.'; return; }
+  if (pass !== pass2)           { if (err) err.textContent = 'Passwords do not match.'; return; }
+
+  let accounts = {};
+  try { accounts = JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || '{}'); } catch(e) {}
+  if (accounts[user]) { if (err) err.textContent = 'Username already taken.'; return; }
+
+  const state       = defaultState(user, selectedDiff || 'easy');
+  state.passwordHash = simpleHash(pass);
+  state.seedPhrase   = generateSeedPhrase();
+  accounts[user]     = state;
+  try { localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts)); } catch(e) {}
+
+  toast('Account created! 🌿', 'ok', 3000);
+  loginSuccess(user, false);
+}
+
+function doRecover() {
+  const phrase = document.getElementById('rec-seed')?.value.trim();
+  const err    = document.getElementById('rec-err');
+  if (!phrase) { if (err) err.textContent = 'Enter your seed phrase.'; return; }
+  let accounts = {};
+  try { accounts = JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || '{}'); } catch(e) {}
+  const found = Object.entries(accounts).find(([, v]) => v.seedPhrase === phrase);
+  if (!found) { if (err) err.textContent = 'Seed phrase not found on this device.'; return; }
+  loginSuccess(found[0], false);
+}
+
+function loginSuccess(username, isMod = false) {
+  try {
+    const saved = loadGame(username);
+    if (saved) {
+      GS = saved;
+    } else {
+      GS = defaultState(username, selectedDiff || 'easy');
+      GS.passwordHash = simpleHash('tnb123');
+    }
+    if (isMod) GS.isMod = true;
+    GS.username  = username;
+    GS.lastSeen  = GS.lastSeen || Date.now();
+    if (!GS.rooms  || GS.rooms.length  === 0) GS.rooms  = [defaultRoom(1)];
+    if (!GS.plants)  GS.plants  = [];
+    if (!GS.curing)  GS.curing  = [];
+    if (!GS.vault)   GS.vault   = [];
+    if (!GS.seeds)   GS.seeds   = {};
+    if (!GS.gear)    GS.gear    = defaultGear();
+    if (!GS.mailbox) GS.mailbox = [];
+    if (!GS.stats)   GS.stats   = defaultStats();
+    if (!GS.bredStrains)   GS.bredStrains   = [];
+    if (!GS.blackMarket)   GS.blackMarket   = [];
+    if (!GS.usedCodes)     GS.usedCodes     = [];
+    if (!GS.growoffHistory) GS.growoffHistory = [];
+    if (!GS.eventLog)      GS.eventLog      = [];
+    GS.activeRoom = GS.activeRoom || 0;
+
+    // Welcome mail for brand new accounts
+    if (GS.mailbox.length === 0) {
+      GS.mailbox.push({
+        id: 'welcome',
+        from: 'The Noyes Boys',
+        body: 'Welcome to the Grow-Off! Type TESTPACK in the Seeds tab to claim a free TestStrain ×5 pack. Good luck grower! 🌿',
+        ts: Date.now(),
+        read: false
+      });
+    }
+
+    initBuyers();
+    catchupOffline();
+    saveGame();
+
+    // Store last user
+    try { localStorage.setItem('nbg_lastUser_v3', username); } catch(e) {}
+
+    showScreen('game');
+    showTab('grow');
+    renderHeader();
+    startTick();
+    spawnLoginParticles();
+
+  } catch(err) {
+    console.error('loginSuccess error:', err);
+    const errEl = document.getElementById('li-err') || document.getElementById('reg-err');
+    if (errEl) errEl.textContent = 'Login error — check console.';
+  }
+}
+
+function doLogout() {
+  stopTick();
+  saveGame();
+  GS = {};
+  showScreen('login');
+}
+
+// ===== SPRAY TARGET LIST =====
 function renderSprayTargets() {
   const room = GS.rooms ? (GS.rooms[GS.activeRoom] || GS.rooms[0]) : null;
   if (!room) return;
 
-  // Lights warning
   const warnEl = document.getElementById('spray-lights-warning');
   const offEl  = document.getElementById('spray-lights-off-note');
   if (warnEl) warnEl.classList.toggle('hidden', !room.lightsOn);
@@ -5300,20 +5420,22 @@ function renderSprayTargets() {
     </div>`).join('');
 }
 
-// ===== RANDOM EVENTS (meteor / golden leaf) =====
-const randomEventChances = { meteor: 1/500, goldenLeaf: 1/50 };
+document.addEventListener('click', function(e) {
+  if (e.target.closest('#sb-spray') || (e.target.getAttribute('onclick') || '').includes('modal-spray')) {
+    setTimeout(renderSprayTargets, 60);
+  }
+});
+
+// ===== RANDOM EVENTS =====
 let sessionEventsFired = { meteor: false, goldenLeaf: false };
+const randomEventChances = { meteor: 1/500, goldenLeaf: 1/50 };
 
 function checkRandomEvents() {
   if (!GS || !GS.username) return;
-
-  // Meteor — 1/500 chance per tick, once per session
   if (!sessionEventsFired.meteor && Math.random() < randomEventChances.meteor) {
     sessionEventsFired.meteor = true;
     spawnMeteor();
   }
-
-  // Golden leaf — 1/50 chance per tick, once per session
   if (!sessionEventsFired.goldenLeaf && Math.random() < randomEventChances.goldenLeaf) {
     sessionEventsFired.goldenLeaf = true;
     spawnGoldenLeaf();
@@ -5324,13 +5446,11 @@ function spawnMeteor() {
   const overlay = document.getElementById('randomEventOverlay');
   if (!overlay) return;
   const el = document.createElement('div');
-  el.className = 'clickable-event meteor-anim';
-  el.innerHTML = '☄️';
-  el.style.cssText = `font-size:40px;top:${10 + Math.random()*30}%;left:-60px;cursor:pointer;position:absolute;z-index:801`;
-  el.title = 'Catch the meteor! Click fast!';
+  el.style.cssText = `font-size:40px;position:absolute;top:${10+Math.random()*30}%;left:-60px;cursor:pointer;z-index:801;animation:meteorFly 3.5s ease-in forwards`;
+  el.textContent = '☄️';
+  el.title = 'Catch the meteor!';
   el.onclick = () => {
     el.remove();
-    // Give an Alienoyes Kush seed
     if (!GS.seeds) GS.seeds = {};
     GS.seeds['Alienoyes Kush'] = (GS.seeds['Alienoyes Kush'] || 0) + 1;
     toast('☄️ Caught the meteor! +1 Alienoyes Kush seed!', 'special', 5000);
@@ -5338,7 +5458,6 @@ function spawnMeteor() {
     saveGame(); renderSeeds();
   };
   overlay.appendChild(el);
-  // Auto-remove after 4s
   setTimeout(() => el.remove(), 4000);
 }
 
@@ -5346,73 +5465,101 @@ function spawnGoldenLeaf() {
   const overlay = document.getElementById('randomEventOverlay');
   if (!overlay) return;
   const el = document.createElement('div');
-  el.className = 'clickable-event';
-  el.innerHTML = '🍃';
-  el.style.cssText = `font-size:32px;top:${20 + Math.random()*50}%;left:${10 + Math.random()*70}%;cursor:pointer;position:absolute;z-index:801;animation:floatHoliday 2s ease-in-out infinite;transition:.15s`;
-  el.title = 'Golden leaf! Click for coins!';
+  el.style.cssText = `font-size:32px;position:absolute;top:${20+Math.random()*50}%;left:${10+Math.random()*70}%;cursor:pointer;z-index:801;animation:floatHoliday 2s ease-in-out infinite`;
+  el.textContent = '🍃';
+  el.title = 'Golden leaf! +500¢';
   el.onclick = () => {
     el.remove();
     GS.coins += 500;
     toast('🍃 Golden Leaf! +500¢', 'special', 4000);
-    addLog('Found a golden leaf! +500¢ 💰', 'success');
+    addLog('Found a golden leaf! +500¢', 'success');
     saveGame(); renderHeader();
   };
   overlay.appendChild(el);
   setTimeout(() => el.remove(), 8000);
 }
 
-// Hook random events into tick
-const _origGameTick = gameTick;
-gameTick = function() {
-  _origGameTick();
+// Inject random events and shield checks into tick without breaking chain
+const _nativeGameTick = window.gameTick;
+window.gameTick = function() {
+  if (_nativeGameTick) _nativeGameTick();
   checkRandomEvents();
+  checkInspectShields();
+  tickReservoir();
+  tickCO2();
 };
 
-// ===== DISEASE ALERT TRIGGER =====
-// Called from tickPlant when a new disease appears
+// ===== DISEASE ALERT =====
 function triggerDiseaseAlert(plant, eventName) {
-  if (!plant || !eventName) return;
-  const icons = { MILDEW: '🍄', SPIDER_MITES: '🕷️', APHIDS: '🐛' };
-  const names = { MILDEW: 'Powdery Mildew', SPIDER_MITES: 'Spider Mites', APHIDS: 'Aphids' };
-  document.getElementById('disease-alert-icon').textContent  = icons[eventName] || '🦠';
-  document.getElementById('disease-alert-title').textContent = names[eventName] || 'Disease Detected';
-  document.getElementById('disease-alert-body').textContent  =
-    `${plant.strainName} has ${names[eventName] || eventName}! Left untreated it will spread to other plants in this room within hours and damage health.`;
+  const icons = { MILDEW:'🍄', SPIDER_MITES:'🕷️', APHIDS:'🐛' };
+  const names = { MILDEW:'Powdery Mildew', SPIDER_MITES:'Spider Mites', APHIDS:'Aphids' };
+  const iconEl  = document.getElementById('disease-alert-icon');
+  const titleEl = document.getElementById('disease-alert-title');
+  const bodyEl  = document.getElementById('disease-alert-body');
+  if (iconEl)  iconEl.textContent  = icons[eventName] || '🦠';
+  if (titleEl) titleEl.textContent = names[eventName] || 'Disease Detected';
+  if (bodyEl)  bodyEl.textContent  = `${plant.strainName} has ${names[eventName]||eventName}! Treat it fast before it spreads — hit SPRAY NOW.`;
   openModal('modal-disease-alert');
 }
 
-// Patch tickPlant to call alert on new disease
-const _origTickPlant = tickPlant;
-tickPlant = function(plant, room, strain, actual, gameMinutes) {
-  const evtsBefore = [...(plant.events || [])];
-  _origTickPlant(plant, room, strain, actual, gameMinutes);
-  const evtsAfter = plant.events || [];
-  evtsAfter.forEach(evt => {
-    if (!evtsBefore.includes(evt) && ['MILDEW','SPIDER_MITES','APHIDS'].includes(evt)) {
-      triggerDiseaseAlert(plant, evt);
+// ===== INSPECT SHIELD EXPIRY =====
+function checkInspectShields() {
+  if (!GS.plants) return;
+  const now = Date.now();
+  GS.plants.forEach(plant => {
+    if (plant.inspectShield && plant.inspectShieldExpires && now > plant.inspectShieldExpires) {
+      plant.inspectShield        = false;
+      plant.inspectArea          = null;
+      plant.inspectShieldExpires = null;
     }
   });
-};
+}
 
-// ===== WEED HOVER BONUS =====
-// Periodic hover bonus on plant art area
+// ===== RESERVOIR DRAIN =====
+function tickReservoir() {
+  const res = GS.gear?.reservoir;
+  if (!res) return;
+  res.level = Math.max(0, (res.level || 100) - 0.0005);
+  if (res.level < 15 && !res.lowAlertSent) {
+    res.lowAlertSent = true;
+    toast('🛢️ Reservoir low — refill soon!', 'warn', 5000);
+  }
+  if (res.level >= 20) res.lowAlertSent = false;
+}
+
+// ===== CO2 DRAIN =====
+function tickCO2() {
+  const tank = GS.gear?.co2Tank;
+  const room = GS.rooms ? (GS.rooms[GS.activeRoom] || GS.rooms[0]) : null;
+  if (!tank || !room) return;
+  if (room.envTarget?.co2 > 800 && tank.level > 0) {
+    tank.level = Math.max(0, (tank.level || 100) - 0.003);
+    if (tank.level <= 0) {
+      room.envTarget.co2 = 800;
+      toast('🫧 CO₂ tank empty! Buy a refill from the shop.', 'warn', 5000);
+    }
+  }
+}
+
+// ===== HOVER BONUS =====
 const hoverCooldowns = {};
 document.addEventListener('mousemove', function(e) {
+  if (!GS || !GS.plants) return;
   const artArea = e.target.closest('.plant-art-area');
   if (!artArea) return;
-  const plantId = artArea.id?.replace('art-','');
+  const plantId = artArea.id?.replace('art-', '');
   if (!plantId) return;
   const now = Date.now();
-  const cd = 20 * 60 * 1000 + Math.random() * 10 * 60 * 1000; // 20–30 min
+  const cd  = (20 + Math.random() * 10) * 60 * 1000;
   if (hoverCooldowns[plantId] && now - hoverCooldowns[plantId] < cd) return;
-  if (Math.random() > 0.003) return; // ~0.3% chance per mousemove in range
+  if (Math.random() > 0.002) return;
   hoverCooldowns[plantId] = now;
-  const plant = GS.plants?.find(p => p.id === plantId);
+  const plant = GS.plants.find(p => p.id === plantId);
   if (!plant) return;
   const bonuses = [
-    { msg: '🌬️ Gentle breeze bonus! +0.2% yield', effect: () => plant.yieldBonus = (plant.yieldBonus||0) + 0.2 },
-    { msg: '✨ Trichome shimmer! +0.1% THC potential', effect: () => plant.thcBonus = (plant.thcBonus||0) + 0.1 },
-    { msg: '🌿 Happy plant! +1 health', effect: () => plant.health = Math.min(100, (plant.health||100) + 1) },
+    { msg:'🌬️ Gentle breeze! +0.2% yield',    effect:() => plant.yieldBonus = (plant.yieldBonus||0)+0.2 },
+    { msg:'✨ Trichome shimmer! +1 health',     effect:() => plant.health = Math.min(100,(plant.health||100)+1) },
+    { msg:'🌿 Happy vibes! +0.1% THC potential',effect:() => plant.thcBonus = (plant.thcBonus||0)+0.1 },
   ];
   const b = bonuses[Math.floor(Math.random() * bonuses.length)];
   b.effect();
@@ -5420,194 +5567,110 @@ document.addEventListener('mousemove', function(e) {
   saveGame();
 });
 
-// ===== INSPECT SHIELD EXPIRY CHECK =====
-function checkInspectShields() {
-  const now = Date.now();
-  (GS.plants || []).forEach(plant => {
-    if (plant.inspectShield && plant.inspectShieldExpires && now > plant.inspectShieldExpires) {
-      plant.inspectShield    = false;
-      plant.inspectArea      = null;
-      plant.inspectShieldExpires = null;
-    }
-  });
-}
-
-// ===== RESERVOIR DRAIN TICK =====
-function tickReservoir(gameMinutes) {
-  const res = GS.gear?.reservoir;
-  if (!res) return;
-  // Reservoir drains slightly over time (evaporation ~1% per game day)
-  res.level = Math.max(0, (res.level || 100) - 0.001 * gameMinutes);
-  if (res.level < 15 && !res.lowAlertSent) {
-    res.lowAlertSent = true;
-    toast('🛢️ Reservoir is running low — refill soon!', 'warn', 5000);
-    addLog('Reservoir level below 15% — needs refill', 'warn');
-  }
-  if (res.level > 20) res.lowAlertSent = false;
-}
-
-// ===== CO2 TANK DRAIN =====
-function tickCO2(room, gameMinutes) {
-  const tank = GS.gear?.co2Tank;
-  if (!tank || !room.envActual) return;
-  if (room.envTarget.co2 > 800 && tank.level > 0) {
-    tank.level = Math.max(0, (tank.level || 100) - 0.005 * gameMinutes);
-    if (tank.level <= 0) {
-      room.envTarget.co2 = 800;
-      toast('🫧 CO₂ tank empty! Refill from shop.', 'warn', 5000);
-    }
-  }
-}
-
-// Inject reservoir + co2 into gameTick
-const _origGameTick2 = gameTick;
-gameTick = function() {
-  _origGameTick2();
-  checkInspectShields();
-  const room = GS.rooms ? (GS.rooms[GS.activeRoom] || GS.rooms[0]) : null;
-  const realMs   = TICK_MS;
-  const gameMins = (realMs / 60000) * GAME_SPEED;
-  tickReservoir(gameMins);
-  if (room) tickCO2(room, gameMins);
-};
-
-// ===== MISSING MODAL OPENERS =====
-function openHangDryModal(batchId) {
-  const batch = (GS.curing || []).find(c => c.id === batchId);
-  if (!batch) return;
-  const remaining = Math.max(0, 48 - (Date.now() - batch.startTs) / 3600000);
-  document.getElementById('hangdry-timer').textContent = formatHours(remaining);
-  document.getElementById('hangdry-name').textContent  = batch.name + ' · ' + batch.grams + 'g';
-  openModal('modal-hangdry');
-}
-
-// ===== LEVEL XP TABLE =====
-function getXPForLevel(level) { return level * 500; }
-
-// ===== SCOREBOARD (local) =====
+// ===== SCOREBOARD =====
 function renderScoreboard() {
   const wrap = document.getElementById('scoreboardWrap');
   if (!wrap) return;
-  // Pull all local accounts and sort by best grow score
-  const accounts = JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || '{}');
-  const entries = Object.entries(accounts).map(([name, data]) => ({
-    name, score: data.seasonBestScore || 0,
-    strain: (data.bestGrows || [])[0]?.strainName || '—',
-    thc:    (data.bestGrows || [])[0]?.thc || 0,
-    yield:  (data.bestGrows || [])[0]?.grams || 0,
-  })).filter(e => e.score > 0).sort((a, b) => b.score - a.score).slice(0, 10);
+  let accounts = {};
+  try { accounts = JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || '{}'); } catch(e) {}
+  const entries = Object.entries(accounts)
+    .map(([name, data]) => ({
+      name,
+      score:  data.seasonBestScore || 0,
+      strain: (data.bestGrows || [])[0]?.strainName || '—',
+      thc:    (data.bestGrows || [])[0]?.thc || 0,
+      grams:  (data.bestGrows || [])[0]?.grams || 0,
+    }))
+    .filter(e => e.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 10);
 
   if (entries.length === 0) {
     wrap.innerHTML = '<div style="color:var(--muted);font-size:10px;padding:8px">No scores yet — complete a grow to appear here!</div>';
     return;
   }
-  const medals = ['🥇', '🥈', '🥉'];
+  const medals = ['🥇','🥈','🥉'];
   wrap.innerHTML = entries.map((e, i) => `
     <div class="score-row">
-      <span class="score-rank ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${medals[i] || (i+1)}</span>
+      <span class="score-rank ${i===0?'gold':i===1?'silver':i===2?'bronze':''}">${medals[i]||(i+1)}</span>
       <div style="flex:1">
         <div class="score-name">${e.name === GS.username ? '⭐ '+e.name : e.name}</div>
         <div class="score-strain">${e.strain}</div>
       </div>
       <span class="score-thc">${e.thc}%</span>
-      <span class="score-yield">${e.yield}g</span>
-      <span class="score-trophy">${i < 3 ? medals[i] : ''}</span>
+      <span class="score-yield">${e.grams}g</span>
+      <span class="score-trophy">${medals[i]||''}</span>
     </div>`).join('');
 }
 
-// Hook scoreboard into stats render
-const _origRenderStats = renderStats;
-renderStats = function() {
-  _origRenderStats();
+// Hook scoreboard into stats tab render (safe override)
+const _baseRenderStats = renderStats;
+function renderStats() {
+  _baseRenderStats();
   renderScoreboard();
-};
+}
 
-// ===== DIFFICULTY HOVER TOOLTIP =====
-document.addEventListener('DOMContentLoaded', () => {
-  const diffBtn = document.getElementById('sb-diff');
-  if (diffBtn) {
-    diffBtn.addEventListener('mouseenter', () => {
-      const hasPlants = GS.plants && GS.plants.length > 0;
-      diffBtn.title = hasPlants
-        ? 'Only changeable with no plants growing'
-        : 'Change difficulty';
-    });
-  }
-});
+// ===== HANG DRY MODAL =====
+function openHangDryModal(batchId) {
+  const batch = (GS.curing || []).find(c => c.id === batchId);
+  if (!batch) return;
+  const remaining = Math.max(0, 48 - (Date.now() - batch.startTs) / 3600000);
+  const timerEl = document.getElementById('hangdry-timer');
+  const nameEl  = document.getElementById('hangdry-name');
+  if (timerEl) timerEl.textContent = formatHours(remaining);
+  if (nameEl)  nameEl.textContent  = `${batch.name} · ${batch.grams}g`;
+  openModal('modal-hangdry');
+}
 
-// ===== AUTO-SAVE EVERY 30 REAL SECONDS =====
-setInterval(() => { if (GS && GS.username) saveGame(); }, 30000);
+// ===== RESERVOIR NUTES SAVE =====
+function setReservoirNutes() {
+  const res = GS.gear?.reservoir;
+  if (!res) { closeModal('modal-water'); return; }
+  const base   = parseInt(document.getElementById('nute-base')?.value)   || 0;
+  const grow   = parseInt(document.getElementById('nute-grow')?.value)   || 0;
+  const bloom  = parseInt(document.getElementById('nute-bloom')?.value)  || 0;
+  const calmag = parseInt(document.getElementById('nute-calmag')?.value) || 0;
+  res.ppm       = base + grow + bloom + calmag;
+  res.nutrients = { base, grow, bloom, calmag };
+  toast(`Reservoir set to ${res.ppm} ppm`, 'ok');
+  closeModal('modal-water');
+  saveGame(); renderGearPanel();
+}
 
-// ===== LAST USER PERSISTENCE =====
-const _origLoginSuccess = loginSuccess;
-loginSuccess = function(username, isMod = false) {
-  localStorage.setItem('nbg_lastUser_v3', username);
-  _origLoginSuccess(username, isMod);
-};
+// ===== VAULT → BLACK MARKET HELPER =====
+function listVaultOnBM(vaultId) {
+  showTab('bmarket');
+  setTimeout(() => {
+    const listTab = document.querySelector('.bm-tab:nth-child(3)');
+    showBmTab('list', listTab);
+    const typeEl = document.getElementById('bm-item-type');
+    if (typeEl) { typeEl.value = 'bud'; updateBmListForm(); }
+    setTimeout(() => {
+      const sel = document.getElementById('bm-item-select');
+      if (sel) {
+        const opt = [...sel.options].find(o => o.value === vaultId);
+        if (opt) sel.value = vaultId;
+      }
+    }, 120);
+  }, 120);
+}
 
-// ===== KEYBOARD SHORTCUTS =====
-document.addEventListener('keydown', e => {
-  if (!GS || !GS.username) return;
-  // Escape closes any open modal
-  if (e.key === 'Escape') {
-    document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
-    document.querySelectorAll('.sidebar-panel.open').forEach(p => p.classList.remove('open'));
-  }
-  // G = Grow tab, S = Seeds, V = Vault, M = Market
-  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-  if (e.key === 'g') showTab('grow');
-  if (e.key === 's') showTab('seeds');
-  if (e.key === 'v') showTab('vault');
-  if (e.key === 'm') showTab('market');
-});
-
-// ===== PANEL CLICK-OUTSIDE CLOSE =====
-document.addEventListener('click', e => {
-  const panels = document.querySelectorAll('.sidebar-panel.open');
-  if (panels.length === 0) return;
-  const clickedInsidePanel  = e.target.closest('.sidebar-panel');
-  const clickedSidebarBtn   = e.target.closest('.sidebar-circles');
-  if (!clickedInsidePanel && !clickedSidebarBtn) {
-    panels.forEach(p => p.classList.remove('open'));
-    document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
-  }
-});
-
-// ===== MODAL CLICK-OUTSIDE CLOSE (non-critical modals) =====
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-  overlay.addEventListener('click', e => {
-    if (e.target === overlay) {
-      // Don't close harvest or sell on outside click (accidental loss prevention)
-      const safe = ['modal-harvest','modal-sell','modal-remove-plant','modal-flip-flower'];
-      if (!safe.includes(overlay.id)) overlay.classList.remove('open');
-    }
-  });
-});
-
-// ===== MOBILE: PREVENT SCROLL ON GAME SCREEN =====
-document.addEventListener('touchmove', e => {
-  if (e.target.closest('.sidebar-panel') || e.target.closest('.game-content') ||
-      e.target.closest('.modal-box')) return;
-}, { passive: true });
-
-// ===== PLANT IMAGE ERROR FALLBACK =====
-// If an image 404s, show a placeholder plant emoji instead
+// ===== IMAGE ERROR FALLBACK =====
 document.addEventListener('error', function(e) {
   if (e.target.tagName === 'IMG' && e.target.classList.contains('plant-img')) {
     e.target.style.display = 'none';
     const art = e.target.closest('.plant-art-area');
     if (art && !art.querySelector('.plant-img-fallback')) {
       const fb = document.createElement('div');
-      fb.className = 'plant-img-fallback';
-      fb.style.cssText = 'font-size:60px;position:relative;z-index:2;padding-bottom:10px';
+      fb.className  = 'plant-img-fallback';
+      fb.style.cssText = 'font-size:64px;position:relative;z-index:2;padding-bottom:10px;user-select:none';
       fb.textContent = '🌿';
       art.appendChild(fb);
     }
   }
 }, true);
 
-// ===== NUTE SLIDER DISPLAY SYNC =====
-// Sync range → number input on sell modal
+// ===== SELL SLIDER SYNC =====
 document.addEventListener('input', function(e) {
   if (e.target.id === 'sell-grams-slider') {
     const inp = document.getElementById('sell-grams-input');
@@ -5621,49 +5684,7 @@ document.addEventListener('input', function(e) {
   }
 });
 
-// ===== CURING SECTION VISIBILITY =====
-function updateCuringSectionVisibility() {
-  const section = document.getElementById('curingSection');
-  if (!section) return;
-  section.style.display = (GS.curing && GS.curing.length > 0) ? 'block' : 'none';
-}
-
-// ===== MISSING: refillReservoir nute setting =====
-function setReservoirNutes() {
-  const res = GS.gear?.reservoir;
-  if (!res) return;
-  const base   = parseInt(document.getElementById('nute-base')?.value)   || 0;
-  const grow   = parseInt(document.getElementById('nute-grow')?.value)   || 0;
-  const bloom  = parseInt(document.getElementById('nute-bloom')?.value)  || 0;
-  const calmag = parseInt(document.getElementById('nute-calmag')?.value) || 0;
-  res.ppm      = base + grow + bloom + calmag;
-  res.nutrients = { base, grow, bloom, calmag };
-  toast(`Reservoir set to ${res.ppm} ppm`, 'ok');
-  closeModal('modal-water');
-  saveGame(); renderGearPanel();
-}
-
-// ===== MISSING: Black market vault listing helper =====
-function listVaultOnBM(vaultId) {
-  const item = (GS.vault || []).find(v => v.id === vaultId);
-  if (!item) return;
-  showTab('bmarket');
-  setTimeout(() => {
-    showBmTab('list', document.querySelector('.bm-tab'));
-    const typeEl = document.getElementById('bm-item-type');
-    if (typeEl) { typeEl.value = 'bud'; updateBmListForm(); }
-    // Pre-select this vault item
-    setTimeout(() => {
-      const sel = document.getElementById('bm-item-select');
-      if (sel) {
-        const opt = [...sel.options].find(o => o.value === vaultId);
-        if (opt) sel.value = vaultId;
-      }
-    }, 100);
-  }, 100);
-}
-
-// ===== MISSING: Grow-off selected entry helper =====
+// ===== GROW-OFF ROW CLICK =====
 document.addEventListener('click', e => {
   const row = e.target.closest('#growoff-vault-list > div');
   if (!row) return;
@@ -5671,52 +5692,101 @@ document.addEventListener('click', e => {
   if (radio) { radio.checked = true; selectGrowOffEntry(radio.value); }
 });
 
-// ===== MISSING: env chart hover tooltip =====
-document.getElementById('envChartSvg')?.addEventListener('mousemove', function(e) {
-  if (!GS.envHistory || GS.envHistory.length < 2) return;
-  const rect = this.getBoundingClientRect();
+// ===== ENV CHART HOVER TOOLTIP =====
+document.addEventListener('mousemove', function(e) {
+  const svg = e.target.closest('#envChartSvg');
+  if (!svg || !GS.envHistory || GS.envHistory.length < 2) return;
+  const rect = svg.getBoundingClientRect();
   const x    = e.clientX - rect.left;
-  const pct  = x / rect.width;
+  const pct  = Math.max(0, Math.min(1, x / rect.width));
   const hist = GS.envHistory.slice(-72);
   const idx  = Math.min(hist.length - 1, Math.floor(pct * hist.length));
   const h    = hist[idx];
   if (!h) return;
-  const tip  = document.getElementById('envChartTip');
+  const tip = document.getElementById('envChartTip');
   if (!tip) return;
   tip.style.display = 'block';
-  tip.style.left = Math.min(x, rect.width - 110) + 'px';
+  tip.style.left = Math.min(x, rect.width - 120) + 'px';
   tip.style.top  = '0px';
   tip.textContent = `${Math.round(h.temp)}°F · ${Math.round(h.humid)}% · ${new Date(h.ts).toLocaleTimeString()}`;
 });
-document.getElementById('envChartSvg')?.addEventListener('mouseleave', () => {
-  const tip = document.getElementById('envChartTip');
-  if (tip) tip.style.display = 'none';
+document.addEventListener('mouseleave', function(e) {
+  if (e.target.closest('#envChartSvg')) {
+    const tip = document.getElementById('envChartTip');
+    if (tip) tip.style.display = 'none';
+  }
+}, true);
+
+// ===== KEYBOARD SHORTCUTS =====
+document.addEventListener('keydown', e => {
+  if (!GS || !GS.username) return;
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+    document.querySelectorAll('.sidebar-panel.open').forEach(p => p.classList.remove('open'));
+    document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+  }
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+  if (e.key === 'g') showTab('grow');
+  if (e.key === 's') showTab('seeds');
+  if (e.key === 'v') showTab('vault');
+  if (e.key === 'm') showTab('market');
 });
 
-// ===== FINAL INIT SAFETY NET =====
-// Ensure GS is always defined before any render
-window.addEventListener('load', () => {
-  if (typeof GS === 'undefined') window.GS = {};
-  if (typeof BUYERS === 'undefined') window.BUYERS = [];
+// ===== PANEL CLICK-OUTSIDE CLOSE =====
+document.addEventListener('click', e => {
+  if (document.querySelectorAll('.sidebar-panel.open').length === 0) return;
+  if (!e.target.closest('.sidebar-panel') && !e.target.closest('.sidebar-circles')) {
+    document.querySelectorAll('.sidebar-panel.open').forEach(p => p.classList.remove('open'));
+    document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+  }
+});
 
-  // Re-attach modal outside-click listeners (for dynamically open modals)
+// ===== MODAL CLICK-OUTSIDE CLOSE =====
+document.addEventListener('click', e => {
+  if (!e.target.classList.contains('modal-overlay')) return;
+  const safe = ['modal-harvest','modal-sell','modal-remove-plant','modal-flip-flower'];
+  if (!safe.includes(e.target.id)) e.target.classList.remove('open');
+});
+
+// ===== DIFFICULTY BUTTON TOOLTIP =====
+document.addEventListener('mouseover', e => {
+  const btn = e.target.closest('#sb-diff');
+  if (!btn || !GS || !GS.username) return;
+  btn.title = (GS.plants && GS.plants.length > 0)
+    ? 'Only changeable when no plants are growing'
+    : 'Change difficulty';
+});
+
+// ===== AUTO-SAVE =====
+setInterval(() => { if (GS && GS.username) { try { saveGame(); } catch(e) {} } }, 30000);
+
+// ===== INIT ON LOAD =====
+window.addEventListener('load', () => {
+  spawnLoginParticles();
+
+  // Pre-fill username if they logged in before
+  try {
+    const lastUser = localStorage.getItem('nbg_lastUser_v3');
+    if (lastUser) {
+      const el = document.getElementById('li-user');
+      if (el) el.value = lastUser;
+    }
+  } catch(e) {}
+
+  // Re-attach modal close listeners (for safety)
   document.querySelectorAll('.modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', e => {
-      if (e.target === overlay) {
-        const safe = ['modal-harvest','modal-sell','modal-remove-plant','modal-flip-flower'];
-        if (!safe.includes(overlay.id)) overlay.classList.remove('open');
-      }
+      if (e.target !== overlay) return;
+      const safe = ['modal-harvest','modal-sell','modal-remove-plant','modal-flip-flower'];
+      if (!safe.includes(overlay.id)) overlay.classList.remove('open');
     });
   });
-
-  // Particle spawn for login page
-  spawnLoginParticles();
 });
 
 // ===== CONSOLE GREETING =====
 console.log('%c🌿 NOYES BOYS GROW-OFF v3.0', 'color:#4ade80;font-size:18px;font-weight:bold;font-family:monospace');
 console.log('%c58 strains · 696 seed codes · Full breeding system', 'color:#a855f7;font-size:12px');
-console.log('%cBuild complete. All 6 parts loaded.', 'color:#22c55e;font-size:12px');
+console.log('%cAll 6 parts loaded successfully.', 'color:#22c55e;font-size:12px');
 </script>
 </body>
 </html>
