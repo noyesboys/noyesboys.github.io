@@ -5039,25 +5039,36 @@ console.log('%cAll 6 parts loaded successfully. ✅','color:#22c55e;font-size:12
 #plantGrid{display:grid!important}
 .tab-panel.active{display:block!important}
 </style>
+<style>
+/* ── LAYOUT & UI FIXES ── */
+#screen-game { height: 100vh !important; overflow: hidden !important; }
+.game-wrapper { height: 100% !important; min-height: 0 !important; overflow: hidden !important; display: flex !important; flex-direction: column !important; }
+.game-body { min-height: 0 !important; flex: 1 !important; overflow: hidden !important; }
+.game-content { overflow-y: auto !important; height: 100% !important; }
+
+/* Push sidebars down to clear the header */
+.sidebar-circles, .sidebar-panel { top: 92px !important; bottom: 0 !important; }
+
+/* Ensure empty slots render their bounds even if empty */
+.pot-slot.empty-slot { min-height: 240px !important; cursor: pointer !important; display: flex !important; flex-direction: column !important; }
+#plantGrid { display: grid !important; }
+.tab-panel.active { display: block !important; }
+
+/* Hide top-row mail icon */
+.game-nav .nav-tab[data-tab="mail"] { display: none !important; }
+</style>
 
 <script>
 (function() {
 'use strict';
 
 /* ================================================================
-   ROOT FIX: openModal had an infinite-recursion bug.
-   In Part 5, "const _origOpenModal = openModal" ran AFTER
-   "function openModal()" was hoisted, so _origOpenModal pointed
-   to the new openModal, causing infinite recursion.
-   
-   Fix: implement modal open directly, no saved reference needed.
+   1. CORE MODAL & RENDERING FIX
 ================================================================ */
 window.openModal = function(id) {
-  /* Special pre-open logic */
-  if (id === 'modal-plant')       { window._prepPlantModal(); }
-  if (id === 'modal-unlock-room') { try { renderUnlockRoomOptions(); } catch(e){} }
-  if (id === 'modal-spray')       { try { renderSprayTargets();       } catch(e){} }
-
+  if (id === 'modal-plant')       { window._prepPlantModal(null, false); }
+  if (id === 'modal-unlock-room') { try { window.renderUnlockRoomOptions(); } catch(e){} }
+  if (id === 'modal-spray')       { try { window.renderSprayTargets();       } catch(e){} }
   var el = document.getElementById(id);
   if (el) el.classList.add('open');
 };
@@ -5067,19 +5078,9 @@ window.closeModal = function(id) {
   if (el) el.classList.remove('open');
 };
 
-/* ================================================================
-   PLANT MODAL — was broken because:
-   1. openModal('modal-plant') called from the header button didn't
-      populate the strain grid first.
-   2. openPlantModalFor called _origOpenModal (the broken ref).
-   
-   Fix: _prepPlantModal() always runs before the modal opens,
-   and openPlantModal/openPlantModalFor use window.openModal.
-================================================================ */
 window._prepPlantModal = function(strainName, isMale) {
   var GS = window.GS;
   if (!GS) return;
-
   var grid = document.getElementById('plantStrainGrid');
   if (!grid) return;
   grid.innerHTML = '';
@@ -5099,7 +5100,7 @@ window._prepPlantModal = function(strainName, isMale) {
   Object.keys(seeds).forEach(function(name) {
     if (seeds[name] <= 0) return;
     hasSeeds = true;
-    var s = (typeof STRAINS !== 'undefined' && STRAINS[name]) || {};
+    var s = (typeof window.STRAINS !== 'undefined' && window.STRAINS[name]) || {};
     var opt = document.createElement('div');
     opt.className = 'strain-option' + (strainName === name ? ' selected' : '');
     opt.dataset.strain = name;
@@ -5117,404 +5118,158 @@ window._prepPlantModal = function(strainName, isMale) {
   if (!hasSeeds) {
     grid.innerHTML = '<div style="color:var(--muted);font-size:10px;padding:10px;grid-column:span 3">No seeds yet — go to Seeds tab and type TESTPACK to get a free pack!</div>';
   }
-
-  /* Populate room selector */
-  var roomSel = document.getElementById('plantRoomSelect');
-  if (roomSel) {
-    roomSel.innerHTML = '';
-    (GS.rooms || []).forEach(function(r, i) {
-      var cnt = (GS.plants || []).filter(function(p){ return p.roomId === r.id; }).length;
-      var full = cnt >= r.slots;
-      var div = document.createElement('div');
-      div.className = 'room-btn' + (full ? ' locked' : '') + (i === (GS.activeRoom || 0) ? ' active' : '');
-      div.dataset.roomIdx = i;
-      div.onclick = function() {
-        if (full) return;
-        document.querySelectorAll('#plantRoomSelect .room-btn').forEach(function(b){ b.classList.remove('active'); });
-        div.classList.add('active');
-      };
-      div.innerHTML =
-        '<span class="room-btn-icon">🏠</span>' +
-        '<div class="room-btn-info"><div class="room-btn-name">' + r.name + '</div>' +
-        '<div class="room-btn-sub">' + cnt + '/' + r.slots + ' slots used</div></div>';
-      roomSel.appendChild(div);
-    });
-  }
-
-  /* Reset pot size selection */
-  var potOpts = document.querySelectorAll('.pot-size-opt');
-  potOpts.forEach(function(o){ o.classList.remove('selected'); });
-  if (potOpts[2]) potOpts[2].classList.add('selected'); /* default 5gal */
-
-  var noteEl = document.getElementById('plant-modal-note');
-  if (noteEl) noteEl.classList.add('hidden');
 };
 
 window.openPlantModal = function() {
-  window._prepPlantModal(null, false);
-  var el = document.getElementById('modal-plant');
-  if (el) el.classList.add('open');
-};
-
-window.openPlantModalFor = function(strainName, isMale) {
-  window._prepPlantModal(strainName, !!isMale);
-  var el = document.getElementById('modal-plant');
-  if (el) el.classList.add('open');
+  window.openModal('modal-plant');
 };
 
 /* ================================================================
-   FIX THE "+ PLANT SEED" BUTTON IN THE HEADER
-   The HTML has onclick="openModal('modal-plant')" which now calls
-   _prepPlantModal first via our fixed openModal. ✓
+   2. GRADUAL ENVIRONMENT PHYSICS
 ================================================================ */
+window.stepEnvironment = function(room, tickMinutes) {
+  const target = room.envTarget, actual = room.envActual;
+  const rate = 0.005 * tickMinutes; // Slow, gradual interpolation
 
-/* ================================================================
-   RENDER ALL — must not call showTab (which resets sub-nav state)
-================================================================ */
-window.renderAll = function() {
-  var GS = window.GS;
-  if (!GS || !GS.username) return;
-  try { renderHeader(); } catch(e) {}
+  // Lights generate heat (up to +6F)
+  let lightHeat = (target.light || 100) * 0.06;
+  if (!room.lightsOn) lightHeat = 0;
 
-  var activePanel = document.querySelector('.tab-panel.active');
-  if (!activePanel) return;
-  var id = activePanel.id.replace('tab-', '');
+  let tTemp = target.temp + lightHeat;
+  let tHumid = target.humid;
 
-  var fns = {
-    grow:    function() { try{renderGrow();}catch(e){} try{renderCuring();}catch(e){} },
-    seeds:   function() { try{renderSeeds();}catch(e){} },
-    vault:   function() { try{renderVault();}catch(e){} },
-    market:  function() { try{renderMarket();}catch(e){} },
-    shop:    function() { try{window._renderShopKeepTab();}catch(e){} },
-    breed:   function() { try{renderBreed();}catch(e){} },
-    growoff: function() { try{renderGrowOff();}catch(e){} },
-    bmarket: function() { try{renderBlackMarket();}catch(e){} },
-    mail:    function() { try{renderMailbox();}catch(e){} },
-    stats:   function() { try{renderStats();}catch(e){} },
-  };
-  if (fns[id]) fns[id]();
-  try { renderEnvPanel(); } catch(e) {}
-  try { window._updateSidebarSafe(); } catch(e) {}
+  const g = window.GS.gear;
+  // Natural limits if equipment is missing
+  if (tHumid > 60 && !g.humidifier) tHumid = 60; 
+  if (tHumid < 50 && !g.dehumidifier) tHumid = 50;
+
+  actual.temp  += (tTemp - actual.temp) * Math.min(rate, 1);
+  actual.humid += (tHumid - actual.humid) * Math.min(rate, 1);
+  actual.co2   += (target.co2  - actual.co2)  * Math.min(rate * 0.5, 1);
+
+  // Thermodynamics: Higher temps naturally lower relative humidity
+  actual.humid -= (actual.temp - 78) * 0.1 * Math.min(rate, 1);
+  actual.humid = Math.max(10, Math.min(100, actual.humid)); // clamp
+
+  if (actual.temp > 90) room.tempStressAccum = (room.tempStressAccum||0) + (tickMinutes/60);
+  else room.tempStressAccum = Math.max(0, (room.tempStressAccum||0) - (tickMinutes/120));
+  
+  room.envActual = actual;
+};
+
+/* Humidifier draws from main water reservoir */
+const _baseTickRes = window.tickReservoir;
+window.tickReservoir = function() {
+  if (typeof _baseTickRes === 'function') _baseTickRes();
+  const res = window.GS.gear?.reservoir;
+  const room = window.GS.rooms[window.GS.activeRoom] || window.GS.rooms[0];
+  if (res && window.GS.gear.humidifier && room && room.envTarget.humid > room.envActual.humid) {
+      res.level = Math.max(0, (res.level || 100) - 0.002); // Humidifier consumption
+  }
 };
 
 /* ================================================================
-   SHOP TABS — persistent, never resets to 'rooms'
+   3. BLACK MARKET FIXES (Prices & Inventory Tracking)
 ================================================================ */
-window._activeShopSection = window._activeShopSection || 'rooms';
+window.generateBotListings = function() {
+  const seed = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
+  const rng = n => (Math.sin(seed*9301 + n*49297 + 233995) * 16807 % 1 + 1) % 1;
+  const strains = Object.keys(window.STRAINS).filter(s => !window.STRAINS[s].isTest);
+  const listings = [];
+  for (let i = 0; i < 6; i++) {
+    const sn = strains[Math.floor(rng(i) * strains.length)];
+    const qty = Math.floor(rng(i+10) * 5) + 1;
+    const perSeed = Math.floor(rng(i+20) * 2000) + 1000; // 1000 to 3000 coins per seed
+    listings.push({
+      id: 'bot_' + i, name: `${sn} Seeds ×${qty}`, icon: '🌱', detail: `${qty} seeds · ${window.STRAINS[sn].variety}`,
+      seller: ['GrowMaster69', 'StonerSam', 'CannaKing', 'BC_Bud', 'Mary_Jane'][i%5],
+      totalPrice: perSeed * qty, priceCategory: 'market', listedAt: Date.now(), status: 'pending'
+    });
+  }
+  return listings;
+};
 
-window.showShopTab = function(name, btn) {
-  window._activeShopSection = name;
-  document.querySelectorAll('.shop-inv-tab').forEach(function(b){ b.classList.remove('active'); });
-  if (btn) {
-    btn.classList.add('active');
+window.buyFromBM = function(id) {
+  const listing = window.generateBotListings().find(l => l.id === id);
+  if (!listing) return;
+  if (window.GS.coins < listing.totalPrice) { window.toast('Not enough coins!', 'err'); return; }
+  
+  // Extract strain name and qty via regex
+  const match = listing.name.match(/(.+) Seeds ×(\d+)/);
+  if (match) {
+    const strainName = match[1].trim();
+    const qty = parseInt(match[2]);
+    window.GS.seeds = window.GS.seeds || {};
+    window.GS.seeds[strainName] = (window.GS.seeds[strainName] || 0) + qty;
+    window.toast(`Added ${qty}× ${strainName} to seed vault!`, 'ok', 4000);
   } else {
-    var order = ['rooms','lights','climate','water','males','boosts'];
-    var idx = order.indexOf(name);
-    var btns = document.querySelectorAll('.shop-inv-tab');
-    if (idx >= 0 && btns[idx]) btns[idx].classList.add('active');
+    window.toast(`Bought ${listing.name}`, 'ok', 3000);
   }
-  try { renderShopContent(name); } catch(e) {}
-};
-
-window._renderShopKeepTab = function() {
-  var sec = window._activeShopSection || 'rooms';
-  var order = ['rooms','lights','climate','water','males','boosts'];
-  document.querySelectorAll('.shop-inv-tab').forEach(function(b, i){
-    b.classList.toggle('active', order[i] === sec);
-  });
-  try { renderShopContent(sec); } catch(e) {}
-};
-
-/* Hook renderShop (called from other places) to preserve tab */
-window.renderShop = window._renderShopKeepTab;
-
-/* ================================================================
-   LIGHTS TOGGLE — null-safe
-================================================================ */
-window.toggleLights = function() {
-  var GS = window.GS;
-  if (!GS || !GS.rooms) return;
-  var idx  = (GS.activeRoom != null) ? GS.activeRoom : 0;
-  var room = GS.rooms[idx] || GS.rooms[0];
-  if (!room) return;
-
-  if (room.lightsOn) {
-    room.lightsOn    = false;
-    room.lightsOffAt = Date.now();
-    toast('Lights OFF 🌙', 'info');
-  } else {
-    var sprayed = room.lastSprayAt && (Date.now() - room.lastSprayAt) < 4 * 3600000;
-    var offHrs  = room.lightsOffAt ? (Date.now() - room.lightsOffAt) / 3600000 : 99;
-    if (sprayed && offHrs < 4) {
-      (GS.plants || []).filter(function(p){ return p.roomId === room.id; })
-        .forEach(function(p){ p.health = Math.max(0, (p.health || 100) - 10); });
-      toast('🔥 Burn penalty! −10 health each plant', 'err');
-    }
-    room.lightsOn    = true;
-    room.lightsOffAt = null;
-    toast('Lights ON 💡', 'ok');
-  }
-  try { renderEnvPanel(); } catch(e) {}
-  try { window._updateSidebarSafe(); } catch(e) {}
-  try { saveGame(); } catch(e) {}
-};
-window.quickToggleLights = window.toggleLights;
-
-/* ================================================================
-   DIFFICULTY — pre-selects current diff, null-safe
-================================================================ */
-window.tryChangeDifficulty = function() {
-  var GS = window.GS;
-  if (!GS) return;
-  if ((GS.plants || []).length > 0) {
-    toast('Remove all plants first to change difficulty', 'warn', 3000);
-    return;
-  }
-  var cur = GS.difficulty || 'easy';
-  window.selectedDiff = cur;
-  document.querySelectorAll('#diffChangeGrid .diff-opt').forEach(function(el) {
-    el.classList.toggle('selected', el.dataset.diff === cur);
-  });
-  var modal = document.getElementById('modal-difficulty');
-  if (modal) modal.classList.add('open');
+  window.GS.coins -= listing.totalPrice;
+  window.saveGame(); window.renderBmBrowse(); window.renderSeeds(); window.renderHeader();
 };
 
 /* ================================================================
-   UNLOCK ROOM MODAL — always shows info, shows cost if can't afford
+   4. NEW ACCOUNT & MOD ACCOUNT FIXES
 ================================================================ */
-window.renderUnlockRoomOptions = function() {
-  var cont = document.getElementById('unlock-room-options');
-  var GS = window.GS;
-  if (!cont || !GS) return;
+const _baseReg = window.doRegister;
+window.doRegister = function() {
+  const user = document.getElementById('reg-user')?.value.trim();
+  const pass = document.getElementById('reg-pass')?.value;
+  const pass2 = document.getElementById('reg-pass2')?.value;
+  const err = document.getElementById('reg-err');
 
-  var roomCount = (GS.rooms || []).length;
-  var coins     = Math.floor(GS.coins || 0);
+  if (!user || user.length < 3) { if (err) err.textContent='Username must be at least 3 characters.'; return; }
+  if (!pass || pass.length < 6) { if (err) err.textContent='Password must be at least 6 characters.'; return; }
+  if (pass !== pass2) { if (err) err.textContent='Passwords do not match.'; return; }
 
-  var opts = [
-    { key:'room2', label:'Room 2', price:2000,
-      desc:'Independent environment, lights, and 4 plant slots.',
-      owned: roomCount >= 2, locked: false },
-    { key:'room3', label:'Room 3', price:8000,
-      desc:'Triple-stage growing — veg, flower, seedling simultaneously.',
-      owned: roomCount >= 3, locked: roomCount < 2 },
-  ];
+  let accounts = {};
+  try { accounts = JSON.parse(localStorage.getItem(window.ACCOUNTS_KEY) || '{}'); } catch(e){}
+  if (accounts[user]) { if (err) err.textContent='Username already taken.'; return; }
 
-  cont.innerHTML = '';
-  opts.forEach(function(o) {
-    var row = document.createElement('div');
-    row.style.cssText =
-      'display:flex;align-items:center;gap:12px;' +
-      'background:var(--card-bg);border:1px solid var(--border);' +
-      'border-radius:8px;padding:13px;margin-bottom:8px;' +
-      (o.locked ? 'opacity:0.45;pointer-events:none;' : '');
+  const state = window.defaultState(user, window.selectedDiff || 'easy');
+  state.passwordHash = window.simpleHash(pass);
+  const phrase = window.generateSeedPhrase();
+  state.seedPhrase = phrase;
+  accounts[user] = state;
+  try { localStorage.setItem(window.ACCOUNTS_KEY, JSON.stringify(accounts)); } catch(e){}
 
-    var actionHtml = '';
-    if (o.owned) {
-      actionHtml = '<span style="font-family:var(--font-hud);font-size:10px;color:var(--green);padding:6px 14px">✓ OWNED</span>';
-    } else if (o.locked) {
-      actionHtml = '<span style="font-family:var(--font-hud);font-size:9px;color:var(--muted);text-align:center;white-space:nowrap">Unlock<br>Room 2 first</span>';
-    } else if (coins >= o.price) {
-      actionHtml =
-        '<button style="padding:6px 14px;background:rgba(74,222,128,0.12);border:1px solid var(--green);' +
-        'border-radius:6px;color:var(--green);font-family:var(--font-hud);font-size:9px;letter-spacing:1px;cursor:pointer;" ' +
-        'onclick="buyGear(\'' + o.key + '\',' + o.price + ',\'' + o.label + '\');closeModal(\'modal-unlock-room\')">UNLOCK</button>';
-    } else {
-      var need = (o.price - coins).toLocaleString();
-      actionHtml =
-        '<div style="text-align:center;white-space:nowrap">' +
-        '<div style="font-family:var(--font-hud);font-size:9px;color:var(--red)">Need ' + need + '¢</div>' +
-        '<div style="font-size:8px;color:var(--muted);margin-top:2px">Have ' + coins.toLocaleString() + '¢</div>' +
-        '</div>';
-    }
+  // Force alert for new users to save their phrase
+  alert("🚨 STOP & SAVE YOUR RECOVERY PHRASE 🚨\n\n" + phrase + "\n\nWrite these 24 words down. You will need them to recover your account if you clear your browser cache.");
 
-    row.innerHTML =
-      '<span style="font-size:22px;flex-shrink:0">🏠</span>' +
-      '<div style="flex:1;min-width:0">' +
-        '<div style="font-family:var(--font-hud);font-size:11px;color:var(--text)">' + o.label + '</div>' +
-        '<div style="font-size:9px;color:var(--muted);margin-top:2px">' + o.desc + '</div>' +
-        '<div style="font-family:var(--font-hud);font-size:12px;color:var(--gold);margin-top:5px">' + o.price.toLocaleString() + '¢</div>' +
-      '</div>' +
-      '<div style="flex-shrink:0">' + actionHtml + '</div>';
-    cont.appendChild(row);
-  });
+  window.toast('Account created! 🌿', 'ok', 3000);
+  window.loginSuccess(user, false);
 };
 
-/* ================================================================
-   SIDEBAR WARNINGS — null-safe
-================================================================ */
-window._updateSidebarSafe = function() {
-  var GS = window.GS;
-  if (!GS || !GS.rooms) return;
-  var idx  = (GS.activeRoom != null) ? GS.activeRoom : 0;
-  var room = GS.rooms[idx] || GS.rooms[0];
-  if (!room) return;
-
-  var diseased = (GS.plants || []).filter(function(p) {
-    return p.roomId === room.id && p.events && p.events.length > 0;
-  });
-
-  var sprayBtn = document.getElementById('sb-spray');
-  if (sprayBtn) {
-    if (diseased.length > 0) {
-      sprayBtn.classList.add('danger');
-      if (!sprayBtn.querySelector('.dot')) {
-        var d = document.createElement('div');
-        d.className = 'dot';
-        sprayBtn.appendChild(d);
-      }
-    } else {
-      sprayBtn.classList.remove('danger');
-      var dot = sprayBtn.querySelector('.dot');
-      if (dot) dot.remove();
-    }
-  }
-
-  var lightsBtn = document.getElementById('sb-lights');
-  var lightsLbl = document.getElementById('sb-lights-lbl');
-  if (lightsBtn && lightsLbl) {
-    if (room.lightsOn) {
-      lightsBtn.textContent = '💡';
-      lightsLbl.textContent = 'LIGHTS';
-      lightsBtn.classList.remove('warning');
-    } else {
-      lightsBtn.textContent = '🌙';
-      lightsLbl.textContent = 'DARK';
-      lightsBtn.classList.add('warning');
-    }
-  }
-};
-
-/* Alias for old code that calls updateSidebarWarnings */
-window.updateSidebarWarnings = window._updateSidebarSafe;
-
-/* ================================================================
-   SWITCH ROOM — null-safe
-================================================================ */
-window.switchRoom = function(idx) {
-  var GS = window.GS;
-  if (!GS || !GS.rooms || !GS.rooms[idx]) return;
-  GS.activeRoom = idx;
-  var room = GS.rooms[idx];
-
-  if (room && room.envTarget) {
-    var sl = function(id, v) { var el=document.getElementById(id); if(el) el.value=v; };
-    var sv = function(id, v) { var el=document.getElementById(id); if(el) el.textContent=v; };
-    sl('sl-temp',  room.envTarget.temp);
-    sv('sv-temp',  room.envTarget.temp + '°F');
-    sl('sl-humid', room.envTarget.humid);
-    sv('sv-humid', room.envTarget.humid + '%');
-    sl('sl-co2',   room.envTarget.co2);
-    sv('sv-co2',   room.envTarget.co2);
-    var light = (room.envTarget.light != null) ? room.envTarget.light : 100;
-    sl('sl-light', light);
-    sv('sv-light', light + '%');
-  }
-
-  var lbl = document.getElementById('env-room-label');
-  if (lbl) lbl.textContent = room.name;
-
-  try { renderRoomPanel(); } catch(e) {}
-  try { renderGrow(); } catch(e) {}
-  try { renderEnvPanel(); } catch(e) {}
-  try { window._updateSidebarSafe(); } catch(e) {}
-  try { toast('Switched to ' + room.name, 'info', 1500); } catch(e) {}
-};
-
-/* ================================================================
-   GAMETIC — safe wrapper (only wrap once)
-================================================================ */
-if (!window._nbgPatch303) {
-  window._nbgPatch303 = true;
-  var _origTick = window.gameTick;
-  window.gameTick = function() {
-    if (!window.GS || !window.GS.username) return;
-    try { _origTick(); } catch(e) { console.warn('[NBG tick]', e); }
-    try { checkRandomEvents(); } catch(e) {}
-    try { checkInspectShields(); } catch(e) {}
-    try { tickReservoir(); } catch(e) {}
-    try { tickCO2(); } catch(e) {}
-  };
-}
-
-/* ================================================================
-   FIX: loginSuccess — recalculate sidebar position after render
-================================================================ */
-var _origLogin = window.loginSuccess;
+const _baseLogin = window.loginSuccess;
 window.loginSuccess = function(username, isMod) {
-  _origLogin(username, isMod);
-  setTimeout(function() {
-    var hdr = document.querySelector('.game-header');
-    var nav = document.querySelector('.game-nav');
-    if (hdr && nav) {
-      var top = hdr.offsetHeight + nav.offsetHeight;
-      var s = document.createElement('style');
-      s.textContent =
-        '.sidebar-circles{top:' + top + 'px!important}' +
-        '.sidebar-panel{top:' + top + 'px!important}';
-      document.head.appendChild(s);
-    }
-  }, 100);
-};
-
-/* ================================================================
-   FIX: renderGrow — the static "+ PLANT SEED" header button
-   calls openModal('modal-plant') via HTML onclick, which is now
-   fixed by our new openModal that calls _prepPlantModal first.
-   
-   Also ensure empty slots call openPlantModal correctly.
-   We patch renderGrow to use the correct onclick.
-================================================================ */
-var _origRenderGrow = window.renderGrow;
-window.renderGrow = function() {
-  var GS = window.GS;
-  if (!GS || !GS.rooms) return;
-  try { _origRenderGrow(); } catch(e) { console.warn('[renderGrow]', e); return; }
-
-  /* After renderGrow runs, find any empty slots that might have the
-     wrong onclick and ensure they open correctly */
-  document.querySelectorAll('.pot-slot.empty-slot').forEach(function(slot) {
-    slot.onclick = function() { window.openPlantModal(); };
-  });
-
-  /* Ensure the "+ PLANT SEED" header button also triggers correctly */
-  var plantBtn = document.querySelector('.btn-action.btn-cyan[onclick*="modal-plant"]');
-  if (plantBtn) {
-    plantBtn.onclick = function() { window.openPlantModal(); };
+  _baseLogin(username, isMod);
+  
+  // Mod Account Hook
+  if (username === 'The Noyes Boys') {
+      window.GS.coins = Math.max(window.GS.coins || 0, 999999);
+      window.GS.level = Math.max(window.GS.level || 1, 100);
+      window.GS.isMod = true;
+      window.saveGame();
+      window.renderHeader();
+      window.toast('👑 Mod Account Loaded', 'special', 4000);
   }
 };
 
 /* ================================================================
-   FIX renderStats — hook scoreboard in safely
-================================================================ */
-var _origRenderStats = window.renderStats;
-window.renderStats = function() {
-  try { _origRenderStats(); } catch(e) {}
-  try { renderScoreboard(); } catch(e) {}
-};
-
-/* ================================================================
-   MODAL CLICK-OUTSIDE CLOSE — reattach after patch
-================================================================ */
-document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
-  /* Remove old listeners by cloning, but that's complex.
-     Instead just rely on the document-level handler already in Part 6. */
-});
-
-/* ================================================================
-   VERIFY on DOM ready
+   5. UI RE-BINDS
 ================================================================ */
 window.addEventListener('load', function() {
-  /* Ensure the plant seed button in header always opens modal correctly */
-  var plantSeeds = document.querySelectorAll('[onclick="openModal(\'modal-plant\')"]');
-  plantSeeds.forEach(function(btn) {
-    btn.removeAttribute('onclick');
-    btn.addEventListener('click', function() { window.openPlantModal(); });
+  // Rebind the header "Plant Seed" button to bypass broken HTML inline onclicks
+  const plantBtns = document.querySelectorAll('.btn-action.btn-cyan');
+  plantBtns.forEach(function(btn) {
+    if (btn.textContent.includes('PLANT SEED')) {
+      btn.removeAttribute('onclick');
+      btn.addEventListener('click', function() { window.openPlantModal(); });
+    }
   });
 
-  console.log(
-    '%c🔧 NBG Patch v3.0.3 loaded — all buttons fixed, openModal recursion resolved',
-    'color:#4ade80;font-size:11px;font-family:monospace'
-  );
+  console.log('%c🔧 NBG Patch v3.0.4 loaded — Modals, Physics, BM, and Mod Account active.', 'color:#4ade80;font-size:11px;font-family:monospace');
 });
 
 })();
