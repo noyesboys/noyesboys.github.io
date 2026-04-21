@@ -5058,142 +5058,218 @@ console.log('%cAll 6 parts loaded successfully. ✅','color:#22c55e;font-size:12
 .game-nav .nav-tab[data-tab="mail"] { display: none !important; }
 </style>
 
-<style>
-  /* Fix Header Overlap & Sidebar */
-  .sidebar-circles, .sidebar-panel { top: 92px !important; z-index: 900 !important; }
-  .modal-overlay { padding-top: 100px !important; }
-  .game-nav .nav-tab[data-tab="mail"] { display: none !important; }
-  
-  /* UI Cleanup */
-  #plantGrid { display: grid !important; gap: 15px; padding: 20px; }
-  .pot-slot.empty-slot { border: 2px dashed rgba(74, 222, 128, 0.2); border-radius: 8px; min-height: 240px; display: flex; align-items: center; justify-content: center; color: var(--green); opacity: 0.6; }
-  .pot-slot.empty-slot:hover { opacity: 1; background: rgba(74, 222, 128, 0.05); }
-</style>
-
 <script>
 (function() {
 'use strict';
 
-/* 1. RELIABLE MOD ACCOUNT & LOGIN */
-window.doLogin = function() {
-    const user = document.getElementById('login-user')?.value.trim();
-    const pass = document.getElementById('login-pass')?.value;
-    const err = document.getElementById('login-err');
-    if (!user || !pass) { if(err) err.textContent = 'Enter credentials.'; return; }
-
-    let accounts = {};
-    try { accounts = JSON.parse(localStorage.getItem(window.ACCOUNTS_KEY) || '{}'); } catch(e){}
-
-    // MOD BYPASS
-    if (user === 'The Noyes Boys' && pass === '123456') {
-        if (!accounts[user]) {
-            accounts[user] = window.defaultState(user, 'hard');
-            accounts[user].passwordHash = window.simpleHash(pass);
-            localStorage.setItem(window.ACCOUNTS_KEY, JSON.stringify(accounts));
-        }
-        window.loginSuccess(user, true);
-        return;
-    }
-
-    const acc = accounts[user];
-    if (!acc || acc.passwordHash !== window.simpleHash(pass)) {
-        if(err) err.textContent = 'Invalid username or password.';
-        return;
-    }
-    window.loginSuccess(user, false);
-};
-
-const _origLoginSuccess = window.loginSuccess;
-window.loginSuccess = function(username, isMod) {
-    _origLoginSuccess(username, isMod);
-    if (username === 'The Noyes Boys') {
-        window.GS.coins = 999999;
-        window.GS.level = 100;
-        window.GS.isMod = true;
-        window.saveGame();
-        window.renderHeader();
-        window.toast('👑 MODERATOR ACCESS: THE NOYES BOYS', 'special', 5000);
-    }
-};
-
-/* 2. REPAIR PLANT INTERACTIONS (One Inspect, Functional Buttons) */
-window.renderPlantControls = function(p, idx) {
-    if (!p) return `<button class="btn-action btn-cyan" onclick="window.openPlantModal()">PLANT SEED</button>`;
-    
-    let html = `<div class="plant-actions-grid">`;
-    html += `<button class="btn-action" onclick="window.waterPlant(${idx})">WATER</button>`;
-    html += `<button class="btn-action" onclick="window.inspectPlant(${idx})">INSPECT</button>`;
-    
-    if (p.stage === 'flowering' && p.flowerProgress >= 100) {
-        html += `<button class="btn-action btn-gold" onclick="window.harvestPlant(${idx})">HARVEST</button>`;
-    } else if (p.stage === 'dried') {
-        html += `<button class="btn-action btn-purple" onclick="window.curePlant(${idx})">CURE</button>`;
-    }
-    
-    html += `</div>`;
-    return html;
-};
-
-// Global fix for interaction functions
-window.waterPlant = function(idx) {
-    const room = window.GS.rooms[window.GS.activeRoom];
-    const p = room.plants[idx];
-    if (!p) return;
-    p.water = 100;
-    window.toast(`${p.name} watered!`, 'ok');
-    window.renderGrow();
-};
-
-window.inspectPlant = function(idx) {
-    const room = window.GS.rooms[window.GS.activeRoom];
-    const p = room.plants[idx];
-    if (!p) return;
-    // Set a global var so the modal knows which plant we are looking at
-    window._inspectingIdx = idx;
-    window.openModal('modal-inspect');
-    // Call the actual render function if it exists
-    if (typeof window.renderInspectModal === 'function') window.renderInspectModal();
-};
-
-/* 3. FIX DAILY GOAL & DIFFICULTY */
-window.refreshDailyGoal = function() {
-    const goals = [
-        { task: "Water 5 plants", reward: 500 },
-        { task: "Harvest a Skunk strain", reward: 1200 },
-        { task: "Reach 80F Temp", reward: 300 }
-    ];
-    window.GS.dailyGoal = goals[Math.floor(Math.random() * goals.length)];
-    const el = document.getElementById('dailyGoalText');
-    if (el) el.innerText = window.GS.dailyGoal.task + " (+" + window.GS.dailyGoal.reward + "¢)";
-};
-
-window.setDifficulty = function(d) {
-    window.selectedDiff = d;
-    document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
-    window.toast("Difficulty: " + d.toUpperCase(), "ok");
-};
-
-/* 4. MODAL CLASH PREVENTION */
+/* ================================================================
+   1. CORE MODAL & RENDERING FIX
+================================================================ */
 window.openModal = function(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    // Close others first to prevent stacking bugs
-    document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
-    el.classList.add('open');
-    if (id === 'modal-plant') window._prepPlantModal(null, false);
+  if (id === 'modal-plant')       { window._prepPlantModal(null, false); }
+  if (id === 'modal-unlock-room') { try { window.renderUnlockRoomOptions(); } catch(e){} }
+  if (id === 'modal-spray')       { try { window.renderSprayTargets();       } catch(e){} }
+  var el = document.getElementById(id);
+  if (el) el.classList.add('open');
 };
 
-/* 5. INITIALIZE */
-window.addEventListener('load', function() {
-    window.refreshDailyGoal();
-    // Fix all top-level action buttons
-    document.querySelectorAll('.btn-action').forEach(btn => {
-        if (btn.innerText.includes('PLANT')) {
-            btn.onclick = () => window.openModal('modal-plant');
-        }
+window.closeModal = function(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.remove('open');
+};
+
+window._prepPlantModal = function(strainName, isMale) {
+  var GS = window.GS;
+  if (!GS) return;
+  var grid = document.getElementById('plantStrainGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  var seeds = {};
+  if (isMale) {
+    seeds = GS.maleSeedsOwned || {};
+  } else {
+    var base = GS.seeds || {};
+    Object.keys(base).forEach(function(k) { seeds[k] = base[k]; });
+    (GS.bredStrains || []).filter(function(b){ return b.seedQty > 0; }).forEach(function(b) {
+      seeds[b.name] = (seeds[b.name] || 0) + b.seedQty;
     });
-    console.log("NBG Patch v3.0.6: Mod Account & Interaction Fixes Active.");
+  }
+
+  var hasSeeds = false;
+  Object.keys(seeds).forEach(function(name) {
+    if (seeds[name] <= 0) return;
+    hasSeeds = true;
+    var s = (typeof window.STRAINS !== 'undefined' && window.STRAINS[name]) || {};
+    var opt = document.createElement('div');
+    opt.className = 'strain-option' + (strainName === name ? ' selected' : '');
+    opt.dataset.strain = name;
+    opt.onclick = function() {
+      document.querySelectorAll('#plantStrainGrid .strain-option').forEach(function(o){ o.classList.remove('selected'); });
+      opt.classList.add('selected');
+    };
+    opt.innerHTML =
+      '<div class="strain-option-emoji">' + (s.emoji || '🌱') + '</div>' +
+      '<div class="strain-option-name">' + name + '</div>' +
+      '<div class="strain-option-qty">×' + seeds[name] + '</div>';
+    grid.appendChild(opt);
+  });
+
+  if (!hasSeeds) {
+    grid.innerHTML = '<div style="color:var(--muted);font-size:10px;padding:10px;grid-column:span 3">No seeds yet — go to Seeds tab and type TESTPACK to get a free pack!</div>';
+  }
+};
+
+window.openPlantModal = function() {
+  window.openModal('modal-plant');
+};
+
+/* ================================================================
+   2. GRADUAL ENVIRONMENT PHYSICS
+================================================================ */
+window.stepEnvironment = function(room, tickMinutes) {
+  const target = room.envTarget, actual = room.envActual;
+  const rate = 0.005 * tickMinutes; // Slow, gradual interpolation
+
+  // Lights generate heat (up to +6F)
+  let lightHeat = (target.light || 100) * 0.06;
+  if (!room.lightsOn) lightHeat = 0;
+
+  let tTemp = target.temp + lightHeat;
+  let tHumid = target.humid;
+
+  const g = window.GS.gear;
+  // Natural limits if equipment is missing
+  if (tHumid > 60 && !g.humidifier) tHumid = 60; 
+  if (tHumid < 50 && !g.dehumidifier) tHumid = 50;
+
+  actual.temp  += (tTemp - actual.temp) * Math.min(rate, 1);
+  actual.humid += (tHumid - actual.humid) * Math.min(rate, 1);
+  actual.co2   += (target.co2  - actual.co2)  * Math.min(rate * 0.5, 1);
+
+  // Thermodynamics: Higher temps naturally lower relative humidity
+  actual.humid -= (actual.temp - 78) * 0.1 * Math.min(rate, 1);
+  actual.humid = Math.max(10, Math.min(100, actual.humid)); // clamp
+
+  if (actual.temp > 90) room.tempStressAccum = (room.tempStressAccum||0) + (tickMinutes/60);
+  else room.tempStressAccum = Math.max(0, (room.tempStressAccum||0) - (tickMinutes/120));
+  
+  room.envActual = actual;
+};
+
+/* Humidifier draws from main water reservoir */
+const _baseTickRes = window.tickReservoir;
+window.tickReservoir = function() {
+  if (typeof _baseTickRes === 'function') _baseTickRes();
+  const res = window.GS.gear?.reservoir;
+  const room = window.GS.rooms[window.GS.activeRoom] || window.GS.rooms[0];
+  if (res && window.GS.gear.humidifier && room && room.envTarget.humid > room.envActual.humid) {
+      res.level = Math.max(0, (res.level || 100) - 0.002); // Humidifier consumption
+  }
+};
+
+/* ================================================================
+   3. BLACK MARKET FIXES (Prices & Inventory Tracking)
+================================================================ */
+window.generateBotListings = function() {
+  const seed = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
+  const rng = n => (Math.sin(seed*9301 + n*49297 + 233995) * 16807 % 1 + 1) % 1;
+  const strains = Object.keys(window.STRAINS).filter(s => !window.STRAINS[s].isTest);
+  const listings = [];
+  for (let i = 0; i < 6; i++) {
+    const sn = strains[Math.floor(rng(i) * strains.length)];
+    const qty = Math.floor(rng(i+10) * 5) + 1;
+    const perSeed = Math.floor(rng(i+20) * 2000) + 1000; // 1000 to 3000 coins per seed
+    listings.push({
+      id: 'bot_' + i, name: `${sn} Seeds ×${qty}`, icon: '🌱', detail: `${qty} seeds · ${window.STRAINS[sn].variety}`,
+      seller: ['GrowMaster69', 'StonerSam', 'CannaKing', 'BC_Bud', 'Mary_Jane'][i%5],
+      totalPrice: perSeed * qty, priceCategory: 'market', listedAt: Date.now(), status: 'pending'
+    });
+  }
+  return listings;
+};
+
+window.buyFromBM = function(id) {
+  const listing = window.generateBotListings().find(l => l.id === id);
+  if (!listing) return;
+  if (window.GS.coins < listing.totalPrice) { window.toast('Not enough coins!', 'err'); return; }
+  
+  // Extract strain name and qty via regex
+  const match = listing.name.match(/(.+) Seeds ×(\d+)/);
+  if (match) {
+    const strainName = match[1].trim();
+    const qty = parseInt(match[2]);
+    window.GS.seeds = window.GS.seeds || {};
+    window.GS.seeds[strainName] = (window.GS.seeds[strainName] || 0) + qty;
+    window.toast(`Added ${qty}× ${strainName} to seed vault!`, 'ok', 4000);
+  } else {
+    window.toast(`Bought ${listing.name}`, 'ok', 3000);
+  }
+  window.GS.coins -= listing.totalPrice;
+  window.saveGame(); window.renderBmBrowse(); window.renderSeeds(); window.renderHeader();
+};
+
+/* ================================================================
+   4. NEW ACCOUNT & MOD ACCOUNT FIXES
+================================================================ */
+const _baseReg = window.doRegister;
+window.doRegister = function() {
+  const user = document.getElementById('reg-user')?.value.trim();
+  const pass = document.getElementById('reg-pass')?.value;
+  const pass2 = document.getElementById('reg-pass2')?.value;
+  const err = document.getElementById('reg-err');
+
+  if (!user || user.length < 3) { if (err) err.textContent='Username must be at least 3 characters.'; return; }
+  if (!pass || pass.length < 6) { if (err) err.textContent='Password must be at least 6 characters.'; return; }
+  if (pass !== pass2) { if (err) err.textContent='Passwords do not match.'; return; }
+
+  let accounts = {};
+  try { accounts = JSON.parse(localStorage.getItem(window.ACCOUNTS_KEY) || '{}'); } catch(e){}
+  if (accounts[user]) { if (err) err.textContent='Username already taken.'; return; }
+
+  const state = window.defaultState(user, window.selectedDiff || 'easy');
+  state.passwordHash = window.simpleHash(pass);
+  const phrase = window.generateSeedPhrase();
+  state.seedPhrase = phrase;
+  accounts[user] = state;
+  try { localStorage.setItem(window.ACCOUNTS_KEY, JSON.stringify(accounts)); } catch(e){}
+
+  // Force alert for new users to save their phrase
+  alert("🚨 STOP & SAVE YOUR RECOVERY PHRASE 🚨\n\n" + phrase + "\n\nWrite these 24 words down. You will need them to recover your account if you clear your browser cache.");
+
+  window.toast('Account created! 🌿', 'ok', 3000);
+  window.loginSuccess(user, false);
+};
+
+const _baseLogin = window.loginSuccess;
+window.loginSuccess = function(username, isMod) {
+  _baseLogin(username, isMod);
+  
+  // Mod Account Hook
+  if (username === 'The Noyes Boys') {
+      window.GS.coins = Math.max(window.GS.coins || 0, 999999);
+      window.GS.level = Math.max(window.GS.level || 1, 100);
+      window.GS.isMod = true;
+      window.saveGame();
+      window.renderHeader();
+      window.toast('👑 Mod Account Loaded', 'special', 4000);
+  }
+};
+
+/* ================================================================
+   5. UI RE-BINDS
+================================================================ */
+window.addEventListener('load', function() {
+  // Rebind the header "Plant Seed" button to bypass broken HTML inline onclicks
+  const plantBtns = document.querySelectorAll('.btn-action.btn-cyan');
+  plantBtns.forEach(function(btn) {
+    if (btn.textContent.includes('PLANT SEED')) {
+      btn.removeAttribute('onclick');
+      btn.addEventListener('click', function() { window.openPlantModal(); });
+    }
+  });
+
+  console.log('%c🔧 NBG Patch v3.0.4 loaded — Modals, Physics, BM, and Mod Account active.', 'color:#4ade80;font-size:11px;font-family:monospace');
 });
 
 })();
