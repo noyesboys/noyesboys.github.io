@@ -5017,318 +5017,505 @@ console.log('%c🌿 NOYES BOYS GROW-OFF v3.0','color:#4ade80;font-size:18px;font
 console.log('%c58 strains · 696 seed codes · Full breeding system','color:#a855f7;font-size:12px');
 console.log('%cAll 6 parts loaded successfully. ✅','color:#22c55e;font-size:12px');
 </script>
-<!-- ============================================================
-  NOYES BOYS GROW-OFF — PATCH v3.0.2
+<!-- ================================================================
+  NOYES BOYS GROW-OFF — PATCH v3.0.3  (COMPLETE FIX)
+  
   INSTRUCTIONS:
-  1. REMOVE the previous patch script tag (nbg_patch_v301.js) if you added it
+  1. Remove ALL previous patch script blocks (v3.0.1, v3.0.2)
   2. Paste this entire block immediately before </body>
-  3. Do NOT use function declarations (function foo(){}) here — use window.foo = function(){}
-     to avoid JavaScript hoisting overwriting originals with our wrappers
-============================================================ -->
+  3. Save and reload — clear localStorage if testing fresh
+================================================================ -->
+<style>
+/* ── LAYOUT FIXES ── */
+#screen-game{height:100vh!important;overflow:hidden!important}
+.game-wrapper{height:100%!important;min-height:0!important;overflow:hidden!important;display:flex!important;flex-direction:column!important}
+.game-body{min-height:0!important;flex:1!important;overflow:hidden!important}
+.game-content{overflow-y:auto!important;height:100%!important}
+/* Sidebar sits below header (52px) + nav (~40px) = 92px */
+.sidebar-circles{top:92px!important;bottom:0!important}
+.sidebar-panel{top:92px!important;bottom:0!important}
+/* Empty slots must be visible */
+.pot-slot.empty-slot{min-height:240px!important;cursor:pointer!important;display:flex!important}
+#plantGrid{display:grid!important}
+.tab-panel.active{display:block!important}
+</style>
+
 <script>
-(function patchNBG() {
+(function() {
+'use strict';
 
-  /* ── 1. CSS FIXES (injected as a style element) ───────────────────── */
-  var css = [
-    /* Constrain game screen to viewport so content scrolls INSIDE, not the page */
-    '#screen-game { height:100vh !important; overflow:hidden !important; }',
-    '.game-wrapper { height:100% !important; min-height:0 !important; overflow:hidden !important; }',
+/* ================================================================
+   ROOT FIX: openModal had an infinite-recursion bug.
+   In Part 5, "const _origOpenModal = openModal" ran AFTER
+   "function openModal()" was hoisted, so _origOpenModal pointed
+   to the new openModal, causing infinite recursion.
+   
+   Fix: implement modal open directly, no saved reference needed.
+================================================================ */
+window.openModal = function(id) {
+  /* Special pre-open logic */
+  if (id === 'modal-plant')       { window._prepPlantModal(); }
+  if (id === 'modal-unlock-room') { try { renderUnlockRoomOptions(); } catch(e){} }
+  if (id === 'modal-spray')       { try { renderSprayTargets();       } catch(e){} }
 
-    /* min-height:0 lets flex children shrink below content size (classic flex bug) */
-    '.game-body { min-height:0 !important; flex:1 !important; }',
-    '.game-content { height:100% !important; overflow-y:auto !important; }',
+  var el = document.getElementById(id);
+  if (el) el.classList.add('open');
+};
 
-    /* Push sidebar below BOTH header (52px) and nav (~40px) */
-    '.sidebar-circles { top:92px !important; bottom:0 !important; }',
-    '.sidebar-panel   { top:92px !important; bottom:0 !important; }',
+window.closeModal = function(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.remove('open');
+};
 
-    /* Empty plant slots — ensure they're visible */
-    '.pot-slot.empty-slot { min-height:240px !important; cursor:pointer !important; }',
+/* ================================================================
+   PLANT MODAL — was broken because:
+   1. openModal('modal-plant') called from the header button didn't
+      populate the strain grid first.
+   2. openPlantModalFor called _origOpenModal (the broken ref).
+   
+   Fix: _prepPlantModal() always runs before the modal opens,
+   and openPlantModal/openPlantModalFor use window.openModal.
+================================================================ */
+window._prepPlantModal = function(strainName, isMale) {
+  var GS = window.GS;
+  if (!GS) return;
 
-    /* Make sure plant grid is always visible */
-    '#plantGrid { display:grid !important; }',
+  var grid = document.getElementById('plantStrainGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
 
-    /* Ensure tab panels show correctly */
-    '.tab-panel.active { display:block !important; }',
-  ].join('\n');
-
-  var styleEl = document.createElement('style');
-  styleEl.textContent = css;
-  document.head.appendChild(styleEl);
-
-
-  /* ── 2. SHOP TABS — persistent section (module-scoped var, no hoisting issue) ── */
-  var _activeShop = 'rooms';
-
-  window.showShopTab = function(name, btn) {
-    _activeShop = name;
-    document.querySelectorAll('.shop-inv-tab').forEach(function(b) {
-      b.classList.remove('active');
+  var seeds = {};
+  if (isMale) {
+    seeds = GS.maleSeedsOwned || {};
+  } else {
+    var base = GS.seeds || {};
+    Object.keys(base).forEach(function(k) { seeds[k] = base[k]; });
+    (GS.bredStrains || []).filter(function(b){ return b.seedQty > 0; }).forEach(function(b) {
+      seeds[b.name] = (seeds[b.name] || 0) + b.seedQty;
     });
-    if (btn) {
-      btn.classList.add('active');
-    } else {
-      var order = ['rooms','lights','climate','water','males','boosts'];
-      var i = order.indexOf(name);
-      var btns = document.querySelectorAll('.shop-inv-tab');
-      if (i >= 0 && btns[i]) btns[i].classList.add('active');
-    }
-    renderShopContent(name);
-  };
-
-  window.renderShop = function() {
-    renderShopContent(_activeShop);
-    var order = ['rooms','lights','climate','water','males','boosts'];
-    document.querySelectorAll('.shop-inv-tab').forEach(function(b, i) {
-      b.classList.toggle('active', order[i] === _activeShop);
-    });
-  };
-
-
-  /* ── 3. RENDER ALL — never calls showTab (which resets sub-nav state) ── */
-  window.renderAll = function() {
-    if (!window.GS || !window.GS.username) return;
-    try { renderHeader(); } catch(e) {}
-    var activePanel = document.querySelector('.tab-panel.active');
-    if (!activePanel) return;
-    var id = activePanel.id.replace('tab-', '');
-    var fns = {
-      grow:    function() { try { renderGrow();    } catch(e){} try { renderCuring(); } catch(e){} },
-      seeds:   function() { try { renderSeeds();   } catch(e){} },
-      vault:   function() { try { renderVault();   } catch(e){} },
-      market:  function() { try { renderMarket();  } catch(e){} },
-      shop:    function() { try { window.renderShop(); } catch(e){} },
-      breed:   function() { try { renderBreed();   } catch(e){} },
-      growoff: function() { try { renderGrowOff(); } catch(e){} },
-      bmarket: function() { try { renderBlackMarket(); } catch(e){} },
-      mail:    function() { try { renderMailbox(); } catch(e){} },
-      stats:   function() { try { renderStats();   } catch(e){} },
-    };
-    if (fns[id]) fns[id]();
-    try { renderEnvPanel();         } catch(e) {}
-    try { window.updateSidebarWarnings(); } catch(e) {}
-  };
-
-
-  /* ── 4. LIGHTS TOGGLE — null-safe ─────────────────────────────────── */
-  window.toggleLights = function() {
-    if (!window.GS || !window.GS.rooms) return;
-    var idx  = (window.GS.activeRoom != null) ? window.GS.activeRoom : 0;
-    var room = window.GS.rooms[idx] || window.GS.rooms[0];
-    if (!room) return;
-
-    if (room.lightsOn) {
-      room.lightsOn   = false;
-      room.lightsOffAt = Date.now();
-      toast('Lights OFF 🌙', 'info');
-    } else {
-      var sprayed = room.lastSprayAt && (Date.now() - room.lastSprayAt) < 4 * 3600000;
-      var offHrs  = room.lightsOffAt ? (Date.now() - room.lightsOffAt) / 3600000 : 99;
-      if (sprayed && offHrs < 4) {
-        (window.GS.plants || [])
-          .filter(function(p) { return p.roomId === room.id; })
-          .forEach(function(p) { p.health = Math.max(0, (p.health || 100) - 10); });
-        toast('🔥 Burn penalty! −10 health each plant', 'err');
-      }
-      room.lightsOn    = true;
-      room.lightsOffAt = null;
-      toast('Lights ON 💡', 'ok');
-    }
-    try { renderEnvPanel();               } catch(e) {}
-    try { window.updateSidebarWarnings(); } catch(e) {}
-    try { saveGame();                     } catch(e) {}
-  };
-
-  window.quickToggleLights = function() { window.toggleLights(); };
-
-
-  /* ── 5. DIFFICULTY — pre-selects current, null-safe ──────────────── */
-  window.tryChangeDifficulty = function() {
-    if (!window.GS) return;
-    if ((window.GS.plants || []).length > 0) {
-      toast('Remove all plants first to change difficulty', 'warn', 3000);
-      return;
-    }
-    var cur = window.GS.difficulty || 'easy';
-    window.selectedDiff = cur;
-    document.querySelectorAll('#diffChangeGrid .diff-opt').forEach(function(el) {
-      el.classList.toggle('selected', el.dataset.diff === cur);
-    });
-    openModal('modal-difficulty');
-  };
-
-
-  /* ── 6. UNLOCK ROOM MODAL — always shows info, explains cost deficit ─ */
-  window.renderUnlockRoomOptions = function() {
-    var cont = document.getElementById('unlock-room-options');
-    if (!cont || !window.GS) return;
-    var roomCount = (window.GS.rooms || []).length;
-    var coins     = Math.floor(window.GS.coins || 0);
-
-    var opts = [
-      { key:'room2', label:'Room 2', price:2000,
-        desc:'Independent environment, lights, and plant slots.',
-        owned: roomCount >= 2, locked: false },
-      { key:'room3', label:'Room 3', price:8000,
-        desc:'Triple-stage growing — veg, flower, seedling at once.',
-        owned: roomCount >= 3, locked: roomCount < 2 },
-    ];
-
-    cont.innerHTML = '';
-    opts.forEach(function(o) {
-      var row = document.createElement('div');
-      row.style.cssText =
-        'display:flex;align-items:center;gap:12px;' +
-        'background:var(--card-bg);border:1px solid var(--border);' +
-        'border-radius:8px;padding:13px;margin-bottom:8px;' +
-        (o.locked ? 'opacity:0.45;' : '');
-
-      /* Build the action column */
-      var action = '';
-      if (o.owned) {
-        action = '<span style="font-family:var(--font-hud);font-size:9px;color:var(--green)">✓ OWNED</span>';
-      } else if (o.locked) {
-        action = '<span style="font-family:var(--font-hud);font-size:9px;color:var(--muted);text-align:center;display:block">Unlock Room 2<br>first</span>';
-      } else {
-        var canAfford = coins >= o.price;
-        if (canAfford) {
-          action = '<button style="padding:6px 14px;background:rgba(74,222,128,0.12);border:1px solid var(--green);' +
-            'border-radius:6px;color:var(--green);font-family:var(--font-hud);font-size:9px;' +
-            'letter-spacing:1px;cursor:pointer;" ' +
-            'onclick="buyGear(\'' + o.key + '\',' + o.price + ',\'' + o.label + '\')' +
-            ';closeModal(\'modal-unlock-room\')">UNLOCK</button>';
-        } else {
-          var need = (o.price - coins).toLocaleString();
-          action = '<div style="text-align:center">' +
-            '<div style="font-family:var(--font-hud);font-size:9px;color:var(--red)">Need ' + need + '¢ more</div>' +
-            '<div style="font-size:8px;color:var(--muted);margin-top:2px">Have ' + coins.toLocaleString() + '¢</div>' +
-            '</div>';
-        }
-      }
-
-      row.innerHTML =
-        '<span style="font-size:22px;flex-shrink:0">🏠</span>' +
-        '<div style="flex:1;min-width:0">' +
-          '<div style="font-family:var(--font-hud);font-size:11px;color:var(--text)">' + o.label + '</div>' +
-          '<div style="font-size:9px;color:var(--muted);margin-top:2px">' + o.desc + '</div>' +
-          '<div style="font-family:var(--font-hud);font-size:11px;color:var(--gold);margin-top:5px">' +
-            o.price.toLocaleString() + '¢</div>' +
-        '</div>' +
-        '<div style="flex-shrink:0">' + action + '</div>';
-      cont.appendChild(row);
-    });
-  };
-
-
-  /* ── 7. SIDEBAR WARNINGS — null-safe ──────────────────────────────── */
-  window.updateSidebarWarnings = function() {
-    if (!window.GS || !window.GS.rooms) return;
-    var idx  = (window.GS.activeRoom != null) ? window.GS.activeRoom : 0;
-    var room = window.GS.rooms[idx] || window.GS.rooms[0];
-    if (!room) return;
-
-    var diseased = (window.GS.plants || []).filter(function(p) {
-      return p.roomId === room.id && p.events && p.events.length > 0;
-    });
-    var sprayBtn = document.getElementById('sb-spray');
-    if (sprayBtn) {
-      if (diseased.length > 0) {
-        sprayBtn.classList.add('danger');
-        if (!sprayBtn.querySelector('.dot')) {
-          var d = document.createElement('div');
-          d.className = 'dot';
-          sprayBtn.appendChild(d);
-        }
-      } else {
-        sprayBtn.classList.remove('danger');
-        var dot = sprayBtn.querySelector('.dot');
-        if (dot) dot.remove();
-      }
-    }
-
-    var lightsBtn = document.getElementById('sb-lights');
-    var lightsLbl = document.getElementById('sb-lights-lbl');
-    if (lightsBtn && lightsLbl) {
-      if (room.lightsOn) {
-        lightsBtn.textContent = '💡';
-        lightsLbl.textContent = 'LIGHTS';
-        lightsBtn.classList.remove('warning');
-      } else {
-        lightsBtn.textContent = '🌙';
-        lightsLbl.textContent = 'DARK';
-        lightsBtn.classList.add('warning');
-      }
-    }
-  };
-
-
-  /* ── 8. SWITCH ROOM — null-safe ────────────────────────────────────── */
-  window.switchRoom = function(idx) {
-    if (!window.GS || !window.GS.rooms || !window.GS.rooms[idx]) return;
-    window.GS.activeRoom = idx;
-    var room = window.GS.rooms[idx];
-
-    if (room && room.envTarget) {
-      var sl = function(id, v) { var el = document.getElementById(id); if (el) el.value = v; };
-      var sv = function(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
-      sl('sl-temp',  room.envTarget.temp);
-      sv('sv-temp',  room.envTarget.temp + '°F');
-      sl('sl-humid', room.envTarget.humid);
-      sv('sv-humid', room.envTarget.humid + '%');
-      sl('sl-co2',   room.envTarget.co2);
-      sv('sv-co2',   room.envTarget.co2);
-      var light = (room.envTarget.light != null) ? room.envTarget.light : 100;
-      sl('sl-light', light);
-      sv('sv-light', light + '%');
-    }
-
-    var lbl = document.getElementById('env-room-label');
-    if (lbl) lbl.textContent = room.name;
-
-    try { renderRoomPanel();              } catch(e) {}
-    try { renderGrow();                   } catch(e) {}
-    try { renderEnvPanel();               } catch(e) {}
-    try { window.updateSidebarWarnings(); } catch(e) {}
-    toast('Switched to ' + room.name, 'info', 1500);
-  };
-
-
-  /* ── 9. SAFE gameTick wrapper — null guard, no circular wrap ────────── */
-  /* Only wrap if we haven't already (prevent double-wrapping on page reload) */
-  if (!window._nbgPatchApplied) {
-    var _origTick = window.gameTick;
-    window.gameTick = function() {
-      if (!window.GS || !window.GS.username) return;
-      try { _origTick(); } catch(e) { console.warn('[NBG] gameTick error:', e); }
-    };
-    window._nbgPatchApplied = true;
   }
 
+  var hasSeeds = false;
+  Object.keys(seeds).forEach(function(name) {
+    if (seeds[name] <= 0) return;
+    hasSeeds = true;
+    var s = (typeof STRAINS !== 'undefined' && STRAINS[name]) || {};
+    var opt = document.createElement('div');
+    opt.className = 'strain-option' + (strainName === name ? ' selected' : '');
+    opt.dataset.strain = name;
+    opt.onclick = function() {
+      document.querySelectorAll('#plantStrainGrid .strain-option').forEach(function(o){ o.classList.remove('selected'); });
+      opt.classList.add('selected');
+    };
+    opt.innerHTML =
+      '<div class="strain-option-emoji">' + (s.emoji || '🌱') + '</div>' +
+      '<div class="strain-option-name">' + name + '</div>' +
+      '<div class="strain-option-qty">×' + seeds[name] + '</div>';
+    grid.appendChild(opt);
+  });
 
-  /* ── 10. Recalculate sidebar top after login (dynamic nav height) ──── */
-  var _origLoginSuccess = window.loginSuccess;
-  window.loginSuccess = function(username, isMod) {
-    _origLoginSuccess(username, isMod);
-    /* Measure actual header + nav height and adjust fixed sidebar */
-    setTimeout(function() {
-      var hdr = document.querySelector('.game-header');
-      var nav = document.querySelector('.game-nav');
-      if (hdr && nav) {
-        var top = hdr.offsetHeight + nav.offsetHeight;
-        var s2 = document.createElement('style');
-        s2.textContent =
-          '.sidebar-circles{top:' + top + 'px!important}' +
-          '.sidebar-panel{top:' + top + 'px!important}';
-        document.head.appendChild(s2);
-      }
-    }, 200);
+  if (!hasSeeds) {
+    grid.innerHTML = '<div style="color:var(--muted);font-size:10px;padding:10px;grid-column:span 3">No seeds yet — go to Seeds tab and type TESTPACK to get a free pack!</div>';
+  }
+
+  /* Populate room selector */
+  var roomSel = document.getElementById('plantRoomSelect');
+  if (roomSel) {
+    roomSel.innerHTML = '';
+    (GS.rooms || []).forEach(function(r, i) {
+      var cnt = (GS.plants || []).filter(function(p){ return p.roomId === r.id; }).length;
+      var full = cnt >= r.slots;
+      var div = document.createElement('div');
+      div.className = 'room-btn' + (full ? ' locked' : '') + (i === (GS.activeRoom || 0) ? ' active' : '');
+      div.dataset.roomIdx = i;
+      div.onclick = function() {
+        if (full) return;
+        document.querySelectorAll('#plantRoomSelect .room-btn').forEach(function(b){ b.classList.remove('active'); });
+        div.classList.add('active');
+      };
+      div.innerHTML =
+        '<span class="room-btn-icon">🏠</span>' +
+        '<div class="room-btn-info"><div class="room-btn-name">' + r.name + '</div>' +
+        '<div class="room-btn-sub">' + cnt + '/' + r.slots + ' slots used</div></div>';
+      roomSel.appendChild(div);
+    });
+  }
+
+  /* Reset pot size selection */
+  var potOpts = document.querySelectorAll('.pot-size-opt');
+  potOpts.forEach(function(o){ o.classList.remove('selected'); });
+  if (potOpts[2]) potOpts[2].classList.add('selected'); /* default 5gal */
+
+  var noteEl = document.getElementById('plant-modal-note');
+  if (noteEl) noteEl.classList.add('hidden');
+};
+
+window.openPlantModal = function() {
+  window._prepPlantModal(null, false);
+  var el = document.getElementById('modal-plant');
+  if (el) el.classList.add('open');
+};
+
+window.openPlantModalFor = function(strainName, isMale) {
+  window._prepPlantModal(strainName, !!isMale);
+  var el = document.getElementById('modal-plant');
+  if (el) el.classList.add('open');
+};
+
+/* ================================================================
+   FIX THE "+ PLANT SEED" BUTTON IN THE HEADER
+   The HTML has onclick="openModal('modal-plant')" which now calls
+   _prepPlantModal first via our fixed openModal. ✓
+================================================================ */
+
+/* ================================================================
+   RENDER ALL — must not call showTab (which resets sub-nav state)
+================================================================ */
+window.renderAll = function() {
+  var GS = window.GS;
+  if (!GS || !GS.username) return;
+  try { renderHeader(); } catch(e) {}
+
+  var activePanel = document.querySelector('.tab-panel.active');
+  if (!activePanel) return;
+  var id = activePanel.id.replace('tab-', '');
+
+  var fns = {
+    grow:    function() { try{renderGrow();}catch(e){} try{renderCuring();}catch(e){} },
+    seeds:   function() { try{renderSeeds();}catch(e){} },
+    vault:   function() { try{renderVault();}catch(e){} },
+    market:  function() { try{renderMarket();}catch(e){} },
+    shop:    function() { try{window._renderShopKeepTab();}catch(e){} },
+    breed:   function() { try{renderBreed();}catch(e){} },
+    growoff: function() { try{renderGrowOff();}catch(e){} },
+    bmarket: function() { try{renderBlackMarket();}catch(e){} },
+    mail:    function() { try{renderMailbox();}catch(e){} },
+    stats:   function() { try{renderStats();}catch(e){} },
   };
+  if (fns[id]) fns[id]();
+  try { renderEnvPanel(); } catch(e) {}
+  try { window._updateSidebarSafe(); } catch(e) {}
+};
 
+/* ================================================================
+   SHOP TABS — persistent, never resets to 'rooms'
+================================================================ */
+window._activeShopSection = window._activeShopSection || 'rooms';
+
+window.showShopTab = function(name, btn) {
+  window._activeShopSection = name;
+  document.querySelectorAll('.shop-inv-tab').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) {
+    btn.classList.add('active');
+  } else {
+    var order = ['rooms','lights','climate','water','males','boosts'];
+    var idx = order.indexOf(name);
+    var btns = document.querySelectorAll('.shop-inv-tab');
+    if (idx >= 0 && btns[idx]) btns[idx].classList.add('active');
+  }
+  try { renderShopContent(name); } catch(e) {}
+};
+
+window._renderShopKeepTab = function() {
+  var sec = window._activeShopSection || 'rooms';
+  var order = ['rooms','lights','climate','water','males','boosts'];
+  document.querySelectorAll('.shop-inv-tab').forEach(function(b, i){
+    b.classList.toggle('active', order[i] === sec);
+  });
+  try { renderShopContent(sec); } catch(e) {}
+};
+
+/* Hook renderShop (called from other places) to preserve tab */
+window.renderShop = window._renderShopKeepTab;
+
+/* ================================================================
+   LIGHTS TOGGLE — null-safe
+================================================================ */
+window.toggleLights = function() {
+  var GS = window.GS;
+  if (!GS || !GS.rooms) return;
+  var idx  = (GS.activeRoom != null) ? GS.activeRoom : 0;
+  var room = GS.rooms[idx] || GS.rooms[0];
+  if (!room) return;
+
+  if (room.lightsOn) {
+    room.lightsOn    = false;
+    room.lightsOffAt = Date.now();
+    toast('Lights OFF 🌙', 'info');
+  } else {
+    var sprayed = room.lastSprayAt && (Date.now() - room.lastSprayAt) < 4 * 3600000;
+    var offHrs  = room.lightsOffAt ? (Date.now() - room.lightsOffAt) / 3600000 : 99;
+    if (sprayed && offHrs < 4) {
+      (GS.plants || []).filter(function(p){ return p.roomId === room.id; })
+        .forEach(function(p){ p.health = Math.max(0, (p.health || 100) - 10); });
+      toast('🔥 Burn penalty! −10 health each plant', 'err');
+    }
+    room.lightsOn    = true;
+    room.lightsOffAt = null;
+    toast('Lights ON 💡', 'ok');
+  }
+  try { renderEnvPanel(); } catch(e) {}
+  try { window._updateSidebarSafe(); } catch(e) {}
+  try { saveGame(); } catch(e) {}
+};
+window.quickToggleLights = window.toggleLights;
+
+/* ================================================================
+   DIFFICULTY — pre-selects current diff, null-safe
+================================================================ */
+window.tryChangeDifficulty = function() {
+  var GS = window.GS;
+  if (!GS) return;
+  if ((GS.plants || []).length > 0) {
+    toast('Remove all plants first to change difficulty', 'warn', 3000);
+    return;
+  }
+  var cur = GS.difficulty || 'easy';
+  window.selectedDiff = cur;
+  document.querySelectorAll('#diffChangeGrid .diff-opt').forEach(function(el) {
+    el.classList.toggle('selected', el.dataset.diff === cur);
+  });
+  var modal = document.getElementById('modal-difficulty');
+  if (modal) modal.classList.add('open');
+};
+
+/* ================================================================
+   UNLOCK ROOM MODAL — always shows info, shows cost if can't afford
+================================================================ */
+window.renderUnlockRoomOptions = function() {
+  var cont = document.getElementById('unlock-room-options');
+  var GS = window.GS;
+  if (!cont || !GS) return;
+
+  var roomCount = (GS.rooms || []).length;
+  var coins     = Math.floor(GS.coins || 0);
+
+  var opts = [
+    { key:'room2', label:'Room 2', price:2000,
+      desc:'Independent environment, lights, and 4 plant slots.',
+      owned: roomCount >= 2, locked: false },
+    { key:'room3', label:'Room 3', price:8000,
+      desc:'Triple-stage growing — veg, flower, seedling simultaneously.',
+      owned: roomCount >= 3, locked: roomCount < 2 },
+  ];
+
+  cont.innerHTML = '';
+  opts.forEach(function(o) {
+    var row = document.createElement('div');
+    row.style.cssText =
+      'display:flex;align-items:center;gap:12px;' +
+      'background:var(--card-bg);border:1px solid var(--border);' +
+      'border-radius:8px;padding:13px;margin-bottom:8px;' +
+      (o.locked ? 'opacity:0.45;pointer-events:none;' : '');
+
+    var actionHtml = '';
+    if (o.owned) {
+      actionHtml = '<span style="font-family:var(--font-hud);font-size:10px;color:var(--green);padding:6px 14px">✓ OWNED</span>';
+    } else if (o.locked) {
+      actionHtml = '<span style="font-family:var(--font-hud);font-size:9px;color:var(--muted);text-align:center;white-space:nowrap">Unlock<br>Room 2 first</span>';
+    } else if (coins >= o.price) {
+      actionHtml =
+        '<button style="padding:6px 14px;background:rgba(74,222,128,0.12);border:1px solid var(--green);' +
+        'border-radius:6px;color:var(--green);font-family:var(--font-hud);font-size:9px;letter-spacing:1px;cursor:pointer;" ' +
+        'onclick="buyGear(\'' + o.key + '\',' + o.price + ',\'' + o.label + '\');closeModal(\'modal-unlock-room\')">UNLOCK</button>';
+    } else {
+      var need = (o.price - coins).toLocaleString();
+      actionHtml =
+        '<div style="text-align:center;white-space:nowrap">' +
+        '<div style="font-family:var(--font-hud);font-size:9px;color:var(--red)">Need ' + need + '¢</div>' +
+        '<div style="font-size:8px;color:var(--muted);margin-top:2px">Have ' + coins.toLocaleString() + '¢</div>' +
+        '</div>';
+    }
+
+    row.innerHTML =
+      '<span style="font-size:22px;flex-shrink:0">🏠</span>' +
+      '<div style="flex:1;min-width:0">' +
+        '<div style="font-family:var(--font-hud);font-size:11px;color:var(--text)">' + o.label + '</div>' +
+        '<div style="font-size:9px;color:var(--muted);margin-top:2px">' + o.desc + '</div>' +
+        '<div style="font-family:var(--font-hud);font-size:12px;color:var(--gold);margin-top:5px">' + o.price.toLocaleString() + '¢</div>' +
+      '</div>' +
+      '<div style="flex-shrink:0">' + actionHtml + '</div>';
+    cont.appendChild(row);
+  });
+};
+
+/* ================================================================
+   SIDEBAR WARNINGS — null-safe
+================================================================ */
+window._updateSidebarSafe = function() {
+  var GS = window.GS;
+  if (!GS || !GS.rooms) return;
+  var idx  = (GS.activeRoom != null) ? GS.activeRoom : 0;
+  var room = GS.rooms[idx] || GS.rooms[0];
+  if (!room) return;
+
+  var diseased = (GS.plants || []).filter(function(p) {
+    return p.roomId === room.id && p.events && p.events.length > 0;
+  });
+
+  var sprayBtn = document.getElementById('sb-spray');
+  if (sprayBtn) {
+    if (diseased.length > 0) {
+      sprayBtn.classList.add('danger');
+      if (!sprayBtn.querySelector('.dot')) {
+        var d = document.createElement('div');
+        d.className = 'dot';
+        sprayBtn.appendChild(d);
+      }
+    } else {
+      sprayBtn.classList.remove('danger');
+      var dot = sprayBtn.querySelector('.dot');
+      if (dot) dot.remove();
+    }
+  }
+
+  var lightsBtn = document.getElementById('sb-lights');
+  var lightsLbl = document.getElementById('sb-lights-lbl');
+  if (lightsBtn && lightsLbl) {
+    if (room.lightsOn) {
+      lightsBtn.textContent = '💡';
+      lightsLbl.textContent = 'LIGHTS';
+      lightsBtn.classList.remove('warning');
+    } else {
+      lightsBtn.textContent = '🌙';
+      lightsLbl.textContent = 'DARK';
+      lightsBtn.classList.add('warning');
+    }
+  }
+};
+
+/* Alias for old code that calls updateSidebarWarnings */
+window.updateSidebarWarnings = window._updateSidebarSafe;
+
+/* ================================================================
+   SWITCH ROOM — null-safe
+================================================================ */
+window.switchRoom = function(idx) {
+  var GS = window.GS;
+  if (!GS || !GS.rooms || !GS.rooms[idx]) return;
+  GS.activeRoom = idx;
+  var room = GS.rooms[idx];
+
+  if (room && room.envTarget) {
+    var sl = function(id, v) { var el=document.getElementById(id); if(el) el.value=v; };
+    var sv = function(id, v) { var el=document.getElementById(id); if(el) el.textContent=v; };
+    sl('sl-temp',  room.envTarget.temp);
+    sv('sv-temp',  room.envTarget.temp + '°F');
+    sl('sl-humid', room.envTarget.humid);
+    sv('sv-humid', room.envTarget.humid + '%');
+    sl('sl-co2',   room.envTarget.co2);
+    sv('sv-co2',   room.envTarget.co2);
+    var light = (room.envTarget.light != null) ? room.envTarget.light : 100;
+    sl('sl-light', light);
+    sv('sv-light', light + '%');
+  }
+
+  var lbl = document.getElementById('env-room-label');
+  if (lbl) lbl.textContent = room.name;
+
+  try { renderRoomPanel(); } catch(e) {}
+  try { renderGrow(); } catch(e) {}
+  try { renderEnvPanel(); } catch(e) {}
+  try { window._updateSidebarSafe(); } catch(e) {}
+  try { toast('Switched to ' + room.name, 'info', 1500); } catch(e) {}
+};
+
+/* ================================================================
+   GAMETIC — safe wrapper (only wrap once)
+================================================================ */
+if (!window._nbgPatch303) {
+  window._nbgPatch303 = true;
+  var _origTick = window.gameTick;
+  window.gameTick = function() {
+    if (!window.GS || !window.GS.username) return;
+    try { _origTick(); } catch(e) { console.warn('[NBG tick]', e); }
+    try { checkRandomEvents(); } catch(e) {}
+    try { checkInspectShields(); } catch(e) {}
+    try { tickReservoir(); } catch(e) {}
+    try { tickCO2(); } catch(e) {}
+  };
+}
+
+/* ================================================================
+   FIX: loginSuccess — recalculate sidebar position after render
+================================================================ */
+var _origLogin = window.loginSuccess;
+window.loginSuccess = function(username, isMod) {
+  _origLogin(username, isMod);
+  setTimeout(function() {
+    var hdr = document.querySelector('.game-header');
+    var nav = document.querySelector('.game-nav');
+    if (hdr && nav) {
+      var top = hdr.offsetHeight + nav.offsetHeight;
+      var s = document.createElement('style');
+      s.textContent =
+        '.sidebar-circles{top:' + top + 'px!important}' +
+        '.sidebar-panel{top:' + top + 'px!important}';
+      document.head.appendChild(s);
+    }
+  }, 100);
+};
+
+/* ================================================================
+   FIX: renderGrow — the static "+ PLANT SEED" header button
+   calls openModal('modal-plant') via HTML onclick, which is now
+   fixed by our new openModal that calls _prepPlantModal first.
+   
+   Also ensure empty slots call openPlantModal correctly.
+   We patch renderGrow to use the correct onclick.
+================================================================ */
+var _origRenderGrow = window.renderGrow;
+window.renderGrow = function() {
+  var GS = window.GS;
+  if (!GS || !GS.rooms) return;
+  try { _origRenderGrow(); } catch(e) { console.warn('[renderGrow]', e); return; }
+
+  /* After renderGrow runs, find any empty slots that might have the
+     wrong onclick and ensure they open correctly */
+  document.querySelectorAll('.pot-slot.empty-slot').forEach(function(slot) {
+    slot.onclick = function() { window.openPlantModal(); };
+  });
+
+  /* Ensure the "+ PLANT SEED" header button also triggers correctly */
+  var plantBtn = document.querySelector('.btn-action.btn-cyan[onclick*="modal-plant"]');
+  if (plantBtn) {
+    plantBtn.onclick = function() { window.openPlantModal(); };
+  }
+};
+
+/* ================================================================
+   FIX renderStats — hook scoreboard in safely
+================================================================ */
+var _origRenderStats = window.renderStats;
+window.renderStats = function() {
+  try { _origRenderStats(); } catch(e) {}
+  try { renderScoreboard(); } catch(e) {}
+};
+
+/* ================================================================
+   MODAL CLICK-OUTSIDE CLOSE — reattach after patch
+================================================================ */
+document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+  /* Remove old listeners by cloning, but that's complex.
+     Instead just rely on the document-level handler already in Part 6. */
+});
+
+/* ================================================================
+   VERIFY on DOM ready
+================================================================ */
+window.addEventListener('load', function() {
+  /* Ensure the plant seed button in header always opens modal correctly */
+  var plantSeeds = document.querySelectorAll('[onclick="openModal(\'modal-plant\')"]');
+  plantSeeds.forEach(function(btn) {
+    btn.removeAttribute('onclick');
+    btn.addEventListener('click', function() { window.openPlantModal(); });
+  });
 
   console.log(
-    '%c🔧 NBG Patch v3.0.2 applied — layout, shop tabs, lights, buttons fixed',
+    '%c🔧 NBG Patch v3.0.3 loaded — all buttons fixed, openModal recursion resolved',
     'color:#4ade80;font-size:11px;font-family:monospace'
   );
+});
 
 })();
 </script>
