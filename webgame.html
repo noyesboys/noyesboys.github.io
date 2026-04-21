@@ -5017,261 +5017,320 @@ console.log('%c🌿 NOYES BOYS GROW-OFF v3.0','color:#4ade80;font-size:18px;font
 console.log('%c58 strains · 696 seed codes · Full breeding system','color:#a855f7;font-size:12px');
 console.log('%cAll 6 parts loaded successfully. ✅','color:#22c55e;font-size:12px');
 </script>
+<!-- ============================================================
+  NOYES BOYS GROW-OFF — PATCH v3.0.2
+  INSTRUCTIONS:
+  1. REMOVE the previous patch script tag (nbg_patch_v301.js) if you added it
+  2. Paste this entire block immediately before </body>
+  3. Do NOT use function declarations (function foo(){}) here — use window.foo = function(){}
+     to avoid JavaScript hoisting overwriting originals with our wrappers
+============================================================ -->
 <script>
-// ============================================================
-// NOYES BOYS GROW-OFF — PATCH v3.0.1
-// Add this as a new <script> block just before </body>
-// It overrides the broken functions with fixed versions.
-// ============================================================
+(function patchNBG() {
 
-// ===== FIX 1: Track active shop section so it never resets =====
-let activeShopSection = 'rooms';
+  /* ── 1. CSS FIXES (injected as a style element) ───────────────────── */
+  var css = [
+    /* Constrain game screen to viewport so content scrolls INSIDE, not the page */
+    '#screen-game { height:100vh !important; overflow:hidden !important; }',
+    '.game-wrapper { height:100% !important; min-height:0 !important; overflow:hidden !important; }',
 
-function showShopTab(name, btn) {
-  activeShopSection = name;
-  document.querySelectorAll('.shop-inv-tab').forEach(b => b.classList.remove('active'));
-  if (btn) {
-    btn.classList.add('active');
-  } else {
-    const tabs = ['rooms', 'lights', 'climate', 'water', 'males', 'boosts'];
-    const idx = tabs.indexOf(name);
-    const btns = document.querySelectorAll('.shop-inv-tab');
-    if (btns[idx]) btns[idx].classList.add('active');
-  }
-  renderShopContent(name);
-}
+    /* min-height:0 lets flex children shrink below content size (classic flex bug) */
+    '.game-body { min-height:0 !important; flex:1 !important; }',
+    '.game-content { height:100% !important; overflow-y:auto !important; }',
 
-function renderShop() {
-  renderShopContent(activeShopSection);
-  const tabs = ['rooms', 'lights', 'climate', 'water', 'males', 'boosts'];
-  document.querySelectorAll('.shop-inv-tab').forEach((b, i) => {
-    b.classList.toggle('active', tabs[i] === activeShopSection);
-  });
-}
+    /* Push sidebar below BOTH header (52px) and nav (~40px) */
+    '.sidebar-circles { top:92px !important; bottom:0 !important; }',
+    '.sidebar-panel   { top:92px !important; bottom:0 !important; }',
 
-// ===== FIX 2: renderAll must NOT reset sub-navigation state =====
-// Instead of calling showTab() (which re-switches the tab), call only the render fn
-function renderAll() {
-  renderHeader();
-  const activeTab = document.querySelector('.tab-panel.active');
-  if (!activeTab) return;
-  const id = activeTab.id.replace('tab-', '');
-  const renders = {
-    grow:    () => { renderGrow(); renderCuring(); },
-    seeds:   renderSeeds,
-    vault:   renderVault,
-    market:  renderMarket,
-    shop:    renderShop,
-    breed:   renderBreed,
-    growoff: renderGrowOff,
-    bmarket: renderBlackMarket,
-    mail:    renderMailbox,
-    stats:   renderStats,
+    /* Empty plant slots — ensure they're visible */
+    '.pot-slot.empty-slot { min-height:240px !important; cursor:pointer !important; }',
+
+    /* Make sure plant grid is always visible */
+    '#plantGrid { display:grid !important; }',
+
+    /* Ensure tab panels show correctly */
+    '.tab-panel.active { display:block !important; }',
+  ].join('\n');
+
+  var styleEl = document.createElement('style');
+  styleEl.textContent = css;
+  document.head.appendChild(styleEl);
+
+
+  /* ── 2. SHOP TABS — persistent section (module-scoped var, no hoisting issue) ── */
+  var _activeShop = 'rooms';
+
+  window.showShopTab = function(name, btn) {
+    _activeShop = name;
+    document.querySelectorAll('.shop-inv-tab').forEach(function(b) {
+      b.classList.remove('active');
+    });
+    if (btn) {
+      btn.classList.add('active');
+    } else {
+      var order = ['rooms','lights','climate','water','males','boosts'];
+      var i = order.indexOf(name);
+      var btns = document.querySelectorAll('.shop-inv-tab');
+      if (i >= 0 && btns[i]) btns[i].classList.add('active');
+    }
+    renderShopContent(name);
   };
-  if (renders[id]) try { renders[id](); } catch(e) { console.warn('renderAll tab error:', e); }
-  renderEnvPanel();
-  updateSidebarWarnings();
-}
 
-// ===== FIX 3: Lights toggle with proper null guards =====
-function toggleLights() {
-  if (!GS || !GS.rooms) return;
-  const idx = (GS.activeRoom !== undefined && GS.activeRoom !== null) ? GS.activeRoom : 0;
-  const room = GS.rooms[idx] || GS.rooms[0];
-  if (!room) return;
+  window.renderShop = function() {
+    renderShopContent(_activeShop);
+    var order = ['rooms','lights','climate','water','males','boosts'];
+    document.querySelectorAll('.shop-inv-tab').forEach(function(b, i) {
+      b.classList.toggle('active', order[i] === _activeShop);
+    });
+  };
 
-  if (room.lightsOn) {
-    room.lightsOn = false;
-    room.lightsOffAt = Date.now();
-    toast('Lights OFF 🌙', 'info');
-  } else {
-    const sprayed  = room.lastSprayAt && (Date.now() - room.lastSprayAt) < 4 * 3600000;
-    const offHrs   = room.lightsOffAt ? (Date.now() - room.lightsOffAt) / 3600000 : 99;
-    if (sprayed && offHrs < 4) {
-      (GS.plants || []).filter(p => p.roomId === room.id)
-        .forEach(p => p.health = Math.max(0, (p.health || 100) - 10));
-      toast('🔥 Burn penalty! −10 health each plant', 'err');
-    }
-    room.lightsOn   = true;
-    room.lightsOffAt = null;
-    toast('Lights ON 💡', 'ok');
-  }
-  renderEnvPanel();
-  updateSidebarWarnings();
-  saveGame();
-}
-function quickToggleLights() { toggleLights(); }
 
-// ===== FIX 4: Sidebar warnings with null guards =====
-function updateSidebarWarnings() {
-  if (!GS || !GS.rooms) return;
-  const idx  = (GS.activeRoom !== undefined && GS.activeRoom !== null) ? GS.activeRoom : 0;
-  const room = GS.rooms[idx] || GS.rooms[0];
-  if (!room) return;
+  /* ── 3. RENDER ALL — never calls showTab (which resets sub-nav state) ── */
+  window.renderAll = function() {
+    if (!window.GS || !window.GS.username) return;
+    try { renderHeader(); } catch(e) {}
+    var activePanel = document.querySelector('.tab-panel.active');
+    if (!activePanel) return;
+    var id = activePanel.id.replace('tab-', '');
+    var fns = {
+      grow:    function() { try { renderGrow();    } catch(e){} try { renderCuring(); } catch(e){} },
+      seeds:   function() { try { renderSeeds();   } catch(e){} },
+      vault:   function() { try { renderVault();   } catch(e){} },
+      market:  function() { try { renderMarket();  } catch(e){} },
+      shop:    function() { try { window.renderShop(); } catch(e){} },
+      breed:   function() { try { renderBreed();   } catch(e){} },
+      growoff: function() { try { renderGrowOff(); } catch(e){} },
+      bmarket: function() { try { renderBlackMarket(); } catch(e){} },
+      mail:    function() { try { renderMailbox(); } catch(e){} },
+      stats:   function() { try { renderStats();   } catch(e){} },
+    };
+    if (fns[id]) fns[id]();
+    try { renderEnvPanel();         } catch(e) {}
+    try { window.updateSidebarWarnings(); } catch(e) {}
+  };
 
-  const diseased = (GS.plants || []).filter(p =>
-    p.roomId === room.id && p.events && p.events.length > 0);
-  const sprayBtn = document.getElementById('sb-spray');
-  if (sprayBtn) {
-    if (diseased.length > 0) {
-      sprayBtn.classList.add('danger');
-      if (!sprayBtn.querySelector('.dot')) {
-        const d = document.createElement('div');
-        d.className = 'dot';
-        sprayBtn.appendChild(d);
-      }
-    } else {
-      sprayBtn.classList.remove('danger');
-      sprayBtn.querySelector('.dot')?.remove();
-    }
-  }
 
-  const lightsBtn = document.getElementById('sb-lights');
-  const lightsLbl = document.getElementById('sb-lights-lbl');
-  if (lightsBtn && lightsLbl) {
+  /* ── 4. LIGHTS TOGGLE — null-safe ─────────────────────────────────── */
+  window.toggleLights = function() {
+    if (!window.GS || !window.GS.rooms) return;
+    var idx  = (window.GS.activeRoom != null) ? window.GS.activeRoom : 0;
+    var room = window.GS.rooms[idx] || window.GS.rooms[0];
+    if (!room) return;
+
     if (room.lightsOn) {
-      lightsBtn.textContent = '💡';
-      lightsLbl.textContent = 'LIGHTS';
-      lightsBtn.classList.remove('warning');
+      room.lightsOn   = false;
+      room.lightsOffAt = Date.now();
+      toast('Lights OFF 🌙', 'info');
     } else {
-      lightsBtn.textContent = '🌙';
-      lightsLbl.textContent = 'DARK';
-      lightsBtn.classList.add('warning');
+      var sprayed = room.lastSprayAt && (Date.now() - room.lastSprayAt) < 4 * 3600000;
+      var offHrs  = room.lightsOffAt ? (Date.now() - room.lightsOffAt) / 3600000 : 99;
+      if (sprayed && offHrs < 4) {
+        (window.GS.plants || [])
+          .filter(function(p) { return p.roomId === room.id; })
+          .forEach(function(p) { p.health = Math.max(0, (p.health || 100) - 10); });
+        toast('🔥 Burn penalty! −10 health each plant', 'err');
+      }
+      room.lightsOn    = true;
+      room.lightsOffAt = null;
+      toast('Lights ON 💡', 'ok');
     }
-  }
-}
+    try { renderEnvPanel();               } catch(e) {}
+    try { window.updateSidebarWarnings(); } catch(e) {}
+    try { saveGame();                     } catch(e) {}
+  };
 
-// ===== FIX 5: Difficulty — pre-select current, open modal properly =====
-function tryChangeDifficulty() {
-  if (!GS) return;
-  const hasPlants = GS.plants && GS.plants.length > 0;
-  if (hasPlants) {
-    toast('Remove all plants first to change difficulty', 'warn', 3000);
-    return;
-  }
-  const current = GS.difficulty || 'easy';
-  selectedDiff = current;
-  document.querySelectorAll('#diffChangeGrid .diff-opt').forEach(el => {
-    el.classList.toggle('selected', el.dataset.diff === current);
-  });
-  openModal('modal-difficulty');
-}
+  window.quickToggleLights = function() { window.toggleLights(); };
 
-// ===== FIX 6: Unlock room modal — show info even when can't afford =====
-function renderUnlockRoomOptions() {
-  const cont = document.getElementById('unlock-room-options');
-  if (!cont || !GS) return;
-  const roomCount = (GS.rooms || []).length;
-  const coins     = GS.coins || 0;
 
-  const options = [
-    {
-      label: 'Room 2', price: 2000, key: 'room2',
-      desc:  'Independent environment, lights, and plant slots.',
-      owned: roomCount >= 2,
-    },
-    {
-      label: 'Room 3', price: 8000, key: 'room3',
-      desc:  'A third room — grow three stages simultaneously.',
-      owned: roomCount >= 3,
-      locked: roomCount < 2,
-    },
-  ];
+  /* ── 5. DIFFICULTY — pre-selects current, null-safe ──────────────── */
+  window.tryChangeDifficulty = function() {
+    if (!window.GS) return;
+    if ((window.GS.plants || []).length > 0) {
+      toast('Remove all plants first to change difficulty', 'warn', 3000);
+      return;
+    }
+    var cur = window.GS.difficulty || 'easy';
+    window.selectedDiff = cur;
+    document.querySelectorAll('#diffChangeGrid .diff-opt').forEach(function(el) {
+      el.classList.toggle('selected', el.dataset.diff === cur);
+    });
+    openModal('modal-difficulty');
+  };
 
-  cont.innerHTML = '';
-  options.forEach(o => {
-    const canAfford = coins >= o.price;
-    const wrapper   = document.createElement('div');
-    wrapper.style.cssText =
-      'background:var(--card-bg);border:1px solid var(--border);border-radius:8px;' +
-      'padding:12px;display:flex;align-items:center;gap:10px;margin-bottom:8px;' +
-      (o.locked ? 'opacity:0.5' : '');
 
-    const btn = document.createElement('button');
-    btn.style.cssText =
-      'padding:5px 14px;font-size:9px;font-family:var(--font-hud);letter-spacing:1px;' +
-      'border-radius:6px;border:1px solid;cursor:pointer;white-space:nowrap;transition:.2s';
+  /* ── 6. UNLOCK ROOM MODAL — always shows info, explains cost deficit ─ */
+  window.renderUnlockRoomOptions = function() {
+    var cont = document.getElementById('unlock-room-options');
+    if (!cont || !window.GS) return;
+    var roomCount = (window.GS.rooms || []).length;
+    var coins     = Math.floor(window.GS.coins || 0);
 
-    if (o.owned) {
-      btn.textContent = '✓ OWNED';
-      btn.style.cssText += ';background:rgba(74,222,128,0.1);border-color:var(--green);color:var(--green);cursor:default';
-    } else if (o.locked) {
-      btn.textContent = 'UNLOCK ROOM 2 FIRST';
-      btn.style.cssText += ';background:transparent;border-color:var(--border);color:var(--muted);cursor:not-allowed';
-    } else if (canAfford) {
-      btn.textContent = 'UNLOCK';
-      btn.style.cssText += ';background:rgba(74,222,128,0.12);border-color:var(--green);color:var(--green)';
-      btn.onclick = () => {
-        buyGear(o.key, o.price, o.label);
-        closeModal('modal-unlock-room');
-      };
-    } else {
-      const need = (o.price - coins).toLocaleString();
-      btn.textContent = `NEED ${need}¢ MORE`;
-      btn.style.cssText +=
-        ';background:transparent;border-color:var(--border);color:var(--muted);cursor:not-allowed';
-      btn.title = `You have ${coins.toLocaleString()}¢ — need ${o.price.toLocaleString()}¢`;
+    var opts = [
+      { key:'room2', label:'Room 2', price:2000,
+        desc:'Independent environment, lights, and plant slots.',
+        owned: roomCount >= 2, locked: false },
+      { key:'room3', label:'Room 3', price:8000,
+        desc:'Triple-stage growing — veg, flower, seedling at once.',
+        owned: roomCount >= 3, locked: roomCount < 2 },
+    ];
+
+    cont.innerHTML = '';
+    opts.forEach(function(o) {
+      var row = document.createElement('div');
+      row.style.cssText =
+        'display:flex;align-items:center;gap:12px;' +
+        'background:var(--card-bg);border:1px solid var(--border);' +
+        'border-radius:8px;padding:13px;margin-bottom:8px;' +
+        (o.locked ? 'opacity:0.45;' : '');
+
+      /* Build the action column */
+      var action = '';
+      if (o.owned) {
+        action = '<span style="font-family:var(--font-hud);font-size:9px;color:var(--green)">✓ OWNED</span>';
+      } else if (o.locked) {
+        action = '<span style="font-family:var(--font-hud);font-size:9px;color:var(--muted);text-align:center;display:block">Unlock Room 2<br>first</span>';
+      } else {
+        var canAfford = coins >= o.price;
+        if (canAfford) {
+          action = '<button style="padding:6px 14px;background:rgba(74,222,128,0.12);border:1px solid var(--green);' +
+            'border-radius:6px;color:var(--green);font-family:var(--font-hud);font-size:9px;' +
+            'letter-spacing:1px;cursor:pointer;" ' +
+            'onclick="buyGear(\'' + o.key + '\',' + o.price + ',\'' + o.label + '\')' +
+            ';closeModal(\'modal-unlock-room\')">UNLOCK</button>';
+        } else {
+          var need = (o.price - coins).toLocaleString();
+          action = '<div style="text-align:center">' +
+            '<div style="font-family:var(--font-hud);font-size:9px;color:var(--red)">Need ' + need + '¢ more</div>' +
+            '<div style="font-size:8px;color:var(--muted);margin-top:2px">Have ' + coins.toLocaleString() + '¢</div>' +
+            '</div>';
+        }
+      }
+
+      row.innerHTML =
+        '<span style="font-size:22px;flex-shrink:0">🏠</span>' +
+        '<div style="flex:1;min-width:0">' +
+          '<div style="font-family:var(--font-hud);font-size:11px;color:var(--text)">' + o.label + '</div>' +
+          '<div style="font-size:9px;color:var(--muted);margin-top:2px">' + o.desc + '</div>' +
+          '<div style="font-family:var(--font-hud);font-size:11px;color:var(--gold);margin-top:5px">' +
+            o.price.toLocaleString() + '¢</div>' +
+        '</div>' +
+        '<div style="flex-shrink:0">' + action + '</div>';
+      cont.appendChild(row);
+    });
+  };
+
+
+  /* ── 7. SIDEBAR WARNINGS — null-safe ──────────────────────────────── */
+  window.updateSidebarWarnings = function() {
+    if (!window.GS || !window.GS.rooms) return;
+    var idx  = (window.GS.activeRoom != null) ? window.GS.activeRoom : 0;
+    var room = window.GS.rooms[idx] || window.GS.rooms[0];
+    if (!room) return;
+
+    var diseased = (window.GS.plants || []).filter(function(p) {
+      return p.roomId === room.id && p.events && p.events.length > 0;
+    });
+    var sprayBtn = document.getElementById('sb-spray');
+    if (sprayBtn) {
+      if (diseased.length > 0) {
+        sprayBtn.classList.add('danger');
+        if (!sprayBtn.querySelector('.dot')) {
+          var d = document.createElement('div');
+          d.className = 'dot';
+          sprayBtn.appendChild(d);
+        }
+      } else {
+        sprayBtn.classList.remove('danger');
+        var dot = sprayBtn.querySelector('.dot');
+        if (dot) dot.remove();
+      }
     }
 
-    wrapper.innerHTML =
-      `<span style="font-size:22px">🏠</span>` +
-      `<div style="flex:1">` +
-        `<div style="font-family:var(--font-hud);font-size:11px;color:var(--text)">${o.label}</div>` +
-        `<div style="font-size:9px;color:var(--muted);margin-top:2px">${o.desc}</div>` +
-      `</div>` +
-      `<div style="text-align:right;flex-shrink:0">` +
-        `<div style="font-family:var(--font-hud);font-size:13px;color:var(--gold);margin-bottom:5px">` +
-          `${o.price.toLocaleString()}¢</div>` +
-      `</div>`;
-    wrapper.querySelector('div:last-child').appendChild(btn);
-    cont.appendChild(wrapper);
-  });
-}
+    var lightsBtn = document.getElementById('sb-lights');
+    var lightsLbl = document.getElementById('sb-lights-lbl');
+    if (lightsBtn && lightsLbl) {
+      if (room.lightsOn) {
+        lightsBtn.textContent = '💡';
+        lightsLbl.textContent = 'LIGHTS';
+        lightsBtn.classList.remove('warning');
+      } else {
+        lightsBtn.textContent = '🌙';
+        lightsLbl.textContent = 'DARK';
+        lightsBtn.classList.add('warning');
+      }
+    }
+  };
 
-// ===== FIX 7: switchRoom with null guard =====
-function switchRoom(idx) {
-  if (!GS || !GS.rooms || !GS.rooms[idx]) return;
-  GS.activeRoom = idx;
-  const room = GS.rooms[idx];
-  if (room && room.envTarget) {
-    const sl = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
-    const sv = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-    sl('sl-temp',  room.envTarget.temp);           sv('sv-temp',  room.envTarget.temp + '°F');
-    sl('sl-humid', room.envTarget.humid);          sv('sv-humid', room.envTarget.humid + '%');
-    sl('sl-co2',   room.envTarget.co2);            sv('sv-co2',   room.envTarget.co2);
-    sl('sl-light', room.envTarget.light ?? 100);   sv('sv-light', (room.envTarget.light ?? 100) + '%');
+
+  /* ── 8. SWITCH ROOM — null-safe ────────────────────────────────────── */
+  window.switchRoom = function(idx) {
+    if (!window.GS || !window.GS.rooms || !window.GS.rooms[idx]) return;
+    window.GS.activeRoom = idx;
+    var room = window.GS.rooms[idx];
+
+    if (room && room.envTarget) {
+      var sl = function(id, v) { var el = document.getElementById(id); if (el) el.value = v; };
+      var sv = function(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
+      sl('sl-temp',  room.envTarget.temp);
+      sv('sv-temp',  room.envTarget.temp + '°F');
+      sl('sl-humid', room.envTarget.humid);
+      sv('sv-humid', room.envTarget.humid + '%');
+      sl('sl-co2',   room.envTarget.co2);
+      sv('sv-co2',   room.envTarget.co2);
+      var light = (room.envTarget.light != null) ? room.envTarget.light : 100;
+      sl('sl-light', light);
+      sv('sv-light', light + '%');
+    }
+
+    var lbl = document.getElementById('env-room-label');
+    if (lbl) lbl.textContent = room.name;
+
+    try { renderRoomPanel();              } catch(e) {}
+    try { renderGrow();                   } catch(e) {}
+    try { renderEnvPanel();               } catch(e) {}
+    try { window.updateSidebarWarnings(); } catch(e) {}
+    toast('Switched to ' + room.name, 'info', 1500);
+  };
+
+
+  /* ── 9. SAFE gameTick wrapper — null guard, no circular wrap ────────── */
+  /* Only wrap if we haven't already (prevent double-wrapping on page reload) */
+  if (!window._nbgPatchApplied) {
+    var _origTick = window.gameTick;
+    window.gameTick = function() {
+      if (!window.GS || !window.GS.username) return;
+      try { _origTick(); } catch(e) { console.warn('[NBG] gameTick error:', e); }
+    };
+    window._nbgPatchApplied = true;
   }
-  const lbl = document.getElementById('env-room-label');
-  if (lbl) lbl.textContent = room.name;
-  renderRoomPanel();
-  renderGrow();
-  renderEnvPanel();
-  updateSidebarWarnings();
-  toast(`Switched to ${room.name}`, 'info', 1500);
-}
 
-// ===== FIX 8: renderEnvPanel null guard =====
-const _patchOrigRenderEnvPanel = renderEnvPanel;
-function renderEnvPanel() {
-  if (!GS || !GS.rooms) return;
-  try { _patchOrigRenderEnvPanel(); } catch(e) { console.warn('renderEnvPanel error:', e); }
-}
 
-// ===== FIX 9: renderGrow null guard =====
-const _patchOrigRenderGrow = renderGrow;
-function renderGrow() {
-  if (!GS || !GS.rooms) return;
-  try { _patchOrigRenderGrow(); } catch(e) { console.warn('renderGrow error:', e); }
-}
+  /* ── 10. Recalculate sidebar top after login (dynamic nav height) ──── */
+  var _origLoginSuccess = window.loginSuccess;
+  window.loginSuccess = function(username, isMod) {
+    _origLoginSuccess(username, isMod);
+    /* Measure actual header + nav height and adjust fixed sidebar */
+    setTimeout(function() {
+      var hdr = document.querySelector('.game-header');
+      var nav = document.querySelector('.game-nav');
+      if (hdr && nav) {
+        var top = hdr.offsetHeight + nav.offsetHeight;
+        var s2 = document.createElement('style');
+        s2.textContent =
+          '.sidebar-circles{top:' + top + 'px!important}' +
+          '.sidebar-panel{top:' + top + 'px!important}';
+        document.head.appendChild(s2);
+      }
+    }, 200);
+  };
 
-// ===== FIX 10: gameTick null guard =====
-const _patchOrigGameTick = window.gameTick;
-window.gameTick = function() {
-  if (!GS || !GS.username) return;
-  try { _patchOrigGameTick(); } catch(e) { console.warn('gameTick error:', e); }
-};
 
-console.log('%c🔧 NBG Patch v3.0.1 applied — shop tabs, lights, difficulty, null guards fixed','color:#4ade80;font-size:11px;font-family:monospace');
+  console.log(
+    '%c🔧 NBG Patch v3.0.2 applied — layout, shop tabs, lights, buttons fixed',
+    'color:#4ade80;font-size:11px;font-family:monospace'
+  );
+
+})();
 </script>
 </body>
 </html>
