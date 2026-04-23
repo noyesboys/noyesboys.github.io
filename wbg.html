@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noyes Boys: The Farm</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #4ade80; --carbon: #080c08; --gold: #fbbf24;
+    --font-hud: 'Orbitron', monospace; --font-mono: 'Share Tech Mono', monospace;
+  }
+  body {
+    margin: 0; padding: 0; background: var(--carbon); color: var(--green);
+    overflow: hidden; font-family: var(--font-mono);
+  }
+  #gameCanvas {
+    display: block; margin: 0 auto; background: #111;
+    border: 2px solid var(--green); box-shadow: 0 0 20px rgba(74,222,128,0.2);
+  }
+  #hud {
+    position: absolute; top: 10px; left: 10px; pointer-events: none;
+    background: rgba(0,0,0,0.8); padding: 15px; border: 1px solid var(--green);
+    border-radius: 8px;
+  }
+  #hud h1 { font-family: var(--font-hud); margin: 0 0 10px 0; font-size: 18px; color: var(--gold); }
+  .hud-stat { margin-bottom: 5px; font-size: 14px; }
+  #interaction-prompt {
+    position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%);
+    background: rgba(251,191,36,0.9); color: #000; padding: 10px 20px;
+    font-family: var(--font-hud); font-size: 16px; border-radius: 5px;
+    display: none; pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<div id="hud">
+  <h1>NOYES BOYS</h1>
+  <div class="hud-stat" id="hud-coins">Coins: 500¢</div>
+  <div class="hud-stat" id="hud-power">Power Draw: 150W</div>
+  <div class="hud-stat" id="hud-zone">Zone: Bedroom</div>
+  <div class="hud-stat" id="hud-env" style="color:#aaa; font-size:12px; margin-top:10px;">Temp: -- | RH: --</div>
+</div>
+
+<div id="interaction-prompt">PRESS [E] TO INTERACT</div>
+
+<canvas id="gameCanvas" width="1024" height="768"></canvas>
+
+<script>
+// ==========================================
+// GAME ENGINE & STATE
+// ==========================================
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+// Input tracking
+const keys = { w:false, a:false, s:false, d:false, e:false };
+window.addEventListener('keydown', e => { 
+  if(keys.hasOwnProperty(e.key.toLowerCase())) keys[e.key.toLowerCase()] = true; 
+});
+window.addEventListener('keyup', e => { 
+  if(keys.hasOwnProperty(e.key.toLowerCase())) keys[e.key.toLowerCase()] = false; 
+});
+
+// Player State
+const player = {
+  x: 500, y: 600, size: 32, speed: 4, color: '#fbbf24',
+  coins: 500, knowledge: 10 // Used to unlock new zones
+};
+
+// ==========================================
+// ZONES & ROOM LOGIC
+// ==========================================
+// We define spatial zones. If the player overlaps them, they enter that "Room"
+const zones = {
+  closet: { 
+    id: 'closet', name: 'The Starter Closet', unlocked: true, 
+    x: 50, y: 50, w: 150, h: 200, color: 'rgba(74,222,128,0.2)',
+    env: { temp: 82, humid: 55, power: 150 }, maxPlants: 2
+  },
+  tent4x4: { 
+    id: 'tent4x4', name: '4x4 Veg Tent', unlocked: false, cost: 2000, reqK: 50,
+    x: 250, y: 50, w: 200, h: 200, color: 'rgba(59,130,246,0.2)',
+    env: { temp: 78, humid: 65, power: 400 }, maxPlants: 4
+  },
+  tent8x8: { 
+    id: 'tent8x8', name: '8x8 Flower Tent', unlocked: false, cost: 8000, reqK: 150,
+    x: 500, y: 50, w: 300, h: 300, color: 'rgba(168,85,247,0.2)',
+    env: { temp: 75, humid: 45, power: 1200 }, maxPlants: 12
+  },
+  mainRoom: { 
+    id: 'mainRoom', name: 'Full Room Grow', unlocked: false, cost: 25000, reqK: 500,
+    x: 50, y: 400, w: 400, h: 300, color: 'rgba(239,68,68,0.2)',
+    env: { temp: 78, humid: 50, power: 3000 }, maxPlants: 25
+  },
+  greenhouse: { 
+    id: 'greenhouse', name: 'Outdoor Greenhouse', unlocked: false, cost: 100000, reqK: 1000,
+    x: 850, y: 0, w: 174, h: 768, color: 'rgba(34,211,238,0.2)', // Covers right side of screen
+    env: { temp: 85, humid: 70, power: 500 }, maxPlants: 50
+  }
+};
+
+let currentZone = null;
+let activePrompt = null;
+
+// ==========================================
+// GAME LOOP
+// ==========================================
+function update() {
+  // Movement
+  if (keys.w && player.y > 0) player.y -= player.speed;
+  if (keys.s && player.y < canvas.height - player.size) player.y += player.speed;
+  if (keys.a && player.x > 0) player.x -= player.speed;
+  if (keys.d && player.x < canvas.width - player.size) player.x += player.speed;
+
+  // Collision / Zone Detection
+  let inZone = null;
+  activePrompt = null;
+
+  for (let key in zones) {
+    let z = zones[key];
+    // Check if player is inside the zone boundaries
+    if (player.x < z.x + z.w && player.x + player.size > z.x &&
+        player.y < z.y + z.h && player.y + player.size > z.y) {
+      
+      inZone = z;
+      
+      if (!z.unlocked) {
+        activePrompt = `UNLOCK ${z.name.toUpperCase()} (${z.cost}¢, ${z.reqK} XP)`;
+        // If they press E, attempt to unlock
+        if (keys.e) attemptUnlock(z);
+      } else {
+        activePrompt = `MANAGE ${z.name.toUpperCase()}`;
+        // Here is where you would open the "Manage Plants" computer UI from your old code
+        // if (keys.e) openManagementUI(z); 
+      }
+    }
+  }
+
+  currentZone = inZone;
+  updateHUD();
+}
+
+function draw() {
+  // Clear screen
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw Zones (Rooms/Tents)
+  for (let key in zones) {
+    let z = zones[key];
+    
+    // Draw floor
+    ctx.fillStyle = z.unlocked ? z.color : 'rgba(50,50,50,0.5)';
+    ctx.fillRect(z.x, z.y, z.w, z.h);
+    
+    // Draw border
+    ctx.strokeStyle = z.unlocked ? '#4ade80' : '#555';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(z.x, z.y, z.w, z.h);
+
+    // Draw label
+    ctx.fillStyle = z.unlocked ? '#fff' : '#888';
+    ctx.font = '14px Share Tech Mono';
+    ctx.fillText(z.name + (z.unlocked ? '' : ' [LOCKED]'), z.x + 10, z.y + 20);
+  }
+
+  // Draw Player
+  ctx.fillStyle = player.color;
+  ctx.fillRect(player.x, player.y, player.size, player.size);
+  
+  // Draw Player Shadow/Outline
+  ctx.strokeStyle = '#000';
+  ctx.strokeRect(player.x, player.y, player.size, player.size);
+}
+
+function loop() {
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// ==========================================
+// MECHANICS & UI
+// ==========================================
+function updateHUD() {
+  document.getElementById('hud-coins').innerText = `Coins: ${player.coins.toLocaleString()}¢ | XP: ${player.knowledge}`;
+  
+  // Calculate total power
+  let totalPower = 0;
+  for (let key in zones) {
+    if (zones[key].unlocked) totalPower += zones[key].env.power;
+  }
+  document.getElementById('hud-power').innerText = `Total Power Draw: ${totalPower}W`;
+
+  if (currentZone && currentZone.unlocked) {
+    document.getElementById('hud-zone').innerText = `Zone: ${currentZone.name}`;
+    document.getElementById('hud-zone').style.color = '#4ade80';
+    document.getElementById('hud-env').innerText = `Temp: ${currentZone.env.temp}°F | RH: ${currentZone.env.humid}%`;
+  } else {
+    document.getElementById('hud-zone').innerText = `Zone: Hallway`;
+    document.getElementById('hud-zone').style.color = '#fff';
+    document.getElementById('hud-env').innerText = `Temp: 72°F | RH: 50%`;
+  }
+
+  const promptEl = document.getElementById('interaction-prompt');
+  if (activePrompt) {
+    promptEl.style.display = 'block';
+    promptEl.innerText = `[E] ${activePrompt}`;
+  } else {
+    promptEl.style.display = 'none';
+  }
+}
+
+// Debounce for 'E' key so we don't buy things 60 times a second
+let canInteract = true;
+function attemptUnlock(zone) {
+  if (!canInteract) return;
+  canInteract = false;
+  setTimeout(() => canInteract = true, 500); // 500ms cooldown
+
+  if (player.coins >= zone.cost && player.knowledge >= zone.reqK) {
+    player.coins -= zone.cost;
+    zone.unlocked = true;
+    console.log(`${zone.name} Unlocked!`);
+  } else {
+    console.log('Not enough coins or XP!');
+  }
+}
+
+// Start Engine
+loop();
+</script>
+</body>
+</html>
