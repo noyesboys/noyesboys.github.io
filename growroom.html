@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grow Room</title>
+  <link rel="stylesheet" href="css/growroom.css" />
+</head>
+<body>
+  <div class="bg-glow"></div>
+  <div class="bg-grid"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-badge">NB</div>
+      <div>
+        <div class="brand-title">NOYES BOYS: GROW ROOM</div>
+        <div class="brand-sub">MODULAR 2D / 2.5D BUILD</div>
+      </div>
+    </div>
+
+    <div class="top-stats">
+      <div class="stat-pill"><span>Credits</span> <strong id="credits">0</strong></div>
+      <div class="stat-pill"><span>Total G</span> <strong id="totalG">0.0</strong></div>
+      <div class="stat-pill"><span>Room</span> <strong id="roomMood">Stable</strong></div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="scene-panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-kicker">Top-down grow room</div>
+          <h1>Room View</h1>
+        </div>
+        <div class="chip" id="envChip">74°F / 55%</div>
+      </div>
+
+      <div class="room-scene" id="roomScene">
+        <div class="room-core"></div>
+        <div class="room-light room-light-a"></div>
+        <div class="room-light room-light-b"></div>
+        <div class="room-floor"></div>
+        <div class="plant-grid" id="plantGrid"></div>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="panel">
+        <div class="panel-head compact">
+          <div>
+            <div class="panel-kicker">Controls</div>
+            <h2>Actions</h2>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="btn" onclick="waterAll()">💧 Water All</button>
+          <button class="btn" onclick="boostLight()">💡 Boost Light</button>
+          <button class="btn" onclick="coolRoom()">❄️ Cool Room</button>
+          <button class="btn" onclick="humidify()">💨 Humidify</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head compact">
+          <div>
+            <div class="panel-kicker">Climate Dock</div>
+            <h2>Environment</h2>
+          </div>
+        </div>
+        <div class="sliders">
+          <label>Target Temp <span id="tempVal">75°F</span></label>
+          <input id="tempSlider" type="range" min="65" max="88" value="75" />
+          <label>Target RH <span id="rhVal">55%</span></label>
+          <input id="rhSlider" type="range" min="35" max="75" value="55" />
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head compact">
+          <div>
+            <div class="panel-kicker">Save / Load</div>
+            <h2>Session</h2>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="btn secondary" onclick="saveGame()">💾 Save Now</button>
+          <button class="btn secondary" onclick="resetDemo()">↺ Reset Demo</button>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script src="js/growroom.js"></script>
+</body>
+</html>
