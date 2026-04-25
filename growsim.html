@@ -63,8 +63,6 @@
       z-index: 10;
     }
 
-    h1 { color: #1aff7a; }
-
     nav a {
       margin-left: 20px;
       color: #baffd4;
@@ -80,8 +78,6 @@
       background: rgba(0, 0, 0, 0.55);
       color: #baffd4;
       font-size: 0.8rem;
-      white-space: nowrap;
-      box-shadow: 0 0 12px rgba(26,255,122,0.15);
     }
 
     .hero {
@@ -95,22 +91,6 @@
       font-size: 3rem;
       color: #1aff7a;
       text-shadow: 0 0 20px #1aff7a;
-    }
-
-    .hero p {
-      max-width: 600px;
-      margin: 15px auto;
-    }
-
-    .play-btn {
-      margin-top: 25px;
-      padding: 16px 30px;
-      font-size: 1.2rem;
-      background: linear-gradient(45deg, #1aff7a, #00cc66);
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      box-shadow: 0 0 15px #1aff7a;
     }
 
     .section {
@@ -141,26 +121,13 @@
       padding: 18px;
     }
 
-    .highlight { color: #1aff7a; }
-
-    .image-placeholder {
-      margin-top: 10px;
+    .card img {
+      width: 100%;
       height: 180px;
-      border: 1px dashed #1aff7a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0.5;
-      font-size: 0.8rem;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      border-top: 1px solid #1aff7a;
-      background: rgba(0,0,0,0.6);
-      position: relative;
-      z-index: 1;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #1aff7a;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -171,23 +138,20 @@
 <div class="fog"></div>
 
 <header>
-  <div style="display:flex; align-items:center; gap:20px;">
-    <img src="/assets/img/noyes boys logo.png" alt="Noyes Boys" style="height:36px;">
-  </div>
+  <img src="/assets/img/noyes boys logo.png" style="height:36px;">
 
-  <nav style="margin-left:auto; display:flex; align-items:center; gap:20px;">
+  <nav>
     <a href="/index">Home</a>
     <a href="/genetics.html">Shop</a>
     <a href="/contact_us.html">Community</a>
     <a href="/webgame.html">Play</a>
-    <div class="live-badge" id="liveBadge">12 players today</div>
+    <span class="live-badge" id="liveBadge">12 players today</span>
   </nav>
 </header>
 
 <section class="hero">
   <h2>YOU DON'T CONTROL THE PLANT</h2>
-  <p>You respond to it. Every decision matters. Every mistake shows.</p>
-  <button class="play-btn" onclick="window.location.href='https://noyesboys.com/webgame'">PLAY NOW</button>
+  <p>You respond to it. Every decision matters.</p>
 </section>
 
 <section class="section">
@@ -197,42 +161,43 @@
     <div class="card">
       <h3>Nothing Is Faked</h3>
       <p><span class="highlight">Every system affects another.</span> Heat, humidity, nutrients, and light all interact in real time.</p>
-      <div class="image-placeholder">/assets/webgame/params.jpeg</div>
+      <p>If something feels off, it usually is — and it will show in your final result.</p>
+      <img src="/assets/webgame/params.jpeg" alt="Parameters panel">
     </div>
 
     <div class="card">
       <h3>Perfect Grows Are Rare</h3>
       <p>Most players will get close.</p>
       <p><span class="highlight">Only the best will ever hit perfection.</span></p>
-      <div class="image-placeholder">/assets/webgame/stats.jpeg</div>
+      <img src="/assets/webgame/stats.jpeg" alt="Grow stats">
     </div>
 
     <div class="card">
       <h3>Time Never Stops</h3>
       <p>Plants grow even when you're offline.</p>
       <p><span class="highlight">Neglect has consequences.</span></p>
-      <div class="image-placeholder">/assets/webgame/plants.jpeg</div>
+      <img src="/assets/webgame/plants.jpeg" alt="Plants growing">
     </div>
 
     <div class="card">
       <h3>Real Consequences</h3>
       <p>Wrong move? You feel it.</p>
       <p><span class="highlight">Overfeed, overheat, overwater — it all matters.</span></p>
-      <div class="image-placeholder">/assets/webgame/harvest.jpeg</div>
+      <img src="/assets/webgame/harvest.jpeg" alt="Harvest results">
     </div>
 
     <div class="card">
       <h3>Every Grow Is Unique</h3>
       <p>No scripted outcomes.</p>
       <p><span class="highlight">Every plant tells a different story.</span></p>
-      <div class="image-placeholder">/assets/webgame/veg.jpeg</div>
+      <img src="/assets/webgame/veg.jpeg" alt="Vegetative growth">
     </div>
 
     <div class="card">
       <h3>Mastery Takes Time</h3>
       <p>You won’t learn this in one run.</p>
       <p><span class="highlight">You get better every grow.</span></p>
-      <div class="image-placeholder">/assets/webgame/profile.jpeg</div>
+      <img src="/assets/webgame/profile.jpeg" alt="Player profile">
     </div>
 
   </div>
@@ -245,50 +210,41 @@
     <div class="card">
       <h3>Start From Seed</h3>
       <p>Choose your strain and begin your grow.</p>
-      <div class="image-placeholder">/assets/webgame/seeds.jpeg</div>
+      <img src="/assets/webgame/seeds.jpeg" alt="Seed inventory">
     </div>
 
     <div class="card">
       <h3>Dial In Your Environment</h3>
       <p>Control light, humidity, temperature, and airflow.</p>
-      <div class="image-placeholder">/assets/webgame/upgrades.jpeg</div>
+      <img src="/assets/webgame/upgrades.jpeg" alt="Equipment upgrades">
     </div>
 
     <div class="card">
       <h3>Feed & Monitor</h3>
       <p>Adjust nutrients, track runoff, and react to plant needs.</p>
-      <div class="image-placeholder">/assets/webgame/water.jpeg</div>
+      <img src="/assets/webgame/water.jpeg" alt="Watering and feeding">
     </div>
 
     <div class="card">
       <h3>Handle Problems</h3>
       <p>Pests, stress, dryness — solve issues before they spread.</p>
-      <div class="image-placeholder">/assets/webgame/spray.jpeg</div>
+      <img src="/assets/webgame/spray.jpeg" alt="Spraying plants">
     </div>
 
     <div class="card">
       <h3>Harvest & Analyze</h3>
       <p>Your final result reflects every decision you made.</p>
-      <div class="image-placeholder">/assets/webgame/inspect.jpeg</div>
+      <img src="/assets/webgame/inspect.jpeg" alt="Inspecting harvest">
     </div>
 
     <div class="card">
       <h3>Improve Next Run</h3>
       <p>Learn from mistakes and push for a better grow.</p>
-      <div class="image-placeholder">/assets/webgame/train.jpeg</div>
+      <img src="/assets/webgame/train.jpeg" alt="Training and improvement">
     </div>
 
   </div>
 </section>
-
-<section class="section" style="text-align:center;">
-  <h2 class="section-title">Think You Can Grow It Perfectly?</h2>
-  <button class="play-btn" onclick="window.location.href='https://noyesboys.com/webgame'">ENTER THE GROW ROOM</button>
-</section>
-
-<footer>
-  <p>© Noyes Boys | All Rights Reserved</p>
-</footer>
 
 <script>
   const container = document.getElementById('particles');
@@ -299,23 +255,6 @@
     p.style.animationDuration = (6 + Math.random() * 10) + 's';
     container.appendChild(p);
   }
-
-  const badge = document.getElementById('liveBadge');
-  let playerCount = 12;
-
-  function updatePlayerBadge() {
-    const drift = Math.random() < 0.5 ? -1 : 1;
-    const chanceToMove = Math.random();
-
-    if (chanceToMove > 0.35) {
-      playerCount = Math.max(5, Math.min(25, playerCount + drift));
-    }
-
-    badge.textContent = `Players who logged in today: ${playerCount}`;
-  }
-
-  setInterval(updatePlayerBadge, 90000);
-  setTimeout(updatePlayerBadge, 12000);
 </script>
 
 </body>
