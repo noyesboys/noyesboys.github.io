@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Noyes Boys Grow Simulator</title>
+  <title>Noyes Boys Grow Simulator</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
@@ -15,76 +16,119 @@
       overflow-x: hidden;
     }
 
-    .particles, .fog { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: 0; pointer-events: none; }
+    .particles, .fog {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
 
     .particle {
-      position: absolute; width: 4px; height: 4px;
-      background: #1aff7a; border-radius: 50%; opacity: 0.3;
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #1aff7a;
+      border-radius: 50%;
+      opacity: 0.3;
       animation: float 10s linear infinite;
     }
 
-    @keyframes float { from { transform: translateY(100vh);} to { transform: translateY(-10vh);} }
+    @keyframes float {
+      from { transform: translateY(100vh); }
+      to { transform: translateY(-10vh); }
+    }
 
-    .fog { background: radial-gradient(circle, rgba(26,255,122,0.05) 0%, transparent 70%); animation: fogMove 30s linear infinite; }
-    @keyframes fogMove { from { transform: translate(-25%, -25%);} to { transform: translate(0%, 0%);} }
+    .fog {
+      background: radial-gradient(circle, rgba(26,255,122,0.05) 0%, transparent 70%);
+      animation: fogMove 30s linear infinite;
+    }
+
+    @keyframes fogMove {
+      from { transform: translate(-25%, -25%); }
+      to { transform: translate(0%, 0%); }
+    }
 
     header {
-      position: sticky; top: 0;
-      display: flex; justify-content: space-between; align-items: center;
+      position: sticky;
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       padding: 15px 30px;
       background: rgba(0,0,0,0.7);
       border-bottom: 1px solid #1aff7a;
       z-index: 10;
     }
 
-    header h1 {
-      color: #1aff7a;
-      letter-spacing: 2px;
-      text-shadow: 0 0 10px #1aff7a;
+    h1 { color: #1aff7a; }
+
+    nav a {
+      margin-left: 20px;
+      color: #baffd4;
+      text-decoration: none;
     }
 
-    nav a { margin-left: 20px; text-decoration: none; color: #baffd4; font-size: 0.9rem; }
-    nav a:hover { color: #1aff7a; }
+    .live-badge {
+      margin-left: auto;
+      margin-right: 24px;
+      padding: 8px 12px;
+      border: 1px solid #1aff7a;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.55);
+      color: #baffd4;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      box-shadow: 0 0 12px rgba(26,255,122,0.15);
+    }
 
     .hero {
       text-align: center;
-      padding: 80px 20px 60px;
+      padding: 100px 20px 80px;
       position: relative;
       z-index: 1;
     }
 
     .hero h2 {
-      font-size: 2.5rem;
+      font-size: 3rem;
       color: #1aff7a;
       text-shadow: 0 0 20px #1aff7a;
     }
 
-    .hero p { max-width: 600px; margin: 15px auto; font-size: 1rem; }
+    .hero p {
+      max-width: 600px;
+      margin: 15px auto;
+    }
 
     .play-btn {
-      margin-top: 25px; padding: 16px 30px;
+      margin-top: 25px;
+      padding: 16px 30px;
       font-size: 1.2rem;
       background: linear-gradient(45deg, #1aff7a, #00cc66);
-      border: none; border-radius: 10px;
-      color: black; cursor: pointer;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
       box-shadow: 0 0 15px #1aff7a;
-      transition: 0.3s;
     }
-
-    .play-btn:hover { transform: scale(1.08); box-shadow: 0 0 30px #1aff7a; }
 
     .section {
-      padding: 40px 20px;
-      position: relative; z-index: 1;
-      opacity: 0; transform: translateY(30px);
-      transition: all 0.6s ease;
+      padding: 60px 20px;
+      position: relative;
+      z-index: 1;
     }
 
-    .section.visible { opacity: 1; transform: translateY(0); }
+    .section-title {
+      text-align: center;
+      color: #1aff7a;
+      font-size: 1.8rem;
+      margin-bottom: 30px;
+    }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
       max-width: 1100px;
       margin: auto;
@@ -95,205 +139,152 @@
       border: 1px solid #1aff7a;
       border-radius: 10px;
       padding: 18px;
-      text-align: left;
     }
 
-    .card h3 { color: #1aff7a; margin-bottom: 10px; font-size: 1.1rem; }
-    .card p { margin: 5px 0; font-size: 0.9rem; }
+    .highlight { color: #1aff7a; }
 
-    .progression { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .image-placeholder {
+      margin-top: 10px;
+      height: 180px;
+      border: 1px dashed #1aff7a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.5;
+      font-size: 0.8rem;
+    }
 
-    .stage {
-      border: 1px solid #1aff7a;
-      padding: 12px;
-      border-radius: 8px;
-      background: rgba(0,0,0,0.5);
+    footer {
       text-align: center;
-      font-size: 0.85rem;
-    }
-
-    .screenshot-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 10px;
-    }
-
-    .screenshot-grid img {
-      width: 100%; border-radius: 8px; border: 1px solid #1aff7a;
-    }
-
-    .testimonial {
+      padding: 20px;
+      border-top: 1px solid #1aff7a;
       background: rgba(0,0,0,0.6);
-      border: 1px solid #1aff7a;
-      padding: 15px;
-      border-radius: 8px;
-      font-size: 0.85rem;
+      position: relative;
+      z-index: 1;
     }
-
-    .live-feed {
-      position: fixed;
-      bottom: 15px;
-      right: 15px;
-      background: rgba(0,0,0,0.8);
-      border: 1px solid #1aff7a;
-      border-radius: 8px;
-      padding: 10px;
-      width: 220px;
-      font-size: 0.75rem;
-      opacity: 0.8;
-      transition: opacity 0.3s;
-    }
-
-    .live-feed:hover { opacity: 1; }
-
-    footer { text-align: center; padding: 20px; border-top: 1px solid #1aff7a; background: rgba(0,0,0,0.6); font-size: 0.8rem; }
   </style>
 </head>
+
 <body>
 
 <div class="particles" id="particles"></div>
 <div class="fog"></div>
 
 <header>
-  <h1>NOYES BOYS ⚡</h1>
-  <nav>
+  <div style="display:flex; align-items:center; gap:20px;">
+    <img src="/INSERTLOGOHERE" alt="Noyes Boys" style="height:36px;">
+  </div>
+
+  <nav style="margin-left:auto; display:flex; align-items:center; gap:20px;">
     <a href="#">Home</a>
     <a href="#">Shop</a>
     <a href="#">Community</a>
     <a href="#">Play</a>
+    <div class="live-badge" id="liveBadge">12 players today</div>
   </nav>
 </header>
 
 <section class="hero">
-  <h2>GROW SIMULATOR</h2>
-  <p>Every decision changes your plant. Can you grow it perfectly?</p>
+  <h2>YOU DON'T CONTROL THE PLANT</h2>
+  <p>You respond to it. Every decision matters. Every mistake shows.</p>
   <button class="play-btn" onclick="window.location.href='https://noyesboys.com/webgame'">PLAY NOW</button>
 </section>
 
 <section class="section">
+  <h2 class="section-title">Why This Game Hits Different</h2>
   <div class="grid">
 
     <div class="card">
-      <h3>How It Works</h3>
-      <p>Plant seeds of your chosen strain.</p>
-      <p>Adjust environment (light, water, nutrients, temperature).</p>
-      <p>Face challenges like pests and mildew.</p>
-      <p>Harvest, analyze, and upgrade.</p>
+      <h3>Nothing Is Faked</h3>
+      <p><span class="highlight">Every system affects another.</span> Heat, humidity, nutrients, and light all interact in real time.</p>
+      <div class="image-placeholder">/INSERTPHOTOHERE</div>
     </div>
 
     <div class="card">
-      <h3>Deep Systems</h3>
-      <p><b>Environment:</b> Indoor/outdoor, seasons.</p>
-      <p><b>Genetics:</b> Hidden stats + rare phenos.</p>
-      <p><b>Upgrades:</b> Lights, airflow, nutrients.</p>
-      <p><b>Market:</b> Buy & sell for profit.</p>
+      <h3>Perfect Grows Are Rare</h3>
+      <p>Most players will get close.</p>
+      <p><span class="highlight">Only the best will ever hit perfection.</span></p>
+      <div class="image-placeholder">/INSERTPHOTOHERE</div>
     </div>
 
     <div class="card">
-      <h3>Progression</h3>
-      <div class="progression">
-        <div class="stage">🌱 Start</div>
-        <div class="stage">💡 Upgrade</div>
-        <div class="stage">🧬 Discover</div>
-        <div class="stage">🏆 Master</div>
-      </div>
+      <h3>Time Never Stops</h3>
+      <p>Plants grow even when you're offline.</p>
+      <p><span class="highlight">Neglect has consequences.</span></p>
+      <div class="image-placeholder">/INSERTPHOTOHERE</div>
     </div>
 
     <div class="card">
-      <h3>Community</h3>
-      <p><b>Leaderboards:</b> Compete globally.</p>
-      <p><b>Events:</b> Seasonal grow-offs.</p>
-      <p><b>Trading:</b> Share genetics.</p>
+      <h3>Real Consequences</h3>
+      <p>Wrong move? You feel it.</p>
+      <p><span class="highlight">Overfeed, overheat, overwater — it all matters.</span></p>
+      <div class="image-placeholder">/INSERTPHOTOHERE</div>
     </div>
 
     <div class="card">
-      <h3>What Players Say</h3>
-      <div class="testimonial">“A groundbreaking simulation.”</div>
-      <div class="testimonial">“I’m hooked already.”</div>
+      <h3>Every Grow Is Unique</h3>
+      <p>No scripted outcomes.</p>
+      <p><span class="highlight">Every plant tells a different story.</span></p>
+      <div class="image-placeholder">/INSERTPHOTOHERE</div>
     </div>
 
     <div class="card">
-      <h3>Whats to come</h3>
-      <div class="testimonial">Proper Logins not just Local Saves</div>
-      <div class="testimonial">Leaderboards</div>
-      <div class="testimonial">Live Events</div>
-      <div class="testimonial">Enhanced Social Features</div>
-      <div class="testimonial">More Strains and Genetics</div>
-      <div class="testimonial">Let us know what you want to see!</div>
-    </div>    
+      <h3>Mastery Takes Time</h3>
+      <p>You won’t learn this in one run.</p>
+      <p><span class="highlight">You get better every grow.</span></p>
+      <div class="image-placeholder">/INSERTPHOTOHERE</div>
+    </div>
 
+  </div>
+</section>
+
+<section class="section">
+  <h2 class="section-title">What You Actually Do</h2>
+  <div class="grid">
 
     <div class="card">
-      <h3>Local Saves for now / Accounts To come!</h3>
-      <div class="screenshot-grid">
-        <img src="assets/webgame/login.jpg">
-      </div>
+      <h3>Start From Seed</h3>
+      <p>Choose your strain and begin your grow.</p>
+      <div class="image-placeholder">/INSERTPHOTOHERE</div>
     </div>
 
     <div class="card">
-      <h3>In-Depth Monitoring</h3>
-      <div class="screenshot-grid">
-        <img src="assets/webgame/2.jpg">
-      </div>
-    </div>
-    
-    <div class="card">
-      <h3>Complete Control</h3>
-      <div class="screenshot-grid">
-        <img src="assets/webgame/start.jpg">
-      </div>
-    </div>    
-
-    <div class="card">
-      <h3>Redeem Seeds with EVERY Pack!</h3>
-      <div class="screenshot-grid">
-        <img src="assets/webgame/redeem.jpg">
-      </div>
+      <h3>Dial In Your Environment</h3>
+      <p>Control light, humidity, temperature, and airflow.</p>
+      <div class="image-placeholder">/INSERTPHOTOHERE</div>
     </div>
 
     <div class="card">
-      <h3>Events Log / Random Events</h3>
-      <div class="screenshot-grid">
-        <img src="assets/webgame/events.jpg">
-      </div>
+      <h3>Feed & Monitor</h3>
+      <p>Adjust nutrients, track runoff, and react to plant needs.</p>
+      <div class="image-placeholder">/INSERTPHOTOHERE</div>
     </div>
 
     <div class="card">
-      <h3>Markets with Real-Time Trading</h3>
-      <div class="screenshot-grid">
-        <img src="assets/webgame/market.jpg">
-      </div>
+      <h3>Handle Problems</h3>
+      <p>Pests, stress, dryness — solve issues before they spread.</p>
+      <div class="image-placeholder">/INSERTPHOTOHERE</div>
     </div>
 
     <div class="card">
-      <h3>Real Time Seed Stash</h3>
-      <div class="screenshot-grid">
-        <img src="assets/webgame/seeds.jpg">
-      </div>
+      <h3>Harvest & Analyze</h3>
+      <p>Your final result reflects every decision you made.</p>
+      <div class="image-placeholder">/INSERTPHOTOHERE</div>
     </div>
 
     <div class="card">
-      <h3>Room Upgrades & More!</h3>
-      <div class="screenshot-grid">
-        <img src="assets/webgame/upgrades.jpg">
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>So Many Upgrades!</h3>
-      <div class="screenshot-grid">
-        <img src="assets/webgame/upgrades2.jpg">
-      </div>
+      <h3>Improve Next Run</h3>
+      <p>Learn from mistakes and push for a better grow.</p>
+      <div class="image-placeholder">/INSERTPHOTOHERE</div>
     </div>
 
   </div>
 </section>
 
 <section class="section" style="text-align:center;">
+  <h2 class="section-title">Think You Can Grow It Perfectly?</h2>
   <button class="play-btn" onclick="window.location.href='https://noyesboys.com/webgame'">ENTER THE GROW ROOM</button>
 </section>
-
-<div class="live-feed" id="liveFeed">🔥 User123 discovered a rare strain</div>
 
 <footer>
   <p>© Noyes Boys | All Rights Reserved</p>
@@ -309,25 +300,22 @@
     container.appendChild(p);
   }
 
-  const sections = document.querySelectorAll('.section');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
-  });
-  sections.forEach(sec => observer.observe(sec));
+  const badge = document.getElementById('liveBadge');
+  let playerCount = 12;
 
-  const messages = [
-    "🔥 User123 discovered a rare strain",
-    "🏆 GrowMaster hit a new high yield",
-    "🧬 PlayerX unlocked rare genetics",
-    "💰 Someone sold premium buds"
-  ];
+  function updatePlayerBadge() {
+    const drift = Math.random() < 0.5 ? -1 : 1;
+    const chanceToMove = Math.random();
 
-  setInterval(() => {
-    const feed = document.getElementById('liveFeed');
-    feed.innerText = messages[Math.floor(Math.random() * messages.length)];
-  }, 12000);
+    if (chanceToMove > 0.35) {
+      playerCount = Math.max(5, Math.min(25, playerCount + drift));
+    }
+
+    badge.textContent = `Players who logged in today: ${playerCount}`;
+  }
+
+  setInterval(updatePlayerBadge, 90000);
+  setTimeout(updatePlayerBadge, 12000);
 </script>
 
 </body>
