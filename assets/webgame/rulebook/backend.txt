@@ -1,9 +1,30 @@
 
-log in / account saves
-black market live like an auction house 
-scoreboard / leaderboard 
-live notifications
+log in / account saves (on my end for backup):
+this info will need to be saved somewhere, i was thinking it should be saved in a folder on my end, same with the usernames and passwords and key phrases that are created for a secure back up, im not sure how this will be implemented but it can be the final step, just so we have everything backed up entirely 
+there can be all the stats and stuff id want to see in this file along with credentials, we can even edit the text file and give them free seeds that way or reimburse a seed if something happened kind of thing .
+
+
+black market:
+ live like an auction house 
+
+
+
+scoreboard / leaderboard:
+there should be a scoreboard added in the final touches
+you can see whos got the best score in that strain etc
+the winner should receive a trophy in their inventory they can use to get a single seed pack (in real life too) (one time use) or hold onto the trophy as a souvenier 
+
+
+live notifications:
+
+
+
+FRIENDS:
+notifications
 mailbox from player to player
-add friends
+add friends/friends list
 view other grow rooms
-pvp / grow off mode
+
+
+pvp / grow off mode:
+ spread mildew to someones grow etc 

@@ -1,0 +1,160 @@
+FEED/NUTRIENTS:
+you should need to buy each nutrient ( i believe we have these already) , the nutrient bottles have 1000ppm of each, if you use 50ppm of it on a feed it has 950ppm left to use
+watering should have an option to stack ec, "run-off" Ec, or flush
+flush is straight water until the soil drops to your set ppm from wherever it is , for example its at 1000, you flush , and set it down to 200, you only use water in this instance
+run off will decrease your ppm to the ppm of the feed
+and stack will add it, so if your feeding 150, to a plant thats already 1000 it will be 1150ppm after the feed
+you need an ec meter to use these, or your just feeding blind until your runoff pop up tells you what you just did (Easy mode) hard mode it doesn't tell you unless you have the meters.
+
+if you only feed 25 % it will only use 25% of the ppm used from the bottle
+example : 100% of a bottle is 1000ppm, i use 250ppm of veg nutrients but i only feed 25% water, that would only be 62.5ppm used from the bottle , even though im feeding 250ppm 
+
+
+DYING PLANT:
+when a plant hits 0% water, it should start a count down, after 8 hours health starts to go down by 1 every hour (real time) once it hits 0 the plant will then die after an addition 12 hours (real time) and the only thing you can do at that point is to remnove it (no harvest, no bonus or points or exp etc)
+
+there should be a way to heal your plants, with a spray, it should heal 25% health and only be usable once per phase, costing 1000c and this will diminish your return by 5% per spray used.
+(watering from 0 water and 0 health should NOT heal the plant, and should only water the plant if it is not at 0 health and water for more than 12 hours, you would then need to heal the plant with a spray or it will die again in 12 hours, on easy mode it should prompt you to use a health spray after or you still risk loosing your plant as just watering alone wont save it here, it clearly wasn't healing if it was slowly dropping to 0 and stayed at 0 (bad environment etc))
+
+
+
+STORE:
+ph up and down should come in 1000ml bottles and should use 1ml per ppm used 
+
+RESEVOIRS:
+we have reservoirs but have not implemented how they work
+there should be an option in water to "attach this plant to a reservoir"
+you can select what reservoir is in the room in equipment's tab, you can then fill that reservoir (for a cost of 1000c and what nutrients you use) with nutrients like you do with a normal feed, using the multiple sliders for each nutrient part bottle and ppm goal.
+you can then set the reservoir in the env settings to auto water at X water level so say when the plant hits 50% OR 70%, it will then use X liters per water depending on the pot size of the plant (1g-25gallons) and you can set it to water up to x amount and stop at say 80% or 70% etc
+this will auto water your plants at a set ppm and rate, for x amount of time.
+
+each plant connected to a reservoir will need an emitter pack and a hose pack from the shop.
+this will use nutrients up like a normal feed does.
+if you use half a bottle of nutrients there should be an item in the inventory now called "half bottle (x)L"
+
+
+INSPECTING:
+inspecting plants should require jewelers loup for inspecting buds
+and should require a ph meter/ec meter  for checking run off
+if you want to ph or check ppm of your feed, if you dont have a ph or ec meter or ph up or down from the store you cant ph your plants when you feed both are only 1000c on the market but required if you want to know the ppm or ph if not it is a mystery when you feed and much easier to burn the plant and it will result in -5 health and a -0.1% harvest every water without proper ph , or without proper ec / ppm checking
+the sliders should say "?" until you have an ec meter and the ph slider should be locked until you have a ph meter .
+easy mode will prompt you to buy them as feeding blind is a bad idea
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_______________DONE_______________
+
+
+2>water is drying out way to fast i belive the rule we set was 50% in twelve hours unless temps are above 90F at that point itll be 60% in 12 hours, 
+or if they are in a small pot and are a big plant, in veg they would lose 80% in a solo cup in 12 hours , but less in a bigger pot, in flower 100% in 12 hours if still in a solo cup but in an xl pot only 50% like usual
+a day one seedling ina  solo cup should only lose 30% water in 12 hours, and after a week 50%
+
+1>(*OLD)water is still draining too fast, i think we defined earlier that it should take up to 12 hours to lose 50%, unless the heat is super high or something along those lines with the paramaters 
+pot size also really matters, a small plant in a big pot should last a few days , but this will have a slow growth rate and risk root rot
+a big plant in a small pot will be the opposite, it will dry 50% within 6 hours ! 
+
+
+&
+
+first off plants health is decreasing too fast
+
+it should be only decreasing at a constant rate if something is wrong
+
+it should be increasing by +1 per hour (real time) if everything is correct and within good paramaters etc
+
+there are plenty of reasons for health to go down, but it shouldnt be at such a constant rate even if things arent correct
+
+we also need to implement more ways to heal the plant
+
+eg: a spray you can use for 1000c, once per phase , that heals 50 % health but you loose a 5% multiplier at the end , still incudes spray burn if lights are on 
+
+another could be adding +5-10 health when you train the plant,
+
+more options for adding health when you click the plant (nothing to constant though still random) 
+
+etc 
+
+"run off" idea: (a pop up that shows after watering) and also a good example of feed goals if we dont already have these included somewhere else for feed targets;:
+
+if run off test comes back higher than initial feed ppm, plants require less nutrients (minus 1-5 health)
+
+if run off comes back lower than feed ppm, plants want higher ppm feed (health stays the same)
+
+if run of comes back exactly what feed was, your on the sweet spot (+5 health and + 0.1 multiplier for harvest for each perfect water, when done under 50% water content and using a 25% or 50% water
+
+)
+
+plant stage / ppm goal ( +examples)
+
+seedling     0-300 ( if you feed 500ppm, the run off would be +200 over the goal, so it could come out at 700)
+
+late seedling 100-500 (if i fed 1000 ppm the run off would be +500 over the goal and come out at 1500ppm)
+
+early veg 200-600 ( if i fed 600, the feed would come back out at 600 meaning i hit the goal)
+
+mid veg 300-800 (if i fed 300, the feed would come back 300 meaning i hit the sweet spot)
+
+late veg 400-1200 (if i fed 300 the feed would be -100 from the sweet spot so it would come back as 200ppm)
+
+early flower 800-1200
+
+mid flower 1000-1500
+
+later flower 1500-2000ppm (week 5-9)
+
+last two weeks + (week 9-13) - 0-1200 ppm (0 if flushing)
+
+this can be made up by mixing veg food (n) and flower food (pk), base is a low, even NPK (state this)
+
+seedling to veg all the way to the first two weeks of flower = want higher nitrogen than pk and a hit of calmag every other feed (25-50 ppm)
+
+mid flower even npk + a hit of calmag under 100ppm every feed
+
+later flower, pk boost, 2 to 1 pk to nitrogen ,  cut nitrogen around week 8-9 of flower for a good senescence effect 
+
+(can also flush with straight water in the final two weeks to achieve this effect with no nitrogen)
+
+(using pk but no nitrogen in final two weeks gives a harvest bonus of 100g roughly compared to flushing as flushing is 0ppm feed)
+
+ph should also be calculated , when you mix a feed you want the ph to be 5.8-6.2 roughly, any higher or lower and your not hitting the sweet spot, there should be a way to add ph down or ph up and depending on what nutrient mix you make, it will either be above or below the sweet spot until you correct it, ph will not swing after your mix is made by more than 0.2-1.2 up or down every few hours
+
+if your plant itself has a ph of 7 and your feed is a perfect 6, it will flush out and the run off will show a 6.5 as it is meeting in the middle of where your plant and feed are, that being said if your ph was at 7 in the plant you should be feeding with a lower ph than usual to get it to compensate .
+
+
+
+
+
+dry backs:
+
+seedlings want to be "dried back" no lower than 70% water and only watered with the 25% water and kept between 71-100% for a perfect seedling phase 
+
+veg wants to be dried back no lower than 50% and only watered with 25 or 50% water and kept between 51%-100% for a perfect phase
+
+first two weeks of flower wants no lower than 50-60% and watered with 25% water and kept between 51-90% water for a perfect phase
+
+mid flower wants no lower than 40% and wateredwith 25% or 50% and kept between 41% -91% for a perfect phase 
+
+late flower (last three weeks) no lower than 25% no higher than 70% and kept between the two for a perfect phase 
+
+
+
+if you hit 100% water it should drop -5 life
+
+if your feed hits under 100% water it, and within the sweet spots mentioned above, +5 health
+
+if at max health, no change obviously .
+
+
+
+

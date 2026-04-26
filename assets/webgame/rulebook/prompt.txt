@@ -1,0 +1,7 @@
+here is our current code and our goals for this prompt please  tell me what chunks to replace and with what, and where to start and stop that has been working well for me.
+
+if you have questions about any implementations please ask. if you cant get to all of this in one prompt also let me know what was not achieved.
+
+only use 90% of your prompt before sending your message at MOST.
+
+if there is some things left to do please inform me within that prompt and we can get to it in the next prompt

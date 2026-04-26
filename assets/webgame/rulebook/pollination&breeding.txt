@@ -3,4 +3,267 @@ you should have the option (if you have multiple rooms) to move a plant to anoth
 the reason for this is if you want to flower just one plant at a time, or have a plant veg longer but flip one, want to have a breeding room, etc etc, lots of reasons actually 
 if there is a male in the room is will prompt on easy mode that this plant will be pollinated
 depending on the stage of the male the plant moved in will most likely have less seeds at the end than plants that started in that room (unless the male is still before week 2 if that makes sense)
+same goes for if you plant a seed in a room with a male or reversed female, it will be pollinated eventually.
 if you move a pollinated (seeded) plant it will stay seeded and give seeds but it wont cross pollinate other plants ONLY if you spray it first, (warning in easy mode asking if you want to spray it with water to kill the pollen first) if you dont, it WILL cross pollinate the other plants in the room after two weeks (in game time) of being in the room with them .  it will use the original pollen that it received so even if its a super noyes that is seeded but it was originally pollinated by a purple rainbow, the pollen that cross pollinates is still purple rainbow .
+
+
+
+MALES:
+males are plantable but dont show up in the plant a seed tab and should have their own "male seeds" tab section there 
+
+
+NAMING:
+we should be able to "name" our grow rooms.
+we should also be able to "name" the strains that we breed, although the parent names should be the actual seeds used 
+currently it has the option to name the strain when you plant it, thats not quite what i want, i want to be able to rename strains in the breeding tab, only the ones that you made yourself that are f2 and up , so if i bred a super noyes f1 x super noyes f1 cross it would be an f2 and i could rename the seeds to "super boys" f2  for example, the f2 still stays relevant and the parent strains still say super noyes x super noyes.,
+if i go to breed "super boys" f2 with another "super noyes f1" it would make a "super boys" bx1 
+if you bred it with another strain that isn't f1, it would make an f1
+if you bred it with another "super boys" f2 it would make an f3 that you could rename and the parents would be "super boys f2" x "super boys f2" 
+("super boys" is just an EXAMPLE name)
+once you name a seed, thats it name for good though, even if you breed more in the future you cant rename them again ( if this is easy to implement)
+
+
+you should only be able to have one male or reversed female in a room, if you have a male you shouldn't be able to spray STS in that room on a female, etc.
+
+
+BREEDING TAB:
+breeding tab could be a bit cleaner, show more information on what rooms breeding is happening in, how many seeds you should be getting per plant based on plant stats etc, easy mode could show tips or warnings and how to's
+
+inventory should be a bit cleaner
+show fem seeds, reg seeds, male seeds, seeds youve bred, bought,
+show what you CAN make if you cross two seeds together,
+be able to rename seeds here (that are f2 / bx1 or further)
+there should be even more info here i just cant quite think of what exactly, 
+
+
+
+
+
+WHEN BREEDING:
+after the male/reversed female hits week two, the females should get a "seeded" badge, those same females should now also say "seed" instead of "g" when you click harvest, and show the amount of seeds youll get instead of the amount of grams 
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------done 
+breeding should work like this
+you plant a male in a room, (using the male plant sprites for these) if there are female plants in that room, at week two it will start to pollinate them
+regardless of if you remove the male or not at this point you will get seeds
+the longer you leave the male in the room the more seeds you get though up to a point of max number at week 12 
+aswell as the longer you grow the plant (week 12 cap)
+seeds form after week 6 and we use the seeded female sprites for these plants from here on, we have some for indica/sativa/ etc i believe 
+from week 2-6 nothing is harvestable yet
+week 6 of flower you get 100 seeds
+7-150
+8-250
+9-350
+10-400-
+11-600
+12-700
+with varying numbers in between unless your hitting an absolute perfect grow with both the male and the female 
+
+these plants should have to go through the whole grow like a normal plant, they just have different harvest results (seeds) and different sprites 
+the "male" plant harvests no product, but gives exp 
+
+spraying the male with water will kill the pollen on it resulting in less seeds
+spraying the females has the same affect, even if its for bugs, you loose 50 seeds a spray roughly 
+
+f1 is when you breed a new male and a female (results in REGS until bred with another f1, resulting in half males and half female seeds f1)
+an f2 is only achievable when you breed two f1s (that you made) together (considered FEM seeds after aswell)
+f3 is only achievable when you breed two f2s together and so on and so on
+to get a bx1 you have to breed the original mother or father, with an f1 for a bx1, an f2 for a bx2 and so on so a male seed with a f3 in the room of the same strain would be a bx3
+
+please remove s1, s2, s2 , we dont need those anymore 
+
+there should be a spray you can buy called "STS SPRAY" for 10k in the shop, and an option for it in the spray window using that on a female will revert it to a male, after two weeks that male will drop pollen, after 30 days seeds will form on ALL other females in that room, they become seeded, when harvested they give x amount of seeds, not bud .
+
+bonus's: 
+
+Generation bonus ladder
+F1
+
+Small starter boosts:
+
++5% growth speed OR
++5% harvest weight OR
++5% seed return OR
++5% resistance to light stress
+F2
+
+Still modest, but more useful:
+
++7% growth speed OR
++7% harvest weight OR
++7% seed return OR
++7% less water drain
+F3
+
+Noticeably stronger:
+
++10% growth speed OR
++10% harvest weight OR
++10% pest resistance OR
++10% less health drain
+F4
+
+Getting into strong territory:
+
++12% growth speed OR
++12% harvest weight OR
++12% mildew resistance OR
++12% stronger nutrient tolerance
+F5
+
+Mid-tier elite:
+
++15% growth speed OR
++15% harvest weight OR
++15% seed return OR
++15% less water drain
+F6
+
+Very strong:
+
++18% growth speed OR
++18% harvest weight OR
++18% resistance to pests OR
++18% less health drain
+F7
+
+High-end genetics:
+
++20% growth speed OR
++20% harvest weight OR
++20% potency bonus OR
++20% stronger nutrient tolerance
+F8
+
+Top shelf:
+
++22% growth speed OR
++22% harvest weight OR
++22% pest/mildew resistance OR
++22% less water drain
+F9
+
+Near-legendary:
+
++24% growth speed OR
++24% harvest weight OR
++24% potency bonus OR
++24% less health drain
+F10
+
+Elite peak tier: * can have two bonus's
+
+95% chance of GOD phenotype OR
++25% growth speed OR
++25% harvest weight OR
++25% seed return OR
++25% pest and mildew resistance OR
++25% less health drain OR
++25% less water drain OR
++25% stronger nutrient tolerance
+Backcross ladder
+
+Backcrosses should feel like “refining” a trait line rather than raw power only. (can have two bonus's)
+
+BX1
++5% stability OR
++5% stronger trait retention OR
++5% harvest weight OR
++5% resistance to stress
+BX2
++7% stability OR
++7% trait retention OR
++7% harvest weight OR
++7% pest resistance
+BX3
++10% stability OR
++10% trait retention OR
++10% growth speed OR
++10% less health drain
+BX4
++12% stability OR
++12% harvest weight OR
++12% potency OR
++12% mildew resistance
+BX5
++15% stability OR
++15% trait retention OR
++15% growth speed OR
++15% less water drain
+BX6
++18% stability OR
++18% harvest weight OR
++18% pest resistance OR
++18% nutrient tolerance
+BX7
++20% trait retention OR
++20% potency OR
++20% growth speed OR
++20% health retention
+BX8
++22% harvest weight OR
++22% resistance to pests/mildew OR
++22% less water drain OR
++22% stronger nutrient tolerance
+BX9
++24% stability OR
++24% potency OR
++24% growth speed OR
++24% stress resistance
+BX10
+95% chance of GOD phenotype OR
++25% growth speed OR
++25% harvest weight OR
++25% potency OR
++25% resistance to pests, mildew, heat, or drought
+Wildcard tiers
+
+These are your “anything can happen” tiers.
+
+F*(anywhere above f10 = f*) can have up to 2-3 bonus's 25% chance rarely four 
+Random elite bonus from the full F pool
+Small chance to roll a rare phenotype
+May gain one extra hidden trait
+BX* ( anywhere above bx10 = bx*) always has 3 bonus's 50% chance rarely four
+Random elite bonus from the full BX pool
+Higher chance for rare phenotype than F*
+Can roll a “perfect trait lock” result
+Phenotypes
+
+These should be separate from the normal bonus roll and feel like special visual + gameplay rewards.
+they can show up randomly when you plant seed but have a much higher rate after f2 / bx1 etc with a very high rate at f10 bx10
+
+Shiny
+Small chance starting around F2 / BX1
+Slightly better potency or yield
+Sparkling
+Starts showing up around F4 / BX3
+Better yield, better visual flair
+Glowing
+Starts around F6 / BX5
+Stronger potency, stronger bonus chance
+Epic
+Starts around F8 / BX7
+Big stat boost, rare visual border, premium feel
+God
+Starts around F10 / BX10
+Extremely rare, highest-tier prestige phenotype
+Holiday
+Event-only phenotype
+Limited release
+Can appear on special seasonal strains with unique visuals
+
+currently when im on the breeding tab and put two strains in and select the type if i wait a few seconds it refresh's the strains  automatically to no strains selected it should keep the selected strains there until you choose different ones im not sure why its doing that
+
+--------------------------------------
+

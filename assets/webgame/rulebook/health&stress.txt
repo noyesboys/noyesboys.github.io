@@ -1,0 +1,398 @@
+
+
+__________________________DONE__________________________
+
+
+training rules:
+you should only be able to train one style, top lst fim or supercrop, once done, you cant use another, you can top once and then lst/fim/supercrop or top twice
+you can lst up to 5 times beneficially,10 times max, but that locks other methods after the first lst,  , after the 5th time your actually losing health and multiplier for harvest (warning on easy mode)
+every time you do a "train" method it should add stress to the plant by 5%-25%
+you cant train in flower what so ever only veg , and seedling but seedling training doesnt give any bonus's only harms the plant ( cant be done in easy mode)
+
+stress:
+10-20% stress the plant drinks faster and loses health by 1 every real time hour or so like we defined earlier for if a plant is stressed
+if 25-50% it will be 2 health
+50-75% 3 health
+100% stressed 5 health per real time hour 
+
+
+
+
+health:
+90-100 nothing
+80-90 grows 2% slower
+70-80%  grows 5% slower
+50-70% grows 8% slower
+30-50% grows 10% slower
+25-50% grows 15% slower
+1%-25% grows 25% slower
+slower growth - slower water intake
+0 health -after 6 hours plant loses 25% of harvest return at end -  after 12 hours plant loses 50% harvest return - after 24 hours real time the plant dies like mentioned before and you can only then remove it to clear the space
+
+to heal stress, the environment must be perfect, or time must pass.
+the plant should lose stress by 2% every in game hour, all the while still losing health if the stress is high. the paramaters and everything else, water, ppm, light intensiety etc are in check but go up 1 if they aren't 
+
+
+health spray should also put down stress down 50%, at a cost of 0.10% multiplier (still only one use per phase and expensive to use)
+ 
+
+
+
+ENVIROMENT
+base 72F 60% RH ( no lights,fans, or any equipment) (stable)
+
+
+small ac will allow you to drop temp up to 10F in small room 5f in medium rooms and 2f in large rooms 0f in xxl rooms
+medium will drop 20 in small rooms 10 in medium and 5 in large 2 in xxl
+large will drop up to 30 in small rooms, 20 in medium 10 in large and 5 in xxl
+xxl will drop up to 50f in small rooms 30 in medium 15 in large rooms and 10f in xxl rooms, 
+you should be able to have up to 3 acs per room (this is why you need to be able to buy multiple)
+temps will drop this much if your sliders are set to these temps, for example a big light in a small room will raise temps dramatically, but if you have an xxl ac you could get away with this, resulting in a better grow, but if you have a big ac and have sliders set to 80, it wont cause temps to go below 80, it just wont be "on" all the time
+
+equipment lets you put your sliders further in either direction, with no equipment you cant move the sliders below 70f, above 75f, below 59%rh or above 61%rh
+but with small equipment you can move them slighty now, and the bigger the equipment the more access to the sliders you technically now have
+*you can set the sliders where ever they aren't "locked" persay, but they wont actually have any affect on the environment past the numbers they are invisibly locked to if that makes sense .
+
+LIGHT size / difference and room size (x2 if two lights , x3 if three lights etc)
+
+small: +5 small room +2 medium room +1 large room +0 xxl room (growth rate is 50% unless in small room 90%)
+medium: +10 small room +5 medium room +3 large room +1 xxl room (growth rate is 70% unless in small room, 100%
+large: +15 small room +10 medium room +5 large room +2 xxl room (growth rate is 80%, small/med room is 100% but risks burns)
+xxl: +20 small room +15 medium room +10 large room +5 xxl room  (growth rate is 100% in xxl and large, medium and small are 100% but will burn forsure)
+
+room size / how many lights
+small: 1 
+medium:3 ( if all large or xxl you risk burns)
+large: 5 (if all xxl you risk burns)
+xxl: 10  (if all xxl you better have good ac, fans etc or risk burns still here too)
+
+fans (up to 3 per room)
+small: -5 small room -2 medium room -1 large room -0 xxl room
+medium: -8 small room -4 medium room -2 large room -1 xxl room
+large: -10 small room -8 medium room -4 large room -2 xxl room
+xxl: -20 small room -10 medium room -8 large room -5 xxl room
+
+
+
+heater size / difference and room size
+small: +5 small room +2 medium room +1 large room +0 xxl room
+medium: +10 small room +5 medium room +3 large room +1 xxl room
+large: +15 small room +10 medium room +5 large room +2 xxl room
+xxl: +20 small room +15 medium room +10 large room +5 xxl room
+
+
+c02: works better above 85F and below 95F (adds a 1x harvest boost at the end if within temps the whole phase)
+ (if above by up to 400ppm it will be the same affect, if below, no bonus affect, if above by 500 or more ppm than ideal, it will have diminishing effects)
+grow phase / ppms
+seedlings  / 0-400
+early veg  / 100-800 for a 0.1-0.8% bonus at the end
+late veg  / 400-1200 to carry on with the bonus 
+early flower - 800-1500
+later flower - 500-1200
+you get the bonus 0.1-1% if you hit the c02 mark the whole grow phase, if you hit it all 5 grow phases you get 5 % max increase on weight at harvest 
+
+
+pot size/ plant stage
+solo = seedling 100% growth speed / early veg 80% growth speed/ late veg 50% growth speed / early flower 30% growth speed / late flower 15% growth speed + (50% harvest loss)
+
+small =seedling 90% growth speed / early veg 80% growth speed/ late veg 80% growth speed / early flower 70% growth speed / late flower 65% growth speed + (30% harvest loss)
+
+medium = seedling 80% growth speed / early veg 70% growth speed/ late veg 80% growth speed / early flower 70% growth speed / late flower 60% growth speed + (25% harvest loss)
+
+large = seedling 50% growth speed / early veg 60% growth speed/ late veg 70% growth speed / early flower 80% growth speed / late flower 90% growth speed + (15% harvest loss)
+
+xl = seedling 25% growth speed / early veg 30% growth speed/ late veg 35% growth speed / early flower 40% growth speed / late flower 50% growth speed + (25% harvest loss)
+
+
+small grow light intensity/room size ( per light)
+low: +1 small room +0 medium room +0 large room +0 xxl room
+medium: +5 small room +1 medium room +0 large room +0 xxl room
+high: +10 small room +5 medium room +2 large room +1 xxl room
+100%: +15 small room +10 medium room +5 large room +2 xxl room
+
+medium grow light intensity/room size
+low: +5 small room +2 medium room +1 large room +0 xxl room
+medium: +10 small room +5 medium room +3 large room +1 xxl room
+high: +15 small room +10 medium room +5 large room +2 xxl room
+100%: +20 small room +15 medium room +10 large room +5 xxl room
+
+large grow light intensity/room size
+low: +10 small room +5 medium room +2 large room +0 xxl room
+medium: +15 small room +10 medium room +5 large room +2 xxl room
+high: +20 small room +15 medium room +8 large room +4 xxl room
+100%: +25 small room +18 medium room +12 large room +6 xxl room
+
+xxl grow light intensity/room size
+low: +30 small room +20 medium room +10 large room +5 xxl room
+medium: +40 small room +25 medium room +20 large room +10 xxl room
+high: +50 small room +30 medium room +20 large room +12 xxl room
+100%: +80 small room +40 medium room +20 large room +15 xxl room
+
+
+
+humidifier size / difference and room size
+small: +5 small room +2 medium room +1 large room +0 xxl room
+medium: +10 small room +5 medium room +3 large room +1 xxl room
+large: +15 small room +10 medium room +5 large room +2 xxl room
+xxl: +20 small room +15 medium room +10 large room +5 xxl room
+
+dehu size / difference and room size
+small: -5 small room -2 medium room -1 large room -0 xxl room
+medium: -10 small room -5 medium room -3 large room -1 xxl room
+large: -15 small room -10 medium room -5 large room -2 xxl room
+xxl: -20 small room -15 medium room -10 large room -5 xxl room
+
+
+------------------
+plant phase  / proper environment / ( anything above or below will start to decrease potential for harvest /thc % slightly, if above or below by 20 or more it will decrease health, if its hotter by atleast 10, the plant will drink faster, if its only off by a few degrees or % it wont be a drastic change)
+
+seedling: 78f 70% rh
+early veg: 80-82f 62-65%
+late  veg: 80-84f 55-60%
+early flower:82-84f 50-55%
+later flower: 82f 40-45%
+
+
+
+at night time humidity should spike, temp should drop (unless you have an appropriate sized heater  / dehumidifier combo)
+putting fans to 100% will diminish the plants health by 1% per in game day, and the water will dry out faster by 10%, it will however drop the heat by 5F
+(if the fan is the right size for the room) if its smaller, it wont do as much damage or heat drop
+you should be able to have up to 3 fans in a room for this reason
+fans above 75% will have this effect just slightly lower, like 0.2% health at 80%, dry out 5% faster, lower temp by 2F etc
+below 75 no real changes happen
+
+
+
+if we haven't already defined a rule like this **
+plant health should regenerate at 1-2 health per 1 hour real time , 2-5 health if everything is near perfect for the environment with no high plant stress, and if its above 30% water)
+
+
+
+
+
+harvest/results (perfect numbers are only achievable with 100% perfect grow, and taken until week 11, before or after will be less)
+
+perfect = 500grams + multipliers + +1% thc over "max"
+80% = 400 grams + multipliers + "max" thc
+60% = 300 grams + 50% of your multipliers + -2% - -5% thc
+50% = 250 grams + 50% of your multipliers + -5% - 10% thc
+30% = 100 grams + 0% multipliers + -10% thc
+less = under 100g + no multipliers or bonus's  + -15 - -20% THC 
+( numbers can vary inbetween, these are for plants taken until week 11, and their respective "max + multiplier" amounts) 
+past week 11 is diminishing returns
+
+
+
+
+
+
+
+
+
+
+
+implement offline gameplay, everything should continue functioning depending on how long your gone, there also should be more chance for "things to go wrong" the longer your away for, i think we discussed this earlier in prompt one or two that if you check more, your get a safety bonus thats invisible, if you dont check back over x amount of hours you start risking things more and more
+
+
+i want it to be realistic, and difficult but have three difficulty modes that are more rewarding at the end easy will give you every warning imaginable intermediate will give you only critical warnings master grower will give you none , and you shouldnt be able to switch back and forth during a grow only when no plants are growing in that room & the sliders are your set point but it should naturally get to temp over time , if you have small equipment it takes longer, not the right equipment it will never reach the set paramaters, etc
+
+RULES
+
+CORE SYSTEM: “Grow Score Engine”
+
+Every plant calculates a Grow Score (1.0 → 10.0) based on:
+
+🌡️ Temperature
+💧 Humidity
+🌬️ Airflow (fans)
+💡 Light (intensity + height)
+🧪 Nutrients (PPM + type)
+🌫️ CO₂
+🚿 Watering habits
+🏠 Room size vs equipment
+🌱 Growth stage requirements
+⚠️ Events / stress
+🎯 FINAL SCORE FORMULA (simple but powerful)
+Grow Score = Base Score (10)
+- Penalties (mistakes, stress, inefficiency)
++ Bonuses (perfect timing, hidden optimizations)
+
+Then convert to:
+
+9.5–10 → PERFECT
+8.0–9.4 → ELITE
+6.0–7.9 → GOOD
+4.0–5.9 → MID
+2.0–3.9 → POOR
+1.0–1.9 → FAILED
+🌡️ TEMP ↔ 💧 HUMIDITY (CORE RELATIONSHIP)
+
+You already nailed this idea—let’s formalize it:
+
+🔁 Interaction Rule
+Temp ↑ → Humidity ↓
+Temp ↓ → Humidity ↑
+🎯 Ideal Ranges by Stage
+Stage	Temp (LED)	Humidity
+Seedling	78–82°F	70–85%
+Veg	80–85°F	55–70%
+Early Flower	80–85°F	50–55%
+Late Flower	75–82°F	40–45%
+⚠️ Penalties
+Too hot:
++growth speed
+❌ lowers density (lanky penalty)
+Too cold:
+❌ slows growth
+Too humid:
+❌ mildew chance
+Too dry:
+❌ water drains faster
+🌬️ FANS SYSTEM (VERY IMPORTANT)
+
+Fans are not just temp control—they affect plant structure + system stability
+
+🎯 Effects
+Fan Speed	Effect
+Low	weak stems, higher humidity
+Medium	balanced
+High	strong stems, lowers humidity
+🔁 Interactions
+More fans → lower temp + lower humidity
+Less fans → heat builds + humidity rises
+🧠 Hidden mechanic (THIS IS GOOD DESIGN)
+High fan speed:
+✅ +density bonus
+❌ slight water loss increase
+🏠 ROOM SIZE vs EQUIPMENT
+
+This is HUGE for realism and strategy.
+
+🔥 Heat Formula Concept
+Heat = (Total Light Power) / Room Size
+💡 Examples
+Small room + big light → 🔥 overheating
+Big room + small light → ❄️ underpowered
+🚨 Hard Rules
+Equipment has capacity limits
+If exceeded:
+❌ cannot reach target settings
+
+triggers warning:
+
+“Your equipment cannot reach this environment”
+
+💡 LIGHT SYSTEM
+🎯 Variables
+Intensity (%)
+Height (distance from plant)
+Type (LED/HPS)
+🔁 Interactions
+Light ↓ (closer) → Temp ↑ + Humidity ↓
+Light ↑ (farther) → weaker growth
+⚠️ Burn Rule
+If Light Distance < Safe Range:
+→ Burn timer starts
+→ Yield penalty over time
+🧠 Bonus Mechanic
+
+Perfect light zone:
+
+✅ +yield
+✅ +THC
+🧪 NUTRIENTS (PPM SYSTEM)
+
+You already designed something VERY good here.
+
+Let’s cleanly define it:
+
+🎯 Ideal Ranges
+Stage	Ideal PPM
+Seed	~300
+Veg	~800
+Flower	~1300
+🔁 Mechanics
+Soil stores PPM
+Plant consumes it over time
+⚠️ Rules
+
+1500 → burn risk
+
+3000 → root rot timer
+
+stacking nutrients:
+✅ short-term boost
+❌ long-term risk
+🧠 SECRET SYSTEM (KEEP THIS)
+
+“Overfeeding slightly = higher yield IF corrected in time”
+
+This is PERFECT for depth.
+
+🌫️ CO₂ SYSTEM
+🎯 Ranges
+CO₂ ppm	Effect
+<800	no boost
+800–1500	optimal
+1500–1800	max boost
+>1800	diminishing returns
+🔁 Interactions
+High CO₂:
+increases water usage
+increases temp sensitivity
+🚿 WATER SYSTEM
+🎯 Rules
+Max drain: ~50% per 12h
+Faster drain if:
+high heat
+high CO₂
+late flower
+⚠️ Penalties
+0% water:
+after 4h → health loss
+Overwatering:
+root rot risk
+🧠 Advanced mechanic
+
+Dry-back strategy:
+
+Veg:
+50% = optimal
+Flower:
+20% = optimal
+🌱 STAGE SYSTEM (CRITICAL)
+
+Each stage has:
+
+ideal environment
+ideal duration
+scoring multiplier
+⏱️ Durations
+Stage	Range	Perfect
+Seed	15–45 days	30
+Veg	30–80	40–60
+Flower	60–85	strain dependent
+🎯 Rule
+Closer to ideal duration → higher score multiplier
+❤️ HEALTH SYSTEM
+⬇️ Lose health from:
+bad environment
+pests/mildew
+bad feeding
+⬆️ Gain health from:
+near-perfect conditions
+proper actions (prune, transplant)
+🧬 FINAL SCORE BREAKDOWN (THIS IS GOLD)
+
+At harvest:
+
+Final Score =
+Env Score (40%)
+Feeding Score (20%)
+Timing Score (20%)
+Plant Health (10%)
+Random Events (10%)
+
+
+
+

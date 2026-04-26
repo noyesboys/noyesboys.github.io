@@ -1,0 +1,176 @@
+ACHEIVMENTS:
+easy, hard, master, godmode achievments, and add so many that you need to use a carousel to flip though "pages" of them 
+
+
+
+STATS:
+BIGGEST HARVEST (1 PLANT) block in the stats
+BIGGEST SEED HARVEST block in the stats
+
+
+
+
+UPDATES:
+A "whats been updated last" pop up when you first log in, and you should be prompted to log out if your away for 12 hours
+
+
+INCREASED GROW SPEED %:
+when a plant has increased grow speed, it should ACT as a plant that is further in growth by X amount of weeks, but still show the normal amount of days that it has been, essentially at the end youd be able to crop a 9 week plant and receive the harvest of an 11 week plant, but if pushed to 11 weeks it would be an extra big crop (FOR EXAMPLE
+
+
+
+
+INVENTORY:
+seeds should be separated by
+SEEDS (bought/imported)
+MALES (regs)
+F* (f1-f*)
+BX* (bx1-bx*)
+
+
+REMNAMED STRAINS:
+should have a way to see what strains made it , beyond just the two parent strains it usually shows, for example f10 is 10 generations atleast, there should be a way to see what those generations were in an "info" button
+renamed strains get a default symbol (emoji) at random, and their picture will just be a sprite image at best , or one of the parent strains if they use one of our original strains as the cross at one point.
+
+
+RANDOM:
+on mobile we dont see the top toolbar showing coins and exp, can we show coins in the shop / market tab somewhere?
+
+
+MAIL:
+attatching a seed to mail should let you actually attach a seed that you have in your inventory and select an amount (mail should say only local mail at this time, *until we get our backend servers up that is)
+
+
+REFILLS:
+you should have to refill your c02 tank every 7 days in game time (it should drain slowly taking 7 days)
+your dehu emptied every 1-3 days (real time) slow drain dependant on size
+your humidifier emptied every 1-5 days (real time) slow drain, dependant on size
+it should cost 50-200c per refill and 500-1000c for c02
+
+CLOCK:
+total time played clock is real time hours since account was made, and how many hours spent actually IN GAME 
+grow time (moves at ingame time speed) so if i have plants that are day 60, that would have been +60 days of in game grow time in theory
+example like this: ( random numbers used)
+
+Account Created: 6 months ago / Play Time: 14 hours / In Game Hours: 3 years 
+
+
+TIME:
+the days should also work with how long the lights are on, if its been a day the lights should show its been on for x amount of time and will be off for x amount of time, even though the days go by fast in game the lights should act accordingly too. (they should be turning on and off once per day, and are currently on for multiple days and off for multiple (ingame) days)
+ for example by day 3 the lights should have turned off 3 times,(*unless set for 24hr on) 
+
+GROWTHSPEED:
+currently the ingame time and actual play time are good, right now ive played a bit over an hour an it shows 4 days of ingame time, awesome
+the only thing is... my plants are already on day 66 .. thats good for testing purposes but i would like to change that now to have the plants only be on day 4 just like the in game time, i prefer the much much slower growth speed please 
+
+
+
+
+FLIPPING:
+your lights should automatically switch to 12/12 when you flip a plant from veg to flower, with a notifiction telling you this, when you flip one plant from veg to flower it should flip all of them in the room not just the one so really we shouldn't have a button to flip on the plant sprite card but instead when you change the time to 12 hours on 12 hours off or less (on time) it will trigger a flip to flower, so this should be a setting in a pop up tab when you click "lights" currently it just turns lights on our off, which should also be in that pop up. clicking the yellow bar on the plant sprite box that shows light time should trigger the same pop up allowing you to see how many hours are left in the day or night cycle aswell.
+flipping the lights to 12/12 or 11 on 13 off or less (on time) will trigger the room to flip to flower , a pop up should ask you if you are ready to flip to flower (in easy mode). if you flip your plants to flower before day 30 of veg a warning should pop up (in easy mode) that you are losing up to 50% of your possible harvest, 25% if you wait till day 30 as thats still not quite the sweet spot. (implement these effects happening aswell)
+if you flip the lights back to above 12 hours after the plant has been in flower for more than 2 weeks, it will go back into veg growth after two weeks time, and be super bushy, a worse yield, less thc, etc etc, possible, but not a good thing to do, the only time it would be good is if you breed with a "revegged" plant , it will produce more seeds than a non re-vegged plant. 
+
+this is also where you should find the light intensity slider, and light height for the room you are in .
+&what light(s) you are using in the room, and a drop down menu to choose from them, and how ever many you can use in that room.
+how long your lights are on for for each stage seedlings 18hr is optimal, 24 hrs is okay, veg 18hrs is optimal, but over or less that is diminishing your return slightly, flower must be below 12 hours, 11 is okay but less is diminishing if its over they wont flower, these are the sweet spots for the best results.
+
+
+PLANTING:
+if you plant a seed in a room that is already in flower it will go through the seedling stage, and veg for 30 days before automatically fliopping to flower
+it will only take pollen from a male or reversed female after two weeks of being in flower, if the male is still there.
+
+
+
+REVEG:
+revegging should be a thing, flower for atleast two weeks, then flip back to veg, and get a "REVEG" badge, it will multiply the crop outcome by 1x if left in veg for 2 weeks , 2x if 4weeks of veg before flipped back into flower, and 3x for 6 weeks, up to a max of 5x for 6-10 weeks, reveg longer and you lose all bonus's.
+this will still add to the "days" badge, not reset it.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_____________DONE_______________
+
+ACHIEVMENTS:
+we no longer have an acievments / daily goals tab, that can be added back to the stats tab please, daily goals that reset and change, harder ones with harder difficulty, achievments that stay completed for things like perfect harvest, god pheno, etc and hard achievments like grow every strain once, grow every strain as a unique pheno, etc , daily goals are easy like water 5 plants, harvest a plant, etc 
+
+SPRITES:
+for some reason the plants are randomly going from a veg sprite to what looks like a seedling sprite, im not sure whats triggering that to happen but it shouldn't. going to a drooping or clawing sprite is okay but not back to a seedling looking sprite.
+
+ROOMS:
+room 1, 2 spots small room
+room 2 should have 5 grow spots level 10 small roonm
+room 3 should have 10 grow spots level 25 medium room
+room 4 should have 15 , level 50, large room
+room 5 , 20 , level 100 xxl room 
+
+add more light options from 
+150w-1000w options 
+
+
+THC @ HARVEST:
+when you click harvest, thc should be 0, just like harvest weight until week 2, at that point thc will be low like 5%, then 10% week 4, 15% week 3 and so on until it hits its cap, it however wont hit its cap if its had any damage along the grow or stress, or isn't 100% health , etc 
+it can hit OVER its cap slightly if its a PERFECT grow
+
+HEADER:
+Header is slightly too big, its covering a bit of the body slightly, including the panel on the left side of the page , half covering the "room" icon 
+
+
+MAIL:
+having the mail icon on the left side is good, we dont need it in the top row aswell though
+there is "received mail" but no longer an outgoing mail place to type your email 
+
+BLACKMARKET:
+black market seeds should be much pricier, like 1000-3000 per seed atleast, but it should vary
+bought seeds off blacmarket, they did not go to my seed inventory - fixed (i think)
+now it shows there is no seeds to buy in the black market?
+
+TEMPS/PARAMS:
+when i change temperature paramaters, for example if temp is 85, and set to 85F, but i change it to 60, it should go 84, a few minutes later 83, 82, 81, and keep going, it shouldn't be instant, especially bringing temps down. it works the same way bringing them up, not instant , but maybe a bit quicker , same with humidity and c02 
+
+
+HIGH TEMP = low humidity this should vary depending on lights/dehu/humidifier setups/ light height and room size/.light intensity 
+low temp = high humidity
+this should also vary depending on lights/dehu/humidifier setups/ light height and room size/ light intensity
+
+right now, i set the sliders to set my paramaters, and the actual temps/humidity dont move at all they stay at 78 where it starts, even when i turn lights off.. no change , bought a new light.. no change
+
+EQUIPMENT:
+in equipment , each item should have a drop down menu to choose from other lights etc, even if theres no other lights to choose from there should still be a drop down menu for them when they will be there 
+
+i dont see a fill button on the humidifier or a water level bar either , it should run out .
+i also dont see where reservoir would be 
+
+
+MOD ACCOUNT:
+The Noyes Boys - mod account, should have mod status, be level 100 , have 999,999 coins to start or a button to refill coins, so that we can test things now without having to save up/level up first 
+
+
+SPRITES:
+I am yet to actually see the images for the plant besides the seedling stage
+but even that one doesn't look like a cannabis plant, i would like to have more detail, showing single leaves even and as it grows it actually changes and gets bigger, there should be up to 10 or so changes per stage at the very least if not more especially for flower
+there should be bad growths and good growths so if its too hot etc it will grow lanky and tall and even to tall pushing against the top of the virtual grow box and bending would be funny to see
+if its cold and lights are low it would stay short bushy and be wider, hopefully that explains what im after here 
+
+INSPECT:
+interacting wit the plant should have more things it can do, so that the first one can be instant on first click 
+and once youve gotten one, like knocked off a dead leaf +0.5 multiplier, you shouldn't be able to get another one for up to 3-4 hours of that kind
+and likewise any other interacting bonus should take atleast 20-60 minutes before you can get one , timers continue when offline like everything else 
+i know in an earlier prompt we talked about random things happening like a meteor going by (super rare)
+how about more common things like a weed grows, you pick it and get a small bonus for keeping the dirt clean
+

@@ -1,0 +1,25 @@
+where it says 30d besides lights on it should show how many hours (in game) left of lights on or lights off , as we already have a day counter somewhere else 
+also the temp icon underneath ppm, can we switch the icon to a leaf and thermometer to represent leaf temp (this is for "true" vpd readings)
+
+
+
+SPRAY:
+spraying with plain water should give a +5 humidity boost for an hour, that doesn't decrease no matter the dehumidifier size ( bad in flower -10 health to eachplant)
+
+spray button on each plant should be cheaper than the spray button on the side panel (spraying all plants)
+
+
+
+LIGHTS/FLIPPING:
+if you flip your lights on (during flower) before 12 hours of darkness has past, you will lose 25 health on each plant and a 5% multiplier for harvest each time
+a warning should be shown on easy mode if you go to turn them back on before 12 hours has passed 
+if you turn your lights OFF (during flower) there is no side effects, but you must manually turn them back on or they stay off .
+
+lights off should have a warning pop up for easy mode
+
+
+GRAPH:
+our temp/humidity graph should be able to show you what the actual numbers are on a graph to the side, or when you hover over in a little text box, thats the whole point of the graph, to see where it dipped or spiked and by how much, this should correlate with the grow log and the player can see 'what happened when and why 
+
+_____________________DONE________________________
+
