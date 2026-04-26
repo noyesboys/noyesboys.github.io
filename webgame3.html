@@ -2634,7 +2634,7 @@ function getHarvestTHC(plant, strain) {
 
   const finalThc = base * thcFraction * Math.max(0.5, healthMult);
   return parseFloat(finalThc.toFixed(1));
-
+}
 
 function calcGrowScore(plant) {
   if (!plant.envLog || !plant.envLog.length) return {score:5.0, grade:'MID'};
