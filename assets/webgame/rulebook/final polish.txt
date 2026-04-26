@@ -1,0 +1,6 @@
+STRAIN CARDS:
+can we include our "strain cards" in a few ways
+1: the slightly faded image we are using for the background of the plant, its a zoomed in , faded version of the plant sprite that is currently being used, can we instead use a zoomed in, slightly faded version of our strain card? say its rainbow skunk im growing, we use the zoomed in on ART from the rainbow skunk card , slightly faded, as the background, and then we can still use option 3 (below) to turn over the tile and see the full card with the stats that are below the art and the name that is above the art, i would want this cropped out here in option 1, making option 3 still relevant. 
+2: when we harvest, id like the icon for each strain in the harvest tab to be their respective card.
+3: i want something showing the card with the stats, on the original grow tab, im thinking if you click anywhere that doesn't already have a click use, it will flip that idividual plant tab over and show the card on the backside .
+( i will include the card files for each strain in this prompt, they are found in "assets/sept22edits/websiteimagedata/cards/finished/_____" (____ = strain name)

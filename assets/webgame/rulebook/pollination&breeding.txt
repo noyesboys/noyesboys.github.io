@@ -1,0 +1,6 @@
+moving plants:
+you should have the option (if you have multiple rooms) to move a plant to another room
+the reason for this is if you want to flower just one plant at a time, or have a plant veg longer but flip one, want to have a breeding room, etc etc, lots of reasons actually 
+if there is a male in the room is will prompt on easy mode that this plant will be pollinated
+depending on the stage of the male the plant moved in will most likely have less seeds at the end than plants that started in that room (unless the male is still before week 2 if that makes sense)
+if you move a pollinated (seeded) plant it will stay seeded and give seeds but it wont cross pollinate other plants ONLY if you spray it first, (warning in easy mode asking if you want to spray it with water to kill the pollen first) if you dont, it WILL cross pollinate the other plants in the room after two weeks (in game time) of being in the room with them .  it will use the original pollen that it received so even if its a super noyes that is seeded but it was originally pollinated by a purple rainbow, the pollen that cross pollinates is still purple rainbow .
