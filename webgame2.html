@@ -621,6 +621,25 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .burp-btn.long{background:rgba(239,68,68,0.08);border-color:var(--red);color:var(--red)}
 .burp-btn:hover{filter:brightness(1.3)}
 .burp-btn:disabled{opacity:.3;cursor:not-allowed;filter:none}
+.dry-equip-select{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.dry-equip-btn{padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:rgba(0,0,0,0.4);font-family:var(--font-hud);font-size:9px;letter-spacing:.5px;cursor:pointer;transition:.2s;color:var(--muted)}
+.dry-equip-btn:hover:not(.disabled){border-color:var(--border-bright);color:var(--text)}
+.dry-equip-btn.active{background:rgba(34,211,238,0.12);border-color:var(--cyan);color:var(--cyan)}
+.dry-equip-btn.disabled{opacity:.3;cursor:not-allowed}
+.mold-badge{display:inline-block;background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.5);border-radius:4px;padding:2px 8px;font-family:var(--font-hud);font-size:8px;color:var(--red);letter-spacing:1px;animation:dangerPulse 1.5s ease-in-out infinite;vertical-align:middle}
+.vault-filter-btn{padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:rgba(0,0,0,0.3);font-family:var(--font-hud);font-size:9px;color:var(--muted);cursor:pointer;transition:.2s}
+.vault-filter-btn:hover,.vault-filter-btn.active{border-color:var(--green);color:var(--green);background:rgba(74,222,128,0.08)}
+.dry-speed-bar{display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(0,0,0,0.3);border-radius:6px;margin-top:10px;font-family:var(--font-hud);font-size:9px}
+.vault-filter-btn{background:var(--card-bg);border:1px solid var(--border);border-radius:5px;padding:4px 10px;color:var(--muted);font-family:var(--font-hud);font-size:9px;cursor:pointer;transition:.2s;letter-spacing:.5px}
+.vault-filter-btn:hover,.vault-filter-btn.active{border-color:var(--green);color:var(--green);background:rgba(74,222,128,0.08)}
+.dry-equip-btn{flex:1;min-width:70px;padding:8px 4px;border-radius:7px;border:1px solid var(--border);background:rgba(0,0,0,0.3);color:var(--muted);font-family:var(--font-hud);font-size:8px;letter-spacing:.3px;cursor:pointer;transition:.2s;text-align:center;line-height:1.6}
+.dry-equip-btn:hover:not(:disabled){border-color:var(--border-bright);color:var(--text)}
+.dry-equip-btn.active-fan{border-color:var(--cyan);background:rgba(34,211,238,0.1);color:var(--cyan)}
+.dry-equip-btn.active-dehu{border-color:var(--blue);background:rgba(59,130,246,0.1);color:var(--blue)}
+.dry-equip-btn.active-ac{border-color:var(--blue);background:rgba(59,130,246,0.1);color:var(--blue)}
+.dry-equip-btn.active-heat{border-color:var(--gold);background:rgba(251,191,36,0.1);color:var(--gold)}
+.dry-equip-btn:disabled{opacity:.3;cursor:not-allowed}
+.mold-badge{display:inline-block;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.5);border-radius:5px;padding:4px 10px;font-family:var(--font-hud);font-size:9px;color:var(--red);letter-spacing:.5px;animation:dangerPulse 2s ease-in-out infinite}
 </style>
 </head>
 
@@ -2475,7 +2494,7 @@ function defaultState(username, difficulty) {
   return {
     username,
     difficulty: difficulty || 'easy',
-    coins: 2500,
+    coins: 500,
     xp: 0,
     level: 1,
     rooms: [defaultRoom(1)],
@@ -2513,6 +2532,8 @@ function defaultState(username, difficulty) {
     growTime: 0,           // total in-game minutes elapsed
     _bmBotListings: [],
     _welcomeSent: false,
+    dryRoom: {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68},
+    dryRoom: {fanAssigned:false, fanSpeed:50, dehuAssigned:false, acAssigned:false, heaterAssigned:false, humidifierAssigned:false, tempTarget:68},
   };
 }
 
@@ -3123,81 +3144,42 @@ function tickCuring(now) {
 
 function _tickDrying(batch, realHrs) {
   const rh = batch.dryRH != null ? batch.dryRH : 80;
-  const g  = GS.gear || {};
+  const dr = GS.dryRoom || {};
+  const g  = GS.gear   || {};
 
-  // Gear multipliers
-  const fanSpeed = (batch.dryFanSpeed != null ? batch.dryFanSpeed : 50) / 100;
-  const hasDehu  = !!(g.dehumidifier);
-  const hasAC    = !!(g.acUnit);
+  // Equipment active only if both turned on AND owned
+  const fanOn    = dr.fanOn    && !!(g.fans    && g.fans[0]);
+  const dehuOn   = dr.dehuOn   && !!g.dehumidifier;
+  const acOn     = dr.acOn     && !!g.acUnit;
+  const fanSpeed = fanOn ? Math.max(0, Math.min(1, (dr.fanSpeed || 50) / 100)) : 0;
 
-  // Base drain rate %/real hr — fan+dehu combo ≈ 0.9%/hr → hits 62% in ~20h
-  let rate = 0.30
-    + fanSpeed * 0.50
-    + (hasDehu ? 0.20 : 0)
-    + (hasAC   ? 0.10 : 0);
+  // Rate %RH / real hour
+  // No gear: ~0.15/hr → ~120h (very slow, risky)
+  // Fan@50%+dehu: ~0.65/hr → ~28h to 62%
+  // Fan@100%+dehu+AC: ~1.05/hr → ~17h to 62%
+  let rate = 0.15
+    + fanSpeed * 0.55
+    + (dehuOn ? 0.28 : 0)
+    + (acOn   ? 0.07 : 0);
 
-  // Slows naturally as RH drops below 60%
-  if (rh < 60) rate *= 0.45;
-  // Below 50%: fixed slow drain regardless of equipment
-  if (rh < 50) rate = rh > 10 ? 0.83 : 0.42;
+  // Natural slowdown as it dries out
+  if (rh < 60)  rate *= 0.45;
+  if (rh < 50)  rate = 0.083;
+  if (rh < 10)  rate = 0.020;
 
   batch.dryRH = Math.max(0, rh - rate * realHrs);
 
-  // Mold risk: > 75% RH with low fan → quality loss
+  // Mold risk: >75% RH — fan is the main protection
   if (rh > 75) {
-    const noFan = fanSpeed < 0.2;
-    const moldProb = (noFan ? 0.12 : 0.015) * realHrs;
+    const moldProb = (!fanOn ? 0.12 : fanSpeed < 0.3 ? 0.04 : 0.010) * realHrs;
     if (Math.random() < moldProb) {
       const loss = Math.round(5 + Math.random() * 20);
       batch.quality = Math.max(0, (batch.quality || 100) - loss);
-      toast('🍄 ' + batch.name + ' — mold! −' + loss + '% quality', 'err', 5000);
+      toast('🍄 ' + batch.name + ' — mold! −' + loss + '% quality. Turn on fan!', 'err', 6000);
       addLog(batch.name + ' — mold loss in dry room (−' + loss + '% quality)', 'warn');
     }
   }
-}
-
-function _tickCuringJar(batch, realHrs, now) {
-  const rh       = batch.jarRH != null ? batch.jarRH : 62;
-  const entryRH  = batch.jarEntryRH || 62;
-  const burps    = batch.burpsDone || 0;
-
-  // RH rises based on how wet it entered the jar
-  let riseRate = 0;
-  if (entryRH > 70)      riseRate = 5.0; // %/hr very fast — too wet!
-  else if (entryRH > 50) riseRate = 2.5; // %/hr normal
-  // Below 50%: doesn't rise
-
-  // Stabilizes with more burps (fully stable at 10 burps)
-  const stabilityFactor = Math.max(0, 1 - burps / 10);
-  riseRate *= stabilityFactor;
-
-  batch.jarRH = Math.min(88, rh + riseRate * realHrs);
-
-  // Overdue burp quality penalty (RH > 70% unchecked for > 6h)
-  const lastBurp = batch.lastBurpTs || batch.jarStartTs || now;
-  const hrsSinceBurp = (now - lastBurp) / 3600000;
-  if (batch.jarRH > 70 && hrsSinceBurp > 6) {
-    const overdueHrs   = hrsSinceBurp - 6;
-    const penaltyTotal = overdueHrs * 5; // −5%/hr overdue
-    const applied      = batch.overduePenaltyApplied || 0;
-    if (penaltyTotal > applied) {
-      const newPen = Math.min(penaltyTotal - applied, 5 * realHrs);
-      batch.quality = Math.max(0, (batch.quality || 100) - newPen);
-      batch.overduePenaltyApplied = applied + newPen;
-    }
-  }
-
-  // Mold risk: jar > 75% for too long
-  if (batch.jarRH > 75 && realHrs > 0) {
-    if (Math.random() < 0.025 * realHrs) {
-      const loss = Math.round(5 + Math.random() * 15);
-      batch.quality = Math.max(0, (batch.quality || 100) - loss);
-      toast('🍄 ' + batch.name + ' — jar mold! −' + loss + '% quality', 'err');
-      addLog(batch.name + ' — jar mold (−' + loss + '% quality)', 'warn');
-    }
-  }
-}
-// ================================================================
+}// ================================================================
 // BLACK MARKET TICK
 // ================================================================
 function tickBlackMarket(now) {
@@ -4272,11 +4254,60 @@ function discardDrying(batchId) {
 }
 
 function updateDryFan(batchId, val) {
-  const batch = (GS.curing||[]).find(b => b.id === batchId);
-  if (!batch) return;
-  batch.dryFanSpeed = parseInt(val);
-  const el = document.getElementById('dry-fan-' + batchId);
+  // Legacy stub — now handled by room-level controls
+  updateDryRoomFan(val);
+}
+
+function toggleDryEquip(type) {
+  if (!GS.dryRoom) GS.dryRoom = {fanAssigned:false, fanSpeed:50, dehuAssigned:false, acAssigned:false, heaterAssigned:false, humidifierAssigned:false, tempTarget:68};
+  const g = GS.gear || {};
+  if      (type === 'fan'    && g.fans?.[0])   GS.dryRoom.fanAssigned      = !GS.dryRoom.fanAssigned;
+  else if (type === 'dehu'   && g.dehumidifier) GS.dryRoom.dehuAssigned     = !GS.dryRoom.dehuAssigned;
+  else if (type === 'ac'     && g.acUnit)        GS.dryRoom.acAssigned       = !GS.dryRoom.acAssigned;
+  else if (type === 'heater' && g.heater)        GS.dryRoom.heaterAssigned   = !GS.dryRoom.heaterAssigned;
+  else if (type === 'humid'  && g.humidifier)    GS.dryRoom.humidifierAssigned = !GS.dryRoom.humidifierAssigned;
+  else { toast('You don\'t own that equipment — buy it from Shop → Climate.', 'warn'); return; }
+  saveGame(); renderVault();
+}
+
+function updateDryRoomFan(val) {
+  if (!GS.dryRoom) return;
+  GS.dryRoom.fanSpeed = parseInt(val);
+  const el = document.getElementById('dry-room-fan-val');
   if (el) el.textContent = val + '%';
+  saveGame();
+}
+
+function updateDryRoomTemp(val) {
+  if (!GS.dryRoom) return;
+  GS.dryRoom.tempTarget = parseInt(val);
+  const el = document.getElementById('dry-room-temp-val');
+  if (el) el.textContent = val + '°F';
+  saveGame();
+}
+function setDryRoomEquip(type) {
+  if (!GS.dryRoom) GS.dryRoom = {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68};
+  const dr = GS.dryRoom;
+  if (type === 'fan')    { dr.fanOn    = !dr.fanOn; }
+  if (type === 'dehu')   { dr.dehuOn   = !dr.dehuOn; }
+  if (type === 'ac')     { dr.acOn     = !dr.acOn;     if (dr.acOn) dr.heaterOn = false; }
+  if (type === 'heater') { dr.heaterOn = !dr.heaterOn; if (dr.heaterOn) dr.acOn = false; }
+  saveGame(); renderVault();
+}
+
+function updateDryRoomFanSpeed(val) {
+  if (!GS.dryRoom) GS.dryRoom = {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68};
+  GS.dryRoom.fanSpeed = parseInt(val);
+  const el = document.getElementById('dry-fan-global');
+  if (el) el.textContent = val + '%';
+  saveGame();
+}
+
+function updateDryRoomTemp(val) {
+  if (!GS.dryRoom) GS.dryRoom = {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68};
+  GS.dryRoom.tempTarget = parseInt(val);
+  const el = document.getElementById('dry-temp-global');
+  if (el) el.textContent = val + '°F';
   saveGame();
 }
 
@@ -4440,84 +4471,161 @@ function renderVault() {
 // ── DRYING ROOM ──
 function _renderDrying(cont) {
   const batches = (GS.curing || []).filter(b => b.phase === 'drying');
+  const g  = GS.gear    || {};
+  const dr = GS.dryRoom || {};
+
+  // What does the player own?
+  const hasFanGear    = !!(g.fans && g.fans[0]);
+  const hasDehuGear   = !!g.dehumidifier;
+  const hasACGear     = !!g.acUnit;
+  const hasHeaterGear = !!g.heater;
+
+  // What is active?
+  const fanOn    = dr.fanOn    && hasFanGear;
+  const dehuOn   = dr.dehuOn   && hasDehuGear;
+  const acOn     = dr.acOn     && hasACGear;
+  const heaterOn = dr.heaterOn && hasHeaterGear;
+  const fanSpeed = dr.fanSpeed != null ? dr.fanSpeed : 50;
+  const tempTgt  = dr.tempTarget != null ? dr.tempTarget : 68;
+
+  // Drying speed label
+  let speedLabel = 'VERY SLOW — risky without a fan';
+  let speedColor = 'var(--red)';
+  if (fanOn && dehuOn && acOn) { speedLabel = 'FAST — ~17h to sweet spot'; speedColor = 'var(--green)'; }
+  else if (fanOn && dehuOn)    { speedLabel = 'GOOD — ~28h to sweet spot'; speedColor = 'var(--green)'; }
+  else if (fanOn)              { speedLabel = 'MODERATE — ~45h to sweet spot'; speedColor = 'var(--gold)'; }
+
+  let html = `
+    <div style="background:var(--card-bg);border:1px solid rgba(34,211,238,0.3);border-radius:12px;padding:16px;margin-bottom:14px">
+      <div style="font-family:var(--font-hud);font-size:11px;color:var(--cyan);letter-spacing:2px;margin-bottom:12px">🌬️ DRYING ROOM CONTROLS</div>
+
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);letter-spacing:1.5px;margin-bottom:7px;text-transform:uppercase">Select Equipment</div>
+      <div class="dry-equip-select">
+        <button class="dry-equip-btn ${!hasFanGear ? 'disabled' : fanOn ? 'active' : ''}"
+          onclick="${hasFanGear ? "setDryRoomEquip('fan')" : ''}">
+          🌀 FAN ${!hasFanGear ? '<span style="font-size:7px">(not owned)</span>' : fanOn ? '✓ ON' : 'OFF'}
+        </button>
+        <button class="dry-equip-btn ${!hasDehuGear ? 'disabled' : dehuOn ? 'active' : ''}"
+          onclick="${hasDehuGear ? "setDryRoomEquip('dehu')" : ''}">
+          🌵 DEHU ${!hasDehuGear ? '<span style="font-size:7px">(not owned)</span>' : dehuOn ? '✓ ON' : 'OFF'}
+        </button>
+        <button class="dry-equip-btn ${!hasACGear ? 'disabled' : acOn ? 'active' : ''}"
+          onclick="${hasACGear ? "setDryRoomEquip('ac')" : ''}">
+          ❄️ AC ${!hasACGear ? '<span style="font-size:7px">(not owned)</span>' : acOn ? '✓ ON' : 'OFF'}
+        </button>
+        <button class="dry-equip-btn ${!hasHeaterGear ? 'disabled' : heaterOn ? 'active' : ''}"
+          onclick="${hasHeaterGear ? "setDryRoomEquip('heater')" : ''}">
+          🔥 HEATER ${!hasHeaterGear ? '<span style="font-size:7px">(not owned)</span>' : heaterOn ? '✓ ON' : 'OFF'}
+        </button>
+      </div>
+
+      ${fanOn ? `
+      <div style="margin-top:10px">
+        <div class="dry-ctrl-row">
+          <span class="dry-ctrl-label">🌀 FAN SPEED</span>
+          <input type="range" min="0" max="100" value="${fanSpeed}"
+            oninput="updateDryRoomFanSpeed(this.value)">
+          <span class="dry-ctrl-val" id="dry-fan-global">${fanSpeed}%</span>
+        </div>
+        ${fanSpeed < 30 ? `<div style="font-size:8px;color:var(--gold);font-family:var(--font-mono);margin-top:3px">⚠️ Low fan speed — mold risk still elevated</div>` : ''}
+      </div>` : ''}
+
+      ${(acOn || heaterOn) ? `
+      <div style="margin-top:8px">
+        <div class="dry-ctrl-row">
+          <span class="dry-ctrl-label">${acOn ? '❄️ AC' : '🔥 HEAT'} TARGET</span>
+          <input type="range" min="55" max="85" value="${tempTgt}"
+            oninput="updateDryRoomTemp(this.value)">
+          <span class="dry-ctrl-val" id="dry-temp-global">${tempTgt}°F</span>
+        </div>
+        <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:2px">
+          Ideal dry room temp: 60–70°F · Cooler = slower but safer
+        </div>
+      </div>` : ''}
+
+      <div class="dry-speed-bar" style="margin-top:12px">
+        <span style="color:var(--muted)">SPEED:</span>
+        <span style="color:${speedColor};flex:1">${speedLabel}</span>
+        <span style="font-size:8px;color:var(--muted)">Sweet spot: 62% RH</span>
+      </div>
+
+      ${!hasFanGear && !hasDehuGear
+        ? `<div class="warning-note" style="margin-top:8px;margin-bottom:0">⚠️ No fan or dehumidifier owned — buy from Shop → Climate for effective drying.</div>`
+        : ''}
+    </div>`;
+
   if (!batches.length) {
-    cont.innerHTML = '<div class="empty-state">🌬️ No batches drying.<br>Harvest a plant to start drying!</div>';
+    html += '<div class="empty-state" style="padding:30px">🌬️ No batches drying.<br>Harvest a plant to start drying.</div>';
+    cont.innerHTML = html;
     return;
   }
-  const g = GS.gear || {};
-  const hasFan   = !!(g.fans && g.fans[0]);
-  const hasDehu  = !!g.dehumidifier;
-  const hasAC    = !!g.acUnit;
-  const hasHeater= !!g.heater;
 
-  let html = '';
   batches.forEach(batch => {
     const rh        = batch.dryRH != null ? batch.dryRH : 80;
     const q         = batch.quality || 100;
-    const fanSpeed  = batch.dryFanSpeed != null ? batch.dryFanSpeed : 50;
-    const elapsedHrs= ((Date.now() - (batch.startTs || Date.now())) / 3600000).toFixed(1);
+    const elapsed   = ((Date.now() - (batch.startTs || Date.now())) / 3600000).toFixed(1);
+    const isMoldRisk= rh > 75;
 
-    let rhColor = 'var(--muted)', phaseLabel = '', isMoldRisk = false;
-    if (rh > 75)            { rhColor = 'var(--red)';   phaseLabel = '🍄 MOLD RISK — increase fan speed!'; isMoldRisk = true; }
-    else if (rh > 70)       { rhColor = 'var(--red)';   phaseLabel = '⚠️ TOO WET — keep drying'; }
-    else if (rh > 68)       { rhColor = 'var(--gold)';  phaseLabel = '⬇️ DRYING — almost in range'; }
-    else if (rh >= 62 && rh < 63)
-                            { rhColor = 'var(--green)'; phaseLabel = '🌟 PERFECT SWEET SPOT! Move to curing now'; }
-    else if (rh >= 58 && rh < 68)
-                            { rhColor = 'var(--green)'; phaseLabel = '✅ PRIME WINDOW (58–64%) — move to curing'; }
-    else if (rh >= 50 && rh < 58)
-                            { rhColor = 'var(--cyan)';  phaseLabel = '👍 ACCEPTABLE (50–58%) — slight bonus'; }
-    else if (rh >= 40 && rh < 50)
-                            { rhColor = 'var(--gold)';  phaseLabel = '⚠️ GETTING TOO DRY — move now!'; }
-    else if (rh < 40)       { rhColor = 'var(--red)';   phaseLabel = '❌ OVERDRIED — severe quality loss!'; }
+    let rhColor = 'var(--cyan)', phaseLabel = '';
+    if (rh > 75)                    { rhColor = 'var(--red)';   phaseLabel = '🍄 MOLD RISK — turn on fan!'; }
+    else if (rh > 70)               { rhColor = 'var(--red)';   phaseLabel = '⚠️ TOO WET — keep drying'; }
+    else if (rh > 68)               { rhColor = 'var(--gold)';  phaseLabel = '⬇️ DRYING — almost there'; }
+    else if (rh >= 62 && rh < 63)  { rhColor = 'var(--green)'; phaseLabel = '🌟 PERFECT SWEET SPOT!'; }
+    else if (rh >= 58 && rh <= 64) { rhColor = 'var(--green)'; phaseLabel = '✅ PRIME WINDOW — move to curing'; }
+    else if (rh >= 50 && rh < 58)  { rhColor = 'var(--cyan)';  phaseLabel = '👍 ACCEPTABLE — slight quality bonus'; }
+    else if (rh >= 40 && rh < 50)  { rhColor = 'var(--gold)';  phaseLabel = '⚠️ GETTING TOO DRY — move now!'; }
+    else if (rh < 40)              { rhColor = 'var(--red)';   phaseLabel = '❌ OVERDRIED — severe quality loss!'; }
+
+    let qPreview = '', qColor = 'var(--muted)';
+    if      (rh >= 62 && rh < 63)   { qPreview = 'PERFECT → +25% quality bonus!'; qColor = 'var(--green)'; }
+    else if (rh >= 58 && rh <= 64)  { qPreview = 'Prime → +15% quality bonus'; qColor = 'var(--green)'; }
+    else if (rh >= 50 && rh < 58)   { qPreview = 'Good → +10% quality bonus'; qColor = 'var(--cyan)'; }
+    else if (rh >= 68 && rh < 70)   { qPreview = 'Wet → −15% quality'; qColor = 'var(--gold)'; }
+    else if (rh >= 65 && rh < 68)   { qPreview = 'Slightly wet → −5% quality'; qColor = 'var(--gold)'; }
+    else if (rh >= 70)              { qPreview = 'Too wet → −50% quality!'; qColor = 'var(--red)'; }
+    else if (rh >= 40 && rh < 50)   { qPreview = 'Too dry → −20% quality'; qColor = 'var(--gold)'; }
+    else if (rh < 40)               { qPreview = 'Overdried → −50% quality!'; qColor = 'var(--red)'; }
 
     const canCure = GS.difficulty !== 'easy' || rh <= 70;
     const easyWarn = GS.difficulty === 'easy' && rh > 70
-      ? `<div class="info-note" style="margin-top:8px">💡 Dry to below 70% before moving to curing jars for best results.</div>` : '';
+      ? `<div class="info-note" style="margin-top:8px;margin-bottom:0">💡 Easy mode: dry below 70% before moving to curing jars.</div>` : '';
 
     html += `<div class="dry-room-card ${isMoldRisk ? 'mold-risk' : ''}">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-        <div style="font-family:var(--font-hud);font-size:12px;color:var(--text)">${batch.name}</div>
-        <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono)">${elapsedHrs}h · ${batch.grams}g · ${batch.thc}% THC</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+        <div style="font-family:var(--font-hud);font-size:12px;color:var(--text)">
+          ${batch.name}
+          ${isMoldRisk ? '<span class="mold-badge" style="margin-left:8px">🍄 MOLD RISK</span>' : ''}
+        </div>
+        <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono)">${elapsed}h · ${batch.grams}g · THC ${batch.thc}%</div>
       </div>
+
       <div class="dry-rh-display" style="color:${rhColor}">${rh.toFixed(1)}<span style="font-size:20px;color:var(--muted)">% RH</span></div>
-      <div class="dry-phase-label" style="color:${rhColor}">${phaseLabel}</div>
+      <div class="dry-phase-label" style="color:${rhColor};margin-bottom:8px">${phaseLabel}</div>
+
       <div class="dry-quality-strip">
         <span class="dry-q-label">QUALITY</span>
         <div class="dry-q-bar"><div class="dry-q-fill" style="width:${q}%;background:${q>80?'var(--green)':q>50?'var(--gold)':'var(--red)'}"></div></div>
         <span style="font-family:var(--font-hud);font-size:10px;color:${q>80?'var(--green)':q>50?'var(--gold)':'var(--red)'}">${Math.round(q)}%</span>
       </div>
-      <div style="font-family:var(--font-hud);font-size:8px;color:var(--muted);letter-spacing:1px;margin:10px 0 6px">FAN SPEED ${!hasFan?'(no fan in gear)':''}</div>
-      <div class="dry-ctrl-row">
-        <span class="dry-ctrl-label">🌀 FAN</span>
-        <input type="range" min="0" max="100" value="${fanSpeed}" ${!hasFan ? 'disabled' : ''}
-          oninput="updateDryFan('${batch.id}',this.value)">
-        <span class="dry-ctrl-val" id="dry-fan-${batch.id}">${fanSpeed}%</span>
-      </div>
-      <div style="font-family:var(--font-hud);font-size:8px;color:var(--muted);letter-spacing:1px;margin:8px 0 5px">ACTIVE GEAR</div>
-      <div class="dry-equip-strip">
-        <span class="dry-equip-pill ${hasFan?'on':'off'}">🌀 FAN</span>
-        <span class="dry-equip-pill ${hasDehu?'on':'off'}">🌵 DEHU</span>
-        <span class="dry-equip-pill ${hasAC?'on':'off'}">❄️ AC</span>
-        <span class="dry-equip-pill ${hasHeater?'on':'off'}">🔥 HEATER</span>
-      </div>
-      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);text-align:center;margin-top:4px">
-        No fan: slow & risky · Fan+Dehu: ~20h to sweet spot · Max gear: ~12h
-      </div>
+
+      ${qPreview ? `<div style="font-size:8px;font-family:var(--font-hud);color:${qColor};text-align:center;margin-top:5px">${qPreview}</div>` : ''}
+
       ${easyWarn}
+
       <div style="display:flex;gap:6px;margin-top:12px">
         <button class="btn-action btn-purple" style="flex:1;padding:10px"
           onclick="moveToCuringJar('${batch.id}')"
-          ${!canCure ? 'disabled' : ''}>
+          ${!canCure ? 'disabled title="Dry below 70% first (Easy mode)"' : ''}>
           🫙 MOVE TO JAR CURING
         </button>
-        <button class="btn-action btn-red" style="padding:10px;min-width:44px" onclick="discardDrying('${batch.id}')">🗑️</button>
+        <button class="btn-action btn-red" style="padding:10px;min-width:44px"
+          onclick="discardDrying('${batch.id}')" title="Discard batch">🗑️</button>
       </div>
     </div>`;
   });
+
   cont.innerHTML = html;
 }
-
 // ── JAR CURING ──
 function _renderCuringJars(cont) {
   const batches = (GS.curing || []).filter(b => b.phase === 'curing');
@@ -5953,6 +6061,10 @@ function loginSuccess() {
   if (!GS.achievements) GS.achievements = [];
      if (!GS.growTime) GS.growTime = 0;
      if (!GS.roomGear) GS.roomGear = {};
+     if (!GS.dryRoom) GS.dryRoom = {fanAssigned:false, fanSpeed:50, dehuAssigned:false, acAssigned:false,           	heaterAssigned:false, humidifierAssigned:false, tempTarget:68};
+if (!GS.dryRoom) GS.dryRoom = {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68};
+  // Migrate old curing phases to new drying/curing system
+  (GS.curing||[]).forEach(b => {
     // Migrate old curing phases to new drying/curing system
   (GS.curing||[]).forEach(b => {
     if (!b._lastCuringTick) b._lastCuringTick = Date.now();
@@ -6732,7 +6844,7 @@ function confirmHarvest() {
     id: uid(), name: plant.name || plant.strainName, strainName: plant.strainName,
     grams: yield_, thc, score: score.score, rarity: plant.rarity || 'Standard',
     quality: 100, phase: 'drying', startTs: Date.now(),
-    dryRH: 80, dryFanSpeed: 50, dryMoldRiskHrs: 0,
+    dryRH: 80,
     _lastCuringTick: Date.now(),
     isBred: !!(GS.bredStrains||[]).find(b=>b.name===plant.strainName)
   });
