@@ -588,6 +588,49 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .ppm-stage-table th{color:var(--muted);font-family:var(--font-hud);font-size:8px;letter-spacing:1px;text-align:left;padding:4px 6px;border-bottom:1px solid var(--border)}
 .ppm-stage-table td{padding:4px 6px;border-bottom:1px solid rgba(255,255,255,0.03);color:var(--text)}
 .ppm-stage-table tr.current-stage td{color:var(--green);background:rgba(74,222,128,0.05)}
+/* ── Drying & Curing UI ── */
+.dry-tab-bar{display:flex;gap:4px;margin-bottom:14px;background:rgba(0,0,0,0.4);border-radius:8px;padding:4px;border:1px solid var(--border)}
+.dry-tab{flex:1;padding:7px;border:none;background:none;color:var(--muted);cursor:pointer;border-radius:6px;font-family:var(--font-hud);font-size:9px;letter-spacing:1px;transition:.2s}
+.dry-tab.active{background:rgba(34,211,238,0.12);color:var(--cyan)}
+.dry-room-card{background:var(--card-bg);border:1px solid rgba(34,211,238,0.3);border-radius:12px;padding:16px;margin-bottom:12px;position:relative}
+.dry-room-card.mold-risk{border-color:rgba(239,68,68,0.5);animation:dangerPulse 2s ease-in-out infinite}
+.dry-rh-display{font-family:var(--font-hud);font-size:44px;font-weight:700;text-align:center;margin:8px 0}
+.dry-phase-label{font-family:var(--font-hud);font-size:9px;letter-spacing:2px;text-align:center;margin-bottom:8px}
+.dry-ctrl-row{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.dry-ctrl-label{font-size:8px;color:var(--muted);font-family:var(--font-hud);width:70px;flex-shrink:0}
+.dry-ctrl-row input[type=range]{flex:1;accent-color:var(--cyan);height:3px;cursor:pointer}
+.dry-ctrl-val{font-family:var(--font-hud);font-size:9px;color:var(--cyan);min-width:40px;text-align:right}
+.dry-equip-strip{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.dry-equip-pill{padding:4px 10px;border-radius:20px;font-family:var(--font-hud);font-size:8px;letter-spacing:.5px}
+.dry-equip-pill.on{background:rgba(34,211,238,0.12);border:1px solid var(--cyan);color:var(--cyan)}
+.dry-equip-pill.off{background:rgba(0,0,0,0.3);border:1px solid var(--border);color:var(--muted);opacity:.5}
+.dry-quality-strip{display:flex;align-items:center;gap:8px;margin:8px 0;padding:6px 8px;background:rgba(0,0,0,0.3);border-radius:6px}
+.dry-q-label{font-size:8px;color:var(--muted);font-family:var(--font-hud);flex-shrink:0;letter-spacing:.5px}
+.dry-q-bar{flex:1;height:5px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden}
+.dry-q-fill{height:100%;border-radius:3px;transition:.5s}
+.cure-jar-card{background:var(--card-bg);border:1px solid rgba(168,85,247,0.35);border-radius:12px;padding:16px;margin-bottom:12px}
+.cure-jar-card.burp-due{border-color:rgba(251,191,36,0.6);animation:gearWarn 1.5s ease-in-out infinite}
+.cure-jar-card.burp-overdue{border-color:rgba(239,68,68,0.6);animation:dangerPulse 2s ease-in-out infinite}
+.cure-jar-rh{font-family:var(--font-hud);font-size:40px;font-weight:700;text-align:center}
+.cure-rh-bar{height:6px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden;margin:6px 0}
+.cure-rh-fill{height:100%;border-radius:3px;transition:.5s}
+.burp-btn-row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.burp-btn{flex:1;min-width:80px;padding:9px 4px;border-radius:7px;border:1px solid;font-family:var(--font-hud);font-size:8px;letter-spacing:.3px;cursor:pointer;transition:.2s;text-align:center;line-height:1.5}
+.burp-btn.quick{background:rgba(34,211,238,0.08);border-color:var(--cyan);color:var(--cyan)}
+.burp-btn.med{background:rgba(168,85,247,0.08);border-color:var(--purple);color:var(--purple)}
+.burp-btn.long{background:rgba(239,68,68,0.08);border-color:var(--red);color:var(--red)}
+.burp-btn:hover{filter:brightness(1.3)}
+.burp-btn:disabled{opacity:.3;cursor:not-allowed;filter:none}
+.vault-filter-btn{background:var(--card-bg);border:1px solid var(--border);border-radius:5px;padding:4px 10px;color:var(--muted);font-family:var(--font-hud);font-size:9px;cursor:pointer;transition:.2s;letter-spacing:.5px}
+.vault-filter-btn:hover,.vault-filter-btn.active{border-color:var(--green);color:var(--green);background:rgba(74,222,128,0.08)}
+.dry-equip-btn{flex:1;min-width:70px;padding:8px 4px;border-radius:7px;border:1px solid var(--border);background:rgba(0,0,0,0.3);color:var(--muted);font-family:var(--font-hud);font-size:8px;letter-spacing:.3px;cursor:pointer;transition:.2s;text-align:center;line-height:1.6}
+.dry-equip-btn:hover:not(:disabled){border-color:var(--border-bright);color:var(--text)}
+.dry-equip-btn.active-fan{border-color:var(--cyan);background:rgba(34,211,238,0.1);color:var(--cyan)}
+.dry-equip-btn.active-dehu{border-color:var(--blue);background:rgba(59,130,246,0.1);color:var(--blue)}
+.dry-equip-btn.active-ac{border-color:var(--blue);background:rgba(59,130,246,0.1);color:var(--blue)}
+.dry-equip-btn.active-heat{border-color:var(--gold);background:rgba(251,191,36,0.1);color:var(--gold)}
+.dry-equip-btn:disabled{opacity:.3;cursor:not-allowed}
+.mold-badge{display:inline-block;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.5);border-radius:5px;padding:4px 10px;font-family:var(--font-hud);font-size:9px;color:var(--red);letter-spacing:.5px;animation:dangerPulse 2s ease-in-out infinite}
 </style>
 </head>
 
@@ -601,7 +644,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     <div class="login-logo">
       <h1>🌿 NOYES BOYS</h1>
       <p>GENETICS · GROW-OFF</p>
-      <span class="version-tag">v4.20</span>
+      <span class="version-tag">v3.1 FIXED</span>
     </div>
     <div class="tabs-login">
       <button class="tab-login-btn active" onclick="showLoginTab('login')">SIGN IN</button>
@@ -916,18 +959,16 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
         <div class="tab-panel hidden" id="tab-vault">
           <div class="section-header">
             <div>
-              <div class="section-title">🏦 HARVEST VAULT</div>
-              <div class="section-sub">Cured harvests ready to sell</div>
-            </div>
-            <div>
-              <div class="plants-badge" id="vault-filter-bar" style="display:flex;gap:5px;flex-wrap:wrap">
-                <button class="vault-filter-btn" data-filter="all" onclick="filterVault('all',this)">ALL</button>
-                <button class="vault-filter-btn" data-filter="rare" onclick="filterVault('rare',this)">RARE</button>
-                <button class="vault-filter-btn" data-filter="highthc" onclick="filterVault('highthc',this)">HIGH THC</button>
-              </div>
+              <div class="section-title">🏦 VAULT</div>
+              <div class="section-sub">Drying · Jar Curing · Cured harvests</div>
             </div>
           </div>
-          <div id="vault-container"></div>
+          <div class="dry-tab-bar">
+            <button class="dry-tab active" onclick="showVaultSub('drying',this)">🌬️ DRYING <span id="dry-count-badge" class="nav-badge" style="display:none">0</span></button>
+            <button class="dry-tab" onclick="showVaultSub('curing',this)">🫙 CURING <span id="cure-count-badge" class="nav-badge" style="display:none">0</span></button>
+            <button class="dry-tab" onclick="showVaultSub('vault',this)">📦 CURED</button>
+          </div>
+          <div id="vault-sub-content"></div>
         </div>
 
         <!-- MARKET TAB -->
@@ -2436,6 +2477,7 @@ let _activeTab = 'grow';
 let _vaultFilter = 'all';
 let _shopSection = 'lights';
 let _bmTab = 'browse';
+let _vaultSub = 'drying';
 let _breedFem  = '';   // persists breed tab female selection across renders
 let _breedMale = '';   // persists breed tab male selection across renders
 
@@ -2481,6 +2523,7 @@ function defaultState(username, difficulty) {
     growTime: 0,           // total in-game minutes elapsed
     _bmBotListings: [],
     _welcomeSent: false,
+    dryRoom: {fanAssigned:false, fanSpeed:50, dehuAssigned:false, acAssigned:false, heaterAssigned:false, humidifierAssigned:false, tempTarget:68},
   };
 }
 
@@ -2848,7 +2891,21 @@ function tickPlant(plant, room, strain, actual, gameMins) {
 
   // Stage advancement
   // Growth speed bonus (gen) — speeds up day accumulation
-  const speedMult = 1 + ((plant.growSpeedBonus || 0) / 100);
+  const genSpeedMult = 1 + ((plant.growSpeedBonus || 0) / 100);
+
+  // Health-based growth slowdown (rulebook)
+  const _hp = plant.health != null ? plant.health : 100;
+  let healthGrowthMult;
+  if      (_hp >= 90) healthGrowthMult = 1.00;   // 90-100: normal
+  else if (_hp >= 80) healthGrowthMult = 0.98;   // 80-90:  2% slower
+  else if (_hp >= 70) healthGrowthMult = 0.95;   // 70-80:  5% slower
+  else if (_hp >= 50) healthGrowthMult = 0.92;   // 50-70:  8% slower
+  else if (_hp >= 30) healthGrowthMult = 0.90;   // 30-50:  10% slower
+  else if (_hp >= 10) healthGrowthMult = 0.85;   // 10-30:  15% slower
+  else                healthGrowthMult = 0.75;   // 1-10:   25% slower
+
+  const speedMult = genSpeedMult * healthGrowthMult;
+
   if (plant.stage === 'Seedling') {
     plant.seedlingDays = (plant.seedlingDays || 0) + (gameMins / (60 * 24)) * speedMult;
     if (plant.seedlingDays >= 14) {
@@ -2936,6 +2993,13 @@ function tickPlant(plant, room, strain, actual, gameMins) {
 
   // Hot temp boosts drain
   if (actual.temp > 90) drainPct *= 1.2;
+
+  // Stress boosts water drain (rulebook: 10%+ stress = drinks faster)
+  const _stress = plant.stress || 0;
+  if      (_stress >= 75) drainPct *= 1.60;   // 75%+:   60% faster
+  else if (_stress >= 50) drainPct *= 1.40;   // 50-75%: 40% faster
+  else if (_stress >= 25) drainPct *= 1.25;   // 25-50%: 25% faster
+  else if (_stress >= 10) drainPct *= 1.15;   // 10-25%: 15% faster
 
   // Apply water drain reduction from gen bonus (percentage reduction)
   const wdrReduction = (plant.waterDrainReduction || 0) / 100;
@@ -3055,45 +3119,103 @@ function tickDiseaseSpread(room, gameMins) {
 }
 
 // ================================================================
-// CURING TICK (real-time)
+// DRYING + CURING TICK (real-time)
 // ================================================================
 function tickCuring(now) {
   (GS.curing || []).forEach(batch => {
-    if (batch.phase === 'hanging') {
-      const elapsed = (now - batch.startTs) / 3600000;
-      if (elapsed >= 48) {
-        batch.phase = 'jarring';
-        batch.burpsDone = 0;
-        batch.jarHumid = 70;
-        batch.nextBurpTs = now + 12 * 3600000;
-        batch.quality = 100;
-        batch.overduePenaltyApplied = 0;
-        addLog(batch.name + ' moved to jar curing 🫙', 'success');
-        toast('🫙 ' + batch.name + ' moved to jar curing!', 'ok');
-      }
-    } else if (batch.phase === 'jarring') {
-      if (batch.nextBurpTs && now > batch.nextBurpTs + 6 * 3600000) {
-        const overdue = Math.floor((now - (batch.nextBurpTs + 6 * 3600000)) / (6 * 3600000));
-        const expectedPenalty = overdue * 10;
-        if (expectedPenalty > (batch.overduePenaltyApplied || 0)) {
-          const newPen = expectedPenalty - (batch.overduePenaltyApplied || 0);
-          batch.quality = Math.max(0, (batch.quality || 100) - newPen);
-          batch.overduePenaltyApplied = expectedPenalty;
-        }
-      }
-      const lastEvt = batch.lastBurpTs || batch.startTs;
-      const hrs = (now - lastEvt) / 3600000;
-      batch.jarHumid = Math.min(70, 60 + (hrs / Math.max(hrs, 12)) * 10);
-      if ((batch.burpsDone || 0) >= 3 && batch.lastBurpTs && (now - batch.lastBurpTs) >= 48 * 3600000) {
-        batch.phase = 'cured';
-        batch.jarHumid = 62;
-        addLog(batch.name + ' fully cured! 🏆', 'success');
-        toast('🏆 ' + batch.name + ' is fully cured!', 'ok', 5000);
-      }
-    }
+    const lastTick = batch._lastCuringTick || batch.startTs || now;
+    const realHrs  = Math.min((now - lastTick) / 3600000, 24); // cap at 24h per tick to avoid weirdness
+    batch._lastCuringTick = now;
+    if (realHrs <= 0.0001) return;
+    if (batch.phase === 'drying')  _tickDrying(batch, realHrs);
+    if (batch.phase === 'curing')  _tickCuringJar(batch, realHrs, now);
   });
 }
 
+function _tickDrying(batch, realHrs) {
+  const rh  = batch.dryRH != null ? batch.dryRH : 80;
+  const dr  = GS.dryRoom || {};
+  const g   = GS.gear || {};
+
+  // Only count equipment if it's assigned AND owned
+  const fanPct  = (dr.fanAssigned && g.fans?.[0]) ? (dr.fanSpeed || 50) / 100 : 0;
+  const hasDehu = !!(dr.dehuAssigned && g.dehumidifier);
+  const hasAC   = !!(dr.acAssigned   && g.acUnit);
+  const hasHeat = !!(dr.heaterAssigned && g.heater);
+
+  // Base rate (no gear): ~0.83%/hr → 12hr for 80→70
+  // Fan 50% + dehu: ~1.23%/hr → ~15hr for sweet spot
+  // Max gear: ~1.7%/hr → ~11hr for sweet spot, 80→70 in ~6hr
+  let rate = 0.83
+    + fanPct * 0.80
+    + (hasDehu ? 0.40 : 0)
+    + (hasAC   ? 0.15 : 0)
+    + (hasHeat ? 0.08 : 0);
+
+  // Natural slow-down as RH drops
+  if (rh < 60) rate *= 0.50;
+  if (rh < 50) rate *= 0.45;
+  if (rh < 20) rate *= 0.30;
+  if (rh < 5)  rate  = 0.02;
+
+  batch.dryRH = Math.max(0, rh - rate * realHrs);
+
+  // Mold risk: above 75% with low/no airflow
+  const lowAirflow = fanPct < 0.25;
+  if (rh > 75 && lowAirflow) {
+    const moldProb = (fanPct === 0 ? 0.12 : 0.04) * realHrs;
+    if (Math.random() < moldProb) {
+      const loss = Math.round(5 + Math.random() * 20);
+      batch.quality = Math.max(0, (batch.quality || 100) - loss);
+      batch._moldHit = true;
+      toast('🍄 ' + batch.name + ' — mold! −' + loss + '% quality. Add more airflow!', 'err', 6000);
+      addLog(batch.name + ' — mold in dry room (−' + loss + '% quality)', 'warn');
+    }
+  } else if (rh <= 70) {
+    batch._moldHit = false; // clear mold flag once out of danger zone
+  }
+}
+function _tickCuringJar(batch, realHrs, now) {
+  const rh       = batch.jarRH != null ? batch.jarRH : 62;
+  const entryRH  = batch.jarEntryRH || 62;
+  const burps    = batch.burpsDone || 0;
+
+  // RH rises based on how wet it entered the jar
+  let riseRate = 0;
+  if (entryRH > 70)      riseRate = 5.0; // %/hr very fast — too wet!
+  else if (entryRH > 50) riseRate = 2.5; // %/hr normal
+  // Below 50%: doesn't rise
+
+  // Stabilizes with more burps (fully stable at 10 burps)
+  const stabilityFactor = Math.max(0, 1 - burps / 10);
+  riseRate *= stabilityFactor;
+
+  batch.jarRH = Math.min(88, rh + riseRate * realHrs);
+
+  // Overdue burp quality penalty (RH > 70% unchecked for > 6h)
+  const lastBurp = batch.lastBurpTs || batch.jarStartTs || now;
+  const hrsSinceBurp = (now - lastBurp) / 3600000;
+  if (batch.jarRH > 70 && hrsSinceBurp > 6) {
+    const overdueHrs   = hrsSinceBurp - 6;
+    const penaltyTotal = overdueHrs * 5; // −5%/hr overdue
+    const applied      = batch.overduePenaltyApplied || 0;
+    if (penaltyTotal > applied) {
+      const newPen = Math.min(penaltyTotal - applied, 5 * realHrs);
+      batch.quality = Math.max(0, (batch.quality || 100) - newPen);
+      batch.overduePenaltyApplied = applied + newPen;
+    }
+  }
+
+  // Mold risk: jar > 75% for too long
+  if (batch.jarRH > 75 && realHrs > 0) {
+    if (Math.random() < 0.025 * realHrs) {
+      const loss = Math.round(5 + Math.random() * 15);
+      batch.quality = Math.max(0, (batch.quality || 100) - loss);
+      toast('🍄 ' + batch.name + ' — jar mold! −' + loss + '% quality', 'err');
+      addLog(batch.name + ' — jar mold (−' + loss + '% quality)', 'warn');
+    }
+  }
+}
 // ================================================================
 // BLACK MARKET TICK
 // ================================================================
@@ -3142,13 +3264,20 @@ function tickPlantRulebook(plant, room, gameMins) {
 
   const diff = GS.difficulty || 'easy';
   stressDelta *= (diff === 'master' ? 1.5 : diff === 'normal' ? 1.0 : 0.7);
-  plant.stress = Math.max(0, Math.min(100, plant.stress + stressDelta));
 
-  // Stress health damage — per REAL hour
+  // Stress natural decay: -2% per in-game hour if env is acceptable, -1% if off
+  const envOk = actual.temp >= 65 && actual.temp <= 95 && actual.humid >= 30 && actual.humid <= 80;
+  const stressDecay = envOk
+    ? 2.0 * (gameMins / 60)   // -2% per in-game hour (good env)
+    : 1.0 * (gameMins / 60);  // -1% per in-game hour (bad env)
+  plant.stress = Math.max(0, Math.min(100, plant.stress + stressDelta - stressDecay));
+
+  // Stress health damage — per REAL hour (per rulebook)
   const rh2 = gameMins / (60 * GAME_SPEED);
-  if (plant.stress > 90)      plant.health = Math.max(0,(plant.health||100) - 2.0 * rh2);
-  else if (plant.stress > 75) plant.health = Math.max(0,(plant.health||100) - 1.0 * rh2);
-  else if (plant.stress > 50) plant.health = Math.max(0,(plant.health||100) - 0.4 * rh2);
+  if (plant.stress >= 100)     plant.health = Math.max(0,(plant.health||100) - 5.0 * rh2);
+  else if (plant.stress >= 50) plant.health = Math.max(0,(plant.health||100) - 3.0 * rh2);
+  else if (plant.stress >= 25) plant.health = Math.max(0,(plant.health||100) - 2.0 * rh2);
+  else if (plant.stress >= 10) plant.health = Math.max(0,(plant.health||100) - 1.0 * rh2);
 
   // Wilt (hot + dry)
   const hotAndDry = actual.temp > 86 && actual.humid < 35;
@@ -4010,101 +4139,193 @@ function removeWeed(plantId) {
 }
 
 // ================================================================
-// CURING RENDER
+// CURING RENDER (grow tab — compact summary only)
 // ================================================================
 function renderCuring() {
   const grid = document.getElementById('curing-grid');
   if (!grid) return;
-  grid.innerHTML = '';
-  if (!GS.curing || !GS.curing.length) {
+  const drying = (GS.curing || []).filter(b => b.phase === 'drying');
+  const curing = (GS.curing || []).filter(b => b.phase === 'curing');
+  if (!drying.length && !curing.length) {
     grid.innerHTML = '<div style="color:var(--muted);font-family:var(--font-hud);font-size:10px;letter-spacing:2px;padding:10px">NO BATCHES DRYING OR CURING</div>';
     return;
   }
-  const now = Date.now();
-  GS.curing.forEach(batch => {
-    const div  = document.createElement('div');
-    const elapsed = (now - batch.startTs) / 3600000;
-    const hangPct = batch.phase === 'hanging' ? Math.min(100, elapsed / 48 * 100).toFixed(0) : 100;
-    const burpDue    = batch.phase === 'jarring' && batch.nextBurpTs && now > batch.nextBurpTs;
-    const burpOverdue= burpDue && now > batch.nextBurpTs + 6 * 3600000;
-    const phaseClass = burpOverdue ? 'curing-card jarring burp-needed' : `curing-card ${batch.phase}`;
-    div.className = phaseClass;
-    const phaseLbl = batch.phase === 'hanging' ? '🪝 HANGING' : batch.phase === 'jarring' ? '🫙 CURING' : '✅ CURED';
-    div.innerHTML = `
-      <div class="curing-header">
-        <div class="curing-name">${batch.name}</div>
-        <div class="curing-phase ${batch.phase}">${phaseLbl}</div>
-      </div>
-      <div class="curing-info">
-        <div class="curing-stat"><span>STRAIN</span><span>${batch.strainName||'—'}</span></div>
-        <div class="curing-stat"><span>GRAMS</span><span>${batch.grams}g</span></div>
-        <div class="curing-stat"><span>THC</span><span>${batch.thc}%</span></div>
-        <div class="curing-stat"><span>QUALITY</span><span style="color:${(batch.quality||100)>80?'var(--green)':(batch.quality||100)>50?'var(--gold)':'var(--red)'}">${Math.round(batch.quality||100)}%</span></div>
-        <div class="curing-stat"><span>RARITY</span><span>${batch.rarity||'Standard'}</span></div>
-        <div class="curing-stat"><span>SCORE</span><span>${batch.score||'—'}</span></div>
-      </div>
-      ${batch.phase === 'hanging' ? `
-        <div class="curing-progress-area">
-          <div class="curing-progress-label">DRY PROGRESS — ${hangPct}% · ${(48-elapsed).toFixed(1)}h remaining</div>
-          <div class="curing-bar-track"><div class="curing-bar-fill" style="width:${hangPct}%"></div></div>
-        </div>` : ''}
-      ${batch.phase === 'jarring' ? `
-        <div class="curing-jar-area">
-          <div class="curing-progress-label">
-            JAR HUMIDITY: ${Math.round(batch.jarHumid||60)}% · BURPS: ${batch.burpsDone||0}/3
-            ${burpOverdue ? ' · ⚠️ OVERDUE' : burpDue ? ' · ⏰ BURP DUE' : ''}
-          </div>
-        </div>
-        <div class="curing-actions">
-          ${burpDue ? `<button class="btn-action btn-blue" onclick="burpJar('${batch.id}')">💨 BURP JAR</button>` : ''}
-          <button class="btn-action btn-green" onclick="moveCuredToVault('${batch.id}')">📦 TO VAULT</button>
-          <button class="btn-action btn-gold" onclick="openSellVaultFromCuring('${batch.id}')">💸 SELL</button>
-        </div>` : ''}
-      ${batch.phase === 'cured' ? `
-        <div class="curing-actions">
-          <button class="btn-action btn-green" onclick="moveCuredToVault('${batch.id}')">📦 TO VAULT</button>
-          <button class="btn-action btn-gold" onclick="openSellVaultFromCuring('${batch.id}')">💸 SELL</button>
-        </div>` : ''}`;
-    grid.appendChild(div);
+  let html = '';
+  drying.forEach(b => {
+    const rh = b.dryRH != null ? b.dryRH : 80;
+    const rhColor = rh >= 58 && rh <= 64 ? 'var(--green)' : rh > 70 ? 'var(--red)' : 'var(--gold)';
+    html += `<div class="curing-card hanging" style="cursor:pointer" onclick="showVaultSubAndTab('drying')">
+      <div class="curing-header"><div class="curing-name">${b.name}</div><div class="curing-phase hanging">🌬️ DRYING</div></div>
+      <div style="font-family:var(--font-hud);font-size:28px;color:${rhColor};text-align:center;margin:6px 0">${rh.toFixed(1)}%<span style="font-size:12px;color:var(--muted)"> RH</span></div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);text-align:center">Tap to manage →</div>
+    </div>`;
   });
+  curing.forEach(b => {
+    const rh = b.jarRH != null ? b.jarRH : 62;
+    const burps = b.burpsDone || 0;
+    const burpDue = rh > 65;
+    const rhColor = rh >= 54 && rh <= 64 ? 'var(--green)' : rh > 70 ? 'var(--red)' : 'var(--gold)';
+    html += `<div class="curing-card jarring ${burpDue ? 'burp-needed' : ''}" style="cursor:pointer" onclick="showVaultSubAndTab('curing')">
+      <div class="curing-header"><div class="curing-name">${b.name}</div><div class="curing-phase jarring">🫙 CURING</div></div>
+      <div style="font-family:var(--font-hud);font-size:28px;color:${rhColor};text-align:center;margin:6px 0">${rh.toFixed(1)}%<span style="font-size:12px;color:var(--muted)"> RH</span></div>
+      <div style="font-size:9px;color:var(--muted);font-family:var(--font-hud);text-align:center">Burps: ${burps}${burpDue ? ' · <span style="color:var(--gold)">💨 BURP NEEDED</span>' : ''}</div>
+    </div>`;
+  });
+  grid.innerHTML = html;
 }
+function burpJar(batchId, burpType) {
+  const batch = (GS.curing||[]).find(b => b.id === batchId);
+  if (!batch || batch.phase !== 'curing') return;
+  const rhBefore = batch.jarRH || 62;
+  let rhDrop = 0, qualityLoss = 0, label = '';
 
-function burpJar(batchId) {
-  const batch = (GS.curing || []).find(b => b.id === batchId);
-  if (!batch || batch.phase !== 'jarring') return;
+  if (burpType === 'quick') { rhDrop = 10; qualityLoss = 0; label = 'Quick burp (5min)'; }
+  else if (burpType === 'med') { rhDrop = 20; qualityLoss = 0; label = 'Med burp (1hr)'; }
+  else if (burpType === 'long') { rhDrop = 30; qualityLoss = 5; label = 'Long burp (4hr)'; }
+
+  batch.jarRH = Math.max(0, rhBefore - rhDrop);
   batch.burpsDone = (batch.burpsDone || 0) + 1;
   batch.lastBurpTs = Date.now();
-  const interval = batch.burpsDone <= 1 ? 12 : batch.burpsDone <= 2 ? 24 : 48;
-  batch.nextBurpTs = Date.now() + interval * 3600000;
   batch.overduePenaltyApplied = 0;
-  batch.jarHumid = 60;
+
+  if (batch.jarRH < 65) batch.everBurpedBelow65 = true;
+
+  if (qualityLoss > 0) {
+    batch.quality = Math.max(0, (batch.quality||100) - qualityLoss);
+    toast('⚠️ ' + label + ' · RH: ' + rhBefore.toFixed(1) + '% → ' + batch.jarRH.toFixed(1) + '% · −' + qualityLoss + '% quality', 'warn', 4000);
+  } else {
+    toast('💨 ' + label + ' · RH: ' + rhBefore.toFixed(1) + '% → ' + batch.jarRH.toFixed(1) + '%', 'ok', 3000);
+  }
+
+  // After 10 burps: trick stabilization by resetting entryRH so rise stops
+  if (batch.burpsDone >= 10) batch.jarEntryRH = 30;
+
   completeDailyGoal();
-  toast('💨 Jar burped! Next in ' + interval + 'h', 'ok');
-  saveGame(); renderCuring();
+  addLog(batch.name + ' burped (' + label + ') RH: ' + batch.jarRH.toFixed(1) + '%', 'info');
+  saveGame(); renderVault(); renderCuring();
+}
+
+function moveToCuringJar(batchId) {
+  const batch = (GS.curing||[]).find(b => b.id === batchId);
+  if (!batch || batch.phase !== 'drying') return;
+  const rh = batch.dryRH != null ? batch.dryRH : 80;
+
+  // Apply drying quality modifier (multiplicative)
+  let qualityMod = 0;
+  if (rh >= 62 && rh < 63)       qualityMod = +25; // perfect 62% sweet spot
+  else if (rh >= 58 && rh < 65)  qualityMod = +15; // prime window
+  else if (rh >= 50 && rh < 58)  qualityMod = +10; // acceptable
+  else if (rh >= 65 && rh < 68)  qualityMod = -5;  // slightly wet
+  else if (rh >= 68 && rh < 70)  qualityMod = -15; // too wet
+  else if (rh >= 70)             qualityMod = -50; // way too wet (50% loss of current quality)
+  else if (rh >= 40 && rh < 50)  qualityMod = -20; // getting over-dried
+  else if (rh < 40)              qualityMod = -50; // over-dried
+
+  const qBefore = batch.quality || 100;
+  if (qualityMod > 0)       batch.quality = Math.min(100, qBefore * (1 + qualityMod/100));
+  else if (qualityMod < 0)  batch.quality = Math.max(0,   qBefore * (1 + qualityMod/100));
+
+  batch.phase       = 'curing';
+  batch.jarRH       = rh;
+  batch.jarEntryRH  = rh;
+  batch.jarStartTs  = Date.now();
+  batch.lastBurpTs  = Date.now();
+  batch.burpsDone   = 0;
+  batch.overduePenaltyApplied = 0;
+  batch.everBurpedBelow65 = false;
+  batch._lastCuringTick = Date.now();
+
+  const qGain = qualityMod > 0 ? ' (+' + qualityMod + '% quality bonus!)' :
+                qualityMod < 0 ? ' (' + qualityMod + '% quality loss)' : ' (no change)';
+  toast('🫙 ' + batch.name + ' → jar curing at ' + rh.toFixed(1) + '% RH' + qGain, qualityMod < 0 ? 'warn' : 'ok', 4000);
+  addLog(batch.name + ' moved to jar curing at ' + rh.toFixed(1) + '% RH (quality: ' + Math.round(batch.quality) + '%)', 'info');
+  saveGame(); renderVault(); renderCuring();
 }
 
 function moveCuredToVault(batchId) {
-  const idx = (GS.curing || []).findIndex(b => b.id === batchId);
+  const idx = (GS.curing||[]).findIndex(b => b.id === batchId);
   if (idx < 0) return;
   const batch = GS.curing[idx];
+  const rh    = batch.jarRH || 62;
+  const burps = batch.burpsDone || 0;
+  let finalQ  = batch.quality || 100;
+
+  // Burp count multiplier
+  if      (burps <= 1)  finalQ *= 0.50;
+  else if (burps === 2) finalQ *= 0.60;
+  else if (burps === 3) finalQ *= 0.75;
+  else if (burps === 4) finalQ *= 0.85;
+  else if (burps === 5) finalQ *= 1.00; // no change
+  else if (burps <= 10) finalQ *= 1.10; // +10% bonus
+  // 10+ is same as 10 (stabilized)
+
+  // Final RH at sealing
+  if      (rh >= 54 && rh <= 64)  { /* sweet spot, no change */ }
+  else if (rh >= 40 && rh < 54)   finalQ *= 0.90;
+  else if (rh >= 30 && rh < 40)   finalQ *= 0.80;
+  else if (rh >= 10 && rh < 30)   finalQ *= 0.50;
+  else if (rh < 10)               finalQ *= 0.30;
+  else if (rh > 64 && rh <= 70)   finalQ *= 0.95;
+  else if (rh > 70)               finalQ *= 0.60;
+
+  finalQ = Math.max(1, Math.min(100, Math.round(finalQ)));
+
   if (!GS.vault) GS.vault = [];
   GS.vault.push({
     id: uid(), name: batch.name, strainName: batch.strainName,
     grams: batch.grams, thc: batch.thc, score: batch.score,
-    rarity: batch.rarity, quality: batch.quality || 100,
+    rarity: batch.rarity, quality: finalQ,
     curedAt: Date.now(), isBred: batch.isBred || false
   });
   GS.curing.splice(idx, 1);
-  toast('📦 Moved to vault: ' + batch.name, 'ok');
-  saveGame(); renderCuring(); renderVault(); renderHeader();
+
+  toast('📦 Sealed & vaulted: ' + batch.name + ' · Quality: ' + finalQ + '% · ' + burps + ' burps', 'ok', 4000);
+  addLog(batch.name + ' → vault (quality: ' + finalQ + '%, ' + burps + ' burps, RH: ' + rh.toFixed(1) + '%)', 'success');
+  saveGame(); renderVault(); renderCuring(); renderHeader();
+}
+
+function discardDrying(batchId) {
+  if (!confirm('Discard this batch permanently?')) return;
+  GS.curing = (GS.curing||[]).filter(b => b.id !== batchId);
+  toast('Batch discarded.', 'info'); saveGame(); renderVault();
+}
+
+function updateDryFan(batchId, val) {
+  // Legacy stub — now handled by room-level controls
+  updateDryRoomFan(val);
+}
+
+function toggleDryEquip(type) {
+  if (!GS.dryRoom) GS.dryRoom = {fanAssigned:false, fanSpeed:50, dehuAssigned:false, acAssigned:false, heaterAssigned:false, humidifierAssigned:false, tempTarget:68};
+  const g = GS.gear || {};
+  if      (type === 'fan'    && g.fans?.[0])   GS.dryRoom.fanAssigned      = !GS.dryRoom.fanAssigned;
+  else if (type === 'dehu'   && g.dehumidifier) GS.dryRoom.dehuAssigned     = !GS.dryRoom.dehuAssigned;
+  else if (type === 'ac'     && g.acUnit)        GS.dryRoom.acAssigned       = !GS.dryRoom.acAssigned;
+  else if (type === 'heater' && g.heater)        GS.dryRoom.heaterAssigned   = !GS.dryRoom.heaterAssigned;
+  else if (type === 'humid'  && g.humidifier)    GS.dryRoom.humidifierAssigned = !GS.dryRoom.humidifierAssigned;
+  else { toast('You don\'t own that equipment — buy it from Shop → Climate.', 'warn'); return; }
+  saveGame(); renderVault();
+}
+
+function updateDryRoomFan(val) {
+  if (!GS.dryRoom) return;
+  GS.dryRoom.fanSpeed = parseInt(val);
+  const el = document.getElementById('dry-room-fan-val');
+  if (el) el.textContent = val + '%';
+  saveGame();
+}
+
+function updateDryRoomTemp(val) {
+  if (!GS.dryRoom) return;
+  GS.dryRoom.tempTarget = parseInt(val);
+  const el = document.getElementById('dry-room-temp-val');
+  if (el) el.textContent = val + '°F';
+  saveGame();
 }
 
 function openSellVaultFromCuring(batchId) {
-  const batch = (GS.curing || []).find(b => b.id === batchId);
-  if (!batch) return;
+  // Legacy stub — move to vault first then sell
   moveCuredToVault(batchId);
-  const item = (GS.vault || []).find(v => v.name === batch.name);
-  if (item) openSellVaultModal(item.id);
 }
 // ================================================================
 // SEEDS TAB
@@ -4221,38 +4442,323 @@ function redeemCode(code) {
 // ================================================================
 function filterVault(f, btn) {
   _vaultFilter = f;
-  document.querySelectorAll('.vault-filter-btn').forEach(b => b.classList.remove('active'));
+  renderVault();
+}
+
+function showVaultSub(name, btn) {
+  _vaultSub = name;
+  document.querySelectorAll('.dry-tab').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   renderVault();
 }
 
-function renderVault() {
-  const cont = document.getElementById('vault-container');
-  if (!cont) return;
-  let items = GS.vault || [];
-  if (_vaultFilter === 'rare')   items = items.filter(v => v.rarity && v.rarity !== 'Standard');
-  if (_vaultFilter === 'highthc') items = items.filter(v => (v.thc || 0) >= 27);
+function showVaultSubAndTab(sub) {
+  _vaultSub = sub;
+  showTab('vault');
+}
 
-  if (!items.length) {
-    cont.innerHTML = '<div class="empty-state">📦 Vault is empty.<br>Harvest and cure your plants to fill it.</div>';
+function renderVault() {
+  const cont = document.getElementById('vault-sub-content');
+  if (!cont) return;
+
+  // Update badges
+  const drying = (GS.curing || []).filter(b => b.phase === 'drying');
+  const curing = (GS.curing || []).filter(b => b.phase === 'curing');
+  const db = document.getElementById('dry-count-badge');
+  const cb = document.getElementById('cure-count-badge');
+  if (db) { db.textContent = drying.length; db.style.display = drying.length ? 'inline' : 'none'; }
+  if (cb) { cb.textContent = curing.length; cb.style.display = curing.length ? 'inline' : 'none'; }
+
+  // Sync active sub-tab button
+  const tabNames = ['drying','curing','vault'];
+  document.querySelectorAll('.dry-tab').forEach((b, i) => {
+    b.classList.toggle('active', tabNames[i] === _vaultSub);
+  });
+
+  if      (_vaultSub === 'drying')  _renderDrying(cont);
+  else if (_vaultSub === 'curing')  _renderCuringJars(cont);
+  else                               _renderVaultCured(cont);
+}
+
+// ── DRYING ROOM ──
+function _renderDrying(cont) {
+  const g   = GS.gear   || {};
+  const dr  = GS.dryRoom || (GS.dryRoom = {fanAssigned:false, fanSpeed:50, dehuAssigned:false, acAssigned:false, heaterAssigned:false, humidifierAssigned:false, tempTarget:68});
+
+  // What the player owns
+  const ownsFan   = !!(g.fans && g.fans[0] && g.fans[0].speed != null);
+  const ownsDehu  = !!g.dehumidifier;
+  const ownsAC    = !!g.acUnit;
+  const ownsHeat  = !!g.heater;
+
+  // Active equipment
+  const fanPct  = (dr.fanAssigned && ownsFan) ? (dr.fanSpeed || 50) / 100 : 0;
+  const hasDehu = !!(dr.dehuAssigned && ownsDehu);
+  const hasAC   = !!(dr.acAssigned   && ownsAC);
+  const hasHeat = !!(dr.heaterAssigned && ownsHeat);
+
+  // Estimated rate & time
+  const rate    = 0.83 + fanPct*0.80 + (hasDehu?0.40:0) + (hasAC?0.15:0) + (hasHeat?0.08:0);
+  const hrsTo62 = Math.round(18 / rate);
+  const isLowAirflow = fanPct < 0.25;
+
+  // ── Equipment Panel ──
+  let html = `<div style="background:rgba(0,0,0,0.45);border:1px solid rgba(34,211,238,0.3);border-radius:12px;padding:16px;margin-bottom:14px">
+    <div style="font-family:var(--font-hud);font-size:10px;color:var(--cyan);letter-spacing:2px;margin-bottom:4px">🌬️ DRY ROOM EQUIPMENT</div>
+    <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-bottom:12px">Shared across all drying batches. Bigger gear = better control &amp; faster drying.</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">`;
+
+  // Fan button
+  html += `<button class="dry-equip-btn ${dr.fanAssigned && ownsFan ? 'active-fan' : ''}"
+    onclick="toggleDryEquip('fan')" ${!ownsFan ? 'disabled' : ''}>
+    🌀 FAN<br><span style="font-size:7px">${ownsFan ? (dr.fanAssigned ? '✅ ON' : 'tap to add') : 'not owned'}</span>
+  </button>`;
+
+  // Dehu button
+  html += `<button class="dry-equip-btn ${dr.dehuAssigned && ownsDehu ? 'active-dehu' : ''}"
+    onclick="toggleDryEquip('dehu')" ${!ownsDehu ? 'disabled' : ''}>
+    🌵 DEHU<br><span style="font-size:7px">${ownsDehu ? (dr.dehuAssigned ? '✅ ON' : 'tap to add') : 'not owned'}</span>
+  </button>`;
+
+  // AC button
+  html += `<button class="dry-equip-btn ${dr.acAssigned && ownsAC ? 'active-ac' : ''}"
+    onclick="toggleDryEquip('ac')" ${!ownsAC ? 'disabled' : ''}>
+    ❄️ AC<br><span style="font-size:7px">${ownsAC ? (dr.acAssigned ? '✅ ON' : 'tap to add') : 'not owned'}</span>
+  </button>`;
+
+  // Heater button
+  html += `<button class="dry-equip-btn ${dr.heaterAssigned && ownsHeat ? 'active-heat' : ''}"
+    onclick="toggleDryEquip('heater')" ${!ownsHeat ? 'disabled' : ''}>
+    🔥 HEATER<br><span style="font-size:7px">${ownsHeat ? (dr.heaterAssigned ? '✅ ON' : 'tap to add') : 'not owned'}</span>
+  </button>`;
+
+  html += `</div>`;
+
+  // Fan speed slider — ONLY if fan assigned
+  if (dr.fanAssigned && ownsFan) {
+    html += `<div class="dry-ctrl-row">
+      <span class="dry-ctrl-label">🌀 SPEED</span>
+      <input type="range" min="0" max="100" value="${dr.fanSpeed || 50}" oninput="updateDryRoomFan(this.value)">
+      <span class="dry-ctrl-val" id="dry-room-fan-val">${dr.fanSpeed || 50}%</span>
+    </div>`;
+  }
+
+  // Temp target slider — ONLY if AC or heater assigned
+  if ((dr.acAssigned && ownsAC) || (dr.heaterAssigned && ownsHeat)) {
+    html += `<div class="dry-ctrl-row" style="margin-top:6px">
+      <span class="dry-ctrl-label">🌡️ TARGET</span>
+      <input type="range" min="55" max="80" value="${dr.tempTarget || 68}" oninput="updateDryRoomTemp(this.value)">
+      <span class="dry-ctrl-val" id="dry-room-temp-val">${dr.tempTarget || 68}°F</span>
+    </div>
+    <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:3px;text-align:right">Ideal: 60–70°F · Cooler = slower but better terpenes</div>`;
+  }
+
+  // Speed estimate + mold warning
+  html += `<div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:7px 10px;background:rgba(0,0,0,0.3);border-radius:6px;font-size:9px;font-family:var(--font-mono)">
+    <span style="color:var(--muted)">Est. time to sweet spot (62% RH)</span>
+    <span style="color:var(--cyan);font-family:var(--font-hud)">${hrsTo62}h</span>
+  </div>`;
+
+  if (isLowAirflow) {
+    html += `<div style="margin-top:8px;padding:6px 10px;background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.35);border-radius:6px;font-size:9px;font-family:var(--font-hud);color:var(--red)">
+      ⚠️ LOW AIRFLOW — mold risk above 75% RH. ${!ownsFan ? 'Buy a fan from Shop → Climate.' : 'Enable fan above or increase speed.'}
+    </div>`;
+  }
+
+  if (!ownsFan && !ownsDehu && !ownsAC && !ownsHeat) {
+    html += `<div class="warning-note" style="margin-top:8px">No equipment owned! Buy fans or a dehumidifier from Shop → Climate. Without airflow, drying takes 20+ hours and mold is likely.</div>`;
+  }
+
+  html += `</div>`;
+
+  // ── Batch Cards ──
+  const batches = (GS.curing || []).filter(b => b.phase === 'drying');
+  if (!batches.length) {
+    html += '<div class="empty-state">🌬️ No batches drying.<br>Harvest a plant to start drying!</div>';
+    cont.innerHTML = html;
     return;
   }
 
-  const totalG = items.reduce((s,v) => s + (v.grams || 0), 0);
-  const avgTHC = items.length ? (items.reduce((s,v) => s + (v.thc||0), 0) / items.length).toFixed(1) : 0;
-  let html = `<div class="vault-summary">Total: ${totalG.toLocaleString()}g · Avg THC: ${avgTHC}% · ${items.length} batches</div>
-    <div class="vault-grid">`;
+  batches.forEach(batch => {
+    const rh  = batch.dryRH != null ? batch.dryRH : 80;
+    const q   = batch.quality || 100;
+    const moldActive = !!(batch._moldHit);
+    const elapsedHrs = ((Date.now() - (batch.startTs || Date.now())) / 3600000).toFixed(1);
 
-  items.slice().sort((a,b) => (b.score||0) - (a.score||0)).forEach(item => {
-    const rarClass = (item.rarity || 'Standard').toLowerCase();
+    let rhColor = 'var(--muted)', phaseLabel = '';
+    if      (rh > 75)             { rhColor = 'var(--red)';   phaseLabel = '🍄 MOLD RISK — increase fan speed!'; }
+    else if (rh > 70)             { rhColor = 'var(--red)';   phaseLabel = '⚠️ TOO WET — keep drying'; }
+    else if (rh > 68)             { rhColor = 'var(--gold)';  phaseLabel = '⬇️ DRYING — almost in range'; }
+    else if (rh >= 62 && rh < 63) { rhColor = 'var(--green)'; phaseLabel = '🌟 PERFECT 62% — move to curing NOW'; }
+    else if (rh >= 58 && rh < 68) { rhColor = 'var(--green)'; phaseLabel = '✅ PRIME WINDOW (58–64%) — move to curing'; }
+    else if (rh >= 50 && rh < 58) { rhColor = 'var(--cyan)';  phaseLabel = '👍 ACCEPTABLE (50–58%)'; }
+    else if (rh >= 40 && rh < 50) { rhColor = 'var(--gold)';  phaseLabel = '⚠️ GETTING TOO DRY — move soon!'; }
+    else if (rh < 40)             { rhColor = 'var(--red)';   phaseLabel = '❌ OVERDRIED — severe quality loss!'; }
+
+    const canCure  = GS.difficulty !== 'easy' || rh <= 70;
+    const easyWarn = GS.difficulty === 'easy' && rh > 70
+      ? `<div class="info-note" style="margin-top:6px;font-size:9px">💡 Dry to below 70% RH before jarring for best results.</div>` : '';
+
+    html += `<div class="dry-room-card ${rh > 75 ? 'mold-risk' : ''}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+        <div style="font-family:var(--font-hud);font-size:12px;color:var(--text)">${batch.name}</div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+          ${moldActive ? `<span class="mold-badge">🍄 MOLD HIT</span>` : ''}
+          <span style="font-size:9px;color:var(--muted);font-family:var(--font-mono)">${elapsedHrs}h · ${batch.grams}g · ${batch.thc}% THC</span>
+        </div>
+      </div>
+      <div class="dry-rh-display" style="color:${rhColor}">${rh.toFixed(1)}<span style="font-size:20px;color:var(--muted)">% RH</span></div>
+      <div class="dry-phase-label" style="color:${rhColor}">${phaseLabel}</div>
+      <div class="dry-quality-strip" style="margin-top:8px">
+        <span class="dry-q-label">QUALITY</span>
+        <div class="dry-q-bar"><div class="dry-q-fill" style="width:${q}%;background:${q>80?'var(--green)':q>50?'var(--gold)':'var(--red)'}"></div></div>
+        <span style="font-family:var(--font-hud);font-size:10px;color:${q>80?'var(--green)':q>50?'var(--gold)':'var(--red)'}">${Math.round(q)}%</span>
+      </div>
+      <div style="margin-top:6px;font-size:8px;color:var(--muted);font-family:var(--font-mono);text-align:center">
+        ${rh >= 62 && rh < 63
+          ? '<span style="color:var(--green)">🌟 +25% quality bonus for hitting exact 62%!</span>'
+          : rh >= 58 && rh < 65
+          ? '<span style="color:var(--green)">+15% quality bonus when jarred in this range</span>'
+          : rh >= 65 && rh < 70
+          ? '<span style="color:var(--gold)">−5 to −15% quality loss if jarred now</span>'
+          : rh >= 70
+          ? '<span style="color:var(--red)">Up to −50% quality loss — keep drying!</span>'
+          : ''}
+      </div>
+      ${easyWarn}
+      <div style="display:flex;gap:6px;margin-top:12px">
+        <button class="btn-action btn-purple" style="flex:1;padding:10px" onclick="moveToCuringJar('${batch.id}')" ${!canCure ? 'disabled' : ''}>
+          🫙 MOVE TO JAR CURING
+        </button>
+        <button class="btn-action btn-red" style="padding:10px;min-width:44px" title="Discard batch" onclick="discardDrying('${batch.id}')">🗑️</button>
+      </div>
+    </div>`;
+  });
+
+  cont.innerHTML = html;
+}
+// ── JAR CURING ──
+function _renderCuringJars(cont) {
+  const batches = (GS.curing || []).filter(b => b.phase === 'curing');
+  if (!batches.length) {
+    cont.innerHTML = '<div class="empty-state">🫙 No jars curing.<br>Dry your harvest first, then move to jar curing.</div>';
+    return;
+  }
+  const now = Date.now();
+  let html = '';
+  batches.forEach(batch => {
+    const rh    = batch.jarRH != null ? batch.jarRH : 62;
+    const q     = batch.quality || 100;
+    const burps = batch.burpsDone || 0;
+    const lastBurp     = batch.lastBurpTs || batch.jarStartTs || now;
+    const hrsSinceBurp = (now - lastBurp) / 3600000;
+    const burpDue      = rh > 65 && hrsSinceBurp >= 4;
+    const burpOverdue  = rh > 70 || (burpDue && hrsSinceBurp >= 10);
+    const everBurpedLow= !!(batch.everBurpedBelow65);
+    const canVault     = everBurpedLow;
+    const enoughBurps  = burps >= 5;
+
+    let rhColor = 'var(--green)', rhNote = '';
+    if (rh > 70)            { rhColor = 'var(--red)';   rhNote = '⚠️ TOO HIGH — burp immediately!'; }
+    else if (rh > 65)       { rhColor = 'var(--gold)';  rhNote = '💨 HIGH — burp when ready'; }
+    else if (rh >= 54 && rh <= 64) { rhColor = 'var(--green)'; rhNote = '✅ SWEET SPOT (54–64%)'; }
+    else if (rh >= 40 && rh < 54)  { rhColor = 'var(--cyan)';  rhNote = '⬇️ LOW — may seal soon'; }
+    else if (rh < 40)       { rhColor = 'var(--red)';   rhNote = '❌ TOO DRY — quality loss if not sealed'; }
+
+    // Preview quality loss at current RH if sealed now
+    let sealPreview = '';
+    if      (rh >= 54 && rh <= 64)  sealPreview = '✅ No quality loss if sealed now';
+    else if (rh >= 40 && rh < 54)   sealPreview = '−10% quality if sealed now';
+    else if (rh >= 30 && rh < 40)   sealPreview = '−20% quality if sealed now';
+    else if (rh > 0  && rh < 30)    sealPreview = '−50% quality if sealed now';
+    else if (rh > 64 && rh <= 70)   sealPreview = '−5% quality if sealed now';
+    else if (rh > 70)               sealPreview = '−40% quality if sealed now — burp first!';
+
+    // Burp count bonus/penalty preview
+    let burpNote = '';
+    if      (burps === 0) burpNote = '⚠️ Need at least 5 burps for full quality';
+    else if (burps < 5)  burpNote = `${5 - burps} more burps for full quality (${burps}/5)`;
+    else if (burps < 10) burpNote = `✅ ${burps}/5 burps done · Extra burps add +10% quality`;
+    else                 burpNote = '✅ Fully cured — jar stabilized';
+
+    html += `<div class="cure-jar-card ${burpOverdue?'burp-overdue':burpDue?'burp-due':''}">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <div style="font-family:var(--font-hud);font-size:12px;color:var(--text)">${batch.name}</div>
+        <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono)">${batch.grams}g · THC ${batch.thc}%</div>
+      </div>
+      <div class="cure-jar-rh" style="color:${rhColor}">${rh.toFixed(1)}<span style="font-size:18px;color:var(--muted)">% RH</span></div>
+      <div style="font-family:var(--font-hud);font-size:9px;text-align:center;color:${rhColor};margin-bottom:6px">${rhNote}</div>
+      <div class="cure-rh-bar">
+        <div class="cure-rh-fill" style="width:${Math.min(100,rh/80*100)}%;background:${rhColor}"></div>
+      </div>
+      <div class="dry-quality-strip">
+        <span class="dry-q-label">QUALITY</span>
+        <div class="dry-q-bar"><div class="dry-q-fill" style="width:${q}%;background:${q>80?'var(--green)':q>50?'var(--gold)':'var(--red)'}"></div></div>
+        <span style="font-family:var(--font-hud);font-size:10px;color:${q>80?'var(--green)':q>50?'var(--gold)':'var(--red)'}">${Math.round(q)}%</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-size:9px;font-family:var(--font-mono);color:var(--muted);margin:8px 0;text-align:center">
+        <div style="background:rgba(0,0,0,0.3);border-radius:5px;padding:5px">BURPS<br><strong style="color:var(--purple);font-size:13px">${burps}</strong></div>
+        <div style="background:rgba(0,0,0,0.3);border-radius:5px;padding:5px">SINCE BURP<br><strong style="color:var(--muted);font-size:13px">${hrsSinceBurp.toFixed(1)}h</strong></div>
+        <div style="background:rgba(0,0,0,0.3);border-radius:5px;padding:5px">ENTRY RH<br><strong style="color:var(--cyan);font-size:13px">${(batch.jarEntryRH||70).toFixed(0)}%</strong></div>
+      </div>
+      <div style="font-size:8px;font-family:var(--font-mono);color:var(--muted);text-align:center;margin-bottom:4px">${sealPreview}</div>
+      <div style="font-size:8px;font-family:var(--font-hud);color:var(--gold);text-align:center;margin-bottom:8px">${burpNote}</div>
+      <div class="burp-btn-row">
+        <button class="burp-btn quick" onclick="burpJar('${batch.id}','quick')" ${rh <= 50 ? 'disabled' : ''}>
+          💨 QUICK<br><span style="font-size:7px;opacity:0.8">5min · −10% RH</span>
+        </button>
+        <button class="burp-btn med" onclick="burpJar('${batch.id}','med')" ${rh <= 50 ? 'disabled' : ''}>
+          💨 MED<br><span style="font-size:7px;opacity:0.8">1hr · −20% RH</span>
+        </button>
+        <button class="burp-btn long" onclick="burpJar('${batch.id}','long')" ${rh <= 50 ? 'disabled' : ''}>
+          ⚠️ LONG<br><span style="font-size:7px;opacity:0.8">4hr · −30% · −5% Q</span>
+        </button>
+      </div>
+      ${GS.difficulty === 'easy' && !enoughBurps && canVault
+        ? `<div class="info-note" style="margin-top:8px">💡 Tip: ${5-burps} more burps for best quality. You can seal early but quality won't be optimal.</div>`
+        : ''}
+      <div style="margin-top:10px">
+        <button class="btn-action btn-green" style="width:100%;padding:10px"
+          onclick="moveCuredToVault('${batch.id}')"
+          ${!canVault ? 'disabled' : ''}>
+          📦 SEAL &amp; MOVE TO VAULT
+        </button>
+        ${!canVault ? `<div style="font-size:8px;color:var(--muted);text-align:center;margin-top:4px;font-family:var(--font-mono)">Burp below 65% RH at least once to unlock sealing</div>` : ''}
+      </div>
+    </div>`;
+  });
+  cont.innerHTML = html;
+}
+
+// ── CURED VAULT ──
+function _renderVaultCured(cont) {
+  let items = GS.vault || [];
+  if (_vaultFilter === 'rare')    items = items.filter(v => v.rarity && v.rarity !== 'Standard');
+  if (_vaultFilter === 'highthc') items = items.filter(v => (v.thc || 0) >= 27);
+  if (!items.length) {
+    cont.innerHTML = '<div class="empty-state">📦 No cured harvests yet.<br>Dry → Cure → Seal to fill your vault.</div>';
+    return;
+  }
+  const totalG = items.reduce((s,v) => s + (v.grams||0), 0);
+  const avgTHC = items.length ? (items.reduce((s,v) => s + (v.thc||0), 0) / items.length).toFixed(1) : 0;
+  let html = `
+    <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">
+      <button class="vault-filter-btn" onclick="filterVault('all',this)">ALL</button>
+      <button class="vault-filter-btn" onclick="filterVault('rare',this)">RARE</button>
+      <button class="vault-filter-btn" onclick="filterVault('highthc',this)">HIGH THC</button>
+    </div>
+    <div class="vault-summary">Total: ${totalG.toLocaleString()}g · Avg THC: ${avgTHC}% · ${items.length} batches</div>
+    <div class="vault-grid">`;
+  items.slice().sort((a,b) => (b.score||0)-(a.score||0)).forEach(item => {
+    const rarClass = (item.rarity||'Standard').toLowerCase();
     html += `<div class="vault-card">
-      <div class="vault-card-rarity ${rarClass}">${item.rarity || 'Standard'}</div>
+      <div class="vault-card-rarity ${rarClass}">${item.rarity||'Standard'}</div>
       <div class="vault-card-name">${item.name}</div>
-      <div class="vault-card-strain">${item.strainName || ''}</div>
+      <div class="vault-card-strain">${item.strainName||''}</div>
       <div class="vault-card-stats">
         <span>⚖️ ${item.grams}g</span>
         <span>🔬 ${item.thc}%</span>
-        <span>📊 ${item.score || '—'}</span>
+        <span>📊 ${item.score||'—'}</span>
         <span>✨ ${Math.round(item.quality||100)}%</span>
       </div>
       <div class="vault-card-date">${timeSince(item.curedAt)}</div>
@@ -4265,7 +4771,6 @@ function renderVault() {
   html += '</div>';
   cont.innerHTML = html;
 }
-
 // ================================================================
 // MARKET TAB
 // ================================================================
@@ -5567,7 +6072,33 @@ function loginSuccess() {
   if (!GS.achievements) GS.achievements = [];
      if (!GS.growTime) GS.growTime = 0;
      if (!GS.roomGear) GS.roomGear = {};
-    GS.rooms.forEach(r => {
+     if (!GS.dryRoom) GS.dryRoom = {fanAssigned:false, fanSpeed:50, dehuAssigned:false, acAssigned:false,           	heaterAssigned:false, humidifierAssigned:false, tempTarget:68};
+    // Migrate old curing phases to new drying/curing system
+  (GS.curing||[]).forEach(b => {
+    if (!b._lastCuringTick) b._lastCuringTick = Date.now();
+    if (b.phase === 'hanging') {
+      b.phase = 'drying'; b.dryRH = 80; b.dryFanSpeed = 50;
+    } else if (b.phase === 'jarring') {
+      b.phase = 'curing';
+      b.jarRH = b.jarHumid || b.jarRH || 62;
+      b.jarEntryRH = b.jarRH;
+      b.jarStartTs = b.jarStartTs || b.startTs || Date.now();
+      b.lastBurpTs = b.lastBurpTs || Date.now();
+      b.everBurpedBelow65 = (b.burpsDone||0) >= 1;
+    } else if (b.phase === 'cured') {
+      // auto-move fully cured batches to vault
+      if (!GS.vault) GS.vault = [];
+      GS.vault.push({
+        id: uid(), name: b.name, strainName: b.strainName,
+        grams: b.grams, thc: b.thc, score: b.score,
+        rarity: b.rarity, quality: Math.round(b.quality||100),
+        curedAt: Date.now(), isBred: b.isBred||false
+      });
+    }
+  });
+  GS.curing = (GS.curing||[]).filter(b => b.phase === 'drying' || b.phase === 'curing');
+
+  GS.rooms.forEach(r => {
     if (!GS.roomGear[r.id]) GS.roomGear[r.id] = defaultGear();
     if (!r.size) r.size = 'small';
     if (!r.lightScheduleHrs) r.lightScheduleHrs = 18;
@@ -5810,7 +6341,7 @@ function confirmPlant() {
     health: 100, waterLevel: 80, soilPPM: 0, stress: 0,
     rarity, potSize, isMale: false, hasSeeds: false,
     events: [], envLog: [], yieldBonus: 0, cropMultiplier: 1,
-    topCount: 0, branchSnaps: 0,
+    topCount: 0, lstCount: 0, trainingStyle: null, branchSnaps: 0,
     roomId: room.id, plantedAt: Date.now(),
     // Gen bonuses (rolled at planting)
     genBonuses: [], growSpeedBonus: 0, potencyBonus: 0,
@@ -6320,7 +6851,9 @@ function confirmHarvest() {
   GS.curing.push({
     id: uid(), name: plant.name || plant.strainName, strainName: plant.strainName,
     grams: yield_, thc, score: score.score, rarity: plant.rarity || 'Standard',
-    quality: 100, phase: 'hanging', startTs: Date.now(),
+    quality: 100, phase: 'drying', startTs: Date.now(),
+    dryRH: 80, dryFanSpeed: 50, dryMoldRiskHrs: 0,
+    _lastCuringTick: Date.now(),
     isBred: !!(GS.bredStrains||[]).find(b=>b.name===plant.strainName)
   });
 
@@ -6351,28 +6884,69 @@ function confirmHarvest() {
 function openTrainModal(plantId) {
   const plant = GS.plants.find(p => p.id === plantId);
   if (!plant) return;
+
+  // ── Hard block: NO training in Flower at all ──
+  if (plant.stage === 'Flower' || plant.stage === 'Ready') {
+    toast('🚫 Cannot train during Flower stage — Veg only!', 'err'); return;
+  }
+  // ── Hard block: No seedling training on Easy ──
+  if (plant.stage === 'Seedling' && (GS.difficulty || 'easy') === 'easy') {
+    toast('🚫 Seedling training not allowed on Easy mode.', 'warn'); return;
+  }
+
   _el('lbl-train-name', plant.name || plant.strainName);
   const inp = document.getElementById('inp-train-plant-id');
   if (inp) inp.value = plantId;
   const typeInp = document.getElementById('inp-train-type');
   if (typeInp) typeInp.value = '';
-  document.querySelectorAll('#modal-train .training-option').forEach(o => o.classList.remove('selected'));
+  document.querySelectorAll('#modal-train .training-option').forEach(o => {
+    o.classList.remove('selected');
+    o.style.opacity = '1';
+    o.style.pointerEvents = '';
+  });
+
   const warn = document.getElementById('train-warning');
+  const msgs = [];
+
+  const style    = plant.trainingStyle || null;  // 'lst'|'fim'|'supercrop'|null
+  const lstCount = plant.lstCount || 0;
+  const topCount = plant.topCount || 0;
+
+  // Dim / lock options based on style rules
+  const canTop       = topCount < 2 && style === null;
+  const canLst       = style === null || style === 'lst';
+  const canFim       = style === null;
+  const canSupercrop = style === null;
+
+  const lockOpt = (id) => {
+    const el = document.getElementById(id);
+    if (el) { el.style.opacity = '0.35'; el.style.pointerEvents = 'none'; }
+  };
+
+  if (!canTop)       lockOpt('train-opt-top');
+  if (!canLst)       lockOpt('train-opt-lst');
+  if (!canFim)       lockOpt('train-opt-fim');
+  if (!canSupercrop) lockOpt('train-opt-snap');
+
+  if (plant.stage === 'Seedling') {
+    msgs.push('⚠️ Seedling training adds stress only — no yield bonus!');
+  }
+  if (style) {
+    msgs.push('Style locked: ' + style.toUpperCase() + ' only.');
+  }
+  if (style === 'lst') {
+    msgs.push('LST count: ' + lstCount + '/10' + (lstCount >= 5 ? ' ⚠️ Past 5 is harmful!' : ' (5 beneficial max)'));
+  }
+  if (topCount >= 2 && style === null) {
+    msgs.push('Both tops used — choose LST, FIM, or Supercrop.');
+  }
+
   if (warn) {
-    if (plant.stage !== 'Veg' && plant.stage !== 'Seedling') {
-      warn.textContent = '⚠️ Training in ' + plant.stage + ' stage reduces effectiveness.';
+    if (msgs.length) {
+      warn.innerHTML = msgs.join('<br>');
       warn.classList.remove('hidden');
     } else {
       warn.classList.add('hidden');
-    }
-    if ((plant.topCount || 0) >= 2) {
-      const top = document.getElementById('train-opt-top');
-      if (top) top.style.opacity = '0.4';
-      warn.textContent = 'Max 2 tops reached — TOP option disabled.';
-      warn.classList.remove('hidden');
-    } else {
-      const top = document.getElementById('train-opt-top');
-      if (top) top.style.opacity = '1';
     }
   }
   openModal('modal-train');
@@ -6391,31 +6965,109 @@ function confirmTrain() {
   const plant   = GS.plants.find(p => p.id === plantId);
   if (!plant || !type) { toast('Select a training type.','warn'); return; }
 
+  const diff     = GS.difficulty || 'easy';
+  const isSeedling = plant.stage === 'Seedling';
+  const style    = plant.trainingStyle || null;
+  const lstCount = plant.lstCount || 0;
+  const topCount = plant.topCount || 0;
+
+  // ── Hard guards (should be caught by openTrainModal but double-check) ──
+  if (plant.stage === 'Flower' || plant.stage === 'Ready') {
+    toast('🚫 Cannot train in Flower stage!', 'err'); return;
+  }
+  if (isSeedling && diff === 'easy') {
+    toast('🚫 Seedling training not allowed on Easy mode.', 'warn'); return;
+  }
+
+  // ── Style-lock validation ──
   if (type === 'top') {
-    if ((plant.topCount || 0) >= 2) { toast('Max 2 tops already applied.','warn'); return; }
-    plant.topCount = (plant.topCount || 0) + 1;
-    const bonus = plant.topCount === 1 ? 15 : 30;
-    plant.yieldBonus = (plant.yieldBonus || 0) + bonus;
-    // Topping stimulates growth — small health bump
-    plant.health = Math.min(100, (plant.health||100) + 5);
-    toast('✂️ Topped! +' + bonus + '% yield · +5 health (Top #' + plant.topCount + ')', 'ok', 3000);
-    addLog(plant.name + ' — topped (#' + plant.topCount + ') +5hp', 'info');
+    if (topCount >= 2)    { toast('Max 2 tops already applied.', 'warn'); return; }
+    if (style !== null)   { toast('Style locked to ' + style.toUpperCase() + ' — cannot top now.', 'warn'); return; }
+  }
+  if (type === 'lst') {
+    if (style !== null && style !== 'lst') { toast('Style locked to ' + style.toUpperCase() + ' — cannot LST.', 'warn'); return; }
+    if (lstCount >= 10) { toast('Max 10 LST applications reached!', 'warn'); return; }
+  }
+  if (type === 'fim') {
+    if (style !== null) { toast('Style locked to ' + style.toUpperCase() + ' — cannot FIM.', 'warn'); return; }
+    if (topCount >= 2 && style === null) {} // allowed after 2 tops
+  }
+  if (type === 'snap') {
+    if (style !== null) { toast('Style locked to ' + style.toUpperCase() + ' — cannot Supercrop.', 'warn'); return; }
+  }
+
+  // ── Roll training stress (5–25%) ──
+  const stressHit = 5 + Math.random() * 20; // 5–25%
+  plant.stress = Math.min(100, (plant.stress || 0) + stressHit);
+
+  // ── Apply training effects ──
+  if (type === 'top') {
+    plant.topCount = topCount + 1;
+    // Seedling top: stress only, no bonus
+    if (isSeedling) {
+      plant.health = Math.max(0, (plant.health||100) - 5);
+      toast('⚠️ Seedling topped — stress added, no yield bonus!', 'warn', 3000);
+      addLog(plant.name + ' — seedling top (stress only)', 'warn');
+    } else {
+      const bonus = plant.topCount === 1 ? 15 : 30;
+      plant.yieldBonus = (plant.yieldBonus || 0) + bonus;
+      toast('✂️ Topped! +' + bonus + '% yield · Stress +' + Math.round(stressHit) + '% (Top #' + plant.topCount + ')', 'ok', 3000);
+      addLog(plant.name + ' — topped (#' + plant.topCount + ') stress+' + Math.round(stressHit) + '%', 'info');
+    }
+
   } else if (type === 'lst') {
-    plant.yieldBonus = (plant.yieldBonus || 0) + 5;
-    plant.health = Math.min(100, (plant.health||100) + 8);
-    toast('🔗 LST applied! +5% yield · +8 health', 'ok', 2500);
-    addLog(plant.name + ' — LST applied +8hp', 'info');
+    const newCount = lstCount + 1;
+    plant.lstCount = newCount;
+    // Lock style to LST after first use (also locks topping)
+    if (!plant.trainingStyle) plant.trainingStyle = 'lst';
+
+    if (isSeedling) {
+      plant.health = Math.max(0, (plant.health||100) - 5);
+      toast('⚠️ Seedling LST — stress added, no yield bonus!', 'warn', 3000);
+      addLog(plant.name + ' — seedling LST (stress only)', 'warn');
+    } else if (newCount <= 5) {
+      // Beneficial range: +5% yield per application
+      plant.yieldBonus = (plant.yieldBonus || 0) + 5;
+      toast('🔗 LST #' + newCount + ' · +5% yield · Stress +' + Math.round(stressHit) + '%', 'ok', 2500);
+      addLog(plant.name + ' — LST #' + newCount + ' +5% yield', 'info');
+      if (diff === 'easy' && newCount === 5) {
+        toast('⚠️ Warning: 5th LST — going further will harm the plant!', 'warn', 5000);
+      }
+    } else {
+      // 6–10: harmful — lose health AND lose multiplier
+      const multLoss = 0.03 * (newCount - 5);
+      plant.cropMultiplier = Math.max(0.1, (plant.cropMultiplier||1.0) - multLoss);
+      plant.health = Math.max(0, (plant.health||100) - 8);
+      toast('⚠️ LST #' + newCount + ' — diminishing returns! −8 health, −' + (multLoss*100).toFixed(0) + '% mult', 'warn', 3500);
+      addLog(plant.name + ' — LST #' + newCount + ' HARMFUL -8hp -mult', 'warn');
+    }
+
   } else if (type === 'fim') {
-    plant.yieldBonus = (plant.yieldBonus || 0) + 10;
-    plant.health = Math.min(100, (plant.health||100) + 6);
-    toast('🌿 FIM applied! +10% yield · +6 health', 'ok', 2500);
-    addLog(plant.name + ' — FIM applied +6hp', 'info');
+    plant.trainingStyle = 'fim';
+    if (isSeedling) {
+      plant.health = Math.max(0, (plant.health||100) - 5);
+      toast('⚠️ Seedling FIM — stress added, no yield bonus!', 'warn', 3000);
+      addLog(plant.name + ' — seedling FIM (stress only)', 'warn');
+    } else {
+      plant.yieldBonus = (plant.yieldBonus || 0) + 10;
+      toast('🌿 FIM! +10% yield · Stress +' + Math.round(stressHit) + '%', 'ok', 2500);
+      addLog(plant.name + ' — FIM +10% yield', 'info');
+    }
+
   } else if (type === 'snap') {
-    if (plant.stage !== 'Veg') { toast('Supercrop works best in Veg.','warn'); }
-    plant.health     = Math.max(0, (plant.health || 100) - 5);
-    plant.yieldBonus = (plant.yieldBonus || 0) + 8;
-    toast('💥 Supercrop done! -5 health, +8% yield', 'ok', 3000);
-    addLog(plant.name + ' — supercropped', 'info');
+    plant.trainingStyle = 'supercrop';
+    if (isSeedling) {
+      plant.health = Math.max(0, (plant.health||100) - 10);
+      toast('⚠️ Seedling supercrop — significant stress, no yield bonus!', 'warn', 3000);
+      addLog(plant.name + ' — seedling supercrop (stress only)', 'warn');
+    } else {
+      plant.health = Math.max(0, (plant.health||100) - 5);
+      plant.yieldBonus = (plant.yieldBonus || 0) + 8;
+      if (!GS.stats) GS.stats = {};
+      GS.stats.branchesSnapped = (GS.stats.branchesSnapped || 0) + 1;
+      toast('💥 Supercrop! +8% yield · −5 health · Stress +' + Math.round(stressHit) + '%', 'ok', 3000);
+      addLog(plant.name + ' — supercropped +8% yield', 'info');
+    }
   }
 
   closeModal('modal-train');
@@ -6572,14 +7224,6 @@ function confirmSpray() {
 
   const totalCost = cost * targets.length;
   if (GS.coins < totalCost) { toast('Not enough coins! Need ' + totalCost + '¢','err'); return; }
-
-  if (sprayType === 'heal') {
-    const plant = targets[0];
-    const phaseKey = plant.stage || 'Seedling';
-    if ((plant._healSprayUsed||{})[phaseKey]) {
-      toast('💉 Already used health spray this ' + phaseKey + ' phase!','warn'); return;
-    }
-  }
 
   GS.coins -= totalCost;
 
