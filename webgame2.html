@@ -2532,8 +2532,7 @@ function defaultState(username, difficulty) {
     growTime: 0,           // total in-game minutes elapsed
     _bmBotListings: [],
     _welcomeSent: false,
-    dryRoom: {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68},
-    dryRoom: {fanAssigned:false, fanSpeed:50, dehuAssigned:false, acAssigned:false, heaterAssigned:false, humidifierAssigned:false, tempTarget:68},
+  dryRoom: {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68},
   };
 }
 
@@ -3182,8 +3181,31 @@ function _tickDrying(batch, realHrs) {
 }// ================================================================
 // BLACK MARKET TICK
 // ================================================================
-function tickBlackMarket(now) {
-  (GS.blackMarket || []).forEach(listing => {
+function _tickCuringJar(batch, realHrs, now) {
+  const rh      = batch.jarRH != null ? batch.jarRH : 62;
+  const entryRH = batch.jarEntryRH || rh;
+  const cap     = Math.min(entryRH, 75);
+
+  // RH rises slowly as moisture redistributes — stops at entry RH
+  if (rh < cap) {
+    const riseRate = 0.5 * realHrs * (1 - rh / Math.max(cap, 1));
+    batch.jarRH = Math.min(cap, rh + riseRate);
+  }
+
+  // Overdue burp penalty: >70% RH for 12+ real hours
+  const lastBurp     = batch.lastBurpTs || batch.jarStartTs || now;
+  const hrsSinceBurp = (now - lastBurp) / 3600000;
+  if (batch.jarRH > 70 && hrsSinceBurp > 12 && !batch.overduePenaltyApplied) {
+    const loss = Math.round(5 + Math.random() * 10);
+    batch.quality = Math.max(0, (batch.quality || 100) - loss);
+    batch.overduePenaltyApplied = 1;
+    toast('⚠️ ' + batch.name + ' — overdue burp! −' + loss + '% quality.', 'warn', 5000);
+    addLog(batch.name + ' — burp overdue penalty −' + loss + '% quality', 'warn');
+  }
+  if (batch.jarRH <= 70) batch.overduePenaltyApplied = 0;
+}
+
+function tickBlackMarket(now) {  (GS.blackMarket || []).forEach(listing => {
     if (listing.status !== 'pending') return;
     const ageMin = (now - listing.listedAt) / 60000;
     const sellMin = listing.priceCategory === 'below' ? 1 + Math.random() * 3 :
@@ -4258,18 +4280,6 @@ function updateDryFan(batchId, val) {
   updateDryRoomFan(val);
 }
 
-function toggleDryEquip(type) {
-  if (!GS.dryRoom) GS.dryRoom = {fanAssigned:false, fanSpeed:50, dehuAssigned:false, acAssigned:false, heaterAssigned:false, humidifierAssigned:false, tempTarget:68};
-  const g = GS.gear || {};
-  if      (type === 'fan'    && g.fans?.[0])   GS.dryRoom.fanAssigned      = !GS.dryRoom.fanAssigned;
-  else if (type === 'dehu'   && g.dehumidifier) GS.dryRoom.dehuAssigned     = !GS.dryRoom.dehuAssigned;
-  else if (type === 'ac'     && g.acUnit)        GS.dryRoom.acAssigned       = !GS.dryRoom.acAssigned;
-  else if (type === 'heater' && g.heater)        GS.dryRoom.heaterAssigned   = !GS.dryRoom.heaterAssigned;
-  else if (type === 'humid'  && g.humidifier)    GS.dryRoom.humidifierAssigned = !GS.dryRoom.humidifierAssigned;
-  else { toast('You don\'t own that equipment — buy it from Shop → Climate.', 'warn'); return; }
-  saveGame(); renderVault();
-}
-
 function updateDryRoomFan(val) {
   if (!GS.dryRoom) return;
   GS.dryRoom.fanSpeed = parseInt(val);
@@ -4278,13 +4288,6 @@ function updateDryRoomFan(val) {
   saveGame();
 }
 
-function updateDryRoomTemp(val) {
-  if (!GS.dryRoom) return;
-  GS.dryRoom.tempTarget = parseInt(val);
-  const el = document.getElementById('dry-room-temp-val');
-  if (el) el.textContent = val + '°F';
-  saveGame();
-}
 function setDryRoomEquip(type) {
   if (!GS.dryRoom) GS.dryRoom = {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68};
   const dr = GS.dryRoom;
@@ -6061,11 +6064,8 @@ function loginSuccess() {
   if (!GS.achievements) GS.achievements = [];
      if (!GS.growTime) GS.growTime = 0;
      if (!GS.roomGear) GS.roomGear = {};
-     if (!GS.dryRoom) GS.dryRoom = {fanAssigned:false, fanSpeed:50, dehuAssigned:false, acAssigned:false,           	heaterAssigned:false, humidifierAssigned:false, tempTarget:68};
-if (!GS.dryRoom) GS.dryRoom = {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68};
+     if (!GS.dryRoom) GS.dryRoom = {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68};
   // Migrate old curing phases to new drying/curing system
-  (GS.curing||[]).forEach(b => {
-    // Migrate old curing phases to new drying/curing system
   (GS.curing||[]).forEach(b => {
     if (!b._lastCuringTick) b._lastCuringTick = Date.now();
     if (b.phase === 'hanging') {
@@ -6078,7 +6078,6 @@ if (!GS.dryRoom) GS.dryRoom = {fanOn:false, dehuOn:false, acOn:false, heaterOn:f
       b.lastBurpTs = b.lastBurpTs || Date.now();
       b.everBurpedBelow65 = (b.burpsDone||0) >= 1;
     } else if (b.phase === 'cured') {
-      // auto-move fully cured batches to vault
       if (!GS.vault) GS.vault = [];
       GS.vault.push({
         id: uid(), name: b.name, strainName: b.strainName,
