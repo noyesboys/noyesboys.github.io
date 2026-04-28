@@ -639,6 +639,16 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .bottle-bar-fill{height:100%;border-radius:2px;transition:.4s}
 .dead-plant-bar{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.4);border-radius:7px;padding:8px 12px;font-size:10px;color:var(--red);font-family:var(--font-mono);line-height:1.6;margin-bottom:8px}
 .permanently-dead-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;z-index:10;border-radius:14px}
+.nute-stock-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:9px;font-family:var(--font-mono)}
+.feed-mode-bar{display:flex;gap:5px;margin-bottom:12px}
+.feed-mode-btn{flex:1;padding:7px 4px;border:1px solid var(--border);border-radius:6px;background:rgba(0,0,0,0.3);font-family:var(--font-hud);font-size:8px;letter-spacing:.5px;cursor:pointer;transition:.2s;color:var(--muted);text-align:center;line-height:1.5}
+.feed-mode-btn.active{border-color:var(--cyan);background:rgba(34,211,238,0.1);color:var(--cyan)}
+.feed-mode-btn:hover:not(.active){border-color:var(--border-bright);color:var(--text)}
+.mystery-val{font-family:var(--font-hud);font-size:11px;color:var(--gold);letter-spacing:2px;min-width:30px;text-align:right}
+.bottle-bar{height:3px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;margin:2px 0}
+.bottle-bar-fill{height:100%;border-radius:2px;transition:.4s}
+.dead-plant-bar{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.4);border-radius:7px;padding:8px 12px;font-size:10px;color:var(--red);font-family:var(--font-mono);line-height:1.6;margin-bottom:8px}
+.permanently-dead-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;z-index:10;border-radius:14px}
 .vault-filter-btn{background:var(--card-bg);border:1px solid var(--border);border-radius:5px;padding:4px 10px;color:var(--muted);font-family:var(--font-hud);font-size:9px;cursor:pointer;transition:.2s;letter-spacing:.5px}
 .vault-filter-btn:hover,.vault-filter-btn.active{border-color:var(--green);color:var(--green);background:rgba(74,222,128,0.08)}
 .dry-equip-btn{flex:1;min-width:70px;padding:8px 4px;border-radius:7px;border:1px solid var(--border);background:rgba(0,0,0,0.3);color:var(--muted);font-family:var(--font-hud);font-size:8px;letter-spacing:.3px;cursor:pointer;transition:.2s;text-align:center;line-height:1.6}
@@ -3853,6 +3863,34 @@ function renderGearPanel() {
   }
 
   body.innerHTML = html;
+// Nutrient stock section
+  const room2 = GS.rooms[GS.activeRoom||0] || GS.rooms[0];
+  const rgStock = getRoomGear(room2.id);
+  const nuteStock = [
+    {label:'Base Feed',  key:'nuteBase',  color:'var(--green)'},
+    {label:'Grow (N)',   key:'nuteGrow',  color:'var(--lime)'},
+    {label:'Bloom (PK)', key:'nuteBloom', color:'var(--purple)'},
+    {label:'Cal-Mag',    key:'nuteCalmag',color:'var(--cyan)'},
+    {label:'pH Up',      key:'phUp',      color:'var(--blue)', unit:'ml'},
+    {label:'pH Down',    key:'phDown',    color:'var(--orange)', unit:'ml'},
+  ];
+  let stockHtml = '<div class="gear-item"><div class="gear-item-header"><span class="gear-item-icon">🧴</span><span class="gear-item-name">NUTRIENT STOCK</span></div>';
+  nuteStock.forEach(n => {
+    const amt   = rgStock[n.key] || 0;
+    const unit  = n.unit || 'ppm';
+    const half  = amt < 500 && amt > 0;
+    const empty = amt <= 0;
+    const pct   = unit === 'ml' ? Math.min(100, amt/10) : Math.min(100, amt/10);
+    const barColor = amt > 500 ? 'var(--green)' : amt > 100 ? 'var(--gold)' : 'var(--red)';
+    const label = empty ? 'EMPTY' : half ? '½ Bottle (' + amt.toFixed(0) + unit + ')' : amt.toFixed(0) + unit;
+    stockHtml += `<div class="nute-stock-row">
+      <span style="flex:1;color:${empty?'var(--muted)':half?'var(--gold)':'var(--text)'}">${n.label}</span>
+      <div class="bottle-bar" style="width:80px"><div class="bottle-bar-fill" style="width:${pct}%;background:${barColor}"></div></div>
+      <span style="color:${empty?'var(--red)':half?'var(--gold)':'var(--green)'};min-width:80px;text-align:right">${label}</span>
+    </div>`;
+  });
+  stockHtml += '</div>';
+  html += stockHtml;
 }
 
 function updateFanSpeed(val) {
@@ -6802,15 +6840,46 @@ function openInspectModal(plantId) {
   const onCD = plant.lastInspect && (Date.now() - plant.lastInspect) < 12 * 3600000;
   if (onCD) { toast('Inspect on cooldown.','warn'); return; }
   _el('lbl-inspect-name', plant.name || plant.strainName);
-  const inp = document.getElementById('inp-inspect-plant-id');
-  if (inp) inp.value = plantId;
+  document.getElementById('inp-inspect-plant-id').value = plantId;
+
+  const g    = GS.gear || {};
+  const hasLoupe  = !!g.scope;
+  const hasEC     = !!g.ecmeter;
+  const hasPH     = !!g.phmeter;
+  const diff = GS.difficulty || 'easy';
+
+  // Dynamically lock inspect options based on gear
+  const opts = document.querySelectorAll('#modal-inspect .inspect-option');
+  opts.forEach(opt => {
+    const area = opt.getAttribute('onclick')?.match(/'(\w+)'/)?.[1];
+    let locked = false, lockMsg = '';
+    if (area === 'buds')   { locked = !hasLoupe;  lockMsg = '🔬 Requires Jeweler\'s Loupe (Shop → Tools, 1500¢)'; }
+    if (area === 'runoff') { locked = !hasEC && !hasPH; lockMsg = '🧪 Requires EC or pH Meter (Shop → Tools)'; }
+    opt.style.opacity = locked ? '0.35' : '1';
+    opt.style.pointerEvents = locked ? 'none' : '';
+    let lockEl = opt.querySelector('.inspect-lock-note');
+    if (locked && !lockEl) {
+      lockEl = document.createElement('div');
+      lockEl.className = 'inspect-lock-note';
+      lockEl.style.cssText = 'font-size:8px;color:var(--red);font-family:var(--font-mono);margin-top:4px;line-height:1.4';
+      opt.appendChild(lockEl);
+    }
+    if (locked && lockEl) lockEl.textContent = lockMsg;
+    if (!locked && lockEl) lockEl.remove();
+  });
+
+  if (!hasLoupe && diff === 'easy') {
+    toast('💡 Buy Jeweler\'s Loupe to inspect buds for ripeness.', 'info', 4000);
+  }
   openModal('modal-inspect');
 }
-
 function confirmInspect(area) {
   const plantId = document.getElementById('inp-inspect-plant-id')?.value;
   const plant   = GS.plants.find(p => p.id === plantId);
   if (!plant) return;
+const g = GS.gear || {};
+  if (area === 'buds'   && !g.scope)               { toast('🔬 Need Jeweler\'s Loupe to inspect buds.','err'); return; }
+  if (area === 'runoff' && !g.ecmeter && !g.phmeter){ toast('🧪 Need EC or pH Meter to check runoff.','err'); return; }
 
   plant.lastInspect       = Date.now();
   plant.inspectShield     = true;
@@ -6899,6 +6968,7 @@ if (plant._permanentlyDead) {
     closeModal('modal-harvest');
     return;
   }
+     if (plant._permanentlyDead) { toast('☠️ Cannot harvest — permanently dead.','err'); closeModal('modal-harvest'); return; }
   const strain  = STRAINS[plant.strainName] || (GS.bredStrains||[]).find(b=>b.name===plant.strainName) || {};
   const score   = calcGrowScore(plant);
   const diffMult= GS.difficulty === 'master' ? 1.25 : GS.difficulty === 'normal' ? 1.1 : 1.0;
