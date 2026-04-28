@@ -621,6 +621,24 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .burp-btn.long{background:rgba(239,68,68,0.08);border-color:var(--red);color:var(--red)}
 .burp-btn:hover{filter:brightness(1.3)}
 .burp-btn:disabled{opacity:.3;cursor:not-allowed;filter:none}
+.dry-equip-select{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.dry-equip-btn{padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:rgba(0,0,0,0.4);font-family:var(--font-hud);font-size:9px;letter-spacing:.5px;cursor:pointer;transition:.2s;color:var(--muted)}
+.dry-equip-btn:hover:not(.disabled){border-color:var(--border-bright);color:var(--text)}
+.dry-equip-btn.active{background:rgba(34,211,238,0.12);border-color:var(--cyan);color:var(--cyan)}
+.dry-equip-btn.disabled{opacity:.3;cursor:not-allowed}
+.mold-badge{display:inline-block;background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.5);border-radius:4px;padding:2px 8px;font-family:var(--font-hud);font-size:8px;color:var(--red);letter-spacing:1px;animation:dangerPulse 1.5s ease-in-out infinite;vertical-align:middle}
+.vault-filter-btn{padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:rgba(0,0,0,0.3);font-family:var(--font-hud);font-size:9px;color:var(--muted);cursor:pointer;transition:.2s}
+.vault-filter-btn:hover,.vault-filter-btn.active{border-color:var(--green);color:var(--green);background:rgba(74,222,128,0.08)}
+.dry-speed-bar{display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(0,0,0,0.3);border-radius:6px;margin-top:10px;font-family:var(--font-hud);font-size:9px}
+.feed-mode-bar{display:flex;gap:5px;margin-bottom:12px}
+.feed-mode-btn{flex:1;padding:7px 4px;border:1px solid var(--border);border-radius:6px;background:rgba(0,0,0,0.3);font-family:var(--font-hud);font-size:8px;letter-spacing:.5px;cursor:pointer;transition:.2s;color:var(--muted);text-align:center;line-height:1.5}
+.feed-mode-btn.active{border-color:var(--cyan);background:rgba(34,211,238,0.1);color:var(--cyan)}
+.feed-mode-btn:hover:not(.active){border-color:var(--border-bright);color:var(--text)}
+.mystery-val{font-family:var(--font-hud);font-size:11px;color:var(--gold);letter-spacing:2px;min-width:30px;text-align:right}
+.bottle-bar{height:3px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;margin:2px 0}
+.bottle-bar-fill{height:100%;border-radius:2px;transition:.4s}
+.dead-plant-bar{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.4);border-radius:7px;padding:8px 12px;font-size:10px;color:var(--red);font-family:var(--font-mono);line-height:1.6;margin-bottom:8px}
+.permanently-dead-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px;z-index:10;border-radius:14px}
 .vault-filter-btn{background:var(--card-bg);border:1px solid var(--border);border-radius:5px;padding:4px 10px;color:var(--muted);font-family:var(--font-hud);font-size:9px;cursor:pointer;transition:.2s;letter-spacing:.5px}
 .vault-filter-btn:hover,.vault-filter-btn.active{border-color:var(--green);color:var(--green);background:rgba(74,222,128,0.08)}
 .dry-equip-btn{flex:1;min-width:70px;padding:8px 4px;border-radius:7px;border:1px solid var(--border);background:rgba(0,0,0,0.3);color:var(--muted);font-family:var(--font-hud);font-size:8px;letter-spacing:.3px;cursor:pointer;transition:.2s;text-align:center;line-height:1.6}
@@ -1140,7 +1158,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     <div class="modal-title">💧 WATER PLANT</div>
     <div class="modal-desc">
       Watering: <strong id="lbl-water-name" style="color:var(--green)">—</strong><br>
-      Soil moisture: <strong id="lbl-water-level" style="color:var(--blue)">—</strong> · Current PPM: <strong id="lbl-water-ppm" style="color:var(--cyan)">—</strong>
+      Soil: <strong id="lbl-water-level" style="color:var(--blue)">—</strong> · PPM: <strong id="lbl-water-ppm" style="color:var(--cyan)">—</strong>
     </div>
     <input type="hidden" id="inp-water-plant-id" value="">
     <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:8px">WATER AMOUNT</div>
@@ -1151,32 +1169,8 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
       <button class="water-amt-btn" data-amt="100" onclick="selectWaterAmt(this)">FLOOD<br><span style="font-size:8px;color:var(--muted)">TO 100%</span></button>
     </div>
     <input type="hidden" id="inp-water-amount" value="25">
-    <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:8px">
-      ADD NUTRIENTS? <span style="color:rgba(74,222,128,0.4)">(OPTIONAL)</span>
-    </div>
-    <div class="nute-slider-row">
-      <span class="nute-slider-label">BASE FEED</span>
-      <input type="range" id="nute-base" min="0" max="1000" step="25" value="0" oninput="updateNuteTotals()">
-      <span class="nute-slider-val" id="nv-base">0 ppm</span>
-    </div>
-    <div class="nute-slider-row">
-      <span class="nute-slider-label">GROW (N)</span>
-      <input type="range" id="nute-grow" min="0" max="800" step="25" value="0" oninput="updateNuteTotals()">
-      <span class="nute-slider-val" id="nv-grow">0 ppm</span>
-    </div>
-    <div class="nute-slider-row">
-      <span class="nute-slider-label">BLOOM (PK)</span>
-      <input type="range" id="nute-bloom" min="0" max="800" step="25" value="0" oninput="updateNuteTotals()">
-      <span class="nute-slider-val" id="nv-bloom">0 ppm</span>
-    </div>
-    <div class="nute-slider-row">
-      <span class="nute-slider-label">CAL-MAG</span>
-      <input type="range" id="nute-calmag" min="0" max="400" step="25" value="0" oninput="updateNuteTotals()">
-      <span class="nute-slider-val" id="nv-calmag">0 ppm</span>
-    </div>
-    <div class="nute-total-display ok" id="nute-total-display">TOTAL: 0 ppm — Plain Water</div>
-    <div class="nute-optimal-range" id="nute-optimal-hint"></div>
-    <div class="warning-note hidden" id="nute-burn-warn" style="margin-top:6px">⚠️ Concentration too high — will burn your plant!</div>
+    <input type="hidden" id="inp-feed-mode" value="stack">
+    <div id="water-dynamic-content"></div>
     <div class="modal-actions">
       <button class="btn-modal confirm" onclick="confirmWater()">💧 WATER</button>
       <button class="btn-modal cancel" onclick="closeModal('modal-water')">CANCEL</button>
@@ -2523,7 +2517,7 @@ function defaultState(username, difficulty) {
     growTime: 0,           // total in-game minutes elapsed
     _bmBotListings: [],
     _welcomeSent: false,
-    dryRoom: {fanAssigned:false, fanSpeed:50, dehuAssigned:false, acAssigned:false, heaterAssigned:false, humidifierAssigned:false, tempTarget:68},
+  dryRoom: {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68},
   };
 }
 
@@ -2578,10 +2572,10 @@ function defaultGear() {
     phUp: 0,             // ml remaining
     phDown: 0,
     // Consumable nutrients (ppm remaining in each bottle = 100000 ppm * 1000ml)
-    nuteBase:  10000,
-    nuteGrow:  10000,
-    nuteBloom: 10000,
-    nuteCalmag:10000,
+    nuteBase:  0,
+          nuteGrow:  0,
+          nuteBloom: 0,
+          nuteCalmag:0,
   };
 }
 
@@ -3006,29 +3000,41 @@ function tickPlant(plant, room, strain, actual, gameMins) {
   drainPct *= (1 - wdrReduction);
   plant.waterLevel = Math.max(0, (plant.waterLevel != null ? plant.waterLevel : 80) - drainPct * gameMins);
 
-  // ── Plant death timer ── (0% water for 8+ real hours → health starts dropping)
+  // ── Dying plant system ──
+  if (plant._permanentlyDead) {
+    // Permanently dead: skip all growth, only removable
+    return;
+  }
+
   if (plant.waterLevel <= 0) {
     plant._zeroWaterTs = plant._zeroWaterTs || Date.now();
-    const zeroHrs = (Date.now() - plant._zeroWaterTs) / 3600000;
-    if (zeroHrs >= 8) {
-      // 1% health per real hour after 8h threshold
-      const hpDrop = Math.max(0, (zeroHrs - 8)) * (gameMins / (60 * GAME_SPEED));
-      plant.health = Math.max(0, (plant.health || 100) - hpDrop);
+    const zeroRealHrs = (Date.now() - plant._zeroWaterTs) / 3600000;
+    if (zeroRealHrs >= 8) {
+      const rh = gameMins / (60 * GAME_SPEED); // real hours this tick
+      plant.health = Math.max(0, (plant.health || 100) - rh); // −1 health per real hour after 8h
     }
-    // At 0 health for 12h → mark as dead (removable only)
-    if ((plant.health || 0) <= 0 && !plant._deadTs) {
-      plant._deadTs = Date.now();
-      plant.isDead = true;
-      toast('💀 ' + (plant.name||plant.strainName) + ' has died! Remove it.', 'err', 8000);
-      addLog((plant.name||plant.strainName) + ' died from dehydration', 'warn');
-    }
-  } else {
-    // Reset death timer when watered
-    if (plant._zeroWaterTs && plant.waterLevel > 10) {
-      plant._zeroWaterTs = null;
-      if (plant.isDead) {
-        // Can't revive a dead plant by watering alone
-      }
+  } else if (plant.waterLevel > 10) {
+    // Watered: reset zero-water timer ONLY if plant is not yet dead
+    if (!plant.isDead) plant._zeroWaterTs = null;
+    // If isDead (0 health) + watered: timer resets but isDead stays — needs health spray
+    if (plant.isDead) plant._zeroWaterTs = null;
+  }
+
+  // Transition to isDead when health hits 0
+  if ((plant.health || 0) <= 0 && !plant.isDead) {
+    plant.isDead  = true;
+    plant._deadTs = Date.now();
+    toast('💀 ' + (plant.name||plant.strainName) + ' at 0 health! Use 💉 Health Spray — 12h until permanent death!', 'err', 8000);
+    addLog((plant.name||plant.strainName) + ' at 0 health — 12h to permanent death', 'warn');
+  }
+
+  // Permanent death: 12 real hours after isDead
+  if (plant.isDead && plant._deadTs && !plant._permanentlyDead) {
+    const deadRealHrs = (Date.now() - plant._deadTs) / 3600000;
+    if (deadRealHrs >= 12) {
+      plant._permanentlyDead = true;
+      toast('💀 ' + (plant.name||plant.strainName) + ' has permanently died. Remove it.', 'err', 10000);
+      addLog((plant.name||plant.strainName) + ' died permanently — remove it', 'warn');
     }
   }
 
@@ -3133,94 +3139,70 @@ function tickCuring(now) {
 }
 
 function _tickDrying(batch, realHrs) {
-  const rh  = batch.dryRH != null ? batch.dryRH : 80;
-  const dr  = GS.dryRoom || {};
-  const g   = GS.gear || {};
+  const rh = batch.dryRH != null ? batch.dryRH : 80;
+  const dr = GS.dryRoom || {};
+  const g  = GS.gear   || {};
 
-  // Only count equipment if it's assigned AND owned
-  const fanPct  = (dr.fanAssigned && g.fans?.[0]) ? (dr.fanSpeed || 50) / 100 : 0;
-  const hasDehu = !!(dr.dehuAssigned && g.dehumidifier);
-  const hasAC   = !!(dr.acAssigned   && g.acUnit);
-  const hasHeat = !!(dr.heaterAssigned && g.heater);
+  // Equipment active only if both turned on AND owned
+  const fanOn    = dr.fanOn    && !!(g.fans    && g.fans[0]);
+  const dehuOn   = dr.dehuOn   && !!g.dehumidifier;
+  const acOn     = dr.acOn     && !!g.acUnit;
+  const fanSpeed = fanOn ? Math.max(0, Math.min(1, (dr.fanSpeed || 50) / 100)) : 0;
 
-  // Base rate (no gear): ~0.83%/hr → 12hr for 80→70
-  // Fan 50% + dehu: ~1.23%/hr → ~15hr for sweet spot
-  // Max gear: ~1.7%/hr → ~11hr for sweet spot, 80→70 in ~6hr
-  let rate = 0.83
-    + fanPct * 0.80
-    + (hasDehu ? 0.40 : 0)
-    + (hasAC   ? 0.15 : 0)
-    + (hasHeat ? 0.08 : 0);
+  // Rate %RH / real hour
+  // No gear: ~0.15/hr → ~120h (very slow, risky)
+  // Fan@50%+dehu: ~0.65/hr → ~28h to 62%
+  // Fan@100%+dehu+AC: ~1.05/hr → ~17h to 62%
+  let rate = 0.15
+    + fanSpeed * 0.55
+    + (dehuOn ? 0.28 : 0)
+    + (acOn   ? 0.07 : 0);
 
-  // Natural slow-down as RH drops
-  if (rh < 60) rate *= 0.50;
-  if (rh < 50) rate *= 0.45;
-  if (rh < 20) rate *= 0.30;
-  if (rh < 5)  rate  = 0.02;
+  // Natural slowdown as it dries out
+  if (rh < 60)  rate *= 0.45;
+  if (rh < 50)  rate = 0.083;
+  if (rh < 10)  rate = 0.020;
 
   batch.dryRH = Math.max(0, rh - rate * realHrs);
 
-  // Mold risk: above 75% with low/no airflow
-  const lowAirflow = fanPct < 0.25;
-  if (rh > 75 && lowAirflow) {
-    const moldProb = (fanPct === 0 ? 0.12 : 0.04) * realHrs;
+  // Mold risk: >75% RH — fan is the main protection
+  if (rh > 75) {
+    const moldProb = (!fanOn ? 0.12 : fanSpeed < 0.3 ? 0.04 : 0.010) * realHrs;
     if (Math.random() < moldProb) {
       const loss = Math.round(5 + Math.random() * 20);
       batch.quality = Math.max(0, (batch.quality || 100) - loss);
-      batch._moldHit = true;
-      toast('🍄 ' + batch.name + ' — mold! −' + loss + '% quality. Add more airflow!', 'err', 6000);
-      addLog(batch.name + ' — mold in dry room (−' + loss + '% quality)', 'warn');
-    }
-  } else if (rh <= 70) {
-    batch._moldHit = false; // clear mold flag once out of danger zone
-  }
-}
-function _tickCuringJar(batch, realHrs, now) {
-  const rh       = batch.jarRH != null ? batch.jarRH : 62;
-  const entryRH  = batch.jarEntryRH || 62;
-  const burps    = batch.burpsDone || 0;
-
-  // RH rises based on how wet it entered the jar
-  let riseRate = 0;
-  if (entryRH > 70)      riseRate = 5.0; // %/hr very fast — too wet!
-  else if (entryRH > 50) riseRate = 2.5; // %/hr normal
-  // Below 50%: doesn't rise
-
-  // Stabilizes with more burps (fully stable at 10 burps)
-  const stabilityFactor = Math.max(0, 1 - burps / 10);
-  riseRate *= stabilityFactor;
-
-  batch.jarRH = Math.min(88, rh + riseRate * realHrs);
-
-  // Overdue burp quality penalty (RH > 70% unchecked for > 6h)
-  const lastBurp = batch.lastBurpTs || batch.jarStartTs || now;
-  const hrsSinceBurp = (now - lastBurp) / 3600000;
-  if (batch.jarRH > 70 && hrsSinceBurp > 6) {
-    const overdueHrs   = hrsSinceBurp - 6;
-    const penaltyTotal = overdueHrs * 5; // −5%/hr overdue
-    const applied      = batch.overduePenaltyApplied || 0;
-    if (penaltyTotal > applied) {
-      const newPen = Math.min(penaltyTotal - applied, 5 * realHrs);
-      batch.quality = Math.max(0, (batch.quality || 100) - newPen);
-      batch.overduePenaltyApplied = applied + newPen;
+      toast('🍄 ' + batch.name + ' — mold! −' + loss + '% quality. Turn on fan!', 'err', 6000);
+      addLog(batch.name + ' — mold loss in dry room (−' + loss + '% quality)', 'warn');
     }
   }
-
-  // Mold risk: jar > 75% for too long
-  if (batch.jarRH > 75 && realHrs > 0) {
-    if (Math.random() < 0.025 * realHrs) {
-      const loss = Math.round(5 + Math.random() * 15);
-      batch.quality = Math.max(0, (batch.quality || 100) - loss);
-      toast('🍄 ' + batch.name + ' — jar mold! −' + loss + '% quality', 'err');
-      addLog(batch.name + ' — jar mold (−' + loss + '% quality)', 'warn');
-    }
-  }
-}
-// ================================================================
+}// ================================================================
 // BLACK MARKET TICK
 // ================================================================
-function tickBlackMarket(now) {
-  (GS.blackMarket || []).forEach(listing => {
+function _tickCuringJar(batch, realHrs, now) {
+  const rh      = batch.jarRH != null ? batch.jarRH : 62;
+  const entryRH = batch.jarEntryRH || rh;
+  const cap     = Math.min(entryRH, 75);
+
+  // RH rises slowly as moisture redistributes — stops at entry RH
+  if (rh < cap) {
+    const riseRate = 0.5 * realHrs * (1 - rh / Math.max(cap, 1));
+    batch.jarRH = Math.min(cap, rh + riseRate);
+  }
+
+  // Overdue burp penalty: >70% RH for 12+ real hours
+  const lastBurp     = batch.lastBurpTs || batch.jarStartTs || now;
+  const hrsSinceBurp = (now - lastBurp) / 3600000;
+  if (batch.jarRH > 70 && hrsSinceBurp > 12 && !batch.overduePenaltyApplied) {
+    const loss = Math.round(5 + Math.random() * 10);
+    batch.quality = Math.max(0, (batch.quality || 100) - loss);
+    batch.overduePenaltyApplied = 1;
+    toast('⚠️ ' + batch.name + ' — overdue burp! −' + loss + '% quality.', 'warn', 5000);
+    addLog(batch.name + ' — burp overdue penalty −' + loss + '% quality', 'warn');
+  }
+  if (batch.jarRH <= 70) batch.overduePenaltyApplied = 0;
+}
+
+function tickBlackMarket(now) {  (GS.blackMarket || []).forEach(listing => {
     if (listing.status !== 'pending') return;
     const ageMin = (now - listing.listedAt) / 60000;
     const sellMin = listing.priceCategory === 'below' ? 1 + Math.random() * 3 :
@@ -4054,16 +4036,29 @@ function _buildPlantCard(plant, room) {
         ? `<button class="inspect-btn cooldown" disabled>🔍 INSPECT (CD: ${cdLeft})</button>`
         : `<button class="inspect-btn" onclick="openInspectModal('${plant.id}')">🔍 INSPECT PLANT</button>`}
     </div>
-    <div class="plant-actions">
-      <button class="btn-action btn-blue"   onclick="openWaterModal('${plant.id}')">💧 WATER</button>
-      <button class="btn-action btn-gold"   onclick="openHarvestModal('${plant.id}')">🌾 HARVEST</button>
-      <button class="btn-action btn-red"    onclick="openRemoveModal('${plant.id}')">🗑️ REMOVE</button>
-      <button class="btn-action btn-green"  onclick="openTrainModal('${plant.id}')">✂️ TRAIN</button>
-      ${plant.stage === 'Veg'
-        ? `<button class="btn-action btn-purple" onclick="openFlipModal('${plant.id}')">🌸 FLIP</button>`
-        : '<button class="btn-action" disabled>🌸 FLIP</button>'}
-      <button class="btn-action" onclick="openSprayModalForPlant('${plant.id}')">🧴 SPRAY</button>
-    </div>`;
+    ${plant._permanentlyDead
+      ? `<div class="dead-plant-bar" style="margin:0 12px 8px">
+           💀 Permanently dead — no harvest possible. Remove to free the slot.
+         </div>
+         <div class="plant-actions">
+           <button class="btn-action btn-red full-width" onclick="openRemoveModal('${plant.id}')">🗑️ REMOVE DEAD PLANT</button>
+         </div>`
+      : `${plant.isDead
+           ? `<div class="dead-plant-bar" style="margin:0 12px 8px">
+                ⚠️ 0 health — needs 💉 Health Spray · ${plant._deadTs ? Math.max(0,12-((Date.now()-plant._deadTs)/3600000)).toFixed(1) : '12.0'}h left
+              </div>`
+           : ''}
+         <div class="plant-actions">
+           <button class="btn-action btn-blue" onclick="openWaterModal('${plant.id}')">💧 WATER</button>
+           <button class="btn-action btn-gold" onclick="openHarvestModal('${plant.id}')" ${plant.isDead ? 'disabled' : ''}>🌾 HARVEST</button>
+           <button class="btn-action btn-red"  onclick="openRemoveModal('${plant.id}')">🗑️ REMOVE</button>
+           <button class="btn-action btn-green" onclick="openTrainModal('${plant.id}')" ${plant.isDead ? 'disabled' : ''}>✂️ TRAIN</button>
+           ${plant.stage === 'Veg' && !plant.isDead
+             ? `<button class="btn-action btn-purple" onclick="openFlipModal('${plant.id}')">🌸 FLIP</button>`
+             : '<button class="btn-action" disabled>🌸 FLIP</button>'}
+           <button class="btn-action" onclick="openSprayModalForPlant('${plant.id}')">🧴 SPRAY</button>
+         </div>`}
+    `;
   return card;
 }
 
@@ -4295,18 +4290,6 @@ function updateDryFan(batchId, val) {
   updateDryRoomFan(val);
 }
 
-function toggleDryEquip(type) {
-  if (!GS.dryRoom) GS.dryRoom = {fanAssigned:false, fanSpeed:50, dehuAssigned:false, acAssigned:false, heaterAssigned:false, humidifierAssigned:false, tempTarget:68};
-  const g = GS.gear || {};
-  if      (type === 'fan'    && g.fans?.[0])   GS.dryRoom.fanAssigned      = !GS.dryRoom.fanAssigned;
-  else if (type === 'dehu'   && g.dehumidifier) GS.dryRoom.dehuAssigned     = !GS.dryRoom.dehuAssigned;
-  else if (type === 'ac'     && g.acUnit)        GS.dryRoom.acAssigned       = !GS.dryRoom.acAssigned;
-  else if (type === 'heater' && g.heater)        GS.dryRoom.heaterAssigned   = !GS.dryRoom.heaterAssigned;
-  else if (type === 'humid'  && g.humidifier)    GS.dryRoom.humidifierAssigned = !GS.dryRoom.humidifierAssigned;
-  else { toast('You don\'t own that equipment — buy it from Shop → Climate.', 'warn'); return; }
-  saveGame(); renderVault();
-}
-
 function updateDryRoomFan(val) {
   if (!GS.dryRoom) return;
   GS.dryRoom.fanSpeed = parseInt(val);
@@ -4315,10 +4298,28 @@ function updateDryRoomFan(val) {
   saveGame();
 }
 
+function setDryRoomEquip(type) {
+  if (!GS.dryRoom) GS.dryRoom = {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68};
+  const dr = GS.dryRoom;
+  if (type === 'fan')    { dr.fanOn    = !dr.fanOn; }
+  if (type === 'dehu')   { dr.dehuOn   = !dr.dehuOn; }
+  if (type === 'ac')     { dr.acOn     = !dr.acOn;     if (dr.acOn) dr.heaterOn = false; }
+  if (type === 'heater') { dr.heaterOn = !dr.heaterOn; if (dr.heaterOn) dr.acOn = false; }
+  saveGame(); renderVault();
+}
+
+function updateDryRoomFanSpeed(val) {
+  if (!GS.dryRoom) GS.dryRoom = {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68};
+  GS.dryRoom.fanSpeed = parseInt(val);
+  const el = document.getElementById('dry-fan-global');
+  if (el) el.textContent = val + '%';
+  saveGame();
+}
+
 function updateDryRoomTemp(val) {
-  if (!GS.dryRoom) return;
+  if (!GS.dryRoom) GS.dryRoom = {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68};
   GS.dryRoom.tempTarget = parseInt(val);
-  const el = document.getElementById('dry-room-temp-val');
+  const el = document.getElementById('dry-temp-global');
   if (el) el.textContent = val + '°F';
   saveGame();
 }
@@ -4482,155 +4483,156 @@ function renderVault() {
 
 // ── DRYING ROOM ──
 function _renderDrying(cont) {
-  const g   = GS.gear   || {};
-  const dr  = GS.dryRoom || (GS.dryRoom = {fanAssigned:false, fanSpeed:50, dehuAssigned:false, acAssigned:false, heaterAssigned:false, humidifierAssigned:false, tempTarget:68});
-
-  // What the player owns
-  const ownsFan   = !!(g.fans && g.fans[0] && g.fans[0].speed != null);
-  const ownsDehu  = !!g.dehumidifier;
-  const ownsAC    = !!g.acUnit;
-  const ownsHeat  = !!g.heater;
-
-  // Active equipment
-  const fanPct  = (dr.fanAssigned && ownsFan) ? (dr.fanSpeed || 50) / 100 : 0;
-  const hasDehu = !!(dr.dehuAssigned && ownsDehu);
-  const hasAC   = !!(dr.acAssigned   && ownsAC);
-  const hasHeat = !!(dr.heaterAssigned && ownsHeat);
-
-  // Estimated rate & time
-  const rate    = 0.83 + fanPct*0.80 + (hasDehu?0.40:0) + (hasAC?0.15:0) + (hasHeat?0.08:0);
-  const hrsTo62 = Math.round(18 / rate);
-  const isLowAirflow = fanPct < 0.25;
-
-  // ── Equipment Panel ──
-  let html = `<div style="background:rgba(0,0,0,0.45);border:1px solid rgba(34,211,238,0.3);border-radius:12px;padding:16px;margin-bottom:14px">
-    <div style="font-family:var(--font-hud);font-size:10px;color:var(--cyan);letter-spacing:2px;margin-bottom:4px">🌬️ DRY ROOM EQUIPMENT</div>
-    <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-bottom:12px">Shared across all drying batches. Bigger gear = better control &amp; faster drying.</div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">`;
-
-  // Fan button
-  html += `<button class="dry-equip-btn ${dr.fanAssigned && ownsFan ? 'active-fan' : ''}"
-    onclick="toggleDryEquip('fan')" ${!ownsFan ? 'disabled' : ''}>
-    🌀 FAN<br><span style="font-size:7px">${ownsFan ? (dr.fanAssigned ? '✅ ON' : 'tap to add') : 'not owned'}</span>
-  </button>`;
-
-  // Dehu button
-  html += `<button class="dry-equip-btn ${dr.dehuAssigned && ownsDehu ? 'active-dehu' : ''}"
-    onclick="toggleDryEquip('dehu')" ${!ownsDehu ? 'disabled' : ''}>
-    🌵 DEHU<br><span style="font-size:7px">${ownsDehu ? (dr.dehuAssigned ? '✅ ON' : 'tap to add') : 'not owned'}</span>
-  </button>`;
-
-  // AC button
-  html += `<button class="dry-equip-btn ${dr.acAssigned && ownsAC ? 'active-ac' : ''}"
-    onclick="toggleDryEquip('ac')" ${!ownsAC ? 'disabled' : ''}>
-    ❄️ AC<br><span style="font-size:7px">${ownsAC ? (dr.acAssigned ? '✅ ON' : 'tap to add') : 'not owned'}</span>
-  </button>`;
-
-  // Heater button
-  html += `<button class="dry-equip-btn ${dr.heaterAssigned && ownsHeat ? 'active-heat' : ''}"
-    onclick="toggleDryEquip('heater')" ${!ownsHeat ? 'disabled' : ''}>
-    🔥 HEATER<br><span style="font-size:7px">${ownsHeat ? (dr.heaterAssigned ? '✅ ON' : 'tap to add') : 'not owned'}</span>
-  </button>`;
-
-  html += `</div>`;
-
-  // Fan speed slider — ONLY if fan assigned
-  if (dr.fanAssigned && ownsFan) {
-    html += `<div class="dry-ctrl-row">
-      <span class="dry-ctrl-label">🌀 SPEED</span>
-      <input type="range" min="0" max="100" value="${dr.fanSpeed || 50}" oninput="updateDryRoomFan(this.value)">
-      <span class="dry-ctrl-val" id="dry-room-fan-val">${dr.fanSpeed || 50}%</span>
-    </div>`;
-  }
-
-  // Temp target slider — ONLY if AC or heater assigned
-  if ((dr.acAssigned && ownsAC) || (dr.heaterAssigned && ownsHeat)) {
-    html += `<div class="dry-ctrl-row" style="margin-top:6px">
-      <span class="dry-ctrl-label">🌡️ TARGET</span>
-      <input type="range" min="55" max="80" value="${dr.tempTarget || 68}" oninput="updateDryRoomTemp(this.value)">
-      <span class="dry-ctrl-val" id="dry-room-temp-val">${dr.tempTarget || 68}°F</span>
-    </div>
-    <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:3px;text-align:right">Ideal: 60–70°F · Cooler = slower but better terpenes</div>`;
-  }
-
-  // Speed estimate + mold warning
-  html += `<div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding:7px 10px;background:rgba(0,0,0,0.3);border-radius:6px;font-size:9px;font-family:var(--font-mono)">
-    <span style="color:var(--muted)">Est. time to sweet spot (62% RH)</span>
-    <span style="color:var(--cyan);font-family:var(--font-hud)">${hrsTo62}h</span>
-  </div>`;
-
-  if (isLowAirflow) {
-    html += `<div style="margin-top:8px;padding:6px 10px;background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.35);border-radius:6px;font-size:9px;font-family:var(--font-hud);color:var(--red)">
-      ⚠️ LOW AIRFLOW — mold risk above 75% RH. ${!ownsFan ? 'Buy a fan from Shop → Climate.' : 'Enable fan above or increase speed.'}
-    </div>`;
-  }
-
-  if (!ownsFan && !ownsDehu && !ownsAC && !ownsHeat) {
-    html += `<div class="warning-note" style="margin-top:8px">No equipment owned! Buy fans or a dehumidifier from Shop → Climate. Without airflow, drying takes 20+ hours and mold is likely.</div>`;
-  }
-
-  html += `</div>`;
-
-  // ── Batch Cards ──
   const batches = (GS.curing || []).filter(b => b.phase === 'drying');
+  const g  = GS.gear    || {};
+  const dr = GS.dryRoom || {};
+
+  // What does the player own?
+  const hasFanGear    = !!(g.fans && g.fans[0]);
+  const hasDehuGear   = !!g.dehumidifier;
+  const hasACGear     = !!g.acUnit;
+  const hasHeaterGear = !!g.heater;
+
+  // What is active?
+  const fanOn    = dr.fanOn    && hasFanGear;
+  const dehuOn   = dr.dehuOn   && hasDehuGear;
+  const acOn     = dr.acOn     && hasACGear;
+  const heaterOn = dr.heaterOn && hasHeaterGear;
+  const fanSpeed = dr.fanSpeed != null ? dr.fanSpeed : 50;
+  const tempTgt  = dr.tempTarget != null ? dr.tempTarget : 68;
+
+  // Drying speed label
+  let speedLabel = 'VERY SLOW — risky without a fan';
+  let speedColor = 'var(--red)';
+  if (fanOn && dehuOn && acOn) { speedLabel = 'FAST — ~17h to sweet spot'; speedColor = 'var(--green)'; }
+  else if (fanOn && dehuOn)    { speedLabel = 'GOOD — ~28h to sweet spot'; speedColor = 'var(--green)'; }
+  else if (fanOn)              { speedLabel = 'MODERATE — ~45h to sweet spot'; speedColor = 'var(--gold)'; }
+
+  let html = `
+    <div style="background:var(--card-bg);border:1px solid rgba(34,211,238,0.3);border-radius:12px;padding:16px;margin-bottom:14px">
+      <div style="font-family:var(--font-hud);font-size:11px;color:var(--cyan);letter-spacing:2px;margin-bottom:12px">🌬️ DRYING ROOM CONTROLS</div>
+
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);letter-spacing:1.5px;margin-bottom:7px;text-transform:uppercase">Select Equipment</div>
+      <div class="dry-equip-select">
+        <button class="dry-equip-btn ${!hasFanGear ? 'disabled' : fanOn ? 'active' : ''}"
+          onclick="${hasFanGear ? "setDryRoomEquip('fan')" : ''}">
+          🌀 FAN ${!hasFanGear ? '<span style="font-size:7px">(not owned)</span>' : fanOn ? '✓ ON' : 'OFF'}
+        </button>
+        <button class="dry-equip-btn ${!hasDehuGear ? 'disabled' : dehuOn ? 'active' : ''}"
+          onclick="${hasDehuGear ? "setDryRoomEquip('dehu')" : ''}">
+          🌵 DEHU ${!hasDehuGear ? '<span style="font-size:7px">(not owned)</span>' : dehuOn ? '✓ ON' : 'OFF'}
+        </button>
+        <button class="dry-equip-btn ${!hasACGear ? 'disabled' : acOn ? 'active' : ''}"
+          onclick="${hasACGear ? "setDryRoomEquip('ac')" : ''}">
+          ❄️ AC ${!hasACGear ? '<span style="font-size:7px">(not owned)</span>' : acOn ? '✓ ON' : 'OFF'}
+        </button>
+        <button class="dry-equip-btn ${!hasHeaterGear ? 'disabled' : heaterOn ? 'active' : ''}"
+          onclick="${hasHeaterGear ? "setDryRoomEquip('heater')" : ''}">
+          🔥 HEATER ${!hasHeaterGear ? '<span style="font-size:7px">(not owned)</span>' : heaterOn ? '✓ ON' : 'OFF'}
+        </button>
+      </div>
+
+      ${fanOn ? `
+      <div style="margin-top:10px">
+        <div class="dry-ctrl-row">
+          <span class="dry-ctrl-label">🌀 FAN SPEED</span>
+          <input type="range" min="0" max="100" value="${fanSpeed}"
+            oninput="updateDryRoomFanSpeed(this.value)">
+          <span class="dry-ctrl-val" id="dry-fan-global">${fanSpeed}%</span>
+        </div>
+        ${fanSpeed < 30 ? `<div style="font-size:8px;color:var(--gold);font-family:var(--font-mono);margin-top:3px">⚠️ Low fan speed — mold risk still elevated</div>` : ''}
+      </div>` : ''}
+
+      ${(acOn || heaterOn) ? `
+      <div style="margin-top:8px">
+        <div class="dry-ctrl-row">
+          <span class="dry-ctrl-label">${acOn ? '❄️ AC' : '🔥 HEAT'} TARGET</span>
+          <input type="range" min="55" max="85" value="${tempTgt}"
+            oninput="updateDryRoomTemp(this.value)">
+          <span class="dry-ctrl-val" id="dry-temp-global">${tempTgt}°F</span>
+        </div>
+        <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:2px">
+          Ideal dry room temp: 60–70°F · Cooler = slower but safer
+        </div>
+      </div>` : ''}
+
+      <div class="dry-speed-bar" style="margin-top:12px">
+        <span style="color:var(--muted)">SPEED:</span>
+        <span style="color:${speedColor};flex:1">${speedLabel}</span>
+        <span style="font-size:8px;color:var(--muted)">Sweet spot: 62% RH</span>
+      </div>
+
+      ${!hasFanGear && !hasDehuGear
+        ? `<div class="warning-note" style="margin-top:8px;margin-bottom:0">⚠️ No fan or dehumidifier owned — buy from Shop → Climate for effective drying.</div>`
+        : ''}
+    </div>`;
+
   if (!batches.length) {
-    html += '<div class="empty-state">🌬️ No batches drying.<br>Harvest a plant to start drying!</div>';
+    html += '<div class="empty-state" style="padding:30px">🌬️ No batches drying.<br>Harvest a plant to start drying.</div>';
     cont.innerHTML = html;
     return;
   }
 
   batches.forEach(batch => {
-    const rh  = batch.dryRH != null ? batch.dryRH : 80;
-    const q   = batch.quality || 100;
-    const moldActive = !!(batch._moldHit);
-    const elapsedHrs = ((Date.now() - (batch.startTs || Date.now())) / 3600000).toFixed(1);
+    const rh        = batch.dryRH != null ? batch.dryRH : 80;
+    const q         = batch.quality || 100;
+    const elapsed   = ((Date.now() - (batch.startTs || Date.now())) / 3600000).toFixed(1);
+    const isMoldRisk= rh > 75;
 
-    let rhColor = 'var(--muted)', phaseLabel = '';
-    if      (rh > 75)             { rhColor = 'var(--red)';   phaseLabel = '🍄 MOLD RISK — increase fan speed!'; }
-    else if (rh > 70)             { rhColor = 'var(--red)';   phaseLabel = '⚠️ TOO WET — keep drying'; }
-    else if (rh > 68)             { rhColor = 'var(--gold)';  phaseLabel = '⬇️ DRYING — almost in range'; }
-    else if (rh >= 62 && rh < 63) { rhColor = 'var(--green)'; phaseLabel = '🌟 PERFECT 62% — move to curing NOW'; }
-    else if (rh >= 58 && rh < 68) { rhColor = 'var(--green)'; phaseLabel = '✅ PRIME WINDOW (58–64%) — move to curing'; }
-    else if (rh >= 50 && rh < 58) { rhColor = 'var(--cyan)';  phaseLabel = '👍 ACCEPTABLE (50–58%)'; }
-    else if (rh >= 40 && rh < 50) { rhColor = 'var(--gold)';  phaseLabel = '⚠️ GETTING TOO DRY — move soon!'; }
-    else if (rh < 40)             { rhColor = 'var(--red)';   phaseLabel = '❌ OVERDRIED — severe quality loss!'; }
+    let rhColor = 'var(--cyan)', phaseLabel = '';
+    if (rh > 75)                    { rhColor = 'var(--red)';   phaseLabel = '🍄 MOLD RISK — turn on fan!'; }
+    else if (rh > 70)               { rhColor = 'var(--red)';   phaseLabel = '⚠️ TOO WET — keep drying'; }
+    else if (rh > 68)               { rhColor = 'var(--gold)';  phaseLabel = '⬇️ DRYING — almost there'; }
+    else if (rh >= 62 && rh < 63)  { rhColor = 'var(--green)'; phaseLabel = '🌟 PERFECT SWEET SPOT!'; }
+    else if (rh >= 58 && rh <= 64) { rhColor = 'var(--green)'; phaseLabel = '✅ PRIME WINDOW — move to curing'; }
+    else if (rh >= 50 && rh < 58)  { rhColor = 'var(--cyan)';  phaseLabel = '👍 ACCEPTABLE — slight quality bonus'; }
+    else if (rh >= 40 && rh < 50)  { rhColor = 'var(--gold)';  phaseLabel = '⚠️ GETTING TOO DRY — move now!'; }
+    else if (rh < 40)              { rhColor = 'var(--red)';   phaseLabel = '❌ OVERDRIED — severe quality loss!'; }
 
-    const canCure  = GS.difficulty !== 'easy' || rh <= 70;
+    let qPreview = '', qColor = 'var(--muted)';
+    if      (rh >= 62 && rh < 63)   { qPreview = 'PERFECT → +25% quality bonus!'; qColor = 'var(--green)'; }
+    else if (rh >= 58 && rh <= 64)  { qPreview = 'Prime → +15% quality bonus'; qColor = 'var(--green)'; }
+    else if (rh >= 50 && rh < 58)   { qPreview = 'Good → +10% quality bonus'; qColor = 'var(--cyan)'; }
+    else if (rh >= 68 && rh < 70)   { qPreview = 'Wet → −15% quality'; qColor = 'var(--gold)'; }
+    else if (rh >= 65 && rh < 68)   { qPreview = 'Slightly wet → −5% quality'; qColor = 'var(--gold)'; }
+    else if (rh >= 70)              { qPreview = 'Too wet → −50% quality!'; qColor = 'var(--red)'; }
+    else if (rh >= 40 && rh < 50)   { qPreview = 'Too dry → −20% quality'; qColor = 'var(--gold)'; }
+    else if (rh < 40)               { qPreview = 'Overdried → −50% quality!'; qColor = 'var(--red)'; }
+
+    const canCure = GS.difficulty !== 'easy' || rh <= 70;
     const easyWarn = GS.difficulty === 'easy' && rh > 70
-      ? `<div class="info-note" style="margin-top:6px;font-size:9px">💡 Dry to below 70% RH before jarring for best results.</div>` : '';
+      ? `<div class="info-note" style="margin-top:8px;margin-bottom:0">💡 Easy mode: dry below 70% before moving to curing jars.</div>` : '';
 
-    html += `<div class="dry-room-card ${rh > 75 ? 'mold-risk' : ''}">
+    html += `<div class="dry-room-card ${isMoldRisk ? 'mold-risk' : ''}">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
-        <div style="font-family:var(--font-hud);font-size:12px;color:var(--text)">${batch.name}</div>
-        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-          ${moldActive ? `<span class="mold-badge">🍄 MOLD HIT</span>` : ''}
-          <span style="font-size:9px;color:var(--muted);font-family:var(--font-mono)">${elapsedHrs}h · ${batch.grams}g · ${batch.thc}% THC</span>
+        <div style="font-family:var(--font-hud);font-size:12px;color:var(--text)">
+          ${batch.name}
+          ${isMoldRisk ? '<span class="mold-badge" style="margin-left:8px">🍄 MOLD RISK</span>' : ''}
         </div>
+        <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono)">${elapsed}h · ${batch.grams}g · THC ${batch.thc}%</div>
       </div>
+
       <div class="dry-rh-display" style="color:${rhColor}">${rh.toFixed(1)}<span style="font-size:20px;color:var(--muted)">% RH</span></div>
-      <div class="dry-phase-label" style="color:${rhColor}">${phaseLabel}</div>
-      <div class="dry-quality-strip" style="margin-top:8px">
+      <div class="dry-phase-label" style="color:${rhColor};margin-bottom:8px">${phaseLabel}</div>
+
+      <div class="dry-quality-strip">
         <span class="dry-q-label">QUALITY</span>
         <div class="dry-q-bar"><div class="dry-q-fill" style="width:${q}%;background:${q>80?'var(--green)':q>50?'var(--gold)':'var(--red)'}"></div></div>
         <span style="font-family:var(--font-hud);font-size:10px;color:${q>80?'var(--green)':q>50?'var(--gold)':'var(--red)'}">${Math.round(q)}%</span>
       </div>
-      <div style="margin-top:6px;font-size:8px;color:var(--muted);font-family:var(--font-mono);text-align:center">
-        ${rh >= 62 && rh < 63
-          ? '<span style="color:var(--green)">🌟 +25% quality bonus for hitting exact 62%!</span>'
-          : rh >= 58 && rh < 65
-          ? '<span style="color:var(--green)">+15% quality bonus when jarred in this range</span>'
-          : rh >= 65 && rh < 70
-          ? '<span style="color:var(--gold)">−5 to −15% quality loss if jarred now</span>'
-          : rh >= 70
-          ? '<span style="color:var(--red)">Up to −50% quality loss — keep drying!</span>'
-          : ''}
-      </div>
+
+      ${qPreview ? `<div style="font-size:8px;font-family:var(--font-hud);color:${qColor};text-align:center;margin-top:5px">${qPreview}</div>` : ''}
+
       ${easyWarn}
+
       <div style="display:flex;gap:6px;margin-top:12px">
-        <button class="btn-action btn-purple" style="flex:1;padding:10px" onclick="moveToCuringJar('${batch.id}')" ${!canCure ? 'disabled' : ''}>
+        <button class="btn-action btn-purple" style="flex:1;padding:10px"
+          onclick="moveToCuringJar('${batch.id}')"
+          ${!canCure ? 'disabled title="Dry below 70% first (Easy mode)"' : ''}>
           🫙 MOVE TO JAR CURING
         </button>
-        <button class="btn-action btn-red" style="padding:10px;min-width:44px" title="Discard batch" onclick="discardDrying('${batch.id}')">🗑️</button>
+        <button class="btn-action btn-red" style="padding:10px;min-width:44px"
+          onclick="discardDrying('${batch.id}')" title="Discard batch">🗑️</button>
       </div>
     </div>`;
   });
@@ -4919,8 +4921,8 @@ const SHOP_ITEMS = {
     {id:'nute_grow',  name:'Grow (N) 1L',    price:700,   icon:'🧴', type:'nutrients', ntype:'nuteGrow',  desc:'High-nitrogen veg feed. 1000ml bottle.'},
     {id:'nute_bloom', name:'Bloom (PK) 1L',  price:700,   icon:'🧴', type:'nutrients', ntype:'nuteBloom', desc:'PK-heavy flower feed. 1000ml bottle.'},
     {id:'nute_calmag',name:'Cal-Mag 1L',     price:500,   icon:'🧴', type:'nutrients', ntype:'nuteCalmag',desc:'Calcium & Magnesium supplement. 1000ml.'},
-    {id:'ph_up',      name:'pH Up 500ml',    price:300,   icon:'⬆️', type:'phUp',     desc:'Raises pH. Required for pH adjusting.'},
-    {id:'ph_down',    name:'pH Down 500ml',  price:300,   icon:'⬇️', type:'phDown',   desc:'Lowers pH. Required for pH adjusting.'},
+    {id:'ph_up',   name:'pH Up 1L',   price:1000, icon:'⬆️', type:'phUp',   desc:'Raises pH. 1000ml — uses 1ml per 0.1 pH unit adjusted.'},
+          {id:'ph_down', name:'pH Down 1L', price:1000, icon:'⬇️', type:'phDown', desc:'Lowers pH. 1000ml — uses 1ml per 0.1 pH unit adjusted.'},
     // Pots & Soil
     {id:'pot_1gal',  name:'1 Gal Pot (×5)',  price:200,  icon:'🪣', type:'pot', potSize:'1gal',  qty:5,  desc:'Solo cup starter pots. 5 pack.'},
     {id:'pot_3gal',  name:'3 Gal Pot (×5)',  price:400,  icon:'🪣', type:'pot', potSize:'3gal',  qty:5,  desc:'Small pots. 5 pack.'},
@@ -5108,9 +5110,9 @@ function buyGear(itemId) {
   if (item.type === 'reservoir')   { const rg = getRoomGear((GS.rooms[GS.activeRoom||0]||GS.rooms[0]).id); rg.reservoir = {size:item.size, level:100, ppm:0}; }
   if (item.type === 'emitters')    { const rg = getRoomGear((GS.rooms[GS.activeRoom||0]||GS.rooms[0]).id); rg.emitterPacks = (rg.emitterPacks||0) + 1; }
   if (item.type === 'hosing')      { const rg = getRoomGear((GS.rooms[GS.activeRoom||0]||GS.rooms[0]).id); rg.hosingPacks  = (rg.hosingPacks||0)  + 1; }
-  if (item.type === 'nutrients')   { const rg = getRoomGear((GS.rooms[GS.activeRoom||0]||GS.rooms[0]).id); rg[item.ntype]  = (rg[item.ntype]||0) + 10000; }
-  if (item.type === 'phUp')        { const rg = getRoomGear((GS.rooms[GS.activeRoom||0]||GS.rooms[0]).id); rg.phUp    = (rg.phUp||0) + 500; }
-  if (item.type === 'phDown')      { const rg = getRoomGear((GS.rooms[GS.activeRoom||0]||GS.rooms[0]).id); rg.phDown  = (rg.phDown||0) + 500; }
+  if (item.type === 'nutrients')   { const rg = getRoomGear((GS.rooms[GS.activeRoom||0]||GS.rooms[0]).id); rg[item.ntype]  = (rg[item.ntype]||0) + 1000; }
+  if (item.type === 'phUp')        { const rg = getRoomGear((GS.rooms[GS.activeRoom||0]||GS.rooms[0]).id); rg.phUp    = (rg.phUp||0) + 1000; }
+  if (item.type === 'phDown')      { const rg = getRoomGear((GS.rooms[GS.activeRoom||0]||GS.rooms[0]).id); rg.phDown  = (rg.phDown||0) + 1000; }
   if (item.type === 'pot')         { if (!GS.pots) GS.pots = {}; GS.pots[item.potSize] = (GS.pots[item.potSize]||0) + item.qty; }
   if (item.type === 'soil')        { if (!GS.soil) GS.soil = {}; GS.soil[item.potSize] = (GS.soil[item.potSize]||0) + item.qty; }
   if (item.type === 'scope')       g.scope    = true;
@@ -6072,8 +6074,8 @@ function loginSuccess() {
   if (!GS.achievements) GS.achievements = [];
      if (!GS.growTime) GS.growTime = 0;
      if (!GS.roomGear) GS.roomGear = {};
-     if (!GS.dryRoom) GS.dryRoom = {fanAssigned:false, fanSpeed:50, dehuAssigned:false, acAssigned:false,           	heaterAssigned:false, humidifierAssigned:false, tempTarget:68};
-    // Migrate old curing phases to new drying/curing system
+     if (!GS.dryRoom) GS.dryRoom = {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68};
+  // Migrate old curing phases to new drying/curing system
   (GS.curing||[]).forEach(b => {
     if (!b._lastCuringTick) b._lastCuringTick = Date.now();
     if (b.phase === 'hanging') {
@@ -6086,7 +6088,6 @@ function loginSuccess() {
       b.lastBurpTs = b.lastBurpTs || Date.now();
       b.everBurpedBelow65 = (b.burpsDone||0) >= 1;
     } else if (b.phase === 'cured') {
-      // auto-move fully cured batches to vault
       if (!GS.vault) GS.vault = [];
       GS.vault.push({
         id: uid(), name: b.name, strainName: b.strainName,
@@ -6411,58 +6412,132 @@ const _origOpenModal = openModal;
 function openWaterModal(plantId) {
   const plant = GS.plants.find(p => p.id === plantId);
   if (!plant) return;
-  const ideal = ENV_IDEAL[plant.stage] || ENV_IDEAL.Veg;
   _el('lbl-water-name',  plant.name || plant.strainName);
   _el('lbl-water-level', Math.round(plant.waterLevel || 0) + '%');
   _el('lbl-water-ppm',   (plant.soilPPM || 0) + ' ppm');
   const inp = document.getElementById('inp-water-plant-id');
   if (inp) inp.value = plantId;
-  // Reset sliders
-  ['nute-base','nute-grow','nute-bloom','nute-calmag'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.value = 0;
-  });
-  ['nv-base','nv-grow','nv-bloom','nv-calmag'].forEach(id => _el(id, '0 ppm'));
-  // Reset water amount to Light
+
+  // Reset water amount buttons
   document.querySelectorAll('.water-amt-btn').forEach(b => b.classList.remove('selected'));
-  const lightBtn = document.querySelector('.water-amt-btn[data-amt="25"]');
-  if (lightBtn) lightBtn.classList.add('selected');
+  const lb = document.querySelector('.water-amt-btn[data-amt="25"]');
+  if (lb) lb.classList.add('selected');
   const amtInp = document.getElementById('inp-water-amount');
   if (amtInp) amtInp.value = '25';
-  // Show optimal hint
-  const hint = document.getElementById('nute-optimal-hint');
-  if (hint) hint.textContent = 'Optimal PPM for ' + plant.stage + ': ' + ideal.ppmLo + '–' + ideal.ppmHi;
-  updateNuteTotals();
+  const modeInp = document.getElementById('inp-feed-mode');
+  if (modeInp) modeInp.value = 'stack';
+
+  const g    = GS.gear || {};
+  const rg   = getRoomGear((GS.rooms.find(r => r.id === plant.roomId) || GS.rooms[0]).id);
+  const hasEC= !!(g.ecmeter);
+  const hasPH= !!(g.phmeter);
+  const phUp = rg.phUp   || 0;
+  const phDn = rg.phDown || 0;
+  const canPH= hasPH && (phUp > 0 || phDn > 0);
+  const diff = GS.difficulty || 'easy';
+  const stage= plant.stage || 'Seedling';
+  const ideal= ENV_IDEAL[stage] || ENV_IDEAL.Veg;
+
+  // Dead plant warning
+  let deadHtml = '';
+  if (plant.isDead) {
+    const hrsLeft = plant._deadTs ? Math.max(0, 12 - (Date.now() - plant._deadTs) / 3600000).toFixed(1) : '12.0';
+    deadHtml = `<div class="dead-plant-bar">
+      ⚠️ Plant is at 0 health — watering restores moisture but <strong>does not heal</strong>.<br>
+      Use 💉 Health Spray to revive · ${hrsLeft}h until permanent death.
+      ${diff === 'easy' ? '<br><span style="color:var(--gold)">💡 Buy Health Spray from Shop → Tools!</span>' : ''}
+    </div>`;
+  }
+
+  // Feed mode (EC meter required)
+  let feedModeHtml = '';
+  if (hasEC) {
+    feedModeHtml = `
+      <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:6px">FEED MODE</div>
+      <div class="feed-mode-bar">
+        <button class="feed-mode-btn active" data-mode="stack"  onclick="selectFeedMode(this)">⬆️ STACK<br><span style="font-size:7px;opacity:.75">Adds to soil PPM</span></button>
+        <button class="feed-mode-btn"        data-mode="runoff" onclick="selectFeedMode(this)">🔄 RUN-OFF<br><span style="font-size:7px;opacity:.75">Sets soil = feed PPM</span></button>
+        <button class="feed-mode-btn"        data-mode="flush"  onclick="selectFeedMode(this)">🚿 FLUSH<br><span style="font-size:7px;opacity:.75">Water only, set target</span></button>
+      </div>`;
+  } else if (diff === 'easy') {
+    feedModeHtml = `<div class="info-note" style="margin-bottom:10px">💡 Buy an <strong>EC/PPM Meter</strong> (Shop → Tools, 2500¢) to unlock Stack / Run-off / Flush feed modes.</div>`;
+  }
+
+  // Nutrient sliders
+  const nuteItems = [
+    {id:'nute-base',   valId:'nv-base',   label:'BASE FEED',  max:1000, rkey:'nuteBase'},
+    {id:'nute-grow',   valId:'nv-grow',   label:'GROW (N)',   max:800,  rkey:'nuteGrow'},
+    {id:'nute-bloom',  valId:'nv-bloom',  label:'BLOOM (PK)', max:800,  rkey:'nuteBloom'},
+    {id:'nute-calmag', valId:'nv-calmag', label:'CAL-MAG',    max:400,  rkey:'nuteCalmag'},
+  ];
+  let nuteRows = '';
+  nuteItems.forEach(n => {
+    const avail   = rg[n.rkey] || 0;
+    const empty   = avail <= 0;
+    const capPPM  = Math.min(n.max, avail);
+    const pct     = avail / 1000 * 100;
+    const barColor= avail > 500 ? 'var(--green)' : avail > 200 ? 'var(--gold)' : 'var(--red)';
+    nuteRows += `<div class="nute-slider-row" style="${empty ? 'opacity:.35;pointer-events:none' : ''}">
+      <span class="nute-slider-label">${n.label}</span>
+      <input type="range" id="${n.id}" min="0" max="${empty ? 0 : capPPM}" step="25" value="0"
+        oninput="updateNuteTotals()" ${empty ? 'disabled' : ''}>
+      ${hasEC
+        ? `<span class="nute-slider-val" id="${n.valId}">0 ppm</span>`
+        : `<span class="mystery-val"     id="${n.valId}">?</span>`}
+    </div>
+    ${hasEC && !empty
+      ? `<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;margin-top:-2px">
+           <div class="bottle-bar" style="flex:1"><div class="bottle-bar-fill" style="width:${Math.min(100,pct)}%;background:${barColor}"></div></div>
+           <span style="font-size:8px;color:${barColor};font-family:var(--font-mono);min-width:60px">${avail.toFixed(0)} ppm left</span>
+         </div>`
+      : empty
+        ? `<div style="font-size:8px;color:var(--red);font-family:var(--font-mono);margin-bottom:4px">${n.label}: empty — buy from Shop</div>`
+        : ''}`;
+  });
+
+  let nuteHtml = '';
+  if (!hasEC) {
+    nuteHtml += `<div class="warning-note" style="margin-bottom:8px">🔍 <strong>Feeding blind</strong> — no EC/PPM meter. Feeding nutrients risks burn and costs <strong>−5 health &amp; −0.1% yield per feed.</strong></div>`;
+  }
+  nuteHtml += `<div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:8px">NUTRIENTS <span style="color:rgba(74,222,128,0.4)">(OPTIONAL)</span></div>
+    <div id="nute-sliders-section">${nuteRows}</div>
+    <div id="flush-section" style="display:none">
+      <div class="info-note" style="margin-bottom:10px">🚿 Flush mode — plain water only, no nutrients used from bottles.</div>
+      <div class="nute-slider-row">
+        <span class="nute-slider-label">TARGET PPM</span>
+        <input type="range" id="flush-target-ppm" min="0" max="${Math.max(plant.soilPPM||0, 400)}" step="50" value="200"
+          oninput="_el('flush-disp',this.value+' ppm')">
+        <span class="nute-slider-val" id="flush-disp">200 ppm</span>
+      </div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Current soil: ${plant.soilPPM||0} ppm</div>
+    </div>`;
+
+  // pH section
+  let phHtml = '';
+  if (canPH) {
+    phHtml = `<div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin:10px 0 6px">pH ADJUSTMENT</div>
+      <div class="nute-slider-row">
+        <span class="nute-slider-label">TARGET pH</span>
+        <input type="range" id="water-ph-target" min="50" max="75" step="1" value="62"
+          oninput="_el('water-ph-val',(this.value/10).toFixed(1))">
+        <span class="nute-slider-val" id="water-ph-val">6.2</span>
+      </div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">pH Up: ${phUp}ml · pH Down: ${phDn}ml · Ideal: 6.0–6.5</div>`;
+  } else if (hasPH && phUp <= 0 && phDn <= 0) {
+    phHtml = `<div class="warning-note" style="margin-top:8px;margin-bottom:0">⚗️ pH Meter owned but no pH Up/Down stock — buy from Shop (1000¢ each).</div>`;
+  } else if (!hasPH && diff === 'easy') {
+    phHtml = `<div class="info-note" style="margin-top:8px;margin-bottom:0">💡 No pH meter — each nutrient feed costs −5 health &amp; −0.1% yield. Buy pH Meter + pH Up/Down from Shop.</div>`;
+  }
+
+  const dyn = document.getElementById('water-dynamic-content');
+  if (dyn) {
+    dyn.innerHTML = `${deadHtml}${feedModeHtml}${nuteHtml}${phHtml}
+      <div class="nute-total-display ok" id="nute-total-display" style="margin-top:10px">TOTAL: 0 ppm — Plain Water</div>
+      <div class="nute-optimal-range" id="nute-optimal-hint">Optimal PPM for ${stage}: ${ideal.ppmLo}–${ideal.ppmHi}</div>
+      <div class="warning-note hidden" id="nute-burn-warn" style="margin-top:6px">⚠️ Concentration too high — will burn your plant!</div>`;
+  }
   openModal('modal-water');
 }
-
-function selectWaterAmt(btn) {
-  document.querySelectorAll('.water-amt-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  const inp = document.getElementById('inp-water-amount');
-  if (inp) inp.value = btn.dataset.amt || '25';
-}
-
-function updateNuteTotals() {
-  const base   = parseInt(document.getElementById('nute-base')?.value   || 0);
-  const grow   = parseInt(document.getElementById('nute-grow')?.value   || 0);
-  const bloom  = parseInt(document.getElementById('nute-bloom')?.value  || 0);
-  const calmag = parseInt(document.getElementById('nute-calmag')?.value || 0);
-  _el('nv-base',   base   + ' ppm');
-  _el('nv-grow',   grow   + ' ppm');
-  _el('nv-bloom',  bloom  + ' ppm');
-  _el('nv-calmag', calmag + ' ppm');
-  const total = base + grow + bloom + calmag;
-  const disp  = document.getElementById('nute-total-display');
-  const warn  = document.getElementById('nute-burn-warn');
-  if (disp) {
-    if (total === 0)     { disp.textContent = 'TOTAL: 0 ppm — Plain Water'; disp.className = 'nute-total-display ok'; }
-    else if (total < 800){ disp.textContent = 'TOTAL: ' + total + ' ppm — Light Feed'; disp.className = 'nute-total-display ok'; }
-    else if (total < 1500){ disp.textContent = 'TOTAL: ' + total + ' ppm — Heavy Feed'; disp.className = 'nute-total-display high'; }
-    else                  { disp.textContent = 'TOTAL: ' + total + ' ppm — BURN RISK!'; disp.className = 'nute-total-display burn'; }
-  }
-  if (warn) warn.classList.toggle('hidden', total < 1500);
-}
-
 // ================================================================
 // RUNOFF CALCULATOR
 // ================================================================
@@ -6520,102 +6595,149 @@ function calcRunoffResult(plant, feedPPM, waterAmount) {
 }
 
 function confirmWater() {
-  const plantId = document.getElementById('inp-water-plant-id')?.value;
-  const plant   = GS.plants.find(p => p.id === plantId);
+  const plantId  = document.getElementById('inp-water-plant-id')?.value;
+  const plant    = GS.plants.find(p => p.id === plantId);
   if (!plant) return;
+
   const amount   = parseInt(document.getElementById('inp-water-amount')?.value || 25);
-  const base     = parseInt(document.getElementById('nute-base')?.value   || 0);
-  const grow     = parseInt(document.getElementById('nute-grow')?.value   || 0);
-  const bloom    = parseInt(document.getElementById('nute-bloom')?.value  || 0);
-  const calmag   = parseInt(document.getElementById('nute-calmag')?.value || 0);
-  const totalPPM = base + grow + bloom + calmag;
+  const feedMode = document.getElementById('inp-feed-mode')?.value || 'stack';
+  const g    = GS.gear || {};
+  const rg   = getRoomGear((GS.rooms.find(r => r.id === plant.roomId) || GS.rooms[0]).id);
+  const hasEC= !!(g.ecmeter);
+  const hasPH= !!(g.phmeter);
+  const phUp = rg.phUp   || 0;
+  const phDn = rg.phDown || 0;
+  const canPH= hasPH && (phUp > 0 || phDn > 0);
+  const diff = GS.difficulty || 'easy';
 
+  // Dead plant: water only, no heal
+  if (plant.isDead && (plant.health || 0) <= 0) {
+    if (amount === 100) plant.waterLevel = 100;
+    else plant.waterLevel = Math.min(100, (plant.waterLevel||0) + amount);
+    closeModal('modal-water');
+    const hrsLeft = plant._deadTs ? Math.max(0,12-((Date.now()-plant._deadTs)/3600000)).toFixed(1) : '12.0';
+    toast('💧 Watered — but plant needs 💉 Health Spray! ' + hrsLeft + 'h left.', 'warn', 6000);
+    addLog(plant.name + ' watered at 0 health — spray needed', 'warn');
+    saveGame(); renderGrow(); return;
+  }
+
+  // FLUSH mode
+  if (feedMode === 'flush') {
+    const targetPPM   = parseInt(document.getElementById('flush-target-ppm')?.value || 200);
+    const prevSoilPPM = plant.soilPPM || 0;
+    if (amount === 100) plant.waterLevel = 100;
+    else plant.waterLevel = Math.min(100, (plant.waterLevel||0) + amount);
+    const frac = amount / 100;
+    plant.soilPPM = Math.max(0, Math.round(prevSoilPPM * (1 - frac * 0.8) + targetPPM * frac * 0.8));
+    closeModal('modal-water');
+    completeDailyGoal();
+    toast('🚿 Flushed! Soil PPM: ' + prevSoilPPM + ' → ' + plant.soilPPM, 'ok', 3000);
+    addLog(plant.name + ' flushed — PPM: ' + prevSoilPPM + ' → ' + plant.soilPPM, 'info');
+    saveGame(); renderGrow(); return;
+  }
+
+  // Normal / Stack / Run-off
+  const base   = parseInt(document.getElementById('nute-base')?.value   || 0);
+  const grow   = parseInt(document.getElementById('nute-grow')?.value   || 0);
+  const bloom  = parseInt(document.getElementById('nute-bloom')?.value  || 0);
+  const calmag = parseInt(document.getElementById('nute-calmag')?.value || 0);
+  const totalFeedPPM = base + grow + bloom + calmag;
+  const waterFrac    = amount / 100;
+
+  // Deplete nutrient bottles: ppm used = feed ppm * water fraction
+  if (totalFeedPPM > 0) {
+    const deduct = (val, key) => {
+      if (val <= 0) return;
+      rg[key] = Math.max(0, (rg[key]||0) - (val * waterFrac));
+    };
+    deduct(base,   'nuteBase');
+    deduct(grow,   'nuteGrow');
+    deduct(bloom,  'nuteBloom');
+    deduct(calmag, 'nuteCalmag');
+  }
+
+  // pH chemicals depletion
+  if (canPH && totalFeedPPM > 0) {
+    const phTarget = parseFloat(document.getElementById('water-ph-target')?.value || 62) / 10;
+    const phDiff   = Math.abs(phTarget - 6.5);
+    const mlUsed   = Math.max(1, Math.round(phDiff * 10));
+    if (phTarget > 6.5) rg.phDown = Math.max(0, (rg.phDown||0) - mlUsed);
+    else                rg.phUp   = Math.max(0, (rg.phUp  ||0) - mlUsed);
+  }
+
+  // Apply water level
   const prevWaterLevel = plant.waterLevel || 0;
-
-  // Apply water
   if (amount === 100) plant.waterLevel = 100;
   else plant.waterLevel = Math.min(100, prevWaterLevel + amount);
 
-  // ── Dry-back check ──
-  const dryback    = getDrybackTarget(plant);
-  const withinDryback = prevWaterLevel >= dryback.minWater && prevWaterLevel <= dryback.maxWater;
-  const goodWaterAmt  = dryback.idealWater.includes(amount);
-  const withinNewRange= plant.waterLevel <= dryback.maxWater;
+  // Apply soil PPM based on mode
+  const prevSoilPPM = plant.soilPPM || 0;
+  if (feedMode === 'runoff' && hasEC) plant.soilPPM = totalFeedPPM;
+  else                                plant.soilPPM = prevSoilPPM + totalFeedPPM; // stack (default)
+  plant.soilPPM = Math.max(0, plant.soilPPM);
 
-  // Penalty: hit 100% water → -5 health
+  // Penalties for feeding without meters
+  let healthPenalty = 0, multPenalty = 0, penReasons = [];
+  if (totalFeedPPM > 0) {
+    if (!hasEC) { healthPenalty += 5; multPenalty += 0.001; penReasons.push('No EC meter'); }
+    if (!canPH) { healthPenalty += 5; multPenalty += 0.001; penReasons.push('No pH meter/chems'); }
+  }
+  if (healthPenalty > 0) {
+    plant.health = Math.max(0, (plant.health||100) - healthPenalty);
+    plant.cropMultiplier = Math.max(0.1, (plant.cropMultiplier||1.0) - multPenalty);
+    toast('⚠️ ' + penReasons.join(' · ') + ' · −' + healthPenalty + ' hp · −' + (multPenalty * 100).toFixed(1) + '% yield', 'warn', 5000);
+  }
+
+  // Burn check
+  if (plant.soilPPM > 1800) {
+    plant.totalBurnEvents = (plant.totalBurnEvents||0) + 1;
+    plant.health = Math.max(0, (plant.health||100) - 15);
+    toast('🔥 Nutrient burn! Soil PPM: ' + plant.soilPPM, 'err');
+    addLog(plant.name + ' — nute burn (PPM: ' + plant.soilPPM + ')', 'warn');
+  } else if (totalFeedPPM > 1500) {
+    plant.totalBurnEvents = (plant.totalBurnEvents||0) + 1;
+    plant.health = Math.max(0, (plant.health||100) - 8);
+    toast('⚠️ High PPM — slight burn', 'warn');
+  }
+
+  // Overwater penalty
   if (plant.waterLevel >= 100 && amount > 25) {
     plant.health = Math.max(0, (plant.health||100) - 5);
-    toast('⚠️ Overwatered to 100%! −5 health', 'warn', 3000);
+    toast('⚠️ Overwatered! −5 health', 'warn', 2500);
   }
 
-  // Reward: watering within sweet spot AND was in correct dry-back range
-  // AND used light/normal water AND result is within max range
-  const sweetSpotWater = withinDryback && goodWaterAmt && withinNewRange && prevWaterLevel < 50;
-  if (sweetSpotWater && totalPPM === 0) {
-    // Plain water in perfect dry-back: +3 health
-    plant.health = Math.min(100, (plant.health||100) + 3);
-  } else if (sweetSpotWater) {
-    // Nutrient feed in perfect dry-back: +5 health
-    plant.health = Math.min(100, (plant.health||100) + 5);
+  // Seedling burn check
+  if (plant.stage === 'Seedling' && plant.soilPPM > 300 && !plant.seedlingBurnApplied) {
+    plant.seedlingBurnApplied = true;
+    plant.health = Math.max(0, (plant.health||100) - 25);
+    toast('🔥 ' + plant.name + ' — seedling burn! (<300ppm only)', 'err');
+    addLog(plant.name + ' — seedling nute burn (' + plant.soilPPM + 'ppm)', 'warn');
   }
 
-  // ── PPM / Burn ──
-  if (totalPPM > 1800) {
-    plant.totalBurnEvents = (plant.totalBurnEvents || 0) + 1;
-    plant.health = Math.max(0, (plant.health || 100) - 15);
-    toast('🔥 Nutrient burn! PPM way too high (' + totalPPM + ').', 'err');
-    addLog(plant.name + ' — nute burn (' + totalPPM + 'ppm)', 'warn');
-  } else if (totalPPM > 1500) {
-    plant.totalBurnEvents = (plant.totalBurnEvents || 0) + 1;
-    plant.health = Math.max(0, (plant.health || 100) - 8);
-    toast('⚠️ High PPM — slight burn risk (' + totalPPM + ').', 'warn');
-    addLog(plant.name + ' — high ppm warning (' + totalPPM + ')', 'warn');
-  }
-
-  // Set new soil PPM
-  plant.soilPPM = totalPPM;
-
-  // ── Runoff calculation ──
-  const runoff = calcRunoffResult(plant, totalPPM, amount);
-
-  // Runoff health effects
-  if (runoff.isHigh && totalPPM > 0) {
-    // Oversaturated — too much salt buildup, slight health ding
-    const excess = Math.min(runoff.runoffPPM - runoff.targetHi, 500);
-    const hpLoss = Math.round(excess / 100); // 1-5 health
-    if (hpLoss > 0) {
-      plant.health = Math.max(0, (plant.health||100) - hpLoss);
-    }
-    addLog(plant.name + ' — runoff high (' + runoff.runoffPPM + 'ppm vs target ' + runoff.targetHi + ') −' + hpLoss + 'hp', 'warn');
-  }
-  if (runoff.isSweet && totalPPM > 0 && prevWaterLevel < 50 && (amount === 25 || amount === 50)) {
-    // Perfect runoff sweet spot → bonus multiplier
-    plant.cropMultiplier = Math.min(5.0, (plant.cropMultiplier||1.0) + 0.05);
-    addLog(plant.name + ' — runoff PERFECT (' + runoff.runoffPPM + 'ppm) +0.05× mult', 'success');
-  }
-
-  // Store runoff data on plant for the popup
-  plant._lastRunoff = {
-    feedPPM: totalPPM,
-    runoffPPM: runoff.runoffPPM,
-    targetLo: runoff.targetLo,
-    targetHi: runoff.targetHi,
-    targetLabel: runoff.targetLabel,
-    isHigh: runoff.isHigh,
-    isLow: runoff.isLow,
-    isSweet: runoff.isSweet,
-    waterLevel: plant.waterLevel,
-    prevWaterLevel,
-    sweetSpotWater,
-    amount,
-  };
-
-  // Check daily goal
   const allWatered = (GS.plants||[]).every(p => (p.waterLevel||0) > 20);
   if (allWatered) completeDailyGoal();
 
+  // Runoff data
+  const runoff = calcRunoffResult(plant, totalFeedPPM, amount);
+  plant._lastRunoff = {
+    feedPPM: totalFeedPPM, runoffPPM: runoff.runoffPPM,
+    targetLo: runoff.targetLo, targetHi: runoff.targetHi,
+    targetLabel: runoff.targetLabel, isHigh: runoff.isHigh,
+    isLow: runoff.isLow, isSweet: runoff.isSweet,
+    waterLevel: plant.waterLevel, prevWaterLevel,
+    amount, sweetSpotWater: prevWaterLevel < 50 && plant.waterLevel <= 80,
+  };
+
   closeModal('modal-water');
-  addLog(plant.name + ' watered — ' + Math.round(plant.waterLevel) + '% · feed:' + totalPPM + 'ppm · runoff:' + runoff.runoffPPM + 'ppm', 'info');
+  addLog(plant.name + ' watered — ' + Math.round(plant.waterLevel) + '% · ' +
+    (hasEC ? 'Soil: ' + plant.soilPPM + 'ppm [' + feedMode + ']' : 'PPM unknown (blind)'), 'info');
+
+  // Only show runoff popup if EC meter OR easy mode
+  if (totalFeedPPM > 0 && (hasEC || diff === 'easy')) {
+    setTimeout(() => showRunoffPopup(plant), 200);
+  }
+  saveGame(); renderGrow();
+}
 
   // Show runoff popup after a short delay
   setTimeout(() => showRunoffPopup(plant), 200);
@@ -6772,6 +6894,11 @@ function confirmHarvest() {
   const plantId = document.getElementById('inp-harvest-plant-id')?.value;
   const plant   = GS.plants.find(p => p.id === plantId);
   if (!plant) return;
+if (plant._permanentlyDead) {
+    toast('Plant is permanently dead — cannot harvest.', 'err');
+    closeModal('modal-harvest');
+    return;
+  }
   const strain  = STRAINS[plant.strainName] || (GS.bredStrains||[]).find(b=>b.name===plant.strainName) || {};
   const score   = calcGrowScore(plant);
   const diffMult= GS.difficulty === 'master' ? 1.25 : GS.difficulty === 'normal' ? 1.1 : 1.0;
@@ -6852,7 +6979,7 @@ function confirmHarvest() {
     id: uid(), name: plant.name || plant.strainName, strainName: plant.strainName,
     grams: yield_, thc, score: score.score, rarity: plant.rarity || 'Standard',
     quality: 100, phase: 'drying', startTs: Date.now(),
-    dryRH: 80, dryFanSpeed: 50, dryMoldRiskHrs: 0,
+    dryRH: 80,
     _lastCuringTick: Date.now(),
     isBred: !!(GS.bredStrains||[]).find(b=>b.name===plant.strainName)
   });
@@ -7285,8 +7412,15 @@ function confirmSpray() {
       plant.health = Math.min(100, (plant.health||0) + 50);
       if (lightsOn) plant.health = Math.max(0, plant.health - 10);
       plant.cropMultiplier = Math.max(0.5, (plant.cropMultiplier||1.0) - 0.05);
-      toast('💉 Health spray used! +50 health, −5% multiplier.', 'ok', 4000);
-      addLog(plant.name + ' health spray used — healed +50 (-5% mult)', 'info');
+      if (plant.isDead && plant.health > 0 && !plant._permanentlyDead) {
+        plant.isDead = false;
+        plant._deadTs = null;
+        toast('💚 ' + (plant.name||plant.strainName) + ' revived! Keep conditions stable.', 'ok', 5000);
+        addLog((plant.name||plant.strainName) + ' revived with health spray', 'success');
+      } else {
+        toast('💉 Health spray! +50 health · −5% mult', 'ok', 4000);
+        addLog(plant.name + ' health spray — +50hp', 'info');
+      }
     }
   });
 
