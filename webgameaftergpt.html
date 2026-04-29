@@ -4238,9 +4238,6 @@ function renderGearPanel() {
       <div class="gear-mini">Fan 1 speed is now stored per-slot, not globally. Current: ${currentFan}%</div>
     </div>`;
 
-  body.innerHTML = html;
-}
-
 // ===== GLOBAL SYSTEMS =====
 const g = GS.gear || {};
 
@@ -4281,6 +4278,9 @@ if (g.reservoir) {
 }
 
 html += `</div>`;
+
+  body.innerHTML = html;
+}
 
 // ================================================================
 // DAILY GOAL
@@ -5398,21 +5398,20 @@ function renderShop() {
   const items = SHOP_ITEMS[_shopSection] || [];
   if (!items.length) { cont.innerHTML = '<div class="empty-state">Nothing here yet.</div>'; return; }
   let html = '<div class="shop-items-list">';
-  items.forEach(item => {
-    const count     = ownedCount(item.id);
-const canAfford = GS.coins >= item.price;
+    items.forEach(item => {
+    const count = ownedCount(item.id);
+    const canAfford = GS.coins >= item.price;
 
-html += `<div class="shop-item ${!canAfford ? 'cant-afford' : ''}">
-  <div class="shop-item-icon">${item.icon}</div>
-  <div class="shop-item-info">
-    <div class="shop-item-name">${item.name}</div>
-    <div class="shop-item-desc">${item.desc}</div>
-    <div class="shop-item-price">${item.price.toLocaleString()}¢ · Owned: ${count}</div>
-  </div>
-  <button class="btn-action btn-gold" style="padding:6px 10px"
-    onclick="buyGear('${item.id}')"
-    ${!canAfford ? 'disabled' : ''}>BUY</button>
-</div>`;
+    html += `<div class="shop-item ${!canAfford ? 'cant-afford' : ''}">
+      <div class="shop-item-icon">${item.icon}</div>
+      <div class="shop-item-info">
+        <div class="shop-item-name">${item.name}</div>
+        <div class="shop-item-desc">${item.desc}</div>
+        <div class="shop-item-price">${item.price.toLocaleString()}¢ · Owned: ${count}</div>
+      </div>
+      <button class="btn-action btn-gold" style="padding:6px 10px"
+        onclick="buyGear('${item.id}')"
+        ${!canAfford ? 'disabled' : ''}>BUY</button>
     </div>`;
   });
   html += '</div>';
