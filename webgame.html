@@ -1585,6 +1585,18 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     </div>
   </div>
 </div>
+<!-- FILL RESERVOIR MODAL -->
+<div class="modal-overlay" id="modal-fill-reservoir">
+  <div class="modal-box">
+    <div class="modal-title">🛢️ FILL RESERVOIR</div>
+    <div class="modal-desc" id="fill-res-desc">Configure nutrients for your reservoir.</div>
+    <div id="fill-res-body"></div>
+    <div class="modal-actions">
+      <button class="btn-modal confirm" onclick="confirmFillReservoir()">💧 FILL</button>
+      <button class="btn-modal cancel" onclick="closeModal('modal-fill-reservoir')">CANCEL</button>
+    </div>
+  </div>
+</div>
 <script>
 'use strict';
 
@@ -2572,9 +2584,8 @@ function defaultGear() {
     reservoir: null,
     emitterPacks: 0,
     hosingPacks: 0,
-    autoWaterPlant: null,
-    autoWaterSettings: {dryout:30, amount:50, stopto:80},
-    scrogNet: false,
+    autoWaterPlants: [],
+    autoWaterSettings: {dryout:30, stopto:80},    scrogNet: false,
     scope: false,
     phmeter: false,
     ecmeter: false,
@@ -3050,18 +3061,19 @@ function tickPlant(plant, room, strain, actual, gameMins) {
 
   // Auto-water
   const gg = getRoomGear(room.id);
-  if (gg.autoWaterPlant === plant.id && gg.reservoir) {
-    const aw = gg.autoWaterSettings, res = gg.reservoir;
+  if ((gg.autoWaterPlants||[]).includes(plant.id) && gg.reservoir) {
+    const aw  = gg.autoWaterSettings || {dryout:30, stopto:80};
+    const res = gg.reservoir;
     if (plant.waterLevel <= (aw.dryout || 30) && (res.level || 0) > 0) {
-      const need = Math.min((aw.stopto || 80) - plant.waterLevel, aw.amount || 50, res.level);
+      const need = Math.min((aw.stopto || 80) - plant.waterLevel, res.level * 0.15);
       if (need > 0) {
         plant.waterLevel = Math.min(100, plant.waterLevel + need);
-        res.level = Math.max(0, res.level - need * 0.5);
-        plant.soilPPM = res.ppm || 0;
+        res.level = Math.max(0, res.level - need);
+        // Blend reservoir PPM into soil each auto-water event
+        plant.soilPPM = Math.min(2000, Math.round((plant.soilPPM||0) * 0.7 + (res.ppm||0) * 0.3));
       }
     }
   }
-
  // Health delta — damage (all rates are per REAL hour)
   // gameMins / (60 * GAME_SPEED) = real hours elapsed this tick
   const rh = gameMins / (60 * GAME_SPEED); // real hours this tick
@@ -3185,7 +3197,138 @@ function _tickDrying(batch, realHrs) {
       addLog(batch.name + ' — mold loss in dry room (−' + loss + '% quality)', 'warn');
     }
   }
-}// ================================================================
+}
+// ================================================================
+// RESERVOIR MANAGEMENT
+// ================================================================
+function attachReservoir(plantId) {
+  const plant = GS.plants.find(p => p.id === plantId);
+  if (!plant) return;
+  const room = GS.rooms.find(r => r.id === plant.roomId) || GS.rooms[0];
+  const rg   = getRoomGear(room.id);
+  if (!rg.reservoir) { toast('No reservoir in this room.','warn'); return; }
+  if (!rg.autoWaterPlants) rg.autoWaterPlants = [];
+  if (rg.autoWaterPlants.includes(plantId)) { toast('Already connected!','warn'); return; }
+  if ((rg.emitterPacks||0) < 1) { toast('Need an Emitter Pack — Shop → Water (800¢).','err'); return; }
+  if ((rg.hosingPacks||0)  < 1) { toast('Need a Hose Pack — Shop → Water (500¢).','err'); return; }
+  // Consume 1 emitter + 1 hose pack per plant
+  rg.emitterPacks = Math.max(0, (rg.emitterPacks||0) - 1);
+  rg.hosingPacks  = Math.max(0, (rg.hosingPacks ||0) - 1);
+  rg.autoWaterPlants.push(plantId);
+  if (!rg.autoWaterSettings) rg.autoWaterSettings = {dryout:30, stopto:80};
+  toast('🔌 ' + (plant.name||plant.strainName) + ' connected to reservoir!', 'ok', 3000);
+  addLog((plant.name||plant.strainName) + ' connected to reservoir (total: ' + rg.autoWaterPlants.length + ')', 'info');
+  saveGame();
+  closeModal('modal-water');
+  setTimeout(() => openWaterModal(plantId), 100);
+}
+
+function detachReservoir(plantId) {
+  const plant = GS.plants.find(p => p.id === plantId);
+  if (!plant) return;
+  const room = GS.rooms.find(r => r.id === plant.roomId) || GS.rooms[0];
+  const rg   = getRoomGear(room.id);
+  if (!rg.autoWaterPlants) rg.autoWaterPlants = [];
+  rg.autoWaterPlants = rg.autoWaterPlants.filter(id => id !== plantId);
+  toast('🔌 ' + (plant.name||plant.strainName) + ' detached from reservoir.', 'info', 2500);
+  addLog('Reservoir detached from ' + (plant.name||plant.strainName) + ' (' + rg.autoWaterPlants.length + ' remaining)', 'info');
+  saveGame();
+  closeModal('modal-water');
+  setTimeout(() => openWaterModal(plantId), 100);
+}
+function updateAutoWaterSetting(key, val, plantId) {
+  const plant = GS.plants.find(p => p.id === plantId);
+  if (!plant) return;
+  const room = GS.rooms.find(r => r.id === plant.roomId) || GS.rooms[0];
+  const rg   = getRoomGear(room.id);
+  if (!rg.autoWaterSettings) rg.autoWaterSettings = {dryout:30, stopto:80};
+  rg.autoWaterSettings[key] = parseInt(val);
+  const el = document.getElementById('aw-' + key + '-val');
+  if (el) el.textContent = val + '%';
+  saveGame();
+}
+
+function openFillReservoirModal() {
+  const room = GS.rooms[GS.activeRoom||0] || GS.rooms[0];
+  const rg   = getRoomGear(room.id);
+  if (!rg.reservoir) { toast('No reservoir in this room.','warn'); return; }
+  const res = rg.reservoir;
+  const body= document.getElementById('fill-res-body');
+  const desc= document.getElementById('fill-res-desc');
+  if (!body) return;
+  if (desc) desc.textContent = res.size + ' · Currently ' + Math.round(res.level||0) + '% full · Current PPM: ' + (res.ppm||0);
+
+  const nuteItems = [
+    {label:'Base Feed', key:'nuteBase',  max:1000},
+    {label:'Grow (N)',  key:'nuteGrow',  max:800},
+    {label:'Bloom(PK)', key:'nuteBloom', max:800},
+    {label:'Cal-Mag',   key:'nuteCalmag',max:400},
+  ];
+  let html = `<div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:10px">SET RESERVOIR RECIPE (ppm per watering)</div>`;
+  nuteItems.forEach(n => {
+    const avail = rg[n.key] || 0;
+    const empty = avail <= 0;
+    const cap   = Math.min(n.max, avail);
+    html += `<div class="nute-slider-row" style="${empty?'opacity:.35;pointer-events:none':''}">
+      <span class="nute-slider-label">${n.label}</span>
+      <input type="range" id="resf-${n.key}" min="0" max="${empty?0:cap}" step="25" value="0"
+        oninput="updateResTotal()">
+      <span class="nute-slider-val" id="rsfv-${n.key}">0 ppm</span>
+    </div>
+    ${empty ? `<div style="font-size:8px;color:var(--red);font-family:var(--font-mono);margin-bottom:4px">${n.label}: EMPTY — buy from Shop</div>` : ''}`;
+  });
+  html += `
+    <div class="nute-total-display ok" id="res-fill-total" style="margin-top:10px">TOTAL: 0 ppm</div>
+    <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);text-align:center;margin-top:6px">
+      Cost: 500¢ to fill reservoir · Nutrients deducted from bottles proportionally
+    </div>`;
+  body.innerHTML = html;
+  openModal('modal-fill-reservoir');
+}
+
+function updateResTotal() {
+  const keys = ['nuteBase','nuteGrow','nuteBloom','nuteCalmag'];
+  let total = 0;
+  keys.forEach(k => {
+    const el = document.getElementById('resf-' + k);
+    const v  = parseInt(el?.value || 0);
+    total += v;
+    const disp = document.getElementById('rsfv-' + k);
+    if (disp) disp.textContent = v + ' ppm';
+  });
+  const disp = document.getElementById('res-fill-total');
+  if (disp) {
+    disp.textContent = 'TOTAL: ' + total + ' ppm';
+    disp.className   = 'nute-total-display ' + (total > 1500 ? 'burn' : total > 900 ? 'high' : 'ok');
+  }
+}
+
+function confirmFillReservoir() {
+  const room = GS.rooms[GS.activeRoom||0] || GS.rooms[0];
+  const rg   = getRoomGear(room.id);
+  if (!rg.reservoir) { toast('No reservoir.','err'); return; }
+  if (GS.coins < 500) { toast('Need 500¢ to fill reservoir.','err'); return; }
+  const keys = ['nuteBase','nuteGrow','nuteBloom','nuteCalmag'];
+  let totalPPM = 0;
+  keys.forEach(k => {
+    const el  = document.getElementById('resf-' + k);
+    const val = parseInt(el?.value || 0);
+    totalPPM += val;
+    // Deduct proportionally: filling a 100% reservoir uses ~50% of the PPM value from bottles
+    // (the rest stays in the bottle — reservoir recipe just sets ratio, not literal 1:1)
+    if (val > 0) rg[k] = Math.max(0, (rg[k]||0) - val * 0.5);
+  });
+  GS.coins -= 500;
+  rg.reservoir.level = 100;
+  rg.reservoir.ppm   = totalPPM;
+  rg.reservoir._lowWarn = false;
+  closeModal('modal-fill-reservoir');
+  toast('🛢️ Reservoir filled! ' + totalPPM + 'ppm · −500¢', 'ok', 4000);
+  addLog('Reservoir filled: ' + totalPPM + 'ppm', 'info');
+  saveGame(); renderGearPanel(); renderEnvPanel(); renderHeader();
+}
+
+// ================================================================
 // BLACK MARKET TICK
 // ================================================================
 function _tickCuringJar(batch, realHrs, now) {
@@ -3677,19 +3820,30 @@ function renderEnvPanel() {
 
   const awS  = document.getElementById('autowater-status');
   const awB  = document.getElementById('autowater-status-body');
-  if (awS && awB && GS.gear && GS.gear.reservoir && GS.gear.autoWaterPlant) {
-    const plant = GS.plants.find(p => p.id === GS.gear.autoWaterPlant);
-    if (plant) {
-      awS.classList.remove('hidden');
-      awB.innerHTML = `<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);line-height:1.8">
-        Plant: <span style="color:var(--green)">${plant.name||plant.strainName}</span><br>
-        Soil: <span style="color:var(--blue)">${Math.round(plant.waterLevel||0)}%</span> · 
-        Res: <span style="color:var(--cyan)">${Math.round(GS.gear.reservoir.level||0)}%</span> · 
-        PPM: <span style="color:var(--gold)">${GS.gear.reservoir.ppm||0}</span>
+  const _ar  = GS.rooms[GS.activeRoom||0] || GS.rooms[0];
+  const _rg  = getRoomGear(_ar.id);
+  const _attached = (_rg.autoWaterPlants||[]);
+  if (awS && awB && _rg.reservoir && _attached.length > 0) {
+    awS.classList.remove('hidden');
+    const res = _rg.reservoir;
+    const aw  = _rg.autoWaterSettings || {dryout:30, stopto:80};
+    let rows  = `<div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin-bottom:5px;letter-spacing:.5px">
+      RES: ${Math.round(res.level||0)}% · PPM: <span style="color:var(--gold)">${res.ppm||0}</span>
+      · Waters at ≤${aw.dryout||30}% → ${aw.stopto||80}%
+    </div>`;
+    _attached.forEach(pid => {
+      const p = GS.plants.find(x => x.id === pid);
+      if (!p) return;
+      const wl    = Math.round(p.waterLevel||0);
+      const wColor= wl < 20 ? 'var(--red)' : wl < 40 ? 'var(--gold)' : 'var(--blue)';
+      rows += `<div style="display:flex;align-items:center;gap:8px;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:9px;font-family:var(--font-mono)">
+        <span style="color:var(--green);flex:1">${p.name||p.strainName}</span>
+        <span style="color:${wColor}">💧 ${wl}%</span>
+        <span style="color:var(--cyan)">${p.soilPPM||0}ppm</span>
       </div>`;
-    } else awS.classList.add('hidden');
-  } else if (awS) awS.classList.add('hidden');
-}
+    });
+    awB.innerHTML = rows;
+  } else if (awS) awS.classList.add('hidden');}
 
 function _roomStage(roomId) {
   const p = (GS.plants || []).filter(x => x.roomId === roomId);
@@ -3808,10 +3962,10 @@ function renderGearPanel() {
       <div class="gear-bar"><div class="gear-bar-fill" style="width:${hlvl}%;background:var(--blue)"></div></div>
       <div class="gear-bar-label">Water level: ${Math.round(hlvl)}%</div>
       <div class="gear-actions">
-        <button class="btn-gear-act" onclick="refillHumidifier()">REFILL</button>
-      </div>` : '<div class="gear-bar-label" style="color:var(--muted)">Buy from Shop → Climate</div>'}
-  </div>`;
-
+        <button class="btn-gear-act" onclick="openFillReservoirModal()">FILL + NUTES</button>
+        <button class="btn-gear-act gold" onclick="refillReservoir()">WATER ONLY</button>
+      </div>
+    </div>`;
   // Dehumidifier
   html += `<div class="gear-item">
     <div class="gear-item-header">
@@ -3901,7 +4055,17 @@ function updateFanSpeed(val) {
 }
 function refillHumidifier() { GS.gear.humidifierLevel = 100; toast('Humidifier refilled 💧','ok'); saveGame(); renderGearPanel(); }
 function refillCO2()        { if (GS.gear.co2Tank) { GS.gear.co2Tank.level = 100; toast('CO₂ refilled 🫧','ok'); saveGame(); renderGearPanel(); } }
-function refillReservoir()  { if (GS.gear.reservoir) { GS.gear.reservoir.level = 100; toast('Reservoir refilled 🛢️','ok'); saveGame(); renderGearPanel(); } }
+function refillReservoir() {
+  const room = GS.rooms[GS.activeRoom||0] || GS.rooms[0];
+  const rg   = getRoomGear(room.id);
+  if (!rg.reservoir) return;
+  rg.reservoir.level = 100;
+  rg.reservoir.ppm   = 0;  // water-only refill clears nutrients — use Fill+Nutes to set PPM
+  rg.reservoir._lowWarn = false;
+  toast('🛢️ Reservoir refilled with plain water — PPM reset to 0. Use 🧪 Fill+Nutes to add nutrients.', 'warn', 4000);
+  addLog('Reservoir water-only refill — PPM cleared to 0', 'info');
+  saveGame(); renderGearPanel();
+}
 
 // ================================================================
 // DAILY GOAL
@@ -6137,9 +6301,18 @@ function loginSuccess() {
   });
   GS.curing = (GS.curing||[]).filter(b => b.phase === 'drying' || b.phase === 'curing');
 
+  // Migrate autoWaterPlant (single ID) → autoWaterPlants (array)
+  Object.values(GS.roomGear || {}).forEach(rg => {
+    if (rg.autoWaterPlant !== undefined && !rg.autoWaterPlants) {
+      rg.autoWaterPlants = rg.autoWaterPlant ? [rg.autoWaterPlant] : [];
+      delete rg.autoWaterPlant;
+    }
+    if (!rg.autoWaterPlants) rg.autoWaterPlants = [];
+  });
+  if (GS.gear && GS.gear.autoWaterPlant !== undefined) delete GS.gear.autoWaterPlant;
+
   GS.rooms.forEach(r => {
-    if (!GS.roomGear[r.id]) GS.roomGear[r.id] = defaultGear();
-    if (!r.size) r.size = 'small';
+    if (!GS.roomGear[r.id]) GS.roomGear[r.id] = defaultGear();    if (!r.size) r.size = 'small';
     if (!r.lightScheduleHrs) r.lightScheduleHrs = 18;
     if (!r.envTarget.light) r.envTarget.light = 100;
     if (!r.envActual.co2)   r.envActual.co2 = 400;
@@ -6535,9 +6708,15 @@ function openWaterModal(plantId) {
 
   let nuteHtml = '';
   if (!hasEC) {
-    nuteHtml += `<div class="warning-note" style="margin-bottom:8px">🔍 <strong>Feeding blind</strong> — no EC/PPM meter. Feeding nutrients risks burn and costs <strong>−5 health &amp; −0.1% yield per feed.</strong></div>`;
-  }
-  nuteHtml += `<div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:8px">NUTRIENTS <span style="color:rgba(74,222,128,0.4)">(OPTIONAL)</span></div>
+    nuteHtml += `<div class="warning-note" style="margin-bottom:8px">
+      🔍 <strong>Feeding blind</strong> — no EC/PPM Meter. Feeding nutrients risks burn and costs <strong>−5 health &amp; −0.1% yield per feed.</strong>
+      ${diff === 'easy'
+        ? `<br><span style="color:var(--gold)">💡 EC/PPM Meter (2,500¢) + pH Meter (2,500¢) from Shop → Tools prevents this penalty.</span>
+           <br><button style="margin-top:6px;width:100%;padding:5px;background:rgba(74,222,128,0.1);border:1px solid var(--green);border-radius:4px;color:var(--green);font-family:var(--font-hud);font-size:8px;cursor:pointer;letter-spacing:.5px"
+             onclick="closeAllModals();showTab('shop');_shopSection='tools';renderShop()">→ OPEN SHOP → TOOLS</button>`
+        : ''}
+    </div>`;
+  }  nuteHtml += `<div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:8px">NUTRIENTS <span style="color:rgba(74,222,128,0.4)">(OPTIONAL)</span></div>
     <div id="nute-sliders-section">${nuteRows}</div>
     <div id="flush-section" style="display:none">
       <div class="info-note" style="margin-bottom:10px">🚿 Flush mode — plain water only, no nutrients used from bottles.</div>
@@ -6567,19 +6746,134 @@ function openWaterModal(plantId) {
     phHtml = `<div class="info-note" style="margin-top:8px;margin-bottom:0">💡 No pH meter — each nutrient feed costs −5 health &amp; −0.1% yield. Buy pH Meter + pH Up/Down from Shop.</div>`;
   }
 
+  // Reservoir attachment section
+  let reservoirHtml = '';
+  if (rg.reservoir) {
+    const res        = rg.reservoir;
+    const hasEmitter = (rg.emitterPacks||0) > 0;
+    const hasHose    = (rg.hosingPacks||0)  > 0;
+    const canAttach  = hasEmitter && hasHose;
+    const attached    = rg.autoWaterPlants || [];
+    const isAttached  = attached.includes(plantId);
+    const attachCount = attached.length;
+
+    if (isAttached) {
+      const aw = rg.autoWaterSettings || {dryout:30, stopto:80};
+      reservoirHtml = `
+        <div style="background:rgba(34,211,238,0.06);border:1px solid rgba(34,211,238,0.35);border-radius:8px;padding:10px;margin-top:10px">
+          <div style="font-family:var(--font-hud);font-size:9px;color:var(--cyan);letter-spacing:1px;margin-bottom:8px">🛢️ AUTO-WATER ACTIVE · ${attachCount} plant(s) on this reservoir</div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-bottom:8px">
+            ${res.size} · Level: ${Math.round(res.level||0)}% · Feed PPM: ${res.ppm||0}
+          </div>
+          <div class="nute-slider-row">
+            <span class="nute-slider-label">DRY AT %</span>
+            <input type="range" min="10" max="70" step="5" value="${aw.dryout||30}"
+              oninput="updateAutoWaterSetting('dryout',this.value,'${plantId}')">
+            <span class="nute-slider-val" id="aw-dryout-val">${aw.dryout||30}%</span>
+          </div>
+          <div class="nute-slider-row">
+            <span class="nute-slider-label">STOP AT %</span>
+            <input type="range" min="50" max="100" step="5" value="${aw.stopto||80}"
+              oninput="updateAutoWaterSetting('stopto',this.value,'${plantId}')">
+            <span class="nute-slider-val" id="aw-stopto-val">${aw.stopto||80}%</span>
+          </div>
+          <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin:4px 0 8px">
+            Waters when soil hits Dry-At%, stops at Stop-At% · Uses reservoir PPM each water
+          </div>
+          <button class="btn-action btn-cyan" style="width:100%;padding:6px;margin-bottom:5px"
+            onclick="openFillReservoirModal()">🧪 REFILL WITH NUTRIENTS</button>
+          <button class="btn-action btn-red" style="width:100%;padding:6px"
+            onclick="detachReservoir('${plantId}')">🔌 DETACH THIS PLANT</button>
+          <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:5px;text-align:center">
+            Water-only refill via Gear Panel sets PPM to 0 — use 🧪 button to keep nutrients.
+          </div>        </div>`;
+    } else {
+      reservoirHtml = `
+        <div style="background:rgba(34,211,238,0.03);border:1px solid rgba(34,211,238,0.2);border-radius:8px;padding:10px;margin-top:10px">
+          <div style="font-family:var(--font-hud);font-size:9px;color:var(--cyan);letter-spacing:1px;margin-bottom:6px">
+            🛢️ RESERVOIR · ${attachCount} plant(s) connected
+          </div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-bottom:6px">
+            ${res.size} · Level: ${Math.round(res.level||0)}% · PPM: ${res.ppm||0}
+          </div>
+          <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-bottom:8px">
+            Emitter Packs: ${(rg.emitterPacks||0)} · Hose Packs: ${(rg.hosingPacks||0)}
+            <span style="color:var(--muted)"> (1 of each consumed per plant connection)</span>
+          </div>
+          ${(res.level||0) < 20
+            ? `<div class="warning-note" style="margin-bottom:6px">⚠️ Reservoir running low — refill soon!</div>` : ''}
+          ${canAttach
+            ? `<button class="btn-action btn-cyan" style="width:100%;padding:7px;margin-bottom:5px"
+                onclick="attachReservoir('${plantId}')">🔌 CONNECT THIS PLANT TO AUTO-WATER</button>
+               <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-bottom:6px;text-align:center">
+                 Uses 1 Emitter Pack + 1 Hose Pack permanently
+               </div>`
+            : `<div class="warning-note" style="margin-bottom:6px">
+                 ⚠️ Need Emitter Pack (800¢) + Hose Pack (500¢) — Shop → Water.
+               </div>`}
+          <button class="btn-action btn-cyan" style="width:100%;padding:6px"
+            onclick="openFillReservoirModal()">🧪 FILL WITH NUTRIENTS</button>        </div>`;
+    }
+  }
+
   const dyn = document.getElementById('water-dynamic-content');
   if (dyn) {
     dyn.innerHTML = `${deadHtml}${feedModeHtml}${nuteHtml}${phHtml}
       <div class="nute-total-display ok" id="nute-total-display" style="margin-top:10px">TOTAL: 0 ppm — Plain Water</div>
       <div class="nute-optimal-range" id="nute-optimal-hint">Optimal PPM for ${stage}: ${ideal.ppmLo}–${ideal.ppmHi}</div>
-      <div class="warning-note hidden" id="nute-burn-warn" style="margin-top:6px">⚠️ Concentration too high — will burn your plant!</div>`;
+      <div class="warning-note hidden" id="nute-burn-warn" style="margin-top:6px">⚠️ Concentration too high — will burn your plant!</div>
+      ${reservoirHtml}`;
   }
   openModal('modal-water');
+}// ================================================================
+// FEED MODE + NUTE TOTAL HELPERS
+// ================================================================
+function selectFeedMode(btn) {
+  document.querySelectorAll('.feed-mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const mode = btn.dataset.mode || 'stack';
+  const inp  = document.getElementById('inp-feed-mode');
+  if (inp) inp.value = mode;
+  const nuteSection  = document.getElementById('nute-sliders-section');
+  const flushSection = document.getElementById('flush-section');
+  if (mode === 'flush') {
+    if (nuteSection)  nuteSection.style.display = 'none';
+    if (flushSection) flushSection.style.display = '';
+  } else {
+    if (nuteSection)  nuteSection.style.display = '';
+    if (flushSection) flushSection.style.display = 'none';
+  }
+  updateNuteTotals();
 }
+
+function updateNuteTotals() {
+  const base   = parseInt(document.getElementById('nute-base')?.value   || 0);
+  const grow   = parseInt(document.getElementById('nute-grow')?.value   || 0);
+  const bloom  = parseInt(document.getElementById('nute-bloom')?.value  || 0);
+  const calmag = parseInt(document.getElementById('nute-calmag')?.value || 0);
+  const total  = base + grow + bloom + calmag;
+  const hasEC  = !!(GS.gear?.ecmeter);
+
+  const disp = document.getElementById('nute-total-display');
+  const warn = document.getElementById('nute-burn-warn');
+  if (disp) {
+    if      (total === 0)   { disp.textContent = 'TOTAL: 0 ppm — Plain Water';       disp.className = 'nute-total-display ok'; }
+    else if (total > 1800)  { disp.textContent = 'TOTAL: ' + total + ' ppm — 🔥 BURN ZONE'; disp.className = 'nute-total-display burn'; }
+    else if (total > 1200)  { disp.textContent = 'TOTAL: ' + total + ' ppm — HIGH';  disp.className = 'nute-total-display high'; }
+    else                    { disp.textContent = 'TOTAL: ' + total + ' ppm';          disp.className = 'nute-total-display ok'; }
+  }
+  if (warn) warn.classList.toggle('hidden', total <= 1800);
+
+  const valMap = {'nv-base':base,'nv-grow':grow,'nv-bloom':bloom,'nv-calmag':calmag};
+  Object.entries(valMap).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = hasEC ? val + ' ppm' : '?';
+  });
+}
+
 // ================================================================
 // RUNOFF CALCULATOR
-// ================================================================
-function getStagePPMTarget(plant) {
+// ================================================================function getStagePPMTarget(plant) {
   const stage = plant.stage || 'Seedling';
   if (stage === 'Seedling') {
     return (plant.seedlingDays||0) < 7 ? {lo:0,hi:300,label:'Seedling (early)'} : {lo:100,hi:500,label:'Seedling (late)'};
@@ -6774,12 +7068,6 @@ function confirmWater() {
   if (totalFeedPPM > 0 && (hasEC || diff === 'easy')) {
     setTimeout(() => showRunoffPopup(plant), 200);
   }
-  saveGame(); renderGrow();
-}
-
-  // Show runoff popup after a short delay
-  setTimeout(() => showRunoffPopup(plant), 200);
-
   saveGame(); renderGrow();
 }
 
