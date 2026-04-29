@@ -3965,7 +3965,8 @@ function renderGearPanel() {
         <button class="btn-gear-act" onclick="openFillReservoirModal()">FILL + NUTES</button>
         <button class="btn-gear-act gold" onclick="refillReservoir()">WATER ONLY</button>
       </div>
-    </div>`;
+    ` : ''}
+  </div>`;
   // Dehumidifier
   html += `<div class="gear-item">
     <div class="gear-item-header">
@@ -6873,7 +6874,8 @@ function updateNuteTotals() {
 
 // ================================================================
 // RUNOFF CALCULATOR
-// ================================================================function getStagePPMTarget(plant) {
+// ================================================================
+function getStagePPMTarget(plant) {
   const stage = plant.stage || 'Seedling';
   if (stage === 'Seedling') {
     return (plant.seedlingDays||0) < 7 ? {lo:0,hi:300,label:'Seedling (early)'} : {lo:100,hi:500,label:'Seedling (late)'};
