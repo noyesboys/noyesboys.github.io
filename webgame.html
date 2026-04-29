@@ -1350,7 +1350,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     </div>
     <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:10px;display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
       <div style="text-align:center">
-        <div style="font-size:9px;color:var(--muted);font-family:var(--font-hud);letter-spacing:1px">YIELD</div>
+        <div style="font-size:9px;color:var(--muted);font-family:var(--font-hud);letter-spacing:1px" id="lbl-harvest-yield-label">YIELD</div>
         <div style="font-family:var(--font-hud);font-size:22px;color:var(--green)" id="lbl-harvest-yield">0g</div>
       </div>
       <div style="text-align:center">
@@ -1531,6 +1531,40 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     <div style="font-size:13px;color:var(--text);margin:6px 0" id="click-bonus-desc">—</div>
     <div class="modal-actions">
       <button class="btn-modal confirm" onclick="closeModal('modal-click-bonus')">NICE!</button>
+    </div>
+  </div>
+</div>
+
+<!-- MOVE PLANT MODAL -->
+<div class="modal-overlay" id="modal-move-plant">
+  <div class="modal-box">
+    <div class="modal-title">🚚 MOVE PLANT TO ROOM</div>
+    <div class="modal-desc" id="move-plant-desc">Select a destination room.</div>
+    <input type="hidden" id="inp-move-plant-id" value="">
+    <div id="move-room-options" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px"></div>
+    <div id="move-plant-warning" class="warning-note hidden"></div>
+    <div class="modal-actions">
+      <button class="btn-modal confirm" id="btn-confirm-move" onclick="confirmMoveRoom()">🚚 MOVE</button>
+      <button class="btn-modal cancel" onclick="closeModal('modal-move-plant')">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+<!-- RENAME STRAIN MODAL -->
+<div class="modal-overlay" id="modal-rename-strain">
+  <div class="modal-box" style="max-width:380px">
+    <div class="modal-title">✏️ NAME YOUR STRAIN</div>
+    <div class="modal-desc">Give your bred strain a custom name. This can only be done once — choose wisely!</div>
+    <input type="hidden" id="inp-rename-strain-key" value="">
+    <div class="field" style="margin-bottom:6px">
+      <label>Custom Strain Name</label>
+      <input type="text" id="inp-rename-strain-val" placeholder="e.g. Super Boys" maxlength="30">
+    </div>
+    <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-bottom:10px" id="rename-strain-parent-note">—</div>
+    <div class="warning-note" style="margin-bottom:0">⚠️ Once named, this cannot be changed.</div>
+    <div class="modal-actions">
+      <button class="btn-modal confirm" onclick="confirmRenameStrain()">✏️ NAME IT</button>
+      <button class="btn-modal cancel" onclick="closeModal('modal-rename-strain')">CANCEL</button>
     </div>
   </div>
 </div>
@@ -3062,15 +3096,22 @@ function tickPlant(plant, room, strain, actual, gameMins) {
             female.pollinatingIsReversed = !!plant.isReversed;
           }
           const femFlowerWeek = Math.ceil((female.flowerDay || 0) / 7);
-          if (maleFlowerWeek >= 6 && femFlowerWeek >= 1) {
-            female.hasSeeds       = true;
-            female.maleStrainName = plant.strainName;
-            female.maleIsReversed = !!plant.isReversed;
-            const SEED_BY_WEEK = {6:100,7:150,8:250,9:350,10:400,11:600,12:700};
-            const base   = SEED_BY_WEEK[Math.min(maleFlowerWeek, 12)] || 100;
-            const varied = Math.round(base * (0.8 + Math.random() * 0.4));
-            female.seedCount = Math.max((female.seedCount||0), varied);
-          }
+          // Week 2+: pollinating badge appears; seeds don't form until week 8
+        if (maleFlowerWeek >= 2) {
+              female.isBeingPollinated  = true;
+              female.pollinatingMaleStrain = plant.strainName;
+              female.maleIsReversed     = !!plant.isReversed;
+        }
+        if (maleFlowerWeek >= 8 && femFlowerWeek >= 1) {
+              female.hasSeeds       = true;
+              female.maleStrainName = plant.strainName;
+              female.maleIsReversed = !!plant.isReversed;
+              // Seeds scale from ~75 at week 8 to ~450+ at week 12
+              const SEED_BY_WEEK = {8:75, 9:150, 10:250, 11:350, 12:450, 13:500, 14:550};
+              const base   = SEED_BY_WEEK[Math.min(maleFlowerWeek, 14)] || 75;
+              const varied = Math.round(base * (0.7 + Math.random() * 0.6));
+              female.seedCount = Math.max((female.seedCount||0), varied);
+        }
         });
       }
     }
@@ -3646,6 +3687,27 @@ function gameTick() {
     tickPlantRulebook(plant, room, gameMins);
   });
 
+  // Pollen carrier: seeded/pollinated plant moved to a new room cross-pollinates after 2 in-game weeks
+  GS.plants.forEach(carrier => {
+    if (!carrier._pollenCarrier || !carrier._pollenSourceStrain) return;
+    carrier._pollenCarrierTimer = (carrier._pollenCarrierTimer||0) + gameMins;
+    const TWO_INGAME_WEEKS = 2 * 7 * 24 * 60; // 20160 game minutes
+    if (carrier._pollenCarrierTimer >= TWO_INGAME_WEEKS) {
+      const roomFems = (GS.plants||[]).filter(p => p.roomId === carrier.roomId && !p.isMale && p.id !== carrier.id);
+      roomFems.forEach(fem => {
+        if (!fem.isBeingPollinated && !fem.hasSeeds) {
+          fem.isBeingPollinated     = true;
+          fem.pollinatingMaleStrain = carrier._pollenSourceStrain;
+          fem.maleStrainName        = carrier._pollenSourceStrain;
+          fem.maleIsReversed        = !!carrier.maleIsReversed;
+          toast('🌬️ ' + (fem.name||fem.strainName) + ' pollinated by carried pollen (' + carrier._pollenSourceStrain + ')!','warn',5000);
+          addLog((fem.name||fem.strainName) + ' cross-pollinated by pollen carried from ' + carrier._pollenSourceStrain,'warn');
+        }
+      });
+      carrier._pollenCarrier = false;
+    }
+  });
+
   tickCuring(now);
   tickBlackMarket(now);
 
@@ -3926,19 +3988,33 @@ function renderRoomPanel() {
   if (!list) return;
   list.innerHTML = '';
   (GS.rooms || []).forEach((room, i) => {
-    const cnt  = (GS.plants || []).filter(p => p.roomId === room.id).length;
-    const div  = document.createElement('div');
-    div.className = 'room-btn' + (i === (GS.activeRoom || 0) ? ' active' : '');
-    div.innerHTML = `
-      <span class="room-btn-icon">🏠</span>
-      <div class="room-btn-info">
-        <div class="room-btn-name">${room.name}</div>
+    const cnt      = (GS.plants || []).filter(p => p.roomId === room.id).length;
+    const hasMale  = (GS.plants || []).some(p => p.roomId === room.id && p.isMale);
+    const div      = document.createElement('div');
+    div.className  = 'room-btn' + (i === (GS.activeRoom || 0) ? ' active' : '');
+    div.innerHTML  = `
+      <span class="room-btn-icon" style="cursor:pointer" onclick="switchRoom(${i});event.stopPropagation()">🏠</span>
+      <div class="room-btn-info" style="cursor:pointer" onclick="switchRoom(${i})">
+        <div class="room-btn-name">${room.name}${hasMale ? ' <span style="color:var(--blue);font-size:8px">♂</span>' : ''}</div>
         <div class="room-btn-sub">${cnt}/${room.slots} plants · ${room.lightsOn ? '💡 ON' : '🌙 OFF'}</div>
       </div>
-      <span class="room-btn-badge">${room.envActual ? Math.round(room.envActual.temp) + '°F' : ''}</span>`;
-    div.onclick = () => switchRoom(i);
+      <span class="room-btn-badge">${room.envActual ? Math.round(room.envActual.temp) + '°F' : ''}</span>
+      <button style="background:none;border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:9px;color:var(--muted);cursor:pointer;margin-left:4px;font-family:var(--font-hud);flex-shrink:0"
+        onclick="event.stopPropagation();promptRenameRoom(${room.id})" title="Rename room">✏️</button>`;
+    div.onclick = (e) => { if (e.target.tagName !== 'BUTTON') switchRoom(i); };
     list.appendChild(div);
   });
+}
+
+function promptRenameRoom(roomId) {
+  const room = GS.rooms.find(r => r.id === roomId);
+  if (!room) return;
+  const newName = window.prompt('Rename room (max 25 chars):', room.name);
+  if (!newName || !newName.trim()) return;
+  room.name = newName.trim().slice(0, 25);
+  toast('Room renamed: ' + room.name, 'ok', 2000);
+  addLog('Room ' + roomId + ' renamed: ' + room.name, 'info');
+  saveGame(); renderRoomPanel(); renderGrow();
 }
 
 function switchRoom(idx) {
@@ -4390,6 +4466,149 @@ function renderGearPanel() {
 }
 
 // ================================================================
+// MOVE PLANT + STRAIN RENAME HELPERS
+// ================================================================
+function getStrainDisplayName(strainName) {
+  const bred = (GS.bredStrains||[]).find(b => b.name === strainName);
+  return (bred && bred.customName) ? bred.customName : strainName;
+}
+
+function openMoveRoomModal(plantId) {
+  const plant = GS.plants.find(p => p.id === plantId);
+  if (!plant) return;
+  const currentRoom = GS.rooms.find(r => r.id === plant.roomId);
+  const descEl = document.getElementById('move-plant-desc');
+  if (descEl) descEl.textContent = 'Moving: ' + (plant.name||plant.strainName) + ' · From: ' + (currentRoom?.name||'Room');
+
+  const inp = document.getElementById('inp-move-plant-id');
+  if (inp) inp.value = plantId;
+  document.getElementById('move-plant-warning')?.classList.add('hidden');
+  const btn = document.getElementById('btn-confirm-move');
+  if (btn) delete btn.dataset.targetRoom;
+
+  const opts = document.getElementById('move-room-options');
+  if (!opts) return;
+  opts.innerHTML = '';
+
+  const destRooms = GS.rooms.filter(r => r.id !== plant.roomId);
+  if (!destRooms.length) {
+    opts.innerHTML = '<div style="color:var(--muted);font-family:var(--font-hud);font-size:10px;padding:10px;text-align:center">No other rooms. Unlock more in Shop → Rooms.</div>';
+    openModal('modal-move-plant');
+    return;
+  }
+
+  destRooms.forEach(room => {
+    const inRoom  = (GS.plants||[]).filter(p => p.roomId === room.id);
+    const isFull  = inRoom.length >= room.slots;
+    const hasMale = inRoom.some(p => p.isMale);
+    const div     = document.createElement('div');
+    div.className = 'room-btn';
+    div.style.opacity = isFull ? '0.4' : '1';
+    div.style.cursor  = isFull ? 'not-allowed' : 'pointer';
+    div.innerHTML = `
+      <span class="room-btn-icon">🏠</span>
+      <div class="room-btn-info">
+        <div class="room-btn-name">${room.name}</div>
+        <div class="room-btn-sub">${inRoom.length}/${room.slots} plants${hasMale ? ' · <span style="color:var(--blue)">♂ HAS MALE</span>' : ''}${isFull ? ' · FULL' : ''}</div>
+      </div>`;
+    if (!isFull) {
+      div.onclick = () => {
+        opts.querySelectorAll('.room-btn').forEach(b => b.classList.remove('active'));
+        div.classList.add('active');
+        const warnEl = document.getElementById('move-plant-warning');
+        if (warnEl) {
+          const msgs = [];
+          if (hasMale && GS.difficulty === 'easy') msgs.push('⚠️ This room has a male plant — your plant will be pollinated!');
+          if ((plant.hasSeeds || plant.isBeingPollinated) && inRoom.some(p => !p.isMale)) {
+            msgs.push('⚠️ This plant carries pollen and may cross-pollinate the destination room\'s plants after 2 weeks. Spray with plain water first to prevent this (💧 Water spray).');
+          }
+          if (msgs.length) { warnEl.innerHTML = msgs.join('<br><br>'); warnEl.classList.remove('hidden'); }
+          else warnEl.classList.add('hidden');
+        }
+        const btn2 = document.getElementById('btn-confirm-move');
+        if (btn2) btn2.dataset.targetRoom = room.id;
+      };
+    }
+    opts.appendChild(div);
+  });
+  openModal('modal-move-plant');
+}
+
+function confirmMoveRoom() {
+  const plantId     = document.getElementById('inp-move-plant-id')?.value;
+  const btn         = document.getElementById('btn-confirm-move');
+  const targetRoomId= parseInt(btn?.dataset.targetRoom);
+  if (!plantId || !targetRoomId) { toast('Select a destination room first.','warn'); return; }
+
+  const plant = GS.plants.find(p => p.id === plantId);
+  if (!plant) return;
+  const targetRoom = GS.rooms.find(r => r.id === targetRoomId);
+  if (!targetRoom) { toast('Room not found.','err'); return; }
+  const inTarget = (GS.plants||[]).filter(p => p.roomId === targetRoomId);
+  if (inTarget.length >= targetRoom.slots) { toast('Destination room is full!','err'); return; }
+
+  const oldRoom = GS.rooms.find(r => r.id === plant.roomId);
+  plant.roomId = targetRoomId;
+
+  // If carrying pollen, mark as carrier for cross-pollination timer
+  if ((plant.hasSeeds || plant.isBeingPollinated) && !plant._pollenCarrier) {
+    plant._pollenCarrier       = true;
+    plant._pollenCarrierTimer  = 0;
+    plant._pollenSourceStrain  = plant.maleStrainName || plant.pollinatingMaleStrain || null;
+  }
+
+  // Disconnect old male link if male is in a different room now
+  if (plant.pollinatingMaleId) {
+    const srcMale = GS.plants.find(p => p.id === plant.pollinatingMaleId);
+    if (!srcMale || srcMale.roomId !== targetRoomId) plant.pollinatingMaleId = null;
+  }
+
+  // Auto-connect to male in destination room if present
+  const destMale = inTarget.find(p => p.isMale);
+  if (destMale && !plant.isMale) {
+    plant.pollinatingMaleId      = destMale.id;
+    plant.pollinatingMaleStrain  = destMale.strainName;
+    plant.isBeingPollinated      = true;
+    if (GS.difficulty === 'easy') {
+      toast('⚠️ ' + (plant.name||plant.strainName) + ' will be pollinated by ' + destMale.strainName + ' in ' + targetRoom.name + '!','warn',5000);
+    }
+  }
+
+  closeModal('modal-move-plant');
+  toast('🚚 ' + (plant.name||plant.strainName) + ' moved to ' + targetRoom.name + '!','ok',3000);
+  addLog((plant.name||plant.strainName) + ' moved: ' + (oldRoom?.name||'?') + ' → ' + targetRoom.name,'info');
+  saveGame(); renderGrow(); renderRoomPanel();
+}
+
+function openRenameStrainModal(strainKey) {
+  const bred = (GS.bredStrains||[]).find(b => b.name === strainKey);
+  if (!bred) return;
+  if (bred.hasBeenNamed) { toast('This strain has already been named — cannot rename.','warn'); return; }
+  const inp = document.getElementById('inp-rename-strain-key');
+  const val = document.getElementById('inp-rename-strain-val');
+  const note= document.getElementById('rename-strain-parent-note');
+  if (inp) inp.value = strainKey;
+  if (val) val.value = bred.customName || '';
+  if (note) note.textContent = 'Parents: ' + bred.genetics + ' · Gen: ' + bred.gen;
+  openModal('modal-rename-strain');
+}
+
+function confirmRenameStrain() {
+  const strainKey = document.getElementById('inp-rename-strain-key')?.value;
+  const newName   = document.getElementById('inp-rename-strain-val')?.value.trim();
+  if (!strainKey || !newName) { toast('Enter a name.','warn'); return; }
+  const bred = (GS.bredStrains||[]).find(b => b.name === strainKey);
+  if (!bred) { toast('Strain not found.','err'); return; }
+  if (bred.hasBeenNamed) { toast('Already named — cannot change.','warn'); return; }
+  bred.customName  = newName.slice(0, 30);
+  bred.hasBeenNamed = true;
+  closeModal('modal-rename-strain');
+  toast('✏️ Strain named: ' + bred.customName + '!','ok',4000);
+  addLog('Strain named: ' + strainKey + ' → ' + bred.customName,'info');
+  saveGame(); renderBreed(); renderSeeds();
+}
+
+// ================================================================
 // GROW TAB
 // ================================================================
 function renderGrow() {
@@ -4457,6 +4676,7 @@ function _buildPlantCard(plant, room) {
       <div class="plant-day-badge">Day ${Math.floor(plant.dayAge || 0)}</div>
       ${rarLbl}
       ${plant.isMale   ? '<div class="male-badge">♂ MALE</div>' : ''}
+      ${plant.isBeingPollinated && !plant.hasSeeds ? '<div class="seeded-badge" style="background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.4);color:var(--blue)">💨 POLLINATING</div>' : ''}
       ${plant.hasSeeds ? '<div class="seeded-badge">🌱 SEEDED</div>' : ''}
       ${plant.isMale && (plant.flowerDay||0) >= 20 ? '<div class="pollen-cloud"></div>' : ''}
     </div>
@@ -4532,13 +4752,16 @@ function _buildPlantCard(plant, room) {
            : ''}
          <div class="plant-actions">
            <button class="btn-action btn-blue" onclick="openWaterModal('${plant.id}')">💧 WATER</button>
-           <button class="btn-action btn-gold" onclick="openHarvestModal('${plant.id}')" ${plant.isDead ? 'disabled' : ''}>🌾 HARVEST</button>
+           <button class="btn-action btn-gold" onclick="openHarvestModal('${plant.id}')" ${plant.isDead ? 'disabled' : ''}>${plant.hasSeeds ? '🌱 SEEDS' : '🌾 HARVEST'}</button>
            <button class="btn-action btn-red"  onclick="openRemoveModal('${plant.id}')">🗑️ REMOVE</button>
            <button class="btn-action btn-green" onclick="openTrainModal('${plant.id}')" ${plant.isDead ? 'disabled' : ''}>✂️ TRAIN</button>
            ${plant.stage === 'Veg' && !plant.isDead
              ? `<button class="btn-action btn-purple" onclick="openFlipModal('${plant.id}')">🌸 FLIP</button>`
              : '<button class="btn-action" disabled>🌸 FLIP</button>'}
            <button class="btn-action" onclick="openSprayModalForPlant('${plant.id}')">🧴 SPRAY</button>
+           ${(GS.rooms||[]).length > 1
+             ? `<button class="btn-action btn-cyan two-wide" onclick="openMoveRoomModal('${plant.id}')">🚚 MOVE TO ROOM</button>`
+             : ''}
          </div>`}
     `;
   return card;
@@ -4813,54 +5036,80 @@ function openSellVaultFromCuring(batchId) {
 // ================================================================
 // SEEDS TAB
 // ================================================================
+let _seedsTab = 'female';
+
 function renderSeeds() {
   const inv = document.getElementById('seed-inventory');
   if (!inv) return;
   const seeds      = GS.seeds      || {};
   const maleSeeds  = GS.maleSeedsOwned || {};
   const bredStrains= GS.bredStrains || [];
-  const entries    = [];
 
-  Object.entries(seeds).forEach(([name, qty]) => {
-    if (qty > 0) entries.push({name, qty, isMale:false, isBred:!!bredStrains.find(b=>b.name===name)});
-  });
-  Object.entries(maleSeeds).forEach(([name, qty]) => {
-    if (qty > 0) entries.push({name, qty, isMale:true, isBred:false});
-  });
+  const femEntries  = Object.entries(seeds).filter(([,q]) => q > 0)
+    .map(([name, qty]) => ({name, qty, isBred:!!bredStrains.find(b=>b.name===name)}));
+  const maleEntries = Object.entries(maleSeeds).filter(([,q]) => q > 0)
+    .map(([name, qty]) => ({name, qty}));
 
-  if (!entries.length) {
-    inv.innerHTML = '<div class="empty-state">🌰 No seeds in inventory.<br>Redeem a code above to get started.</div>';
-    return;
-  }
+  const totalFem  = femEntries.reduce((s,e)=>s+e.qty, 0);
+  const totalMale = maleEntries.reduce((s,e)=>s+e.qty, 0);
 
-  inv.innerHTML = '';
-  entries.forEach(entry => {
-    const strain = STRAINS[entry.name] || bredStrains.find(b=>b.name===entry.name) || {genetics:'Custom bred strain', variety:'hybrid', emoji:'🌱', thcBase:'?', yieldBase:'?'};
+  let tabHtml = `
+    <div style="display:flex;gap:4px;margin-bottom:12px;background:rgba(0,0,0,0.4);border-radius:8px;padding:4px;border:1px solid var(--border)">
+      <button onclick="_seedsTab='female';renderSeeds()"
+        style="flex:1;padding:7px;border:none;background:${_seedsTab==='female'?'rgba(74,222,128,0.12)':'none'};color:${_seedsTab==='female'?'var(--green)':'var(--muted)'};border-radius:6px;font-family:var(--font-hud);font-size:9px;letter-spacing:1px;cursor:pointer">
+        🌿 FEM SEEDS (${totalFem})
+      </button>
+      <button onclick="_seedsTab='male';renderSeeds()"
+        style="flex:1;padding:7px;border:none;background:${_seedsTab==='male'?'rgba(59,130,246,0.12)':'none'};color:${_seedsTab==='male'?'var(--blue)':'var(--muted)'};border-radius:6px;font-family:var(--font-hud);font-size:9px;letter-spacing:1px;cursor:pointer">
+        ♂ MALE SEEDS (${totalMale})
+      </button>
+    </div>`;
+
+  inv.innerHTML = tabHtml;
+
+  const buildCard = (entry, isMale) => {
+    const displayName = getStrainDisplayName(entry.name);
+    const strain = STRAINS[entry.name] || bredStrains.find(b=>b.name===entry.name) || {genetics:'Unknown genetics', variety:'hybrid', emoji:isMale?'♂️':'🌿', thcBase:'?', yieldBase:'?'};
+    const bredDef  = bredStrains.find(b => b.name === entry.name);
+    const genBadge = bredDef ? `<span class="seed-tag bred-tag">${bredDef.gen}</span>` : '';
     const div = document.createElement('div');
-    div.className = 'seed-card' + (entry.isMale ? ' male-seed' : '') + (entry.isBred ? ' bred-seed' : '');
+    div.className = 'seed-card' + (isMale ? ' male-seed' : '') + (entry.isBred ? ' bred-seed' : '');
     div.innerHTML = `
       <div class="seed-card-top">
-        <div class="seed-emoji">${entry.isMale ? '♂️' : (strain.emoji || '🌿')}</div>
+        <div class="seed-emoji">${isMale ? '♂️' : (strain.emoji || '🌿')}</div>
         <div class="seed-info">
-          <div class="seed-name">
-            ${entry.name}
-            ${entry.isMale ? '<span class="seed-tag male-tag">MALE</span>' : ''}
-            ${entry.isBred ? '<span class="seed-tag bred-tag">BRED</span>' : ''}
-          </div>
+          <div class="seed-name">${displayName}${isMale ? '<span class="seed-tag male-tag">MALE</span>' : ''}${genBadge}</div>
+          ${bredDef ? `<div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:1px">${bredDef.genetics}</div>` : ''}
           <div class="seed-genetics">${strain.genetics || 'Unknown genetics'}</div>
-          <div class="seed-stats">THC: ${strain.thcBase || '?'}% · Yield: ~${strain.yieldBase || '?'}g · ${strain.variety || 'hybrid'}</div>
+          <div class="seed-stats">THC: ${strain.thcBase || '?'}% · ${strain.variety || 'hybrid'}${strain.yieldBase ? ' · ~' + strain.yieldBase + 'g' : ''}</div>
         </div>
         <div class="seed-qty-badge">${entry.qty}x</div>
       </div>
       <div class="seed-actions">
-        ${!entry.isMale
-          ? `<button class="btn-action btn-green" onclick="openPlantModalWith('${entry.name}')">🌱 PLANT</button>
-             <button class="btn-action btn-purple" onclick="openBreedModalWith('${entry.name}')">🧬 BREED</button>`
-          : `<button class="btn-action btn-blue" onclick="openPlantMaleWith('${entry.name}')">♂️ PLANT MALE</button>`}
-        <button class="btn-action btn-gold" onclick="openSellSeedModal('${entry.name}',${entry.isMale})">💸 SELL</button>
+        ${!isMale
+          ? `<button class="btn-action btn-green" onclick="openPlantModalWith('${entry.name}')">🌱 PLANT</button>`
+          : `<button class="btn-action btn-blue" onclick="openPlantMaleWith('${entry.name}')">♂ PLANT</button>`}
+        <button class="btn-action btn-gold" onclick="openSellSeedModal('${entry.name}',${isMale})">💸 SELL</button>
+        ${!isMale && entry.isBred ? `<button class="btn-action btn-purple" onclick="openBreedModalWith('${entry.name}')">🧬 BREED</button>` : ''}
+        ${!isMale && entry.isBred && bredDef && !bredDef.hasBeenNamed && bredDef.gen !== 'F1'
+          ? `<button class="btn-action btn-cyan" onclick="openRenameStrainModal('${entry.name}')">✏️ NAME</button>` : ''}
       </div>`;
     inv.appendChild(div);
-  });
+  };
+
+  if (_seedsTab === 'female') {
+    if (!femEntries.length) {
+      inv.innerHTML += '<div class="empty-state">🌿 No female seeds.<br>Redeem a code above, or breed plants.</div>';
+    } else {
+      femEntries.forEach(e => buildCard(e, false));
+    }
+  } else {
+    if (!maleEntries.length) {
+      inv.innerHTML += '<div class="empty-state">♂ No male seeds.<br>Buy from Shop → ♂ MALES tab.</div>';
+    } else {
+      maleEntries.forEach(e => buildCard(e, true));
+    }
+  }
 }
 
 // ================================================================
@@ -5711,19 +5960,39 @@ function renderBreed() {
   if (bredStrains.length) {
     html += `<div class="breed-section">
       <div class="breed-title">📋 BRED STRAINS REGISTRY</div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:12px;line-height:1.6">
+        Your created crosses. F2 and above can be given a custom name (once, permanently).
+        Name them in the <strong style="color:var(--green)">Seeds tab</strong> or click ✏️ here.
+      </div>
       <div class="bred-list">
         ${bredStrains.map(b => {
           const gt = GEN_TABLE[b.gen] || GEN_TABLE.F2;
           const typeColor = b.seedType === 'FEM' ? 'var(--purple)' : 'var(--orange)';
+          const displayName = b.customName || b.name;
+          const canRename = !b.hasBeenNamed && b.gen !== 'F1' && b.gen !== 'original';
+          const stockFem  = seeds[b.name]||0;
+          const stockMale = maleSeeds[b.name]||0;
           return `<div class="bred-card">
-            <div class="bred-name">${b.name}</div>
-            <div class="bred-genetics">${b.genetics}</div>
-            <div class="bred-meta">
-              Gen: <b>${b.gen}</b> ·
-              <span style="color:${typeColor}">${b.seedType || 'FEM'}</span> ·
-              Stability: ${gt.stability || '?'}% ·
-              THC: ~${b.thcBase || '?'}% ·
-              Seeds: ${(seeds[b.name]||0) + (maleSeeds[b.name]||0)}x
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:6px">
+              <div style="flex:1;min-width:0">
+                <div class="bred-name">${displayName}
+                  ${b.customName ? `<span style="font-size:8px;color:var(--muted);font-family:var(--font-mono)"> (${b.name})</span>` : ''}
+                </div>
+                <div class="bred-genetics">${b.genetics}</div>
+                <div class="bred-meta">
+                  Gen: <b>${b.gen}</b> ·
+                  <span style="color:${typeColor}">${b.seedType || 'FEM'}</span> ·
+                  Stability: ${gt.stability || '?'}% ·
+                  THC: ~${b.thcBase || '?'}% ·
+                  Seeds: <span style="color:var(--green)">${stockFem}x ♀</span>${stockMale > 0 ? ` <span style="color:var(--blue)">+ ${stockMale}x ♂</span>` : ''}
+                </div>
+              </div>
+              ${canRename
+                ? `<button class="btn-action btn-cyan" style="padding:4px 8px;flex-shrink:0;margin-top:2px;font-size:8px"
+                     onclick="openRenameStrainModal('${b.name}')">✏️ NAME</button>`
+                : b.customName
+                  ? `<span style="font-size:8px;color:var(--green);font-family:var(--font-hud);flex-shrink:0">✅ NAMED</span>`
+                  : ''}
             </div>
           </div>`;
         }).join('')}
@@ -6733,6 +7002,12 @@ function openPlantMaleWith(strainName) {
   if (!room) { toast('No room available.','warn'); return; }
   const inRoom = (GS.plants || []).filter(p => p.roomId === room.id);
   if (inRoom.length >= room.slots) { toast('Room full!','warn'); return; }
+  // Only one male or reversed female allowed per room
+  const existingMale = inRoom.find(p => p.isMale);
+  if (existingMale) {
+    toast('⚠️ ' + room.name + ' already has a male/reversed plant! Only one per room allowed.','err',5000);
+    return;
+  }
   if ((GS.maleSeedsOwned[strainName] || 0) < 1) { toast('No male seeds of that strain.','err'); return; }
 
   GS.maleSeedsOwned[strainName]--;
@@ -7473,11 +7748,15 @@ function openHarvestModal(plantId) {
   if (gradeEl)  { gradeEl.textContent  = sg; gradeEl.className  = 'analysis-grade ' + sg; }
   if (hgradeEl) { hgradeEl.textContent = hg; hgradeEl.className = 'analysis-grade ' + hg; }
 
+  const isSeededHarvest = plant.hasSeeds && !!plant.maleStrainName;
+  const isPollinatingHarvest = plant.isBeingPollinated && !plant.hasSeeds;
+
   _el('lbl-harvest-score',  score.score + ' / 10 — ' + score.grade);
   _el('lbl-harvest-health', Math.round(plant.health || 0) + '%');
   _el('lbl-harvest-rarity', plant.rarity || 'Standard');
-  _el('lbl-harvest-yield',  yield_ + 'g');
-  _el('lbl-harvest-thc',    thc + '%');
+  _el('lbl-harvest-yield-label', isSeededHarvest ? 'SEEDS' : isPollinatingHarvest ? 'SEEDS (0)' : 'YIELD');
+  _el('lbl-harvest-yield',  isSeededHarvest ? (plant.seedCount||0) + 'x' : isPollinatingHarvest ? '0x (week 8+)' : yield_ + 'g');
+  _el('lbl-harvest-thc',    isSeededHarvest || isPollinatingHarvest ? '—' : thc + '%');
   _el('lbl-harvest-mult',   '×' + (plant.cropMultiplier || 1).toFixed(2));
   _el('lbl-harvest-xp',     xpGain + ' XP');
 
@@ -7945,6 +8224,13 @@ function confirmSpray() {
     if (!plant) { toast('Plant not found.','err'); return; }
     if (plant.isMale) { toast('🧪 STS Spray is for females only.','warn'); return; }
     if (plant.isReversed) { toast('Already reversed!','warn'); return; }
+    // Cannot reverse if room already has a male
+    const roomMates = (GS.plants||[]).filter(p => p.roomId === plant.roomId && p.id !== plant.id);
+    const maleInRoom = roomMates.find(p => p.isMale);
+    if (maleInRoom) {
+      toast('⚠️ Room already has a male plant! Remove it before reversing a female with STS.','err',5000);
+      return;
+    }
     if ((GS.gear.stsSprayCount || 0) < 1) { toast('No STS Spray left — buy more in the Shop.','err'); return; }
     GS.gear.stsSprayCount = Math.max(0, GS.gear.stsSprayCount - 1);
     plant.isReversed  = true;
@@ -7983,6 +8269,12 @@ function confirmSpray() {
     }
     if (sprayType === 'water') {
       plant.health = Math.min(100, (plant.health||100) + 3);
+      // Clear pollen carrier flag — water spray kills residual pollen
+      if (plant._pollenCarrier) {
+        plant._pollenCarrier = false;
+        plant._pollenCarrierTimer = 0;
+        if (GS.difficulty === 'easy') toast('💧 Pollen washed off ' + (plant.name||plant.strainName) + ' — safe to move without cross-pollinating.','ok',4000);
+      }
       // Spraying male with water kills pollen
       if (plant.isMale && plant.stage === 'Flower') {
         const pollenLoss = 40 + Math.floor(Math.random() * 20);
