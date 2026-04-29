@@ -3173,15 +3173,20 @@ function tickPlant(plant, room, strain, actual, gameMins) {
   // Auto-water
   const gg = getRoomGear(room.id);
   if ((gg.autoWaterPlants||[]).includes(plant.id) && gg.reservoir) {
-    const aw  = gg.autoWaterSettings || {dryout:30, stopto:80};
-    const res = gg.reservoir;
-    if (plant.waterLevel <= (aw.dryout || 30) && (res.level || 0) > 0) {
-      const need = Math.min((aw.stopto || 80) - plant.waterLevel, res.level * 0.15);
-      if (need > 0) {
-        plant.waterLevel = Math.min(100, plant.waterLevel + need);
-        res.level = Math.max(0, res.level - need);
-        // Blend reservoir PPM into soil each auto-water event
-        plant.soilPPM = Math.min(2000, Math.round((plant.soilPPM||0) * 0.7 + (res.ppm||0) * 0.3));
+    const aw   = gg.autoWaterSettings || {dryout:30, stopto:80};
+    const res  = gg.reservoir;
+    const capG = res.capacityGal || res.capacity || 20;
+    const levelG = res.levelGal != null ? res.levelGal : (res.level||0)/100*capG;
+    const potGal = {'1gal':1,'3gal':3,'5gal':5,'10gal':10,'25gal':25}[plant.potSize] || 5;
+    if (plant.waterLevel <= (aw.dryout||30) && levelG > 0) {
+      const wantPct  = Math.min((aw.stopto||80) - plant.waterLevel, 100);
+      const galNeeded= potGal * wantPct / 100;
+      const galUsed  = Math.min(galNeeded, levelG);
+      if (galUsed > 0.001) {
+        plant.waterLevel = Math.min(100, plant.waterLevel + (galUsed/potGal*100));
+        res.levelGal = Math.max(0, levelG - galUsed);
+        res.level    = Math.round(res.levelGal/capG*100);
+        plant.soilPPM = Math.min(2000, Math.round((plant.soilPPM||0)*0.7 + (res.ppm||0)*0.3));
       }
     }
   }
@@ -3320,15 +3325,20 @@ function attachReservoir(plantId) {
   if (!rg.reservoir) { toast('No reservoir in this room.','warn'); return; }
   if (!rg.autoWaterPlants) rg.autoWaterPlants = [];
   if (rg.autoWaterPlants.includes(plantId)) { toast('Already connected!','warn'); return; }
-  if ((rg.emitterPacks||0) < 1) { toast('Need an Emitter Pack — Shop → Water (800¢).','err'); return; }
-  if ((rg.hosingPacks||0)  < 1) { toast('Need a Hose Pack — Shop → Water (500¢).','err'); return; }
-  // Consume 1 emitter + 1 hose pack per plant
-  rg.emitterPacks = Math.max(0, (rg.emitterPacks||0) - 1);
-  rg.hosingPacks  = Math.max(0, (rg.hosingPacks ||0) - 1);
+  const invC = getInventory().consumables || {};
+  const emAvail = (rg.emitterPacks||0) + (invC['emitters']||0);
+  const hoAvail = (rg.hosingPacks ||0) + (invC['hosing']  ||0);
+  if (emAvail < 1) { toast('Need an Emitter Pack — Shop → Water (800¢).','err'); return; }
+  if (hoAvail < 1) { toast('Need a Hose Pack — Shop → Water (500¢).','err'); return; }
+  // Consume from room stock first, then global consumables
+  if ((rg.emitterPacks||0) > 0) rg.emitterPacks--;
+  else invC['emitters'] = Math.max(0,(invC['emitters']||0)-1);
+  if ((rg.hosingPacks||0) > 0) rg.hosingPacks--;
+  else invC['hosing'] = Math.max(0,(invC['hosing']||0)-1);
   rg.autoWaterPlants.push(plantId);
   if (!rg.autoWaterSettings) rg.autoWaterSettings = {dryout:30, stopto:80};
-  toast('🔌 ' + (plant.name||plant.strainName) + ' connected to reservoir!', 'ok', 3000);
-  addLog((plant.name||plant.strainName) + ' connected to reservoir (total: ' + rg.autoWaterPlants.length + ')', 'info');
+  toast('🔌 ' + (plant.name||plant.strainName) + ' connected to reservoir!','ok',3000);
+  addLog((plant.name||plant.strainName) + ' connected to reservoir (total: ' + rg.autoWaterPlants.length + ')','info');
   saveGame();
   closeModal('modal-water');
   setTimeout(() => openWaterModal(plantId), 100);
@@ -3357,6 +3367,36 @@ function updateAutoWaterSetting(key, val, plantId) {
   const el = document.getElementById('aw-' + key + '-val');
   if (el) el.textContent = val + '%';
   saveGame();
+}
+
+function refillCO2() {
+  const g = GS.gear || {};
+  if (!g.co2Tank) { toast('No CO₂ tank installed.','warn'); return; }
+  const cost = 2000;
+  if (GS.coins < cost) { toast('Need 2,000¢ to refill CO₂ tank.','err'); return; }
+  GS.coins -= cost;
+  g.co2Tank.level = 100;
+  toast('🫧 CO₂ tank refilled! −2,000¢','ok',3000);
+  addLog('CO₂ tank refilled','info');
+  saveGame(); renderGearPanel(); renderHeader();
+}
+
+function refillReservoirPlain(roomId) {
+  const rId = roomId || (GS.rooms[GS.activeRoom||0]||GS.rooms[0])?.id || 1;
+  const rg  = getRoomGear(rId);
+  if (!rg.reservoir) { toast('No reservoir in this room.','warn'); return; }
+  const res  = rg.reservoir;
+  const capG = res.capacityGal || 20;
+  const cost = Math.max(200, Math.round(capG * 0.4));
+  if (GS.coins < cost) { toast('Need ' + cost.toLocaleString() + '¢ to refill.','err'); return; }
+  GS.coins -= cost;
+  res.levelGal = capG;
+  res.level    = 100;
+  res.ppm      = 0;
+  res._lowWarn = false;
+  toast('💧 Reservoir filled with plain water! −' + cost.toLocaleString() + '¢','ok',3000);
+  addLog('Reservoir plain refill (' + capG + ' gal)','info');
+  saveGame(); renderGearPanel(); renderHeader();
 }
 
 function openFillReservoirModal() {
@@ -3430,8 +3470,10 @@ function confirmFillReservoir() {
     if (val > 0) rg[k] = Math.max(0, (rg[k]||0) - val * 0.5);
   });
   GS.coins -= 500;
-  rg.reservoir.level = 100;
-  rg.reservoir.ppm   = totalPPM;
+  const _capG = rg.reservoir.capacityGal || 20;
+  rg.reservoir.level    = 100;
+  rg.reservoir.levelGal = _capG;
+  rg.reservoir.ppm      = totalPPM;
   rg.reservoir._lowWarn = false;
   closeModal('modal-fill-reservoir');
   toast('🛢️ Reservoir filled! ' + totalPPM + 'ppm · −500¢', 'ok', 4000);
@@ -3614,12 +3656,20 @@ function gameTick() {
     g.co2Tank.level = Math.max(0, (g.co2Tank.level || 100) - 0.003);
     if (g.co2Tank.level <= 0) { ar.envTarget.co2 = 400; toast('🫧 CO₂ tank empty!','warn'); }
   }
-  if (g.reservoir) {
-    g.reservoir.level = Math.max(0, (g.reservoir.level || 100) - 0.0003);
-    if (g.reservoir.level < 10 && !g.reservoir._lowWarn) {
-      g.reservoir._lowWarn = true; toast('🛢️ Reservoir running low!','warn');
+  // Reservoir low-water warning (per room)
+  for (const wr of GS.rooms||[]) {
+    const wrg = getRoomGear(wr.id);
+    if (wrg.reservoir) {
+      const res  = wrg.reservoir;
+      const capG = res.capacityGal || 20;
+      const levG = res.levelGal != null ? res.levelGal : (res.level||0)/100*capG;
+      const pct  = capG > 0 ? levG/capG*100 : 0;
+      if (pct < 10 && !res._lowWarn) {
+        res._lowWarn = true;
+        toast('🛢️ Reservoir in ' + (wr.name||'Room') + ' running low!','warn',5000);
+      }
+      if (pct >= 15) res._lowWarn = false;
     }
-    if (g.reservoir.level >= 15) g.reservoir._lowWarn = false;
   }
   if (g.humidifier && g.humidifier.type) {
     g.humidifierLevel = Math.max(0, (g.humidifierLevel || 100) - 0.005);
@@ -4070,258 +4120,273 @@ function toggleLights() {
 function renderGearPanel() {
   const body = document.getElementById('gear-panel-body');
   if (!body) return;
+  const room = GS.rooms?.[GS.activeRoom||0] || GS.rooms?.[0];
+  if (!room) { body.innerHTML = '<div class="empty-state">No room selected.</div>'; return; }
 
-  const room = GS.rooms?.[GS.activeRoom || 0] || GS.rooms?.[0];
-  if (!room) {
-    body.innerHTML = '<div class="empty-state">No room selected.</div>';
-    return;
-  }
-
-  const rg = getRoomGear(room.id);
+  const rg     = getRoomGear(room.id);
+  const g      = GS.gear || {};
   const counts = roomEquipCounts(room.id);
-  const inv = getInventoryInstances();
+  const inv    = getInventoryInstances();
+  const invC   = getInventory().consumables || {};
 
-  const typeMap = {
-    lights: 'lights',
-    fans: 'fan',
-    acUnits: 'acUnit',
-    dehumidifiers: 'dehumidifier',
-    humidifiers: 'humidifier',
-    heaters: 'heater',
-  };
+  // Thermostat defaults (stored on GS.gear for global HVAC)
+  if (g.thermAcOn    == null) g.thermAcOn    = 84;
+  if (g.thermAcOff   == null) g.thermAcOff   = 78;
+  if (g.thermDehuOn  == null) g.thermDehuOn  = 65;
+  if (g.thermDehuOff == null) g.thermDehuOff = 55;
+  if (g.thermHumidOn == null) g.thermHumidOn = 45;
+  if (g.thermHumidOff== null) g.thermHumidOff= 62;
+  if (g.thermHeatOn  == null) g.thermHeatOn  = 64;
+  if (g.thermHeatOff == null) g.thermHeatOff = 72;
+  if (g.co2Target    == null) g.co2Target    = 1200;
 
-  const labels = {
-    lights: 'LIGHT',
-    fans: 'FAN',
-    acUnits: 'AC',
-    dehumidifiers: 'DEHUMIDIFIER',
-    humidifiers: 'HUMIDIFIER',
-    heaters: 'HEATER',
-  };
-
-  function slotSelect(group, idx, selectedUid) {
-    const itemType = typeMap[group];
-    const options = inv.filter(x => x.equipType === itemType);
-
-    let html = `<select class="gear-slot-select" onchange="assignRoomSlot(${room.id}, '${group}', ${idx}, this.value)">`;
-    html += `<option value="">Not assigned</option>`;
-
-    for (const item of options) {
-      let disabled = false;
-      try {
-        if (item.uid !== selectedUid) isInstanceUsedSomewhere(item.uid, room.id, group, idx);
-      } catch (e) {
-        disabled = true;
+  // Helper: build instance dropdown for a slot
+  const buildSlotSelect = (group, idx, equipType) => {
+    const currentUid = rg[group]?.[idx]?.instanceUid || '';
+    const opts = inv.filter(x => x.equipType === equipType || x.type === equipType);
+    let s = `<select style="width:100%;background:rgba(0,15,0,0.8);border:1px solid var(--border);border-radius:5px;padding:5px 7px;color:var(--text);font-family:var(--font-body);font-size:12px;outline:none;margin-top:5px"
+      onchange="assignRoomSlot(${room.id},'${group}',${idx},this.value);renderGearPanel()">
+      <option value="">— Not Installed —</option>`;
+    opts.forEach(inst => {
+      let inUse = false;
+      for (const r2 of GS.rooms||[]) {
+        const rg2 = getRoomGear(r2.id);
+        const arr = rg2[group]||[];
+        for (let j=0;j<arr.length;j++) {
+          if ((r2.id!==room.id||j!==idx) && arr[j]?.instanceUid===inst.uid) { inUse=true; break; }
+        }
+        if (inUse) break;
       }
+      s += `<option value="${inst.uid}" ${inst.uid===currentUid?'selected':''} ${inUse&&inst.uid!==currentUid?'disabled':''}>${inst.icon||'📦'} ${inst.name}${inUse&&inst.uid!==currentUid?' (in use)':''}</option>`;
+    });
+    return s + '</select>';
+  };
 
-      html += `<option value="${item.uid}" ${item.uid === selectedUid ? 'selected' : ''} ${disabled ? 'disabled' : ''}>
-        ${item.icon || '📦'} ${item.name}${item.size ? ' (' + item.size + ')' : ''}
-      </option>`;
-    }
-
-    html += `</select>`;
-    return html;
-  }
-
-  function renderLightSlot(idx, slot) {
-    const selected = slot?.instanceUid || '';
-    const settings = slot?.settings || {};
-    return `
-      <div class="gear-slot">
-        <div class="gear-slot-head">
-          <strong>Light ${idx + 1}</strong>
-          ${slotSelect('lights', idx, selected)}
-        </div>
-        <div class="gear-slot-grid">
-          <label>Height
-            <input type="range" min="0" max="100" value="${settings.height ?? 60}"
-              oninput="updateRoomSlotSetting(${room.id}, 'lights', ${idx}, 'height', this.value)">
-          </label>
-          <label>Intensity
-            <input type="range" min="0" max="100" value="${settings.intensity ?? 100}"
-              oninput="updateRoomSlotSetting(${room.id}, 'lights', ${idx}, 'intensity', this.value)">
-          </label>
-        </div>
-      </div>`;
-  }
-
-  function renderFanSlot(idx, slot) {
-    const selected = slot?.instanceUid || '';
-    const settings = slot?.settings || {};
-    return `
-      <div class="gear-slot">
-        <div class="gear-slot-head">
-          <strong>Fan ${idx + 1}</strong>
-          ${slotSelect('fans', idx, selected)}
-        </div>
-        <div class="gear-slot-grid">
-          <label>Speed
-            <input type="range" min="0" max="100" value="${settings.speed ?? 50}"
-              oninput="updateRoomSlotSetting(${room.id}, 'fans', ${idx}, 'speed', this.value)">
-          </label>
-          <label>Direction
-            <select onchange="updateRoomSlotSetting(${room.id}, 'fans', ${idx}, 'direction', this.value)">
-              <option value="up" ${settings.direction === 'up' ? 'selected' : ''}>Up</option>
-              <option value="center" ${(!settings.direction || settings.direction === 'center') ? 'selected' : ''}>Center</option>
-              <option value="down" ${settings.direction === 'down' ? 'selected' : ''}>Down</option>
-            </select>
-          </label>
-        </div>
-      </div>`;
-  }
-
-  function renderClimateSlot(group, idx, slot) {
-    const selected = slot?.instanceUid || '';
-    const settings = slot?.settings || {};
-    const title = labels[group] + ' ' + (idx + 1);
-    return `
-      <div class="gear-slot">
-        <div class="gear-slot-head">
-          <strong>${title}</strong>
-          ${slotSelect(group, idx, selected)}
-        </div>
-        <div class="gear-slot-grid">
-          <label>Power
-            <input type="range" min="0" max="100" value="${settings.power ?? 50}"
-              oninput="updateRoomSlotSetting(${room.id}, '${group}', ${idx}, 'power', this.value)">
-          </label>
-        </div>
-      </div>`;
-  }
-
-  ensureSlotArray(rg, 'lights', counts.lights || 0);
-  ensureSlotArray(rg, 'fans', counts.fans || 0);
-  ensureSlotArray(rg, 'acUnits', counts.ac || 0);
-  ensureSlotArray(rg, 'dehumidifiers', counts.dehu || 0);
-  ensureSlotArray(rg, 'humidifiers', counts.humid || 0);
-
-  let html = `
-    <div class="gear-room-head">
-      <div class="gear-room-title">${room.name || ('Room ' + room.id)}</div>
-      <div class="gear-room-sub">Equipment slots are per-room now</div>
+  // Helper: thermostat row (reads/writes directly to GS.gear via inline oninput)
+  const thermRow = (label, gKey, min, max, unit, accentColor) => {
+    const val = g[gKey] != null ? g[gKey] : 70;
+    return `<div class="fan-speed-ctrl">
+      <label style="width:60px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">${label}</label>
+      <input type="range" min="${min}" max="${max}" value="${val}" style="flex:1;accent-color:${accentColor};height:3px"
+        oninput="GS.gear['${gKey}']=parseInt(this.value);document.getElementById('tv-${gKey}').textContent=this.value+'${unit}';saveGame()">
+      <span class="fan-speed-val" id="tv-${gKey}" style="color:${accentColor}">${val}${unit}</span>
     </div>`;
+  };
 
-  if ((counts.lights || 0) > 0) {
-    html += `<div class="gear-group"><div class="gear-group-title">💡 Lights</div>`;
-    for (let i = 0; i < counts.lights; i++) html += renderLightSlot(i, rg.lights[i]);
-    html += `</div>`;
-  }
+  let html = `<div style="font-family:var(--font-hud);font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">${room.name.toUpperCase()}</div>`;
 
-  if ((counts.fans || 0) > 0) {
-    html += `<div class="gear-group"><div class="gear-group-title">🌀 Fans</div>`;
-    for (let i = 0; i < counts.fans; i++) html += renderFanSlot(i, rg.fans[i]);
-    html += `</div>`;
-  }
-
-  if ((counts.ac || 0) > 0) {
-    html += `<div class="gear-group"><div class="gear-group-title">❄️ AC</div>`;
-    for (let i = 0; i < counts.ac; i++) html += renderClimateSlot('acUnits', i, rg.acUnits[i]);
-    html += `</div>`;
-  }
-
-  if ((counts.dehu || 0) > 0) {
-    html += `<div class="gear-group"><div class="gear-group-title">🌵 Dehumidifiers</div>`;
-    for (let i = 0; i < counts.dehu; i++) html += renderClimateSlot('dehumidifiers', i, rg.dehumidifiers[i]);
-    html += `</div>`;
-  }
-
-  if ((counts.humid || 0) > 0) {
-    html += `<div class="gear-group"><div class="gear-group-title">💧 Humidifiers</div>`;
-    for (let i = 0; i < counts.humid; i++) html += renderClimateSlot('humidifiers', i, rg.humidifiers[i]);
-    html += `</div>`;
-  }
-
-  const currentFan = rg.fans?.[0]?.settings?.speed ?? 50;
-  html += `
-    <div class="gear-group">
-      <div class="gear-group-title">Nutrient Stock</div>
-      <div class="gear-mini">Fan 1 speed is now stored per-slot, not globally. Current: ${currentFan}%</div>
-    </div>`;
-
-// ===== GLOBAL SYSTEMS =====
-const g = GS.gear || {};
-
-html += `<div class="gear-group">
-  <div class="gear-group-title">🧪 Systems</div>`;
-
-// CO2
-html += `<div class="gear-item">
-  <div class="gear-item-header">
-    <span class="gear-item-icon">🫧</span>
-    <span class="gear-item-name">CO₂ TANK</span>
-    <span class="gear-item-status ${g.co2Tank ? 'ok' : 'off'}">
-      ${g.co2Tank ? Math.round(g.co2Tank.level || 0) + '%' : 'Not installed'}
-    </span>
-  </div>
-  ${g.co2Tank ? `
-    <div class="gear-bar">
-      <div class="gear-bar-fill" style="width:${g.co2Tank.level||0}%;background:var(--purple)"></div>
-    </div>
-    <button class="btn-gear-act" onclick="refillCO2()">REFILL</button>
-  ` : ''}
-</div>`;
-
-// Reservoir
-if (g.reservoir) {
-  const lvl = g.reservoir.level || 0;
+  // ── LIGHTS ──
+  const lightCount = counts.lights || 0;
+  ensureSlotArray(rg, 'lights', lightCount);
   html += `<div class="gear-item">
     <div class="gear-item-header">
-      <span class="gear-item-icon">🛢️</span>
-      <span class="gear-item-name">RESERVOIR</span>
-      <span class="gear-item-status">${Math.round(lvl)}%</span>
-    </div>
-    <div class="gear-bar">
-      <div class="gear-bar-fill" style="width:${lvl}%;background:var(--cyan)"></div>
-    </div>
-    <button class="btn-gear-act" onclick="refillReservoir()">REFILL</button>
-  </div>`;
-}
+      <span class="gear-item-icon">💡</span>
+      <span class="gear-item-name">LIGHTS <span style="color:var(--muted);font-size:8px">(${lightCount} SLOT${lightCount!==1?'S':''})</span></span>
+      <span class="gear-item-status ${room.lightsOn?'ok':'off'}">${room.lightsOn?'ON':'OFF'}</span>
+    </div>`;
+  if (lightCount === 0) {
+    html += `<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">This room has no light slots</div>`;
+  }
+  for (let i=0; i<lightCount; i++) {
+    const inst = inv.find(x => x.uid === rg.lights[i]?.instanceUid);
+    const s    = rg.lights[i]?.settings || {};
+    html += `<div style="background:rgba(0,0,0,0.35);border:1px solid var(--border);border-radius:7px;padding:9px;margin-top:7px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+        <span style="font-family:var(--font-hud);font-size:8px;color:var(--muted)">SLOT ${i+1}</span>
+        ${inst?`<span style="font-size:8px;color:var(--gold);font-family:var(--font-hud)">${inst.name}${inst.power?' · '+inst.power+'W':''}</span>`:`<span style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">empty</span>`}
+      </div>
+      ${buildSlotSelect('lights',i,'lights')}
+      ${inst?`
+        <div class="fan-speed-ctrl" style="margin-top:7px">
+          <label style="width:60px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">HEIGHT</label>
+          <input type="range" min="0" max="100" value="${s.height??60}" style="flex:1;accent-color:var(--gold);height:3px"
+            oninput="updateRoomSlotSetting(${room.id},'lights',${i},'height',this.value);this.nextElementSibling.textContent=this.value+'cm'">
+          <span class="fan-speed-val" style="color:var(--gold)">${s.height??60}cm</span>
+        </div>
+        <div class="fan-speed-ctrl">
+          <label style="width:60px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">INTENSITY</label>
+          <input type="range" min="0" max="100" value="${s.intensity??100}" style="flex:1;accent-color:var(--gold);height:3px"
+            oninput="updateRoomSlotSetting(${room.id},'lights',${i},'intensity',this.value);this.nextElementSibling.textContent=this.value+'%'">
+          <span class="fan-speed-val" style="color:var(--gold)">${s.intensity??100}%</span>
+        </div>`:`<div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:5px">Buy lights in Shop → Lights and install here</div>`}
+    </div>`;
+  }
+  html += `</div>`;
 
-html += `</div>`;
+  // ── FANS ──
+  const fanCount = counts.fans || 0;
+  ensureSlotArray(rg, 'fans', fanCount);
+  html += `<div class="gear-item">
+    <div class="gear-item-header">
+      <span class="gear-item-icon">🌀</span>
+      <span class="gear-item-name">FANS <span style="color:var(--muted);font-size:8px">(${fanCount} SLOT${fanCount!==1?'S':''})</span></span>
+    </div>`;
+  if (fanCount === 0) {
+    html += `<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">This room has no fan slots</div>`;
+  }
+  for (let i=0; i<fanCount; i++) {
+    const inst = inv.find(x => x.uid === rg.fans[i]?.instanceUid);
+    const s    = rg.fans[i]?.settings || {};
+    html += `<div style="background:rgba(0,0,0,0.35);border:1px solid var(--border);border-radius:7px;padding:9px;margin-top:7px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+        <span style="font-family:var(--font-hud);font-size:8px;color:var(--muted)">SLOT ${i+1}</span>
+        ${inst?`<span style="font-size:8px;color:var(--cyan);font-family:var(--font-hud)">${inst.name}</span>`:`<span style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">empty</span>`}
+      </div>
+      ${buildSlotSelect('fans',i,'fan')}
+      ${inst?`
+        <div class="fan-speed-ctrl" style="margin-top:7px">
+          <label style="width:60px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">SPEED</label>
+          <input type="range" min="0" max="100" value="${s.speed??50}" style="flex:1;accent-color:var(--cyan);height:3px"
+            oninput="updateRoomSlotSetting(${room.id},'fans',${i},'speed',this.value);this.nextElementSibling.textContent=this.value+'%'">
+          <span class="fan-speed-val" style="color:var(--cyan)">${s.speed??50}%</span>
+        </div>`:`<div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:5px">Buy fans in Shop → Climate and install here</div>`}
+    </div>`;
+  }
+  html += `</div>`;
+
+  // ── HEATER — turns ON below "on" setpoint, OFF above "off" setpoint ──
+  html += `<div class="gear-item ${g.heater&&(g.thermHeatOn>=g.thermHeatOff)?'gear-warning':''}">
+    <div class="gear-item-header">
+      <span class="gear-item-icon">🔥</span>
+      <span class="gear-item-name">HEATER</span>
+      <span class="gear-item-status ${g.heater?'ok':'off'}">${g.heater?(g.heater.type||g.heater.name||'INSTALLED'):'NOT INSTALLED'}</span>
+    </div>
+    ${g.heater?`
+      <div class="gear-bar" style="margin:5px 0 6px"><div class="gear-bar-fill" style="width:100%;background:var(--orange)"></div></div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin-bottom:5px;letter-spacing:.5px">TURNS ON below ON-AT · OFF above OFF-AT</div>
+      ${thermRow('ON AT ↓','thermHeatOn',50,85,'°F','var(--blue)')}
+      ${thermRow('OFF AT ↑','thermHeatOff',55,95,'°F','var(--red)')}
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Currently: ${g.thermHeatOn}°F on → ${g.thermHeatOff}°F off</div>`
+    :`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Buy a Heater in Shop → Climate</div>`}
+  </div>`;
+
+  // ── AC UNIT — turns ON above "on" setpoint, OFF below "off" setpoint ──
+  html += `<div class="gear-item">
+    <div class="gear-item-header">
+      <span class="gear-item-icon">❄️</span>
+      <span class="gear-item-name">AC UNIT</span>
+      <span class="gear-item-status ${g.acUnit?'ok':'off'}">${g.acUnit?(g.acUnit.type||g.acUnit.name||'INSTALLED'):'NOT INSTALLED'}</span>
+    </div>
+    ${g.acUnit?`
+      <div class="gear-bar" style="margin:5px 0 6px"><div class="gear-bar-fill" style="width:100%;background:var(--blue)"></div></div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin-bottom:5px;letter-spacing:.5px">TURNS ON above ON-AT · OFF below OFF-AT</div>
+      ${thermRow('ON AT ↑','thermAcOn',60,100,'°F','var(--red)')}
+      ${thermRow('OFF AT ↓','thermAcOff',55,95,'°F','var(--blue)')}
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Currently: ${g.thermAcOn}°F on → ${g.thermAcOff}°F off</div>`
+    :`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Buy an AC Unit in Shop → Climate</div>`}
+  </div>`;
+
+  // ── HUMIDIFIER — turns ON below "on" setpoint, OFF above "off" setpoint ──
+  html += `<div class="gear-item">
+    <div class="gear-item-header">
+      <span class="gear-item-icon">💧</span>
+      <span class="gear-item-name">HUMIDIFIER</span>
+      <span class="gear-item-status ${g.humidifier?'ok':'off'}">${g.humidifier?(g.humidifier.type||'INSTALLED'):'NOT INSTALLED'}</span>
+    </div>
+    ${g.humidifier?`
+      <div class="gear-bar" style="margin:5px 0 6px"><div class="gear-bar-fill" style="width:100%;background:var(--cyan)"></div></div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin-bottom:5px;letter-spacing:.5px">TURNS ON below ON-AT · OFF above OFF-AT</div>
+      ${thermRow('ON AT ↓','thermHumidOn',20,80,'%','var(--blue)')}
+      ${thermRow('OFF AT ↑','thermHumidOff',30,95,'%','var(--red)')}
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Currently: ${g.thermHumidOn}% on → ${g.thermHumidOff}% off</div>`
+    :`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Buy a Humidifier in Shop → Climate</div>`}
+  </div>`;
+
+  // ── DEHUMIDIFIER — turns ON above "on" setpoint, OFF below "off" setpoint ──
+  html += `<div class="gear-item">
+    <div class="gear-item-header">
+      <span class="gear-item-icon">🌵</span>
+      <span class="gear-item-name">DEHUMIDIFIER</span>
+      <span class="gear-item-status ${g.dehumidifier?'ok':'off'}">${g.dehumidifier?(g.dehumidifier.type||'INSTALLED'):'NOT INSTALLED'}</span>
+    </div>
+    ${g.dehumidifier?`
+      <div class="gear-bar" style="margin:5px 0 6px"><div class="gear-bar-fill" style="width:100%;background:var(--purple)"></div></div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin-bottom:5px;letter-spacing:.5px">TURNS ON above ON-AT · OFF below OFF-AT</div>
+      ${thermRow('ON AT ↑','thermDehuOn',30,90,'%','var(--red)')}
+      ${thermRow('OFF AT ↓','thermDehuOff',25,80,'%','var(--blue)')}
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Currently: ${g.thermDehuOn}% on → ${g.thermDehuOff}% off</div>`
+    :`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Buy a Dehumidifier in Shop → Climate</div>`}
+  </div>`;
+
+  // ── CO2 TANK ──
+  const co2 = g.co2Tank || null;
+  html += `<div class="gear-item ${co2&&(co2.level||0)<20?'gear-warning':''}">
+    <div class="gear-item-header">
+      <span class="gear-item-icon">🫧</span>
+      <span class="gear-item-name">CO₂ TANK</span>
+      <span class="gear-item-status ${co2?((co2.level||0)>20?'ok':'warn'):'off'}">${co2?Math.round(co2.level||0)+'%':'NOT INSTALLED'}</span>
+    </div>
+    ${co2?`
+      <div class="gear-bar" style="margin:5px 0"><div class="gear-bar-fill" style="width:${co2.level||0}%;background:var(--purple)"></div></div>
+      <div class="gear-bar-label">${(co2.level||0)<20?'⚠️ Low — refill soon!':'Pressurized and ready'}</div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin:7px 0 4px;letter-spacing:.5px">TARGET PPM — CO₂ activates below target, stops above</div>
+      <div class="fan-speed-ctrl">
+        <label style="width:60px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">TARGET</label>
+        <input type="range" min="400" max="1500" step="50" value="${g.co2Target||1200}" style="flex:1;accent-color:var(--purple);height:3px"
+          oninput="GS.gear.co2Target=parseInt(this.value);document.getElementById('tv-co2Target').textContent=this.value+'ppm';saveGame()">
+        <span class="fan-speed-val" id="tv-co2Target" style="color:var(--purple)">${g.co2Target||1200}ppm</span>
+      </div>
+      <div class="gear-actions"><button class="btn-gear-act gold" onclick="refillCO2()">REFILL TANK −2,000¢</button></div>`
+    :`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Buy a CO₂ Tank in Shop → Climate</div>`}
+  </div>`;
+
+  // ── RESERVOIR ──
+  const res      = rg.reservoir || null;
+  const awPlants = rg.autoWaterPlants || [];
+  const aw       = rg.autoWaterSettings || {dryout:30, stopto:80};
+  const emAvail  = (rg.emitterPacks||0) + (invC['emitters']||0);
+  const hoAvail  = (rg.hosingPacks ||0) + (invC['hosing']  ||0);
+
+  if (res) {
+    const capG    = res.capacityGal || res.capacity || 20;
+    const levelG  = res.levelGal != null ? res.levelGal : (res.level||0)/100*capG;
+    const levelPct= Math.max(0,Math.min(100,Math.round(levelG/capG*100)));
+    const rColor  = levelPct>50?'var(--green)':levelPct>20?'var(--gold)':'var(--red)';
+    html += `<div class="gear-item ${levelPct<20?'gear-warning':''}">
+      <div class="gear-item-header">
+        <span class="gear-item-icon">🛢️</span>
+        <span class="gear-item-name">RESERVOIR <span style="font-size:8px;color:var(--muted)">${capG.toLocaleString()} GAL</span></span>
+        <span class="gear-item-status ${levelPct>50?'ok':levelPct>20?'warn':'danger'}">${levelG.toFixed(0)}gal left</span>
+      </div>
+      <div class="gear-bar" style="margin:6px 0"><div class="gear-bar-fill" style="width:${levelPct}%;background:${rColor}"></div></div>
+      <div class="gear-bar-label">${levelPct}% full · ${levelG.toFixed(1)} / ${capG.toLocaleString()} gallons${levelPct<20?' · ⚠️ LOW':''}</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:10px 0 8px">
+        <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:6px;padding:7px;text-align:center">
+          <div style="font-family:var(--font-hud);font-size:7px;color:var(--muted);letter-spacing:.5px;margin-bottom:4px">NUTRIENT PPM</div>
+          <div style="font-family:var(--font-hud);font-size:14px;color:var(--cyan)">${res.ppm||0}</div>
+        </div>
+        <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:6px;padding:7px;text-align:center">
+          <div style="font-family:var(--font-hud);font-size:7px;color:var(--muted);letter-spacing:.5px;margin-bottom:4px">WATER AT</div>
+          <div style="font-family:var(--font-hud);font-size:14px;color:var(--blue)">${aw.dryout||30}%</div>
+        </div>
+        <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:6px;padding:7px;text-align:center">
+          <div style="font-family:var(--font-hud);font-size:7px;color:var(--muted);letter-spacing:.5px;margin-bottom:4px">STOP AT</div>
+          <div style="font-family:var(--font-hud);font-size:14px;color:var(--green)">${aw.stopto||80}%</div>
+        </div>
+      </div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-bottom:8px;line-height:1.6">
+        ${awPlants.length} plant(s) on auto-water · ${emAvail} emitter pack(s) · ${hoAvail} hose pack(s) available
+      </div>
+      <div class="gear-actions">
+        <button class="btn-gear-act" onclick="openFillReservoirModal()">🧪 FILL W/ NUTRIENTS</button>
+        <button class="btn-gear-act gold" onclick="refillReservoirPlain(${room.id})">💧 PLAIN WATER</button>
+      </div>
+    </div>`;
+  } else {
+    html += `<div class="gear-item">
+      <div class="gear-item-header">
+        <span class="gear-item-icon">🛢️</span>
+        <span class="gear-item-name">RESERVOIR</span>
+        <span class="gear-item-status off">NOT INSTALLED</span>
+      </div>
+      <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">
+        Buy a reservoir in Shop → Water to enable auto-watering<br>
+        <span style="color:var(--muted)">Available stock: ${emAvail} emitters · ${hoAvail} hose packs</span>
+      </div>
+    </div>`;
+  }
 
   body.innerHTML = html;
-}
-
-// ================================================================
-// DAILY GOAL
-// ================================================================
-function renderDailyGoal() {
-  const bar = document.getElementById('daily-goal-bar');
-  if (!bar) return;
-  const today = new Date().toDateString();
-  if (GS.dailyGoalDone && GS.dailyGoalDate === today) {
-    bar.classList.add('hidden');
-    return;
-  }
-  bar.classList.remove('hidden');
-  const goal = getDailyGoal();
-  const diff = GS.difficulty || 'easy';
-  if (diff === 'master') bar.classList.add('hard');
-  else bar.classList.remove('hard');
-  _el('daily-goal-text',   goal.icon + ' ' + goal.text);
-  _el('daily-goal-reward', 'Reward: ' + goal.reward + '¢ + ' + goal.xp + ' XP');
-}
-
-function dismissDailyGoal() {
-  GS.dailyGoalDone = true;
-  GS.dailyGoalDate = new Date().toDateString();
-  const bar = document.getElementById('daily-goal-bar');
-  if (bar) bar.classList.add('hidden');
-  saveGame();
-}
-
-function completeDailyGoal() {
-  const today = new Date().toDateString();
-  if (GS.dailyGoalDone && GS.dailyGoalDate === today) return;
-  const goal = getDailyGoal();
-  GS.coins += goal.reward;
-  grantXP(goal.xp);
-  GS.dailyGoalDone = true;
-  GS.dailyGoalDate = today;
-  GS.dailyGoalId   = goal.id;
-  toast('🎯 Daily goal complete! +' + goal.reward + '¢ +' + goal.xp + ' XP', 'ok', 4000);
-  renderDailyGoal(); renderHeader(); saveGame();
-  checkAchievements();
 }
 
 // ================================================================
@@ -5328,11 +5393,13 @@ const SHOP_ITEMS = {
     {id:'co2_tank',     name:'CO₂ Tank',         price:6000,  icon:'🫧', type:'co2Tank', desc:'Raises CO₂ up to 1500ppm. Refills every 7 days.'},
   ],
   irrigation: [
-    {id:'res_5',    name:'5 Gal Reservoir',  price:3000,  icon:'🛢️', type:'reservoir', size:'5gal',  desc:'Entry-level auto-water reservoir.'},
-    {id:'res_10',   name:'10 Gal Reservoir', price:5000,  icon:'🛢️', type:'reservoir', size:'10gal', desc:'Mid-range. 2–4 plants.'},
-    {id:'res_20',   name:'20 Gal Reservoir', price:8000,  icon:'🛢️', type:'reservoir', size:'20gal', desc:'Large capacity for full rooms.'},
-    {id:'emitters', name:'Drip Emitters',    price:800,   icon:'💦', type:'emitters', desc:'Required for auto-watering.'},
-    {id:'hosing',   name:'Hosing Pack',      price:500,   icon:'🪣', type:'hosing',   desc:'Connects reservoir to emitters.'},
+    {id:'res_500',   name:'500 Gal Reservoir',   price:3000,  icon:'🛢️', type:'reservoir', capacityGal:500,   desc:'Entry-level tank. Handles 2–4 plants for days without refilling.'},
+    {id:'res_1000',  name:'1,000 Gal Reservoir',  price:6000,  icon:'🛢️', type:'reservoir', capacityGal:1000,  desc:'Mid-range. Solid for 4–8 plants.'},
+    {id:'res_2000',  name:'2,000 Gal Reservoir',  price:10000, icon:'🛢️', type:'reservoir', capacityGal:2000,  desc:'Large capacity — fills small rooms easily.'},
+    {id:'res_5000',  name:'5,000 Gal Reservoir',  price:22000, icon:'🛢️', type:'reservoir', capacityGal:5000,  desc:'Commercial tank. Large room no problem.'},
+    {id:'res_10000', name:'10,000 Gal Reservoir', price:50000, icon:'🛢️', type:'reservoir', capacityGal:10000, desc:'Maximum capacity. Set it and forget it.'},
+    {id:'emitters', name:'Drip Emitters (×5)',  price:800,   icon:'💦', type:'emitters', qty:5, desc:'5 packs. Each connects one plant to the reservoir.'},
+    {id:'hosing',   name:'Hosing Pack (×5)',    price:500,   icon:'🪣', type:'hosing',   qty:5, desc:'5 packs. One pack per plant connection needed.'},
     // Nutrients (1000ml bottles)
     {id:'nute_base',  name:'Base Feed 1L',   price:600,   icon:'🧴', type:'nutrients', ntype:'nuteBase',  desc:'Base nutrient solution. 1000ml bottle.'},
     {id:'nute_grow',  name:'Grow (N) 1L',    price:700,   icon:'🧴', type:'nutrients', ntype:'nuteGrow',  desc:'High-nitrogen veg feed. 1000ml bottle.'},
@@ -5450,36 +5517,74 @@ function buyGear(itemId) {
     item.type === 'phDown' ||
     item.type === 'pot' ||
     item.type === 'soil' ||
-    item.type === 'healthSpray' ||
-    item.type === 'stsSpray' ||
-    item.type === 'emitters' ||
-    item.type === 'hosing';
+    item.type === 'healthSpray';
+
+  const activeRoomId = (GS.rooms[GS.activeRoom||0] || GS.rooms[0])?.id || 1;
 
   if (item.type === 'unlockRoom') {
     const def = ROOM_DEFS[item.roomId];
-    if (!def) { toast('Unknown room!', 'err'); GS.coins += item.price; return; }
-    if ((GS.level || 1) < def.levelReq) {
-      toast('⚠️ Need Level ' + def.levelReq + ' to unlock Room ' + item.roomId, 'warn');
-      GS.coins += item.price;
-      return;
+    if (!def) { toast('Unknown room!','err'); GS.coins += item.price; return; }
+    if ((GS.level||1) < def.levelReq) {
+      toast('⚠️ Need Level ' + def.levelReq + ' to unlock Room ' + item.roomId,'warn');
+      GS.coins += item.price; return;
     }
-    if (!(GS.rooms || []).some(r => r.id === item.roomId)) {
+    if (!(GS.rooms||[]).some(r => r.id === item.roomId)) {
       GS.rooms.push(defaultRoom(item.roomId));
       if (!GS.roomGear) GS.roomGear = {};
       GS.roomGear[item.roomId] = defaultGear();
     }
+  } else if (item.type === 'reservoir') {
+    const rg = getRoomGear(activeRoomId);
+    const capG = item.capacityGal || 20;
+    rg.reservoir = { size: item.name, capacityGal: capG, levelGal: capG, level: 100, ppm: 0, _lowWarn: false };
+    toast('🛢️ ' + item.name + ' installed in ' + (GS.rooms.find(r=>r.id===activeRoomId)?.name||'Room') + '!','ok',3000);
+  } else if (item.type === 'emitters') {
+    const rg = getRoomGear(activeRoomId);
+    rg.emitterPacks = (rg.emitterPacks||0) + (item.qty||1);
+    toast('💦 ' + (item.qty||1) + 'x Emitter Packs added to ' + (GS.rooms.find(r=>r.id===activeRoomId)?.name||'Room') + '!','ok',2500);
+  } else if (item.type === 'hosing') {
+    const rg = getRoomGear(activeRoomId);
+    rg.hosingPacks = (rg.hosingPacks||0) + (item.qty||1);
+    toast('🪣 ' + (item.qty||1) + 'x Hose Packs added to ' + (GS.rooms.find(r=>r.id===activeRoomId)?.name||'Room') + '!','ok',2500);
+  } else if (item.type === 'acUnit') {
+    if (!GS.gear) GS.gear = defaultGear();
+    GS.gear.acUnit = { type: item.atype||item.name, size: item.asize||'medium' };
+    toast('❄️ ' + item.name + ' installed!','ok',3000);
+  } else if (item.type === 'humidifier') {
+    if (!GS.gear) GS.gear = defaultGear();
+    GS.gear.humidifier = { type: item.htype||item.name, size: item.hsize||'medium' };
+    toast('💧 ' + item.name + ' installed!','ok',3000);
+  } else if (item.type === 'dehumidifier') {
+    if (!GS.gear) GS.gear = defaultGear();
+    GS.gear.dehumidifier = { type: item.dtype||item.name, size: item.dsize||'medium' };
+    toast('🌵 ' + item.name + ' installed!','ok',3000);
+  } else if (item.type === 'heater') {
+    if (!GS.gear) GS.gear = defaultGear();
+    GS.gear.heater = { type: item.htype||item.name, size: item.heatsize||'medium' };
+    toast('🔥 ' + item.name + ' installed!','ok',3000);
+  } else if (item.type === 'co2Tank') {
+    if (!GS.gear) GS.gear = defaultGear();
+    GS.gear.co2Tank = { level: 100 };
+    toast('🫧 CO₂ Tank installed!','ok',3000);
+  } else if (item.type === 'scope') {
+    GS.gear.scope = true; toast('🔬 Jeweler\'s Loupe installed!','ok',2500);
+  } else if (item.type === 'phmeter') {
+    GS.gear.phmeter = true; toast('🧪 pH Meter installed!','ok',2500);
+  } else if (item.type === 'ecmeter') {
+    GS.gear.ecmeter = true; toast('🔌 EC/PPM Meter installed!','ok',2500);
+  } else if (item.type === 'scrogNet') {
+    GS.gear.scrogNet = true; toast('🕸️ SCROG Net installed!','ok',2500);
+  } else if (item.type === 'stsSpray') {
+    GS.gear.stsSprayCount = (GS.gear.stsSprayCount||0) + 1;
+    toast('🧪 STS Spray added! (' + GS.gear.stsSprayCount + ' available)','ok',3000);
   } else if (isConsumable) {
-    inv.consumables[item.id] = (inv.consumables[item.id] || 0) + (item.qty || 1);
+    inv.consumables[item.id] = (inv.consumables[item.id]||0) + (item.qty||1);
   } else {
     inv.instances.push({
-      uid: uid(),
-      itemId: item.id,
-      type: item.type,
-      name: item.name,
-      icon: item.icon,
-      size: item.size || item.fsize || item.hsize || item.dsize || item.asize || item.heatsize || 'medium',
-      power: item.power || null,
-      equipType: item.type
+      uid: uid(), itemId: item.id, type: item.type,
+      name: item.name, icon: item.icon,
+      size: item.size||item.fsize||item.hsize||item.dsize||item.asize||item.heatsize||'medium',
+      power: item.power||null, equipType: item.type
     });
   }
 
@@ -6994,6 +7099,14 @@ function selectFeedMode(btn) {
     if (flushSection) flushSection.style.display = 'none';
   }
   updateNuteTotals();
+}
+
+function selectWaterAmt(btn) {
+  document.querySelectorAll('.water-amt-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  const amt = btn.dataset.amt || '25';
+  const inp = document.getElementById('inp-water-amount');
+  if (inp) inp.value = amt;
 }
 
 function updateNuteTotals() {
