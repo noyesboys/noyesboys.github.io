@@ -659,6 +659,38 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .dry-equip-btn.active-heat{border-color:var(--gold);background:rgba(251,191,36,0.1);color:var(--gold)}
 .dry-equip-btn:disabled{opacity:.3;cursor:not-allowed}
 .mold-badge{display:inline-block;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.5);border-radius:5px;padding:4px 10px;font-family:var(--font-hud);font-size:9px;color:var(--red);letter-spacing:.5px;animation:dangerPulse 2s ease-in-out infinite}
+/* ── Strain Card Overlay (flip) ── */
+.strain-card-overlay{
+  position:absolute;inset:0;
+  background:var(--card-bg);
+  border:1px solid var(--border-bright);
+  border-radius:14px;
+  z-index:50;
+  opacity:0;
+  pointer-events:none;
+  transform:rotateY(90deg);
+  transform-origin:left center;
+  transition:transform .38s cubic-bezier(.4,0,.2,1),opacity .22s;
+  overflow-y:auto;overflow-x:hidden;
+}
+.strain-card-overlay.showing{opacity:1;pointer-events:auto;transform:rotateY(0deg)}
+.sco-card-img{width:100%;display:block;max-height:280px;object-fit:contain}
+.sco-info{padding:12px}
+.sco-name{font-family:var(--font-hud);font-size:12px;color:var(--green);letter-spacing:.5px;margin-bottom:3px}
+.sco-genetics{font-size:9px;color:var(--muted);font-style:italic;margin-bottom:9px;line-height:1.5}
+.sco-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:9px}
+.sco-stat{background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:5px;padding:6px;text-align:center}
+.sco-stat-lbl{font-size:7px;color:var(--muted);font-family:var(--font-hud);letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px}
+.sco-stat-val{font-family:var(--font-hud);font-size:13px}
+.sco-flip-back{width:100%;padding:7px;background:rgba(74,222,128,0.1);border:1px solid var(--green);border-radius:6px;color:var(--green);font-family:var(--font-hud);font-size:9px;cursor:pointer;letter-spacing:.5px;transition:.15s;margin-top:4px}
+.sco-flip-back:hover{background:rgba(74,222,128,0.22)}
+.sco-no-card{padding:16px;text-align:center}
+/* ── Collector Cards (inventory) ── */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:6px}
+.collector-card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:.2s;text-align:center}
+.collector-card:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 6px 18px rgba(74,222,128,0.1)}
+.collector-card-img{width:100%;display:block;max-height:190px;object-fit:contain}
+.collector-card-label{font-family:var(--font-hud);font-size:8px;color:var(--muted);letter-spacing:.3px;padding:5px 4px;border-top:1px solid var(--border);line-height:1.5}
 </style>
 </head>
 
@@ -1116,6 +1148,18 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 <!-- ===== TOAST CONTAINER ===== -->
 <div id="toast"></div>
 
+<!-- CARD VIEWER MODAL -->
+<div class="modal-overlay" id="modal-card-viewer">
+  <div class="modal-box" style="max-width:420px;text-align:center;padding:20px">
+    <div class="modal-title" id="card-viewer-title" style="justify-content:center;margin-bottom:12px">— STRAIN CARD —</div>
+    <img id="card-viewer-img" src="" alt="" style="width:100%;max-height:65vh;object-fit:contain;border-radius:8px;margin-bottom:10px">
+    <div id="card-viewer-desc" style="font-size:10px;color:var(--muted);font-family:var(--font-mono);margin-bottom:10px;line-height:1.6"></div>
+    <div class="modal-actions">
+      <button class="btn-modal cancel" onclick="closeModal('modal-card-viewer')">CLOSE</button>
+    </div>
+  </div>
+</div>
+
 <!-- ===================================================================
      MODALS
 =================================================================== -->
@@ -1331,6 +1375,9 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 <div class="modal-overlay" id="modal-harvest">
   <div class="modal-box wide">
     <div class="modal-title">🌾 HARVEST PLANT</div>
+    <div id="harvest-card-preview" style="text-align:center;margin-bottom:8px;display:none">
+      <img id="harvest-card-img" src="" alt="" style="max-height:90px;border-radius:6px;object-fit:contain;opacity:0.88">
+    </div>
     <input type="hidden" id="inp-harvest-plant-id" value="">
     <div class="analysis-section">
       <div class="analysis-grade-row">
@@ -1681,6 +1728,36 @@ const TICK_MS      = 10000;
 const GAME_SPEED   = 144;
 const ACCOUNTS_KEY = 'nbg_accounts_v31';
 const SPRITE_BASE  = 'assets/webgame/manuallysorted';
+const STRAIN_CARD_BASE = 'assets/sept22edits/websiteimagedata/cards/finished/';
+const STRAIN_CARDS_LIST = [
+  "Purple Rainbow","Rainbow Cakes","Cake Breath","Alienoyes Kush","Mangonoyes Kush",
+  "Citronoyes Haze","Noyes Haze","Noyes Breath","Meat Cakes","Biscotti Rocks",
+  "Yesno Kush","Shiny Rocks","Noyes Rocks","Noyes Pebbles","Mango Rocks",
+  "Citrus Pebbles","Citrus Rocks","Alien Rocks","Citrus Haze Breath","Mango Aliens",
+  "Loud Dreams","Afghani Noyes","White Noyes","Blueberry Fingers","Cheeto Fingers",
+  "Noyes OG","Bubba Noyes","Captain Noyes","Hash Fingers","Noyes Poison",
+  "Albino Skunk","Rainbow Skunk","Skunk Breath","Blueberry Skunk","Skunk Cake",
+  "Le Pew","Skunk Capone","Skunk Face","Alienized Skunk","Citrus Squirts",
+  "Noyes Thunder","Snowstorm","TFB","Trainbreath","Lemon Breath","Larry Breath",
+  "Citrus Breath","Larry Noyes","Super Noyes","Super Poison","Super Noyes Runts",
+  "Super Captain Noyes","Super Bubba","Super Breath","Super Alienoyes",
+  "Super Rainbow Skunk","Super Albino Skunk","Super Larry Noyes"
+];
+
+function getStrainCardPath(strainName) {
+  if (!strainName) return null;
+  if (STRAIN_CARDS_LIST.includes(strainName))
+    return STRAIN_CARD_BASE + strainName.replace(/ /g,'%20') + '.png';
+  // Bred strains: inherit first known parent's card art
+  const bred = (typeof GS !== 'undefined' && GS && GS.bredStrains||[]).find(b=>b.name===strainName);
+  if (bred && bred.genetics) {
+    for (const part of bred.genetics.split(/[×x]/)) {
+      const p = part.trim();
+      if (STRAIN_CARDS_LIST.includes(p)) return STRAIN_CARD_BASE + p.replace(/ /g,'%20') + '.png';
+    }
+  }
+  return null;
+}
 
 // ================================================================
 // SPRITE SYSTEM
@@ -2736,6 +2813,7 @@ function defaultState(username, difficulty) {
     dailyGoalDate: '',
     dailyGoalDone: false,
     dailyGoalId: '',
+    cards: [],
     growTime: 0,           // total in-game minutes elapsed
     _bmBotListings: [],
     _welcomeSent: false,
@@ -4063,40 +4141,59 @@ function renderInventory() {
   const cont = document.getElementById('inventory-container');
   if (!cont) return;
 
-  const inv = getInventory();
-  const groups = new Map();
-
-  inv.instances.forEach(x => {
-    if (!groups.has(x.itemId)) groups.set(x.itemId, []);
-    groups.get(x.itemId).push(x);
-  });
-
-  const consumables = inv.consumables || {};
-  let html = '';
-
+  // ── Gear & Consumables ──
   const allItems = Object.values(SHOP_ITEMS).flat();
+  let itemsHtml = '';
   allItems.forEach(item => {
     const count = ownedCount(item.id);
     if (count <= 0) return;
-
-    const icon = item.icon || '📦';
-    html += `
-      <div class="shop-item">
-        <div class="shop-item-icon">${icon}</div>
-        <div class="shop-item-info">
-          <div class="shop-item-name">${item.name}</div>
-          <div class="shop-item-desc">${item.desc || ''}</div>
-          <div class="shop-item-price">Owned: ${count}</div>
-        </div>
-      </div>`;
+    itemsHtml += `<div class="shop-item">
+      <div class="shop-item-icon">${item.icon||'📦'}</div>
+      <div class="shop-item-info">
+        <div class="shop-item-name">${item.name}</div>
+        <div class="shop-item-desc">${item.desc||''}</div>
+        <div class="shop-item-price">Owned: ${count}</div>
+      </div>
+    </div>`;
   });
 
-  if (!html) {
-    cont.innerHTML = '<div class="empty-state">No inventory yet.</div>';
-    return;
+  // ── Collector Cards ──
+  const ownedCards = GS.cards || [];
+  let cardsHtml = `<div class="section-divider" style="margin-top:20px">🃏 COLLECTOR CARDS (${ownedCards.length})</div>`;
+  if (ownedCards.length) {
+    cardsHtml += '<div class="cards-grid">';
+    ownedCards.forEach(strainName => {
+      const path   = getStrainCardPath(strainName);
+      const emoji  = (STRAINS[strainName]||{}).emoji || '🌿';
+      const safeName = strainName.replace(/'/g,"\\'");
+      cardsHtml += `<div class="collector-card" onclick="viewCard('${safeName}')" title="${strainName}">
+        ${path
+          ? `<img class="collector-card-img" src="${path}" alt="${strainName}" onerror="this.style.opacity='0.08'">`
+          : `<div style="height:150px;display:flex;align-items:center;justify-content:center;font-size:42px">${emoji}</div>`}
+        <div class="collector-card-label">${strainName}</div>
+      </div>`;
+    });
+    cardsHtml += '</div>';
+  } else {
+    cardsHtml += '<div style="color:var(--muted);font-family:var(--font-hud);font-size:10px;padding:18px;text-align:center;letter-spacing:1px;line-height:2">No cards yet.<br>Redeem seed codes to unlock collector cards!</div>';
   }
 
-  cont.innerHTML = `<div class="shop-items-list">${html}</div>`;
+  const gearSection = itemsHtml
+    ? `<div class="section-divider">🎒 GEAR &amp; CONSUMABLES</div><div class="shop-items-list">${itemsHtml}</div>`
+    : `<div style="color:var(--muted);font-family:var(--font-hud);font-size:10px;padding:12px;text-align:center;letter-spacing:1px">No gear items yet — buy from the Shop.</div>`;
+
+  cont.innerHTML = gearSection + cardsHtml;
+}
+
+function viewCard(strainName) {
+  const path   = getStrainCardPath(strainName);
+  const strain = STRAINS[strainName] || (GS.bredStrains||[]).find(b=>b.name===strainName) || {};
+  _el('card-viewer-title', strainName);
+  const img  = document.getElementById('card-viewer-img');
+  const desc = document.getElementById('card-viewer-desc');
+  if (img)  { img.src = path||''; img.style.display = path ? '' : 'none'; }
+  if (desc) desc.textContent = (strain.genetics||'') + (strain.thcBase ? `  ·  THC: ${strain.thcBase}%  ·  ~${strain.yieldBase}g  ·  ${strain.flowerDays}d flower` : '');
+  openModal('modal-card-viewer');
 }
 
 function showLoginTab(name) {
@@ -4879,6 +4976,8 @@ function _buildPlantCard(plant, room) {
   const strain  = STRAINS[plant.strainName] || (GS.bredStrains||[]).find(b=>b.name===plant.strainName) || {variety:'hybrid', emoji:'🌿', genetics:''};
   const actual  = room.envActual || {temp:78, humid:65, co2:400};
   const imgSrc  = getPlantSprite(plant, strain);
+  const _cPath  = getStrainCardPath(plant.strainName);
+  const cardBg  = _cPath || imgSrc;
   const week    = getPlantWeek(plant);
   const score   = calcGrowScore(plant);
   const holiday = getHoliday();
@@ -4905,7 +5004,7 @@ function _buildPlantCard(plant, room) {
 
   card.innerHTML = `
     <div class="plant-art-area" onclick="handlePlantClick('${plant.id}')" id="art-${plant.id}">
-      <div class="plant-art-bg" style="background-image:url('${imgSrc}')"></div>
+      <div class="plant-art-bg" style="background-image:url('${cardBg}');background-position:center center"></div>
       <div class="plant-art-bg-overlay"></div>
       <img class="plant-img" id="img-${plant.id}" src="${imgSrc}" alt="${plant.strainName}" loading="lazy"
            onerror="this.style.opacity='0.05'">
@@ -5010,6 +5109,44 @@ function _buildPlantCard(plant, room) {
              : ''}
          </div>`}
     `;
+  // ── Strain card overlay (flip on non-interactive click) ──
+  const _sco = document.createElement('div');
+  _sco.className = 'strain-card-overlay';
+  _sco.id = 'sco-' + plant.id;
+  const _bredDef2 = (GS.bredStrains||[]).find(b=>b.name===plant.strainName);
+  const _flipBackBtn = `<button class="sco-flip-back" onclick="event.stopPropagation();document.getElementById('sco-${plant.id}').classList.remove('showing')">← FLIP BACK</button>`;
+  const _statsGrid = `<div class="sco-stats">
+    <div class="sco-stat"><div class="sco-stat-lbl">THC</div><div class="sco-stat-val" style="color:var(--gold)">${strain.thcBase||'?'}%</div></div>
+    <div class="sco-stat"><div class="sco-stat-lbl">YIELD</div><div class="sco-stat-val" style="color:var(--green)">~${strain.yieldBase||'?'}g</div></div>
+    <div class="sco-stat"><div class="sco-stat-lbl">FLOWER</div><div class="sco-stat-val" style="color:var(--cyan)">${strain.flowerDays||63}d</div></div>
+  </div>`;
+  const _genBadge = _bredDef2
+    ? `<div style="font-size:9px;color:var(--purple);font-family:var(--font-hud);margin-bottom:7px">Gen: ${_bredDef2.gen} · ${_bredDef2.seedType||'FEM'}</div>` : '';
+  const _dayLine = `<div style="font-size:9px;color:var(--muted);font-family:var(--font-hud);margin-bottom:8px">Day ${Math.floor(plant.dayAge||0)} · ${plant.stage} · <span style="color:${plant.rarity==='GOD'?'var(--pink)':plant.rarity==='Glowing'?'var(--orange)':plant.rarity==='Sparkling'?'var(--cyan)':plant.rarity==='Shiny'?'var(--gold)':plant.rarity==='EP'?'var(--purple)':'var(--muted)'}">${plant.rarity||'Standard'}</span></div>`;
+
+  if (_cPath) {
+    _sco.innerHTML = `<img class="sco-card-img" src="${_cPath}" alt="${plant.strainName}" onerror="this.style.display='none'">
+      <div class="sco-info">
+        <div class="sco-name">${plant.name||plant.strainName}</div>
+        <div class="sco-genetics">${strain.genetics||''}</div>
+        ${_statsGrid}${_genBadge}${_dayLine}${_flipBackBtn}
+      </div>`;
+  } else {
+    _sco.innerHTML = `<div class="sco-no-card">
+        <div style="font-size:40px;margin-bottom:8px">${strain.emoji||'🌿'}</div>
+        <div class="sco-name">${plant.name||plant.strainName}</div>
+        <div class="sco-genetics">${strain.genetics||''}</div>
+        ${_statsGrid}${_genBadge}${_dayLine}${_flipBackBtn}
+      </div>`;
+  }
+  card.appendChild(_sco);
+
+  card.addEventListener('click', (e) => {
+    if (e.target.closest('button,input,select,a,.plant-art-area,.event-tag,.inspect-btn,.weed-clickable,.strain-card-overlay')) return;
+    const ov = document.getElementById('sco-' + plant.id);
+    if (ov) ov.classList.toggle('showing');
+  });
+
   return card;
 }
 
@@ -5409,6 +5546,11 @@ function redeemCode(code) {
 
   GS.seeds[entry.strain] = (GS.seeds[entry.strain] || 0) + entry.qty;
   GS.stats.seedsRedeemed = (GS.stats.seedsRedeemed || 0) + entry.qty;
+  if (!GS.cards) GS.cards = [];
+  if (STRAIN_CARDS_LIST.includes(entry.strain) && !GS.cards.includes(entry.strain)) {
+    GS.cards.push(entry.strain);
+    toast('🃏 Collector card unlocked: ' + entry.strain + '!', 'special', 5000);
+  }
   if (r) { r.textContent = '✅ Redeemed ' + entry.qty + 'x ' + entry.strain + '!'; r.className = 'code-result ok'; }
   toast('✅ Redeemed ' + entry.qty + 'x ' + entry.strain + '!', 'ok', 4000);
   addLog('Code redeemed: ' + entry.qty + 'x ' + entry.strain, 'success');
@@ -7224,6 +7366,7 @@ function loginSuccess() {
   if (!GS.envHistory) GS.envHistory = [];
   if (!GS.achievements) GS.achievements = [];
   if (!GS.harvestNames) GS.harvestNames = {};
+  if (!GS.cards)        GS.cards        = [];
      if (!GS.growTime) GS.growTime = 0;
      if (!GS.roomGear) GS.roomGear = {};
      if (!GS.dryRoom) GS.dryRoom = {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68};
@@ -8267,6 +8410,13 @@ function openHarvestModal(plantId) {
 
   const inp = document.getElementById('inp-harvest-plant-id');
   if (inp) inp.value = plantId;
+  const _hcPrev = document.getElementById('harvest-card-preview');
+  const _hcImg  = document.getElementById('harvest-card-img');
+  const _hcPath = getStrainCardPath(plant.strainName);
+  if (_hcPrev && _hcImg) {
+    if (_hcPath) { _hcImg.src = _hcPath; _hcImg.alt = plant.strainName; _hcPrev.style.display = ''; }
+    else _hcPrev.style.display = 'none';
+  }
 
   // Naming: only for bred strains; locked if already named
   const nameField = document.getElementById('harvest-name-field');
