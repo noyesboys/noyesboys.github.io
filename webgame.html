@@ -1127,12 +1127,18 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     <div class="modal-desc">Choose a strain, pot size, and name your plant.</div>
     <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:6px">SELECT STRAIN</div>
     <div class="strain-select-grid" id="plant-strain-grid"></div>
-    <div class="field" style="margin-top:10px">
-      <label>Plant Name (optional)</label>
-      <input type="text" id="inp-plant-name" placeholder="Leave blank to use strain name" maxlength="30">
+    <div id="male-seed-section" class="hidden" style="margin-top:12px">
+      <div style="font-family:var(--font-hud);font-size:9px;color:var(--blue);letter-spacing:1px;margin-bottom:6px">♂ MALE SEEDS — Plant in room to pollinate females</div>
+      <div class="strain-select-grid" id="plant-male-grid"></div>
     </div>
+    <input type="hidden" id="inp-plant-name" value="">
     <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin:10px 0 6px">SELECT POT SIZE</div>
     <div class="pot-size-grid" id="pot-size-grid">
+      <div class="pot-size-opt" data-pot="0.5gal" onclick="selectPot(this)">
+        <div class="pot-size-opt-icon">🪣</div>
+        <div class="pot-size-opt-name">SEEDLING</div>
+        <div class="pot-size-opt-vol">0.5 gal</div>
+      </div>
       <div class="pot-size-opt selected" data-pot="1gal" onclick="selectPot(this)">
         <div class="pot-size-opt-icon">🪣</div>
         <div class="pot-size-opt-name">SOLO</div>
@@ -1365,6 +1371,13 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
         <div style="font-size:9px;color:var(--muted);font-family:var(--font-hud);letter-spacing:1px">XP GAIN</div>
         <div style="font-family:var(--font-hud);font-size:22px;color:var(--cyan)" id="lbl-harvest-xp">0</div>
       </div>
+    </div>
+    <div id="harvest-name-field" class="hidden" style="margin:10px 0 0">
+      <div style="font-family:var(--font-hud);font-size:9px;color:var(--purple);letter-spacing:1px;margin-bottom:6px">NAME THIS CROSS</div>
+      <input type="text" id="inp-harvest-custom-name" maxlength="40"
+        placeholder="e.g. Purple Dream, Sunset OG..."
+        style="width:100%;background:rgba(0,15,0,0.8);border:1px solid rgba(168,85,247,0.5);border-radius:7px;padding:9px 12px;color:var(--text);font-family:var(--font-body);font-size:14px;outline:none">
+      <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px" id="harvest-name-hint">Name locked in for all future harvests of this cross.</div>
     </div>
     <div style="margin-top:8px;font-size:9px;color:var(--muted);font-family:var(--font-hud);text-align:center">
       Goes to hang-drying → jar curing before it can be sold
@@ -1602,6 +1615,24 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     <div class="warning-note">⚠️ Screenshot or write this down NOW. Close this only after saving it.</div>
     <div class="modal-actions">
       <button class="btn-modal confirm" onclick="closeModal('modal-seed-phrase')">I SAVED IT ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- TRANSPLANT MODAL -->
+<div class="modal-overlay" id="modal-transplant">
+  <div class="modal-box">
+    <div class="modal-title">🪣 TRANSPLANT</div>
+    <div class="modal-desc">Moving: <strong id="lbl-transplant-name" style="color:var(--green)">—</strong><br>
+    Plant will grow slowly while establishing roots, then speed up once root bound.</div>
+    <input type="hidden" id="inp-transplant-plant-id" value="">
+    <input type="hidden" id="inp-transplant-pot-size" value="">
+    <div id="transplant-timing-note" class="info-note" style="margin-bottom:12px"></div>
+    <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:8px">SELECT NEW POT SIZE</div>
+    <div id="transplant-pot-options"></div>
+    <div class="modal-actions">
+      <button class="btn-modal confirm" onclick="confirmTransplant()">🪣 TRANSPLANT</button>
+      <button class="btn-modal cancel" onclick="closeModal('modal-transplant')">CANCEL</button>
     </div>
   </div>
 </div>
@@ -2355,6 +2386,130 @@ function determineBreedGeneration(femStrain, maleStrain) {
   // Mixed F × BX → treat as F with min level + 1
   return {gen:'F2', type:'FEM', canGrow:true};
 }
+const POT_ORDER = ['0.5gal','1gal','3gal','5gal','10gal','25gal'];
+
+const POT_SOIL_REQ = {
+  '0.5gal': {soilId:'soil_halfgal', qty:1, potId:'pot_halfgal'},
+  '1gal':   {soilId:'soil_1',       qty:1, potId:'pot_1gal'},
+  '3gal':   {soilId:'soil_1',       qty:3, potId:'pot_3gal'},
+  '5gal':   {soilId:'soil_5',       qty:1, potId:'pot_5gal'},
+  '10gal':  {soilId:'soil_5',       qty:2, potId:'pot_10gal'},
+  '25gal':  {soilId:'soil_25',      qty:1, potId:'pot_25gal'},
+};
+
+function getValidTransplantSizes(currentPotSize) {
+  const idx = POT_ORDER.indexOf(currentPotSize);
+  if (idx < 0 || idx >= POT_ORDER.length - 1) return [];
+  return POT_ORDER.slice(idx + 1, Math.min(idx + 3, POT_ORDER.length));
+}
+
+function getTransplantTiming(plant) {
+  const stage    = plant.stage || 'Seedling';
+  const seedDays = plant.seedlingDays || 0;
+  const vegDays  = plant.vegDays || 0;
+  const fw       = Math.ceil((plant.flowerDay||1)/7);
+  if (stage === 'Seedling') {
+    if (seedDays >= 7 && seedDays <= 14) return {bindDays:1,  quality:'perfect', color:'var(--green)', msg:'🌟 Perfect timing (days 7–14) — 1-day root bind, no loss'};
+    if (seedDays < 7)                   return {bindDays:7,  quality:'early',   color:'var(--gold)',  msg:'⚠️ Very early — 7-day slow period, tiny growth loss'};
+    return                                      {bindDays:3,  quality:'late',    color:'var(--gold)',  msg:'⬇️ Late seedling — 3-day root bind'};
+  }
+  if (stage === 'Veg') {
+    if (vegDays >= 14 && vegDays <= 35) return {bindDays:1,  quality:'perfect', color:'var(--green)', msg:'🌟 Prime veg window — 1-day root bind, full benefit'};
+    if (vegDays < 14)                  return {bindDays:4,  quality:'early',   color:'var(--gold)',  msg:'⚠️ Early veg — 4-day slow period, minimal loss'};
+    return                                     {bindDays:5,  quality:'late',    color:'var(--gold)',  msg:'⬇️ Late veg — 5-day root bind. Consider if worth it.'};
+  }
+  if (stage === 'Flower' || stage === 'Ready') {
+    if (fw <= 2) return {bindDays:10, quality:'risky', color:'var(--red)', msg:'⚠️ Risky — early flower only. 10-day stress. Not recommended.'};
+    return              {bindDays:999,quality:'bad',   color:'var(--red)', msg:'❌ Too late to transplant in mid/late flower.'};
+  }
+  return {bindDays:3, quality:'ok', color:'var(--muted)', msg:'Transplant — 3-day adjustment'};
+}
+
+function openTransplantModal(plantId) {
+  const plant = GS.plants.find(p => p.id === plantId);
+  if (!plant) return;
+  const inv  = getInventory();
+  const cons = inv.consumables || {};
+  const timing = getTransplantTiming(plant);
+  if (timing.quality === 'bad') { toast(timing.msg,'err',5000); return; }
+  const validSizes = getValidTransplantSizes(plant.potSize || '1gal');
+  if (!validSizes.length) { toast('Already in the largest pot size.','warn'); return; }
+
+  _el('lbl-transplant-name', plant.name || plant.strainName);
+  const tiNote = document.getElementById('transplant-timing-note');
+  if (tiNote) {
+    tiNote.textContent = timing.msg;
+    tiNote.style.borderColor = timing.color;
+    tiNote.style.color = timing.color;
+  }
+
+  const opts = document.getElementById('transplant-pot-options');
+  if (opts) {
+    opts.innerHTML = '';
+    validSizes.forEach(size => {
+      const req  = POT_SOIL_REQ[size] || {};
+      const hasPot  = (cons[req.potId]  || 0) >= 1;
+      const hasSoil = (cons[req.soilId] || 0) >= req.qty;
+      const canDo   = hasPot && hasSoil;
+      const galLabel = size;
+      const div = document.createElement('div');
+      div.className = 'training-option' + (canDo ? '' : '');
+      div.style.opacity = canDo ? '1' : '0.5';
+      div.style.cursor  = canDo ? 'pointer' : 'default';
+      div.innerHTML = `
+        <div class="training-option-name">🪣 ${galLabel} POT</div>
+        <div class="training-option-desc">
+          Requires: 1× ${galLabel} pot ${hasPot?'✅':'❌'} · ${req.qty}× ${req.soilId?.replace('soil_','')||'?'} soil ${hasSoil?'✅':'❌'}
+          ${!hasPot ? `<br><span style="color:var(--red)">Missing pot — buy in Shop → Water</span>` : ''}
+          ${!hasSoil ? `<br><span style="color:var(--red)">Missing soil — buy in Shop → Water</span>` : ''}
+        </div>`;
+      if (canDo) {
+        div.onclick = () => {
+          document.querySelectorAll('#transplant-pot-options .training-option').forEach(o => o.classList.remove('selected'));
+          div.classList.add('selected');
+          const sinp = document.getElementById('inp-transplant-pot-size');
+          if (sinp) sinp.value = size;
+        };
+      }
+      opts.appendChild(div);
+    });
+  }
+  const sinp = document.getElementById('inp-transplant-pot-size');
+  if (sinp) sinp.value = '';
+  document.getElementById('inp-transplant-plant-id').value = plantId;
+  openModal('modal-transplant');
+}
+
+function confirmTransplant() {
+  const plantId = document.getElementById('inp-transplant-plant-id')?.value;
+  const newSize = document.getElementById('inp-transplant-pot-size')?.value;
+  const plant   = GS.plants.find(p => p.id === plantId);
+  if (!plant || !newSize) { toast('Select a pot size.','warn'); return; }
+
+  const inv  = getInventory();
+  const cons = inv.consumables || {};
+  const req  = POT_SOIL_REQ[newSize];
+  if (!req) { toast('Invalid pot size.','err'); return; }
+  if ((cons[req.potId]||0) < 1)    { toast('Missing ' + newSize + ' pot!','err'); return; }
+  if ((cons[req.soilId]||0) < req.qty) { toast('Not enough soil!','err'); return; }
+
+  // Consume
+  cons[req.potId]  = Math.max(0,(cons[req.potId]||0) - 1);
+  cons[req.soilId] = Math.max(0,(cons[req.soilId]||0) - req.qty);
+
+  const timing = getTransplantTiming(plant);
+  const oldPot = plant.potSize || '1gal';
+  plant.potSize         = newSize;
+  plant.transplanting   = true;
+  plant.transplantBindTimer = timing.bindDays;
+  plant.isRootBound     = false;
+  plant._transplantFrom = oldPot;
+
+  closeModal('modal-transplant');
+  toast('🪣 Transplanted ' + (plant.name||plant.strainName) + ': ' + oldPot + ' → ' + newSize + ' · ' + timing.msg, timing.quality === 'perfect' ? 'ok' : 'warn', 5000);
+  addLog((plant.name||plant.strainName) + ' transplanted to ' + newSize + ' (' + timing.bindDays + 'd bind)', 'info');
+  saveGame(); renderGrow();
+}
 const RARITY_DESC = {
   GOD:       'GOD Phenotype — legendary. Elite potency, massive yield, perfect expression.',
   Glowing:   'Glowing — exceptional resin coverage and standout terpene profile.',
@@ -2457,13 +2612,16 @@ function checkAchievements() {
 }
 
 function getDailyGoal() {
-  const diff = GS.difficulty || 'easy';
-  const challenges = DAILY_CHALLENGES[diff] || DAILY_CHALLENGES.easy;
-  // Use day-of-year + username hash for deterministic daily rotation
-  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
-  const hash = simpleHash(GS.username + dayOfYear);
-  const idx = parseInt(hash, 36) % challenges.length;
-  return challenges[Math.abs(idx)];
+  try {
+    const diff = GS.difficulty || 'easy';
+    const challenges = DAILY_CHALLENGES[diff] || DAILY_CHALLENGES.easy;
+    if (!challenges || !challenges.length) return DAILY_CHALLENGES.easy[0];
+    const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
+    const raw = simpleHash((GS.username||'player') + dayOfYear);
+    const parsed = parseInt(raw, 36);
+    const idx = isNaN(parsed) ? (dayOfYear % challenges.length) : (Math.abs(parsed) % challenges.length);
+    return challenges[idx] || challenges[0];
+  } catch(e) { return DAILY_CHALLENGES.easy[0]; }
 }
 
 const BOT_LADDER = [
@@ -2531,6 +2689,7 @@ let GS = {};
 let _tickInterval = null;
 let _lastTick = Date.now();
 let _activeTab = 'grow';
+let _inspecting = false;
 let _vaultFilter = 'all';
 let _shopSection = 'lights';
 let _bmTab = 'browse';
@@ -2745,7 +2904,6 @@ function updateRoomSlotSetting(roomId, group, idx, key, value) {
   if (!rg[group][idx].settings) rg[group][idx].settings = {};
   rg[group][idx].settings[key] = value;
   saveGame();
-  renderGearPanel();
 }
 
 // ================================================================
@@ -3066,16 +3224,19 @@ function tickPlant(plant, room, strain, actual, gameMins) {
 
   const speedMult = genSpeedMult * healthGrowthMult;
 
+  const transplantSlowMult = plant.transplanting ? 0.4 : 1.0;
+  const finalSpeedMult = speedMult * transplantSlowMult;
+
   if (plant.stage === 'Seedling') {
-    plant.seedlingDays = (plant.seedlingDays || 0) + (gameMins / (60 * 24)) * speedMult;
+    plant.seedlingDays = (plant.seedlingDays || 0) + (gameMins / (60 * 24)) * finalSpeedMult;
     if (plant.seedlingDays >= 14) {
       plant.stage = 'Veg'; plant.vegDays = 0;
       addLog(plant.name + ' entered Veg 🌿', 'success');
     }
   } else if (plant.stage === 'Veg') {
-    plant.vegDays = (plant.vegDays || 0) + (gameMins / (60 * 24)) * speedMult;
+    plant.vegDays = (plant.vegDays || 0) + (gameMins / (60 * 24)) * finalSpeedMult;
   } else if (plant.stage === 'Flower') {
-    plant.flowerDay = (plant.flowerDay || 0) + (gameMins / (60 * 24)) * speedMult;
+    plant.flowerDay = (plant.flowerDay || 0) + (gameMins / (60 * 24)) * finalSpeedMult;
     const fd = strain ? (strain.flowerDays || 63) : 63;
     if (plant.flowerDay >= fd) {
       plant.stage = 'Ready';
@@ -3132,10 +3293,22 @@ function tickPlant(plant, room, strain, actual, gameMins) {
     plant.inspectShield = false; plant.inspectArea = null; plant.inspectShieldExpires = null;
   }
 
+  // ── Transplant root bind timer ──
+  if (plant.transplanting && (plant.transplantBindTimer||0) > 0) {
+    plant.transplantBindTimer -= gameMins / (60 * 24);
+    if (plant.transplantBindTimer <= 0) {
+      plant.transplanting       = false;
+      plant.transplantBindTimer = 0;
+      plant.isRootBound         = true;
+      toast('🔴 ' + (plant.name||plant.strainName) + ' is root bound! Drinking faster now.','ok',4000);
+      addLog((plant.name||plant.strainName) + ' root bound after transplant','info');
+    }
+  }
+
   // Water drain — target: 50% in 12 real hours for a 5gal pot in normal conditions
   // 12 real hours = 720 real mins × GAME_SPEED(144) = 103,680 game mins
   // Base drain per game min = 50 / 103680 ≈ 0.000482
-  const potGal = {'1gal':1,'3gal':3,'5gal':5,'10gal':10,'25gal':25}[plant.potSize] || 5;
+  const potGal = {'0.5gal':0.5,'1gal':1,'3gal':3,'5gal':5,'10gal':10,'25gal':25}[plant.potSize] || 5;
   let drainPct = 0.000482; // base: 5gal, veg/flower, normal temp
 
   // Pot size scaling
@@ -3168,8 +3341,12 @@ function tickPlant(plant, room, strain, actual, gameMins) {
   else if (_stress >= 25) drainPct *= 1.25;   // 25-50%: 25% faster
   else if (_stress >= 10) drainPct *= 1.15;   // 10-25%: 15% faster
 
-  // Apply water drain reduction from gen bonus (percentage reduction)
-  const wdrReduction = (plant.waterDrainReduction || 0) / 100;
+  // Transplant modifiers
+  if (plant.transplanting)  drainPct *= 0.5;   // Slow period — drinks and grows less
+  if (plant.isRootBound)    drainPct *= 1.3;   // Root bound — drinks and grows faster
+
+  // Apply water drain reduction from gen bonus
+  const wdrReduction = (plant.waterDrainReduction||0) / 100;
   drainPct *= (1 - wdrReduction);
   plant.waterLevel = Math.max(0, (plant.waterLevel != null ? plant.waterLevel : 80) - drainPct * gameMins);
 
@@ -3803,6 +3980,9 @@ function showScreen(id) {
 
 function showTab(name) {
   _activeTab = name;
+  // Close any open sidebar panels
+  document.querySelectorAll('.sidebar-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p => {
     p.classList.remove('active');
     p.classList.add('hidden');
@@ -4712,7 +4892,9 @@ function _buildPlantCard(plant, room) {
         <span class="meta-chip">${plant.potSize || '5gal'}</span>
         ${plant.topCount   ? `<span class="meta-chip ok">TOP×${plant.topCount}</span>` : ''}
         ${plant.branchSnaps ? `<span class="meta-chip danger">💥×${plant.branchSnaps}</span>` : ''}
-        ${plant.isWilting  ? `<span class="meta-chip danger">🥵 WILTING</span>` : ''}
+        ${plant.isWilting     ? `<span class="meta-chip danger">🥵 WILTING</span>` : ''}
+        ${plant.transplanting ? `<span class="meta-chip warn">🪣 SETTLING ${Math.ceil(plant.transplantBindTimer||0)}d</span>` : ''}
+        ${plant.isRootBound   ? `<span class="meta-chip ok">🔴 ROOT BOUND</span>` : ''}
       </div>
     </div>
     <div class="grow-score-mini">
@@ -4759,6 +4941,11 @@ function _buildPlantCard(plant, room) {
              ? `<button class="btn-action btn-purple" onclick="openFlipModal('${plant.id}')">🌸 FLIP</button>`
              : '<button class="btn-action" disabled>🌸 FLIP</button>'}
            <button class="btn-action" onclick="openSprayModalForPlant('${plant.id}')">🧴 SPRAY</button>
+           <button class="btn-action btn-cyan two-wide" onclick="openTransplantModal('${plant.id}')"
+             ${(plant.potSize==='25gal'||plant.isDead||plant._permanentlyDead)?'disabled':''}>
+             🪣 TRANSPLANT${plant.transplanting ? ' ('+Math.ceil(plant.transplantBindTimer||0)+'d)' : ''}
+             ${plant.isRootBound ? ' 🔴' : ''}
+           </button>
            ${(GS.rooms||[]).length > 1
              ? `<button class="btn-action btn-cyan two-wide" onclick="openMoveRoomModal('${plant.id}')">🚚 MOVE TO ROOM</button>`
              : ''}
@@ -5657,6 +5844,8 @@ const SHOP_ITEMS = {
     {id:'ph_up',   name:'pH Up 1L',   price:1000, icon:'⬆️', type:'phUp',   desc:'Raises pH. 1000ml — uses 1ml per 0.1 pH unit adjusted.'},
           {id:'ph_down', name:'pH Down 1L', price:1000, icon:'⬇️', type:'phDown', desc:'Lowers pH. 1000ml — uses 1ml per 0.1 pH unit adjusted.'},
     // Pots & Soil
+    {id:'pot_halfgal', name:'½ Gal Pot (×10)', price:150, icon:'🪣', type:'pot', potSize:'0.5gal', qty:10, desc:'Tiny starter pots — perfect for seedlings. 10 pack.'},
+    {id:'soil_halfgal',name:'½ Gal Soil (×10)',price:80,  icon:'🌱', type:'soil', potSize:'0.5gal',qty:10, desc:'Tiny seedling starter soil. 10 pack.'},
     {id:'pot_1gal',  name:'1 Gal Pot (×5)',  price:200,  icon:'🪣', type:'pot', potSize:'1gal',  qty:5,  desc:'Solo cup starter pots. 5 pack.'},
     {id:'pot_3gal',  name:'3 Gal Pot (×5)',  price:400,  icon:'🪣', type:'pot', potSize:'3gal',  qty:5,  desc:'Small pots. 5 pack.'},
     {id:'pot_5gal',  name:'5 Gal Pot (×5)',  price:700,  icon:'🪣', type:'pot', potSize:'5gal',  qty:5,  desc:'Medium pots. 5 pack.'},
@@ -6798,6 +6987,7 @@ function loginSuccess() {
   if (!GS.bestGrows) GS.bestGrows = [];
   if (!GS.envHistory) GS.envHistory = [];
   if (!GS.achievements) GS.achievements = [];
+  if (!GS.harvestNames) GS.harvestNames = {};
      if (!GS.growTime) GS.growTime = 0;
      if (!GS.roomGear) GS.roomGear = {};
      if (!GS.dryRoom) GS.dryRoom = {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68};
@@ -6922,12 +7112,11 @@ function confirmDiffChange() {
 // PLANT MODAL OPENERS
 // ================================================================
 function openPlantModal() {
-  const room = GS.rooms ? (GS.rooms[GS.activeRoom || 0] || GS.rooms[0]) : null;
+  const room = GS.rooms ? (GS.rooms[GS.activeRoom||0] || GS.rooms[0]) : null;
   if (!room) { toast('No room available.','warn'); return; }
-  const inRoom = (GS.plants || []).filter(p => p.roomId === room.id);
+  const inRoom = (GS.plants||[]).filter(p => p.roomId === room.id);
   if (inRoom.length >= room.slots) { toast('Room full! Buy more slots in the Shop.','warn'); return; }
 
-  // Populate strain grid
   const grid = document.getElementById('plant-strain-grid');
   if (grid) {
     grid.innerHTML = '';
@@ -6943,9 +7132,9 @@ function openPlantModal() {
         div.className = 'strain-option';
         div.dataset.strain = name;
         div.innerHTML = `
-          <div class="strain-option-emoji">${strain.emoji || '🌿'}</div>
+          <div class="strain-option-emoji">${strain.emoji||'🌿'}</div>
           <div class="strain-option-name">${name}</div>
-          <div class="strain-option-thc">${strain.thcBase || '?'}% THC</div>
+          <div class="strain-option-thc">${strain.thcBase||'?'}% THC</div>
           <div class="strain-option-qty">${qty}x</div>`;
         div.onclick = () => {
           grid.querySelectorAll('.strain-option').forEach(s => s.classList.remove('selected'));
@@ -6959,17 +7148,40 @@ function openPlantModal() {
     }
   }
 
-  // Reset pot selection to 1gal
+  // Male seeds section
+  const maleGrid = document.getElementById('plant-male-grid');
+  const maleSection = document.getElementById('male-seed-section');
+  const maleSeeds = GS.maleSeedsOwned || {};
+  const maleEntries = Object.entries(maleSeeds).filter(([,q]) => q > 0);
+  if (maleGrid && maleSection) {
+    if (maleEntries.length > 0) {
+      maleSection.classList.remove('hidden');
+      maleGrid.innerHTML = '';
+      maleEntries.forEach(([name, qty]) => {
+        const strain = STRAINS[name] || {emoji:'🌿', thcBase:'?'};
+        const div = document.createElement('div');
+        div.className = 'strain-option';
+        div.style.borderColor = 'rgba(59,130,246,0.5)';
+        div.innerHTML = `
+          <div class="strain-option-emoji">♂${strain.emoji||'🌿'}</div>
+          <div class="strain-option-name" style="color:var(--blue)">${name}</div>
+          <div class="strain-option-thc">Male seed</div>
+          <div class="strain-option-qty" style="color:var(--blue)">${qty}x</div>`;
+        div.onclick = () => { openPlantMaleWith(name); closeModal('modal-plant'); };
+        maleGrid.appendChild(div);
+      });
+    } else {
+      maleSection.classList.add('hidden');
+    }
+  }
+
   document.querySelectorAll('.pot-size-opt').forEach(p => p.classList.remove('selected'));
   const defaultPot = document.querySelector('.pot-size-opt[data-pot="1gal"]');
   if (defaultPot) defaultPot.classList.add('selected');
   const potInp = document.getElementById('inp-selected-pot');
   if (potInp) potInp.value = '1gal';
-
   const strainInp = document.getElementById('inp-selected-strain');
   if (strainInp) strainInp.value = '';
-  const nameInp = document.getElementById('inp-plant-name');
-  if (nameInp) nameInp.value = '';
   const note = document.getElementById('plant-modal-note');
   if (note) note.classList.add('hidden');
 
@@ -7052,7 +7264,7 @@ function selectPot(el) {
 function confirmPlant() {
   const strainName = document.getElementById('inp-selected-strain')?.value;
   const potSize    = document.getElementById('inp-selected-pot')?.value || '5gal';
-  const customName = document.getElementById('inp-plant-name')?.value.trim();
+
 
   if (!strainName) { toast('Select a strain first.','warn'); return; }
   if ((GS.seeds[strainName] || 0) < 1) { toast('No seeds of that strain left.','err'); return; }
@@ -7067,18 +7279,19 @@ function confirmPlant() {
   const bredDef = (GS.bredStrains||[]).find(b=>b.name===strainName);
   const isBred  = !!bredDef;
 
-  // Block planting F1 REGs
   if (bredDef && bredDef.gen === 'F1') {
-    GS.seeds[strainName]++; // refund
-    toast('⚠️ F1 REGs cannot be planted — breed two F1s together to make growable F2 FEMs.', 'warn', 5000);
+    GS.seeds[strainName]++;
+    toast('⚠️ F1 REGs cannot be planted — breed two F1s to make growable F2 FEMs.','warn',5000);
     return;
   }
 
   const rarity = rollRarity(strain, isBred ? (strain.gen||'F2') : null, isBred);
+  // Plants are named after their strain. Custom names are given AT HARVEST for bred crosses.
+  const plantName = strainName;
 
   const plant = {
     id: uid(), strainName,
-    name: customName || strainName,
+    name: plantName,
     stage: 'Seedling', seedlingDays: 0, vegDays: 0, flowerDay: 0, dayAge: 0,
     health: 100, waterLevel: 80, soilPPM: 0, stress: 0,
     rarity, potSize, isMale: false, hasSeeds: false,
@@ -7101,7 +7314,7 @@ function confirmPlant() {
   GS.plants.push(plant);
 
   closeModal('modal-plant');
-  toast('🌱 Planted ' + plant.name + '! (' + rarity + ')', 'ok', 3000);
+  toast('🌱 Planted ' + plant.name + '! (' + rarity + (isBred ? ' · name at harvest' : '') + ')', 'ok', 3000);
   addLog('Planted: ' + plant.name + ' [' + rarity + ']', 'success');
   saveGame(); renderGrow(); renderSeeds(); renderHeader();
 }
@@ -7701,30 +7914,35 @@ function openInspectModal(plantId) {
   openModal('modal-inspect');
 }
 function confirmInspect(area) {
+  if (_inspecting) return;
+  _inspecting = true;
+  closeModal('modal-inspect');
+  setTimeout(() => { _inspecting = false; }, 1000);
+
   const plantId = document.getElementById('inp-inspect-plant-id')?.value;
   const plant   = GS.plants.find(p => p.id === plantId);
   if (!plant) return;
-const g = GS.gear || {};
+
+  const g = GS.gear || {};
   if (area === 'buds'   && !g.scope)               { toast('🔬 Need Jeweler\'s Loupe to inspect buds.','err'); return; }
   if (area === 'runoff' && !g.ecmeter && !g.phmeter){ toast('🧪 Need EC or pH Meter to check runoff.','err'); return; }
 
-  plant.lastInspect       = Date.now();
-  plant.inspectShield     = true;
-  plant.inspectArea       = area;
+  plant.lastInspect          = Date.now();
+  plant.inspectShield        = true;
+  plant.inspectArea          = area;
   plant.inspectShieldExpires = Date.now() + (area === 'general' ? 8 : 12) * 3600000;
 
-  // General inspect: +2% yield bonus
   if (area === 'general') {
-    plant.yieldBonus = (plant.yieldBonus || 0) + 2;
-    toast('✨ General inspect — +2% yield bonus!', 'ok', 3000);
+    plant.yieldBonus = (plant.yieldBonus||0) + 2;
+    toast('✨ General inspect — +2% yield bonus!','ok',3000);
   } else {
-    toast('🛡️ Shielded: ' + area + ' — 12h protection', 'ok', 3000);
+    toast('🛡️ Shielded: ' + area + ' — 12h protection','ok',3000);
   }
 
   completeDailyGoal();
-  closeModal('modal-inspect');
-  addLog(plant.name + ' inspected (' + area + ')', 'info');
-  saveGame(); renderGrow();
+  addLog((plant.name||plant.strainName) + ' inspected (' + area + ')','info');
+  saveGame();
+  setTimeout(() => renderGrow(), 30);
 }
 
 // ================================================================
@@ -7787,6 +8005,28 @@ function openHarvestModal(plantId) {
 
   const inp = document.getElementById('inp-harvest-plant-id');
   if (inp) inp.value = plantId;
+
+  // Naming: only for bred strains; locked if already named
+  const nameField = document.getElementById('harvest-name-field');
+  const nameInp   = document.getElementById('inp-harvest-custom-name');
+  const nameHint  = document.getElementById('harvest-name-hint');
+  const isBredP   = !!(GS.bredStrains||[]).find(b => b.name === plant.strainName);
+  if (nameField) {
+    if (isBredP) {
+      nameField.classList.remove('hidden');
+      const stored = (GS.harvestNames||{})[plant.strainName];
+      if (nameInp) {
+        nameInp.value = stored || '';
+        nameInp.disabled = !!stored;
+        nameInp.style.opacity = stored ? '0.6' : '1';
+      }
+      if (nameHint) nameHint.textContent = stored
+        ? '✅ Locked as "' + stored + '" — all future harvests use this name'
+        : 'Name this cross once — locked in forever after harvest';
+    } else {
+      nameField.classList.add('hidden');
+    }
+  }
   openModal('modal-harvest');
 }
 
@@ -7874,10 +8114,19 @@ if (plant._permanentlyDead) {
   const thc    = getHarvestTHC(plant, strain);
   const xpGain = Math.round(score.score * 50 * diffMult);
 
+  // Naming — save custom name for bred strains
+  if (!GS.harvestNames) GS.harvestNames = {};
+  const isBredHarv = !!(GS.bredStrains||[]).find(b => b.name === plant.strainName);
+  const customHarvestName = document.getElementById('inp-harvest-custom-name')?.value.trim();
+  if (isBredHarv && customHarvestName && !GS.harvestNames[plant.strainName]) {
+    GS.harvestNames[plant.strainName] = customHarvestName;
+  }
+  const batchName = (GS.harvestNames||{})[plant.strainName] || plant.name || plant.strainName;
+
   // Move to curing
   if (!GS.curing) GS.curing = [];
   GS.curing.push({
-    id: uid(), name: plant.name || plant.strainName, strainName: plant.strainName,
+    id: uid(), name: batchName, strainName: plant.strainName,
     grams: yield_, thc, score: score.score, rarity: plant.rarity || 'Standard',
     quality: 100, phase: 'drying', startTs: Date.now(),
     dryRH: 80,
