@@ -203,62 +203,49 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 @keyframes godBorder{0%,100%{box-shadow:0 0 12px rgba(236,72,153,0.3)}50%{box-shadow:0 0 30px rgba(236,72,153,0.7)}}
 .pot-slot.male-plant{border-color:rgba(59,130,246,0.5)}
 .plant-art-area{height:220px;position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;cursor:pointer;background:#0a1a0a}
-.plant-art-bg{position:absolute;inset:0;background-size:cover;background-position:center top;opacity:0.15;filter:blur(1px)}
+.plant-art-bg{position:absolute;inset:0;background-size:cover;background-position:center top;opacity:0.15;filter:blur(1px) saturate(1.05)}
 .plant-art-bg-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--card-bg) 100%)}
 .plant-img{position:relative;z-index:2;max-height:210px;max-width:100%;object-fit:contain;transition:.3s}
-.plant-img.shake-anim{animation:plantShake .4s ease-in-out}
-@keyframes plantShake{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-4px) rotate(-2deg)}75%{transform:translateX(4px) rotate(2deg)}}
-.plant-img.droop-anim{animation:plantDroop 2s ease-in-out infinite}
-@keyframes plantDroop{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
-.plant-stage-badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.85);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-family:var(--font-hud);font-size:8px;letter-spacing:1px;color:var(--green);z-index:5}
-.plant-day-badge{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.85);border:1px solid var(--border);border-radius:4px;padding:3px 8px;font-family:var(--font-hud);font-size:8px;color:var(--muted);z-index:5}
-.plant-rarity-badge{position:absolute;top:32px;right:8px;border-radius:4px;padding:2px 6px;font-family:var(--font-hud);font-size:7px;letter-spacing:1px;z-index:5}
-.plant-rarity-badge.Standard{display:none}
-.plant-rarity-badge.EP{background:rgba(168,85,247,0.2);border:1px solid rgba(168,85,247,0.5);color:var(--purple)}
-.plant-rarity-badge.Shiny{background:rgba(251,191,36,0.2);border:1px solid rgba(251,191,36,0.5);color:var(--gold)}
-.plant-rarity-badge.Sparkling{background:rgba(34,211,238,0.2);border:1px solid rgba(34,211,238,0.5);color:var(--cyan)}
-.plant-rarity-badge.Glowing{background:rgba(249,115,22,0.2);border:1px solid rgba(249,115,22,0.5);color:var(--orange)}
-.plant-rarity-badge.GOD{background:rgba(236,72,153,0.2);border:1px solid rgba(236,72,153,0.5);color:var(--pink);animation:godShimmer 1.5s ease-in-out infinite}
-@keyframes godShimmer{0%,100%{box-shadow:none}50%{box-shadow:0 0 8px rgba(236,72,153,0.5)}}
-.weed-clickable{position:absolute;bottom:20px;left:12px;font-size:14px;cursor:pointer;z-index:8;animation:weedWave 2s ease-in-out infinite;transition:.15s}
-.weed-clickable:hover{transform:scale(1.3)}
-@keyframes weedWave{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
-.male-badge{position:absolute;top:32px;left:8px;background:rgba(59,130,246,0.2);border:1px solid rgba(59,130,246,0.5);border-radius:4px;padding:2px 6px;font-family:var(--font-hud);font-size:8px;color:var(--blue);z-index:5}
-.seeded-badge{position:absolute;top:56px;left:8px;background:rgba(251,191,36,0.15);border:1px solid rgba(251,191,36,0.4);border-radius:4px;padding:2px 6px;font-family:var(--font-hud);font-size:8px;color:var(--gold);z-index:5}
-.pollen-cloud{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(251,191,36,0.08),transparent 60%);pointer-events:none;animation:pollenFloat 3s ease-in-out infinite;z-index:3}
-@keyframes pollenFloat{0%,100%{opacity:0.5}50%{opacity:1}}
-.plant-info-section{padding:10px 12px}
-.plant-name-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.plant-name{font-family:var(--font-hud);font-size:12px;color:var(--green);letter-spacing:.8px}
-.plant-genetics{font-size:10px;color:var(--muted);margin-top:1px;font-style:italic}
-.event-tags-row{display:flex;gap:3px;flex-wrap:wrap;margin:6px 0 4px}
-.event-tag{background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.4);border-radius:4px;padding:2px 7px;font-size:9px;color:var(--red);font-family:var(--font-hud);cursor:pointer;transition:.15s;letter-spacing:.3px}
-.event-tag:hover{background:rgba(239,68,68,0.25)}
-.stat-bars{display:flex;flex-direction:column;gap:4px;margin:8px 0}
-.bar-row{display:flex;align-items:center;gap:7px}
-.bar-label{font-size:9px;color:var(--muted);font-family:var(--font-hud);width:54px;letter-spacing:.3px;flex-shrink:0}
-.bar-track{flex:1;height:4px;background:rgba(255,255,255,0.04);border-radius:2px;overflow:hidden}
-.bar-fill{height:100%;border-radius:2px;transition:.4s}
-.bar-fill.green{background:linear-gradient(90deg,var(--green-dark),var(--green))}
-.bar-fill.blue{background:linear-gradient(90deg,var(--blue-dim),var(--blue))}
-.bar-fill.gold{background:linear-gradient(90deg,var(--gold-dim),var(--gold))}
-.bar-fill.red{background:linear-gradient(90deg,var(--red-dim),var(--red))}
-.bar-fill.purple{background:linear-gradient(90deg,var(--purple-dim),var(--purple))}
-.bar-fill.cyan{background:linear-gradient(90deg,#0e7490,var(--cyan))}
-.bar-fill.orange{background:linear-gradient(90deg,#c2410c,var(--orange))}
-.bar-val{font-family:var(--font-mono);font-size:9px;width:30px;text-align:right;color:var(--muted)}
-.plant-meta-row{display:flex;gap:5px;flex-wrap:wrap;padding:0 0 6px;font-family:var(--font-hud);font-size:8px}
-.meta-chip{background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:3px;padding:2px 5px;color:var(--muted)}
-.meta-chip.ok{color:var(--green);border-color:rgba(74,222,128,0.3)}
-.meta-chip.warn{color:var(--gold);border-color:rgba(251,191,36,0.35)}
-.meta-chip.danger{color:var(--red);border-color:rgba(239,68,68,0.35)}
-.inspect-btn-area{padding:0 12px 7px}
-.inspect-btn{width:100%;padding:7px;border:1px solid rgba(74,222,128,0.35);background:rgba(74,222,128,0.06);color:var(--green);border-radius:7px;cursor:pointer;font-family:var(--font-hud);font-size:9px;letter-spacing:.8px;transition:.2s}
-.inspect-btn.shielded{background:rgba(74,222,128,0.14);border-color:var(--green);box-shadow:0 0 8px rgba(74,222,128,0.15)}
-.inspect-btn.cooldown{opacity:.4;cursor:not-allowed}
-.inspect-cooldown-txt{font-size:8px;color:var(--muted);text-align:center;margin-top:2px;font-family:var(--font-mono)}
-.inspect-shield-info{font-size:8px;color:var(--green);font-family:var(--font-mono);text-align:center;margin-top:2px}
-.night-mode-bar{display:flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(0,0,0,0.4);border-top:1px solid var(--border);font-family:var(--font-hud);font-size:8px;color:var(--muted)}
+.plant-card-front,.plant-card-back{display:block}
+.plant-card-back{
+  display:none;
+  min-height: 100%;
+  padding: 10px;
+  background: rgba(0,0,0,0.7);
+  border-top: 1px solid var(--border);
+}
+.pot-slot.is-flipped .plant-card-front{display:none}
+.pot-slot.is-flipped .plant-card-back{display:block}
+.card-back-art{
+  width:100%;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 20px rgba(74,222,128,0.08);
+}
+.card-back-name{
+  font-family:var(--font-hud);
+  font-size:12px;
+  color:var(--green);
+  letter-spacing:1px;
+  margin-bottom:6px;
+}
+.card-back-meta{
+  margin-top:8px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  font-family:var(--font-mono);
+  font-size:9px;
+  color:var(--muted);
+}
+.card-back-stat{
+  background:rgba(0,0,0,0.35);
+  border:1px solid var(--border);
+  border-radius:6px;
+  padding:6px;
+}
 .lc-indicator{display:flex;gap:1px;align-items:center}
 .lc-seg{width:8px;height:5px;border-radius:1px}
 .lc-on{background:var(--gold);opacity:.8}
@@ -1028,15 +1015,21 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
         </div>
         
         <!-- INVENTORY TAB -->
-        <div class="tab-panel hidden" id="tab-inventory">
-        <div class="section-header">
-        <div>
-        <div class="section-title">🎒 INVENTORY</div>
-        <div class="section-sub">Everything you own, grouped by item type</div>
-        </div>
-        </div>
-        <div id="inventory-container"></div>
-        </div>
+<div class="tab-panel hidden" id="tab-inventory">
+  <div class="section-header">
+    <div>
+      <div class="section-title">🎒 INVENTORY</div>
+      <div class="section-sub">Everything you own, grouped by item type</div>
+    </div>
+  </div>
+
+  <div class="shop-inventory-tabs">
+    <button class="shop-inv-tab active" onclick="showInvTab('items',this)">ITEMS</button>
+    <button class="shop-inv-tab" onclick="showInvTab('cards',this)">CARDS</button>
+  </div>
+
+  <div id="inventory-container"></div>
+</div>
 
         <!-- BREED TAB -->
         <div class="tab-panel hidden" id="tab-breed">
@@ -3836,30 +3829,49 @@ function renderAll() {
   updateSidebarWarnings();
 }
 
+let _invTab = 'items';
+
+function showInvTab(name, btn) {
+  _invTab = name;
+  document.querySelectorAll('#tab-inventory .shop-inv-tab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderInventory();
+}
+
 function renderInventory() {
   const cont = document.getElementById('inventory-container');
   if (!cont) return;
 
   const inv = getInventory();
-  const groups = new Map();
 
-  inv.instances.forEach(x => {
-    if (!groups.has(x.itemId)) groups.set(x.itemId, []);
-    groups.get(x.itemId).push(x);
-  });
+  if (_invTab === 'cards') {
+    const cards = inv.instances.filter(x => x.type === 'card');
+    if (!cards.length) {
+      cont.innerHTML = '<div class="empty-state">No strain cards yet.</div>';
+      return;
+    }
 
-  const consumables = inv.consumables || {};
+    cont.innerHTML = `
+      <div class="vault-grid">
+        ${cards.map(c => `
+          <div class="vault-card" onclick="openCardViewer('${c.cardKey}')">
+            <img src="${c.cardSrc}" alt="${c.name}" style="width:100%;height:160px;object-fit:cover;border-radius:10px;margin-bottom:10px">
+            <div class="vault-card-name">${c.name}</div>
+            <div class="vault-card-strain">${c.sourceStrain || c.name}</div>
+          </div>
+        `).join('')}
+      </div>`;
+    return;
+  }
+
   let html = '';
-
   const allItems = Object.values(SHOP_ITEMS).flat();
   allItems.forEach(item => {
     const count = ownedCount(item.id);
     if (count <= 0) return;
-
-    const icon = item.icon || '📦';
     html += `
       <div class="shop-item">
-        <div class="shop-item-icon">${icon}</div>
+        <div class="shop-item-icon">${item.icon || '📦'}</div>
         <div class="shop-item-info">
           <div class="shop-item-name">${item.name}</div>
           <div class="shop-item-desc">${item.desc || ''}</div>
@@ -3868,12 +3880,7 @@ function renderInventory() {
       </div>`;
   });
 
-  if (!html) {
-    cont.innerHTML = '<div class="empty-state">No inventory yet.</div>';
-    return;
-  }
-
-  cont.innerHTML = `<div class="shop-items-list">${html}</div>`;
+  cont.innerHTML = html ? `<div class="shop-items-list">${html}</div>` : '<div class="empty-state">No inventory yet.</div>';
 }
 
 function showLoginTab(name) {
@@ -4468,9 +4475,69 @@ function renderGearPanel() {
 // ================================================================
 // MOVE PLANT + STRAIN RENAME HELPERS
 // ================================================================
-function getStrainDisplayName(strainName) {
-  const bred = (GS.bredStrains||[]).find(b => b.name === strainName);
-  return (bred && bred.customName) ? bred.customName : strainName;
+const CARD_BASE = 'assets/sept22edits/websiteimagedata/cards/finished';
+
+// Fill this with the exact filenames from finished.zip.
+// Key = normalized strain name, value = exact filename.
+const CARD_LIBRARY = {
+  purplerainbow: 'purplerainbowscard.png',
+  rainbowcakes: 'rainbowcakescard.png',
+  cakebreath: 'cakebreathcard.png',
+  alienoyeskush: 'alienoyeskushcard.jpg',
+  mangonoyeskush: 'mangonoyeskushcard.png',
+  citronoyeshaze: 'citronoyeshazecard.jpg',
+  noyeshaze: 'noyeshazecard.png',
+  noyesbreath: 'noyesbreathcard.jpg',
+  meatcakes: 'meatcakescard.png',
+  biscottirocks: 'biscottirockscard.png',
+  yesnokush: 'yesnokushcard.png',
+  shinyrocks: 'shinyrockscard.png',
+  noyesrocks: 'noyesrockscard.png',
+  noyespebbles: 'noyespebblescard.png',
+  mangorocks: 'mangorockscard.png',
+  citruspebbles: 'citruspebblescard.png',
+  citrusrocks: 'citrusrockscard.png',
+  alienrocks: 'alienrockscard.png',
+  citrushazebreath: 'citrushazebreathcard.png',
+  mangoaliens: 'mangoalienscard.png',
+  louddreams: 'louddreamscard.png',
+  afghaninoyes: 'afghaninoyescard.png',
+  whitenoyes: 'whitenoyescard.png',
+  blueberryfingers: 'blueberryfingerscard.jpg',
+  cheetofingers: 'cheetofingerscard.png',
+  noyesog: 'noyesogcard.png',
+  bubbanoyes: 'bubbanoyescard.png',
+  captainnoyes: 'captainnoyescard.png',
+  hashfingers: 'hashfingerscard.png',
+  noyespoison: 'noyespoisoncard.png',
+  albinoskunk: 'albinoskunkcard.jpg',
+  rainbowskunk: 'rainbowskunkcard.jpg',
+  skunkbreath: 'skunkbreathcard.jpg',
+  skunkface: 'skunkfacecard.png',
+  skunkcake: 'skunkcakecard.png',
+  skunkcapone: 'skunkcaponecard.png',
+  thunderfuckbuddies: 'thunderfuckbuddiescard.png'
+};
+
+function _keyify(v) {
+  return (v || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+function getStrainCardPath(strainName) {
+  const bred = (GS.bredStrains || []).find(b => b.name === strainName);
+  const sourceName = bred?.sourceStrain || strainName;
+  const key = _keyify(sourceName);
+  const file = CARD_LIBRARY[key] || CARD_LIBRARY[_keyify(strainName)];
+  return file ? `${CARD_BASE}/${file}` : `${CARD_BASE}/${key}card.png`;
+}
+
+function getStrainCardThumb(strainName) {
+  return getStrainCardPath(strainName);
+}
+
+function getStrainCardLabel(strainName) {
+  const bred = (GS.bredStrains || []).find(b => b.name === strainName);
+  return bred?.customName || strainName;
 }
 
 function openMoveRoomModal(plantId) {
@@ -4640,6 +4707,7 @@ function _buildPlantCard(plant, room) {
   const strain  = STRAINS[plant.strainName] || (GS.bredStrains||[]).find(b=>b.name===plant.strainName) || {variety:'hybrid', emoji:'🌿', genetics:''};
   const actual  = room.envActual || {temp:78, humid:65, co2:400};
   const imgSrc  = getPlantSprite(plant, strain);
+  const cardSrc = getStrainCardPath(plant.strainName);
   const week    = getPlantWeek(plant);
   const score   = calcGrowScore(plant);
   const holiday = getHoliday();
@@ -4663,108 +4731,118 @@ function _buildPlantCard(plant, room) {
 
   const card = document.createElement('div');
   card.className = ['pot-slot', rc, sc, plant.isMale ? 'male-plant' : ''].filter(Boolean).join(' ');
+  card.dataset.flipped = '0';
+  card.onclick = (e) => handlePlantCardClick(e, plant.id);
 
   card.innerHTML = `
-    <div class="plant-art-area" onclick="handlePlantClick('${plant.id}')" id="art-${plant.id}">
-      <div class="plant-art-bg" style="background-image:url('${imgSrc}')"></div>
-      <div class="plant-art-bg-overlay"></div>
-      <img class="plant-img" id="img-${plant.id}" src="${imgSrc}" alt="${plant.strainName}" loading="lazy"
-           onerror="this.style.opacity='0.05'">
-      ${holiday ? `<div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);font-size:22px;z-index:10;pointer-events:none">${holiday}</div>` : ''}
-      ${plant.weedPresent ? `<span class="weed-clickable" onclick="removeWeed('${plant.id}');event.stopPropagation()" title="Remove weed!">🌾</span>` : ''}
-      <div class="plant-stage-badge">${plant.stage === 'Ready' ? '✅ READY' : plant.stage.toUpperCase()} WK${week}</div>
-      <div class="plant-day-badge">Day ${Math.floor(plant.dayAge || 0)}</div>
-      ${rarLbl}
-      ${plant.isMale   ? '<div class="male-badge">♂ MALE</div>' : ''}
-      ${plant.isBeingPollinated && !plant.hasSeeds ? '<div class="seeded-badge" style="background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.4);color:var(--blue)">💨 POLLINATING</div>' : ''}
-      ${plant.hasSeeds ? '<div class="seeded-badge">🌱 SEEDED</div>' : ''}
-      ${plant.isMale && (plant.flowerDay||0) >= 20 ? '<div class="pollen-cloud"></div>' : ''}
-    </div>
-    <div class="plant-info-section">
-      <div class="plant-name-row"><span class="plant-name">${plant.name || plant.strainName}</span></div>
-      <div class="plant-genetics">${strain.genetics || ''}</div>
-      <div class="event-tags-row">${evtHtml}</div>
-      <div class="stat-bars">
-        <div class="bar-row">
-          <span class="bar-label">HEALTH</span>
-          <div class="bar-track"><div class="bar-fill ${plant.health > 60 ? 'green' : plant.health > 30 ? 'gold' : 'red'}" style="width:${plant.health||0}%"></div></div>
-          <span class="bar-val">${Math.round(plant.health||0)}%</span>
+    <div class="plant-card-front">
+      <div class="plant-art-area" onclick="handlePlantClick('${plant.id}');event.stopPropagation()" id="art-${plant.id}">
+        <div class="plant-art-bg" style="background-image:url('${cardSrc}')"></div>
+        <div class="plant-art-bg-overlay"></div>
+        <img class="plant-img" id="img-${plant.id}" src="${imgSrc}" alt="${plant.strainName}" loading="lazy"
+             onerror="this.style.opacity='0.05'">
+        ${holiday ? `<div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);font-size:22px;z-index:10;pointer-events:none">${holiday}</div>` : ''}
+        ${plant.weedPresent ? `<span class="weed-clickable" onclick="removeWeed('${plant.id}');event.stopPropagation()" title="Remove weed!">🌾</span>` : ''}
+        <div class="plant-stage-badge">${plant.stage === 'Ready' ? '✅ READY' : plant.stage.toUpperCase()} WK${week}</div>
+        <div class="plant-day-badge">Day ${Math.floor(plant.dayAge || 0)}</div>
+        ${rarLbl}
+        ${plant.isMale   ? '<div class="male-badge">♂ MALE</div>' : ''}
+        ${plant.isBeingPollinated && !plant.hasSeeds ? '<div class="seeded-badge" style="background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.4);color:var(--blue)">💨 POLLINATING</div>' : ''}
+        ${plant.hasSeeds ? '<div class="seeded-badge">🌱 SEEDED</div>' : ''}
+        ${plant.isMale && (plant.flowerDay||0) >= 20 ? '<div class="pollen-cloud"></div>' : ''}
+      </div>
+      <div class="plant-info-section">
+        <div class="plant-name-row"><span class="plant-name">${plant.name || plant.strainName}</span></div>
+        <div class="plant-genetics">${strain.genetics || ''}</div>
+        <div class="event-tags-row">${evtHtml}</div>
+        <div class="stat-bars">
+          <div class="bar-row">
+            <span class="bar-label">HEALTH</span>
+            <div class="bar-track"><div class="bar-fill ${plant.health > 60 ? 'green' : plant.health > 30 ? 'gold' : 'red'}" style="width:${plant.health||0}%"></div></div>
+            <span class="bar-val">${Math.round(plant.health||0)}%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">WATER</span>
+            <div class="bar-track"><div class="bar-fill ${wColor}" style="width:${wl}%"></div></div>
+            <span class="bar-val">${Math.round(wl)}%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">STRESS</span>
+            <div class="bar-track"><div class="bar-fill ${(plant.stress||0) < 30 ? 'green' : (plant.stress||0) < 60 ? 'gold' : 'red'}" style="width:${plant.stress||0}%"></div></div>
+            <span class="bar-val">${Math.round(plant.stress||0)}%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">SOIL PPM</span>
+            <div class="bar-track"><div class="bar-fill cyan" style="width:${Math.min(100,(plant.soilPPM||0)/18)}%"></div></div>
+            <span class="bar-val">${plant.soilPPM||0}</span>
+          </div>
         </div>
-        <div class="bar-row">
-          <span class="bar-label">WATER</span>
-          <div class="bar-track"><div class="bar-fill ${wColor}" style="width:${wl}%"></div></div>
-          <span class="bar-val">${Math.round(wl)}%</span>
-        </div>
-        <div class="bar-row">
-          <span class="bar-label">STRESS</span>
-          <div class="bar-track"><div class="bar-fill ${(plant.stress||0) < 30 ? 'green' : (plant.stress||0) < 60 ? 'gold' : 'red'}" style="width:${plant.stress||0}%"></div></div>
-          <span class="bar-val">${Math.round(plant.stress||0)}%</span>
-        </div>
-        <div class="bar-row">
-          <span class="bar-label">SOIL PPM</span>
-          <div class="bar-track"><div class="bar-fill cyan" style="width:${Math.min(100,(plant.soilPPM||0)/18)}%"></div></div>
-          <span class="bar-val">${plant.soilPPM||0}</span>
+        <div class="plant-meta-row">
+          <span class="meta-chip ${actual.temp > 90 ? 'danger' : actual.temp > 85 ? 'warn' : 'ok'}">🌡️ ${Math.round(actual.temp)}°F</span>
+          <span class="meta-chip">${strain.height || 'Med'}</span>
+          <span class="meta-chip">${plant.potSize || '5gal'}</span>
+          ${plant.topCount   ? `<span class="meta-chip ok">TOP×${plant.topCount}</span>` : ''}
+          ${plant.branchSnaps ? `<span class="meta-chip danger">💥×${plant.branchSnaps}</span>` : ''}
+          ${plant.isWilting  ? `<span class="meta-chip danger">🥵 WILTING</span>` : ''}
         </div>
       </div>
-      <div class="plant-meta-row">
-        <span class="meta-chip ${actual.temp > 90 ? 'danger' : actual.temp > 85 ? 'warn' : 'ok'}">🌡️ ${Math.round(actual.temp)}°F</span>
-        <span class="meta-chip">${strain.height || 'Med'}</span>
-        <span class="meta-chip">${plant.potSize || '5gal'}</span>
-        ${plant.topCount   ? `<span class="meta-chip ok">TOP×${plant.topCount}</span>` : ''}
-        ${plant.branchSnaps ? `<span class="meta-chip danger">💥×${plant.branchSnaps}</span>` : ''}
-        ${plant.isWilting  ? `<span class="meta-chip danger">🥵 WILTING</span>` : ''}
+      <div class="grow-score-mini">
+        <span class="gsm-label">GROW SCORE</span>
+        <span class="gsm-score ${sg}">${score.score}</span>
+        <div class="gsm-bar"><div class="gsm-bar-fill" style="width:${Math.min(100, score.score / 10 * 100)}%"></div></div>
+        <span class="gsm-label" style="margin-left:4px">${score.grade}</span>
       </div>
-    </div>
-    <div class="grow-score-mini">
-      <span class="gsm-label">GROW SCORE</span>
-      <span class="gsm-score ${sg}">${score.score}</span>
-      <div class="gsm-bar"><div class="gsm-bar-fill" style="width:${Math.min(100, score.score / 10 * 100)}%"></div></div>
-      <span class="gsm-label" style="margin-left:4px">${score.grade}</span>
-    </div>
-    <div class="night-mode-bar">
-      <span style="font-size:9px">${room.lightsOn ? '💡 LIGHTS ON' : '🌙 DARK'}</span>
-      <div class="lc-indicator">
-        ${room.lightsOn
-          ? '<div class="lc-seg lc-on"></div>'.repeat(12) + '<div class="lc-seg lc-off"></div>'.repeat(4)
-          : '<div class="lc-seg lc-off"></div>'.repeat(16)}
+      <div class="night-mode-bar">
+        <span style="font-size:9px">${room.lightsOn ? '💡 LIGHTS ON' : '🌙 DARK'}</span>
+        <div class="lc-indicator">
+          ${room.lightsOn
+            ? '<div class="lc-seg lc-on"></div>'.repeat(12) + '<div class="lc-seg lc-off"></div>'.repeat(4)
+            : '<div class="lc-seg lc-off"></div>'.repeat(16)}
+        </div>
+        <span style="flex:1"></span>
+        <span style="font-size:9px;color:var(--muted)">${Math.floor(plant.dayAge||0)}d</span>
       </div>
-      <span style="flex:1"></span>
-      <span style="font-size:9px;color:var(--muted)">${Math.floor(plant.dayAge||0)}d</span>
-    </div>
-    <div class="inspect-btn-area">
-      ${plant.inspectShield
-        ? `<button class="inspect-btn shielded" onclick="openInspectModal('${plant.id}')">🛡️ SHIELDED — ${plant.inspectArea||''} (${shLeft})</button>`
-        : onCD
-        ? `<button class="inspect-btn cooldown" disabled>🔍 INSPECT (CD: ${cdLeft})</button>`
-        : `<button class="inspect-btn" onclick="openInspectModal('${plant.id}')">🔍 INSPECT PLANT</button>`}
-    </div>
-    ${plant._permanentlyDead
-      ? `<div class="dead-plant-bar" style="margin:0 12px 8px">
-           💀 Permanently dead — no harvest possible. Remove to free the slot.
-         </div>
-         <div class="plant-actions">
-           <button class="btn-action btn-red full-width" onclick="openRemoveModal('${plant.id}')">🗑️ REMOVE DEAD PLANT</button>
-         </div>`
-      : `${plant.isDead
-           ? `<div class="dead-plant-bar" style="margin:0 12px 8px">
-                ⚠️ 0 health — needs 💉 Health Spray · ${plant._deadTs ? Math.max(0,12-((Date.now()-plant._deadTs)/3600000)).toFixed(1) : '12.0'}h left
-              </div>`
-           : ''}
-         <div class="plant-actions">
-           <button class="btn-action btn-blue" onclick="openWaterModal('${plant.id}')">💧 WATER</button>
-           <button class="btn-action btn-gold" onclick="openHarvestModal('${plant.id}')" ${plant.isDead ? 'disabled' : ''}>${plant.hasSeeds ? '🌱 SEEDS' : '🌾 HARVEST'}</button>
-           <button class="btn-action btn-red"  onclick="openRemoveModal('${plant.id}')">🗑️ REMOVE</button>
-           <button class="btn-action btn-green" onclick="openTrainModal('${plant.id}')" ${plant.isDead ? 'disabled' : ''}>✂️ TRAIN</button>
-           ${plant.stage === 'Veg' && !plant.isDead
-             ? `<button class="btn-action btn-purple" onclick="openFlipModal('${plant.id}')">🌸 FLIP</button>`
-             : '<button class="btn-action" disabled>🌸 FLIP</button>'}
-           <button class="btn-action" onclick="openSprayModalForPlant('${plant.id}')">🧴 SPRAY</button>
-           ${(GS.rooms||[]).length > 1
-             ? `<button class="btn-action btn-cyan two-wide" onclick="openMoveRoomModal('${plant.id}')">🚚 MOVE TO ROOM</button>`
+      <div class="inspect-btn-area">
+        ${plant.inspectShield
+          ? `<button class="inspect-btn shielded" onclick="openInspectModal('${plant.id}');event.stopPropagation()">🛡️ SHIELDED — ${plant.inspectArea||''} (${shLeft})</button>`
+          : onCD
+          ? `<button class="inspect-btn cooldown" disabled>🔍 INSPECT (CD: ${cdLeft})</button>`
+          : `<button class="inspect-btn" onclick="openInspectModal('${plant.id}');event.stopPropagation()">🔍 INSPECT PLANT</button>`}
+      </div>
+      ${plant._permanentlyDead
+        ? `<div class="dead-plant-bar" style="margin:0 12px 8px">
+             💀 Permanently dead — no harvest possible. Remove to free the slot.
+           </div>
+           <div class="plant-actions">
+             <button class="btn-action btn-red full-width" onclick="openRemoveModal('${plant.id}');event.stopPropagation()">🗑️ REMOVE DEAD PLANT</button>
+           </div>`
+        : `${plant.isDead
+             ? `<div class="dead-plant-bar" style="margin:0 12px 8px">
+                  ⚠️ 0 health — needs 💉 Health Spray · ${plant._deadTs ? Math.max(0,12-((Date.now()-plant._deadTs)/3600000)).toFixed(1) : '12.0'}h left
+                </div>`
              : ''}
-         </div>`}
+           <div class="plant-actions">
+             <button class="btn-action btn-blue" onclick="openWaterModal('${plant.id}');event.stopPropagation()">💧 WATER</button>
+             <button class="btn-action btn-gold" onclick="openHarvestModal('${plant.id}');event.stopPropagation()" ${plant.isDead ? 'disabled' : ''}>${plant.hasSeeds ? '🌱 SEEDS' : '🌾 HARVEST'}</button>
+             <button class="btn-action btn-red"  onclick="openRemoveModal('${plant.id}');event.stopPropagation()">🗑️ REMOVE</button>
+             <button class="btn-action btn-green" onclick="openTrainModal('${plant.id}');event.stopPropagation()" ${plant.isDead ? 'disabled' : ''}>✂️ TRAIN</button>
+             ${plant.stage === 'Veg' && !plant.isDead
+               ? `<button class="btn-action btn-purple" onclick="openFlipModal('${plant.id}');event.stopPropagation()">🌸 FLIP</button>`
+               : '<button class="btn-action" disabled>🌸 FLIP</button>'}
+             <button class="btn-action" onclick="openSprayModalForPlant('${plant.id}');event.stopPropagation()">🧴 SPRAY</button>
+             ${(GS.rooms||[]).length > 1
+               ? `<button class="btn-action btn-cyan two-wide" onclick="openMoveRoomModal('${plant.id}');event.stopPropagation()">🚚 MOVE TO ROOM</button>`
+               : ''}
+           </div>`}
     `;
   return card;
+}
+
+function handlePlantCardClick(e, plantId) {
+  const target = e.target;
+  if (target.closest('button, .event-tag, .weed-clickable, .plant-art-area')) return;
+  const card = e.currentTarget;
+  card.classList.toggle('is-flipped');
 }
 
 // ── Plant click handler ──
@@ -4854,11 +4932,20 @@ function renderCuring() {
   drying.forEach(b => {
     const rh = b.dryRH != null ? b.dryRH : 80;
     const rhColor = rh >= 58 && rh <= 64 ? 'var(--green)' : rh > 70 ? 'var(--red)' : 'var(--gold)';
-    html += `<div class="curing-card hanging" style="cursor:pointer" onclick="showVaultSubAndTab('drying')">
-      <div class="curing-header"><div class="curing-name">${b.name}</div><div class="curing-phase hanging">🌬️ DRYING</div></div>
-      <div style="font-family:var(--font-hud);font-size:28px;color:${rhColor};text-align:center;margin:6px 0">${rh.toFixed(1)}%<span style="font-size:12px;color:var(--muted)"> RH</span></div>
-      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);text-align:center">Tap to manage →</div>
-    </div>`;
+    const art = getStrainCardPath(b.strainName);
+
+html += `<div class="curing-card">
+  <img src="${art}" alt="${b.strainName}"
+       style="width:100%;height:110px;object-fit:cover;border-radius:8px;border:1px solid var(--border);margin-bottom:8px">
+
+  <div style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin-bottom:4px">
+    ${b.strainName}
+  </div>
+
+  <div style="font-size:9px;color:var(--muted)">
+    ${b.phase.toUpperCase()} • ${Math.floor((Date.now() - b.startTime)/3600000)}h
+  </div>
+</div>`;
   });
   curing.forEach(b => {
     const rh = b.jarRH != null ? b.jarRH : 62;
@@ -5127,6 +5214,20 @@ function tryRedeemCode() {
   if (el) el.value = '';
 }
 
+function addStrainCardToInventory(strainName, sourceStrain, codeKey) {
+  const inv = getInventory();
+  const cardKey = _keyify(sourceStrain || strainName || codeKey);
+  inv.instances.push({
+    uid: uid(),
+    itemId: 'card_' + cardKey,
+    type: 'card',
+    name: strainName,
+    sourceStrain: sourceStrain || strainName,
+    cardKey,
+    cardSrc: getStrainCardPath(sourceStrain || strainName),
+  });
+}
+
 function redeemCode(code) {
   const isMod = GS.username === MOD_USER;
   const r = document.getElementById('code-result');
@@ -5139,10 +5240,11 @@ function redeemCode(code) {
     GS.seeds['TestStrain'] = (GS.seeds['TestStrain'] || 0) + 3;
     GS.testPackUsed = true;
     GS.stats.seedsRedeemed = (GS.stats.seedsRedeemed || 0) + 3;
+    addStrainCardToInventory('TestStrain', 'TestStrain', 'TESTPACK');
     if (r) { r.textContent = '✅ Redeemed 3x TestStrain!'; r.className = 'code-result ok'; }
     toast('🧪 Test pack redeemed — 3x TestStrain!', 'ok', 4000);
     addLog('Redeemed TESTPACK (3x TestStrain)', 'success');
-    saveGame(); renderSeeds(); renderHeader(); return;
+    saveGame(); renderSeeds(); renderInventory(); renderHeader(); return;
   }
 
   const entry = SEED_CODES[code];
@@ -5163,10 +5265,12 @@ function redeemCode(code) {
 
   GS.seeds[entry.strain] = (GS.seeds[entry.strain] || 0) + entry.qty;
   GS.stats.seedsRedeemed = (GS.stats.seedsRedeemed || 0) + entry.qty;
+  addStrainCardToInventory(entry.strain, entry.strain, code);
+
   if (r) { r.textContent = '✅ Redeemed ' + entry.qty + 'x ' + entry.strain + '!'; r.className = 'code-result ok'; }
   toast('✅ Redeemed ' + entry.qty + 'x ' + entry.strain + '!', 'ok', 4000);
   addLog('Code redeemed: ' + entry.qty + 'x ' + entry.strain, 'success');
-  saveGame(); renderSeeds(); renderHeader();
+  saveGame(); renderSeeds(); renderInventory(); renderHeader();
 }
 
 // ================================================================
