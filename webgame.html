@@ -2968,7 +2968,10 @@ function ensureSlotArray(rg, key, count) {
 
 function assignRoomSlot(roomId, group, idx, uid) {
   const rg = getRoomGear(roomId);
-  ensureSlotArray(rg, group, roomEquipCounts(roomId)[group] || 0);
+  const _gk = {lights:'lights',fans:'fans',acUnits:'ac',heaters:'heaters',dehumidifiers:'dehu',humidifiers:'humid'};
+  const _cnt = roomEquipCounts(roomId)[_gk[group]||group] || 1;
+  ensureSlotArray(rg, group, _cnt);
+  if (!rg[group][idx]) rg[group][idx] = { instanceUid: null, settings: {} };
   rg[group][idx].instanceUid = uid || null;
   if (!rg[group][idx].settings) rg[group][idx].settings = {};
   saveGame();
@@ -3354,13 +3357,16 @@ function tickPlant(plant, room, strain, actual, gameMins) {
     }
   } else if (plant.stage === 'Veg') {
     plant.vegDays = (plant.vegDays || 0) + (gameMins / (60 * 24)) * finalSpeedMult;
-  } else if (plant.stage === 'Flower') {
+  } else if (plant.stage === 'Flower' || plant.stage === 'Ready') {
+    // Keep advancing flowerDay in Ready so week counter doesn't stall at wk9
     plant.flowerDay = (plant.flowerDay || 0) + (gameMins / (60 * 24)) * finalSpeedMult;
-    const fd = strain ? (strain.flowerDays || 63) : 63;
-    if (plant.flowerDay >= fd) {
-      plant.stage = 'Ready';
-      addLog(plant.name + ' READY TO HARVEST! 🌾', 'success');
-      toast('🌾 ' + plant.name + ' is ready to harvest!', 'ok', 5000);
+    if (plant.stage === 'Flower') {
+      const fd = strain ? (strain.flowerDays || 63) : 63;
+      if (plant.flowerDay >= fd) {
+        plant.stage = 'Ready';
+        addLog(plant.name + ' READY TO HARVEST! 🌾', 'success');
+        toast('🌾 ' + plant.name + ' is ready to harvest!', 'ok', 5000);
+      }
     }
     // Pollination
     // ── In-room pollination ──
@@ -4066,7 +4072,7 @@ function stopTick() {
 function catchupOffline() {
   if (!GS.lastSeen) return;
   const offMs = Date.now() - GS.lastSeen;
-  if (offMs < 30000) return;
+  if (offMs < 60000) return;  // raised to 60s to avoid triggering on quick refreshes
   const offHrs = offMs / 3600000;
   if (offMs > 300000) {
     const el = document.getElementById('comeback-msg');
@@ -4089,6 +4095,9 @@ function catchupOffline() {
     });
     tickCuring(Date.now());
   }
+  // Reset so next refresh doesn't re-simulate the same period
+  GS.lastSeen = Date.now();
+  _lastTick = Date.now();
 }
 // ================================================================
 // SCREEN / TAB NAVIGATION
@@ -4137,52 +4146,290 @@ function renderAll() {
   updateSidebarWarnings();
 }
 
+function _seedGridCard(name, qty, strain, isMale, isBred) {
+  const bd = (GS.bredStrains||[]).find(b => b.name === name);
+  const displayName = getStrainDisplayName(name);
+  const genLabel = bd ? bd.gen : '';
+  const genColor = genLabel.startsWith('BX') ? 'var(--cyan)' : 'var(--purple)';
+  const borderColor = isMale ? 'rgba(59,130,246,0.4)' : isBred ? 'rgba(168,85,247,0.35)' : 'rgba(74,222,128,0.2)';
+  const cardPath = getStrainCardPath(name);
+  const emoji = (strain && strain.emoji) || (isMale ? '♂️' : '🌿');
+  const nameColor = isMale ? 'var(--blue)' : isBred ? 'var(--purple)' : 'var(--green)';
+  return `<div style="background:var(--card-bg);border:1px solid ${borderColor};border-radius:9px;overflow:hidden;text-align:center;cursor:pointer;transition:.2s"
+      onclick="showTab('seeds')" title="${displayName}">
+    ${cardPath
+      ? `<img src="${cardPath}" alt="${displayName}" style="width:100%;height:75px;object-fit:contain;display:block;opacity:.88;padding:4px" onerror="this.style.display='none'">`
+      : `<div style="height:60px;display:flex;align-items:center;justify-content:center;font-size:24px">${isMale?'♂':''}${emoji}</div>`}
+    <div style="padding:5px 4px 6px">
+      <div style="font-family:var(--font-hud);font-size:8px;color:${nameColor};letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:1px">${displayName}</div>
+      ${genLabel ? `<div style="font-size:7px;color:${genColor};font-family:var(--font-hud)">${genLabel}</div>` : ''}
+      <div style="font-family:var(--font-hud);font-size:14px;font-weight:700;color:var(--gold);margin-top:2px">${qty}×</div>
+    </div>
+  </div>`;
+}
+
+function _instanceRoomUsage(uid) {
+  for (const room of GS.rooms||[]) {
+    const rg = getRoomGear(room.id);
+    const groups = ['lights','fans','acUnits','heaters','dehumidifiers','humidifiers'];
+    for (const g of groups) {
+      if ((rg[g]||[]).some(s => s?.instanceUid === uid)) return room.name;
+    }
+  }
+  return null;
+}
+
 function renderInventory() {
   const cont = document.getElementById('inventory-container');
   if (!cont) return;
 
-  // ── Gear & Consumables ──
-  const allItems = Object.values(SHOP_ITEMS).flat();
-  let itemsHtml = '';
-  allItems.forEach(item => {
-    const count = ownedCount(item.id);
-    if (count <= 0) return;
-    itemsHtml += `<div class="shop-item">
-      <div class="shop-item-icon">${item.icon||'📦'}</div>
-      <div class="shop-item-info">
-        <div class="shop-item-name">${item.name}</div>
-        <div class="shop-item-desc">${item.desc||''}</div>
-        <div class="shop-item-price">Owned: ${count}</div>
-      </div>
-    </div>`;
-  });
+  const seeds      = GS.seeds           || {};
+  const maleSeeds  = GS.maleSeedsOwned  || {};
+  const bred       = GS.bredStrains     || [];
+  const inv        = getInventory();
+  const instances  = inv.instances      || [];
+  const consumables= inv.consumables    || {};
 
-  // ── Collector Cards ──
+  let html = '';
+
+  // ────────────────────────────────────────────────
+  // SEEDS
+  // ────────────────────────────────────────────────
+  const femEntries  = Object.entries(seeds).filter(([,q]) => q > 0);
+  const maleEntries = Object.entries(maleSeeds).filter(([,q]) => q > 0);
+
+  if (femEntries.length || maleEntries.length) {
+    html += `<div class="section-divider">🌿 SEEDS</div>`;
+  }
+
+  // ── FEMALE / FEM ──
+  if (femEntries.length) {
+    html += `<div style="font-family:var(--font-hud);font-size:9px;color:var(--green);letter-spacing:1.5px;margin:4px 0 8px">FEMALE / FEM SEEDS</div>`;
+
+    const genOrder = g => {
+      if (!g || g === 'original') return 0;
+      if (g === 'F*') return 99; if (g === 'BX*') return 199;
+      if (g.startsWith('F'))  return parseInt(g.slice(1))  || 1;
+      if (g.startsWith('BX')) return 100 + (parseInt(g.slice(2)) || 1);
+      return 999;
+    };
+
+    const baseFem = femEntries.filter(([n]) => !bred.find(b=>b.name===n));
+    const bredFemF = femEntries.filter(([n]) => { const b=bred.find(x=>x.name===n); return b&&b.gen&&b.gen.startsWith('F'); })
+      .sort(([a],[b2]) => genOrder(bred.find(x=>x.name===a)?.gen) - genOrder(bred.find(x=>x.name===b2)?.gen));
+    const bredFemBX = femEntries.filter(([n]) => { const b=bred.find(x=>x.name===n); return b&&b.gen&&b.gen.startsWith('BX'); })
+      .sort(([a],[b2]) => genOrder(bred.find(x=>x.name===a)?.gen) - genOrder(bred.find(x=>x.name===b2)?.gen));
+
+    if (baseFem.length) {
+      html += `<div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);letter-spacing:.5px;margin-bottom:6px">ORIGINAL STRAINS</div>`;
+      html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:14px">`;
+      baseFem.forEach(([n,q]) => { html += _seedGridCard(n,q,STRAINS[n]||{},false,false); });
+      html += `</div>`;
+    }
+    if (bredFemF.length) {
+      html += `<div style="font-size:8px;color:var(--purple);font-family:var(--font-hud);letter-spacing:.5px;margin-bottom:6px">F SERIES (F1 → F*)</div>`;
+      html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:14px">`;
+      bredFemF.forEach(([n,q]) => { html += _seedGridCard(n,q,bred.find(b=>b.name===n)||{},false,true); });
+      html += `</div>`;
+    }
+    if (bredFemBX.length) {
+      html += `<div style="font-size:8px;color:var(--cyan);font-family:var(--font-hud);letter-spacing:.5px;margin-bottom:6px">BX SERIES (BX1 → BX*)</div>`;
+      html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:14px">`;
+      bredFemBX.forEach(([n,q]) => { html += _seedGridCard(n,q,bred.find(b=>b.name===n)||{},false,true); });
+      html += `</div>`;
+    }
+  }
+
+  // ── MALE ──
+  if (maleEntries.length) {
+    html += `<div style="font-family:var(--font-hud);font-size:9px;color:var(--blue);letter-spacing:1.5px;margin:4px 0 8px">♂ MALE SEEDS</div>`;
+    const baseMale  = maleEntries.filter(([n]) => !bred.find(b=>b.name===n));
+    const bredMaleF = maleEntries.filter(([n]) => { const b=bred.find(x=>x.name===n); return b&&b.gen&&b.gen.startsWith('F'); });
+    const bredMaleBX= maleEntries.filter(([n]) => { const b=bred.find(x=>x.name===n); return b&&b.gen&&b.gen.startsWith('BX'); });
+    if (baseMale.length) {
+      html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:10px">`;
+      baseMale.forEach(([n,q]) => { html += _seedGridCard(n,q,STRAINS[n]||{},true,false); });
+      html += `</div>`;
+    }
+    if (bredMaleF.length) {
+      html += `<div style="font-size:8px;color:var(--purple);font-family:var(--font-hud);letter-spacing:.5px;margin-bottom:5px">F SERIES</div>`;
+      html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:10px">`;
+      bredMaleF.forEach(([n,q]) => { html += _seedGridCard(n,q,bred.find(b=>b.name===n)||{},true,true); });
+      html += `</div>`;
+    }
+    if (bredMaleBX.length) {
+      html += `<div style="font-size:8px;color:var(--cyan);font-family:var(--font-hud);letter-spacing:.5px;margin-bottom:5px">BX SERIES</div>`;
+      html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:10px">`;
+      bredMaleBX.forEach(([n,q]) => { html += _seedGridCard(n,q,bred.find(b=>b.name===n)||{},true,true); });
+      html += `</div>`;
+    }
+  }
+
+  // ────────────────────────────────────────────────
+  // EQUIPMENT
+  // ────────────────────────────────────────────────
+  html += `<div class="section-divider" style="margin-top:18px">⚙️ EQUIPMENT</div>`;
+
+  const lights  = instances.filter(x => (x.equipType||x.type) === 'lights');
+  const fans    = instances.filter(x => (x.equipType||x.type) === 'fan');
+  const acU     = instances.filter(x => (x.equipType||x.type) === 'acUnit');
+  const heaters = instances.filter(x => (x.equipType||x.type) === 'heater');
+  const dehus   = instances.filter(x => (x.equipType||x.type) === 'dehumidifier');
+  const humids  = instances.filter(x => (x.equipType||x.type) === 'humidifier');
+
+  const mkGearGrid = (items, sectionLabel, accent) => {
+    if (!items.length) return '';
+    let s = `<div style="font-family:var(--font-hud);font-size:9px;color:${accent};letter-spacing:1px;margin:10px 0 6px">${sectionLabel}</div>`;
+    s += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:8px;margin-bottom:6px">`;
+    items.forEach(inst => {
+      const usedIn = _instanceRoomUsage(inst.uid);
+      s += `<div style="background:var(--card-bg);border:1px solid ${usedIn?'rgba(74,222,128,0.35)':'var(--border)'};border-radius:9px;padding:10px;display:flex;flex-direction:column;gap:3px">
+        <div style="font-size:20px">${inst.icon||'📦'}</div>
+        <div style="font-family:var(--font-hud);font-size:9px;color:var(--text);letter-spacing:.3px">${inst.name}</div>
+        ${inst.power ? `<div style="font-size:8px;color:var(--gold);font-family:var(--font-mono)">${inst.power}W</div>` : ''}
+        ${inst.size  ? `<div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">${inst.size}</div>` : ''}
+        <div style="font-size:8px;color:${usedIn?'var(--green)':'var(--muted)'};font-family:var(--font-mono)">${usedIn||'Not assigned'}</div>
+      </div>`;
+    });
+    s += `</div>`;
+    return s;
+  };
+
+  html += mkGearGrid(lights,  '💡 LIGHTS',      'var(--gold)');
+  html += mkGearGrid(fans,    '🌀 FANS',         'var(--cyan)');
+
+  if (acU.length || heaters.length) {
+    html += `<div style="font-family:var(--font-hud);font-size:9px;color:var(--orange);letter-spacing:1px;margin:10px 0 6px">🌡️ TEMP CONTROL</div>`;
+    html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:8px;margin-bottom:6px">`;
+    [...acU, ...heaters].forEach(inst => {
+      const usedIn = _instanceRoomUsage(inst.uid);
+      const accent = (inst.equipType||inst.type) === 'acUnit' ? 'var(--blue)' : 'var(--orange)';
+      html += `<div style="background:var(--card-bg);border:1px solid ${usedIn?'rgba(74,222,128,0.35)':'var(--border)'};border-radius:9px;padding:10px;display:flex;flex-direction:column;gap:3px">
+        <div style="font-size:20px">${inst.icon||'📦'}</div>
+        <div style="font-family:var(--font-hud);font-size:9px;color:var(--text)">${inst.name}</div>
+        <div style="font-size:8px;color:${accent};font-family:var(--font-mono)">${(inst.equipType||inst.type)==='acUnit'?'AC':'Heater'} · ${inst.size||''}</div>
+        <div style="font-size:8px;color:${usedIn?'var(--green)':'var(--muted)'};font-family:var(--font-mono)">${usedIn||'Not assigned'}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  if (dehus.length || humids.length) {
+    html += `<div style="font-family:var(--font-hud);font-size:9px;color:var(--blue);letter-spacing:1px;margin:10px 0 6px">💧 HUMIDITY</div>`;
+    html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:8px;margin-bottom:6px">`;
+    [...dehus, ...humids].forEach(inst => {
+      const usedIn = _instanceRoomUsage(inst.uid);
+      const accent = (inst.equipType||inst.type) === 'dehumidifier' ? 'var(--purple)' : 'var(--blue)';
+      html += `<div style="background:var(--card-bg);border:1px solid ${usedIn?'rgba(74,222,128,0.35)':'var(--border)'};border-radius:9px;padding:10px;display:flex;flex-direction:column;gap:3px">
+        <div style="font-size:20px">${inst.icon||'📦'}</div>
+        <div style="font-family:var(--font-hud);font-size:9px;color:var(--text)">${inst.name}</div>
+        <div style="font-size:8px;color:${accent};font-family:var(--font-mono)">${(inst.equipType||inst.type)==='dehumidifier'?'Dehumidifier':'Humidifier'} · ${inst.size||''}</div>
+        <div style="font-size:8px;color:${usedIn?'var(--green)':'var(--muted)'};font-family:var(--font-mono)">${usedIn||'Not assigned'}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // ── TOOLS ──
+  const toolDefs = [
+    {key:'scope',    icon:'🔬', name:"Jeweler's Loupe"},
+    {key:'phmeter',  icon:'🧪', name:'pH Meter'},
+    {key:'ecmeter',  icon:'🔌', name:'EC/PPM Meter'},
+    {key:'scrogNet', icon:'🕸️', name:'SCROG Net'},
+  ];
+  const ownedTools = toolDefs.filter(t => GS.gear?.[t.key]);
+  const stsCount   = GS.gear?.stsSprayCount || 0;
+  if (ownedTools.length || stsCount > 0) {
+    html += `<div style="font-family:var(--font-hud);font-size:9px;color:var(--green);letter-spacing:1px;margin:10px 0 6px">🛠️ TOOLS</div>`;
+    html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:8px;margin-bottom:6px">`;
+    ownedTools.forEach(t => {
+      html += `<div style="background:var(--card-bg);border:1px solid rgba(74,222,128,0.35);border-radius:9px;padding:10px;display:flex;flex-direction:column;gap:3px">
+        <div style="font-size:20px">${t.icon}</div>
+        <div style="font-family:var(--font-hud);font-size:9px;color:var(--green)">${t.name}</div>
+        <div style="font-size:8px;color:var(--green);font-family:var(--font-mono)">✅ Installed</div>
+      </div>`;
+    });
+    if (stsCount > 0) {
+      html += `<div style="background:var(--card-bg);border:1px solid rgba(168,85,247,0.4);border-radius:9px;padding:10px;display:flex;flex-direction:column;gap:3px">
+        <div style="font-size:20px">🧪</div>
+        <div style="font-family:var(--font-hud);font-size:9px;color:var(--purple)">STS Spray</div>
+        <div style="font-family:var(--font-hud);font-size:14px;color:var(--gold)">${stsCount}×</div>
+      </div>`;
+    }
+    html += `</div>`;
+  }
+
+  // ── CONSUMABLES (nutrients, pH, pots, soil) ──
+  // Aggregate per-room nutrients
+  const nuteKeys = ['nuteBase','nuteGrow','nuteBloom','nuteCalmag','phUp','phDown'];
+  const nuteDefs = {
+    nuteBase:'🧴 Base Feed', nuteGrow:'🧴 Grow (N)', nuteBloom:'🧴 Bloom (PK)',
+    nuteCalmag:'🧴 Cal-Mag', phUp:'⬆️ pH Up', phDown:'⬇️ pH Down'
+  };
+  const nuteAccum = {};
+  (GS.rooms||[]).forEach(r => {
+    const rg = getRoomGear(r.id);
+    nuteKeys.forEach(k => {
+      const amt = rg[k]||0;
+      if (amt > 0) {
+        if (!nuteAccum[k]) nuteAccum[k] = {label:nuteDefs[k], total:0, rooms:[]};
+        nuteAccum[k].total += amt;
+        nuteAccum[k].rooms.push(r.name.replace('Room ','R'));
+      }
+    });
+  });
+  const potSoilItems = Object.entries(consumables).filter(([,q]) => q > 0);
+  const allItems2 = Object.values(SHOP_ITEMS).flat();
+
+  if (Object.keys(nuteAccum).length || potSoilItems.length) {
+    html += `<div style="font-family:var(--font-hud);font-size:9px;color:var(--gold);letter-spacing:1px;margin:10px 0 6px">🧴 CONSUMABLES</div>`;
+    html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:6px">`;
+    Object.entries(nuteAccum).forEach(([k, n]) => {
+      const [ic, nm] = n.label.split(' ').slice(0,1).join('') ? [n.label.split(' ')[0], n.label.split(' ').slice(1).join(' ')] : ['🧴','?'];
+      html += `<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:9px;padding:10px;text-align:center">
+        <div style="font-size:16px;margin-bottom:3px">${ic}</div>
+        <div style="font-family:var(--font-hud);font-size:8px;color:var(--text);margin-bottom:2px">${nm}</div>
+        <div style="font-family:var(--font-hud);font-size:14px;color:var(--gold)">${Math.round(n.total)}ml</div>
+        <div style="font-size:7px;color:var(--muted);font-family:var(--font-mono);margin-top:2px">${n.rooms.join(', ')}</div>
+      </div>`;
+    });
+    potSoilItems.forEach(([id, qty]) => {
+      const item = allItems2.find(i => i.id === id);
+      if (!item) return;
+      html += `<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:9px;padding:10px;text-align:center">
+        <div style="font-size:16px;margin-bottom:3px">${item.icon||'📦'}</div>
+        <div style="font-family:var(--font-hud);font-size:8px;color:var(--text);margin-bottom:2px">${item.name}</div>
+        <div style="font-family:var(--font-hud);font-size:14px;color:var(--gold)">${qty}×</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  if (!instances.length && !Object.keys(nuteAccum).length && !potSoilItems.length && !ownedTools.length) {
+    html += `<div style="color:var(--muted);font-family:var(--font-hud);font-size:10px;padding:12px;text-align:center;letter-spacing:1px">No gear yet — visit the Shop.</div>`;
+  }
+
+  // ── COLLECTOR CARDS ──
   const ownedCards = GS.cards || [];
-  let cardsHtml = `<div class="section-divider" style="margin-top:20px">🃏 COLLECTOR CARDS (${ownedCards.length})</div>`;
+  html += `<div class="section-divider" style="margin-top:20px">🃏 COLLECTOR CARDS (${ownedCards.length})</div>`;
   if (ownedCards.length) {
-    cardsHtml += '<div class="cards-grid">';
+    html += `<div class="cards-grid">`;
     ownedCards.forEach(strainName => {
-      const path   = getStrainCardPath(strainName);
-      const emoji  = (STRAINS[strainName]||{}).emoji || '🌿';
-      const safeName = strainName.replace(/'/g,"\\'");
-      cardsHtml += `<div class="collector-card" onclick="viewCard('${safeName}')" title="${strainName}">
-        ${path
-          ? `<img class="collector-card-img" src="${path}" alt="${strainName}" onerror="this.style.opacity='0.08'">`
-          : `<div style="height:150px;display:flex;align-items:center;justify-content:center;font-size:42px">${emoji}</div>`}
+      const path  = getStrainCardPath(strainName);
+      const emoji = (STRAINS[strainName]||{}).emoji || '🌿';
+      const safe  = strainName.replace(/'/g,"\\'");
+      html += `<div class="collector-card" onclick="viewCard('${safe}')" title="${strainName}">
+        ${path ? `<img class="collector-card-img" src="${path}" alt="${strainName}" onerror="this.style.opacity='0.08'">` 
+               : `<div style="height:150px;display:flex;align-items:center;justify-content:center;font-size:42px">${emoji}</div>`}
         <div class="collector-card-label">${strainName}</div>
       </div>`;
     });
-    cardsHtml += '</div>';
+    html += `</div>`;
   } else {
-    cardsHtml += '<div style="color:var(--muted);font-family:var(--font-hud);font-size:10px;padding:18px;text-align:center;letter-spacing:1px;line-height:2">No cards yet.<br>Redeem seed codes to unlock collector cards!</div>';
+    html += `<div style="color:var(--muted);font-family:var(--font-hud);font-size:10px;padding:18px;text-align:center;letter-spacing:1px;line-height:2">No cards yet.<br>Redeem seed codes to unlock collector cards!</div>`;
   }
 
-  const gearSection = itemsHtml
-    ? `<div class="section-divider">🎒 GEAR &amp; CONSUMABLES</div><div class="shop-items-list">${itemsHtml}</div>`
-    : `<div style="color:var(--muted);font-family:var(--font-hud);font-size:10px;padding:12px;text-align:center;letter-spacing:1px">No gear items yet — buy from the Shop.</div>`;
-
-  cont.innerHTML = gearSection + cardsHtml;
+  cont.innerHTML = html;
 }
 
 function viewCard(strainName) {
@@ -7806,67 +8053,96 @@ function openWaterModal(plantId) {
   ];
   let nuteRows = '';
   nuteItems.forEach(n => {
-    const avail   = rg[n.rkey] || 0;
-    const empty   = avail <= 0;
-    const capPPM  = Math.min(n.max, avail);
-    const pct     = avail / 1000 * 100;
-    const barColor= avail > 500 ? 'var(--green)' : avail > 200 ? 'var(--gold)' : 'var(--red)';
+    const avail    = rg[n.rkey] || 0;
+    const empty    = avail <= 0;
+    const capPPM   = Math.min(n.max, avail);
+    const pct      = Math.min(100, avail / 1000 * 100);
+    const barColor = avail > 500 ? 'var(--green)' : avail > 200 ? 'var(--gold)' : 'var(--red)';
+    // Slider always functional; value display shows '?' without EC meter
     nuteRows += `<div class="nute-slider-row" style="${empty ? 'opacity:.35;pointer-events:none' : ''}">
       <span class="nute-slider-label">${n.label}</span>
       <input type="range" id="${n.id}" min="0" max="${empty ? 0 : capPPM}" step="25" value="0"
         oninput="updateNuteTotals()" ${empty ? 'disabled' : ''}>
-      ${hasEC
-        ? `<span class="nute-slider-val" id="${n.valId}">0 ppm</span>`
-        : `<span class="mystery-val"     id="${n.valId}">?</span>`}
+      <span class="${hasEC ? 'nute-slider-val' : 'mystery-val'}" id="${n.valId}">${hasEC ? '0 ppm' : '?'}</span>
     </div>
-    ${hasEC && !empty
+    ${!empty
       ? `<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;margin-top:-2px">
-           <div class="bottle-bar" style="flex:1"><div class="bottle-bar-fill" style="width:${Math.min(100,pct)}%;background:${barColor}"></div></div>
-           <span style="font-size:8px;color:${barColor};font-family:var(--font-mono);min-width:60px">${avail.toFixed(0)} ppm left</span>
+           <div class="bottle-bar" style="flex:1"><div class="bottle-bar-fill" style="width:${pct}%;background:${barColor}"></div></div>
+           <span style="font-size:8px;color:${barColor};font-family:var(--font-mono);min-width:56px">${avail.toFixed(0)}ml left</span>
          </div>`
-      : empty
-        ? `<div style="font-size:8px;color:var(--red);font-family:var(--font-mono);margin-bottom:4px">${n.label}: empty — buy from Shop</div>`
-        : ''}`;
+      : `<div style="font-size:8px;color:var(--red);font-family:var(--font-mono);margin-bottom:4px">${n.label}: EMPTY — buy from Shop → Water</div>`}`;
   });
 
   let nuteHtml = '';
   if (!hasEC) {
-    nuteHtml += `<div class="warning-note" style="margin-bottom:8px">
-      🔍 <strong>Feeding blind</strong> — no EC/PPM Meter. Feeding nutrients risks burn and costs <strong>−5 health &amp; −0.1% yield per feed.</strong>
+    nuteHtml += `<div class="warning-note" style="margin-bottom:10px;border-color:rgba(239,68,68,0.55)">
+      🔍 <strong>FEEDING BLIND</strong> — no EC/PPM Meter installed.<br>
+      Slider values show <strong style="color:var(--gold);font-size:13px">?</strong> and you cannot see what you're adding.<br>
+      Each nutrient feed without an EC meter: <strong style="color:var(--red)">−5 health &amp; −0.1% yield multiplier</strong>.
       ${diff === 'easy'
-        ? `<br><span style="color:var(--gold)">💡 EC/PPM Meter (2,500¢) + pH Meter (2,500¢) from Shop → Tools prevents this penalty.</span>
-           <br><button style="margin-top:6px;width:100%;padding:5px;background:rgba(74,222,128,0.1);border:1px solid var(--green);border-radius:4px;color:var(--green);font-family:var(--font-hud);font-size:8px;cursor:pointer;letter-spacing:.5px"
-             onclick="closeAllModals();showTab('shop');_shopSection='tools';renderShop()">→ OPEN SHOP → TOOLS</button>`
+        ? `<br><br><span style="color:var(--gold)">💡 Easy fix: buy an <strong>EC/PPM Meter (2,500¢)</strong> from Shop → Tools.
+             Without it every feed is a gamble — your plant can easily burn.</span>
+           <br><button style="margin-top:8px;width:100%;padding:7px;background:rgba(74,222,128,0.12);border:1px solid var(--green);border-radius:5px;color:var(--green);font-family:var(--font-hud);font-size:9px;cursor:pointer;letter-spacing:.5px"
+             onclick="closeAllModals();showTab('shop');_shopSection='tools';renderShop()">🛒 OPEN SHOP → TOOLS</button>`
         : ''}
     </div>`;
-  }  nuteHtml += `<div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:8px">NUTRIENTS <span style="color:rgba(74,222,128,0.4)">(OPTIONAL)</span></div>
-    <div id="nute-sliders-section">${nuteRows}</div>
-    <div id="flush-section" style="display:none">
-      <div class="info-note" style="margin-bottom:10px">🚿 Flush mode — plain water only, no nutrients used from bottles.</div>
-      <div class="nute-slider-row">
-        <span class="nute-slider-label">TARGET PPM</span>
-        <input type="range" id="flush-target-ppm" min="0" max="${Math.max(plant.soilPPM||0, 400)}" step="50" value="200"
-          oninput="_el('flush-disp',this.value+' ppm')">
-        <span class="nute-slider-val" id="flush-disp">200 ppm</span>
-      </div>
-      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Current soil: ${plant.soilPPM||0} ppm</div>
-    </div>`;
+  }
+  nuteHtml += `<div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:8px">
+    NUTRIENTS <span style="color:rgba(74,222,128,0.4)">(OPTIONAL)</span>
+    ${hasEC ? '<span style="color:var(--green);margin-left:6px">✅ EC METER</span>' : '<span style="color:var(--red);margin-left:6px">❌ NO EC METER</span>'}
+  </div>
+  <div id="nute-sliders-section">${nuteRows}</div>
+  <div id="flush-section" style="display:none">
+    <div class="info-note" style="margin-bottom:10px">🚿 Flush mode — plain water only, no nutrients used from bottles.</div>
+    <div class="nute-slider-row">
+      <span class="nute-slider-label">TARGET PPM</span>
+      <input type="range" id="flush-target-ppm" min="0" max="${Math.max(plant.soilPPM||0, 400)}" step="50" value="200"
+        oninput="_el('flush-disp',this.value+' ppm')">
+      <span class="nute-slider-val" id="flush-disp">200 ppm</span>
+    </div>
+    <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Current soil: ${plant.soilPPM||0} ppm</div>
+  </div>`;
 
-  // pH section
-  let phHtml = '';
+  // pH section — always rendered; locked when requirements not met
+  const _phLabelColor = canPH ? 'var(--green)' : 'var(--red)';
+  const _phLabelIcon  = canPH ? '✅' : '🔒';
+  let phHtml = `<div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin:10px 0 6px">
+    pH ADJUSTMENT <span style="color:${_phLabelColor};margin-left:6px">${_phLabelIcon} ${canPH ? 'ACTIVE' : 'LOCKED'}</span>
+  </div>`;
+
   if (canPH) {
-    phHtml = `<div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin:10px 0 6px">pH ADJUSTMENT</div>
-      <div class="nute-slider-row">
-        <span class="nute-slider-label">TARGET pH</span>
-        <input type="range" id="water-ph-target" min="50" max="75" step="1" value="62"
-          oninput="_el('water-ph-val',(this.value/10).toFixed(1))">
-        <span class="nute-slider-val" id="water-ph-val">6.2</span>
-      </div>
-      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">pH Up: ${phUp}ml · pH Down: ${phDn}ml · Ideal: 6.0–6.5</div>`;
-  } else if (hasPH && phUp <= 0 && phDn <= 0) {
-    phHtml = `<div class="warning-note" style="margin-top:8px;margin-bottom:0">⚗️ pH Meter owned but no pH Up/Down stock — buy from Shop (1000¢ each).</div>`;
-  } else if (!hasPH && diff === 'easy') {
-    phHtml = `<div class="info-note" style="margin-top:8px;margin-bottom:0">💡 No pH meter — each nutrient feed costs −5 health &amp; −0.1% yield. Buy pH Meter + pH Up/Down from Shop.</div>`;
+    phHtml += `<div class="nute-slider-row">
+      <span class="nute-slider-label">TARGET pH</span>
+      <input type="range" id="water-ph-target" min="50" max="75" step="1" value="62"
+        oninput="_el('water-ph-val',(this.value/10).toFixed(1))">
+      <span class="nute-slider-val" id="water-ph-val">6.2</span>
+    </div>
+    <div style="font-size:8px;color:var(--green);font-family:var(--font-mono)">
+      ✅ pH Up: ${phUp}ml · pH Down: ${phDn}ml · Ideal: 6.0–6.5
+    </div>`;
+  } else {
+    // Build a clear message about exactly what's missing
+    const _missingParts = [];
+    if (!hasPH)       _missingParts.push('pH Meter (2,500¢ — Shop → Tools)');
+    if (phUp   <= 0)  _missingParts.push('pH Up (1,000¢ — Shop → Water)');
+    if (phDn   <= 0)  _missingParts.push('pH Down (1,000¢ — Shop → Water)');
+    const _missingStr = _missingParts.length
+      ? 'Missing: <strong>' + _missingParts.join(' + ') + '</strong>'
+      : '';
+
+    phHtml += `<div class="nute-slider-row" style="opacity:.3;pointer-events:none">
+      <span class="nute-slider-label">TARGET pH</span>
+      <input type="range" id="water-ph-target" min="50" max="75" step="1" value="62" disabled>
+      <span class="mystery-val">🔒</span>
+    </div>
+    <div class="warning-note" style="margin-top:6px;margin-bottom:0">
+      🔒 pH adjustment locked — ${_missingStr}.<br>
+      Each nutrient feed without pH control: <strong style="color:var(--red)">−5 health &amp; −0.1% yield multiplier</strong>.
+      ${diff === 'easy'
+        ? `<br><button style="margin-top:7px;width:100%;padding:6px;background:rgba(74,222,128,0.1);border:1px solid var(--green);border-radius:5px;color:var(--green);font-family:var(--font-hud);font-size:9px;cursor:pointer;letter-spacing:.5px"
+             onclick="closeAllModals();showTab('shop');_shopSection='tools';renderShop()">🛒 SHOP → TOOLS &amp; WATER</button>`
+        : ''}
+    </div>`;
   }
 
   // Reservoir attachment section
@@ -7987,18 +8263,39 @@ function updateNuteTotals() {
 
   const disp = document.getElementById('nute-total-display');
   const warn = document.getElementById('nute-burn-warn');
-  if (disp) {
-    if      (total === 0)   { disp.textContent = 'TOTAL: 0 ppm — Plain Water';       disp.className = 'nute-total-display ok'; }
-    else if (total > 1800)  { disp.textContent = 'TOTAL: ' + total + ' ppm — 🔥 BURN ZONE'; disp.className = 'nute-total-display burn'; }
-    else if (total > 1200)  { disp.textContent = 'TOTAL: ' + total + ' ppm — HIGH';  disp.className = 'nute-total-display high'; }
-    else                    { disp.textContent = 'TOTAL: ' + total + ' ppm';          disp.className = 'nute-total-display ok'; }
-  }
-  if (warn) warn.classList.toggle('hidden', total <= 1800);
 
+  if (disp) {
+    if (total === 0) {
+      disp.textContent = 'TOTAL: 0 ppm — Plain Water (no penalty)';
+      disp.className   = 'nute-total-display ok';
+    } else if (!hasEC) {
+      // No EC meter — hide the actual number entirely
+      disp.textContent = 'TOTAL: ??? ppm — BLIND FEED  ⚠️ −5 HP −0.1% yield';
+      disp.className   = 'nute-total-display burn';
+    } else if (total > 1800) {
+      disp.textContent = 'TOTAL: ' + total + ' ppm — 🔥 BURN ZONE!';
+      disp.className   = 'nute-total-display burn';
+    } else if (total > 1400) {
+      disp.textContent = 'TOTAL: ' + total + ' ppm — HIGH (risk of lockout)';
+      disp.className   = 'nute-total-display high';
+    } else if (total > 900) {
+      disp.textContent = 'TOTAL: ' + total + ' ppm — ELEVATED';
+      disp.className   = 'nute-total-display high';
+    } else {
+      disp.textContent = 'TOTAL: ' + total + ' ppm';
+      disp.className   = 'nute-total-display ok';
+    }
+  }
+
+  // Show burn warning if no EC OR actual total is in burn zone
+  if (warn) warn.classList.toggle('hidden', hasEC ? total <= 1800 : total === 0);
+
+  // Individual slider value displays — "?" without EC meter
   const valMap = {'nv-base':base,'nv-grow':grow,'nv-bloom':bloom,'nv-calmag':calmag};
   Object.entries(valMap).forEach(([id, val]) => {
     const el = document.getElementById(id);
-    if (el) el.textContent = hasEC ? val + ' ppm' : '?';
+    if (!el) return;
+    el.textContent = hasEC ? val + ' ppm' : (val > 0 ? '?' : '0');
   });
 }
 
@@ -8325,7 +8622,13 @@ function confirmInspect(area) {
     toast('🛡️ Shielded: ' + area + ' — 12h protection','ok',3000);
   }
 
-  function renderDailyGoal() {
+  completeDailyGoal();
+  addLog((plant.name||plant.strainName) + ' inspected (' + area + ')','info');
+  saveGame();
+  setTimeout(() => renderGrow(), 30);
+}
+
+function renderDailyGoal() {
   const bar = document.getElementById('daily-goal-bar');
   if (!bar || !GS || !GS.username) return;
   const today = new Date().toDateString();
@@ -8342,12 +8645,6 @@ function confirmInspect(area) {
     if (t) t.textContent = goal.icon + ' ' + goal.text;
     if (r) r.textContent = 'Reward: ' + goal.reward + '¢ + ' + goal.xp + ' XP';
   } catch(e) { console.warn('daily goal err',e); }
-}
-
-  completeDailyGoal();
-  addLog((plant.name||plant.strainName) + ' inspected (' + area + ')','info');
-  saveGame();
-  setTimeout(() => renderGrow(), 30);
 }
 
 // ================================================================
