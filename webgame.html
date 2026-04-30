@@ -2745,11 +2745,11 @@ function defaultState(username, difficulty) {
 
 // Room sizes: id → {slots, levelReq, size, name}
 const ROOM_DEFS = {
-  1: { slots: 2,  levelReq: 0,   size: 'small',  name: 'Room 1 — Small',  equip: { lights: 1,  fans: 1,  ac: 0, dehu: 0, humid: 0 } },
-  2: { slots: 5,  levelReq: 10,  size: 'small',  name: 'Room 2 — Small+', equip: { lights: 2,  fans: 2,  ac: 0, dehu: 0, humid: 0 } },
-  3: { slots: 10, levelReq: 25,  size: 'medium', name: 'Room 3 — Medium', equip: { lights: 3,  fans: 3,  ac: 0, dehu: 0, humid: 0 } },
-  4: { slots: 15, levelReq: 50,  size: 'large',  name: 'Room 4 — Large',  equip: { lights: 5,  fans: 5,  ac: 0, dehu: 0, humid: 0 } },
-  5: { slots: 20, levelReq: 100, size: 'xxl',    name: 'Room 5 — XXL',    equip: { lights: 10, fans: 10, ac: 2, dehu: 2, humid: 2 } },
+  1: { slots: 2,  levelReq: 0,   size: 'small',  name: 'Room 1 — Small',  equip: { lights: 1,  fans: 1,  ac: 1, dehu: 1, humid: 1, heaters: 1 } },
+  2: { slots: 5,  levelReq: 10,  size: 'small',  name: 'Room 2 — Small+', equip: { lights: 2,  fans: 2,  ac: 1, dehu: 1, humid: 1, heaters: 1 } },
+  3: { slots: 10, levelReq: 25,  size: 'medium', name: 'Room 3 — Medium', equip: { lights: 3,  fans: 3,  ac: 2, dehu: 2, humid: 2, heaters: 2 } },
+  4: { slots: 15, levelReq: 50,  size: 'large',  name: 'Room 4 — Large',  equip: { lights: 5,  fans: 5,  ac: 2, dehu: 2, humid: 2, heaters: 2 } },
+  5: { slots: 20, levelReq: 100, size: 'xxl',    name: 'Room 5 — XXL',    equip: { lights: 10, fans: 10, ac: 3, dehu: 3, humid: 3, heaters: 3 } },
 };
 
 function _makeSlots(count, defaults = {}) {
@@ -2854,7 +2854,7 @@ function getRoomGear(roomId) {
 
 function roomEquipCounts(roomId) {
   const def = ROOM_DEFS[roomId];
-  return def?.equip || { lights: 1, fans: 1, ac: 0, dehu: 0, humid: 0 };
+  return def?.equip || { lights: 1, fans: 1, ac: 1, dehu: 1, humid: 1, heaters: 1 };
 }
 
 function getInventoryInstances() {
@@ -3118,74 +3118,115 @@ function calcGrowScore(plant) {
 // ================================================================
 // ENVIRONMENT PHYSICS
 // ================================================================
+function updateRoomTherm(roomId, key, val, displayId, unit) {
+  const rg = getRoomGear(roomId);
+  rg[key] = parseInt(val);
+  const el = document.getElementById(displayId);
+  if (el) el.textContent = val + unit;
+  saveGame();
+}
+
+function hasClimateInRoom(roomId, type) {
+  const rg  = getRoomGear(roomId);
+  const inv = getInventoryInstances();
+  const slotKey = {acUnit:'acUnits',humidifier:'humidifiers',dehumidifier:'dehumidifiers',heater:'heaters'}[type];
+  if (slotKey && (rg[slotKey]||[]).some(s => s?.instanceUid && inv.find(x=>x.uid===s.instanceUid))) return true;
+  const g = GS.gear||{};
+  if (type==='acUnit')       return !!g.acUnit;
+  if (type==='humidifier')   return !!g.humidifier;
+  if (type==='dehumidifier') return !!g.dehumidifier;
+  if (type==='heater')       return !!g.heater;
+  return false;
+}
+
+function getClimateCapacity(roomId, type) {
+  const rg  = getRoomGear(roomId);
+  const inv = getInventoryInstances();
+  const slotKey = {acUnit:'acUnits',humidifier:'humidifiers',dehumidifier:'dehumidifiers',heater:'heaters'}[type];
+  if (!slotKey) return 10;
+  const total = (rg[slotKey]||[]).reduce((sum,s) => {
+    if (!s?.instanceUid) return sum;
+    const inst = inv.find(x=>x.uid===s.instanceUid);
+    if (!inst) return sum;
+    return sum + (inst.cooling||inst.heating||inst.humidPct||inst.dehuPct||10);
+  }, 0);
+  return total || 10;
+}
 function stepEnvironment(room, gameMins) {
-  const g = GS.gear || {};
-  const target = room.envTarget;
-  const actual = room.envActual;
+  const rg     = getRoomGear(room.id);
+  const g      = GS.gear || {};
+  const target = room.envTarget || {temp:78,humid:65,co2:400};
+  const actual = room.envActual || {temp:72,humid:60,co2:400};
 
-  // Temperature
-  const wHeat = {150:3, 240:4, 480:6, 600:8, 720:10, 1000:14};
-  let tempTarget;
+  const hasAC     = hasClimateInRoom(room.id,'acUnit');
+  const hasHeater = hasClimateInRoom(room.id,'heater');
+  const hasHumid  = hasClimateInRoom(room.id,'humidifier');
+  const hasDehu   = hasClimateInRoom(room.id,'dehumidifier');
+
+  // Init thermostat defaults per room
+  if (rg.thermAcOn    == null) rg.thermAcOn    = 84;
+  if (rg.thermAcOff   == null) rg.thermAcOff   = 78;
+  if (rg.thermHeatOn  == null) rg.thermHeatOn  = 64;
+  if (rg.thermHeatOff == null) rg.thermHeatOff = 72;
+  if (rg.thermDehuOn  == null) rg.thermDehuOn  = 65;
+  if (rg.thermDehuOff == null) rg.thermDehuOff = 55;
+  if (rg.thermHumidOn == null) rg.thermHumidOn = 45;
+  if (rg.thermHumidOff== null) rg.thermHumidOff= 62;
+
+  // State machines — hysteresis on/off
+  if (hasAC)     { if (actual.temp  > rg.thermAcOn)     rg._acActive    = true;  if (actual.temp  < rg.thermAcOff)    rg._acActive    = false; }
+  else             rg._acActive    = false;
+  if (hasHeater) { if (actual.temp  < rg.thermHeatOn)   rg._heatActive  = true;  if (actual.temp  > rg.thermHeatOff)  rg._heatActive  = false; }
+  else             rg._heatActive  = false;
+  if (hasDehu)   { if (actual.humid > rg.thermDehuOn)   rg._dehuActive  = true;  if (actual.humid < rg.thermDehuOff)  rg._dehuActive  = false; }
+  else             rg._dehuActive  = false;
+  if (hasHumid)  { if (actual.humid < rg.thermHumidOn)  rg._humidActive = true;  if (actual.humid > rg.thermHumidOff) rg._humidActive = false; }
+  else             rg._humidActive = false;
+
+  // Temperature — light heat + ambient + HVAC
+  const wHeat = {150:3,240:4,480:6,600:8,720:10,1000:14};
+  let tempTarget = room.ambientTemp || 68;
   if (room.lightsOn) {
-    const lightSlots = room.equipSlots?.lights || [];
-const activeLights = lightSlots.filter(s => s.instanceUid);
-
-const totalLightW = activeLights.reduce((sum, slot) => {
-  const inst = findInventoryInstance(slot.instanceUid);
-  return sum + (inst ? (wHeat[inst.power] || 5) : 0);
-}, 0);
-
-const avgIntensity = activeLights.length
-  ? activeLights.reduce((sum, slot) => sum + (slot.settings?.intensity ?? 100), 0) / activeLights.length
-  : 0;
-
-const lightContrib = totalLightW * (avgIntensity / 100) * 0.25;
-tempTarget = target.temp + lightContrib;
-    tempTarget = target.temp + lightContrib;
-  } else {
-    tempTarget = room.ambientTemp || 68;
+    let lightHeat = 0;
+    (rg.lights||[]).forEach(s => {
+      if (!s?.instanceUid) return;
+      const inst = findInventoryInstance(s.instanceUid);
+      if (!inst) return;
+      const w = wHeat[inst.power] || (inst.power ? inst.power * 0.012 : 5);
+      lightHeat += w * ((s.settings?.intensity ?? 100) / 100) * 0.25;
+    });
+    tempTarget = target.temp + lightHeat;
   }
-  if (g.acUnit)  tempTarget = Math.min(tempTarget, target.temp);
-  if (g.heater)  tempTarget = Math.max(tempTarget, target.temp);
-  if (!g.acUnit && !g.heater) tempTarget = Math.max(55, Math.min(100, tempTarget));
 
-  const tempRate = Math.min(0.004 * gameMins, 0.6);
-  actual.temp += (tempTarget - actual.temp) * tempRate;
+  if (rg._acActive)   tempTarget = Math.min(tempTarget, rg.thermAcOff);
+  if (rg._heatActive) tempTarget = Math.max(tempTarget, rg.thermHeatOff);
+  if (!hasAC && !hasHeater) tempTarget = Math.max(55, Math.min(105, tempTarget));
+
+  actual.temp += (tempTarget - actual.temp) * Math.min(0.004 * gameMins, 0.6);
 
   // Humidity
-  const tempDelta = actual.temp - 70;
-  let humidTarget = target.humid - tempDelta * 0.4;
-  if (!g.humidifier) {
-    humidTarget = Math.min(humidTarget, 62);
-  } else {
-    const maxH = (g.humidifier.type && g.humidifier.type.includes('Large')) ? 85 : 72;
-    const wf = (g.humidifierLevel || 0) / 100;
-    humidTarget = Math.min(humidTarget, 20 + (maxH - 20) * wf);
-    if ((g.humidifierLevel || 0) <= 0) humidTarget = Math.min(humidTarget, 42);
-  }
-  if (!g.dehumidifier) humidTarget = Math.max(humidTarget, 42);
-  else humidTarget = Math.max(humidTarget, 28);
+  let humidTarget = target.humid - (actual.temp - 70) * 0.4;
+  if (rg._humidActive) humidTarget = Math.min(humidTarget, rg.thermHumidOff + getClimateCapacity(room.id,'humidifier'));
+  else                 humidTarget = Math.min(humidTarget, 62);
+  if (rg._dehuActive)  humidTarget = Math.max(humidTarget, Math.max(20, rg.thermDehuOff - 5));
+  else                 humidTarget = Math.max(humidTarget, 42);
   humidTarget = Math.max(10, Math.min(100, humidTarget));
 
-  const humidRate = Math.min(0.003 * gameMins, 0.5);
-  actual.humid += (humidTarget - actual.humid) * humidRate;
+  actual.humid += (humidTarget - actual.humid) * Math.min(0.003 * gameMins, 0.5);
 
   // CO2
-  let co2Target = target.co2;
-  if (co2Target > 400 && !g.co2Tank) co2Target = 400;
-  if (g.co2Tank && (g.co2Tank.level || 0) <= 0) co2Target = 400;
-  const co2Rate = Math.min(0.002 * gameMins, 0.3);
-  actual.co2 += (co2Target - actual.co2) * co2Rate;
+  let co2Target = 400;
+  if (g.co2Tank && (g.co2Tank.level||0) > 0 && target.co2 > 400) {
+    co2Target = Math.min(target.co2, g.co2Target || 1200);
+  }
+  actual.co2 += (co2Target - actual.co2) * Math.min(0.002 * gameMins, 0.3);
 
   actual.temp  = Math.max(40, Math.min(115, actual.temp));
   actual.humid = Math.max(5,  Math.min(100, actual.humid));
   actual.co2   = Math.max(300, Math.min(2000, actual.co2));
 
-  if (actual.temp > 90) {
-    room.tempStressAccum = (room.tempStressAccum || 0) + gameMins / 60;
-  } else {
-    room.tempStressAccum = Math.max(0, (room.tempStressAccum || 0) - gameMins / 120);
-  }
+  if (actual.temp > 90) room.tempStressAccum = (room.tempStressAccum||0) + gameMins/60;
+  else                  room.tempStressAccum = Math.max(0,(room.tempStressAccum||0) - gameMins/120);
   room.envActual = actual;
 }
 
@@ -3251,40 +3292,42 @@ function tickPlant(plant, room, strain, actual, gameMins) {
       const maleFlowerWeek = Math.ceil((plant.flowerDay || 0) / 7);
       if (maleFlowerWeek >= 2) {
         GS.plants.filter(p => p.roomId === plant.roomId && !p.isMale).forEach(female => {
+          // First contact — record male and start timing
           if (!female.pollinatingMaleId) {
-            female.pollinatingMaleId     = plant.id;
-            female.pollinatingMaleStrain = plant.strainName;
-            female.pollinatingIsReversed = !!plant.isReversed;
+            female.pollinatingMaleId      = plant.id;
+            female.pollinatingMaleStrain  = plant.strainName;
+            female.pollinatingIsReversed  = !!plant.isReversed;
+            female.pollinationStartMaleWk = maleFlowerWeek;
+            female.pollinatedGameWeeks    = 0;
           }
+          // Accumulate in-game pollination time (game weeks)
+          female.pollinatedGameWeeks = (female.pollinatedGameWeeks||0) + gameMins / (60 * 24 * 7);
+          const pollWeeks     = female.pollinatedGameWeeks || 0;
           const femFlowerWeek = Math.ceil((female.flowerDay || 0) / 7);
-          // Week 2+: pollinating badge appears; seeds don't form until week 8
-        if (maleFlowerWeek >= 2) {
-              female.isBeingPollinated  = true;
-              female.pollinatingMaleStrain = plant.strainName;
-              female.maleIsReversed     = !!plant.isReversed;
-        }
-        if (maleFlowerWeek >= 8 && femFlowerWeek >= 1) {
-              female.hasSeeds       = true;
-              female.maleStrainName = plant.strainName;
-              female.maleIsReversed = !!plant.isReversed;
-              // Seeds scale from ~75 at week 8 to ~450+ at week 12
-              const SEED_BY_WEEK = {8:75, 9:150, 10:250, 11:350, 12:450, 13:500, 14:550};
-              const base   = SEED_BY_WEEK[Math.min(maleFlowerWeek, 14)] || 75;
-              const varied = Math.round(base * (0.7 + Math.random() * 0.6));
-              female.seedCount = Math.max((female.seedCount||0), varied);
-        }
+          // Pollinating badge visible from week 2+
+          female.isBeingPollinated     = true;
+          female.pollinatingMaleStrain = plant.strainName;
+          female.maleIsReversed        = !!plant.isReversed;
+          // Seeds need: male at week 8+ AND 2+ game-weeks of pollination
+          if (maleFlowerWeek >= 8 && femFlowerWeek >= 1 && pollWeeks >= 2) {
+            female.hasSeeds       = true;
+            female.maleStrainName = plant.strainName;
+            female.maleIsReversed = !!plant.isReversed;
+            // Time multiplier: entered at week 2 = full potential; entered at week 12 = ~30%
+            const timeMult = Math.min(1.0, (pollWeeks - 2) / 6 + 0.3);
+            const SEED_BASE = {8:80, 9:170, 10:290, 11:390, 12:470, 13:520, 14:560};
+            const base      = SEED_BASE[Math.min(maleFlowerWeek, 14)] || 80;
+            const varied    = Math.round(base * timeMult * (0.7 + Math.random() * 0.6));
+            female.seedCount = Math.max((female.seedCount||0), varied);
+          }
         });
       }
     }
 
-    // Female: check if a male is still in room and update seed count
+    // Female: clear dead male link
     if (!plant.isMale && plant.pollinatingMaleId) {
       const male = GS.plants.find(p => p.id === plant.pollinatingMaleId);
-      if (!male) {
-        // Male was removed — seeds already set, keep them
-      } else {
-        // Male still present — seed count already updated above via male's tick
-      }
+      if (!male) plant.pollinatingMaleId = null; // male gone — seeds locked in
     }
   }
 
@@ -4380,192 +4423,216 @@ function renderGearPanel() {
   if (!room) { body.innerHTML = '<div class="empty-state">No room selected.</div>'; return; }
 
   const rg     = getRoomGear(room.id);
-  const g      = GS.gear || {};
   const counts = roomEquipCounts(room.id);
   const inv    = getInventoryInstances();
   const invC   = getInventory().consumables || {};
+  const g      = GS.gear || {};
 
-  // Thermostat defaults (stored on GS.gear for global HVAC)
-  if (g.thermAcOn    == null) g.thermAcOn    = 84;
-  if (g.thermAcOff   == null) g.thermAcOff   = 78;
-  if (g.thermDehuOn  == null) g.thermDehuOn  = 65;
-  if (g.thermDehuOff == null) g.thermDehuOff = 55;
-  if (g.thermHumidOn == null) g.thermHumidOn = 45;
-  if (g.thermHumidOff== null) g.thermHumidOff= 62;
-  if (g.thermHeatOn  == null) g.thermHeatOn  = 64;
-  if (g.thermHeatOff == null) g.thermHeatOff = 72;
-  if (g.co2Target    == null) g.co2Target    = 1200;
+  // Init thermostat defaults
+  const thermDefaults = {thermAcOn:84,thermAcOff:78,thermHeatOn:64,thermHeatOff:72,thermDehuOn:65,thermDehuOff:55,thermHumidOn:45,thermHumidOff:62};
+  Object.entries(thermDefaults).forEach(([k,v]) => { if (rg[k]==null) rg[k]=v; });
 
-  // Helper: build instance dropdown for a slot
-  const buildSlotSelect = (group, idx, equipType) => {
-    const currentUid = rg[group]?.[idx]?.instanceUid || '';
-    const opts = inv.filter(x => x.equipType === equipType || x.type === equipType);
-    let s = `<select style="width:100%;background:rgba(0,15,0,0.8);border:1px solid var(--border);border-radius:5px;padding:5px 7px;color:var(--text);font-family:var(--font-body);font-size:12px;outline:none;margin-top:5px"
+  const lC=counts.lights||0, fC=counts.fans||0;
+  const acC=counts.ac||0, htC=counts.heaters||0, dhC=counts.dehu||0, hmC=counts.humid||0;
+  ensureSlotArray(rg,'lights',lC); ensureSlotArray(rg,'fans',fC);
+  ensureSlotArray(rg,'acUnits',acC); ensureSlotArray(rg,'heaters',htC);
+  ensureSlotArray(rg,'dehumidifiers',dhC); ensureSlotArray(rg,'humidifiers',hmC);
+
+  // Dropdown builder
+  const sel = (group, idx, equipType) => {
+    const cur = (rg[group]||[])[idx]?.instanceUid || '';
+    const opts = inv.filter(x => (x.equipType||x.type) === equipType);
+    let s = `<select style="width:100%;background:rgba(0,15,0,0.85);border:1px solid var(--border);border-radius:5px;padding:5px 7px;color:var(--text);font-family:var(--font-body);font-size:12px;outline:none;margin-top:5px;cursor:pointer"
       onchange="assignRoomSlot(${room.id},'${group}',${idx},this.value);renderGearPanel()">
       <option value="">— Not Installed —</option>`;
     opts.forEach(inst => {
       let inUse = false;
+      const groups2 = ['lights','fans','acUnits','heaters','dehumidifiers','humidifiers'];
       for (const r2 of GS.rooms||[]) {
         const rg2 = getRoomGear(r2.id);
-        const arr = rg2[group]||[];
-        for (let j=0;j<arr.length;j++) {
-          if ((r2.id!==room.id||j!==idx) && arr[j]?.instanceUid===inst.uid) { inUse=true; break; }
+        for (const g2 of groups2) {
+          if ((rg2[g2]||[]).some((sl,j) => {
+            const isCurrentSlot = r2.id===room.id && g2===group && j===idx;
+            return !isCurrentSlot && sl?.instanceUid===inst.uid;
+          })) { inUse=true; break; }
         }
         if (inUse) break;
       }
-      s += `<option value="${inst.uid}" ${inst.uid===currentUid?'selected':''} ${inUse&&inst.uid!==currentUid?'disabled':''}>${inst.icon||'📦'} ${inst.name}${inUse&&inst.uid!==currentUid?' (in use)':''}</option>`;
+      s += `<option value="${inst.uid}" ${inst.uid===cur?'selected':''} ${inUse?'disabled':''}>
+        ${inst.icon||'📦'} ${inst.name}${inUse?' (in use)':''}
+      </option>`;
     });
     return s + '</select>';
   };
 
-  // Helper: thermostat row (reads/writes directly to GS.gear via inline oninput)
-  const thermRow = (label, gKey, min, max, unit, accentColor) => {
-    const val = g[gKey] != null ? g[gKey] : 70;
+  // Thermostat slider (no re-render on slide — uses updateRoomTherm)
+  const thSlider = (label, key, min, max, unit, accent, eid) => {
+    const val = rg[key] ?? thermDefaults[key] ?? min;
     return `<div class="fan-speed-ctrl">
-      <label style="width:60px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">${label}</label>
-      <input type="range" min="${min}" max="${max}" value="${val}" style="flex:1;accent-color:${accentColor};height:3px"
-        oninput="GS.gear['${gKey}']=parseInt(this.value);document.getElementById('tv-${gKey}').textContent=this.value+'${unit}';saveGame()">
-      <span class="fan-speed-val" id="tv-${gKey}" style="color:${accentColor}">${val}${unit}</span>
+      <label style="width:68px;font-family:var(--font-hud);font-size:8px;color:var(--muted);flex-shrink:0">${label}</label>
+      <input type="range" min="${min}" max="${max}" value="${val}" style="flex:1;accent-color:${accent};height:3px;cursor:pointer"
+        oninput="updateRoomTherm(${room.id},'${key}',this.value,'${eid}','${unit}')">
+      <span class="fan-speed-val" id="${eid}" style="color:${accent}">${val}${unit}</span>
     </div>`;
   };
 
-  let html = `<div style="font-family:var(--font-hud);font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">${room.name.toUpperCase()}</div>`;
-
-  // ── LIGHTS ──
-  const lightCount = counts.lights || 0;
-  ensureSlotArray(rg, 'lights', lightCount);
-  html += `<div class="gear-item">
-    <div class="gear-item-header">
-      <span class="gear-item-icon">💡</span>
-      <span class="gear-item-name">LIGHTS <span style="color:var(--muted);font-size:8px">(${lightCount} SLOT${lightCount!==1?'S':''})</span></span>
-      <span class="gear-item-status ${room.lightsOn?'ok':'off'}">${room.lightsOn?'ON':'OFF'}</span>
-    </div>`;
-  if (lightCount === 0) {
-    html += `<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">This room has no light slots</div>`;
-  }
-  for (let i=0; i<lightCount; i++) {
-    const inst = inv.find(x => x.uid === rg.lights[i]?.instanceUid);
-    const s    = rg.lights[i]?.settings || {};
-    html += `<div style="background:rgba(0,0,0,0.35);border:1px solid var(--border);border-radius:7px;padding:9px;margin-top:7px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
+  // Light slot builder
+  const mkLight = (i) => {
+    const s = (rg.lights||[])[i]?.settings||{};
+    const inst = inv.find(x=>x.uid===(rg.lights||[])[i]?.instanceUid);
+    return `<div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:7px;padding:9px;margin-top:7px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:2px">
         <span style="font-family:var(--font-hud);font-size:8px;color:var(--muted)">SLOT ${i+1}</span>
-        ${inst?`<span style="font-size:8px;color:var(--gold);font-family:var(--font-hud)">${inst.name}${inst.power?' · '+inst.power+'W':''}</span>`:`<span style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">empty</span>`}
+        ${inst?`<span style="font-size:8px;color:var(--gold);font-family:var(--font-hud)">${inst.name}${inst.power?' · '+inst.power+'W':''}</span>`
+              :`<span style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">empty</span>`}
       </div>
-      ${buildSlotSelect('lights',i,'lights')}
+      ${sel('lights',i,'lights')}
       ${inst?`
         <div class="fan-speed-ctrl" style="margin-top:7px">
-          <label style="width:60px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">HEIGHT</label>
-          <input type="range" min="0" max="100" value="${s.height??60}" style="flex:1;accent-color:var(--gold);height:3px"
+          <label style="width:68px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">HEIGHT</label>
+          <input type="range" min="0" max="100" value="${s.height??60}" style="flex:1;accent-color:var(--gold);height:3px;cursor:pointer"
             oninput="updateRoomSlotSetting(${room.id},'lights',${i},'height',this.value);this.nextElementSibling.textContent=this.value+'cm'">
           <span class="fan-speed-val" style="color:var(--gold)">${s.height??60}cm</span>
         </div>
         <div class="fan-speed-ctrl">
-          <label style="width:60px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">INTENSITY</label>
-          <input type="range" min="0" max="100" value="${s.intensity??100}" style="flex:1;accent-color:var(--gold);height:3px"
+          <label style="width:68px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">INTENSITY</label>
+          <input type="range" min="0" max="100" value="${s.intensity??100}" style="flex:1;accent-color:var(--gold);height:3px;cursor:pointer"
             oninput="updateRoomSlotSetting(${room.id},'lights',${i},'intensity',this.value);this.nextElementSibling.textContent=this.value+'%'">
           <span class="fan-speed-val" style="color:var(--gold)">${s.intensity??100}%</span>
-        </div>`:`<div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:5px">Buy lights in Shop → Lights and install here</div>`}
+        </div>`
+      :`<div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:5px">Buy lights in Shop → Lights</div>`}
     </div>`;
-  }
-  html += `</div>`;
+  };
 
-  // ── FANS ──
-  const fanCount = counts.fans || 0;
-  ensureSlotArray(rg, 'fans', fanCount);
+  // Fan slot builder
+  const mkFan = (i) => {
+    const s = (rg.fans||[])[i]?.settings||{};
+    const inst = inv.find(x=>x.uid===(rg.fans||[])[i]?.instanceUid);
+    return `<div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:7px;padding:9px;margin-top:7px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:2px">
+        <span style="font-family:var(--font-hud);font-size:8px;color:var(--muted)">SLOT ${i+1}</span>
+        ${inst?`<span style="font-size:8px;color:var(--cyan);font-family:var(--font-hud)">${inst.name}</span>`
+              :`<span style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">empty</span>`}
+      </div>
+      ${sel('fans',i,'fan')}
+      ${inst?`
+        <div class="fan-speed-ctrl" style="margin-top:7px">
+          <label style="width:68px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">SPEED</label>
+          <input type="range" min="0" max="100" value="${s.speed??50}" style="flex:1;accent-color:var(--cyan);height:3px;cursor:pointer"
+            oninput="updateRoomSlotSetting(${room.id},'fans',${i},'speed',this.value);this.nextElementSibling.textContent=this.value+'%'">
+          <span class="fan-speed-val" style="color:var(--cyan)">${s.speed??50}%</span>
+        </div>`
+      :`<div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:5px">Buy fans in Shop → Climate</div>`}
+    </div>`;
+  };
+
+  // Climate unit slot builder (AC / heater / dehu / humid — no per-unit settings, just dropdown)
+  const mkClimate = (group, i, equipType, accent) => {
+    const inst = inv.find(x=>x.uid===(rg[group]||[])[i]?.instanceUid);
+    return `<div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:7px;padding:9px;margin-top:7px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:2px">
+        <span style="font-family:var(--font-hud);font-size:8px;color:var(--muted)">UNIT ${i+1}</span>
+        ${inst?`<span style="font-size:8px;color:${accent};font-family:var(--font-hud)">${inst.name} · ${inst.size||''}</span>`
+              :`<span style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">empty</span>`}
+      </div>
+      ${sel(group,i,equipType)}
+    </div>`;
+  };
+
+  const hasAnyAC   = (rg.acUnits||[]).some(s=>s?.instanceUid);
+  const hasAnyHeat = (rg.heaters||[]).some(s=>s?.instanceUid);
+  const hasAnyDehu = (rg.dehumidifiers||[]).some(s=>s?.instanceUid);
+  const hasAnyHum  = (rg.humidifiers||[]).some(s=>s?.instanceUid);
+
+  let html = `<div style="font-family:var(--font-hud);font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">${room.name.toUpperCase()}</div>`;
+
+  // LIGHTS
+  html += `<div class="gear-item">
+    <div class="gear-item-header">
+      <span class="gear-item-icon">💡</span>
+      <span class="gear-item-name">LIGHTS <span style="color:var(--muted);font-size:8px">(${lC} SLOTS)</span></span>
+      <span class="gear-item-status ${room.lightsOn?'ok':'off'}">${room.lightsOn?'ON':'OFF'}</span>
+    </div>
+    ${lC ? Array.from({length:lC},(_,i)=>mkLight(i)).join('')
+         : '<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">No light slots in this room</div>'}
+  </div>`;
+
+  // FANS
   html += `<div class="gear-item">
     <div class="gear-item-header">
       <span class="gear-item-icon">🌀</span>
-      <span class="gear-item-name">FANS <span style="color:var(--muted);font-size:8px">(${fanCount} SLOT${fanCount!==1?'S':''})</span></span>
-    </div>`;
-  if (fanCount === 0) {
-    html += `<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">This room has no fan slots</div>`;
-  }
-  for (let i=0; i<fanCount; i++) {
-    const inst = inv.find(x => x.uid === rg.fans[i]?.instanceUid);
-    const s    = rg.fans[i]?.settings || {};
-    html += `<div style="background:rgba(0,0,0,0.35);border:1px solid var(--border);border-radius:7px;padding:9px;margin-top:7px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px">
-        <span style="font-family:var(--font-hud);font-size:8px;color:var(--muted)">SLOT ${i+1}</span>
-        ${inst?`<span style="font-size:8px;color:var(--cyan);font-family:var(--font-hud)">${inst.name}</span>`:`<span style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">empty</span>`}
-      </div>
-      ${buildSlotSelect('fans',i,'fan')}
-      ${inst?`
-        <div class="fan-speed-ctrl" style="margin-top:7px">
-          <label style="width:60px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">SPEED</label>
-          <input type="range" min="0" max="100" value="${s.speed??50}" style="flex:1;accent-color:var(--cyan);height:3px"
-            oninput="updateRoomSlotSetting(${room.id},'fans',${i},'speed',this.value);this.nextElementSibling.textContent=this.value+'%'">
-          <span class="fan-speed-val" style="color:var(--cyan)">${s.speed??50}%</span>
-        </div>`:`<div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:5px">Buy fans in Shop → Climate and install here</div>`}
-    </div>`;
-  }
-  html += `</div>`;
-
-  // ── HEATER — turns ON below "on" setpoint, OFF above "off" setpoint ──
-  html += `<div class="gear-item ${g.heater&&(g.thermHeatOn>=g.thermHeatOff)?'gear-warning':''}">
-    <div class="gear-item-header">
-      <span class="gear-item-icon">🔥</span>
-      <span class="gear-item-name">HEATER</span>
-      <span class="gear-item-status ${g.heater?'ok':'off'}">${g.heater?(g.heater.type||g.heater.name||'INSTALLED'):'NOT INSTALLED'}</span>
+      <span class="gear-item-name">FANS <span style="color:var(--muted);font-size:8px">(${fC} SLOTS)</span></span>
     </div>
-    ${g.heater?`
-      <div class="gear-bar" style="margin:5px 0 6px"><div class="gear-bar-fill" style="width:100%;background:var(--orange)"></div></div>
-      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin-bottom:5px;letter-spacing:.5px">TURNS ON below ON-AT · OFF above OFF-AT</div>
-      ${thermRow('ON AT ↓','thermHeatOn',50,85,'°F','var(--blue)')}
-      ${thermRow('OFF AT ↑','thermHeatOff',55,95,'°F','var(--red)')}
-      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Currently: ${g.thermHeatOn}°F on → ${g.thermHeatOff}°F off</div>`
-    :`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Buy a Heater in Shop → Climate</div>`}
+    ${fC ? Array.from({length:fC},(_,i)=>mkFan(i)).join('')
+         : '<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">No fan slots</div>'}
   </div>`;
 
-  // ── AC UNIT — turns ON above "on" setpoint, OFF below "off" setpoint ──
+  // AC
   html += `<div class="gear-item">
     <div class="gear-item-header">
       <span class="gear-item-icon">❄️</span>
-      <span class="gear-item-name">AC UNIT</span>
-      <span class="gear-item-status ${g.acUnit?'ok':'off'}">${g.acUnit?(g.acUnit.type||g.acUnit.name||'INSTALLED'):'NOT INSTALLED'}</span>
+      <span class="gear-item-name">AC UNITS <span style="color:var(--muted);font-size:8px">(${acC} SLOTS)</span></span>
+      <span class="gear-item-status ${hasAnyAC?(rg._acActive?'ok':'off'):'off'}">${hasAnyAC?(rg._acActive?'COOLING':'STANDBY'):'NONE INSTALLED'}</span>
     </div>
-    ${g.acUnit?`
-      <div class="gear-bar" style="margin:5px 0 6px"><div class="gear-bar-fill" style="width:100%;background:var(--blue)"></div></div>
-      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin-bottom:5px;letter-spacing:.5px">TURNS ON above ON-AT · OFF below OFF-AT</div>
-      ${thermRow('ON AT ↑','thermAcOn',60,100,'°F','var(--red)')}
-      ${thermRow('OFF AT ↓','thermAcOff',55,95,'°F','var(--blue)')}
-      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Currently: ${g.thermAcOn}°F on → ${g.thermAcOff}°F off</div>`
-    :`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Buy an AC Unit in Shop → Climate</div>`}
+    ${acC ? Array.from({length:acC},(_,i)=>mkClimate('acUnits',i,'acUnit','var(--blue)')).join('') : ''}
+    ${hasAnyAC?`
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin:10px 0 5px;letter-spacing:.5px">THERMOSTAT — turns ON above · OFF below</div>
+      ${thSlider('ON AT ↑','thermAcOn',  65,105,'°F','var(--red)',    'tac_on_' +room.id)}
+      ${thSlider('OFF AT ↓','thermAcOff', 55, 95,'°F','var(--blue)',  'tac_off_'+room.id)}
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:3px">Status: ${rg._acActive?'🟢 COOLING NOW':'⚪ STANDBY'}</div>`
+    :`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:5px">Buy AC in Shop → Climate and assign here</div>`}
   </div>`;
 
-  // ── HUMIDIFIER — turns ON below "on" setpoint, OFF above "off" setpoint ──
+  // HEATER
   html += `<div class="gear-item">
     <div class="gear-item-header">
-      <span class="gear-item-icon">💧</span>
-      <span class="gear-item-name">HUMIDIFIER</span>
-      <span class="gear-item-status ${g.humidifier?'ok':'off'}">${g.humidifier?(g.humidifier.type||'INSTALLED'):'NOT INSTALLED'}</span>
+      <span class="gear-item-icon">🔥</span>
+      <span class="gear-item-name">HEATERS <span style="color:var(--muted);font-size:8px">(${htC} SLOTS)</span></span>
+      <span class="gear-item-status ${hasAnyHeat?(rg._heatActive?'ok':'off'):'off'}">${hasAnyHeat?(rg._heatActive?'HEATING':'STANDBY'):'NONE INSTALLED'}</span>
     </div>
-    ${g.humidifier?`
-      <div class="gear-bar" style="margin:5px 0 6px"><div class="gear-bar-fill" style="width:100%;background:var(--cyan)"></div></div>
-      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin-bottom:5px;letter-spacing:.5px">TURNS ON below ON-AT · OFF above OFF-AT</div>
-      ${thermRow('ON AT ↓','thermHumidOn',20,80,'%','var(--blue)')}
-      ${thermRow('OFF AT ↑','thermHumidOff',30,95,'%','var(--red)')}
-      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Currently: ${g.thermHumidOn}% on → ${g.thermHumidOff}% off</div>`
-    :`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Buy a Humidifier in Shop → Climate</div>`}
+    ${htC ? Array.from({length:htC},(_,i)=>mkClimate('heaters',i,'heater','var(--orange)')).join('') : ''}
+    ${hasAnyHeat?`
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin:10px 0 5px;letter-spacing:.5px">THERMOSTAT — turns ON below · OFF above</div>
+      ${thSlider('ON AT ↓','thermHeatOn', 50,85,'°F','var(--blue)',  'tht_on_' +room.id)}
+      ${thSlider('OFF AT ↑','thermHeatOff',55,95,'°F','var(--red)',  'tht_off_'+room.id)}
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:3px">Status: ${rg._heatActive?'🟠 HEATING NOW':'⚪ STANDBY'}</div>`
+    :`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:5px">Buy Heater in Shop → Climate and assign here</div>`}
   </div>`;
 
-  // ── DEHUMIDIFIER — turns ON above "on" setpoint, OFF below "off" setpoint ──
+  // DEHUMIDIFIER
   html += `<div class="gear-item">
     <div class="gear-item-header">
       <span class="gear-item-icon">🌵</span>
-      <span class="gear-item-name">DEHUMIDIFIER</span>
-      <span class="gear-item-status ${g.dehumidifier?'ok':'off'}">${g.dehumidifier?(g.dehumidifier.type||'INSTALLED'):'NOT INSTALLED'}</span>
+      <span class="gear-item-name">DEHUMIDIFIERS <span style="color:var(--muted);font-size:8px">(${dhC} SLOTS)</span></span>
+      <span class="gear-item-status ${hasAnyDehu?(rg._dehuActive?'ok':'off'):'off'}">${hasAnyDehu?(rg._dehuActive?'ACTIVE':'STANDBY'):'NONE INSTALLED'}</span>
     </div>
-    ${g.dehumidifier?`
-      <div class="gear-bar" style="margin:5px 0 6px"><div class="gear-bar-fill" style="width:100%;background:var(--purple)"></div></div>
-      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin-bottom:5px;letter-spacing:.5px">TURNS ON above ON-AT · OFF below OFF-AT</div>
-      ${thermRow('ON AT ↑','thermDehuOn',30,90,'%','var(--red)')}
-      ${thermRow('OFF AT ↓','thermDehuOff',25,80,'%','var(--blue)')}
-      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Currently: ${g.thermDehuOn}% on → ${g.thermDehuOff}% off</div>`
-    :`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Buy a Dehumidifier in Shop → Climate</div>`}
+    ${dhC ? Array.from({length:dhC},(_,i)=>mkClimate('dehumidifiers',i,'dehumidifier','var(--purple)')).join('') : ''}
+    ${hasAnyDehu?`
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin:10px 0 5px;letter-spacing:.5px">THERMOSTAT — turns ON above · OFF below</div>
+      ${thSlider('ON AT ↑','thermDehuOn', 30,90,'%','var(--red)',    'tdh_on_' +room.id)}
+      ${thSlider('OFF AT ↓','thermDehuOff',20,80,'%','var(--purple)','tdh_off_'+room.id)}
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:3px">Status: ${rg._dehuActive?'🟣 ACTIVE NOW':'⚪ STANDBY'}</div>`
+    :`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:5px">Buy Dehumidifier in Shop → Climate and assign here</div>`}
   </div>`;
 
-  // ── CO2 TANK ──
-  const co2 = g.co2Tank || null;
+  // HUMIDIFIER
+  html += `<div class="gear-item">
+    <div class="gear-item-header">
+      <span class="gear-item-icon">💧</span>
+      <span class="gear-item-name">HUMIDIFIERS <span style="color:var(--muted);font-size:8px">(${hmC} SLOTS)</span></span>
+      <span class="gear-item-status ${hasAnyHum?(rg._humidActive?'ok':'off'):'off'}">${hasAnyHum?(rg._humidActive?'ACTIVE':'STANDBY'):'NONE INSTALLED'}</span>
+    </div>
+    ${hmC ? Array.from({length:hmC},(_,i)=>mkClimate('humidifiers',i,'humidifier','var(--cyan)')).join('') : ''}
+    ${hasAnyHum?`
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin:10px 0 5px;letter-spacing:.5px">THERMOSTAT — turns ON below · OFF above</div>
+      ${thSlider('ON AT ↓','thermHumidOn', 20,80,'%','var(--blue)', 'thm_on_' +room.id)}
+      ${thSlider('OFF AT ↑','thermHumidOff',30,95,'%','var(--cyan)','thm_off_'+room.id)}
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:3px">Status: ${rg._humidActive?'🔵 ACTIVE NOW':'⚪ STANDBY'}</div>`
+    :`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:5px">Buy Humidifier in Shop → Climate and assign here</div>`}
+  </div>`;
+
+  // CO2 TANK
+  const co2 = g.co2Tank;
   html += `<div class="gear-item ${co2&&(co2.level||0)<20?'gear-warning':''}">
     <div class="gear-item-header">
       <span class="gear-item-icon">🫧</span>
@@ -4574,55 +4641,52 @@ function renderGearPanel() {
     </div>
     ${co2?`
       <div class="gear-bar" style="margin:5px 0"><div class="gear-bar-fill" style="width:${co2.level||0}%;background:var(--purple)"></div></div>
-      <div class="gear-bar-label">${(co2.level||0)<20?'⚠️ Low — refill soon!':'Pressurized and ready'}</div>
-      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin:7px 0 4px;letter-spacing:.5px">TARGET PPM — CO₂ activates below target, stops above</div>
+      <div class="gear-bar-label">${(co2.level||0)<20?'⚠️ Low — refill soon!':'Pressurized'}</div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin:8px 0 5px;letter-spacing:.5px">TARGET — activates below, stops above</div>
       <div class="fan-speed-ctrl">
-        <label style="width:60px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">TARGET</label>
-        <input type="range" min="400" max="1500" step="50" value="${g.co2Target||1200}" style="flex:1;accent-color:var(--purple);height:3px"
-          oninput="GS.gear.co2Target=parseInt(this.value);document.getElementById('tv-co2Target').textContent=this.value+'ppm';saveGame()">
-        <span class="fan-speed-val" id="tv-co2Target" style="color:var(--purple)">${g.co2Target||1200}ppm</span>
+        <label style="width:68px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">TARGET</label>
+        <input type="range" min="400" max="1500" step="50" value="${g.co2Target||1200}" style="flex:1;accent-color:var(--purple);height:3px;cursor:pointer"
+          oninput="GS.gear.co2Target=parseInt(this.value);document.getElementById('tco2t').textContent=this.value+'ppm';saveGame()">
+        <span class="fan-speed-val" id="tco2t" style="color:var(--purple)">${g.co2Target||1200}ppm</span>
       </div>
-      <div class="gear-actions"><button class="btn-gear-act gold" onclick="refillCO2()">REFILL TANK −2,000¢</button></div>`
-    :`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Buy a CO₂ Tank in Shop → Climate</div>`}
+      <div class="gear-actions"><button class="btn-gear-act gold" onclick="refillCO2()">REFILL −2,000¢</button></div>`
+    :`<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Buy CO₂ Tank in Shop → Climate</div>`}
   </div>`;
 
-  // ── RESERVOIR ──
-  const res      = rg.reservoir || null;
-  const awPlants = rg.autoWaterPlants || [];
-  const aw       = rg.autoWaterSettings || {dryout:30, stopto:80};
-  const emAvail  = (rg.emitterPacks||0) + (invC['emitters']||0);
-  const hoAvail  = (rg.hosingPacks ||0) + (invC['hosing']  ||0);
-
+  // RESERVOIR
+  const res = rg.reservoir;
+  const awP = rg.autoWaterPlants||[];
+  const aw  = rg.autoWaterSettings||{dryout:30,stopto:80};
+  const emA = (rg.emitterPacks||0)+(invC['emitters']||0);
+  const hoA = (rg.hosingPacks||0) +(invC['hosing']  ||0);
   if (res) {
-    const capG    = res.capacityGal || res.capacity || 20;
-    const levelG  = res.levelGal != null ? res.levelGal : (res.level||0)/100*capG;
-    const levelPct= Math.max(0,Math.min(100,Math.round(levelG/capG*100)));
-    const rColor  = levelPct>50?'var(--green)':levelPct>20?'var(--gold)':'var(--red)';
-    html += `<div class="gear-item ${levelPct<20?'gear-warning':''}">
+    const capG  = res.capacityGal||20;
+    const levG  = res.levelGal!=null ? res.levelGal : (res.level||0)/100*capG;
+    const pct   = Math.min(100,Math.round(levG/capG*100));
+    const rCol  = pct>50?'var(--green)':pct>20?'var(--gold)':'var(--red)';
+    html += `<div class="gear-item ${pct<15?'gear-danger':''}">
       <div class="gear-item-header">
         <span class="gear-item-icon">🛢️</span>
-        <span class="gear-item-name">RESERVOIR <span style="font-size:8px;color:var(--muted)">${capG.toLocaleString()} GAL</span></span>
-        <span class="gear-item-status ${levelPct>50?'ok':levelPct>20?'warn':'danger'}">${levelG.toFixed(0)}gal left</span>
+        <span class="gear-item-name">RESERVOIR <span style="color:var(--muted);font-size:8px">${capG.toLocaleString()} GAL</span></span>
+        <span class="gear-item-status ${pct>50?'ok':pct>20?'warn':'danger'}">${levG.toFixed(0)}gal left</span>
       </div>
-      <div class="gear-bar" style="margin:6px 0"><div class="gear-bar-fill" style="width:${levelPct}%;background:${rColor}"></div></div>
-      <div class="gear-bar-label">${levelPct}% full · ${levelG.toFixed(1)} / ${capG.toLocaleString()} gallons${levelPct<20?' · ⚠️ LOW':''}</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:10px 0 8px">
+      <div class="gear-bar" style="margin:6px 0 3px"><div class="gear-bar-fill" style="width:${pct}%;background:${rCol}"></div></div>
+      <div class="gear-bar-label">${pct}% · ${levG.toFixed(1)} / ${capG.toLocaleString()} gal${pct<15?' · ⚠️ VERY LOW':''}</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:10px 0">
         <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:6px;padding:7px;text-align:center">
-          <div style="font-family:var(--font-hud);font-size:7px;color:var(--muted);letter-spacing:.5px;margin-bottom:4px">NUTRIENT PPM</div>
+          <div style="font-family:var(--font-hud);font-size:7px;color:var(--muted);margin-bottom:3px">NUTRIENT PPM</div>
           <div style="font-family:var(--font-hud);font-size:14px;color:var(--cyan)">${res.ppm||0}</div>
         </div>
         <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:6px;padding:7px;text-align:center">
-          <div style="font-family:var(--font-hud);font-size:7px;color:var(--muted);letter-spacing:.5px;margin-bottom:4px">WATER AT</div>
+          <div style="font-family:var(--font-hud);font-size:7px;color:var(--muted);margin-bottom:3px">WATER AT</div>
           <div style="font-family:var(--font-hud);font-size:14px;color:var(--blue)">${aw.dryout||30}%</div>
         </div>
         <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:6px;padding:7px;text-align:center">
-          <div style="font-family:var(--font-hud);font-size:7px;color:var(--muted);letter-spacing:.5px;margin-bottom:4px">STOP AT</div>
+          <div style="font-family:var(--font-hud);font-size:7px;color:var(--muted);margin-bottom:3px">STOP AT</div>
           <div style="font-family:var(--font-hud);font-size:14px;color:var(--green)">${aw.stopto||80}%</div>
         </div>
       </div>
-      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-bottom:8px;line-height:1.6">
-        ${awPlants.length} plant(s) on auto-water · ${emAvail} emitter pack(s) · ${hoAvail} hose pack(s) available
-      </div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-bottom:8px">${awP.length} plant(s) connected · Emitters: ${emA} · Hoses: ${hoA}</div>
       <div class="gear-actions">
         <button class="btn-gear-act" onclick="openFillReservoirModal()">🧪 FILL W/ NUTRIENTS</button>
         <button class="btn-gear-act gold" onclick="refillReservoirPlain(${room.id})">💧 PLAIN WATER</button>
@@ -4630,21 +4694,16 @@ function renderGearPanel() {
     </div>`;
   } else {
     html += `<div class="gear-item">
-      <div class="gear-item-header">
-        <span class="gear-item-icon">🛢️</span>
-        <span class="gear-item-name">RESERVOIR</span>
-        <span class="gear-item-status off">NOT INSTALLED</span>
-      </div>
+      <div class="gear-item-header"><span class="gear-item-icon">🛢️</span><span class="gear-item-name">RESERVOIR</span><span class="gear-item-status off">NOT INSTALLED</span></div>
       <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">
-        Buy a reservoir in Shop → Water to enable auto-watering<br>
-        <span style="color:var(--muted)">Available stock: ${emAvail} emitters · ${hoAvail} hose packs</span>
+        Buy a 500–10,000 gal reservoir in Shop → Water<br>
+        Stock: ${emA} emitter packs · ${hoA} hose packs
       </div>
     </div>`;
   }
 
   body.innerHTML = html;
 }
-
 // ================================================================
 // MOVE PLANT + STRAIN RENAME HELPERS
 // ================================================================
@@ -5042,7 +5101,7 @@ function renderCuring() {
     const rh = b.dryRH != null ? b.dryRH : 80;
     const rhColor = rh >= 58 && rh <= 64 ? 'var(--green)' : rh > 70 ? 'var(--red)' : 'var(--gold)';
     html += `<div class="curing-card hanging" style="cursor:pointer" onclick="showVaultSubAndTab('drying')">
-      <div class="curing-header"><div class="curing-name">${b.name}</div><div class="curing-phase hanging">🌬️ DRYING</div></div>
+      <div class="curing-header"><div class="curing-name">${getStrainDisplayName(b.name)||b.name}</div><div class="curing-phase hanging">🌬️ DRYING</div></div>
       <div style="font-family:var(--font-hud);font-size:28px;color:${rhColor};text-align:center;margin:6px 0">${rh.toFixed(1)}%<span style="font-size:12px;color:var(--muted)"> RH</span></div>
       <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);text-align:center">Tap to manage →</div>
     </div>`;
@@ -5053,7 +5112,7 @@ function renderCuring() {
     const burpDue = rh > 65;
     const rhColor = rh >= 54 && rh <= 64 ? 'var(--green)' : rh > 70 ? 'var(--red)' : 'var(--gold)';
     html += `<div class="curing-card jarring ${burpDue ? 'burp-needed' : ''}" style="cursor:pointer" onclick="showVaultSubAndTab('curing')">
-      <div class="curing-header"><div class="curing-name">${b.name}</div><div class="curing-phase jarring">🫙 CURING</div></div>
+      <div class="curing-header"><div class="curing-name">${getStrainDisplayName(b.name)||b.name}</div><div class="curing-phase jarring">🫙 CURING</div></div>
       <div style="font-family:var(--font-hud);font-size:28px;color:${rhColor};text-align:center;margin:6px 0">${rh.toFixed(1)}%<span style="font-size:12px;color:var(--muted)"> RH</span></div>
       <div style="font-size:9px;color:var(--muted);font-family:var(--font-hud);text-align:center">Burps: ${burps}${burpDue ? ' · <span style="color:var(--gold)">💨 BURP NEEDED</span>' : ''}</div>
     </div>`;
@@ -5674,7 +5733,7 @@ function _renderVaultCured(cont) {
     html += `<div class="vault-card">
       <div class="vault-card-rarity ${rarClass}">${item.rarity||'Standard'}</div>
       <div class="vault-card-name">${item.name}</div>
-      <div class="vault-card-strain">${item.strainName||''}</div>
+      <div class="vault-card-strain">${getStrainDisplayName(item.strainName||'')}</div>
       <div class="vault-card-stats">
         <span>⚖️ ${item.grams}g</span>
         <span>🔬 ${item.thc}%</span>
@@ -5904,7 +5963,13 @@ function renderShop() {
   if (!items.length) { cont.innerHTML = '<div class="empty-state">Nothing here yet.</div>'; return; }
   let html = '<div class="shop-items-list">';
     items.forEach(item => {
-    const count = ownedCount(item.id);
+    let count = ownedCount(item.id);
+    if (item.type === 'reservoir') {
+      count = (GS.rooms||[]).filter(r => {
+        const _rg2 = getRoomGear(r.id);
+        return _rg2.reservoir && _rg2.reservoir.capacityGal === (item.capacityGal||20);
+      }).length;
+    }
     const canAfford = GS.coins >= item.price;
 
     html += `<div class="shop-item ${!canAfford ? 'cant-afford' : ''}">
@@ -5950,9 +6015,6 @@ function buyGear(itemId) {
   const inv = getInventory();
 
   const isConsumable =
-    item.type === 'nutrients' ||
-    item.type === 'phUp' ||
-    item.type === 'phDown' ||
     item.type === 'pot' ||
     item.type === 'soil' ||
     item.type === 'healthSpray';
@@ -5984,22 +6046,30 @@ function buyGear(itemId) {
     const rg = getRoomGear(activeRoomId);
     rg.hosingPacks = (rg.hosingPacks||0) + (item.qty||1);
     toast('🪣 ' + (item.qty||1) + 'x Hose Packs added to ' + (GS.rooms.find(r=>r.id===activeRoomId)?.name||'Room') + '!','ok',2500);
-  } else if (item.type === 'acUnit') {
-    if (!GS.gear) GS.gear = defaultGear();
-    GS.gear.acUnit = { type: item.atype||item.name, size: item.asize||'medium' };
-    toast('❄️ ' + item.name + ' installed!','ok',3000);
-  } else if (item.type === 'humidifier') {
-    if (!GS.gear) GS.gear = defaultGear();
-    GS.gear.humidifier = { type: item.htype||item.name, size: item.hsize||'medium' };
-    toast('💧 ' + item.name + ' installed!','ok',3000);
-  } else if (item.type === 'dehumidifier') {
-    if (!GS.gear) GS.gear = defaultGear();
-    GS.gear.dehumidifier = { type: item.dtype||item.name, size: item.dsize||'medium' };
-    toast('🌵 ' + item.name + ' installed!','ok',3000);
-  } else if (item.type === 'heater') {
-    if (!GS.gear) GS.gear = defaultGear();
-    GS.gear.heater = { type: item.htype||item.name, size: item.heatsize||'medium' };
-    toast('🔥 ' + item.name + ' installed!','ok',3000);
+  } else if (['acUnit','humidifier','dehumidifier','heater'].includes(item.type)) {
+    const _icons = {acUnit:'❄️',humidifier:'💧',dehumidifier:'🌵',heater:'🔥'};
+    inv.instances.push({
+      uid: uid(), itemId: item.id, type: item.type, equipType: item.type,
+      name: item.name, icon: item.icon||_icons[item.type],
+      size: item.asize||item.hsize||item.dsize||item.heatsize||'medium',
+      cooling:  item.type==='acUnit'       ? ({small:10,medium:20,large:30,xxl:50}[item.asize]||10)  : 0,
+      heating:  item.type==='heater'       ? ({small:5, medium:10,large:15       }[item.heatsize]||5) : 0,
+      humidPct: item.type==='humidifier'   ? ({small:5, medium:7, large:10,xxl:15}[item.hsize]||5)   : 0,
+      dehuPct:  item.type==='dehumidifier' ? ({small:5, medium:7, large:10,xxl:15}[item.dsize]||5)   : 0,
+    });
+    toast((_icons[item.type]||'📦')+' '+item.name+' added to inventory — assign in Gear panel!','ok',4000);
+  } else if (item.type === 'nutrients') {
+    const rg2 = getRoomGear(activeRoomId);
+    rg2[item.ntype] = (rg2[item.ntype]||0) + 1000;
+    toast('🧴 '+item.name+' added to '+(GS.rooms.find(r=>r.id===activeRoomId)?.name||'Room')+'!','ok',2500);
+  } else if (item.type === 'phUp') {
+    const rg2 = getRoomGear(activeRoomId);
+    rg2.phUp = (rg2.phUp||0) + 1000;
+    toast('⬆️ pH Up 1L added to '+(GS.rooms.find(r=>r.id===activeRoomId)?.name||'Room')+'!','ok',2500);
+  } else if (item.type === 'phDown') {
+    const rg2 = getRoomGear(activeRoomId);
+    rg2.phDown = (rg2.phDown||0) + 1000;
+    toast('⬇️ pH Down 1L added to '+(GS.rooms.find(r=>r.id===activeRoomId)?.name||'Room')+'!','ok',2500);
   } else if (item.type === 'co2Tank') {
     if (!GS.gear) GS.gear = defaultGear();
     GS.gear.co2Tank = { level: 100 };
@@ -6038,6 +6108,100 @@ function buyGear(itemId) {
 // ================================================================
 // BREED TAB
 // ================================================================
+// ================================================================
+// CROSS PREVIEW CALCULATOR
+// ================================================================
+let _breedPreviewFem  = '';
+let _breedPreviewMale = '';
+
+function previewCross(femName, maleName) {
+  if (!femName || !maleName) return null;
+  const femDef  = STRAINS[femName]  || (GS.bredStrains||[]).find(b=>b.name===femName)  || null;
+  const maleDef = STRAINS[maleName] || (GS.bredStrains||[]).find(b=>b.name===maleName) || null;
+  if (!femDef || !maleDef) return null;
+  const femObj  = {...femDef,  gen: femDef.gen  || 'original'};
+  const maleObj = {...maleDef, gen: maleDef.gen || 'original'};
+  const result  = determineBreedGeneration(femObj, maleObj);
+  const gt      = GEN_TABLE[result.gen] || GEN_TABLE.F1;
+  const femDisp = getStrainDisplayName(femName);
+  const maleDisp= getStrainDisplayName(maleName);
+  const avgTHC  = parseFloat((((femDef.thcBase||25) + (maleDef.thcBase||25)) / 2).toFixed(1));
+  const avgYield= Math.round(((femDef.yieldBase||400) + (maleDef.yieldBase||400)) / 2);
+  const bonusPool  = BREED_BONUSES[result.gen]   || [];
+  const bonusCount = BREED_BONUS_COUNT[result.gen] || 0;
+  const childName  = femDisp.split(' ')[0] + ' × ' + maleDisp.split(' ')[0] + ' [' + result.gen + ']';
+  const standardPct= Math.max(0, 100 - (gt.god||0) - (gt.glowing||0) - (gt.sparkling||0) - (gt.shiny||0) - (gt.ep||0));
+  return {result, gt, childName, avgTHC, avgYield, femDisp, maleDisp, bonusPool, bonusCount, standardPct};
+}
+
+function renderBreedCrossPreview() {
+  const cont = document.getElementById('breed-cross-preview-result');
+  if (!cont) return;
+  if (!_breedPreviewFem || !_breedPreviewMale) {
+    cont.innerHTML = '<div style="color:var(--muted);font-size:10px;font-family:var(--font-hud);text-align:center;padding:14px;letter-spacing:1px">Select both parents to preview the cross.</div>';
+    return;
+  }
+  const p = previewCross(_breedPreviewFem, _breedPreviewMale);
+  if (!p) {
+    cont.innerHTML = '<div style="color:var(--red);font-size:9px;font-family:var(--font-mono);padding:8px">Cannot preview — strain data missing.</div>';
+    return;
+  }
+  const typeColor  = p.result.type === 'FEM' ? 'var(--purple)' : 'var(--orange)';
+  const canGrow    = p.result.canGrow !== false;
+  const canName    = p.result.gen !== 'F1' && p.result.type === 'FEM';
+  const rarItems   = [
+    {label:'GOD',       val:p.gt.god,       color:'var(--pink)'},
+    {label:'GLOWING',   val:p.gt.glowing,   color:'var(--orange)'},
+    {label:'SPARKLING', val:p.gt.sparkling, color:'var(--cyan)'},
+    {label:'SHINY',     val:p.gt.shiny,     color:'var(--gold)'},
+    {label:'EP',        val:p.gt.ep,        color:'var(--purple)'},
+    {label:'STANDARD',  val:p.standardPct.toFixed(1), color:'var(--muted)'},
+  ].filter(r => parseFloat(r.val) > 0);
+
+  cont.innerHTML = `
+    <div style="background:rgba(0,0,0,0.5);border:1px solid rgba(168,85,247,0.3);border-radius:10px;padding:14px;margin-top:8px">
+      <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1.5px;margin-bottom:8px">CROSS RESULT PREVIEW</div>
+      <div style="font-family:var(--font-hud);font-size:13px;color:var(--text);margin-bottom:3px">${p.childName}</div>
+      <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-bottom:12px">${p.femDisp} × ${p.maleDisp}</div>
+
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;text-align:center">
+        <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:6px;padding:7px">
+          <div style="font-size:7px;color:var(--muted);font-family:var(--font-hud);letter-spacing:.5px;margin-bottom:3px">GEN</div>
+          <div style="font-family:var(--font-hud);font-size:15px;color:var(--green)">${p.result.gen}</div>
+        </div>
+        <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:6px;padding:7px">
+          <div style="font-size:7px;color:var(--muted);font-family:var(--font-hud);letter-spacing:.5px;margin-bottom:3px">TYPE</div>
+          <div style="font-family:var(--font-hud);font-size:12px;color:${typeColor}">${p.result.type}</div>
+        </div>
+        <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:6px;padding:7px">
+          <div style="font-size:7px;color:var(--muted);font-family:var(--font-hud);letter-spacing:.5px;margin-bottom:3px">THC~</div>
+          <div style="font-family:var(--font-hud);font-size:15px;color:var(--gold)">${p.avgTHC}%</div>
+        </div>
+        <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:6px;padding:7px">
+          <div style="font-size:7px;color:var(--muted);font-family:var(--font-hud);letter-spacing:.5px;margin-bottom:3px">STABILITY</div>
+          <div style="font-family:var(--font-hud);font-size:15px;color:var(--cyan)">${p.gt.stability||'—'}%</div>
+        </div>
+      </div>
+
+      <div style="font-family:var(--font-hud);font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:5px">RARITY CHANCES PER SEED</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px">
+        ${rarItems.map(r=>`<span style="background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.06);border-radius:4px;padding:3px 7px;font-family:var(--font-hud);font-size:8px;color:${r.color}">${r.label}: ${r.val}%</span>`).join('')}
+      </div>
+
+      ${p.bonusPool.length ? `
+        <div style="font-family:var(--font-hud);font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:4px">GEN BONUSES — ${p.bonusCount} rolled at planting</div>
+        <div style="font-size:9px;color:var(--text);font-family:var(--font-mono);line-height:1.9;flex-wrap:wrap">
+          ${p.bonusPool.map(b=>`<span style="color:var(--green)">+${b.pct}% ${b.type.replace(/([A-Z])/g,' $1').toLowerCase().trim()}</span>`).join(' &nbsp;·&nbsp; ')}
+        </div>` : ''}
+
+      ${!canGrow
+        ? `<div class="warning-note" style="margin-top:10px;margin-bottom:0">⚠️ F1 REG seeds cannot be grown directly — breed two F1s together to produce growable F2 FEMs.</div>`
+        : canName
+          ? `<div class="success-note" style="margin-top:10px;margin-bottom:0">✅ F2+ FEM — you can give these seeds a custom name after harvesting them.</div>`
+          : ''}
+    </div>`;
+}
+
 function renderBreed() {
   const cont = document.getElementById('breed-container');
   if (!cont) return;
@@ -6048,49 +6212,121 @@ function renderBreed() {
   let html = '';
 
   // ── SECTION 1: Active Pollination Status ──
-  const activeMales = (GS.plants || []).filter(p => p.isMale && p.stage === 'Flower');
-  const seededFems  = (GS.plants || []).filter(p => !p.isMale && p.hasSeeds);
+  const activeMales     = (GS.plants || []).filter(p => p.isMale && p.stage === 'Flower');
+  const pollinatingFems = (GS.plants || []).filter(p => !p.isMale && p.isBeingPollinated);
+  const seededFems      = (GS.plants || []).filter(p => !p.isMale && p.hasSeeds);
 
-  if (activeMales.length || seededFems.length) {
+  if (activeMales.length || seededFems.length || pollinatingFems.length) {
     html += `<div class="breed-section">
       <div class="breed-title">🌿 ACTIVE POLLINATION</div>
-      <div class="breed-subtitle">Breeding is happening in your grow rooms right now.</div>`;
+      <div class="breed-subtitle">Live breeding status across all rooms.</div>`;
 
     activeMales.forEach(male => {
-      const room = (GS.rooms||[]).find(r => r.id === male.roomId);
-      const fw   = Math.ceil((male.flowerDay || 0) / 7);
-      const pollinatingFems = (GS.plants||[]).filter(p => p.roomId === male.roomId && !p.isMale && p.stage === 'Flower');
-      const typeLabel = male.isReversed ? '🔄 REVERSED (→ FEM seeds)' : '♂ MALE (→ REG seeds)';
-      html += `<div class="bred-card" style="border-color:${male.isReversed ? 'var(--purple)' : 'var(--cyan)'}">
-        <div class="bred-name">${male.name || male.strainName} <span style="font-size:10px;color:var(--muted)">${typeLabel}</span></div>
-        <div class="bred-genetics">Room: ${room?.name || '—'} · Flower Week ${fw}</div>
-        <div class="bred-meta">
-          ${fw < 2
-            ? '⏳ Pollen drops at Week 2 of flower'
-            : fw < 6
-            ? '🌬️ Pollinating · Seeds begin forming at Week 6'
-            : `🌱 Pollinating · Est. seeds on harvest: ${(() => {
-                const SEED_BY_WEEK = {6:100,7:150,8:250,9:350,10:400,11:600,12:700};
-                return SEED_BY_WEEK[Math.min(fw,12)] || 100;
-              })()} per female`}
+      const room      = (GS.rooms||[]).find(r => r.id === male.roomId);
+      const fw        = Math.ceil((male.flowerDay || 0) / 7);
+      const roomFems  = (GS.plants||[]).filter(p => p.roomId === male.roomId && !p.isMale && (p.stage==='Flower'||p.stage==='Ready'));
+      const typeLabel = male.isReversed ? '🔄 REVERSED → FEM seeds' : '♂ MALE → REG seeds';
+      const typeColor = male.isReversed ? 'var(--purple)' : 'var(--cyan)';
+      let statusMsg   = '';
+      if      (fw < 2) statusMsg = '⏳ Pollen drops at Week 2 of flower';
+      else if (fw < 8) statusMsg = '🌬️ Pollinating — seeds begin forming at male Week 8';
+      else {
+        const SEED_BASE = {8:80, 9:170, 10:290, 11:390, 12:470, 13:520, 14:560};
+        const maxSeeds  = SEED_BASE[Math.min(fw,14)] || 80;
+        statusMsg = '🌱 Week ' + fw + ' — max ~' + maxSeeds + ' seeds/female (if pollinated from Week 2)';
+      }
+      html += `<div class="bred-card" style="border-color:${typeColor}">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:4px">
+          <div>
+            <div class="bred-name">${male.name||male.strainName} <span style="font-size:9px;color:${typeColor}">${typeLabel}</span></div>
+            <div class="bred-genetics">${room?.name||'—'} · Flower Week ${fw}</div>
+          </div>
+          <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted)">${roomFems.length} female(s) in room</div>
         </div>
-        <div class="bred-meta" style="color:var(--green)">Females in room: ${pollinatingFems.length}</div>
+        <div class="bred-meta" style="margin-top:6px">${statusMsg}</div>
+        ${roomFems.map(f => {
+          const pollWks  = (f.pollinatedGameWeeks||0).toFixed(1);
+          const timeMult = Math.min(100, Math.max(30, Math.round(((Math.min(f.pollinatedGameWeeks||0,8)-2)/6+0.3)*100)));
+          const seedEst  = f.seedCount || 0;
+          const pollBar  = Math.min(100, Math.round((f.pollinatedGameWeeks||0)/8*100));
+          return `<div style="padding:6px 0;border-top:1px solid rgba(255,255,255,0.05);margin-top:5px">
+            <div style="display:flex;align-items:center;gap:8px;font-size:9px;font-family:var(--font-mono);flex-wrap:wrap;margin-bottom:4px">
+              <span style="color:var(--green)">${f.name||f.strainName}</span>
+              <span style="color:var(--muted)">⏱ ${pollWks} weeks pollinated</span>
+              <span style="color:var(--gold)">Efficiency: ${timeMult}%</span>
+              ${f.hasSeeds ? `<span style="color:var(--green)">🌱 ${seedEst} seeds</span>` : `<span style="color:var(--muted)">⏳ Seeds at male Week 8</span>`}
+            </div>
+            <div style="height:3px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden">
+              <div style="height:100%;width:${pollBar}%;background:${typeColor};border-radius:2px;transition:.4s"></div>
+            </div>
+          </div>`;
+        }).join('')}
       </div>`;
     });
 
-    seededFems.forEach(fem => {
-      const room = (GS.rooms||[]).find(r => r.id === fem.roomId);
-      const fw   = Math.ceil((fem.flowerDay || 0) / 7);
+    // Seeded females whose male is no longer in room
+    seededFems.filter(f => !activeMales.some(m => m.roomId === f.roomId)).forEach(fem => {
+      const room     = (GS.rooms||[]).find(r => r.id === fem.roomId);
+      const fw       = Math.ceil((fem.flowerDay||0) / 7);
       const seedType = fem.maleIsReversed ? 'FEM' : 'REG';
+      const pollWks  = (fem.pollinatedGameWeeks||0).toFixed(1);
+      const timeMult = Math.min(100, Math.max(30, Math.round(((Math.min(fem.pollinatedGameWeeks||0,8)-2)/6+0.3)*100)));
       html += `<div class="bred-card" style="border-color:var(--gold)">
-        <div class="bred-name">${fem.name || fem.strainName} <span style="font-size:10px;color:var(--gold)">🌱 SEEDED</span></div>
-        <div class="bred-genetics">Room: ${room?.name || '—'} · Week ${fw} · Father: ${fem.maleStrainName || '?'}</div>
-        <div class="bred-meta">Current seed count: <strong style="color:var(--green)">${fem.seedCount || 0}</strong> · Type: <strong style="color:${seedType==='FEM'?'var(--purple)':'var(--orange)'}">${seedType}</strong></div>
-        <div class="bred-meta" style="color:var(--muted);font-size:9px">Harvest to collect seeds. Seed count increases each week up to Week 12.</div>
+        <div class="bred-name">${fem.name||fem.strainName} <span style="font-size:10px;color:var(--gold)">🌱 SEEDED — male gone</span></div>
+        <div class="bred-genetics">${room?.name||'—'} · Week ${fw} · Father: ${getStrainDisplayName(fem.maleStrainName||'?')}</div>
+        <div class="bred-meta" style="margin-top:4px;display:flex;gap:12px;flex-wrap:wrap">
+          <span>Seeds: <strong style="color:var(--green)">${fem.seedCount||0}</strong></span>
+          <span>Type: <strong style="color:${seedType==='FEM'?'var(--purple)':'var(--orange)'}">${seedType}</strong></span>
+          <span style="color:var(--muted)">Pollinated ${pollWks} wks (${timeMult}% efficiency)</span>
+        </div>
+        <div class="bred-meta" style="color:var(--muted);font-size:9px;margin-top:3px">Harvest to collect seeds.</div>
       </div>`;
     });
 
-    html += `</div>`;
+    if (GS.difficulty === 'easy') {
+      html += `<div class="info-note" style="margin-top:8px"><strong>💡 How seeds work:</strong> Males pollinate at Week 2 · Seeds form at male Week 8+ · The longer she's pollinated, the more seeds she gets · Water spray kills carried pollen before you move a plant.</div>`;
+    }
+    html += '</div>';
+  }
+
+  // ── SECTION 1.5: Cross Preview Calculator ──
+  const allFemKeys  = Object.keys(seeds||{}).filter(n => (seeds[n]||0) > 0);
+  const allMaleKeys = Object.keys(maleSeeds||{}).filter(n => (maleSeeds[n]||0) > 0);
+  // Also include reversed plants as male options
+  const reversedInRoom = (GS.plants||[]).filter(p => p.isReversed && p.stage === 'Flower');
+  reversedInRoom.forEach(p => { if (!allMaleKeys.includes(p.strainName)) allMaleKeys.push(p.strainName); });
+
+  if (allFemKeys.length && allMaleKeys.length) {
+    let femOptHtml = '<option value="">— ♀ Female Parent —</option>';
+    allFemKeys.forEach(n => {
+      const bd  = (GS.bredStrains||[]).find(b=>b.name===n);
+      const lbl = getStrainDisplayName(n) + (bd ? ' [' + bd.gen + ']' : '') + ' (' + (seeds[n]||0) + 'x)';
+      femOptHtml += `<option value="${n}" ${n===_breedPreviewFem?'selected':''}>${lbl}</option>`;
+    });
+    let maleOptHtml = '<option value="">— ♂ Male Parent —</option>';
+    allMaleKeys.forEach(n => {
+      const isRev   = reversedInRoom.some(p => p.strainName === n);
+      const bd      = (GS.bredStrains||[]).find(b=>b.name===n);
+      const lbl     = getStrainDisplayName(n) + (bd ? ' [' + bd.gen + ']' : '') + (isRev ? ' [REVERSED]' : ' ♂') + (maleSeeds[n] ? ' (' + maleSeeds[n] + 'x)' : '');
+      maleOptHtml   += `<option value="${n}" ${n===_breedPreviewMale?'selected':''}>${lbl}</option>`;
+    });
+    html += `<div class="breed-section">
+      <div class="breed-title">🔬 CROSS PREVIEW CALCULATOR</div>
+      <div class="breed-subtitle">See exactly what you'd get before committing to a cross.</div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
+        <select style="flex:1;min-width:140px;background:rgba(0,15,0,0.85);border:1px solid var(--border);border-radius:7px;padding:9px 10px;color:var(--text);font-family:var(--font-body);font-size:13px;outline:none;transition:.2s"
+          onchange="_breedPreviewFem=this.value;renderBreedCrossPreview()">
+          ${femOptHtml}
+        </select>
+        <span style="font-family:var(--font-hud);font-size:18px;color:var(--muted)">×</span>
+        <select style="flex:1;min-width:140px;background:rgba(0,15,0,0.85);border:1px solid var(--border);border-radius:7px;padding:9px 10px;color:var(--text);font-family:var(--font-body);font-size:13px;outline:none;transition:.2s"
+          onchange="_breedPreviewMale=this.value;renderBreedCrossPreview()">
+          ${maleOptHtml}
+        </select>
+      </div>
+      <div id="breed-cross-preview-result"></div>
+    </div>`;
+    setTimeout(renderBreedCrossPreview, 60);
   }
 
   // ── SECTION 2: Seed Inventory ──
@@ -7385,9 +7621,10 @@ function openWaterModal(plantId) {
   const rg   = getRoomGear((GS.rooms.find(r => r.id === plant.roomId) || GS.rooms[0]).id);
   const hasEC= !!(g.ecmeter);
   const hasPH= !!(g.phmeter);
-  const phUp = rg.phUp   || 0;
-  const phDn = rg.phDown || 0;
-  const canPH= hasPH && (phUp > 0 || phDn > 0);
+  const _phinv  = getInventory().consumables || {};
+  const phUp    = (rg.phUp||0) + (GS.gear?.phUp||0) + (_phinv['ph_up']||0);
+  const phDn    = (rg.phDown||0) + (GS.gear?.phDown||0) + (_phinv['ph_down']||0);
+  const canPH   = hasPH && (phUp > 0 || phDn > 0);
   const diff = GS.difficulty || 'easy';
   const stage= plant.stage || 'Seedling';
   const ideal= ENV_IDEAL[stage] || ENV_IDEAL.Veg;
@@ -7745,8 +7982,14 @@ function confirmWater() {
     const phTarget = parseFloat(document.getElementById('water-ph-target')?.value || 62) / 10;
     const phDiff   = Math.abs(phTarget - 6.5);
     const mlUsed   = Math.max(1, Math.round(phDiff * 10));
-    if (phTarget > 6.5) rg.phDown = Math.max(0, (rg.phDown||0) - mlUsed);
-    else                rg.phUp   = Math.max(0, (rg.phUp  ||0) - mlUsed);
+    const _phic    = getInventory().consumables || {};
+    const _deductPH = (cKey, gKey, rKey) => {
+      if      ((_phic[cKey]||0)       >= mlUsed) _phic[cKey]       = Math.max(0,(_phic[cKey]||0)       - mlUsed);
+      else if ((GS.gear?.[gKey]||0)   >= mlUsed) GS.gear[gKey]     = Math.max(0,(GS.gear[gKey]||0)     - mlUsed);
+      else if ((rg[rKey]||0)          >= mlUsed) rg[rKey]          = Math.max(0,(rg[rKey]||0)          - mlUsed);
+    };
+    if (phTarget > 6.5) _deductPH('ph_down','phDown','phDown');
+    else                _deductPH('ph_up',  'phUp',  'phUp');
   }
 
   // Apply water level
@@ -7939,6 +8182,25 @@ function confirmInspect(area) {
     toast('🛡️ Shielded: ' + area + ' — 12h protection','ok',3000);
   }
 
+  function renderDailyGoal() {
+  const bar = document.getElementById('daily-goal-bar');
+  if (!bar || !GS || !GS.username) return;
+  const today = new Date().toDateString();
+  if (GS.dailyGoalDate !== today) { GS.dailyGoalDone = false; GS.dailyGoalDate = today; saveGame(); }
+  if (GS.dailyGoalDone) { bar.classList.add('hidden'); return; }
+  bar.classList.remove('hidden','completed');
+  if ((GS.difficulty||'easy')==='master') bar.classList.add('hard');
+  else bar.classList.remove('hard');
+  try {
+    const goal = getDailyGoal();
+    if (!goal) return;
+    const t = document.getElementById('daily-goal-text');
+    const r = document.getElementById('daily-goal-reward');
+    if (t) t.textContent = goal.icon + ' ' + goal.text;
+    if (r) r.textContent = 'Reward: ' + goal.reward + '¢ + ' + goal.xp + ' XP';
+  } catch(e) { console.warn('daily goal err',e); }
+}
+
   completeDailyGoal();
   addLog((plant.name||plant.strainName) + ' inspected (' + area + ')','info');
   saveGame();
@@ -8066,18 +8328,21 @@ if (plant._permanentlyDead) {
       const femParentStrain  = strain;
       const isReversedPollen = !!plant.maleIsReversed;
 
-      // Reversed pollen = FEM seeds regardless of gen; normal male = REG on first cross
       let breedResult = determineBreedGeneration(femParentStrain, maleParentStrain);
       if (isReversedPollen && breedResult.type === 'REG') {
         breedResult = { ...breedResult, type: 'FEM', canGrow: true };
       }
 
-      const seedStrainName = plant.strainName.split(' ')[0] + ' × ' + plant.maleStrainName.split(' ')[0] + ' [' + breedResult.gen + ']';
+      // Use custom display names for seed name construction
+      const femDisplay  = getStrainDisplayName(plant.strainName);
+      const maleDisplay = getStrainDisplayName(plant.maleStrainName);
+      const seedStrainName = femDisplay.split(' ')[0] + ' × ' + maleDisplay.split(' ')[0] + ' [' + breedResult.gen + ']';
 
       if (!GS.bredStrains) GS.bredStrains = [];
       if (!GS.bredStrains.find(b => b.name === seedStrainName)) {
         GS.bredStrains.push({
-          name: seedStrainName, genetics: plant.strainName + ' × ' + plant.maleStrainName,
+          name: seedStrainName,
+          genetics: femDisplay + ' × ' + maleDisplay,
           gen: breedResult.gen, seedType: breedResult.type, canGrow: breedResult.canGrow,
           thcBase:    parseFloat(((((femParentStrain?.thcBase)||25) + ((maleParentStrain?.thcBase)||25)) / 2).toFixed(1)),
           yieldBase:  Math.round((((femParentStrain?.yieldBase)||400) + ((maleParentStrain?.yieldBase)||400)) / 2),
@@ -8100,10 +8365,18 @@ if (plant._permanentlyDead) {
 
       GS.plants = GS.plants.filter(p => p.id !== plantId);
       closeModal('modal-harvest');
-      const seedTypeLabel = breedResult.type === 'FEM' ? 'FEM (all female!)' : 'REG (50/50 male-female)';
-      toast('🌱 ' + seedQty + 'x ' + seedStrainName + ' [' + breedResult.gen + ' ' + seedTypeLabel + ']', 'ok', 6000);
-      addLog('Seeded harvest: ' + seedQty + 'x ' + seedStrainName + ' ' + breedResult.type, 'success');
       saveGame(); renderGrow(); renderSeeds(); renderBreed(); renderHeader();
+
+      const seedTypeLabel = breedResult.type === 'FEM' ? 'FEM (all female!)' : 'REG (50/50 male-female)';
+      toast('🌱 ' + seedQty + 'x ' + seedStrainName + ' [' + breedResult.gen + ' · ' + seedTypeLabel + ']', 'ok', 6000);
+      addLog('Seeded harvest: ' + seedQty + 'x ' + seedStrainName + ' ' + breedResult.type, 'success');
+
+      // Auto-open rename for F2+ FEM seeds only (not F1, not REG, not males)
+      const newBred = (GS.bredStrains||[]).find(b => b.name === seedStrainName);
+      const canNameGen = newBred && breedResult.type === 'FEM' && breedResult.gen !== 'F1';
+      if (canNameGen && !newBred.hasBeenNamed) {
+        setTimeout(() => openRenameStrainModal(seedStrainName), 700);
+      }
       return;
     }
   }
