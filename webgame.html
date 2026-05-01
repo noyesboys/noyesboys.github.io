@@ -658,6 +658,22 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .dry-equip-btn.active-ac{border-color:var(--blue);background:rgba(59,130,246,0.1);color:var(--blue)}
 .dry-equip-btn.active-heat{border-color:var(--gold);background:rgba(251,191,36,0.1);color:var(--gold)}
 .dry-equip-btn:disabled{opacity:.3;cursor:not-allowed}
+/* ── Plant Modal sticky layout ── */
+#modal-plant>.modal-box{padding:0;overflow:hidden;display:flex;flex-direction:column;max-height:88vh}
+.plant-modal-header{padding:16px 20px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
+.plant-modal-body{flex:1;overflow-y:auto;padding:10px 20px}
+.plant-modal-footer{padding:10px 20px 16px;border-top:1px solid var(--border);flex-shrink:0;background:var(--panel);border-radius:0 0 16px 16px}
+#modal-plant .strain-select-grid{grid-template-columns:repeat(auto-fill,minmax(85px,1fr));gap:5px;max-height:220px}
+#modal-plant .strain-option{padding:6px 4px}
+#modal-plant .strain-option-emoji{font-size:16px;margin-bottom:2px}
+#modal-plant .strain-option-name{font-size:7px;letter-spacing:.2px}
+#modal-plant .strain-option-thc{font-size:7px;margin-top:1px}
+#modal-plant .strain-option-qty{font-size:11px;margin-top:1px}
+#modal-plant .pot-size-grid{grid-template-columns:repeat(auto-fill,minmax(65px,1fr));gap:4px}
+#modal-plant .pot-size-opt{padding:5px 4px}
+#modal-plant .pot-size-opt-icon{font-size:14px}
+#modal-plant .pot-size-opt-name{font-size:7px;margin-top:1px}
+#modal-plant .pot-size-opt-vol{font-size:7px}
 .mold-badge{display:inline-block;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.5);border-radius:5px;padding:4px 10px;font-family:var(--font-hud);font-size:9px;color:var(--red);letter-spacing:.5px;animation:dangerPulse 2s ease-in-out infinite}
 /* ── Strain Card Overlay (flip) ── */
 .strain-card-overlay{
@@ -1193,54 +1209,60 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 <!-- PLANT SEED MODAL -->
 <div class="modal-overlay" id="modal-plant">
   <div class="modal-box">
-    <div class="modal-title">🌱 PLANT A SEED</div>
-    <div class="modal-desc">Choose a strain, pot size, and name your plant.</div>
-    <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:6px">SELECT STRAIN</div>
-    <div class="strain-select-grid" id="plant-strain-grid"></div>
-    <div id="male-seed-section" class="hidden" style="margin-top:12px">
-      <div style="font-family:var(--font-hud);font-size:9px;color:var(--blue);letter-spacing:1px;margin-bottom:6px">♂ MALE SEEDS — Plant in room to pollinate females</div>
-      <div class="strain-select-grid" id="plant-male-grid"></div>
+    <div class="plant-modal-header">
+      <div class="modal-title" style="margin-bottom:4px">🌱 PLANT A SEED</div>
+      <div style="font-size:10px;color:var(--muted)">Choose a strain and pot size.</div>
     </div>
-    <input type="hidden" id="inp-plant-name" value="">
-    <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin:10px 0 6px">SELECT POT SIZE</div>
-    <div class="pot-size-grid" id="pot-size-grid">
-      <div class="pot-size-opt" data-pot="0.5gal" onclick="selectPot(this)">
-        <div class="pot-size-opt-icon">🪣</div>
-        <div class="pot-size-opt-name">SEEDLING</div>
-        <div class="pot-size-opt-vol">0.5 gal</div>
+    <div class="plant-modal-body">
+      <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:5px">SELECT STRAIN</div>
+      <div class="strain-select-grid" id="plant-strain-grid"></div>
+      <div id="male-seed-section" class="hidden" style="margin-top:10px">
+        <div style="font-family:var(--font-hud);font-size:9px;color:var(--blue);letter-spacing:1px;margin-bottom:5px">♂ MALE SEEDS — Plant to pollinate females</div>
+        <div class="strain-select-grid" id="plant-male-grid"></div>
       </div>
-      <div class="pot-size-opt selected" data-pot="1gal" onclick="selectPot(this)">
-        <div class="pot-size-opt-icon">🪣</div>
-        <div class="pot-size-opt-name">SOLO</div>
-        <div class="pot-size-opt-vol">1 gal</div>
+      <input type="hidden" id="inp-plant-name" value="">
+      <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin:8px 0 5px">SELECT POT SIZE</div>
+      <div class="pot-size-grid" id="pot-size-grid">
+        <div class="pot-size-opt" data-pot="0.5gal" onclick="selectPot(this)">
+          <div class="pot-size-opt-icon">🪣</div>
+          <div class="pot-size-opt-name">SEEDLING</div>
+          <div class="pot-size-opt-vol">0.5 gal</div>
+        </div>
+        <div class="pot-size-opt selected" data-pot="1gal" onclick="selectPot(this)">
+          <div class="pot-size-opt-icon">🪣</div>
+          <div class="pot-size-opt-name">SOLO</div>
+          <div class="pot-size-opt-vol">1 gal</div>
+        </div>
+        <div class="pot-size-opt" data-pot="3gal" onclick="selectPot(this)">
+          <div class="pot-size-opt-icon">🪣</div>
+          <div class="pot-size-opt-name">SMALL</div>
+          <div class="pot-size-opt-vol">3 gal</div>
+        </div>
+        <div class="pot-size-opt" data-pot="5gal" onclick="selectPot(this)">
+          <div class="pot-size-opt-icon">🪣</div>
+          <div class="pot-size-opt-name">MEDIUM</div>
+          <div class="pot-size-opt-vol">5 gal</div>
+        </div>
+        <div class="pot-size-opt" data-pot="10gal" onclick="selectPot(this)">
+          <div class="pot-size-opt-icon">🪣</div>
+          <div class="pot-size-opt-name">LARGE</div>
+          <div class="pot-size-opt-vol">10 gal</div>
+        </div>
+        <div class="pot-size-opt" data-pot="25gal" onclick="selectPot(this)">
+          <div class="pot-size-opt-icon">🪣</div>
+          <div class="pot-size-opt-name">XL</div>
+          <div class="pot-size-opt-vol">25 gal</div>
+        </div>
       </div>
-      <div class="pot-size-opt" data-pot="3gal" onclick="selectPot(this)">
-        <div class="pot-size-opt-icon">🪣</div>
-        <div class="pot-size-opt-name">SMALL</div>
-        <div class="pot-size-opt-vol">3 gal</div>
-      </div>
-      <div class="pot-size-opt" data-pot="5gal" onclick="selectPot(this)">
-        <div class="pot-size-opt-icon">🪣</div>
-        <div class="pot-size-opt-name">MEDIUM</div>
-        <div class="pot-size-opt-vol">5 gal</div>
-      </div>
-      <div class="pot-size-opt" data-pot="10gal" onclick="selectPot(this)">
-        <div class="pot-size-opt-icon">🪣</div>
-        <div class="pot-size-opt-name">LARGE</div>
-        <div class="pot-size-opt-vol">10 gal</div>
-      </div>
-      <div class="pot-size-opt" data-pot="25gal" onclick="selectPot(this)">
-        <div class="pot-size-opt-icon">🪣</div>
-        <div class="pot-size-opt-name">XL</div>
-        <div class="pot-size-opt-vol">25 gal</div>
-      </div>
+      <input type="hidden" id="inp-selected-pot" value="1gal">
+      <input type="hidden" id="inp-selected-strain" value="">
+      <div id="plant-modal-note" class="warning-note hidden" style="margin-top:8px"></div>
     </div>
-    <input type="hidden" id="inp-selected-pot" value="1gal">
-    <input type="hidden" id="inp-selected-strain" value="">
-    <div id="plant-modal-note" class="warning-note hidden" style="margin-top:10px"></div>
-    <div class="modal-actions">
-      <button class="btn-modal confirm" onclick="confirmPlant()">🌱 PLANT</button>
-      <button class="btn-modal cancel" onclick="closeModal('modal-plant')">CANCEL</button>
+    <div class="plant-modal-footer">
+      <div class="modal-actions" style="margin-top:0">
+        <button class="btn-modal confirm" onclick="confirmPlant()">🌱 PLANT</button>
+        <button class="btn-modal cancel" onclick="closeModal('modal-plant')">CANCEL</button>
+      </div>
     </div>
   </div>
 </div>
@@ -3103,7 +3125,7 @@ function defaultState(username, difficulty) {
   return {
     username,
     difficulty: difficulty || 'easy',
-    coins: 500,
+    coins: 10000,
     xp: 0,
     level: 1,
     rooms: [defaultRoom(1)],
@@ -3409,8 +3431,9 @@ function grantXP(amount) {
   const newLevel = Math.floor(GS.xp / 500) + 1;
   if (newLevel > (GS.level || 1)) {
     GS.level = newLevel;
-    toast('🎉 LEVEL UP! Now Level ' + newLevel, 'ok', 5000);
-    addLog('Level up! Now Level ' + newLevel, 'success');
+    GS.coins = (GS.coins || 0) + 1000;
+    toast('🎉 LEVEL UP! Now Level ' + newLevel + ' · +1,000¢', 'ok', 5000);
+    addLog('Level up! Now Level ' + newLevel + ' +1,000¢', 'success');
   }
 }
 
@@ -6917,27 +6940,38 @@ const SHOP_ITEMS = {
   ]
 };
 
+function _toolOwned(type) {
+  // Tools stored as booleans in GS.gear
+  const g = GS.gear || {};
+  const map = {scope:'scope', phmeter:'phmeter', ecmeter:'ecmeter', scrogNet:'scrogNet', stsSpray:'stsSprayCount', co2Tank:'co2Tank'};
+  if (type === 'scope')    return !!g.scope;
+  if (type === 'phmeter')  return !!g.phmeter;
+  if (type === 'ecmeter')  return !!g.ecmeter;
+  if (type === 'scrogNet') return !!g.scrogNet;
+  if (type === 'stsSpray') return (g.stsSprayCount||0) > 0;
+  if (type === 'co2Tank')  return !!g.co2Tank;
+  return false;
+}
+
 function renderShop() {
   const cont = document.getElementById('shop-container');
   if (!cont) return;
 
-  // Build males list dynamically from STRAINS
   if (_shopSection === 'males') {
     const strainNames = Object.keys(STRAINS).filter(s => !STRAINS[s].isTest);
-    let html = '<div class="shop-items-list">';
+    let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px">';
     strainNames.forEach(name => {
-      const strain = STRAINS[name];
-      const owned = (GS.maleSeedsOwned[name] || 0);
-      const canAfford = GS.coins >= 5000;
-      html += `<div class="shop-item">
-        <div class="shop-item-icon">${strain.emoji || '🌿'}♂</div>
-        <div class="shop-item-info">
-          <div class="shop-item-name">${name} (MALE)</div>
-          <div class="shop-item-desc">${strain.genetics || ''} · ${strain.variety}</div>
-          <div class="shop-item-price">5,000¢ per seed · Owned: ${owned}</div>
-        </div>
-        <button class="btn-action btn-gold" style="padding:6px 10px"
-          onclick="buyMaleSeed('${name}')" ${!canAfford ? 'disabled' : ''}>BUY</button>
+      const strain   = STRAINS[name];
+      const owned    = (GS.maleSeedsOwned[name] || 0);
+      const canAfford= GS.coins >= 5000;
+      html += `<div style="background:var(--card-bg);border:1px solid ${owned>0?'rgba(59,130,246,0.4)':'var(--border)'};border-radius:10px;padding:12px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:5px">
+        <div style="font-size:22px">${strain.emoji||'🌿'}♂</div>
+        <div style="font-family:var(--font-hud);font-size:9px;color:var(--text);letter-spacing:.3px">${name}</div>
+        <div style="font-size:8px;color:var(--muted);line-height:1.4;min-height:24px">${strain.variety} · ${strain.thcBase}% THC</div>
+        <div style="font-family:var(--font-hud);font-size:10px;color:var(--gold)">5,000¢</div>
+        ${owned>0?`<div style="font-size:8px;color:var(--blue);font-family:var(--font-hud)">Owned: ${owned}</div>`:''}
+        <button class="btn-action btn-gold" style="width:100%;padding:5px;margin-top:2px"
+          onclick="buyMaleSeed('${name}')" ${!canAfford?'disabled':''}>BUY ♂</button>
       </div>`;
     });
     html += '</div>';
@@ -6947,27 +6981,43 @@ function renderShop() {
 
   const items = SHOP_ITEMS[_shopSection] || [];
   if (!items.length) { cont.innerHTML = '<div class="empty-state">Nothing here yet.</div>'; return; }
-  let html = '<div class="shop-items-list">';
-    items.forEach(item => {
-    let count = ownedCount(item.id);
-    if (item.type === 'reservoir') {
+
+  let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px">';
+  items.forEach(item => {
+    // Determine owned count correctly
+    let count = 0;
+    if (['scope','phmeter','ecmeter','scrogNet','co2Tank'].includes(item.type)) {
+      count = _toolOwned(item.type) ? 1 : 0;
+    } else if (item.type === 'stsSpray') {
+      count = GS.gear?.stsSprayCount || 0;
+    } else if (item.type === 'unlockRoom') {
+      count = (GS.rooms||[]).some(r => r.id === item.roomId) ? 1 : 0;
+    } else if (item.type === 'reservoir') {
       count = (GS.rooms||[]).filter(r => {
         const _rg2 = getRoomGear(r.id);
         return _rg2.reservoir && _rg2.reservoir.capacityGal === (item.capacityGal||20);
       }).length;
+    } else {
+      count = ownedCount(item.id);
     }
-    const canAfford = GS.coins >= item.price;
 
-    html += `<div class="shop-item ${!canAfford ? 'cant-afford' : ''}">
-      <div class="shop-item-icon">${item.icon}</div>
-      <div class="shop-item-info">
-        <div class="shop-item-name">${item.name}</div>
-        <div class="shop-item-desc">${item.desc}</div>
-        <div class="shop-item-price">${item.price.toLocaleString()}¢ · Owned: ${count}</div>
-      </div>
-      <button class="btn-action btn-gold" style="padding:6px 10px"
-        onclick="buyGear('${item.id}')"
-        ${!canAfford ? 'disabled' : ''}>BUY</button>
+    const canAfford  = GS.coins >= item.price;
+    const isOwned    = count > 0 && !['nute_base','nute_grow','nute_bloom','nute_calmag','ph_up','ph_down','emitters','hosing','health_spray','stsSpray','pot_halfgal','pot_1gal','pot_3gal','pot_5gal','pot_10gal','pot_25gal','soil_halfgal','soil_1','soil_5','soil_25'].includes(item.id);
+    const borderColor= isOwned ? 'rgba(74,222,128,0.4)' : canAfford ? 'var(--border)' : 'rgba(255,255,255,0.05)';
+    const roomLocked = item.type === 'unlockRoom' && count === 0 && (GS.level||1) < (ROOM_DEFS[item.roomId]?.levelReq||0);
+
+    html += `<div style="background:var(--card-bg);border:1px solid ${borderColor};border-radius:10px;padding:11px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;opacity:${!canAfford&&!isOwned?'0.6':'1'}">
+      <div style="font-size:22px;margin-bottom:2px">${item.icon}</div>
+      <div style="font-family:var(--font-hud);font-size:9px;color:${isOwned?'var(--green)':'var(--text)'};letter-spacing:.3px;line-height:1.3">${item.name}</div>
+      <div style="font-size:7px;color:var(--muted);line-height:1.4;min-height:28px;flex:1">${item.desc}</div>
+      <div style="font-family:var(--font-hud);font-size:10px;color:${isOwned?'var(--green)':'var(--gold)'}">${isOwned?'✅ OWNED':item.price.toLocaleString()+'¢'}</div>
+      ${count>0?`<div style="font-size:8px;color:var(--muted);font-family:var(--font-hud)">Owned: ${count}</div>`:''}
+      ${roomLocked?`<div style="font-size:8px;color:var(--red);font-family:var(--font-hud)">Need Lv${ROOM_DEFS[item.roomId]?.levelReq}</div>`:''}
+      ${!isOwned||['nute_base','nute_grow','nute_bloom','nute_calmag','ph_up','ph_down','emitters','hosing','health_spray','stsSpray','pot_halfgal','pot_1gal','pot_3gal','pot_5gal','pot_10gal','pot_25gal','soil_halfgal','soil_1','soil_5','soil_25'].includes(item.id)
+        ? `<button class="btn-action btn-gold" style="width:100%;padding:5px;margin-top:3px"
+            onclick="buyGear('${item.id}')"
+            ${(!canAfford||roomLocked)?'disabled':''}>BUY</button>`
+        : ''}
     </div>`;
   });
   html += '</div>';
@@ -7061,12 +7111,16 @@ function buyGear(itemId) {
     GS.gear.co2Tank = { level: 100 };
     toast('🫧 CO₂ Tank installed!','ok',3000);
   } else if (item.type === 'scope') {
+    if (GS.gear.scope) { GS.coins += item.price; toast('🔬 Already own Loupe!','warn'); return; }
     GS.gear.scope = true; toast('🔬 Jeweler\'s Loupe installed!','ok',2500);
   } else if (item.type === 'phmeter') {
+    if (GS.gear.phmeter) { GS.coins += item.price; toast('🧪 Already own pH Meter!','warn'); return; }
     GS.gear.phmeter = true; toast('🧪 pH Meter installed!','ok',2500);
   } else if (item.type === 'ecmeter') {
+    if (GS.gear.ecmeter) { GS.coins += item.price; toast('🔌 Already own EC Meter!','warn'); return; }
     GS.gear.ecmeter = true; toast('🔌 EC/PPM Meter installed!','ok',2500);
   } else if (item.type === 'scrogNet') {
+    if (GS.gear.scrogNet) { GS.coins += item.price; toast('🕸️ Already own SCROG Net!','warn'); return; }
     GS.gear.scrogNet = true; toast('🕸️ SCROG Net installed!','ok',2500);
   } else if (item.type === 'stsSpray') {
     GS.gear.stsSprayCount = (GS.gear.stsSprayCount||0) + 1;
@@ -7583,20 +7637,23 @@ function _renderBMBrowse(cont) {
     _seedBMBotListings();
     return;
   }
-  let html = '';
+  let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px">';
   listings.forEach(l => {
     const strain = STRAINS[l.strain] || {genetics:'Unknown', thcBase:'?', variety:'hybrid'};
-    html += `<div class="bm-listing-card">
-      <div class="bm-listing-strain">${l.strain} <span style="font-size:9px;color:var(--muted)">${l.qty}x seeds</span></div>
-      <div class="bm-listing-genetics">${strain.genetics || 'Unknown genetics'}</div>
-      <div class="bm-listing-meta">
-        <span class="bm-price">${l.price.toLocaleString()}¢ total</span>
-        <span style="font-size:9px;color:var(--muted)">THC: ${strain.thcBase || '?'}% · ${strain.variety || 'hybrid'}</span>
+    html += `<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:13px;display:flex;flex-direction:column;gap:5px;transition:.2s" onmouseover="this.style.borderColor='rgba(239,68,68,0.5)'" onmouseout="this.style.borderColor='var(--border)'">
+      <div style="font-size:20px;text-align:center">${STRAINS[l.strain]?.emoji||'🌿'}</div>
+      <div style="font-family:var(--font-hud);font-size:10px;color:var(--text);text-align:center">${l.strain}</div>
+      <div style="font-size:8px;color:var(--muted);font-style:italic;text-align:center">${strain.genetics||'Unknown'}</div>
+      <div style="display:flex;justify-content:space-between;font-family:var(--font-hud);font-size:9px;margin-top:3px">
+        <span style="color:var(--gold)">${l.price.toLocaleString()}¢</span>
+        <span style="color:var(--muted)">${l.qty}x seeds</span>
       </div>
-      <div class="bm-listing-seller">Listed by: ${l.seller}</div>
-      <button class="btn-action btn-red" onclick="buyFromBM('${l.id}')">🕶️ BUY (85% success)</button>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">THC: ${strain.thcBase||'?'}% · ${strain.variety||'hybrid'}</div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">by: ${l.seller}</div>
+      <button class="btn-action btn-red" style="margin-top:4px" onclick="buyFromBM('${l.id}')">🕶️ BUY (85%)</button>
     </div>`;
   });
+  html += '</div>';
   cont.innerHTML = html;
 }
 
@@ -8890,22 +8947,22 @@ function openWaterModal(plantId) {
   nuteItems.forEach(n => {
     const avail    = rg[n.rkey] || 0;
     const empty    = avail <= 0;
+    const locked   = !hasEC || empty;   // locked if no EC meter OR no stock
     const capPPM   = Math.min(n.max, avail);
     const pct      = Math.min(100, avail / 1000 * 100);
     const barColor = avail > 500 ? 'var(--green)' : avail > 200 ? 'var(--gold)' : 'var(--red)';
-    // Slider always functional; value display shows '?' without EC meter
-    nuteRows += `<div class="nute-slider-row" style="${empty ? 'opacity:.35;pointer-events:none' : ''}">
+    nuteRows += `<div class="nute-slider-row" style="opacity:${locked?'0.28':'1'};pointer-events:${locked?'none':''}">
       <span class="nute-slider-label">${n.label}</span>
-      <input type="range" id="${n.id}" min="0" max="${empty ? 0 : capPPM}" step="25" value="0"
-        oninput="updateNuteTotals()" ${empty ? 'disabled' : ''}>
-      <span class="${hasEC ? 'nute-slider-val' : 'mystery-val'}" id="${n.valId}">${hasEC ? '0 ppm' : '?'}</span>
+      <input type="range" id="${n.id}" min="0" max="${locked ? 0 : capPPM}" step="25" value="0"
+        oninput="updateNuteTotals()" ${locked ? 'disabled' : ''}>
+      <span class="nute-slider-val" id="${n.valId}">0 ppm</span>
     </div>
-    ${!empty
+    ${!empty && hasEC
       ? `<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;margin-top:-2px">
            <div class="bottle-bar" style="flex:1"><div class="bottle-bar-fill" style="width:${pct}%;background:${barColor}"></div></div>
            <span style="font-size:8px;color:${barColor};font-family:var(--font-mono);min-width:56px">${avail.toFixed(0)}ml left</span>
          </div>`
-      : `<div style="font-size:8px;color:var(--red);font-family:var(--font-mono);margin-bottom:4px">${n.label}: EMPTY — buy from Shop → Water</div>`}`;
+      : !hasEC ? '' : `<div style="font-size:8px;color:var(--red);font-family:var(--font-mono);margin-bottom:4px">${n.label}: EMPTY</div>`}`;
   });
 
   let nuteHtml = '';
@@ -9240,6 +9297,12 @@ function confirmWater() {
   const totalFeedPPM = base + grow + bloom + calmag;
   const waterFrac    = amount / 100;
 
+  // Hard block: cannot add nutrients without EC meter
+  if (totalFeedPPM > 0 && !hasEC) {
+    toast('🔒 EC/PPM Meter required to feed nutrients! Buy from Shop → Tools (2,500¢)', 'err', 6000);
+    return;
+  }
+
   // Deplete nutrient bottles: ppm used = feed ppm * water fraction
   if (totalFeedPPM > 0) {
     const deduct = (val, key) => {
@@ -9284,16 +9347,18 @@ function confirmWater() {
   else                                plant.soilPPM = prevSoilPPM + totalFeedPPM; // stack (default)
   plant.soilPPM = Math.max(0, plant.soilPPM);
 
-  // Penalties for feeding without meters
-  let healthPenalty = 0, multPenalty = 0, penReasons = [];
-  if (totalFeedPPM > 0) {
-    if (!hasEC) { healthPenalty += 5; multPenalty += 0.001; penReasons.push('No EC meter'); }
-    if (!canPH) { healthPenalty += 5; multPenalty += 0.001; penReasons.push('No pH meter/chems'); }
-  }
-  if (healthPenalty > 0) {
+  // pH penalty only (EC is now hard-blocked above)
+  let healthPenalty = 0, multPenalty = 0;
+  if (totalFeedPPM > 0 && !canPH) {
+    healthPenalty = 3; multPenalty = 0.001;
     plant.health = Math.max(0, (plant.health||100) - healthPenalty);
     plant.cropMultiplier = Math.max(0.1, (plant.cropMultiplier||1.0) - multPenalty);
-    toast('⚠️ ' + penReasons.join(' · ') + ' · −' + healthPenalty + ' hp · −' + (multPenalty * 100).toFixed(1) + '% yield', 'warn', 5000);
+    toast('⚠️ No pH control · −' + healthPenalty + ' hp · −0.1% yield', 'warn', 4000);
+  } else if (totalFeedPPM > 1400) {
+    healthPenalty = 5; multPenalty = 0.002;
+    plant.health = Math.max(0, (plant.health||100) - healthPenalty);
+    plant.cropMultiplier = Math.max(0.1, (plant.cropMultiplier||1.0) - multPenalty);
+    toast('⚠️ High PPM — risk of lockout! −' + healthPenalty + ' hp · −0.2% yield', 'warn', 4000);
   }
 
   // Burn check
@@ -9342,8 +9407,8 @@ function confirmWater() {
   addLog(plant.name + ' watered — ' + Math.round(plant.waterLevel) + '% · ' +
     (hasEC ? 'Soil: ' + plant.soilPPM + 'ppm [' + feedMode + ']' : 'PPM unknown (blind)'), 'info');
 
-  // Only show runoff popup if EC meter OR easy mode
-  if (totalFeedPPM > 0 && (hasEC || diff === 'easy')) {
+  // Show runoff popup when EC meter present
+  if (totalFeedPPM > 0 && hasEC) {
     setTimeout(() => showRunoffPopup(plant), 200);
   }
   saveGame(); renderGrow();
@@ -9414,28 +9479,45 @@ function openInspectModal(plantId) {
   const hasPH     = !!g.phmeter;
   const diff = GS.difficulty || 'easy';
 
-  // Dynamically lock inspect options based on gear
+  // Lock inspect options based on actual gear owned
   const opts = document.querySelectorAll('#modal-inspect .inspect-option');
   opts.forEach(opt => {
     const area = opt.getAttribute('onclick')?.match(/'(\w+)'/)?.[1];
     let locked = false, lockMsg = '';
-    if (area === 'buds')   { locked = !hasLoupe;  lockMsg = '🔬 Requires Jeweler\'s Loupe (Shop → Tools, 1500¢)'; }
-    if (area === 'runoff') { locked = !hasEC && !hasPH; lockMsg = '🧪 Requires EC or pH Meter (Shop → Tools)'; }
-    opt.style.opacity = locked ? '0.35' : '1';
-    opt.style.pointerEvents = locked ? 'none' : '';
-    let lockEl = opt.querySelector('.inspect-lock-note');
-    if (locked && !lockEl) {
-      lockEl = document.createElement('div');
-      lockEl.className = 'inspect-lock-note';
-      lockEl.style.cssText = 'font-size:8px;color:var(--red);font-family:var(--font-mono);margin-top:4px;line-height:1.4';
-      opt.appendChild(lockEl);
+    if (area === 'buds')   {
+      locked = !hasLoupe;
+      lockMsg = '🔬 LOCKED — Buy Jeweler\'s Loupe (1,500¢ · Shop → Tools)';
     }
-    if (locked && lockEl) lockEl.textContent = lockMsg;
-    if (!locked && lockEl) lockEl.remove();
+    if (area === 'runoff') {
+      locked = !hasEC && !hasPH;
+      lockMsg = '🧪 LOCKED — Buy EC or pH Meter (Shop → Tools)';
+    }
+    opt.style.opacity         = locked ? '0.2' : '1';
+    opt.style.pointerEvents   = locked ? 'none' : '';
+    opt.style.cursor          = locked ? 'not-allowed' : 'pointer';
+    opt.style.background      = locked ? 'rgba(239,68,68,0.05)' : '';
+    opt.style.borderColor     = locked ? 'rgba(239,68,68,0.3)' : '';
+    // Add/remove lock note
+    let lockEl = opt.querySelector('.inspect-lock-note');
+    if (locked) {
+      if (!lockEl) {
+        lockEl = document.createElement('div');
+        lockEl.className = 'inspect-lock-note';
+        lockEl.style.cssText = 'font-size:8px;color:var(--red);font-family:var(--font-hud);margin-top:4px;line-height:1.4;letter-spacing:.3px';
+        opt.appendChild(lockEl);
+      }
+      lockEl.textContent = lockMsg;
+    } else if (lockEl) {
+      lockEl.remove();
+    }
   });
-
+  // Show what's needed
   if (!hasLoupe && diff === 'easy') {
-    toast('💡 Buy Jeweler\'s Loupe to inspect buds for ripeness.', 'info', 4000);
+    toast('🔬 Buy Jeweler\'s Loupe (Shop → Tools) to inspect bud ripeness.', 'info', 4000);
+  } else if (!hasEC && !hasPH) {
+    toast('🧪 Buy EC or pH Meter (Shop → Tools) to check runoff.', 'info', 4000);
+  } else if (onCD) {
+    toast('⏳ Inspect on cooldown. Try again later.', 'warn', 3000);
   }
   openModal('modal-inspect');
 }
