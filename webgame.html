@@ -205,7 +205,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .plant-art-area{height:220px;position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;cursor:pointer;background:#0a1a0a}
 .plant-art-bg{position:absolute;inset:0;background-size:cover;background-position:center top;opacity:0.15;filter:blur(1px)}
 .plant-art-bg-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--card-bg) 100%)}
-.plant-img{position:relative;z-index:2;max-height:210px;max-width:100%;object-fit:contain;transition:.3s}
+.plant-img{position:relative;z-index:2;max-height:280px;max-width:95%;object-fit:contain;transition:.3s}
 .plant-img.shake-anim{animation:plantShake .4s ease-in-out}
 @keyframes plantShake{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-4px) rotate(-2deg)}75%{transform:translateX(4px) rotate(2deg)}}
 .plant-img.droop-anim{animation:plantDroop 2s ease-in-out infinite}
@@ -658,6 +658,20 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .dry-equip-btn.active-ac{border-color:var(--blue);background:rgba(59,130,246,0.1);color:var(--blue)}
 .dry-equip-btn.active-heat{border-color:var(--gold);background:rgba(251,191,36,0.1);color:var(--gold)}
 .dry-equip-btn:disabled{opacity:.3;cursor:not-allowed}
+/* Equip screen */
+.equip-slot-card{background:var(--card-bg);border:1px solid var(--border);border-radius:9px;padding:8px;text-align:center;cursor:pointer;transition:.2s;min-width:80px}
+.equip-slot-card:hover{border-color:var(--green);background:rgba(74,222,128,0.05)}
+.equip-slot-card.filled{border-color:rgba(74,222,128,0.4)}
+.equip-slot-card.expired{border-color:rgba(239,68,68,0.5)}
+.rarity-Common{color:var(--muted)}
+.rarity-Uncommon{color:var(--green)}
+.rarity-Rare{color:var(--blue)}
+.rarity-Epic{color:var(--purple)}
+.rarity-Legendary{color:var(--orange)}
+.rarity-Master{color:var(--gold)}
+.rarity-GOD{color:var(--pink);animation:godShimmer 1.5s ease-in-out infinite}
+.rarity-Black.Market{color:var(--red)}
+.rarity-Seasonal{color:var(--cyan)}
 /* ── Plant Modal sticky layout ── */
 #modal-plant>.modal-box{padding:0;overflow:hidden;display:flex;flex-direction:column;max-height:88vh}
 .plant-modal-header{padding:16px 20px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
@@ -675,6 +689,23 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 #modal-plant .pot-size-opt-name{font-size:7px;margin-top:1px}
 #modal-plant .pot-size-opt-vol{font-size:7px}
 .mold-badge{display:inline-block;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.5);border-radius:5px;padding:4px 10px;font-family:var(--font-hud);font-size:9px;color:var(--red);letter-spacing:.5px;animation:dangerPulse 2s ease-in-out infinite}
+/* ── Drying / Curing sprite frames ── */
+.dry-sprite-wrap{width:100%;height:200px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:8px;margin-bottom:12px;background:#060e06}
+.dry-sprite-wrap svg{width:100%;height:100%}
+@keyframes sway{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+@keyframes swayFast{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+@keyframes drip{0%{opacity:0;transform:translateY(0)}60%{opacity:1}100%{opacity:0;transform:translateY(22px)}}
+@keyframes moldPulse{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes sparkle{0%,100%{opacity:0;transform:scale(0.5)}50%{opacity:1;transform:scale(1.2)}}
+@keyframes steamRise{0%{opacity:0;transform:translateY(0) scaleX(1)}40%{opacity:.7}100%{opacity:0;transform:translateY(-28px) scaleX(1.5)}}
+@keyframes bubbleUp{0%{opacity:0;transform:translateY(0)}50%{opacity:.8}100%{opacity:0;transform:translateY(-18px)}}
+@keyframes jarGlow{0%,100%{filter:drop-shadow(0 0 4px rgba(74,222,128,0.3))}50%{filter:drop-shadow(0 0 12px rgba(74,222,128,0.7))}}
+@keyframes jarWarn{0%,100%{filter:drop-shadow(0 0 4px rgba(251,191,36,0.3))}50%{filter:drop-shadow(0 0 12px rgba(251,191,36,0.8))}}
+@keyframes jarDanger{0%,100%{filter:drop-shadow(0 0 4px rgba(239,68,68,0.3))}50%{filter:drop-shadow(0 0 14px rgba(239,68,68,0.9))}}
+@keyframes particleFloat{0%{opacity:0;transform:translate(0,0) scale(.5)}30%{opacity:.8}100%{opacity:0;transform:translate(var(--px),var(--py)) scale(1.2)}}
+@keyframes ropeWave{0%,100%{d:path('M 0,0 Q 10,-3 20,0')}50%{d:path('M 0,0 Q 10,3 20,0')}}
+.dry-sprite-click-hint{text-align:center;font-size:8px;color:rgba(74,222,128,0.3);font-family:var(--font-hud);letter-spacing:1px;margin-top:-6px;margin-bottom:8px}
+
 /* ── Strain Card Overlay (flip) ── */
 .strain-card-overlay{
   position:absolute;inset:0;
@@ -1256,11 +1287,14 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
       </div>
       <input type="hidden" id="inp-selected-pot" value="1gal">
       <input type="hidden" id="inp-selected-strain" value="">
-      <div id="plant-modal-note" class="warning-note hidden" style="margin-top:8px"></div>
+      <div id="plant-modal-note" class="warning-note hidden" style="margin-top:10px"></div>
+    <div id="plant-additive-section" class="hidden" style="margin-top:12px">
+      <div style="font-family:var(--font-hud);font-size:9px;color:var(--green);letter-spacing:1px;margin-bottom:6px">🌍 SOIL ADDITIVE (optional — uses 1 per plant)</div>
+      <div id="plant-additive-grid"></div>
     </div>
-    <div class="plant-modal-footer">
-      <div class="modal-actions" style="margin-top:0">
-        <button class="btn-modal confirm" onclick="confirmPlant()">🌱 PLANT</button>
+    <input type="hidden" id="inp-selected-additive" value="">
+    <div class="modal-actions">
+      <button class="btn-modal confirm" onclick="confirmPlant()">🌱 PLANT</button>
         <button class="btn-modal cancel" onclick="closeModal('modal-plant')">CANCEL</button>
       </div>
     </div>
@@ -3024,9 +3058,19 @@ function checkQuestProgress() {
       if (r.coins) GS.coins += r.coins;
       if (r.xp)    grantXP(r.xp);
       (r.items||[]).forEach(itemId => grantEquipItem(itemId, 1));
-      if (r.special === 'unbreakable_ph')  GS.gear.unbreakable_ph  = true;
-      if (r.special === 'unbreakable_ec')  GS.gear.unbreakable_ec  = true;
-      if (r.special === 'super_light')     GS.gear.super_light     = true;
+      if (r.special === 'unbreakable_ph')  { GS.gear.unbreakable_ph = true; GS.gear.phmeter = true; }
+      if (r.special === 'unbreakable_ec')  { GS.gear.unbreakable_ec = true; GS.gear.ecmeter = true; }
+      if (r.special === 'super_light') {
+        GS.gear.super_light = true;
+        const inv = getInventory();
+        if (!inv.instances.some(x => x.itemId === 'forbidden_light')) {
+          inv.instances.push({
+            uid: uid(), itemId: 'forbidden_light', type: 'lights', equipType: 'lights',
+            name: 'Forbidden Light ⚡', icon: '💡', power: 1500, size: 'legendary',
+            isForbidden: true
+          });
+        }
+      }
       anyNew = true;
       toast('🎯 QUEST COMPLETE: ' + q.name + '! Rewards granted!', 'special', 6000);
       addLog('Quest complete: ' + q.name, 'success');
@@ -3917,10 +3961,15 @@ function tickPlant(plant, room, strain, actual, gameMins) {
     const humidOk  = actual.humid >= ideal2.humidLo && actual.humid <= ideal2.humidHi;
     const noDisease= (plant.events||[]).length === 0;
     const lowStress= (plant.stress||0) < 40;
-    let regenRate = 0; // default: no regen when bad conditions
-    if (tempOk && humidOk && noDisease && lowStress) regenRate = 2.0; // +2/real hr perfect
-    else if (tempOk && humidOk && noDisease)         regenRate = 1.2; // +1.2/real hr decent
-    else if (noDisease && lowStress)                 regenRate = 0.5; // +0.5/real hr okay
+    let regenRate = 0;
+    if (tempOk && humidOk && noDisease && lowStress) regenRate = 2.0;
+    else if (tempOk && humidOk && noDisease)         regenRate = 1.2;
+    else if (noDisease && lowStress)                 regenRate = 0.5;
+    // Additive regen multiplier
+    if (plant._additiveRegen && regenRate > 0) regenRate *= (1 + (plant._additiveRegen||0));
+    // Global equip regen bonus
+    const _ebRegen = getEquippedBonuses().health_regen||0;
+    if (_ebRegen > 0 && regenRate > 0) regenRate *= _ebRegen;
     // If there are problems, no regen (don't fight the delta above)
     delta += regenRate * rh;
   }
@@ -4305,7 +4354,9 @@ function tickPlantRulebook(plant, room, gameMins) {
   const mildewResist= Math.min(0.9, (plant.mildewResistBonus||0) / 100);
   const pestChance = (plant.stress > 60 ? 0.03 : 0) * (1 - pestResist);
   const miteChance = (hotAndDry ? 0.05 : 0) * (1 - pestResist);
-  if (!plant.events.includes('SPIDER_MITES') && !plant.events.includes('APHIDS')) {
+  const pestShielded  = plant.pestShieldExpires  && Date.now() < plant.pestShieldExpires;
+  const mildewShielded= plant.mildewShieldExpires && Date.now() < plant.mildewShieldExpires;
+  if (!plant.events.includes('SPIDER_MITES') && !plant.events.includes('APHIDS') && !pestShielded) {
     if (Math.random() < (pestChance + miteChance) * (gameMins / 60)) {
       const pest = hotAndDry ? 'SPIDER_MITES' : 'APHIDS';
       plant.events.push(pest);
@@ -4316,7 +4367,7 @@ function tickPlantRulebook(plant, room, gameMins) {
   // Mildew from high humidity + low airflow
   const g = GS.gear || {};
   const lowAirflow = !g.fans || (g.fans[0]?.speed || 0) < 20;
-  if (!plant.events.includes('MILDEW') && actual.humid > 70 && lowAirflow) {
+  if (!plant.events.includes('MILDEW') && actual.humid > 70 && lowAirflow && !mildewShielded) {
     const mildewChance = 0.05 * (gameMins / 60) * (actual.humid > 80 ? 1.5 : 1) * (1 - mildewResist);
     if (Math.random() < mildewChance) {
       plant.events.push('MILDEW');
@@ -4335,6 +4386,24 @@ function tickPlantRulebook(plant, room, gameMins) {
 // ================================================================
 // MAIN GAME TICK
 // ================================================================
+function completeDailyGoal() {
+  if (!GS) return;
+  const today = new Date().toDateString();
+  if (GS.dailyGoalDone && GS.dailyGoalDate === today) return;
+  const goal = getDailyGoal();
+  if (!goal) return;
+  GS.dailyGoalDone = true;
+  GS.dailyGoalDate = today;
+  GS.coins = (GS.coins||0) + (goal.reward||0);
+  grantXP(goal.xp||0);
+  GS.stats.totalCoins = (GS.stats.totalCoins||0) + (goal.reward||0);
+  const bar = document.getElementById('daily-goal-bar');
+  if (bar) bar.classList.add('completed','hidden');
+  toast('🎯 Daily Goal Complete! +' + goal.reward + '¢ +' + goal.xp + ' XP', 'ok', 5000);
+  addLog('Daily goal complete: ' + goal.text, 'success');
+  saveGame();
+}
+
 function gameTick() {
   const now = Date.now();
   const realMs = now - _lastTick;
@@ -4420,13 +4489,14 @@ function gameTick() {
   if (!GS.envHistory) GS.envHistory = [];
   GS.envHistory.push({ts: now, temp: ar.envActual.temp, humid: ar.envActual.humid});
   if (GS.envHistory.length > 720) GS.envHistory.shift();
-  // Track disease-free days
+  // Track disease-free days (accumulate real time, reset on any disease)
   const anyDiseased = (GS.plants||[]).some(p => (p.events||[]).length > 0);
   if (!anyDiseased && (GS.plants||[]).length > 0) {
     GS.stats.diseaseFreeDays = (GS.stats.diseaseFreeDays||0) + realMs / 86400000;
-  } else {
+  } else if (anyDiseased) {
     GS.stats.diseaseFreeDays = 0;
   }
+  // Don't reset if no plants — preserve progress
   // Suit curse tick
   const eb2 = getEquippedBonuses();
   if ((eb2.hidden_curse||0) >= 2 && (GS.plants||[]).length > 0) {
@@ -4546,6 +4616,14 @@ function renderAll() {
   _renderTab(_activeTab);
   renderEnvPanel();
   updateSidebarWarnings();
+  // Update quest badge without full render
+  const claimed = GS.questsClaimed || [];
+  const newAvailable = QUESTS.filter(q => {
+    if (claimed.includes(q.id)) return false;
+    try { return getQuestProgress(q) >= (q.obj?.val||1); } catch(e) { return false; }
+  }).length;
+  const qb = document.getElementById('quest-badge');
+  if (qb) { qb.style.display = newAvailable ? 'inline' : 'none'; qb.textContent = newAvailable || '!'; }
 }
 
 function _seedGridCard(name, qty, strain, isMale, isBred) {
@@ -5875,6 +5953,7 @@ function _buildPlantCard(plant, room) {
         ${plant.isWilting     ? `<span class="meta-chip danger">🥵 WILTING</span>` : ''}
         ${plant.transplanting ? `<span class="meta-chip warn">🪣 SETTLING ${Math.ceil(plant.transplantBindTimer||0)}d</span>` : ''}
         ${plant.isRootBound   ? `<span class="meta-chip ok">🔴 ROOT BOUND</span>` : ''}
+        ${plant._appliedAdditive ? `<span class="meta-chip ok" title="${EQUIPMENT_ITEMS[plant._appliedAdditive]?.name||'Additive'}">${EQUIPMENT_ITEMS[plant._appliedAdditive]?.icon||'🌍'} SOIL</span>` : ''}
       </div>
     </div>
     <div class="grow-score-mini">
@@ -6398,13 +6477,298 @@ function redeemCode(code) {
   }
   if (r) { r.textContent = '✅ Redeemed ' + entry.qty + 'x ' + entry.strain + '!'; r.className = 'code-result ok'; }
   toast('✅ Redeemed ' + entry.qty + 'x ' + entry.strain + '!', 'ok', 4000);
+  GS.stats.seedsRedeemed = (GS.stats.seedsRedeemed || 0) + entry.qty;
   addLog('Code redeemed: ' + entry.qty + 'x ' + entry.strain, 'success');
+  checkQuestProgress();
   saveGame(); renderSeeds(); renderHeader();
 }
 
 // ================================================================
 // VAULT TAB
 // ================================================================
+// ================================================================
+// DRYING + CURING ANIMATED SPRITES
+// ================================================================
+function getDryingSprite(batch) {
+  const rh   = batch.dryRH != null ? batch.dryRH : 80;
+  const q    = batch.quality || 100;
+  const dr   = GS.dryRoom || {};
+  const g    = GS.gear   || {};
+  const fanOn= dr.fanOn && !!(g.fans && g.fans[0]);
+  const fanSpeed = fanOn ? (dr.fanSpeed || 50) : 0;
+
+  // State classification
+  const isMoldRisk   = rh > 75;
+  const isTooWet     = rh > 68 && rh <= 75;
+  const isGoodDrying = rh >= 62 && rh <= 68;
+  const isSweetSpot  = rh >= 58 && rh < 62;
+  const isOverDried  = rh < 40;
+  const isAlmostDone = rh >= 40 && rh < 58;
+
+  // Colors based on state
+  const budColor   = isOverDried  ? '#7a5c2e'
+                   : isMoldRisk   ? '#4a7a2e'
+                   : isGoodDrying ? '#5db356'
+                   : isSweetSpot  ? '#8bc34a'
+                   : '#6ab04c';
+  const budDark    = isOverDried  ? '#5c4020' : '#2d5a1b';
+  const stemColor  = isOverDried  ? '#8d6c3a' : '#5a8a3a';
+  const rhColor    = isMoldRisk   ? '#ef4444'
+                   : isTooWet     ? '#f97316'
+                   : isGoodDrying ? '#22d3ee'
+                   : isSweetSpot  ? '#4ade80'
+                   : isOverDried  ? '#d97706'
+                   : '#a3e635';
+  const swayAnim   = fanSpeed > 60 ? 'swayFast 1.2s ease-in-out infinite'
+                   : fanSpeed > 0  ? 'sway 2.2s ease-in-out infinite'
+                   : 'sway 5s ease-in-out infinite';
+  const moldy      = isMoldRisk && (q < 80);
+  const crispy     = isOverDried;
+
+  // Build 3 hanging branches
+  const branch = (x, delay, scale) => {
+    const sy = scale || 1;
+    return `
+    <g style="animation:${swayAnim};animation-delay:${delay}s;transform-origin:${x}px 20px">
+      <!-- rope -->
+      <line x1="${x}" y1="8" x2="${x}" y2="42" stroke="#8d6c3a" stroke-width="1.5" stroke-dasharray="${crispy?'3,2':'none'}"/>
+      <!-- main stem -->
+      <line x1="${x}" y1="42" x2="${x}" y2="${42+60*sy}" stroke="${stemColor}" stroke-width="${3*sy}" stroke-linecap="round"/>
+      <!-- side branches -->
+      <line x1="${x}" y1="${52}" x2="${x-22*sy}" y2="${72}" stroke="${stemColor}" stroke-width="${2*sy}"/>
+      <line x1="${x}" y1="${58}" x2="${x+20*sy}" y2="${76}" stroke="${stemColor}" stroke-width="${2*sy}"/>
+      <line x1="${x}" y1="${66}" x2="${x-18*sy}" y2="${88}" stroke="${stemColor}" stroke-width="${2*sy}"/>
+      <line x1="${x}" y1="${74}" x2="${x+16*sy}" y2="${92}" stroke="${stemColor}" stroke-width="${2*sy}"/>
+      <!-- bud clusters -->
+      <ellipse cx="${x-22*sy}" cy="${74}" rx="${10*sy}" ry="${14*sy}" fill="${budColor}" opacity=".9"/>
+      <ellipse cx="${x-22*sy}" cy="${72}" rx="${7*sy}" ry="${9*sy}" fill="${budDark}" opacity=".5"/>
+      <ellipse cx="${x+20*sy}" cy="${78}" rx="${9*sy}" ry="${13*sy}" fill="${budColor}" opacity=".9"/>
+      <ellipse cx="${x+20*sy}" cy="${76}" rx="${6*sy}" ry="${8*sy}" fill="${budDark}" opacity=".4"/>
+      <ellipse cx="${x-18*sy}" cy="${90}" rx="${8*sy}" ry="${12*sy}" fill="${budColor}" opacity=".88"/>
+      <ellipse cx="${x+16*sy}" cy="${94}" rx="${8*sy}" ry="${11*sy}" fill="${budColor}" opacity=".85"/>
+      <!-- main cola -->
+      <ellipse cx="${x}" cy="${85*sy}" rx="${13*sy}" ry="${24*sy}" fill="${budColor}" opacity=".95"/>
+      <ellipse cx="${x}" cy="${82*sy}" rx="${9*sy}" ry="${16*sy}" fill="${budDark}" opacity=".4"/>
+      ${moldy ? `<ellipse cx="${x+4}" cy="${78}" rx="5" ry="5" fill="#2d7a2d" opacity=".7" style="animation:moldPulse 1.8s ease-in-out infinite;animation-delay:${delay}s"/>
+                 <ellipse cx="${x-6}" cy="${92}" rx="4" ry="4" fill="#3a8a1a" opacity=".6" style="animation:moldPulse 2s ease-in-out infinite"/>` : ''}
+      ${crispy ? `<line x1="${x-18}" y1="${88}" x2="${x-24}" y2="${96}" stroke="${budDark}" stroke-width="1" opacity=".5"/>
+                  <line x1="${x+14}" y1="${90}" x2="${x+20}" y2="${98}" stroke="${budDark}" stroke-width="1" opacity=".5"/>` : ''}
+      ${isSweetSpot ? `<circle cx="${x-14}" cy="${70}" r="2" fill="#fbbf24" opacity=".8" style="animation:sparkle 1.5s ease-in-out infinite;animation-delay:${delay+0.3}s"/>
+                       <circle cx="${x+12}" cy="${82}" r="1.5" fill="#a3e635" opacity=".7" style="animation:sparkle 2s ease-in-out infinite;animation-delay:${delay+0.6}s"/>` : ''}
+    </g>`;
+  };
+
+  // Water drips when too wet
+  const drips = isMoldRisk || isTooWet ? `
+    <circle cx="70" cy="128" r="2.5" fill="#60a5fa" opacity=".7" style="animation:drip 1.8s ease-in-out infinite"/>
+    <circle cx="160" cy="134" r="2" fill="#60a5fa" opacity=".6" style="animation:drip 2.2s ease-in-out infinite;animation-delay:.6s"/>
+    <circle cx="240" cy="122" r="2.5" fill="#60a5fa" opacity=".65" style="animation:drip 1.6s ease-in-out infinite;animation-delay:1s"/>` : '';
+
+  // Fan airflow lines
+  const airLines = fanOn ? `
+    <line x1="0" y1="160" x2="300" y2="155" stroke="${rhColor}" stroke-width=".6" opacity=".18" stroke-dasharray="8,6"/>
+    <line x1="0" y1="148" x2="300" y2="143" stroke="${rhColor}" stroke-width=".5" opacity=".12" stroke-dasharray="6,8"/>` : '';
+
+  // Rope line across top
+  const ropeColor = crispy ? '#7a5c2e' : '#5a4030';
+
+  return `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+    <!-- background gradient -->
+    <defs>
+      <linearGradient id="dryBg${batch.id}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${isMoldRisk?'#1a0a0a':isOverDried?'#1a1000':'#061006'}"/>
+        <stop offset="100%" stop-color="${isMoldRisk?'#0d0505':isOverDried?'#0d0a00':'#030703'}"/>
+      </linearGradient>
+      <linearGradient id="ropeGrad${batch.id}" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="${ropeColor}" stop-opacity=".4"/>
+        <stop offset="50%" stop-color="${ropeColor}" stop-opacity="1"/>
+        <stop offset="100%" stop-color="${ropeColor}" stop-opacity=".4"/>
+      </linearGradient>
+    </defs>
+    <rect width="300" height="200" fill="url(#dryBg${batch.id})"/>
+    <!-- ceiling hooks -->
+    <rect x="60" y="0" width="3" height="12" rx="1" fill="${ropeColor}" opacity=".8"/>
+    <rect x="148" y="0" width="3" height="12" rx="1" fill="${ropeColor}" opacity=".8"/>
+    <rect x="236" y="0" width="3" height="12" rx="1" fill="${ropeColor}" opacity=".8"/>
+    <!-- rope line -->
+    <line x1="20" y1="10" x2="280" y2="10" stroke="url(#ropeGrad${batch.id})" stroke-width="2"/>
+    <!-- hanging branches -->
+    ${branch(62, 0, 0.9)}
+    ${branch(150, 0.4, 1.0)}
+    ${branch(238, 0.8, 0.95)}
+    ${drips}
+    ${airLines}
+    <!-- RH readout badge -->
+    <rect x="8" y="8" width="54" height="20" rx="4" fill="rgba(0,0,0,.7)" stroke="${rhColor}" stroke-width=".8"/>
+    <text x="35" y="22" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="${rhColor}">${rh.toFixed(1)}%</text>
+    <!-- state label -->
+    <rect x="8" y="32" width="72" height="14" rx="3" fill="rgba(0,0,0,.6)"/>
+    <text x="44" y="42" text-anchor="middle" font-family="monospace" font-size="8" fill="${rhColor}">
+      ${isMoldRisk?'MOLD RISK':isTooWet?'TOO WET':isGoodDrying?'DRYING':isSweetSpot?'SWEET SPOT':isOverDried?'OVER-DRIED':'DRYING'}
+    </text>
+    ${fanOn ? `<rect x="228" y="8" width="64" height="14" rx="3" fill="rgba(0,0,0,.6)"/>
+               <text x="260" y="18" text-anchor="middle" font-family="monospace" font-size="8" fill="#22d3ee">🌀 FAN ${fanSpeed}%</text>` : ''}
+    ${isMoldRisk ? `<rect x="100" y="180" width="100" height="16" rx="4" fill="rgba(239,68,68,.18)" stroke="rgba(239,68,68,.5)" stroke-width=".8"/>
+                    <text x="150" y="191" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#ef4444" style="animation:moldPulse 1.5s infinite">⚠ MOLD RISK</text>` : ''}
+  </svg>`;
+}
+
+function getCuringSprite(batch) {
+  const rh         = batch.jarRH != null ? batch.jarRH : 62;
+  const q          = batch.quality || 100;
+  const burps      = batch.burpsDone || 0;
+  const now        = Date.now();
+  const lastBurp   = batch.lastBurpTs || batch.jarStartTs || now;
+  const hrsSince   = (now - lastBurp) / 3600000;
+  const needsBurp  = rh > 65 && hrsSince >= 4;
+  const overdue    = rh > 70 || (needsBurp && hrsSince >= 10);
+  const belowFifty = rh < 50;
+  const sweetSpot  = rh >= 54 && rh <= 64;
+  const onCooldown = hrsSince < 5;
+
+  // Colors
+  const budColor = belowFifty ? '#7a5c2e'
+                 : overdue    ? '#4a7a2e'
+                 : sweetSpot  ? '#6ab04c'
+                 : rh > 65    ? '#5a9a4a'
+                 : '#5db356';
+  const budDark  = belowFifty ? '#5c4020' : '#2d5a1b';
+  const jarStroke= overdue    ? '#ef4444'
+                 : needsBurp  ? '#fbbf24'
+                 : sweetSpot  ? '#4ade80'
+                 : belowFifty ? '#d97706'
+                 : '#22d3ee';
+  const jarFill  = overdue    ? 'rgba(239,68,68,.08)'
+                 : needsBurp  ? 'rgba(251,191,36,.08)'
+                 : sweetSpot  ? 'rgba(74,222,128,.08)'
+                 : belowFifty ? 'rgba(217,119,6,.06)'
+                 : 'rgba(34,211,238,.06)';
+  const glowAnim = overdue   ? 'jarDanger 1.5s ease-in-out infinite'
+                 : needsBurp ? 'jarWarn 2s ease-in-out infinite'
+                 : sweetSpot ? 'jarGlow 3s ease-in-out infinite'
+                 : 'none';
+
+  // Moisture particles floating inside jar
+  const particles = (overdue || needsBurp) ? Array.from({length:6}, (_,i) => {
+    const px = -15 + Math.sin(i*1.1)*20;
+    const py = -25 - i*8;
+    const cx = 150 + (i%2===0 ? -18 : 18) + i*4;
+    const cy = 140 - i*10;
+    return `<circle cx="${cx}" cy="${cy}" r="${1.2+i*0.3}" fill="${jarStroke}"
+      style="--px:${px}px;--py:${py}px;opacity:0;animation:bubbleUp ${1.2+i*0.3}s ease-out infinite;animation-delay:${i*0.22}s"/>`;
+  }).join('') : '';
+
+  // Steam wisps when overdue
+  const steam = (overdue || rh > 72) ? `
+    <ellipse cx="140" cy="52" rx="7" ry="3" fill="${jarStroke}" opacity=".35"
+      style="animation:steamRise 2s ease-out infinite"/>
+    <ellipse cx="158" cy="48" rx="5" ry="2.5" fill="${jarStroke}" opacity=".28"
+      style="animation:steamRise 2.4s ease-out infinite;animation-delay:.5s"/>
+    <ellipse cx="150" cy="44" rx="6" ry="2" fill="${jarStroke}" opacity=".22"
+      style="animation:steamRise 2.8s ease-out infinite;animation-delay:1s"/>` : '';
+
+  // Sparkles for sweet spot
+  const sparkles = sweetSpot ? `
+    <circle cx="118" cy="100" r="2.5" fill="#fbbf24" style="animation:sparkle 1.8s ease-in-out infinite"/>
+    <circle cx="182" cy="118" r="2" fill="#4ade80" style="animation:sparkle 2.2s ease-in-out infinite;animation-delay:.4s"/>
+    <circle cx="128" cy="140" r="1.8" fill="#22d3ee" style="animation:sparkle 1.6s ease-in-out infinite;animation-delay:.8s"/>
+    <circle cx="172" cy="96" r="2" fill="#a3e635" style="animation:sparkle 2s ease-in-out infinite;animation-delay:1.2s"/>` : '';
+
+  // Quality crack lines on overdried
+  const cracks = belowFifty ? `
+    <line x1="132" y1="110" x2="125" y2="126" stroke="${budDark}" stroke-width=".8" opacity=".6"/>
+    <line x1="158" y1="118" x2="165" y2="132" stroke="${budDark}" stroke-width=".7" opacity=".5"/>` : '';
+
+  return `<svg viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+    <defs>
+      <linearGradient id="jarBg${batch.id}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${overdue?'#1a0505':belowFifty?'#120d00':'#060d12'}"/>
+        <stop offset="100%" stop-color="${overdue?'#0d0303':belowFifty?'#0a0800':'#030609'}"/>
+      </linearGradient>
+      <clipPath id="jarClip${batch.id}">
+        <rect x="102" y="62" width="96" height="124" rx="8"/>
+      </clipPath>
+      <linearGradient id="glassGrad${batch.id}" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="rgba(255,255,255,.12)"/>
+        <stop offset="40%" stop-color="rgba(255,255,255,.04)"/>
+        <stop offset="100%" stop-color="rgba(255,255,255,.08)"/>
+      </linearGradient>
+    </defs>
+    <rect width="300" height="200" fill="url(#jarBg${batch.id})"/>
+
+    <!-- jar body shadow -->
+    <ellipse cx="151" cy="188" rx="52" ry="8" fill="rgba(0,0,0,.5)"/>
+
+    <!-- jar group with glow -->
+    <g style="animation:${glowAnim}">
+      <!-- jar base fill -->
+      <rect x="102" y="62" width="96" height="124" rx="8" fill="${jarFill}" stroke="${jarStroke}" stroke-width="1.5"/>
+
+      <!-- buds inside jar (clipped) -->
+      <g clip-path="url(#jarClip${batch.id})">
+        <!-- bud mass bottom -->
+        <ellipse cx="150" cy="175" rx="48" ry="20" fill="${budColor}" opacity=".9"/>
+        <ellipse cx="130" cy="162" rx="22" ry="28" fill="${budColor}" opacity=".88"/>
+        <ellipse cx="168" cy="158" rx="20" ry="26" fill="${budColor}" opacity=".85"/>
+        <ellipse cx="150" cy="148" rx="18" ry="22" fill="${budColor}" opacity=".9"/>
+        <!-- bud highlights -->
+        <ellipse cx="128" cy="155" rx="12" ry="16" fill="${budDark}" opacity=".35"/>
+        <ellipse cx="168" cy="150" rx="10" ry="14" fill="${budDark}" opacity=".3"/>
+        <ellipse cx="150" cy="140" rx="9" ry="12" fill="${budDark}" opacity=".35"/>
+        <!-- top buds -->
+        <ellipse cx="138" cy="108" rx="16" ry="20" fill="${budColor}" opacity=".82"/>
+        <ellipse cx="162" cy="112" rx="14" ry="18" fill="${budColor}" opacity=".8"/>
+        <ellipse cx="150" cy="95" rx="12" ry="16" fill="${budColor}" opacity=".78"/>
+        <!-- trichome shimmer -->
+        ${sweetSpot ? `<ellipse cx="148" cy="130" rx="20" ry="28" fill="rgba(255,255,255,.05)"/>` : ''}
+        ${cracks}
+        ${particles}
+      </g>
+
+      <!-- RH level line -->
+      <line x1="104" y1="${62 + 124*(1 - Math.min(rh,100)/100)}" x2="196" y2="${62 + 124*(1 - Math.min(rh,100)/100)}"
+        stroke="${jarStroke}" stroke-width=".8" opacity=".5" stroke-dasharray="4,3"/>
+
+      <!-- glass overlay shimmer -->
+      <rect x="102" y="62" width="96" height="124" rx="8" fill="url(#glassGrad${batch.id})"/>
+      <!-- jar rim -->
+      <rect x="98" y="56" width="104" height="16" rx="4" fill="${jarFill}" stroke="${jarStroke}" stroke-width="1.2"/>
+      <!-- lid -->
+      <rect x="94" y="48" width="112" height="14" rx="4" fill="rgba(0,0,0,.7)" stroke="${jarStroke}" stroke-width="1"/>
+      <rect x="100" y="51" width="100" height="2" rx="1" fill="${jarStroke}" opacity=".4"/>
+    </g>
+
+    ${steam}
+    ${sparkles}
+
+    <!-- RH badge -->
+    <rect x="8" y="8" width="54" height="20" rx="4" fill="rgba(0,0,0,.75)" stroke="${jarStroke}" stroke-width=".8"/>
+    <text x="35" y="22" text-anchor="middle" font-family="monospace" font-size="11" font-weight="bold" fill="${jarStroke}">${rh.toFixed(1)}%</text>
+
+    <!-- quality badge -->
+    <rect x="8" y="32" width="54" height="16" rx="3" fill="rgba(0,0,0,.6)"/>
+    <text x="35" y="43" text-anchor="middle" font-family="monospace" font-size="9" fill="${q>80?'#4ade80':q>50?'#fbbf24':'#ef4444'}">${Math.round(q)}% Q</text>
+
+    <!-- burp count -->
+    <rect x="238" y="8" width="54" height="20" rx="4" fill="rgba(0,0,0,.7)" stroke="rgba(168,85,247,.5)" stroke-width=".8"/>
+    <text x="265" y="22" text-anchor="middle" font-family="monospace" font-size="10" fill="#a855f7">${burps} BURPS</text>
+
+    <!-- state label -->
+    ${overdue ? `<rect x="82" y="176" width="136" height="18" rx="4" fill="rgba(239,68,68,.15)" stroke="rgba(239,68,68,.5)" stroke-width=".8"/>
+                 <text x="150" y="188" text-anchor="middle" font-family="monospace" font-size="9" fill="#ef4444" style="animation:moldPulse 1.5s infinite">⚠ BURP OVERDUE</text>` :
+     needsBurp ? `<rect x="82" y="176" width="136" height="18" rx="4" fill="rgba(251,191,36,.1)" stroke="rgba(251,191,36,.5)" stroke-width=".8"/>
+                  <text x="150" y="188" text-anchor="middle" font-family="monospace" font-size="9" fill="#fbbf24">💨 BURP NEEDED</text>` :
+     sweetSpot ? `<rect x="82" y="176" width="136" height="18" rx="4" fill="rgba(74,222,128,.1)" stroke="rgba(74,222,128,.4)" stroke-width=".8"/>
+                  <text x="150" y="188" text-anchor="middle" font-family="monospace" font-size="9" fill="#4ade80">✅ SWEET SPOT</text>` :
+     belowFifty ? `<rect x="72" y="176" width="156" height="18" rx="4" fill="rgba(217,119,6,.1)" stroke="rgba(217,119,6,.4)" stroke-width=".8"/>
+                   <text x="150" y="188" text-anchor="middle" font-family="monospace" font-size="9" fill="#d97706">⬇ OVER-DRIED · SEAL NOW?</text>` :
+     onCooldown ? `<rect x="72" y="176" width="156" height="18" rx="4" fill="rgba(168,85,247,.08)" stroke="rgba(168,85,247,.3)" stroke-width=".8"/>
+                   <text x="150" y="188" text-anchor="middle" font-family="monospace" font-size="9" fill="#a855f7">⏳ COOLDOWN ${(5-hrsSince).toFixed(1)}h</text>` :
+    `<rect x="82" y="176" width="136" height="18" rx="4" fill="rgba(0,0,0,.5)"/>
+     <text x="150" y="188" text-anchor="middle" font-family="monospace" font-size="9" fill="#60a5fa">CURING…</text>`}
+  </svg>`;
+}
+
 function filterVault(f, btn) {
   _vaultFilter = f;
   renderVault();
@@ -6576,6 +6940,9 @@ function _renderDrying(cont) {
         <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono)">${elapsed}h · ${batch.grams}g · THC ${batch.thc}%</div>
       </div>
 
+      <div class="dry-sprite-wrap">${getDryingSprite(batch)}</div>
+      <div class="dry-sprite-click-hint">↑ LIVE DRY ROOM VIEW</div>
+
       <div class="dry-rh-display" style="color:${rhColor}">${rh.toFixed(1)}<span style="font-size:20px;color:var(--muted)">% RH</span></div>
       <div class="dry-phase-label" style="color:${rhColor};margin-bottom:8px">${phaseLabel}</div>
 
@@ -6655,6 +7022,8 @@ function _renderCuringJars(cont) {
         <div style="font-family:var(--font-hud);font-size:12px;color:var(--text)">${batch.name}</div>
         <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono)">${batch.grams}g · THC ${batch.thc}%</div>
       </div>
+      <div class="dry-sprite-wrap" style="height:210px">${getCuringSprite(batch)}</div>
+      <div class="dry-sprite-click-hint">↑ LIVE JAR VIEW · CLICK JAR TO BURP</div>
       <div class="cure-jar-rh" style="color:${rhColor}">${rh.toFixed(1)}<span style="font-size:18px;color:var(--muted)">% RH</span></div>
       <div style="font-family:var(--font-hud);font-size:9px;text-align:center;color:${rhColor};margin-bottom:6px">${rhNote}</div>
       <div class="cure-rh-bar">
@@ -7608,6 +7977,7 @@ function confirmGrowOffSubmit() {
     if (resTxt)  resTxt.textContent  = 'YOU WIN!';
     if (resDet)  resDet.textContent  = 'Beat ' + bot.name + ' · Score ' + sc.score + ' ≥ ' + bot.target + ' · +' + bot.reward.coins.toLocaleString() + '¢ +' + bot.reward.xp.toLocaleString() + ' XP';
     completeDailyGoal();
+    checkQuestProgress();
     toast('🏆 Beat ' + bot.name + '! +' + bot.reward.coins.toLocaleString() + '¢', 'ok', 6000);
     addLog('Grow-Off WIN vs ' + bot.name + ' (score: ' + sc.score + ')', 'success');
   } else {
@@ -8054,7 +8424,7 @@ function openEquipSlot(slot) {
           <div style="font-size:7px;color:${item.color||'var(--muted)'};font-family:var(--font-hud);margin-bottom:4px">${item.rarity}</div>
           <div style="margin-bottom:5px">${bonusList}</div>
           ${owned.qty>1?`<div style="font-family:var(--font-hud);font-size:9px;color:var(--gold)">${owned.qty}×</div>`:''}
-          ${item.duration_hrs?`<div style="font-size:7px;color:${isExpired?'var(--red)':'var(--cyan)'};font-family:var(--font-mono)">${isExpired?'EXPIRED':item.duration_hrs+'h buff'}</div>`:''}
+          ${item.duration_hrs?`<div style="font-size:7px;color:${isExpired?'var(--red)':'var(--cyan)'};font-family:var(--font-mono)">${isExpired?'EXPIRED':_buffTimeLeft(slot)}</div>`:''}
           ${cur?`<div style="font-family:var(--font-hud);font-size:7px;color:var(--green);margin-top:3px">✅ EQUIPPED</div>`:''}`;
         div.onclick = () => {
           closeModal('modal-equip-select');
@@ -8074,6 +8444,16 @@ function unequipCurrentSlot() {
   if (!slot) return;
   unequipSlot(slot);
   closeModal('modal-equip-select');
+}
+
+function _buffTimeLeft(slot) {
+  const expiry = GS.equipBuffExpiry?.[slot];
+  if (!expiry) return 'active';
+  const msLeft = expiry - Date.now();
+  if (msLeft <= 0) return 'EXPIRED';
+  const h = Math.floor(msLeft / 3600000);
+  const m = Math.floor((msLeft % 3600000) / 60000);
+  return h > 0 ? h + 'h ' + m + 'm left' : m + 'm left';
 }
 
 function renderEquippables() {
@@ -8556,7 +8936,8 @@ function loginSuccess() {
   if (!GS.stats.vaultEntries)    GS.stats.vaultEntries    = 0;
   if (!GS.stats.suitCurses)      GS.stats.suitCurses      = 0;
   if (!GS.stats.additivesUsed)   GS.stats.additivesUsed   = 0;
-  if (!GS.stats.diseaseFreeDays) GS.stats.diseaseFreeDays = 0;
+  if (!GS.stats.diseaseFreeDays)    GS.stats.diseaseFreeDays    = 0;
+  if (!GS.stats._dfDayCheckTs)     GS.stats._dfDayCheckTs      = Date.now();
   if (!GS.stats.uniqueStrains)   GS.stats.uniqueStrains   = [];
   if (!GS.stats.raritiesGrown)   GS.stats.raritiesGrown   = {};
   initBuyers();
@@ -8701,6 +9082,46 @@ function openPlantModal() {
   const note = document.getElementById('plant-modal-note');
   if (note) note.classList.add('hidden');
 
+  // Additives
+  const addSection = document.getElementById('plant-additive-section');
+  const addGrid    = document.getElementById('plant-additive-grid');
+  const ownedAdds  = (GS.equipItems||[]).filter(x => {
+    const item = EQUIPMENT_ITEMS[x.id];
+    return item && item.slot === 'additive' && x.qty > 0;
+  });
+  if (addSection && addGrid) {
+    if (ownedAdds.length) {
+      addSection.classList.remove('hidden');
+      addGrid.innerHTML = '';
+      ownedAdds.forEach(owned => {
+        const item = EQUIPMENT_ITEMS[owned.id];
+        if (!item) return;
+        const div = document.createElement('div');
+        div.className = 'training-option';
+        div.dataset.additive = owned.id;
+        div.innerHTML = `
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font-size:20px">${item.icon}</span>
+            <div style="flex:1">
+              <div class="training-option-name">${item.name} <span style="color:var(--gold);font-family:var(--font-hud);font-size:9px">${owned.qty}× available</span></div>
+              <div class="training-option-desc">${item.desc}</div>
+            </div>
+          </div>`;
+        div.onclick = () => {
+          addGrid.querySelectorAll('.training-option').forEach(o => o.classList.remove('selected'));
+          div.classList.toggle('selected');
+          const inp = document.getElementById('inp-selected-additive');
+          if (inp) inp.value = div.classList.contains('selected') ? owned.id : '';
+        };
+        addGrid.appendChild(div);
+      });
+    } else {
+      addSection.classList.add('hidden');
+    }
+  }
+  const addInp = document.getElementById('inp-selected-additive');
+  if (addInp) addInp.value = '';
+
   openModal('modal-plant');
 }
 
@@ -8824,6 +9245,28 @@ function confirmPlant() {
   if (isBred && bredDef && bredDef.canGrow !== false) {
     const bonuses = rollBreedBonuses(bredDef.gen);
     applyBreedBonusToPlant(plant, bonuses);
+  }
+
+  // Apply soil additive if selected
+  const additiveId = document.getElementById('inp-selected-additive')?.value;
+  if (additiveId) {
+    const aItem = EQUIPMENT_ITEMS[additiveId];
+    const owned = (GS.equipItems||[]).find(x => x.id === additiveId);
+    if (aItem && owned && owned.qty > 0) {
+      owned.qty--;
+      // Apply bonuses to plant
+      const ab = aItem.bonuses || {};
+      if (ab.yield_pct)          plant.yieldBonus          = (plant.yieldBonus||0) + ab.yield_pct;
+      if (ab.grow_speed)         plant.growSpeedBonus      = (plant.growSpeedBonus||0) + ab.grow_speed;
+      if (ab.water_drain_reduce) plant.waterDrainReduction = (plant.waterDrainReduction||0) + ab.water_drain_reduce;
+      if (ab.health_regen)       plant._additiveRegen      = (plant._additiveRegen||0) + ab.health_regen;
+      if (ab.overwater_resist)   plant.overwaterResist     = (plant.overwaterResist||0) + ab.overwater_resist;
+      if (ab.no_nute_penalty)    plant.noNutePenalty       = true;
+      if (ab.potency)            plant.potencyBonus        = (plant.potencyBonus||0) + (ab.potency||0);
+      plant._appliedAdditive = additiveId;
+      GS.stats.additivesUsed = (GS.stats.additivesUsed||0) + 1;
+      checkQuestProgress();
+    }
   }
 
   if (!GS.plants) GS.plants = [];
@@ -9540,11 +9983,31 @@ function confirmInspect(area) {
   plant.inspectArea          = area;
   plant.inspectShieldExpires = Date.now() + (area === 'general' ? 8 : 12) * 3600000;
 
+  // Auto-shield gloves extend protection
+  const eb = getEquippedBonuses();
+  const extraAreas = [];
+  if (eb.auto_shield_pests  && !plant.events?.includes('SPIDER_MITES') && !plant.events?.includes('APHIDS'))
+    extraAreas.push('pests');
+  if (eb.auto_shield_mildew && !plant.events?.includes('MILDEW'))
+    extraAreas.push('mildew');
+
   if (area === 'general') {
     plant.yieldBonus = (plant.yieldBonus||0) + 2;
-    toast('✨ General inspect — +2% yield bonus!','ok',3000);
+    const extraMsg = extraAreas.length ? ' + Auto-shield: ' + extraAreas.join(', ') : '';
+    toast('✨ General inspect — +2% yield bonus!' + extraMsg,'ok',4000);
   } else {
-    toast('🛡️ Shielded: ' + area + ' — 12h protection','ok',3000);
+    const extraMsg = extraAreas.length ? ' + Gloves auto-shielded: ' + extraAreas.join(', ') : '';
+    toast('🛡️ Shielded: ' + area + ' — 12h protection' + extraMsg,'ok',3500);
+  }
+
+  // Apply extra shields from gloves
+  if (extraAreas.length) {
+    plant.gloveShields = extraAreas;
+    // These block those disease types from spawning for the shield duration
+    if (!plant.pestShieldExpires || Date.now() > plant.pestShieldExpires) {
+      if (extraAreas.includes('pests'))  plant.pestShieldExpires  = Date.now() + 12 * 3600000;
+      if (extraAreas.includes('mildew')) plant.mildewShieldExpires= Date.now() + 12 * 3600000;
+    }
   }
 
   completeDailyGoal();
