@@ -3344,7 +3344,10 @@ function tickPlant(plant, room, strain, actual, gameMins) {
   else if (_hp >= 10) healthGrowthMult = 0.85;   // 10-30:  15% slower
   else                healthGrowthMult = 0.75;   // 1-10:   25% slower
 
-  const speedMult = genSpeedMult * healthGrowthMult;
+  // pH growth modifier — high pH slows growth
+  const _curPHg = plant.soilPH != null ? plant.soilPH : 6.3;
+  const pHGrowthMult = _curPHg >= 7.3 ? 0.80 : _curPHg >= 7.0 ? 0.90 : 1.0;
+  const speedMult = genSpeedMult * healthGrowthMult * pHGrowthMult;
 
   const transplantSlowMult = plant.transplanting ? 0.4 : 1.0;
   const finalSpeedMult = speedMult * transplantSlowMult;
@@ -3475,6 +3478,10 @@ function tickPlant(plant, room, strain, actual, gameMins) {
   // Apply water drain reduction from gen bonus
   const wdrReduction = (plant.waterDrainReduction||0) / 100;
   drainPct *= (1 - wdrReduction);
+  // High pH = drinks faster
+  const _curPHd = plant.soilPH != null ? plant.soilPH : 6.3;
+  if      (_curPHd >= 7.3) drainPct *= 1.30;
+  else if (_curPHd >= 7.0) drainPct *= 1.15;
   plant.waterLevel = Math.max(0, (plant.waterLevel != null ? plant.waterLevel : 80) - drainPct * gameMins);
 
   // ── Dying plant system ──
@@ -3577,6 +3584,11 @@ function tickPlant(plant, room, strain, actual, gameMins) {
   plant.health = Math.max(0, Math.min(100, (plant.health || 100) + delta));
 
   if (plant.waterLevel < 20) plant.neglectPenalty = (plant.neglectPenalty || 0) + gameMins / 60;
+  // ── Soil pH drift — rises toward 7.5 cap over 3 real days (0.0167 pH/real hr) ──
+  if (plant.soilPH == null) plant.soilPH = 6.3;
+  const _phDriftRh = gameMins / (60 * GAME_SPEED); // real hours this tick
+  plant.soilPH = Math.min(7.5, plant.soilPH + 0.0167 * _phDriftRh);
+
   if (!plant.envLog) plant.envLog = [];
   plant.envLog.push({score: getEnvScore(actual, plant.stage), ts: Date.now()});
   if (plant.envLog.length > 2000) plant.envLog.shift();
@@ -3834,9 +3846,12 @@ function _tickCuringJar(batch, realHrs, now) {
   const entryRH = batch.jarEntryRH || rh;
   const cap     = Math.min(entryRH, 75);
 
-  // RH rises slowly as moisture redistributes — stops at entry RH
+  // RH rises as moisture redistributes — very slow below 50% (over-dried)
   if (rh < cap) {
-    const riseRate = 0.5 * realHrs * (1 - rh / Math.max(cap, 1));
+    // Below 50: very slow recovery (0.08/hr); 50–65: normal (0.5/hr)
+    const riseRate = rh < 50
+      ? 0.08 * realHrs * (1 - rh / Math.max(cap, 1))
+      : 0.5  * realHrs * (1 - rh / Math.max(cap, 1));
     batch.jarRH = Math.min(cap, rh + riseRate);
   }
 
@@ -5234,6 +5249,11 @@ function _buildPlantCard(plant, room) {
   const cdLeft  = onCD ? formatTime(plant.lastInspect + 12 * 3600000 - Date.now()) : '';
   const shLeft  = plant.inspectShield && plant.inspectShieldExpires ? formatTime(plant.inspectShieldExpires - Date.now()) : '';
   const sg      = score.score >= 9.5 ? 'A' : score.score >= 8 ? 'B' : score.score >= 6 ? 'C' : 'D';
+  const _rg_card    = getRoomGear(room.id);
+  const isAutoWater = (_rg_card.autoWaterPlants||[]).includes(plant.id);
+  const _pH         = plant.soilPH != null ? plant.soilPH : 6.3;
+  const _pHClass    = _pH >= 7.3 ? 'danger' : _pH >= 7.0 ? 'warn' : _pH >= 6.0 && _pH <= 6.8 ? 'ok' : 'warn';
+  const _pHLabel    = _pH < 6.0 ? 'LOW' : _pH <= 6.8 ? '✓' : _pH <= 7.0 ? 'HIGH' : '⚠️ HIGH';
 
   const evtHtml = (plant.events || []).map(e => {
     const L = {MILDEW:'🍄 MILDEW', SPIDER_MITES:'🕷️ MITES', APHIDS:'🐛 APHIDS'};
@@ -5261,6 +5281,7 @@ function _buildPlantCard(plant, room) {
       <div class="plant-day-badge">Day ${Math.floor(plant.dayAge || 0)}</div>
       ${rarLbl}
       ${plant.isMale   ? '<div class="male-badge">♂ MALE</div>' : ''}
+      ${isAutoWater ? '<div style="position:absolute;bottom:8px;left:8px;background:rgba(74,222,128,0.18);border:1px solid var(--green);border-radius:4px;padding:2px 8px;font-family:var(--font-hud);font-size:8px;color:var(--green);z-index:6;letter-spacing:.5px">💧 AUTO WATER</div>' : ''}
       ${plant.isBeingPollinated && !plant.hasSeeds ? '<div class="seeded-badge" style="background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.4);color:var(--blue)">💨 POLLINATING</div>' : ''}
       ${plant.hasSeeds ? '<div class="seeded-badge">🌱 SEEDED</div>' : ''}
       ${plant.isMale && (plant.flowerDay||0) >= 20 ? '<div class="pollen-cloud"></div>' : ''}
@@ -5295,6 +5316,7 @@ function _buildPlantCard(plant, room) {
         <span class="meta-chip ${actual.temp > 90 ? 'danger' : actual.temp > 85 ? 'warn' : 'ok'}">🌡️ ${Math.round(actual.temp)}°F</span>
         <span class="meta-chip">${strain.height || 'Med'}</span>
         <span class="meta-chip">${plant.potSize || '5gal'}</span>
+        <span class="meta-chip ${_pHClass}" title="Soil pH — ideal 6.2–6.4 · drifts up over time">pH ${_pH.toFixed(1)} ${_pHLabel}</span>
         ${plant.topCount   ? `<span class="meta-chip ok">TOP×${plant.topCount}</span>` : ''}
         ${plant.branchSnaps ? `<span class="meta-chip danger">💥×${plant.branchSnaps}</span>` : ''}
         ${plant.isWilting     ? `<span class="meta-chip danger">🥵 WILTING</span>` : ''}
@@ -5506,6 +5528,17 @@ function renderCuring() {
 function burpJar(batchId, burpType) {
   const batch = (GS.curing||[]).find(b => b.id === batchId);
   if (!batch || batch.phase !== 'curing') return;
+
+  // 5-hour real-time cooldown between burps
+  const _now      = Date.now();
+  const _lastB    = batch.lastBurpTs || batch.jarStartTs || _now;
+  const _hrsWait  = (_now - _lastB) / 3600000;
+  if (_hrsWait < 5) {
+    const _hrsLeft = (5 - _hrsWait).toFixed(1);
+    toast('⏳ Burp cooldown — ' + _hrsLeft + 'h left (5h between burps).', 'warn', 3500);
+    return;
+  }
+
   const rhBefore = batch.jarRH || 62;
   let rhDrop = 0, qualityLoss = 0, label = '';
 
@@ -5579,6 +5612,8 @@ function moveCuredToVault(batchId) {
   const rh    = batch.jarRH || 62;
   const burps = batch.burpsDone || 0;
   let finalQ  = batch.quality || 100;
+  // Below-50% RH gate: allow sealing but with heavy penalty
+  const belowFiftyPenalty = rh < 50;
 
   // Burp count multiplier
   if      (burps <= 1)  finalQ *= 0.50;
@@ -5600,17 +5635,25 @@ function moveCuredToVault(batchId) {
 
   finalQ = Math.max(1, Math.min(100, Math.round(finalQ)));
 
+  // Below-50 RH penalty — 50% quality loss + 5% THC loss
+  let finalTHC = batch.thc || 0;
+  if (belowFiftyPenalty) {
+    finalQ    = Math.max(1, Math.round(finalQ * 0.50));
+    finalTHC  = Math.max(0, parseFloat((finalTHC * 0.95).toFixed(1)));
+  }
+
   if (!GS.vault) GS.vault = [];
   GS.vault.push({
     id: uid(), name: batch.name, strainName: batch.strainName,
-    grams: batch.grams, thc: batch.thc, score: batch.score,
+    grams: batch.grams, thc: finalTHC, score: batch.score,
     rarity: batch.rarity, quality: finalQ,
     curedAt: Date.now(), isBred: batch.isBred || false
   });
   GS.curing.splice(idx, 1);
 
-  toast('📦 Sealed & vaulted: ' + batch.name + ' · Quality: ' + finalQ + '% · ' + burps + ' burps', 'ok', 4000);
-  addLog(batch.name + ' → vault (quality: ' + finalQ + '%, ' + burps + ' burps, RH: ' + rh.toFixed(1) + '%)', 'success');
+  const _penaltyMsg = belowFiftyPenalty ? ' · ⚠️ Over-dried −50% quality −5% THC' : '';
+  toast('📦 Sealed & vaulted: ' + batch.name + ' · Quality: ' + finalQ + '% · THC: ' + finalTHC + '%' + _penaltyMsg, belowFiftyPenalty ? 'warn' : 'ok', 5000);
+  addLog(batch.name + ' → vault (Q: ' + finalQ + '%, THC: ' + finalTHC + '%, ' + burps + ' burps, RH: ' + rh.toFixed(1) + '%)' + (belowFiftyPenalty ? ' OVER-DRIED' : ''), 'success');
   saveGame(); renderVault(); renderCuring(); renderHeader();
 }
 
@@ -6023,8 +6066,11 @@ function _renderCuringJars(cont) {
     const burpDue      = rh > 65 && hrsSinceBurp >= 4;
     const burpOverdue  = rh > 70 || (burpDue && hrsSinceBurp >= 10);
     const everBurpedLow= !!(batch.everBurpedBelow65);
-    const canVault     = everBurpedLow;
+    const belowFifty   = rh < 50;
+    const canVault     = everBurpedLow || belowFifty; // below 50 = always sealable (with penalty)
     const enoughBurps  = burps >= 5;
+    const burpOnCooldown = hrsSinceBurp < 5;
+    const burpCooldownLeft = burpOnCooldown ? (5 - hrsSinceBurp).toFixed(1) : 0;
 
     let rhColor = 'var(--green)', rhNote = '';
     if (rh > 70)            { rhColor = 'var(--red)';   rhNote = '⚠️ TOO HIGH — burp immediately!'; }
@@ -6071,27 +6117,44 @@ function _renderCuringJars(cont) {
       </div>
       <div style="font-size:8px;font-family:var(--font-mono);color:var(--muted);text-align:center;margin-bottom:4px">${sealPreview}</div>
       <div style="font-size:8px;font-family:var(--font-hud);color:var(--gold);text-align:center;margin-bottom:8px">${burpNote}</div>
+      ${burpOnCooldown
+        ? `<div style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.3);border-radius:7px;padding:8px;text-align:center;margin-bottom:6px">
+             <span style="font-family:var(--font-hud);font-size:10px;color:var(--gold)">⏳ BURP COOLDOWN — ${burpCooldownLeft}h left</span><br>
+             <span style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">One burp allowed every 5 real hours</span>
+           </div>`
+        : ''}
       <div class="burp-btn-row">
-        <button class="burp-btn quick" onclick="burpJar('${batch.id}','quick')" ${rh <= 50 ? 'disabled' : ''}>
+        <button class="burp-btn quick" onclick="burpJar('${batch.id}','quick')" ${rh <= 50 || burpOnCooldown ? 'disabled' : ''}>
           💨 QUICK<br><span style="font-size:7px;opacity:0.8">5min · −10% RH</span>
         </button>
-        <button class="burp-btn med" onclick="burpJar('${batch.id}','med')" ${rh <= 50 ? 'disabled' : ''}>
+        <button class="burp-btn med" onclick="burpJar('${batch.id}','med')" ${rh <= 50 || burpOnCooldown ? 'disabled' : ''}>
           💨 MED<br><span style="font-size:7px;opacity:0.8">1hr · −20% RH</span>
         </button>
-        <button class="burp-btn long" onclick="burpJar('${batch.id}','long')" ${rh <= 50 ? 'disabled' : ''}>
+        <button class="burp-btn long" onclick="burpJar('${batch.id}','long')" ${rh <= 50 || burpOnCooldown ? 'disabled' : ''}>
           ⚠️ LONG<br><span style="font-size:7px;opacity:0.8">4hr · −30% · −5% Q</span>
         </button>
       </div>
+      ${belowFifty ? `<div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);text-align:center;margin-top:4px">RH below 50% — over-dried. Slow recovery only. Seal now or wait.</div>` : ''}
       ${GS.difficulty === 'easy' && !enoughBurps && canVault
         ? `<div class="info-note" style="margin-top:8px">💡 Tip: ${5-burps} more burps for best quality. You can seal early but quality won't be optimal.</div>`
         : ''}
       <div style="margin-top:10px">
-        <button class="btn-action btn-green" style="width:100%;padding:10px"
-          onclick="moveCuredToVault('${batch.id}')"
-          ${!canVault ? 'disabled' : ''}>
-          📦 SEAL &amp; MOVE TO VAULT
-        </button>
-        ${!canVault ? `<div style="font-size:8px;color:var(--muted);text-align:center;margin-top:4px;font-family:var(--font-mono)">Burp below 65% RH at least once to unlock sealing</div>` : ''}
+        ${belowFifty
+          ? `<div class="warning-note" style="margin-bottom:6px">
+               ⚠️ <strong>OVER-DRIED</strong> — sealing now applies:<br>
+               <span style="color:var(--red)">−50% quality · −5% THC</span><br>
+               <span style="color:var(--muted);font-size:8px">Alternatively wait for slow RH recovery (${(batch.jarRH||0).toFixed(1)}% → 50%+)</span>
+             </div>
+             <button class="btn-action btn-red" style="width:100%;padding:10px"
+               onclick="moveCuredToVault('${batch.id}')">
+               ⚠️ SEAL WITH PENALTY (OVER-DRIED)
+             </button>`
+          : `<button class="btn-action btn-green" style="width:100%;padding:10px"
+               onclick="moveCuredToVault('${batch.id}')"
+               ${!canVault ? 'disabled' : ''}>
+               📦 SEAL &amp; MOVE TO VAULT
+             </button>
+             ${!canVault ? `<div style="font-size:8px;color:var(--muted);text-align:center;margin-top:4px;font-family:var(--font-mono)">Burp below 65% RH at least once to unlock sealing</div>` : ''}`}
       </div>
     </div>`;
   });
@@ -8417,19 +8480,25 @@ function confirmWater() {
     deduct(calmag, 'nuteCalmag');
   }
 
-  // pH chemicals depletion
+  // pH chemicals depletion — 1ml per gallon of pot size
+  const _potGalPH = {'0.5gal':0.5,'1gal':1,'3gal':3,'5gal':5,'10gal':10,'25gal':25}[plant.potSize] || 5;
   if (canPH && totalFeedPPM > 0) {
     const phTarget = parseFloat(document.getElementById('water-ph-target')?.value || 62) / 10;
-    const phDiff   = Math.abs(phTarget - 6.5);
-    const mlUsed   = Math.max(1, Math.round(phDiff * 10));
+    const mlUsed   = _potGalPH; // 1ml per gallon regardless of pH swing
     const _phic    = getInventory().consumables || {};
     const _deductPH = (cKey, gKey, rKey) => {
-      if      ((_phic[cKey]||0)       >= mlUsed) _phic[cKey]       = Math.max(0,(_phic[cKey]||0)       - mlUsed);
-      else if ((GS.gear?.[gKey]||0)   >= mlUsed) GS.gear[gKey]     = Math.max(0,(GS.gear[gKey]||0)     - mlUsed);
-      else if ((rg[rKey]||0)          >= mlUsed) rg[rKey]          = Math.max(0,(rg[rKey]||0)          - mlUsed);
+      if      ((_phic[cKey]||0)     >= mlUsed) _phic[cKey]   = Math.max(0,(_phic[cKey]||0)   - mlUsed);
+      else if ((GS.gear?.[gKey]||0) >= mlUsed) GS.gear[gKey] = Math.max(0,(GS.gear[gKey]||0) - mlUsed);
+      else if ((rg[rKey]||0)        >= mlUsed) rg[rKey]      = Math.max(0,(rg[rKey]||0)      - mlUsed);
     };
     if (phTarget > 6.5) _deductPH('ph_down','phDown','phDown');
     else                _deductPH('ph_up',  'phUp',  'phUp');
+    // Set plant soil pH to the adjusted target
+    plant.soilPH = Math.max(4.0, Math.min(8.0, phTarget));
+  } else if (totalFeedPPM === 0) {
+    // Plain water gently nudges pH down if above 7.0 (natural)
+    if ((plant.soilPH||6.3) > 7.0)
+      plant.soilPH = Math.max(7.0, (plant.soilPH||6.3) - 0.05);
   }
 
   // Apply water level
