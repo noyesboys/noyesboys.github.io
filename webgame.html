@@ -705,6 +705,51 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 @keyframes particleFloat{0%{opacity:0;transform:translate(0,0) scale(.5)}30%{opacity:.8}100%{opacity:0;transform:translate(var(--px),var(--py)) scale(1.2)}}
 @keyframes ropeWave{0%,100%{d:path('M 0,0 Q 10,-3 20,0')}50%{d:path('M 0,0 Q 10,3 20,0')}}
 .dry-sprite-click-hint{text-align:center;font-size:8px;color:rgba(74,222,128,0.3);font-family:var(--font-hud);letter-spacing:1px;margin-top:-6px;margin-bottom:8px}
+/* ── QUESTS ── */
+.quest-card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;transition:.2s;position:relative;overflow:hidden}
+.quest-card:hover{border-color:var(--border-bright)}
+.quest-card.q-available{border-color:rgba(74,222,128,0.35)}
+.quest-card.q-active{border-color:rgba(168,85,247,0.5);box-shadow:0 0 12px rgba(168,85,247,0.08)}
+.quest-card.q-complete{border-color:rgba(251,191,36,0.5);background:rgba(251,191,36,0.03);opacity:.8}
+.quest-card.q-locked{opacity:.35;pointer-events:none}
+.quest-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--purple),transparent);opacity:0;transition:.2s}
+.quest-card.q-active::before{opacity:1}
+.quest-header{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.quest-icon{font-size:22px;flex-shrink:0}
+.quest-title{font-family:var(--font-hud);font-size:11px;color:var(--text);letter-spacing:.5px}
+.quest-category{font-size:8px;font-family:var(--font-hud);letter-spacing:1px;padding:2px 7px;border-radius:4px}
+.quest-category.tutorial{background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.3);color:var(--green)}
+.quest-category.growing{background:rgba(34,211,238,0.1);border:1px solid rgba(34,211,238,0.3);color:var(--cyan)}
+.quest-category.advanced{background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.3);color:var(--purple)}
+.quest-category.silly{background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);color:var(--gold)}
+.quest-category.chain{background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.3);color:var(--orange)}
+.quest-desc{font-size:10px;color:var(--muted);margin-bottom:10px;line-height:1.5}
+.quest-steps{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.quest-step{display:flex;align-items:center;gap:8px;padding:5px 8px;background:rgba(0,0,0,0.3);border-radius:5px;border:1px solid rgba(255,255,255,0.04)}
+.quest-step.done{background:rgba(74,222,128,0.06);border-color:rgba(74,222,128,0.2)}
+.quest-step-check{width:14px;height:14px;border-radius:50%;border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px}
+.quest-step-check.done{background:var(--green);border-color:var(--green);color:#000}
+.quest-step-label{font-family:var(--font-hud);font-size:9px;color:var(--muted);flex:1;letter-spacing:.3px}
+.quest-step.done .quest-step-label{color:var(--green);text-decoration:line-through;opacity:.7}
+.quest-step-count{font-family:var(--font-mono);font-size:9px;color:var(--cyan)}
+.quest-step-bar{flex:1;height:3px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden}
+.quest-step-bar-fill{height:100%;background:linear-gradient(90deg,var(--purple-dim),var(--purple));border-radius:2px;transition:.4s}
+.quest-reward-strip{display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(0,0,0,0.35);border-radius:6px;font-family:var(--font-hud);font-size:9px;flex-wrap:wrap}
+.quest-reward-strip .r-lbl{color:var(--muted);letter-spacing:.5px}
+.quest-reward-strip .r-val{color:var(--gold)}
+.quest-start-btn{width:100%;margin-top:8px;padding:8px;border-radius:7px;border:1px solid var(--purple);background:rgba(168,85,247,0.1);color:var(--purple);font-family:var(--font-hud);font-size:9px;letter-spacing:1px;cursor:pointer;transition:.2s}
+.quest-start-btn:hover{background:rgba(168,85,247,0.22)}
+.quest-complete-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.4);border-radius:5px;padding:3px 10px;font-family:var(--font-hud);font-size:9px;color:var(--gold)}
+.quest-tabs{display:flex;gap:4px;margin-bottom:14px;background:rgba(0,0,0,0.4);border-radius:8px;padding:4px;border:1px solid var(--border)}
+.quest-tab-btn{flex:1;padding:7px 4px;border:none;background:none;color:var(--muted);cursor:pointer;border-radius:6px;font-family:var(--font-hud);font-size:9px;letter-spacing:.5px;transition:.2s;white-space:nowrap}
+.quest-tab-btn.active{background:rgba(168,85,247,0.12);color:var(--purple)}
+.mystery-bar-wrap{background:rgba(0,0,0,0.5);border:1px solid rgba(251,191,36,0.3);border-radius:7px;padding:10px;margin:8px 0}
+.mystery-bar-track{height:10px;background:rgba(255,255,255,0.05);border-radius:5px;overflow:hidden;margin:6px 0}
+.mystery-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:5px;transition:.8s}
+.mystery-bar-label{font-family:var(--font-hud);font-size:9px;color:var(--gold);letter-spacing:1px}
+.mystery-bar-pct{font-family:var(--font-mono);font-size:11px;color:var(--gold)}
+@keyframes questUnlock{0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
+.quest-newly-unlocked{animation:questUnlock .6s ease-in-out 2;border-color:var(--purple)!important}
 
 /* ── Strain Card Overlay (flip) ── */
 .strain-card-overlay{
@@ -2848,65 +2893,649 @@ const EQUIPMENT_ITEMS = {
 };
 
 // ================================================================
-// QUESTS
+// QUESTS — multi-step, tutorial-forward, chain-unlocking
 // ================================================================
-const QUEST_CATEGORIES = ['Beginner','Grower','Elite','Master','Legend','Black Market','Special'];
-
 const QUESTS = [
-  // ── Beginner ──
-  {id:'q_first_harvest',  cat:'Beginner',     icon:'🌾', name:'First Cut',            desc:'Complete your very first harvest.',              obj:{type:'total_harvests',val:1},     rewards:{coins:500,   xp:200,  items:['gloves_trim']}},
-  {id:'q_first_sale',     cat:'Beginner',     icon:'💸', name:'Open for Business',    desc:'Make your first sale.',                         obj:{type:'total_coins_earned',val:1}, rewards:{coins:300,   xp:100,  items:['crown_bronze']}},
-  {id:'q_redeem_code',    cat:'Beginner',     icon:'🌱', name:'Seed Hunter',           desc:'Redeem your first seed code.',                  obj:{type:'seeds_redeemed',val:1},     rewards:{coins:200,   xp:100,  items:['cape_green']}},
-  {id:'q_plant_5',        cat:'Beginner',     icon:'🌿', name:'Green Thumb',           desc:'Plant 5 seeds total.',                          obj:{type:'plants_planted',val:5},     rewards:{coins:400,   xp:150,  items:['beanie']}},
-  {id:'q_reach_veg',      cat:'Beginner',     icon:'🌱', name:'Out of the Shell',      desc:'Grow a plant to Veg stage.',                    obj:{type:'veg_reached',val:1},        rewards:{coins:250,   xp:80,   items:['pants_cargo']}},
-  // ── Grower ──
-  {id:'q_harvest_5',      cat:'Grower',       icon:'🌾', name:'Crop Report',           desc:'Harvest 5 plants.',                             obj:{type:'total_harvests',val:5},     rewards:{coins:1200,  xp:400,  items:['shirt_tiedye']}},
-  {id:'q_harvest_10',     cat:'Grower',       icon:'🌾', name:'Double Digits',         desc:'Harvest 10 plants.',                            obj:{type:'total_harvests',val:10},    rewards:{coins:3000,  xp:800,  items:['pants_tiedye','ring_emerald']}},
-  {id:'q_1kg',            cat:'Grower',       icon:'⚖️', name:'First Kilogram',        desc:'Grow 1,000g total.',                            obj:{type:'total_grams',val:1000},     rewards:{coins:2000,  xp:500,  items:['necklace_yield']}},
-  {id:'q_cure_disease_10',cat:'Grower',       icon:'🏥', name:'Plant Doctor',          desc:'Cure 10 plant diseases.',                       obj:{type:'diseases_cured',val:10},    rewards:{coins:1000,  xp:300,  items:['gloves_mildew']}},
-  {id:'q_no_disease_7d',  cat:'Grower',       icon:'🛡️', name:'Clean Room',            desc:'Go 7 real days with no active diseases.',        obj:{type:'disease_free_days',val:7},  rewards:{coins:1500,  xp:400,  items:['gloves_pest']}},
-  {id:'q_full_cure',      cat:'Grower',       icon:'🫙', name:'Patience is a Virtue',  desc:'Complete a full dry+cure cycle to vault.',      obj:{type:'vault_entries',val:1},      rewards:{coins:800,   xp:300,  items:['gloves_cure']}},
-  {id:'q_grade_a',        cat:'Grower',       icon:'⭐', name:'A Student',             desc:'Get a perfect A-grade grow score.',              obj:{type:'perfect_grows',val:1},      rewards:{coins:3000,  xp:600,  items:['necklace_wisdom']}},
-  {id:'q_5_strains',      cat:'Grower',       icon:'🧬', name:'Variety Pack',          desc:'Grow 5 different strains.',                     obj:{type:'unique_strains',val:5},     rewards:{coins:1500,  xp:400,  items:['buff_xp_1','buff_xp_1']}},
-  {id:'q_water_100',      cat:'Grower',       icon:'💧', name:'Hydro King',            desc:'Water plants 100 times.',                       obj:{type:'total_waters',val:100},     rewards:{coins:2000,  xp:500,  items:['additive_myco','additive_myco','additive_myco']}},
-  // ── Elite ──
-  {id:'q_harvest_50',     cat:'Elite',        icon:'🌾', name:'Fifty Cuts',            desc:'Harvest 50 plants.',                            obj:{type:'total_harvests',val:50},    rewards:{coins:15000, xp:3000, items:['cape_purple','ring_ruby']}},
-  {id:'q_10kg',           cat:'Elite',        icon:'⚖️', name:'10kg Club',             desc:'Grow 10,000g total.',                           obj:{type:'total_grams',val:10000},    rewards:{coins:10000, xp:2500, items:['ring_sapphire']}},
-  {id:'q_ep_pheno',       cat:'Elite',        icon:'💜', name:'Elite Find',            desc:'Grow an EP phenotype.',                         obj:{type:'rarity_grown',rarity:'EP',val:1}, rewards:{coins:5000, xp:1500, items:['ring_amethyst']}},
-  {id:'q_shiny_pheno',    cat:'Elite',        icon:'✨', name:'Shiny Hunter',          desc:'Grow a Shiny phenotype.',                       obj:{type:'rarity_grown',rarity:'Shiny',val:1}, rewards:{coins:8000, xp:2000, items:['ring_diamond']}},
-  {id:'q_growoff_win',    cat:'Elite',        icon:'🏆', name:'First Blood',           desc:'Win your first Grow-Off.',                      obj:{type:'growoff_wins',val:1},        rewards:{coins:5000,  xp:2000, items:['cape_gold']}},
-  {id:'q_breed_first',    cat:'Elite',        icon:'🧬', name:'Genetic Pioneer',       desc:'Create your first bred strain.',                obj:{type:'seeds_bred',val:1},          rewards:{coins:3000,  xp:1000, items:['shirt_lab']}},
-  {id:'q_50k_coins',      cat:'Elite',        icon:'💰', name:'Big Money',             desc:'Earn 50,000¢ total.',                           obj:{type:'total_coins_earned',val:50000}, rewards:{coins:2000, xp:1000, items:['super_soil','super_soil','super_soil']}},
-  {id:'q_perfect_a_5',    cat:'Elite',        icon:'⭐', name:'Perfectionist',         desc:'Get 5 perfect A-grade grows.',                  obj:{type:'perfect_grows',val:5},       rewards:{coins:8000,  xp:2000, items:['shirt_hazmat']}},
-  {id:'q_bred_10',        cat:'Elite',        icon:'🧬', name:'Breeding Program',      desc:'Breed 10 seeds.',                               obj:{type:'seeds_bred',val:10},         rewards:{coins:5000,  xp:1500, items:['pants_wizard']}},
-  // ── Master ──
-  {id:'q_harvest_100',    cat:'Master',       icon:'🌾', name:'Century Grower',        desc:'Harvest 100 plants.',                           obj:{type:'total_harvests',val:100},    rewards:{coins:50000, xp:10000,items:['cape_trimmed_gold']}},
-  {id:'q_100kg',          cat:'Master',       icon:'⚖️', name:'100kg Legend',          desc:'Grow 100,000g total.',                          obj:{type:'total_grams',val:100000},    rewards:{coins:100000,xp:20000,items:['ring_god']}},
-  {id:'q_glowing_pheno',  cat:'Master',       icon:'🟠', name:'Glowing Up',            desc:'Grow a Glowing phenotype.',                     obj:{type:'rarity_grown',rarity:'Glowing',val:1}, rewards:{coins:5000,xp:1000,items:['necklace_ruby']}},
-  {id:'q_sparkling_pheno',cat:'Master',       icon:'💎', name:'Diamonds in the Garden',desc:'Grow a Sparkling phenotype.',                   obj:{type:'rarity_grown',rarity:'Sparkling',val:1}, rewards:{coins:10000,xp:2000,items:['necklace_thc']}},
-  {id:'q_growoff_all',    cat:'Master',       icon:'🏆', name:'Ladder Climber',        desc:'Beat every Grow-Off opponent.',                 obj:{type:'growoff_wins',val:5},        rewards:{coins:100000,xp:25000,items:['cape_red_trim']}},
-  {id:'q_bred_50',        cat:'Master',       icon:'🧬', name:'Full Breeder',          desc:'Breed 50 seeds.',                               obj:{type:'seeds_bred',val:50},         rewards:{coins:20000, xp:5000, items:['buff_crop_5','buff_crop_5']}},
-  {id:'q_level25',        cat:'Master',       icon:'📈', name:'Veteran',               desc:'Reach Level 25.',                               obj:{type:'level',val:25},              rewards:{coins:25000, xp:5000, items:['wizard_hat']}},
-  {id:'q_level50',        cat:'Master',       icon:'📈', name:'Legend Level',          desc:'Reach Level 50.',                               obj:{type:'level',val:50},              rewards:{coins:100000,xp:20000,items:['crown_platinum']}},
-  {id:'q_unbreakable_ph', cat:'Master',       icon:'🧪', name:'Unbreakable',           desc:'Harvest 25 plants — earn an indestructible pH Meter.', obj:{type:'total_harvests',val:25}, rewards:{coins:5000,xp:2000,items:[],special:'unbreakable_ph'}},
-  {id:'q_unbreakable_ec', cat:'Master',       icon:'🔌', name:'Never Breaks',          desc:'Earn 100,000¢ — unlock an indestructible EC Meter.', obj:{type:'total_coins_earned',val:100000}, rewards:{coins:0,xp:5000,items:[],special:'unbreakable_ec'}},
-  {id:'q_super_light',    cat:'Master',       icon:'💡', name:'The Forbidden Light',   desc:'10 perfect A-grade grows — unlock a legendary light.', obj:{type:'perfect_grows',val:10}, rewards:{coins:10000,xp:5000,items:[],special:'super_light'}},
-  // ── Legend ──
-  {id:'q_god_pheno',      cat:'Legend',       icon:'👑', name:'GOD Phenotype',         desc:'Grow a GOD phenotype.',                         obj:{type:'god_phenos',val:1},          rewards:{coins:50000, xp:10000,items:['crown_god']}},
-  {id:'q_god_3',          cat:'Legend',       icon:'👑', name:'Holy Trinity',          desc:'Grow 3 GOD phenotypes.',                        obj:{type:'god_phenos',val:3},          rewards:{coins:100000,xp:15000,items:['necklace_god','ring_god']}},
-  {id:'q_drug_lord',      cat:'Legend',       icon:'💰', name:'Drug Lord',             desc:'Earn 1,000,000¢ total.',                        obj:{type:'total_coins_earned',val:1000000}, rewards:{coins:50000,xp:10000,items:['crown_fire','cape_rainbow']}},
-  {id:'q_1000kg',         cat:'Legend',       icon:'⚖️', name:'Metric Ton',           desc:'Grow 1,000,000g total.',                        obj:{type:'total_grams',val:1000000},   rewards:{coins:99999, xp:15000,items:['gem_god']}},
-  // ── Black Market ──
-  {id:'q_bm_first',       cat:'Black Market', icon:'🕶️', name:'First Deal',           desc:'Make 1 successful BM purchase.',                obj:{type:'bm_purchases',val:1},        rewards:{coins:500,   xp:200,  items:['hood_black']}},
-  {id:'q_bm_10',          cat:'Black Market', icon:'🕶️', name:'Street Cred',         desc:'Make 10 successful BM purchases.',              obj:{type:'bm_purchases',val:10},       rewards:{coins:3000,  xp:800,  items:['ring_onyx']}},
-  {id:'q_bm_5sales',      cat:'Black Market', icon:'🕶️', name:'The Shadow',          desc:'Sell 5 items on the Black Market.',              obj:{type:'bm_sales',val:5},            rewards:{coins:5000,  xp:1500, items:['cape_dark']}},
-  // ── Special ──
-  {id:'q_branch_snap',    cat:'Special',      icon:'💥', name:'Heavy Hands',          desc:'Snap a branch by clicking too fast.',           obj:{type:'branches_snapped',val:1},    rewards:{coins:100,   xp:50,   items:['buff_stress_1']}},
-  {id:'q_suit_curse',     cat:'Special',      icon:'😈', name:'Trust the Process',    desc:'Have a negative event while wearing the Suit.',  obj:{type:'suit_curses',val:1},         rewards:{coins:5000,  xp:500,  items:['buff_harvest_5']}},
-  {id:'q_soil_master',    cat:'Special',      icon:'🌍', name:'Soil Scientist',       desc:'Use 5 dirt additives at planting.',              obj:{type:'additives_used',val:5},      rewards:{coins:3000,  xp:800,  items:['additive_biochar','additive_worm','additive_perlite']}},
-  {id:'q_wizard_combo',   cat:'Special',      icon:'🧙', name:'Full Wizard',          desc:'Equip Wizard Hat + Wizard Robes simultaneously.', obj:{type:'combo_equip',items:['wizard_hat','pants_wizard'],val:1}, rewards:{coins:5000,xp:2000,items:['buff_xp_5']}},
-  {id:'q_tiedye_combo',   cat:'Special',      icon:'🌈', name:'Full Tie-Dye',         desc:'Equip Tie-Dye Shirt + Tie-Dye Pants at once.',  obj:{type:'combo_equip',items:['shirt_tiedye','pants_tiedye'],val:1}, rewards:{coins:2000,xp:500,items:['buff_crop_1','buff_crop_1','buff_crop_1']}},
-  {id:'q_crown_collector',cat:'Special',      icon:'👑', name:'Crown Collector',      desc:'Own 3 different crowns.',                       obj:{type:'own_item_count',tag:'crown',val:3}, rewards:{coins:8000,xp:2000,items:['buff_crop_5']}},
+
+  // ════════════════════════════════════════════════════════
+  // ── TUTORIAL CHAIN — teaches the game step by step ──
+  // ════════════════════════════════════════════════════════
+  {
+    id:'q_welcome', cat:'Tutorial', icon:'🌱',
+    name:'Welcome to the Grow Room',
+    desc:'Every legend started somewhere. Learn the basics — plant, water, and inspect.',
+    levelReq:0,
+    steps:[
+      {id:'s1', label:'Plant your first seed (Seeds tab → Redeem a code first)', type:'plants_planted', target:1},
+      {id:'s2', label:'Water your plant 3 times (💧 Water button on plant card)', type:'total_waters', target:3},
+      {id:'s3', label:'Inspect your plant once (🔍 Inspect Plant button)', type:'inspectionsDone', target:1},
+      {id:'s4', label:'Grow it to Veg stage (takes ~14 in-game days)', type:'veg_reached', target:1},
+    ],
+    unlocks:['q_training_basics','q_climate_intro'],
+    rewards:{coins:750, xp:400, items:['beanie']},
+  },
+
+  {
+    id:'q_training_basics', cat:'Tutorial', icon:'✂️',
+    name:'Bend, Don\'t Break',
+    desc:'Training plants in Veg dramatically boosts yield. LST is the safest method — use it before flipping to flower.',
+    levelReq:0, requiresQuest:'q_welcome',
+    steps:[
+      {id:'s1', label:'Go to Veg stage on any plant', type:'veg_reached', target:1},
+      {id:'s2', label:'Apply LST (✂️ Train → LST on a Veg plant)', type:'lstApplied', target:1},
+      {id:'s3', label:'Apply LST again (2 total — keep bending!)', type:'lstApplied', target:2},
+      {id:'s4', label:'Flip the plant to Flower (Train complete → 🌸 Flip)', type:'plantsFlipped', target:1},
+    ],
+    unlocks:['q_nute_basics'],
+    rewards:{coins:800, xp:450, items:['pants_cargo']},
+  },
+
+  {
+    id:'q_climate_intro', cat:'Tutorial', icon:'🌡️',
+    name:'It\'s Getting Hot in Here',
+    desc:'Temperature and humidity are everything. A fan keeps air moving and reduces mildew and heat stress.',
+    levelReq:0, requiresQuest:'q_welcome',
+    steps:[
+      {id:'s1', label:'Buy any fan from Shop → Climate', type:'fanOwned', target:1},
+      {id:'s2', label:'Assign the fan in the Gear panel (⚙️ sidebar)', type:'fanAssigned', target:1},
+      {id:'s3', label:'Inspect a plant for stress protection (🔍 Inspect → General)', type:'inspectionsDone', target:2},
+    ],
+    unlocks:['q_humidity_101'],
+    rewards:{coins:600, xp:350, items:['buff_stress_1']},
+  },
+
+  {
+    id:'q_humidity_101', cat:'Tutorial', icon:'💧',
+    name:'Don\'t Sweat It',
+    desc:'Humidity above 70% causes mildew. A dehumidifier keeps the air dry and your buds clean.',
+    levelReq:0, requiresQuest:'q_climate_intro',
+    steps:[
+      {id:'s1', label:'Buy a dehumidifier from Shop → Climate', type:'dehuOwned', target:1},
+      {id:'s2', label:'Assign it in the Gear panel', type:'dehuAssigned', target:1},
+      {id:'s3', label:'Cure any disease on a plant (🧴 Spray it)', type:'diseases_cured', target:1},
+    ],
+    rewards:{coins:700, xp:400, items:['gloves_mildew']},
+  },
+
+  {
+    id:'q_nute_basics', cat:'Tutorial', icon:'🧴',
+    name:'Feed Me, Seymour',
+    desc:'Nutrients are key to big potent harvests. But too much BURNS. Buy an EC meter first — always.',
+    levelReq:0, requiresQuest:'q_training_basics',
+    steps:[
+      {id:'s1', label:'Buy an EC/PPM Meter (Shop → Tools, 2,500¢)', type:'gear_owned', gearKey:'ecmeter', target:1},
+      {id:'s2', label:'Buy any nutrient bottle (Shop → Water)', type:'nuteBought', target:1},
+      {id:'s3', label:'Add nutrients during a watering (💧 Water → nutrient sliders)', type:'nuteFeeds', target:1},
+      {id:'s4', label:'Hit the optimal PPM range 3 waterings in a row', type:'optimalPPMHits', target:3},
+    ],
+    unlocks:['q_ph_control'],
+    rewards:{coins:1200, xp:600, items:['necklace_wisdom']},
+  },
+
+  {
+    id:'q_ph_control', cat:'Tutorial', icon:'🧪',
+    name:'pH or Die',
+    desc:'pH controls whether your plant can actually absorb those nutrients. Without it, you\'re feeding blind.',
+    levelReq:0, requiresQuest:'q_nute_basics',
+    steps:[
+      {id:'s1', label:'Buy a pH Meter (Shop → Tools, 2,500¢)', type:'gear_owned', gearKey:'phmeter', target:1},
+      {id:'s2', label:'Buy pH Up or pH Down (Shop → Water, 1,000¢)', type:'phChemBought', target:1},
+      {id:'s3', label:'Adjust pH during a watering', type:'phAdjusted', target:1},
+      {id:'s4', label:'Water with ideal pH (6.0–6.8) 3 times', type:'idealPHWaters', target:3},
+    ],
+    unlocks:['q_first_harvest'],
+    rewards:{coins:1500, xp:700, items:['gloves_cure']},
+  },
+
+  {
+    id:'q_first_harvest', cat:'Tutorial', icon:'🌾',
+    name:'The First Cut',
+    desc:'Ready stage = maximum yield and THC. Don\'t rush it. Week 10+ is ideal for most strains.',
+    levelReq:0, requiresQuest:'q_ph_control',
+    steps:[
+      {id:'s1', label:'Grow a plant to the Ready stage (stage shown on card)', type:'veg_reached', target:1},
+      {id:'s2', label:'Harvest a plant at Week 8 or later', type:'harvestAtWeek8', target:1},
+      {id:'s3', label:'Dry and move to jar curing (Vault tab → Drying)', type:'moveToCuringCount', target:1},
+      {id:'s4', label:'Make your first sale (Market tab)', type:'total_coins_earned', target:1},
+    ],
+    unlocks:['q_drying_101','q_second_grow'],
+    rewards:{coins:2000, xp:1000, items:['cape_green','buff_xp_1']},
+  },
+
+  {
+    id:'q_drying_101', cat:'Tutorial', icon:'🌬️',
+    name:'The Waiting Game',
+    desc:'Drying and curing separates good weed from great weed. The sweet spot is 58–64% RH. Don\'t rush it.',
+    levelReq:0, requiresQuest:'q_first_harvest',
+    steps:[
+      {id:'s1', label:'Dry a batch below 70% RH (Vault → Drying tab)', type:'dryBelow70', target:1},
+      {id:'s2', label:'Move it to jar curing (press "Move to Jar Curing")', type:'moveToCuringCount', target:1},
+      {id:'s3', label:'Burp the jar 5 times (Vault → Curing tab)', type:'totalBurps', target:5},
+      {id:'s4', label:'Seal it and move to vault (press "Seal & Move to Vault")', type:'vaultEntries', target:1},
+    ],
+    rewards:{coins:1500, xp:800, items:['gloves_cure','buff_crop_1']},
+  },
+
+  {
+    id:'q_second_grow', cat:'Tutorial', icon:'🌿',
+    name:'Back at It',
+    desc:'Second grow. Apply everything you learned. Try topping this time.',
+    levelReq:0, requiresQuest:'q_first_harvest',
+    steps:[
+      {id:'s1', label:'Plant a second seed', type:'plants_planted', target:2},
+      {id:'s2', label:'Top the plant once (Train → Top, in Veg stage)', type:'topApplied', target:1},
+      {id:'s3', label:'Inspect it at least 3 times before harvest', type:'inspectionsDone', target:3},
+      {id:'s4', label:'Harvest it at Week 8 or later', type:'harvestAtWeek8', target:2},
+    ],
+    unlocks:['q_grow_room_upgrade'],
+    rewards:{coins:2500, xp:1200, items:['ring_emerald']},
+  },
+
+  {
+    id:'q_grow_room_upgrade', cat:'Tutorial', icon:'🏠',
+    name:'Bigger, Better',
+    desc:'More plants and better lights = more yield. Time to scale up.',
+    levelReq:5, requiresQuest:'q_second_grow',
+    steps:[
+      {id:'s1', label:'Reach Level 5', type:'level', target:5},
+      {id:'s2', label:'Buy a HID or LED light from Shop → Lights', type:'bigLightOwned', target:1},
+      {id:'s3', label:'Have 3 plants growing at the same time', type:'maxSimultaneous', target:3},
+      {id:'s4', label:'Harvest 5 plants total', type:'total_harvests', target:5},
+    ],
+    unlocks:['q_breeding_intro'],
+    rewards:{coins:5000, xp:2000, items:['shirt_lab','buff_crop_5']},
+  },
+
+  // ════════════════════════════════════════════════════════
+  // ── GROWER QUESTS ──
+  // ════════════════════════════════════════════════════════
+  {
+    id:'q_harvest_5', cat:'Grower', icon:'🌾',
+    name:'Crop Report',
+    desc:'You\'re getting the hang of this.',
+    levelReq:3,
+    steps:[
+      {id:'s1', label:'Harvest 3 plants total', type:'total_harvests', target:3},
+      {id:'s2', label:'Harvest 5 plants total', type:'total_harvests', target:5},
+    ],
+    rewards:{coins:1200, xp:400, items:['shirt_tiedye']},
+  },
+
+  {
+    id:'q_harvest_10', cat:'Grower', icon:'🌾',
+    name:'Double Digits',
+    desc:'Ten harvests. You know what you\'re doing.',
+    levelReq:5, requiresQuest:'q_harvest_5',
+    steps:[
+      {id:'s1', label:'Harvest 8 plants total', type:'total_harvests', target:8},
+      {id:'s2', label:'Harvest 10 plants total', type:'total_harvests', target:10},
+      {id:'s3', label:'Get an A-grade grow score on any harvest', type:'perfect_grows', target:1},
+    ],
+    rewards:{coins:3000, xp:800, items:['pants_tiedye','ring_ruby']},
+  },
+
+  {
+    id:'q_1kg', cat:'Grower', icon:'⚖️',
+    name:'First Kilogram',
+    desc:'Grow 1,000g total.',
+    levelReq:5,
+    steps:[
+      {id:'s1', label:'Grow 500g total', type:'total_grams', target:500},
+      {id:'s2', label:'Grow 1,000g total', type:'total_grams', target:1000},
+    ],
+    rewards:{coins:2000, xp:500, items:['necklace_yield']},
+  },
+
+  {
+    id:'q_plant_doctor', cat:'Grower', icon:'🏥',
+    name:'Plant Doctor',
+    desc:'Diseases spread fast. Learn to identify and cure them before they wipe your room.',
+    levelReq:3,
+    steps:[
+      {id:'s1', label:'Cure 1 disease (🧴 Spray button on an infected plant)', type:'diseases_cured', target:1},
+      {id:'s2', label:'Cure 5 diseases total', type:'diseases_cured', target:5},
+      {id:'s3', label:'Cure 10 diseases total', type:'diseases_cured', target:10},
+      {id:'s4', label:'Go 3 real days with zero diseases across all rooms', type:'disease_free_days', target:3},
+    ],
+    rewards:{coins:1500, xp:500, items:['gloves_pest','shirt_hazmat']},
+  },
+
+  {
+    id:'q_breeding_intro', cat:'Grower', icon:'🧬',
+    name:'The Birds and the Bees',
+    desc:'Learn to breed your own genetics. Buy a male seed and let nature take its course.',
+    levelReq:10, requiresQuest:'q_grow_room_upgrade',
+    steps:[
+      {id:'s1', label:'Buy a male seed (Shop → ♂ Males tab, 5,000¢)', type:'maleSeedBought', target:1},
+      {id:'s2', label:'Plant the male in a room that has females', type:'malePlanted', target:1},
+      {id:'s3', label:'Let the male reach Week 2 of Flower (pollen drops)', type:'plantsFlipped', target:2},
+      {id:'s4', label:'Harvest a seeded female to collect your new seeds', type:'seeds_bred', target:1},
+    ],
+    unlocks:['q_breed_advanced'],
+    rewards:{coins:5000, xp:2000, items:['buff_xp_1','buff_crop_1']},
+  },
+
+  // ════════════════════════════════════════════════════════
+  // ── ELITE QUESTS (Level 10+ required) ──
+  // ════════════════════════════════════════════════════════
+  {
+    id:'q_harvest_50', cat:'Elite', icon:'🌾',
+    name:'Fifty Cuts',
+    desc:'Harvest 50 plants.',
+    levelReq:15,
+    steps:[
+      {id:'s1', label:'Harvest 25 plants', type:'total_harvests', target:25},
+      {id:'s2', label:'Harvest 50 plants', type:'total_harvests', target:50},
+    ],
+    rewards:{coins:15000, xp:3000, items:['cape_purple','ring_ruby']},
+  },
+  {
+    id:'q_10kg', cat:'Elite', icon:'⚖️',
+    name:'10kg Club',
+    desc:'Grow 10,000g total.',
+    levelReq:20,
+    steps:[
+      {id:'s1', label:'Grow 5,000g total', type:'total_grams', target:5000},
+      {id:'s2', label:'Grow 10,000g total', type:'total_grams', target:10000},
+    ],
+    rewards:{coins:10000, xp:2500, items:['ring_sapphire']},
+  },
+  {
+    id:'q_ep_pheno', cat:'Elite', icon:'💜',
+    name:'Elite Find',
+    desc:'Grow an EP phenotype. The more you grow, the higher your chances.',
+    levelReq:10,
+    steps:[
+      {id:'s1', label:'Harvest 10 plants (more grows = higher rarity chance)', type:'total_harvests', target:10},
+      {id:'s2', label:'Find an EP phenotype', type:'rarity_grown', rarity:'EP', target:1},
+    ],
+    rewards:{coins:5000, xp:1500, items:['ring_amethyst']},
+  },
+  {
+    id:'q_shiny_pheno', cat:'Elite', icon:'✨',
+    name:'Shiny Hunter',
+    desc:'Grow a Shiny phenotype.',
+    levelReq:15,
+    steps:[
+      {id:'s1', label:'Find an EP phenotype first', type:'rarity_grown', rarity:'EP', target:1},
+      {id:'s2', label:'Find a Shiny phenotype', type:'rarity_grown', rarity:'Shiny', target:1},
+    ],
+    rewards:{coins:8000, xp:2000, items:['ring_diamond']},
+  },
+  {
+    id:'q_growoff_win', cat:'Elite', icon:'🏆',
+    name:'First Blood',
+    desc:'Win your first Grow-Off challenge.',
+    levelReq:10,
+    steps:[
+      {id:'s1', label:'Submit to the Grow-Off for the first time (Grow-Off tab)', type:'growoffSubmits', target:1},
+      {id:'s2', label:'Win your first Grow-Off challenge', type:'growoff_wins', target:1},
+    ],
+    rewards:{coins:5000, xp:2000, items:['cape_gold']},
+  },
+  {
+    id:'q_50k_coins', cat:'Elite', icon:'💰',
+    name:'Big Money',
+    desc:'Earn 50,000¢ total.',
+    levelReq:15,
+    steps:[
+      {id:'s1', label:'Earn 10,000¢ total', type:'total_coins_earned', target:10000},
+      {id:'s2', label:'Earn 25,000¢ total', type:'total_coins_earned', target:25000},
+      {id:'s3', label:'Earn 50,000¢ total', type:'total_coins_earned', target:50000},
+    ],
+    rewards:{coins:2000, xp:1000, items:['super_soil','super_soil','super_soil']},
+  },
+  {
+    id:'q_perfect_a_5', cat:'Elite', icon:'⭐',
+    name:'Perfectionist',
+    desc:'Get 5 perfect A-grade grows. Maintain ideal environment, water regularly, inspect often.',
+    levelReq:20,
+    steps:[
+      {id:'s1', label:'Get your first A-grade grow', type:'perfect_grows', target:1},
+      {id:'s2', label:'Get 3 A-grade grows total', type:'perfect_grows', target:3},
+      {id:'s3', label:'Get 5 A-grade grows total', type:'perfect_grows', target:5},
+    ],
+    rewards:{coins:8000, xp:2000, items:['shirt_hazmat']},
+  },
+  {
+    id:'q_breed_advanced', cat:'Elite', icon:'🧬',
+    name:'Breeding Program',
+    desc:'Breed 10 seeds and name your strain.',
+    levelReq:15, requiresQuest:'q_breeding_intro',
+    steps:[
+      {id:'s1', label:'Breed 5 seeds total', type:'seeds_bred', target:5},
+      {id:'s2', label:'Breed 10 seeds total', type:'seeds_bred', target:10},
+      {id:'s3', label:'Give your bred strain a custom name (Seeds tab → Name)', type:'strainsNamed', target:1},
+    ],
+    rewards:{coins:5000, xp:1500, items:['pants_wizard']},
+  },
+
+  // ════════════════════════════════════════════════════════
+  // ── MASTER QUESTS (Level 25+ required) ──
+  // ════════════════════════════════════════════════════════
+  {
+    id:'q_harvest_100', cat:'Master', icon:'🌾',
+    name:'Century Grower',
+    desc:'100 harvests. A true cultivar.',
+    levelReq:30,
+    steps:[
+      {id:'s1', label:'Harvest 75 plants', type:'total_harvests', target:75},
+      {id:'s2', label:'Harvest 100 plants', type:'total_harvests', target:100},
+    ],
+    rewards:{coins:50000, xp:10000, items:['cape_trimmed_gold']},
+  },
+  {
+    id:'q_100kg', cat:'Master', icon:'⚖️',
+    name:'100kg Legend',
+    desc:'Grow 100,000g total.',
+    levelReq:40,
+    steps:[
+      {id:'s1', label:'Grow 50,000g total', type:'total_grams', target:50000},
+      {id:'s2', label:'Grow 100,000g total', type:'total_grams', target:100000},
+    ],
+    rewards:{coins:100000, xp:20000, items:['ring_god']},
+  },
+  {
+    id:'q_sparkling_pheno', cat:'Master', icon:'💎',
+    name:'Diamonds in the Garden',
+    desc:'Grow a Sparkling phenotype.',
+    levelReq:20,
+    steps:[
+      {id:'s1', label:'Find a Shiny phenotype first', type:'rarity_grown', rarity:'Shiny', target:1},
+      {id:'s2', label:'Find a Sparkling phenotype', type:'rarity_grown', rarity:'Sparkling', target:1},
+    ],
+    rewards:{coins:10000, xp:2000, items:['necklace_thc']},
+  },
+  {
+    id:'q_glowing_pheno', cat:'Master', icon:'🟠',
+    name:'Glowing Up',
+    desc:'Grow a Glowing phenotype.',
+    levelReq:25,
+    steps:[
+      {id:'s1', label:'Find a Sparkling phenotype first', type:'rarity_grown', rarity:'Sparkling', target:1},
+      {id:'s2', label:'Find a Glowing phenotype', type:'rarity_grown', rarity:'Glowing', target:1},
+    ],
+    rewards:{coins:5000, xp:1000, items:['necklace_ruby']},
+  },
+  {
+    id:'q_growoff_all', cat:'Master', icon:'🏆',
+    name:'Ladder Climber',
+    desc:'Beat every opponent on the Grow-Off ladder.',
+    levelReq:25, requiresQuest:'q_growoff_win',
+    steps:[
+      {id:'s1', label:'Beat Rookie Randy', type:'growoff_wins', target:1},
+      {id:'s2', label:'Beat Basement Barry', type:'growoff_wins', target:2},
+      {id:'s3', label:'Beat Tent Tyson', type:'growoff_wins', target:3},
+      {id:'s4', label:'Beat Greenhouse Gloria', type:'growoff_wins', target:4},
+      {id:'s5', label:'Beat The Master', type:'growoff_wins', target:5},
+    ],
+    rewards:{coins:100000, xp:25000, items:['cape_red_trim']},
+  },
+  {
+    id:'q_level25', cat:'Master', icon:'📈',
+    name:'Veteran',
+    desc:'Reach Level 25.',
+    levelReq:15,
+    steps:[
+      {id:'s1', label:'Reach Level 15', type:'level', target:15},
+      {id:'s2', label:'Reach Level 20', type:'level', target:20},
+      {id:'s3', label:'Reach Level 25', type:'level', target:25},
+    ],
+    rewards:{coins:25000, xp:5000, items:['wizard_hat']},
+  },
+  {
+    id:'q_level50', cat:'Master', icon:'📈',
+    name:'Legend Level',
+    desc:'Reach Level 50.',
+    levelReq:25, requiresQuest:'q_level25',
+    steps:[
+      {id:'s1', label:'Reach Level 30', type:'level', target:30},
+      {id:'s2', label:'Reach Level 40', type:'level', target:40},
+      {id:'s3', label:'Reach Level 50', type:'level', target:50},
+    ],
+    rewards:{coins:100000, xp:20000, items:['crown_platinum']},
+  },
+  {
+    id:'q_unbreakable_ph', cat:'Master', icon:'🧪',
+    name:'Unbreakable',
+    desc:'Harvest 25 plants — unlock an indestructible pH Meter that can never break.',
+    levelReq:10,
+    steps:[
+      {id:'s1', label:'Harvest 10 plants', type:'total_harvests', target:10},
+      {id:'s2', label:'Harvest 25 plants', type:'total_harvests', target:25},
+    ],
+    rewards:{coins:5000, xp:2000, items:[], special:'unbreakable_ph'},
+  },
+  {
+    id:'q_unbreakable_ec', cat:'Master', icon:'🔌',
+    name:'Never Breaks',
+    desc:'Earn 100,000¢ — unlock an indestructible EC Meter.',
+    levelReq:15,
+    steps:[
+      {id:'s1', label:'Earn 50,000¢ total', type:'total_coins_earned', target:50000},
+      {id:'s2', label:'Earn 100,000¢ total', type:'total_coins_earned', target:100000},
+    ],
+    rewards:{coins:0, xp:5000, items:[], special:'unbreakable_ec'},
+  },
+  {
+    id:'q_super_light', cat:'Master', icon:'💡',
+    name:'The Forbidden Light',
+    desc:'10 perfect A-grade grows unlocks a legendary light.',
+    levelReq:20,
+    steps:[
+      {id:'s1', label:'Get 5 A-grade grows', type:'perfect_grows', target:5},
+      {id:'s2', label:'Get 10 A-grade grows', type:'perfect_grows', target:10},
+    ],
+    rewards:{coins:10000, xp:5000, items:[], special:'super_light'},
+  },
+
+  // ════════════════════════════════════════════════════════
+  // ── LEGEND QUESTS (Level 40+) ──
+  // ════════════════════════════════════════════════════════
+  {
+    id:'q_god_pheno', cat:'Legend', icon:'👑',
+    name:'GOD Phenotype',
+    desc:'The rarest of the rare. Bred strains at F5+ have the best odds.',
+    levelReq:40,
+    steps:[
+      {id:'s1', label:'Find a Glowing phenotype first', type:'rarity_grown', rarity:'Glowing', target:1},
+      {id:'s2', label:'Find a GOD phenotype', type:'god_phenos', target:1},
+    ],
+    rewards:{coins:50000, xp:10000, items:['crown_god']},
+  },
+  {
+    id:'q_god_3', cat:'Legend', icon:'👑',
+    name:'Holy Trinity',
+    desc:'Grow 3 GOD phenotypes.',
+    levelReq:50, requiresQuest:'q_god_pheno',
+    steps:[
+      {id:'s1', label:'Find your 2nd GOD phenotype', type:'god_phenos', target:2},
+      {id:'s2', label:'Find your 3rd GOD phenotype', type:'god_phenos', target:3},
+    ],
+    rewards:{coins:100000, xp:15000, items:['necklace_god','ring_god']},
+  },
+  {
+    id:'q_drug_lord', cat:'Legend', icon:'💰',
+    name:'Drug Lord',
+    desc:'Earn 1,000,000¢ total.',
+    levelReq:50,
+    steps:[
+      {id:'s1', label:'Earn 250,000¢ total', type:'total_coins_earned', target:250000},
+      {id:'s2', label:'Earn 500,000¢ total', type:'total_coins_earned', target:500000},
+      {id:'s3', label:'Earn 1,000,000¢ total', type:'total_coins_earned', target:1000000},
+    ],
+    rewards:{coins:50000, xp:10000, items:['crown_fire','cape_rainbow']},
+  },
+  {
+    id:'q_1000kg', cat:'Legend', icon:'⚖️',
+    name:'Metric Ton',
+    desc:'Grow 1,000,000g total.',
+    levelReq:75,
+    steps:[
+      {id:'s1', label:'Grow 500,000g total', type:'total_grams', target:500000},
+      {id:'s2', label:'Grow 1,000,000g total', type:'total_grams', target:1000000},
+    ],
+    rewards:{coins:99999, xp:15000, items:['gem_god']},
+  },
+
+  // ════════════════════════════════════════════════════════
+  // ── BLACK MARKET QUESTS ──
+  // ════════════════════════════════════════════════════════
+  {
+    id:'q_bm_first', cat:'Black Market', icon:'🕶️',
+    name:'First Deal',
+    desc:'The Black Market has better strains but 15% chance of getting ripped. Welcome to the streets.',
+    levelReq:5,
+    steps:[
+      {id:'s1', label:'Open the Black Market tab (🕶️ Blk Market in nav)', type:'bm_purchases', target:0, specialHint:true},
+      {id:'s2', label:'Make 1 successful BM purchase (85% success rate)', type:'bm_purchases', target:1},
+    ],
+    rewards:{coins:500, xp:200, items:['hood_black']},
+  },
+  {
+    id:'q_bm_10', cat:'Black Market', icon:'🕶️',
+    name:'Street Cred',
+    desc:'Make 10 successful BM purchases.',
+    levelReq:10, requiresQuest:'q_bm_first',
+    steps:[
+      {id:'s1', label:'Make 5 BM purchases total', type:'bm_purchases', target:5},
+      {id:'s2', label:'Make 10 BM purchases total', type:'bm_purchases', target:10},
+    ],
+    rewards:{coins:3000, xp:800, items:['ring_onyx']},
+  },
+  {
+    id:'q_bm_5sales', cat:'Black Market', icon:'🕶️',
+    name:'The Shadow',
+    desc:'Sell 5 items anonymously on the Black Market.',
+    levelReq:10, requiresQuest:'q_bm_first',
+    steps:[
+      {id:'s1', label:'List your first item for sale (BM tab → List Item)', type:'bm_sales', target:0, specialHint:true},
+      {id:'s2', label:'Successfully sell 3 items on BM', type:'bm_sales', target:3},
+      {id:'s3', label:'Successfully sell 5 items on BM', type:'bm_sales', target:5},
+    ],
+    rewards:{coins:5000, xp:1500, items:['cape_dark']},
+  },
+
+  // ════════════════════════════════════════════════════════
+  // ── SILLY QUESTS ──
+  // ════════════════════════════════════════════════════════
+  {
+    id:'q_master_supply', cat:'Silly', icon:'👴',
+    name:'Old Man\'s Order',
+    desc:'A legendary old grower reached out. He needs supplies. He said "a lot" but forgot to write down how much. Just bring what you can — he promises it\'ll be worth it.',
+    levelReq:5,
+    mystery:true,
+    steps:[
+      {id:'s1', label:'Bring him some nutrients (buy any nutrient bottle)', type:'masterNuteTotal', target:5000,  mystery:true},
+      {id:'s2', label:'Keep going... he texted "more please"',              type:'masterNuteTotal', target:15000, mystery:true},
+      {id:'s3', label:'You\'re a real one for this.',                       type:'masterNuteTotal', target:30000, mystery:true},
+      {id:'s4', label:'...almost there. Probably.',                         type:'masterNuteTotal', target:50000, mystery:true},
+    ],
+    rewards:{coins:0, xp:5000, items:[], special:'super_reservoir',
+      customRewardText:'🛢️ UNLOCK: Super Reservoir (50,000 gal)'},
+  },
+
+  {
+    id:'q_noob_p1', cat:'Silly', icon:'🤝',
+    name:'Help a Noob — Part 1: Basics',
+    desc:'A brand new grower DMed you. He has no seeds, no light, and is asking what "indica" means. Help him get started.',
+    levelReq:5,
+    steps:[
+      {id:'s1', label:'Donate a seed to the noob (button below, costs 1 seed)', type:'noobSeedDonated', target:1, special:'donate_seed'},
+      {id:'s2', label:'Donate a light to the noob (button below, costs 2,000¢)', type:'noobLightDonated', target:1, special:'donate_light'},
+    ],
+    unlocks:['q_noob_p2'],
+    rewards:{coins:1000, xp:500, items:['buff_xp_1']},
+  },
+
+  {
+    id:'q_noob_p2', cat:'Silly', icon:'🤝',
+    name:'Help a Noob — Part 2: Nutrients',
+    desc:'He planted the seed! But now he\'s texting you at 3am. "Why are the leaves yellow?" He used way too many nutrients. Classic.',
+    levelReq:5, requiresQuest:'q_noob_p1',
+    steps:[
+      {id:'s1', label:'Send him base nutrients (button below, costs 500¢)', type:'noobNuteDonated', target:1, special:'donate_nute'},
+      {id:'s2', label:'He burned it. Send pH Down to flush (button below, costs 300¢)', type:'noobPHDonated', target:1, special:'donate_ph'},
+      {id:'s3', label:'Water your own plant 5 times while advising him', type:'total_waters', target:5},
+    ],
+    unlocks:['q_noob_p3'],
+    rewards:{coins:1500, xp:800, items:['buff_crop_1']},
+  },
+
+  {
+    id:'q_noob_p3', cat:'Silly', icon:'🤝',
+    name:'Help a Noob — Part 3: Harvest Day',
+    desc:'HE MADE IT TO HARVEST. He is panicking. He thinks he needs to "wring the buds out." Walk him through it.',
+    levelReq:5, requiresQuest:'q_noob_p2',
+    steps:[
+      {id:'s1', label:'Have a cured batch in your vault to show him', type:'vaultEntries', target:1},
+      {id:'s2', label:'Harvest one of your own plants (lead by example)', type:'total_harvests', target:1},
+      {id:'s3', label:'Complete his education: 3 total harvests across your account', type:'total_harvests', target:3},
+    ],
+    rewards:{coins:5000, xp:3000, items:['crown_bronze','buff_harvest_1'],
+      customText:'He sends you a voice memo of himself crying. It\'s kind of touching.'},
+  },
+
+  // ════════════════════════════════════════════════════════
+  // ── SPECIAL QUESTS ──
+  // ════════════════════════════════════════════════════════
+  {
+    id:'q_branch_snap', cat:'Special', icon:'💥',
+    name:'Heavy Hands',
+    desc:'Snap a branch by clicking too fast on a plant.',
+    levelReq:0,
+    steps:[
+      {id:'s1', label:'Click a plant rapidly 5+ times in quick succession', type:'branches_snapped', target:1},
+    ],
+    rewards:{coins:100, xp:50, items:['buff_stress_1']},
+  },
+  {
+    id:'q_suit_curse', cat:'Special', icon:'😈',
+    name:'Trust the Process',
+    desc:'Something bad will happen while you\'re wearing the Suit. It always does.',
+    levelReq:5,
+    steps:[
+      {id:'s1', label:'Own the Business Suit + Dress Pants (from quests/drops)', type:'own_item', itemId:'shirt_suit', target:1},
+      {id:'s2', label:'Equip both and wait for the curse to hit', type:'suit_curses', target:1},
+    ],
+    rewards:{coins:5000, xp:500, items:['buff_harvest_5']},
+  },
+  {
+    id:'q_wizard_combo', cat:'Special', icon:'🧙',
+    name:'Full Wizard',
+    desc:'Equip Wizard Hat + Wizard Robes at the same time for a secret combo bonus.',
+    levelReq:10,
+    steps:[
+      {id:'s1', label:'Earn the Wizard Hat (Level 25 quest reward)', type:'own_item', itemId:'wizard_hat', target:1},
+      {id:'s2', label:'Earn the Wizard Robes (Breeding quest reward)', type:'own_item', itemId:'pants_wizard', target:1},
+      {id:'s3', label:'Equip both simultaneously (Inventory → Equip)', type:'combo_equip', items:['wizard_hat','pants_wizard'], target:1},
+    ],
+    rewards:{coins:5000, xp:2000, items:['buff_xp_5']},
+  },
+  {
+    id:'q_tiedye_combo', cat:'Special', icon:'🌈',
+    name:'Full Tie-Dye',
+    desc:'Equip Tie-Dye Shirt + Tie-Dye Pants at once.',
+    levelReq:3,
+    steps:[
+      {id:'s1', label:'Earn the Tie-Dye Shirt (Crop Report quest reward)', type:'own_item', itemId:'shirt_tiedye', target:1},
+      {id:'s2', label:'Earn the Tie-Dye Pants (Double Digits quest reward)', type:'own_item', itemId:'pants_tiedye', target:1},
+      {id:'s3', label:'Wear both at once', type:'combo_equip', items:['shirt_tiedye','pants_tiedye'], target:1},
+    ],
+    rewards:{coins:2000, xp:500, items:['buff_crop_1','buff_crop_1','buff_crop_1']},
+  },
+  {
+    id:'q_crown_collector', cat:'Special', icon:'👑',
+    name:'Crown Collector',
+    desc:'Own 3 different crowns.',
+    levelReq:20,
+    steps:[
+      {id:'s1', label:'Own 1 crown', type:'own_item_count', tag:'crown', target:1},
+      {id:'s2', label:'Own 2 crowns', type:'own_item_count', tag:'crown', target:2},
+      {id:'s3', label:'Own 3 crowns', type:'own_item_count', tag:'crown', target:3},
+    ],
+    rewards:{coins:8000, xp:2000, items:['buff_crop_5']},
+  },
 ];
 
 function checkAchievements() {
@@ -2969,6 +3598,36 @@ function getEquippedBonuses() {
   return bonuses;
 }
 
+function doQuestDonate(type, questId) {
+  if (!GS || !GS.stats) return;
+  if (type === 'noob_seed') {
+    // Find first available seed
+    const seedEntry = Object.entries(GS.seeds||{}).find(([,q])=>q>0);
+    if (!seedEntry) { toast('No seeds to donate.','warn'); return; }
+    GS.seeds[seedEntry[0]]--;
+    GS.stats.noobSeedDonated = (GS.stats.noobSeedDonated||0) + 1;
+    toast('🌱 Seed donated! He said "thanks mate"', 'ok', 3000);
+  } else if (type === 'noob_light') {
+    if (GS.coins < 2000) { toast('Need 2,000¢','err'); return; }
+    GS.coins -= 2000;
+    GS.stats.noobLightDonated = (GS.stats.noobLightDonated||0) + 1;
+    toast('💡 Light donated! He\'s very excited.', 'ok', 3000);
+  } else if (type === 'noob_nute') {
+    if (GS.coins < 500) { toast('Need 500¢','err'); return; }
+    GS.coins -= 500;
+    GS.stats.noobNuteDonated = (GS.stats.noobNuteDonated||0) + 1;
+    toast('🧴 Nutrients sent! He immediately used too much.', 'warn', 4000);
+  } else if (type === 'noob_ph') {
+    if (GS.coins < 300) { toast('Need 300¢','err'); return; }
+    GS.coins -= 300;
+    GS.stats.noobPHDonated = (GS.stats.noobPHDonated||0) + 1;
+    toast('🧪 pH Down sent! He says it smells like vinegar.', 'ok', 3000);
+  }
+  addLog('Quest donation: ' + type, 'info');
+  checkQuestProgress();
+  saveGame(); renderQuests(); renderHeader();
+}
+
 function equipItem(slot, itemId) {
   if (!GS.equip) GS.equip = {};
   const item = EQUIPMENT_ITEMS[itemId];
@@ -3003,82 +3662,219 @@ function grantEquipItem(itemId, qty) {
   else GS.equipItems.push({id:itemId, qty:qty||1});
 }
 
-function getQuestProgress(quest) {
+// ── Is this quest available (level + chain requirements met)? ──
+function isQuestAvailable(quest) {
+  if (!GS) return false;
+  if ((quest.levelReq||0) > (GS.level||1)) return false;
+  if (quest.requiresQuest && !(GS.questsClaimed||[]).includes(quest.requiresQuest)) return false;
+  return true;
+}
+
+// ── Progress for a single quest step ──
+function getStepProgress(step) {
   if (!GS) return 0;
-  const s  = GS.stats || {};
-  const o  = quest.obj;
-  if (!o) return 0;
-  switch(o.type) {
+  const s = GS.stats || {};
+  if (step.target === 0) return 1; // auto-complete hint steps
+
+  switch(step.type) {
+    case 'plants_planted':     return s.plantsPlanted    || 0;
+    case 'total_waters':       return s.totalWaters      || 0;
+    case 'inspectionsDone':    return s.inspectionsDone  || 0;
+    case 'veg_reached':        return s.vegReached       || 0;
+    case 'lstApplied':         return s.lstApplied       || 0;
+    case 'topApplied':         return s.topApplied       || 0;
+    case 'plantsFlipped':      return s.plantsFlipped    || 0;
+    case 'nuteFeeds':          return s.nuteFeeds        || 0;
+    case 'optimalPPMHits':     return s.optimalPPMHits   || 0;
+    case 'idealPHWaters':      return s.idealPHWaters    || 0;
+    case 'phAdjusted':         return s.phAdjusted       || 0;
+    case 'phChemBought':       return s.phChemBought     || 0;
+    case 'nuteBought':         return s.nuteBought       || 0;
+    case 'maleSeedBought':     return s.maleSeedBought   || 0;
+    case 'malePlanted':        return s.malePlanted      || 0;
+    case 'strainsNamed':       return s.strainsNamed     || 0;
+    case 'harvestAtWeek8':     return s.harvestAtWeek8   || 0;
+    case 'dryBelow70':         return s.dryBelow70       || 0;
+    case 'moveToCuringCount':  return s.moveToCuringCount|| 0;
+    case 'totalBurps':         return s.totalBurps       || 0;
+    case 'growoffSubmits':     return s.growoffSubmits   || 0;
+    case 'fanOwned':           return s.fanOwned         || 0;
+    case 'fanAssigned':        return s.fanAssigned      || 0;
+    case 'dehuOwned':          return s.dehuOwned        || 0;
+    case 'dehuAssigned':       return s.dehuAssigned     || 0;
+    case 'bigLightOwned':      return s.bigLightOwned    || 0;
+    case 'maxSimultaneous':    return s.maxSimultaneous  || 0;
+    case 'masterNuteTotal':    return s.masterNuteTotal  || 0;
+    case 'noobSeedDonated':    return s.noobSeedDonated  || 0;
+    case 'noobLightDonated':   return s.noobLightDonated || 0;
+    case 'noobNuteDonated':    return s.noobNuteDonated  || 0;
+    case 'noobPHDonated':      return s.noobPHDonated    || 0;
     case 'total_harvests':     return s.totalHarvests    || 0;
     case 'total_grams':        return s.totalGrams       || 0;
     case 'total_coins_earned': return s.totalCoins       || 0;
-    case 'seeds_redeemed':     return s.seedsRedeemed    || 0;
-    case 'plants_planted':     return s.plantsPlanted    || 0;
-    case 'veg_reached':        return s.vegReached       || 0;
+    case 'seeds_bred':         return s.seedsBred        || 0;
+    case 'perfect_grows':      return s.perfectGrows     || 0;
+    case 'god_phenos':         return s.godPhenoCount    || 0;
     case 'diseases_cured':     return s.diseasesCured    || 0;
     case 'disease_free_days':  return s.diseaseFreeDays  || 0;
-    case 'vault_entries':      return s.vaultEntries     || 0;
-    case 'perfect_grows':      return s.perfectGrows     || 0;
-    case 'unique_strains':     return (s.uniqueStrains||[]).length;
-    case 'total_waters':       return s.totalWaters      || 0;
+    case 'vaultEntries':       return s.vaultEntries     || 0;
+    case 'growoff_wins':       return GS.growoffUnlocked || 0;
+    case 'level':              return GS.level           || 1;
     case 'bm_purchases':       return s.bmPurchases      || 0;
     case 'bm_sales':           return s.bmSales          || 0;
     case 'branches_snapped':   return s.branchesSnapped  || 0;
     case 'suit_curses':        return s.suitCurses       || 0;
-    case 'additives_used':     return s.additivesUsed    || 0;
-    case 'seeds_bred':         return s.seedsBred        || 0;
-    case 'god_phenos':         return s.godPhenoCount    || 0;
-    case 'growoff_wins':       return GS.growoffUnlocked || 0;
-    case 'level':              return GS.level           || 1;
-    case 'rarity_grown':       return (s.raritiesGrown||{})[o.rarity] || 0;
+    case 'strainsNamed':       return s.strainsNamed     || 0;
+    case 'gear_owned': {
+      const g = GS.gear || {};
+      if (step.gearKey === 'ecmeter')  return g.ecmeter  ? 1 : 0;
+      if (step.gearKey === 'phmeter')  return g.phmeter  ? 1 : 0;
+      if (step.gearKey === 'scope')    return g.scope    ? 1 : 0;
+      if (step.gearKey === 'scrogNet') return g.scrogNet ? 1 : 0;
+      if (step.gearKey === 'fanOwned') return (s.fanOwned||0) > 0 ? 1 : 0;
+      if (step.gearKey === 'dehuOwned')return (s.dehuOwned||0) > 0 ? 1 : 0;
+      return 0;
+    }
+    case 'rarity_grown': {
+      const r = s.raritiesGrown || {};
+      if (step.rarity === 'EP')        return r.EP       || 0;
+      if (step.rarity === 'Shiny')     return r.Shiny    || 0;
+      if (step.rarity === 'Sparkling') return r.Sparkling|| 0;
+      if (step.rarity === 'Glowing')   return r.Glowing  || 0;
+      return 0;
+    }
     case 'combo_equip': {
-      const equipped = GS.equip || {};
-      return o.items.every(i => Object.values(equipped).includes(i)) ? 1 : 0;
+      const eq = GS.equip || {};
+      return step.items.every(i => Object.values(eq).includes(i)) ? 1 : 0;
+    }
+    case 'own_item': {
+      return (GS.equipItems||[]).some(x => x.id === step.itemId && x.qty > 0) ? 1 : 0;
     }
     case 'own_item_count': {
-      const ownedItems = getOwnedEquipItems();
-      return ownedItems.filter(x => x.id.includes(o.tag||'')).length;
+      return (GS.equipItems||[]).filter(x => x.id.includes(step.tag||'')).length;
+    }
+    case 'suit_equipped': {
+      const eq = GS.equip || {};
+      return (eq.shirt === 'shirt_suit' && eq.pants === 'pants_suit') ? 1 : 0;
     }
     default: return 0;
   }
+}
+
+// ── Overall quest progress: returns { done: N, total: N, allDone: bool } ──
+function getQuestOverallProgress(quest) {
+  const steps = quest.steps || [];
+  if (!steps.length) return {done:0, total:0, allDone:true};
+  let done = 0;
+  steps.forEach(step => {
+    if (getStepProgress(step) >= (step.target||1)) done++;
+  });
+  return {done, total:steps.length, allDone: done >= steps.length};
+}
+
+// Legacy shim — kept so nothing else breaks
+function getQuestProgress(quest) {
+  return getQuestOverallProgress(quest).allDone ? (quest.steps?.[0]?.target||1) : 0;
+}
+
+function _showQuestComplete(quest) {
+  const r = quest.rewards;
+  const itemLines = (r.items||[]).reduce((acc, id) => {
+    const item = EQUIPMENT_ITEMS[id];
+    if (!item) return acc;
+    const existing = acc.find(x => x.id === id);
+    if (existing) existing.qty++;
+    else acc.push({id, name:item.name, icon:item.icon, rarity:item.rarity, qty:1});
+    return acc;
+  }, []);
+
+  const RARITY_COLORS2 = {
+    Common:'var(--muted)', Uncommon:'var(--green)', Rare:'var(--blue)',
+    Epic:'var(--purple)', Legendary:'var(--orange)', Master:'var(--gold)',
+    GOD:'var(--pink)', 'Black Market':'var(--red)', Seasonal:'var(--cyan)'
+  };
+
+  // Build a rich toast-style banner
+  const itemHtml = itemLines.map(it =>
+    `<span style="display:inline-flex;align-items:center;gap:3px;background:rgba(0,0,0,0.5);border:1px solid ${RARITY_COLORS2[it.rarity]||'var(--border)'};border-radius:4px;padding:3px 7px;font-size:9px;color:${RARITY_COLORS2[it.rarity]||'var(--muted)'};font-family:var(--font-hud);white-space:nowrap">
+      ${it.icon} ${it.qty > 1 ? it.qty + '× ' : ''}${it.name}
+    </span>`
+  ).join('');
+
+  const coinLine  = r.coins ? `<span style="color:var(--gold);font-family:var(--font-hud);font-size:10px">+${r.coins.toLocaleString()}¢</span>` : '';
+  const xpLine    = r.xp    ? `<span style="color:var(--purple);font-family:var(--font-hud);font-size:10px">+${r.xp.toLocaleString()} XP</span>` : '';
+  const specLine  = r.special ? `<span style="color:var(--cyan);font-family:var(--font-hud);font-size:9px">🔓 ${r.special.replace(/_/g,' ').toUpperCase()}</span>` : '';
+
+  // Create DOM notification (richer than a plain toast)
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = `
+    position:fixed;left:50%;top:80px;transform:translateX(-50%);
+    background:var(--panel);border:2px solid rgba(251,191,36,0.7);
+    border-radius:14px;padding:16px 20px;z-index:10000;
+    max-width:420px;width:90vw;text-align:center;
+    box-shadow:0 0 40px rgba(251,191,36,0.2);
+    animation:toastIn .35s ease;
+  `;
+  wrapper.innerHTML = `
+    <div style="font-size:22px;margin-bottom:6px">${quest.icon}</div>
+    <div style="font-family:var(--font-hud);font-size:13px;color:var(--gold);letter-spacing:1.5px;margin-bottom:4px">QUEST COMPLETE!</div>
+    <div style="font-family:var(--font-hud);font-size:11px;color:var(--text);margin-bottom:8px">${quest.name}</div>
+    <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:8px">
+      ${coinLine}${xpLine}${specLine}
+    </div>
+    ${itemLines.length ? `
+      <div style="font-family:var(--font-hud);font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:6px">ITEMS RECEIVED</div>
+      <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:center">${itemHtml}</div>
+    ` : ''}
+    <button onclick="this.parentElement.remove()"
+      style="margin-top:12px;padding:6px 20px;background:rgba(251,191,36,0.12);border:1px solid var(--gold);border-radius:6px;color:var(--gold);font-family:var(--font-hud);font-size:9px;letter-spacing:1px;cursor:pointer">
+      AWESOME!
+    </button>`;
+  document.body.appendChild(wrapper);
+  setTimeout(() => { if (wrapper.parentElement) wrapper.remove(); }, 8000);
 }
 
 function checkQuestProgress() {
   if (!GS || !GS.stats) return;
   if (!GS.questsClaimed) GS.questsClaimed = [];
   let anyNew = false;
+
   QUESTS.forEach(q => {
     if (GS.questsClaimed.includes(q.id)) return;
-    const prog = getQuestProgress(q);
-    const target = q.obj?.val || 1;
-    if (prog >= target) {
-      // Auto-claim reward
-      GS.questsClaimed.push(q.id);
-      const r = q.rewards;
-      if (r.coins) GS.coins += r.coins;
-      if (r.xp)    grantXP(r.xp);
-      (r.items||[]).forEach(itemId => grantEquipItem(itemId, 1));
-      if (r.special === 'unbreakable_ph')  { GS.gear.unbreakable_ph = true; GS.gear.phmeter = true; }
-      if (r.special === 'unbreakable_ec')  { GS.gear.unbreakable_ec = true; GS.gear.ecmeter = true; }
-      if (r.special === 'super_light') {
-        GS.gear.super_light = true;
-        const inv = getInventory();
-        if (!inv.instances.some(x => x.itemId === 'forbidden_light')) {
-          inv.instances.push({
-            uid: uid(), itemId: 'forbidden_light', type: 'lights', equipType: 'lights',
-            name: 'Forbidden Light ⚡', icon: '💡', power: 1500, size: 'legendary',
-            isForbidden: true
-          });
-        }
-      }
-      anyNew = true;
-      toast('🎯 QUEST COMPLETE: ' + q.name + '! Rewards granted!', 'special', 6000);
-      addLog('Quest complete: ' + q.name, 'success');
+    if (!isQuestAvailable(q)) return;
+    const prog = getQuestOverallProgress(q);
+    if (!prog.allDone) return;
+
+    GS.questsClaimed.push(q.id);
+    const r = q.rewards;
+    if (r.coins) GS.coins += r.coins;
+    if (r.xp)    grantXP(r.xp);
+    (r.items||[]).forEach(itemId => grantEquipItem(itemId, 1));
+
+    // Special rewards
+    if (r.special === 'unbreakable_ph')  { GS.gear.unbreakable_ph = true; GS.gear.phmeter = true; }
+    if (r.special === 'unbreakable_ec')  { GS.gear.unbreakable_ec = true; GS.gear.ecmeter = true; }
+    if (r.special === 'super_light') {
+      GS.gear.super_light = true;
+      const inv = getInventory();
+      if (!inv.instances.some(x => x.itemId === 'forbidden_light'))
+        inv.instances.push({uid:uid(),itemId:'forbidden_light',type:'lights',equipType:'lights',
+          name:'Forbidden Light ⚡',icon:'💡',power:1500,size:'legendary',isForbidden:true});
     }
+    if (r.special === 'super_reservoir') {
+      // Unlock a 50,000 gal reservoir in Room 1
+      const rId = (GS.rooms[0]||{}).id || 1;
+      const rg  = getRoomGear(rId);
+      rg.reservoir = {size:'Super Reservoir',capacityGal:50000,levelGal:50000,level:100,ppm:0,_lowWarn:false};
+      toast('🛢️ Super Reservoir (50,000 gal) unlocked in Room 1!','special',8000);
+    }
+
+    anyNew = true;
+    _showQuestComplete(q);
+    addLog('Quest complete: ' + q.name + ' — ' + (r.coins||0).toLocaleString() + '¢ +' + (r.xp||0) + ' XP','success');
   });
   if (anyNew) { saveGame(); }
 }
-
 function getDailyGoal() {
   try {
     const diff = GS.difficulty || 'easy';
@@ -3189,7 +3985,36 @@ function defaultState(username, difficulty) {
     stats: {
       totalHarvests:0, totalGrams:0, totalCoins:0, totalXP:0,
       playtime:0, diseasesCured:0, branchesSnapped:0,
-      seedsRedeemed:0, seedsBred:0, perfectGrows:0, godPhenoCount:0,
+      seedsRedeemed:0, seedsBred:0, perfectGrows:0, godPhenoCount:0,inspectionsDone: 0,
+lstApplied: 0,
+topApplied: 0,
+plantsFlipped: 0,
+nuteFeeds: 0,
+optimalPPMHits: 0,
+idealPHWaters: 0,
+phAdjusted: 0,
+phChemBought: 0,
+nuteBought: 0,
+maleSeedBought: 0,
+malePlanted: 0,
+strainsNamed: 0,
+harvestAtWeek8: 0,
+dryBelow70: 0,
+moveToCuringCount: 0,
+totalBurps: 0,
+growoffSubmits: 0,
+masterNuteTotal: 0,
+noobSeedDonated: 0,
+noobLightDonated: 0,
+noobNuteDonated: 0,
+noobPHDonated: 0,
+fanOwned: 0,
+fanAssigned: 0,
+dehuOwned: 0,
+dehuAssigned: 0,
+bigLightOwned: 0,
+maxSimultaneous: 0,
+suitEquipped: 0,
       recentSales:[]
     },
     achievements: [],
@@ -3365,6 +4190,8 @@ function assignRoomSlot(roomId, group, idx, uid) {
   if (!rg[group][idx]) rg[group][idx] = { instanceUid: null, settings: {} };
   rg[group][idx].instanceUid = uid || null;
   if (!rg[group][idx].settings) rg[group][idx].settings = {};
+  if (group === 'fans') GS.stats.fanAssigned = (GS.stats.fanAssigned||0) + 1;
+if (group === 'dehumidifiers') GS.stats.dehuAssigned = (GS.stats.dehuAssigned||0) + 1;
   saveGame();
   renderGearPanel();
   renderRoomPanel();
@@ -3730,7 +4557,8 @@ function tickPlant(plant, room, strain, actual, gameMins) {
 
   // Stage advancement
   // Growth speed bonus (gen) — speeds up day accumulation
-  const genSpeedMult = 1 + ((plant.growSpeedBonus || 0) / 100);
+  const _eqSpeed     = (GS && GS.username) ? (getEquippedBonuses().grow_speed || 0) : 0;
+  const genSpeedMult = 1 + ((plant.growSpeedBonus || 0) / 100) + (_eqSpeed / 100);
 
   // Health-based growth slowdown (rulebook)
   const _hp = plant.health != null ? plant.health : 100;
@@ -3947,7 +4775,10 @@ function tickPlant(plant, room, strain, actual, gameMins) {
   const rh = gameMins / (60 * GAME_SPEED); // real hours this tick
   let delta = 0;
   if (plant.waterLevel < 15 && !plant.isDead) delta -= 1.5 * rh;  // -1.5/real hr when dry
-  if (plant.waterLevel > 95) delta -= 0.8 * rh;                   // -0.8/real hr overwatered
+  if (plant.waterLevel > 95) {
+    const _owResist = Math.min(0.95, (plant.overwaterResist || 0) / 100);
+    delta -= 0.8 * rh * (1 - _owResist);
+  }
   if (actual.temp > 90 && (room.tempStressAccum || 0) > 2) delta -= 1.0 * rh;
   if ((plant.events || []).length > 0) {
     plant.untreatedDiseaseTime = (plant.untreatedDiseaseTime || 0) + gameMins;
@@ -4053,10 +4884,11 @@ function _tickDrying(batch, realHrs) {
   // No gear: ~0.15/hr → ~120h (very slow, risky)
   // Fan@50%+dehu: ~0.65/hr → ~28h to 62%
   // Fan@100%+dehu+AC: ~1.05/hr → ~17h to 62%
-  let rate = 0.15
+  const _dryEquipMult = (GS && GS.username) ? (getEquippedBonuses().dry_speed || 1) : 1;
+  let rate = (0.15
     + fanSpeed * 0.55
     + (dehuOn ? 0.28 : 0)
-    + (acOn   ? 0.07 : 0);
+    + (acOn   ? 0.07 : 0)) * _dryEquipMult;
 
   // Natural slowdown as it dries out
   if (rh < 60)  rate *= 0.45;
@@ -5831,6 +6663,7 @@ function confirmRenameStrain() {
   if (bred.hasBeenNamed) { toast('Already named — cannot change.','warn'); return; }
   bred.customName  = newName.slice(0, 30);
   bred.hasBeenNamed = true;
+  GS.stats.strainsNamed = (GS.stats.strainsNamed||0) + 1;
   closeModal('modal-rename-strain');
   toast('✏️ Strain named: ' + bred.customName + '!','ok',4000);
   addLog('Strain named: ' + strainKey + ' → ' + bred.customName,'info');
@@ -6197,6 +7030,7 @@ function burpJar(batchId, burpType) {
 
   completeDailyGoal();
   addLog(batch.name + ' burped (' + label + ') RH: ' + batch.jarRH.toFixed(1) + '%', 'info');
+  GS.stats.totalBurps = (GS.stats.totalBurps||0) + 1;
   saveGame(); renderVault(); renderCuring();
 }
 
@@ -6232,6 +7066,8 @@ function moveToCuringJar(batchId) {
 
   const qGain = qualityMod > 0 ? ' (+' + qualityMod + '% quality bonus!)' :
                 qualityMod < 0 ? ' (' + qualityMod + '% quality loss)' : ' (no change)';
+  if (rh < 70) GS.stats.dryBelow70 = (GS.stats.dryBelow70||0) + 1;
+GS.stats.moveToCuringCount = (GS.stats.moveToCuringCount||0) + 1;
   toast('🫙 ' + batch.name + ' → jar curing at ' + rh.toFixed(1) + '% RH' + qGain, qualityMod < 0 ? 'warn' : 'ok', 4000);
   addLog(batch.name + ' moved to jar curing at ' + rh.toFixed(1) + '% RH (quality: ' + Math.round(batch.quality) + '%)', 'info');
   saveGame(); renderVault(); renderCuring();
@@ -7387,6 +8223,7 @@ function buyMaleSeed(strainName) {
   if (GS.coins < 5000) { toast('Not enough coins! Need 5,000¢','err'); return; }
   GS.coins -= 5000;
   GS.maleSeedsOwned[strainName] = (GS.maleSeedsOwned[strainName] || 0) + 1;
+  GS.stats.maleSeedBought = (GS.stats.maleSeedBought||0) + 1;
   toast('♂ Bought 1x ' + strainName + ' male seed!', 'ok', 3000);
   addLog('Bought male seed: ' + strainName, 'info');
   saveGame(); renderShop(); renderSeeds(); renderHeader();
@@ -7454,6 +8291,19 @@ function buyGear(itemId) {
     });
     toast((_icons[item.type]||'📦')+' '+item.name+' added to inventory — assign in Gear panel!','ok',4000);
   } else if (item.type === 'nutrients') {
+    if (item.type === 'nutrients') {
+  GS.stats.nuteBought = (GS.stats.nuteBought||0) + 1;
+  GS.stats.masterNuteTotal = (GS.stats.masterNuteTotal||0) + 1000;
+  // ...existing code
+}
+if (item.type === 'phUp' || item.type === 'phDown') {
+  GS.stats.phChemBought = (GS.stats.phChemBought||0) + 1;
+}
+// Fan/dehu/light owned tracking — add before toast:
+if (item.type === 'fan')          GS.stats.fanOwned   = (GS.stats.fanOwned||0)    + 1;
+if (item.type === 'dehumidifier') GS.stats.dehuOwned  = (GS.stats.dehuOwned||0)   + 1;
+if (item.type === 'lights' && (item.power||0) >= 315)
+                                  GS.stats.bigLightOwned = (GS.stats.bigLightOwned||0) + 1;
     const rg2 = getRoomGear(activeRoomId);
     rg2[item.ntype] = (rg2[item.ntype]||0) + 1000;
     toast('🧴 '+item.name+' added to '+(GS.rooms.find(r=>r.id===activeRoomId)?.name||'Room')+'!','ok',2500);
@@ -7957,7 +8807,7 @@ function confirmGrowOffSubmit() {
   const acts    = document.getElementById('go-submit-actions');
   if (res)  res.classList.remove('hidden');
   if (acts) acts.classList.add('hidden');
-
+  GS.stats.growoffSubmits = (GS.stats.growoffSubmits||0) + 1;
   if (won) {
     GS.growoffUnlocked = botIdx + 1;
     GS.coins += bot.reward.coins;
@@ -8316,64 +9166,189 @@ function renderQuests() {
   const claimed = GS.questsClaimed || [];
 
   // Update badge
-  const newAvailable = QUESTS.filter(q => {
+  const readyCount = QUESTS.filter(q => {
     if (claimed.includes(q.id)) return false;
-    return getQuestProgress(q) >= (q.obj?.val||1);
+    if (!isQuestAvailable(q)) return false;
+    return getQuestOverallProgress(q).allDone;
   }).length;
   const qb = document.getElementById('quest-badge');
-  if (qb) { qb.style.display = newAvailable ? 'inline' : 'none'; qb.textContent = newAvailable || '!'; }
+  if (qb) { qb.style.display = readyCount ? 'inline' : 'none'; qb.textContent = readyCount || '!'; }
 
+  const CATS = ['Tutorial','Grower','Elite','Master','Legend','Black Market','Silly','Special'];
   let html = '';
-  const RARITY_COLORS = {Common:'var(--muted)', Uncommon:'var(--green)', Rare:'var(--blue)', Epic:'var(--purple)', Legendary:'var(--orange)', Master:'var(--gold)', 'Black Market':'var(--red)', GOD:'var(--pink)', Seasonal:'var(--cyan)', Special:'var(--teal)'};
 
-  QUEST_CATEGORIES.forEach(cat => {
+  CATS.forEach(cat => {
     const catQuests = QUESTS.filter(q => q.cat === cat);
     if (!catQuests.length) return;
-    const done  = catQuests.filter(q => claimed.includes(q.id)).length;
-    html += `<div style="margin-bottom:18px">
-      <div class="section-divider" style="margin-bottom:10px">${cat} (${done}/${catQuests.length})</div>
-      <div style="display:flex;flex-direction:column;gap:6px">`;
-    catQuests.forEach(q => {
-      const isClaimed = claimed.includes(q.id);
-      const prog      = getQuestProgress(q);
-      const target    = q.obj?.val || 1;
-      const pct       = Math.min(100, (prog / target) * 100);
-      const isReady   = prog >= target && !isClaimed;
-      const rewards   = q.rewards;
-      const itemPreviews = (rewards.items||[]).slice(0,4).map(id => {
-        const item = EQUIPMENT_ITEMS[id];
-        return item ? `<span title="${item.name}" style="font-size:14px">${item.icon}</span>` : '';
-      }).join('');
+    const doneCt  = catQuests.filter(q => claimed.includes(q.id)).length;
+    const catColor = {Tutorial:'var(--green)',Grower:'var(--cyan)',Elite:'var(--blue)',
+      Master:'var(--purple)',Legend:'var(--gold)',
+      'Black Market':'var(--red)',Silly:'var(--orange)',Special:'var(--pink)'}[cat]||'var(--muted)';
 
-      html += `<div style="background:var(--card-bg);border:1px solid ${isClaimed?'rgba(74,222,128,0.3)':isReady?'rgba(251,191,36,0.6)':'var(--border)'};border-radius:10px;padding:12px;${isReady?'animation:readyGlow 2s ease-in-out infinite':''}">
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-          <span style="font-size:20px">${q.icon}</span>
-          <div style="flex:1;min-width:0">
-            <div style="font-family:var(--font-hud);font-size:11px;color:${isClaimed?'var(--muted)':isReady?'var(--gold)':'var(--text)'};letter-spacing:.5px;margin-bottom:2px">
-              ${isClaimed?'✅ ':isReady?'🎁 ':''}${q.name}
+    html += `<div style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:7px;margin-bottom:10px;flex-wrap:wrap;gap:6px">
+        <div style="font-family:var(--font-hud);font-size:11px;color:${catColor};letter-spacing:2px">${cat.toUpperCase()}</div>
+        <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted)">${doneCt}/${catQuests.length} complete</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">`;
+
+    catQuests.forEach(q => {
+      const isClaimed   = claimed.includes(q.id);
+      const isAvail     = isQuestAvailable(q);
+      const prog        = getQuestOverallProgress(q);
+      const isReady     = prog.allDone && !isClaimed && isAvail;
+      const isLocked    = !isAvail;
+
+      // Build step list
+      const steps = q.steps || [];
+      let stepsHtml = '';
+      steps.forEach((step, si) => {
+        const prevStepsDone = steps.slice(0, si).every(s => getStepProgress(s) >= (s.target||1));
+        const stepProg  = getStepProgress(step);
+        const stepDone  = stepProg >= (step.target||1);
+        const stepActive= prevStepsDone && !stepDone;
+        const pct       = step.target > 0 ? Math.min(100, (stepProg / step.target) * 100) : 100;
+
+        // Mystery step — hide numbers
+        const isMystery = q.mystery && step.mystery;
+        let progressDisplay = '';
+        if (!isMystery && step.target > 1 && !stepDone) {
+          progressDisplay = `<div style="display:flex;align-items:center;gap:6px;margin-top:3px">
+            <div style="flex:1;height:3px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden">
+              <div style="height:100%;width:${pct}%;background:${stepActive?'var(--purple)':'rgba(74,222,128,0.3)'};border-radius:2px;transition:.4s"></div>
             </div>
-            <div style="font-size:9px;color:var(--muted);margin-bottom:4px">${q.desc}</div>
-            ${!isClaimed?`
-              <div style="height:3px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;margin-bottom:4px">
-                <div style="height:100%;width:${pct}%;background:${isReady?'var(--gold)':'var(--green)'};border-radius:2px;transition:.5s"></div>
-              </div>
-              <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">${prog.toLocaleString()} / ${target.toLocaleString()}</div>
-            `:''
-            }
+            <span style="font-size:8px;color:var(--muted);font-family:var(--font-mono);white-space:nowrap">${stepProg.toLocaleString()} / ${step.target.toLocaleString()}</span>
+          </div>`;
+        } else if (isMystery && !stepDone) {
+          // Show bar with NO numbers — mystery!
+          progressDisplay = `<div style="margin-top:3px;display:flex;align-items:center;gap:6px">
+            <div style="flex:1;height:4px;background:rgba(251,191,36,0.1);border-radius:2px;overflow:hidden;border:1px solid rgba(251,191,36,0.2)">
+              <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:2px;transition:.8s"></div>
+            </div>
+            <span style="font-size:9px;color:var(--gold);font-family:var(--font-hud)">???</span>
+          </div>`;
+        }
+
+        // Donate buttons for noob quests
+        let donateHtml = '';
+        if (step.special && stepActive && !stepDone) {
+          if (step.special === 'donate_seed') {
+            const hasSeeds = Object.values(GS.seeds||{}).some(q=>q>0);
+            donateHtml = `<button class="btn-action btn-green" style="margin-top:5px;padding:5px 12px;font-size:8px"
+              onclick="doQuestDonate('noob_seed','${q.id}')" ${!hasSeeds?'disabled':''}>
+              🌱 Donate a Seed ${!hasSeeds?'(no seeds)':''}
+            </button>`;
+          }
+          if (step.special === 'donate_light') {
+            donateHtml = `<button class="btn-action btn-gold" style="margin-top:5px;padding:5px 12px;font-size:8px"
+              onclick="doQuestDonate('noob_light','${q.id}')" ${GS.coins<2000?'disabled':''}>
+              💡 Donate a Light (−2,000¢) ${GS.coins<2000?'(need 2,000¢)':''}
+            </button>`;
+          }
+          if (step.special === 'donate_nute') {
+            donateHtml = `<button class="btn-action btn-cyan" style="margin-top:5px;padding:5px 12px;font-size:8px"
+              onclick="doQuestDonate('noob_nute','${q.id}')" ${GS.coins<500?'disabled':''}>
+              🧴 Send Nutrients (−500¢) ${GS.coins<500?'(need 500¢)':''}
+            </button>`;
+          }
+          if (step.special === 'donate_ph') {
+            donateHtml = `<button class="btn-action btn-blue" style="margin-top:5px;padding:5px 12px;font-size:8px"
+              onclick="doQuestDonate('noob_ph','${q.id}')" ${GS.coins<300?'disabled':''}>
+              🧪 Send pH Down (−300¢) ${GS.coins<300?'(need 300¢)':''}
+            </button>`;
+          }
+        }
+
+        const stepBg = stepDone
+          ? 'rgba(74,222,128,0.06)'
+          : stepActive
+          ? 'rgba(168,85,247,0.06)'
+          : 'rgba(0,0,0,0.2)';
+        const stepBorder = stepDone
+          ? 'rgba(74,222,128,0.25)'
+          : stepActive
+          ? 'rgba(168,85,247,0.35)'
+          : 'rgba(255,255,255,0.04)';
+        const numColor = stepDone
+          ? 'var(--green)'
+          : stepActive
+          ? 'var(--purple)'
+          : 'var(--muted)';
+
+        stepsHtml += `<div style="display:flex;gap:8px;align-items:flex-start;padding:6px 8px;background:${stepBg};border:1px solid ${stepBorder};border-radius:6px">
+          <div style="width:18px;height:18px;border-radius:50%;border:1px solid ${numColor};background:${stepDone?'var(--green)':stepActive?'rgba(168,85,247,0.3)':'transparent'};flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:${stepDone?'#000':'var(--muted)'};font-family:var(--font-hud);margin-top:1px">
+            ${stepDone ? '✓' : si+1}
           </div>
-          <div style="text-align:right;flex-shrink:0">
-            <div style="font-size:12px;margin-bottom:2px">${itemPreviews}</div>
-            ${rewards.coins?`<div style="font-family:var(--font-hud);font-size:9px;color:var(--gold)">${rewards.coins.toLocaleString()}¢</div>`:''}
-            ${rewards.xp?`<div style="font-family:var(--font-hud);font-size:9px;color:var(--purple)">${rewards.xp.toLocaleString()} XP</div>`:''}
-            ${rewards.special?`<div style="font-family:var(--font-hud);font-size:8px;color:var(--cyan)">🔓 ${rewards.special.replace(/_/g,' ')}</div>`:''}
+          <div style="flex:1;min-width:0">
+            <div style="font-family:var(--font-hud);font-size:9px;color:${stepDone?'var(--green)':stepActive?'var(--text)':'var(--muted)'};letter-spacing:.3px;${stepDone?'text-decoration:line-through;opacity:.7':''}">${step.specialHint?'<span style="color:var(--blue)">ℹ️ </span>':''}${step.label}</div>
+            ${progressDisplay}
+            ${donateHtml}
           </div>
+        </div>`;
+      });
+
+      // Reward strip
+      const r = q.rewards;
+      const rewardItems = (r.items||[]).slice(0,5).reduce((acc,id)=>{
+        const item=EQUIPMENT_ITEMS[id];
+        if(!item) return acc;
+        const ex=acc.find(x=>x.id===id);
+        if(ex) ex.qty++;
+        else acc.push({id,name:item.name,icon:item.icon,rarity:item.rarity,qty:1});
+        return acc;
+      },[]);
+      const rewardHtml = `<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:7px 8px;background:rgba(0,0,0,0.35);border-radius:6px;margin-top:8px">
+        <span style="font-size:8px;color:var(--muted);font-family:var(--font-hud)">REWARDS:</span>
+        ${r.coins?`<span style="font-family:var(--font-hud);font-size:9px;color:var(--gold)">${r.coins.toLocaleString()}¢</span>`:''}
+        ${r.xp?`<span style="font-family:var(--font-hud);font-size:9px;color:var(--purple)">${r.xp.toLocaleString()} XP</span>`:''}
+        ${r.special?`<span style="font-family:var(--font-hud);font-size:8px;color:var(--cyan)">🔓 ${r.customRewardText||r.special.replace(/_/g,' ').toUpperCase()}</span>`:''}
+        ${rewardItems.map(it=>`<span title="${it.name}" style="font-size:12px">${it.icon}${it.qty>1?`<sup style='font-size:7px;color:var(--gold)'>${it.qty}</sup>`:''}</span>`).join('')}
+      </div>`;
+
+      // Unlocks hint
+      const unlocksHtml = (q.unlocks||[]).length
+        ? `<div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin-top:5px;letter-spacing:.5px">
+            🔓 Unlocks: ${(q.unlocks||[]).map(id=>{const uq=QUESTS.find(x=>x.id===id);return uq?`<span style="color:var(--green)">${uq.name}</span>`:id;}).join(', ')}
+           </div>`
+        : '';
+
+      // Custom completion note (noob quest)
+      const customNote = isClaimed && r.customText
+        ? `<div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);padding:6px 8px;background:rgba(0,0,0,0.3);border-radius:5px;margin-top:6px;font-style:italic">"${r.customText}"</div>` : '';
+
+      const cardBg  = isClaimed   ? 'rgba(74,222,128,0.03)'
+                    : isReady     ? 'rgba(251,191,36,0.03)'
+                    : isLocked    ? 'rgba(0,0,0,0.1)'
+                    : 'var(--card-bg)';
+      const cardBdr = isClaimed   ? 'rgba(74,222,128,0.3)'
+                    : isReady     ? 'rgba(251,191,36,0.6)'
+                    : isLocked    ? 'rgba(255,255,255,0.04)'
+                    : 'var(--border)';
+      const glowAnim = isReady    ? 'animation:readyGlow 2s ease-in-out infinite' : '';
+
+      html += `<div style="background:${cardBg};border:1px solid ${cardBdr};border-radius:12px;padding:14px;${glowAnim};opacity:${isLocked?'0.35':'1'};pointer-events:${isLocked?'none':''}">
+        <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+          <span style="font-size:20px;flex-shrink:0">${q.icon}</span>
+          <div style="flex:1;min-width:120px">
+            <div style="font-family:var(--font-hud);font-size:11px;color:${isClaimed?'var(--muted)':isReady?'var(--gold)':isLocked?'var(--muted)':'var(--text)'};letter-spacing:.5px;margin-bottom:2px">
+              ${isClaimed?'✅ ':isReady?'🎁 ':isLocked?'🔒 ':''}${q.name}
+            </div>
+            <div style="font-size:9px;color:var(--muted);line-height:1.5">${q.desc}</div>
+            ${q.levelReq>0&&!isClaimed?`<div style="font-size:8px;color:${isLocked?'var(--red)':'var(--muted)'};font-family:var(--font-hud);margin-top:2px">${isLocked?'🔒 ':''} Level ${q.levelReq} required</div>`:''}
+            ${q.requiresQuest&&!isClaimed&&isLocked?`<div style="font-size:8px;color:var(--red);font-family:var(--font-hud);margin-top:2px">Requires: ${QUESTS.find(x=>x.id===q.requiresQuest)?.name||q.requiresQuest}</div>`:''}
+          </div>
+          ${!isClaimed&&isAvail?`<div style="font-family:var(--font-hud);font-size:10px;color:${prog.done===prog.total?'var(--green)':'var(--muted)'};white-space:nowrap">${prog.done}/${prog.total}</div>`:''}
         </div>
+        ${!isClaimed ? `<div style="display:flex;flex-direction:column;gap:4px;margin-bottom:8px">${stepsHtml}</div>` : customNote}
+        ${!isClaimed ? rewardHtml : ''}
+        ${!isClaimed ? unlocksHtml : ''}
       </div>`;
     });
-    html += '</div></div>';
+
+    html += `</div></div>`;
   });
 
-  cont.innerHTML = html || '<div class="empty-state">No quests available.</div>';
+  cont.innerHTML = html || '<div class="empty-state">No quests.</div>';
 }
 
 // ================================================================
@@ -8848,7 +9823,36 @@ function loginSuccess() {
   if (!GS.stats) GS.stats = {
     totalHarvests:0, totalGrams:0, totalCoins:0, totalXP:0,
     playtime:0, diseasesCured:0, branchesSnapped:0,
-    seedsRedeemed:0, seedsBred:0, perfectGrows:0, godPhenoCount:0,
+    seedsRedeemed:0, seedsBred:0, perfectGrows:0, godPhenoCount:0,inspectionsDone: 0,
+lstApplied: 0,
+topApplied: 0,
+plantsFlipped: 0,
+nuteFeeds: 0,
+optimalPPMHits: 0,
+idealPHWaters: 0,
+phAdjusted: 0,
+phChemBought: 0,
+nuteBought: 0,
+maleSeedBought: 0,
+malePlanted: 0,
+strainsNamed: 0,
+harvestAtWeek8: 0,
+dryBelow70: 0,
+moveToCuringCount: 0,
+totalBurps: 0,
+growoffSubmits: 0,
+masterNuteTotal: 0,
+noobSeedDonated: 0,
+noobLightDonated: 0,
+noobNuteDonated: 0,
+noobPHDonated: 0,
+fanOwned: 0,
+fanAssigned: 0,
+dehuOwned: 0,
+dehuAssigned: 0,
+bigLightOwned: 0,
+maxSimultaneous: 0,
+suitEquipped: 0,
     recentSales:[]
   };
   if (!GS.eventLog) GS.eventLog = [];
@@ -8917,6 +9921,22 @@ function loginSuccess() {
   if (!GS.equipItems)     GS.equipItems     = [];
   if (!GS.questsClaimed)  GS.questsClaimed  = [];
   if (!GS.equipBuffExpiry)GS.equipBuffExpiry= {};
+
+  // Auto-clear any expired timed buffs on login
+  EQUIP_SLOTS.forEach(slot => {
+    const itemId = GS.equip[slot];
+    if (!itemId) return;
+    const item = EQUIPMENT_ITEMS[itemId];
+    if (!item) { delete GS.equip[slot]; return; }
+    if (item.duration_hrs) {
+      const expiry = GS.equipBuffExpiry[slot];
+      if (!expiry || Date.now() > expiry) {
+        delete GS.equip[slot];
+        delete GS.equipBuffExpiry[slot];
+        // Don't log here — too early, just silently clear
+      }
+    }
+  });
   // Init new stat fields
   if (!GS.stats.plantsPlanted)   GS.stats.plantsPlanted   = 0;
   if (!GS.stats.vegReached)      GS.stats.vegReached      = 0;
@@ -9162,6 +10182,7 @@ function openPlantMaleWith(strainName) {
   };
   if (!GS.plants) GS.plants = [];
   GS.plants.push(plant);
+  GS.stats.malePlanted = (GS.stats.malePlanted||0) + 1;
   toast('♂ Male ' + strainName + ' planted!', 'info', 3000);
   addLog('Planted male: ' + strainName, 'info');
   saveGame(); renderGrow(); renderHeader();
@@ -9806,10 +10827,14 @@ function confirmWater() {
     toast('⚠️ High PPM — slight burn', 'warn');
   }
 
-  // Overwater penalty
+  // Overwater penalty (reduced by overwater_resist additive)
   if (plant.waterLevel >= 100 && amount > 25) {
-    plant.health = Math.max(0, (plant.health||100) - 5);
-    toast('⚠️ Overwatered! −5 health', 'warn', 2500);
+    const _owr    = Math.min(0.95, (plant.overwaterResist || 0) / 100);
+    const _owDmg  = Math.round(5 * (1 - _owr));
+    if (_owDmg > 0) {
+      plant.health = Math.max(0, (plant.health||100) - _owDmg);
+      toast('⚠️ Overwatered! −' + _owDmg + ' health' + (_owr > 0 ? ' (resist reduced from 5)' : ''), 'warn', 2500);
+    }
   }
 
   // Seedling burn check
@@ -9844,6 +10869,17 @@ function confirmWater() {
   if (totalFeedPPM > 0 && hasEC) {
     setTimeout(() => showRunoffPopup(plant), 200);
   }
+  if (totalFeedPPM > 0 && hasEC) {
+  GS.stats.nuteFeeds = (GS.stats.nuteFeeds||0) + 1;
+  const ppmTarget = getStagePPMTarget(plant);
+  if (plant.soilPPM >= ppmTarget.lo && plant.soilPPM <= ppmTarget.hi)
+    GS.stats.optimalPPMHits = (GS.stats.optimalPPMHits||0) + 1;
+}
+if (canPH && totalFeedPPM > 0) {
+  GS.stats.phAdjusted = (GS.stats.phAdjusted||0) + 1;
+  const pHt = parseFloat(document.getElementById('water-ph-target')?.value||62)/10;
+  if (pHt >= 6.0 && pHt <= 6.8) GS.stats.idealPHWaters = (GS.stats.idealPHWaters||0) + 1;
+}
   saveGame(); renderGrow();
 }
 
@@ -9969,6 +11005,7 @@ function confirmInspect(area) {
   if (area === 'runoff' && !g.ecmeter && !g.phmeter){ toast('🧪 Need EC or pH Meter to check runoff.','err'); return; }
 
   plant.lastInspect          = Date.now();
+  GS.stats.inspectionsDone = (GS.stats.inspectionsDone||0) + 1;
   plant.inspectShield        = true;
   plant.inspectArea          = area;
   plant.inspectShieldExpires = Date.now() + (area === 'general' ? 8 : 12) * 3600000;
@@ -10254,7 +11291,10 @@ if (plant._permanentlyDead) {
     GS.bestGrows.sort((a,b)=>(b.score||0)-(a.score||0));
     if (GS.bestGrows.length > 10) GS.bestGrows.pop();
   }
-
+if (fw >= 8) GS.stats.harvestAtWeek8 = (GS.stats.harvestAtWeek8||0) + 1;
+const allPlantCount = (GS.plants||[]).length;
+if (allPlantCount > (GS.stats.maxSimultaneous||0))
+  GS.stats.maxSimultaneous = allPlantCount;
   closeModal('modal-harvest');
   toast('🌾 Harvested ' + (plant.name||plant.strainName) + '! ' + yield_ + 'g · ' + thc + '% THC · +' + xpGain + ' XP', 'ok', 5000);
   addLog('Harvested: ' + (plant.name||plant.strainName) + ' — ' + yield_ + 'g [' + score.grade + ']', 'success');
@@ -10366,10 +11406,12 @@ function confirmTrain() {
   if (type === 'top') {
     if (topCount >= 2)    { toast('Max 2 tops already applied.', 'warn'); return; }
     if (style !== null)   { toast('Style locked to ' + style.toUpperCase() + ' — cannot top now.', 'warn'); return; }
+    GS.stats.topApplied = (GS.stats.topApplied||0) + 1;
   }
   if (type === 'lst') {
     if (style !== null && style !== 'lst') { toast('Style locked to ' + style.toUpperCase() + ' — cannot LST.', 'warn'); return; }
     if (lstCount >= 10) { toast('Max 10 LST applications reached!', 'warn'); return; }
+    GS.stats.lstApplied = (GS.stats.lstApplied||0) + 1;
   }
   if (type === 'fim') {
     if (style !== null) { toast('Style locked to ' + style.toUpperCase() + ' — cannot FIM.', 'warn'); return; }
@@ -10478,6 +11520,7 @@ function confirmFlip() {
   if (!plant) return;
   if (plant.stage !== 'Veg') { toast('Plant must be in Veg to flip.','warn'); return; }
   plant.stage    = 'Flower';
+  GS.stats.plantsFlipped = (GS.stats.plantsFlipped||0) + 1;
   plant.flowerDay = 0;
   closeModal('modal-flip');
   toast('🌸 ' + (plant.name||plant.strainName) + ' flipped to Flower!', 'ok', 3000);
