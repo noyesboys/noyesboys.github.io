@@ -658,6 +658,44 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .dry-equip-btn.active-ac{border-color:var(--blue);background:rgba(59,130,246,0.1);color:var(--blue)}
 .dry-equip-btn.active-heat{border-color:var(--gold);background:rgba(251,191,36,0.1);color:var(--gold)}
 .dry-equip-btn:disabled{opacity:.3;cursor:not-allowed}
+/* ── DRYING ROOM shared view ── */
+.dry-room-shared{background:var(--card-bg);border:1px solid rgba(34,211,238,0.35);border-radius:14px;overflow:hidden;margin-bottom:14px}
+.dry-room-svg-wrap{width:100%;background:#060e06;position:relative}
+.dry-batch-shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;padding:10px;background:rgba(0,0,0,0.3)}
+.dry-batch-chip{background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:8px 10px;cursor:pointer;transition:.2s;position:relative}
+.dry-batch-chip:hover{border-color:var(--cyan)}
+.dry-batch-chip.mold-risk{border-color:rgba(239,68,68,0.6);animation:dangerPulse 2s ease-in-out infinite}
+.dry-batch-chip.sweet-spot{border-color:rgba(74,222,128,0.5)}
+.dry-batch-chip.overdried{border-color:rgba(249,115,22,0.5)}
+.dbc-name{font-family:var(--font-hud);font-size:9px;color:var(--text);letter-spacing:.3px;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dbc-rh{font-family:var(--font-hud);font-size:18px;font-weight:700}
+.dbc-status{font-size:7px;font-family:var(--font-hud);letter-spacing:.5px;margin-top:2px}
+.dbc-quality{font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:2px}
+.dbc-expand{display:none;padding:10px;background:rgba(0,0,0,0.4);border-top:1px solid var(--border);margin-top:6px}
+.dbc-expand.open{display:block}
+/* ── CURING shelf ── */
+.cure-shelf-wrap{background:#080c12;border-radius:12px 12px 0 0;padding:10px 14px;position:relative;min-height:120px}
+.cure-shelf-svg{width:100%;display:block}
+.cure-jar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;padding:10px;background:rgba(0,0,0,0.2)}
+.cure-jar-chip{background:var(--card-bg);border:1px solid rgba(168,85,247,0.35);border-radius:8px;padding:8px 10px;cursor:pointer;transition:.2s}
+.cure-jar-chip:hover{border-color:var(--purple)}
+.cure-jar-chip.burp-due{border-color:rgba(251,191,36,0.6);animation:gearWarn 1.5s ease-in-out infinite}
+.cure-jar-chip.burp-overdue{border-color:rgba(239,68,68,0.6);animation:dangerPulse 2s ease-in-out infinite}
+.cure-jar-chip.sweet{border-color:rgba(74,222,128,0.5)}
+.cjc-name{font-family:var(--font-hud);font-size:9px;color:var(--text);letter-spacing:.3px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cjc-rh{font-family:var(--font-hud);font-size:18px;font-weight:700}
+.cjc-burps{font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:2px}
+.cjc-detail{display:none;padding:10px;background:rgba(0,0,0,0.5);border-top:1px solid var(--border);margin-top:6px}
+.cjc-detail.open{display:block}
+/* ── Env panel readonly ── */
+.env-target-bar{height:6px;background:rgba(255,255,255,0.05);border-radius:3px;position:relative;overflow:visible;margin:4px 0}
+.env-target-range{position:absolute;height:100%;border-radius:3px;background:rgba(74,222,128,0.3);border:1px solid rgba(74,222,128,0.5)}
+.env-actual-marker{position:absolute;top:-4px;width:3px;height:14px;border-radius:2px;transform:translateX(-50%)}
+.env-ro-row{display:flex;align-items:center;gap:7px;margin-bottom:10px}
+.env-ro-label{font-size:8px;color:var(--muted);font-family:var(--font-hud);width:55px;flex-shrink:0;letter-spacing:.3px}
+.env-ro-val{font-family:var(--font-hud);font-size:9px;color:var(--green);min-width:42px;text-align:right}
+/* Env chart tooltip */
+.env-chart-tooltip{position:absolute;background:rgba(0,0,0,0.9);border:1px solid var(--border);border-radius:5px;padding:4px 8px;font-family:var(--font-mono);font-size:9px;color:var(--text);pointer-events:none;display:none;z-index:10;white-space:nowrap}
 /* Equip screen */
 .equip-slot-card{background:var(--card-bg);border:1px solid var(--border);border-radius:9px;padding:8px;text-align:center;cursor:pointer;transition:.2s;min-width:80px}
 .equip-slot-card:hover{border-color:var(--green);background:rgba(74,222,128,0.05)}
@@ -4176,7 +4214,19 @@ function isInstanceUsedSomewhere(uid, ignoreRoomId = null, ignoreGroup = null, i
   return false;
 }
 
+function _getOrInitClimateSlots(rg, key, minCount) {
+  if (!Array.isArray(rg[key])) rg[key] = [];
+  const maxAssigned = rg[key].filter(s=>s?.instanceUid).length;
+  const target = Math.max(minCount, maxAssigned + 1);
+  while (rg[key].length < target) rg[key].push({ instanceUid: null, settings: {} });
+  return rg[key];
+}
+
 function ensureSlotArray(rg, key, count) {
+  if (['fans','acUnits','heaters','dehumidifiers','humidifiers'].includes(key)) {
+    _getOrInitClimateSlots(rg, key, Math.max(count, 1));
+    return;
+  }
   if (!Array.isArray(rg[key])) rg[key] = [];
   while (rg[key].length < count) rg[key].push({ instanceUid: null, settings: {} });
   rg[key] = rg[key].slice(0, count);
@@ -6082,6 +6132,21 @@ function switchRoom(idx) {
 // ================================================================
 // ENVIRONMENT PANEL
 // ================================================================
+function getEnvTargetFromGear(roomId) {
+  const rg = getRoomGear(roomId);
+  const hasAC    = (rg.acUnits||[]).some(s=>s?.instanceUid);
+  const hasHeat  = (rg.heaters||[]).some(s=>s?.instanceUid);
+  const hasDehu  = (rg.dehumidifiers||[]).some(s=>s?.instanceUid);
+  const hasHumid = (rg.humidifiers||[]).some(s=>s?.instanceUid);
+  const hasCO2   = !!(GS.gear?.co2Tank && (GS.gear.co2Tank.level||0) > 0);
+  const tempLo   = hasHeat ? (rg.thermHeatOff!=null?rg.thermHeatOff:72) : 55;
+  const tempHi   = hasAC   ? (rg.thermAcOff  !=null?rg.thermAcOff  :84) : 105;
+  const humidLo  = hasDehu  ? (rg.thermDehuOff !=null?rg.thermDehuOff :45) : 20;
+  const humidHi  = hasHumid ? (rg.thermHumidOff!=null?rg.thermHumidOff:65) : 100;
+  const co2      = hasCO2   ? (GS.gear?.co2Target||1200) : 400;
+  return {tempLo, tempHi, humidLo, humidHi, co2, hasAC, hasHeat, hasDehu, hasHumid, hasCO2};
+}
+
 function renderEnvPanel() {
   if (!GS || !GS.rooms) return;
   const room   = GS.rooms[GS.activeRoom || 0] || GS.rooms[0];
@@ -6089,6 +6154,7 @@ function renderEnvPanel() {
   const actual = room.envActual || {temp:78, humid:65, co2:400};
   const stage  = _roomStage(room.id);
   const ideal  = ENV_IDEAL[stage] || ENV_IDEAL.Veg;
+  const diff   = GS.difficulty || 'easy';
 
   const setCard = (id, val, lo, hi) => {
     const valEl  = document.getElementById('env-val-'  + id);
@@ -6110,41 +6176,112 @@ function renderEnvPanel() {
   const vpdEl = document.getElementById('env-val-vpd');
   if (vpdEl) vpdEl.textContent = vpd.toFixed(2);
 
-  const showIdeal = GS.difficulty === 'easy';
-  _el('env-ideal-temp',  showIdeal ? `ideal: ${ideal.tempLo}–${ideal.tempHi}°F` : '');
-  _el('env-ideal-humid', showIdeal ? `ideal: ${ideal.humidLo}–${ideal.humidHi}%` : '');
+  const target = getEnvTargetFromGear(room.id);
+
+  _el('env-ideal-temp',  diff==='easy' ? `ideal: ${ideal.tempLo}–${ideal.tempHi}°F` : '');
+  _el('env-ideal-humid', diff==='easy' ? `ideal: ${ideal.humidLo}–${ideal.humidHi}%` : '');
 
   const ll = document.getElementById('env-lights-label');
   const lb = document.getElementById('env-lights-btn');
   if (ll && lb) {
     if (room.lightsOn) {
-      ll.textContent = '💡 LIGHTS ON';
-      lb.textContent = 'FLIP OFF';
-      lb.className   = 'lights-toggle-btn on';
+      ll.textContent = '💡 LIGHTS ON'; lb.textContent = 'FLIP OFF'; lb.className = 'lights-toggle-btn on';
     } else {
-      ll.textContent = '🌙 LIGHTS OFF';
-      lb.textContent = 'FLIP ON';
-      lb.className   = 'lights-toggle-btn off';
+      ll.textContent = '🌙 LIGHTS OFF'; lb.textContent = 'FLIP ON'; lb.className = 'lights-toggle-btn off';
     }
+  }
+
+  const ctrlGroup = document.querySelector('.env-ctrl-group');
+  if (ctrlGroup) {
+    const tempPct  = v => Math.max(0, Math.min(100, (v - 55) / (105 - 55) * 100));
+    const humidPct = v => Math.max(0, Math.min(100, (v - 20) / 80 * 100));
+    const co2Pct   = v => Math.max(0, Math.min(100, (v - 400) / 1100 * 100));
+
+    const tLoP = tempPct(target.tempLo), tHiP = tempPct(target.tempHi);
+    const hLoP = humidPct(target.humidLo), hHiP = humidPct(target.humidHi);
+    const aTP  = tempPct(actual.temp), aHP = humidPct(actual.humid);
+    const co2P = co2Pct(actual.co2);
+    const co2TP = co2Pct(target.co2||400);
+
+    const tempActColor  = actual.temp  >= ideal.tempLo  && actual.temp  <= ideal.tempHi  ? 'var(--green)' : actual.temp  > 90 ? 'var(--red)' : 'var(--gold)';
+    const humidActColor = actual.humid >= ideal.humidLo && actual.humid <= ideal.humidHi ? 'var(--green)' : 'var(--gold)';
+
+    let conflictWarn = '';
+    if (target.hasAC && target.hasHeat && diff === 'easy') {
+      const acOn  = getRoomGear(room.id).thermAcOff   || 78;
+      const htOff = getRoomGear(room.id).thermHeatOff || 72;
+      if (htOff >= acOn - 2) conflictWarn += '<div class="env-limit-warn" style="margin-bottom:6px">⚠️ Heater OFF temp overlaps AC ON temp — they\'ll fight each other!</div>';
+    }
+    if (target.hasDehu && target.hasHumid && diff === 'easy') {
+      const dOff = getRoomGear(room.id).thermDehuOff  || 55;
+      const hOff = getRoomGear(room.id).thermHumidOff || 62;
+      if (dOff >= hOff - 5) conflictWarn += '<div class="env-limit-warn" style="margin-bottom:6px">⚠️ Dehumidifier and humidifier ranges overlap!</div>';
+    }
+
+    ctrlGroup.innerHTML = `
+      <div class="env-ctrl-title">🎛️ ENVIRONMENT — <span style="color:var(--green)">${room.name.toUpperCase()}</span>
+        <span style="font-size:8px;color:var(--muted);margin-left:8px">(Set ranges in ⚙️ Gear Panel)</span>
+      </div>
+      ${conflictWarn}
+      <div class="env-ro-row">
+        <span class="env-ro-label">TEMP °F</span>
+        <div style="flex:1;position:relative">
+          <div class="env-target-bar">
+            <div class="env-target-range" style="left:${tLoP}%;width:${Math.max(1,tHiP-tLoP)}%"></div>
+            <div class="env-actual-marker" style="left:${aTP}%;background:${tempActColor}"></div>
+          </div>
+          ${diff==='easy'?`<div class="env-target-bar" style="margin-top:2px"><div class="env-target-range" style="left:${tempPct(ideal.tempLo)}%;width:${Math.max(1,tempPct(ideal.tempHi)-tempPct(ideal.tempLo))}%;background:rgba(74,222,128,0.15);border-color:rgba(74,222,128,0.2)"></div></div><div style="font-size:7px;color:rgba(74,222,128,0.5);font-family:var(--font-mono)">ideal: ${ideal.tempLo}–${ideal.tempHi}°F</div>`:''}
+        </div>
+        <span class="env-ro-val" style="color:${tempActColor}">${Math.round(actual.temp)}°F</span>
+      </div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin:-6px 0 8px 62px">
+        ${target.hasHeat?`🔥 Heat: off@${getRoomGear(room.id).thermHeatOff||72}°F`:'No heater'} · ${target.hasAC?`❄️ AC: off@${getRoomGear(room.id).thermAcOff||84}°F`:'No AC'}
+      </div>
+      <div class="env-ro-row">
+        <span class="env-ro-label">HUMIDITY</span>
+        <div style="flex:1;position:relative">
+          <div class="env-target-bar">
+            <div class="env-target-range" style="left:${hLoP}%;width:${Math.max(1,hHiP-hLoP)}%"></div>
+            <div class="env-actual-marker" style="left:${aHP}%;background:${humidActColor}"></div>
+          </div>
+          ${diff==='easy'?`<div class="env-target-bar" style="margin-top:2px"><div class="env-target-range" style="left:${humidPct(ideal.humidLo)}%;width:${Math.max(1,humidPct(ideal.humidHi)-humidPct(ideal.humidLo))}%;background:rgba(74,222,128,0.15);border-color:rgba(74,222,128,0.2)"></div></div><div style="font-size:7px;color:rgba(74,222,128,0.5);font-family:var(--font-mono)">ideal: ${ideal.humidLo}–${ideal.humidHi}%</div>`:''}
+        </div>
+        <span class="env-ro-val" style="color:${humidActColor}">${Math.round(actual.humid)}%</span>
+      </div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin:-6px 0 8px 62px">
+        ${target.hasDehu?`🌵 Dehu: off@${getRoomGear(room.id).thermDehuOff||55}%`:'No dehu'} · ${target.hasHumid?`💧 Humid: off@${getRoomGear(room.id).thermHumidOff||62}%`:'No humidifier'}
+      </div>
+      <div class="env-ro-row">
+        <span class="env-ro-label">CO₂ PPM</span>
+        <div style="flex:1;position:relative">
+          <div class="env-target-bar">
+            ${target.hasCO2?`<div class="env-target-range" style="left:${co2Pct(400)}%;width:${Math.max(1,co2TP-co2Pct(400))}%;background:rgba(168,85,247,0.3);border-color:rgba(168,85,247,0.5)"></div>`:''}
+            <div class="env-actual-marker" style="left:${co2P}%;background:var(--purple)"></div>
+          </div>
+        </div>
+        <span class="env-ro-val" style="color:var(--purple)">${Math.round(actual.co2)}</span>
+      </div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin:-6px 0 0 62px">
+        ${target.hasCO2?`🫧 Tank active · target: ${GS.gear?.co2Target||1200}ppm`:'No CO₂ tank'}
+      </div>
+      <div id="env-limit-warn" class="env-limit-warn hidden" style="margin-top:8px"></div>`;
   }
 
   const warn = document.getElementById('env-limit-warn');
   if (warn) {
-    const g = GS.gear || {};
     let msg = '';
-    if      (room.envTarget.humid > 70 && !g.humidifier)    msg = '⚠️ No humidifier — humidity caps at ~62%';
-    else if (room.envTarget.humid < 38 && !g.dehumidifier)  msg = '⚠️ No dehumidifier — cannot drop below ~42%';
-    else if (room.envTarget.co2   > 400 && !g.co2Tank)      msg = '⚠️ No CO₂ tank — CO₂ stays at 400ppm';
+    if (!target.hasHumid && !target.hasDehu) msg = '⚠️ No humidity control — RH will drift to ambient';
+    else if (target.hasCO2 && !GS.gear?.co2Tank) msg = '⚠️ No CO₂ tank — stays at 400ppm';
     if (msg) { warn.textContent = msg; warn.classList.remove('hidden'); }
-    else       warn.classList.add('hidden');
+    else warn.classList.add('hidden');
   }
 
   renderEnvChart();
 
-  const awS  = document.getElementById('autowater-status');
-  const awB  = document.getElementById('autowater-status-body');
-  const _ar  = GS.rooms[GS.activeRoom||0] || GS.rooms[0];
-  const _rg  = getRoomGear(_ar.id);
+  const awS = document.getElementById('autowater-status');
+  const awB = document.getElementById('autowater-status-body');
+  const _ar = GS.rooms[GS.activeRoom||0] || GS.rooms[0];
+  const _rg = getRoomGear(_ar.id);
   const _attached = (_rg.autoWaterPlants||[]);
   if (awS && awB && _rg.reservoir && _attached.length > 0) {
     awS.classList.remove('hidden');
@@ -6166,51 +6303,124 @@ function renderEnvPanel() {
       </div>`;
     });
     awB.innerHTML = rows;
-  } else if (awS) awS.classList.add('hidden');}
-
-function _roomStage(roomId) {
-  const p = (GS.plants || []).filter(x => x.roomId === roomId);
-  if (p.some(x => x.stage === 'Flower' || x.stage === 'Ready')) return 'Flower';
-  if (p.some(x => x.stage === 'Veg'))                           return 'Veg';
-  return 'Seedling';
+  } else if (awS) awS.classList.add('hidden');
 }
 
-function updateEnvSlider(type, val) {
-  const room = GS.rooms ? (GS.rooms[GS.activeRoom || 0] || GS.rooms[0]) : null;
-  if (!room) return;
-  const num = parseFloat(val);
-  room.envTarget[type] = num;
-  const sv = document.getElementById('sv-' + type);
-  if (sv) sv.textContent = type === 'temp' ? num + '°F' : type === 'humid' ? num + '%' : type === 'light' ? num + '%' : num;
-  renderEnvPanel();
-  saveGame();
-}
+function updateEnvSlider(type, val) { /* readonly — set via Gear panel thermostats */ }
 
 function renderEnvChart() {
-  const svg  = document.getElementById('env-chart-svg');
-  if (!svg || !GS.envHistory || GS.envHistory.length < 2) return;
-  const hist  = GS.envHistory.slice(-72);
-  const temps = hist.map(h => h.temp);
-  const minT  = Math.min(...temps) - 2;
-  const maxT  = Math.max(...temps) + 2;
+  const container = document.querySelector('.env-chart-wrap');
+  if (!container || !GS.envHistory || GS.envHistory.length < 2) return;
+  const hist  = GS.envHistory.slice(-144);
+  const temps  = hist.map(h => h.temp);
+  const humids = hist.map(h => h.humid);
+  const minT = Math.min(...temps) - 2, maxT = Math.max(...temps) + 2;
+  const minH = Math.min(...humids) - 2, maxH = Math.max(...humids) + 2;
+
+  let tooltip = container.querySelector('.env-chart-tooltip');
+  if (!tooltip) {
+    tooltip = document.createElement('div');
+    tooltip.className = 'env-chart-tooltip';
+    container.style.position = 'relative';
+    container.appendChild(tooltip);
+  }
+
   const W = 300, H = 90;
-  const pts = hist.map((h, i) => {
-    const x = (i / (hist.length - 1)) * W;
-    const y = H - ((h.temp - minT) / (maxT - minT || 1)) * (H - 10) - 5;
-    return x + ',' + y;
-  });
+  const toX = i => (i / (hist.length - 1)) * W;
+  const toYt = t => H - ((t - minT) / (maxT - minT || 1)) * (H - 10) - 5;
+  const toYh = h => H - ((h - minH) / (maxH - minH || 1)) * (H - 10) - 5;
+
+  const ptsT = hist.map((h,i) => `${toX(i)},${toYt(h.temp)}`);
+  const ptsH = hist.map((h,i) => `${toX(i)},${toYh(h.humid)}`);
+
+  let svg = document.getElementById('env-chart-svg');
+  if (!svg) return;
+
   const line = document.getElementById('env-chart-line');
   const area = document.getElementById('env-chart-area');
-  if (line) line.setAttribute('d', 'M' + pts.join('L'));
-  if (area) area.setAttribute('d', 'M' + pts.join('L') + `L${W},${H} L0,${H} Z`);
+  if (line) line.setAttribute('d', 'M' + ptsT.join('L'));
+  if (area) area.setAttribute('d', 'M' + ptsT.join('L') + `L${W},${H} L0,${H} Z`);
 
-  const stage = _roomStage((GS.rooms[GS.activeRoom || 0] || GS.rooms[0]).id);
-  const ideal = ENV_IDEAL[stage] || ENV_IDEAL.Veg;
-  const toY   = t => H - ((t - minT) / (maxT - minT || 1)) * (H - 10) - 5;
-  const lo = document.getElementById('env-ideal-lo');
-  const hi = document.getElementById('env-ideal-hi');
-  if (lo) { const y = toY(ideal.tempLo); lo.setAttribute('y1', y); lo.setAttribute('y2', y); }
-  if (hi) { const y = toY(ideal.tempHi); hi.setAttribute('y1', y); hi.setAttribute('y2', y); }
+  let humidLine = svg.querySelector('#env-chart-line-humid');
+  if (!humidLine) {
+    humidLine = document.createElementNS('http://www.w3.org/2000/svg','path');
+    humidLine.id = 'env-chart-line-humid';
+    humidLine.setAttribute('fill','none');
+    humidLine.setAttribute('stroke','var(--blue)');
+    humidLine.setAttribute('stroke-width','1');
+    humidLine.setAttribute('opacity','0.5');
+    svg.appendChild(humidLine);
+  }
+  humidLine.setAttribute('d','M' + ptsH.join('L'));
+
+  let crosshair = svg.querySelector('#env-crosshair');
+  if (!crosshair) {
+    crosshair = document.createElementNS('http://www.w3.org/2000/svg','line');
+    crosshair.id = 'env-crosshair';
+    crosshair.setAttribute('y1','0');
+    crosshair.setAttribute('y2',H);
+    crosshair.setAttribute('stroke','rgba(255,255,255,0.25)');
+    crosshair.setAttribute('stroke-width','1');
+    crosshair.setAttribute('stroke-dasharray','3,3');
+    crosshair.style.display = 'none';
+    svg.appendChild(crosshair);
+  }
+
+  ['env-dot-temp','env-dot-humid'].forEach((id,ci) => {
+    let dot = svg.querySelector('#'+id);
+    if (!dot) {
+      dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      dot.id = id;
+      dot.setAttribute('r','3');
+      dot.setAttribute('fill',ci===0?'var(--green)':'var(--blue)');
+      dot.style.display='none';
+      svg.appendChild(dot);
+    }
+  });
+
+  const canvas = svg.closest('.env-chart-canvas');
+  if (canvas && !canvas._hoverInited) {
+    canvas._hoverInited = true;
+    canvas.addEventListener('mousemove', e => {
+      const rect = svg.getBoundingClientRect();
+      const mx   = e.clientX - rect.left;
+      const frac = Math.max(0, Math.min(1, mx / rect.width));
+      const idx  = Math.round(frac * (hist.length - 1));
+      const h    = hist[idx];
+      if (!h) return;
+      const svgX = toX(idx);
+      crosshair.setAttribute('x1',svgX); crosshair.setAttribute('x2',svgX);
+      crosshair.style.display = '';
+      const dotT = svg.querySelector('#env-dot-temp');
+      const dotH = svg.querySelector('#env-dot-humid');
+      if (dotT) { dotT.setAttribute('cx',svgX); dotT.setAttribute('cy',toYt(h.temp)); dotT.style.display=''; }
+      if (dotH) { dotH.setAttribute('cx',svgX); dotH.setAttribute('cy',toYh(h.humid)); dotH.style.display=''; }
+      const ago  = timeSince(h.ts);
+      tooltip.innerHTML = `<span style="color:var(--green)">🌡️ ${h.temp.toFixed(1)}°F</span> · <span style="color:var(--blue)">💧 ${(h.humid||0).toFixed(1)}%</span><br><span style="color:var(--muted);font-size:8px">${ago}</span>`;
+      tooltip.style.display='block';
+      const tw = 150, th = 44;
+      let tx = mx + 10, ty = e.clientY - rect.top - th/2;
+      if (tx + tw > rect.width) tx = mx - tw - 10;
+      tx = Math.max(0, tx); ty = Math.max(0, ty);
+      tooltip.style.left = tx + 'px';
+      tooltip.style.top  = ty + 'px';
+    });
+    canvas.addEventListener('mouseleave', () => {
+      tooltip.style.display = 'none';
+      crosshair.style.display = 'none';
+      ['env-dot-temp','env-dot-humid'].forEach(id=>{ const d=svg.querySelector('#'+id); if(d) d.style.display='none'; });
+    });
+
+    const title = container.querySelector('.env-chart-title');
+    if (title) title.innerHTML = 'TEMP <span style="color:var(--green)">━</span> &nbsp; HUMID <span style="color:var(--blue);opacity:.6">━</span> &nbsp; <span style="color:var(--muted);font-size:8px">HOVER FOR VALUES</span> · LAST 2 HRS';
+
+    const stage = _roomStage((GS.rooms[GS.activeRoom||0]||GS.rooms[0]).id);
+    const ideal = ENV_IDEAL[stage] || ENV_IDEAL.Veg;
+    const lo = document.getElementById('env-ideal-lo');
+    const hi = document.getElementById('env-ideal-hi');
+    if (lo) { const y=toYt(ideal.tempLo); lo.setAttribute('y1',y); lo.setAttribute('y2',y); }
+    if (hi) { const y=toYt(ideal.tempHi); hi.setAttribute('y1',y); hi.setAttribute('y2',y); }
+  }
 }
 
 function toggleLights() {
@@ -7636,18 +7846,80 @@ function renderVault() {
 }
 
 // ── DRYING ROOM ──
+function _buildDryRoomSVG(batches) {
+  if (!batches.length) return '<div style="text-align:center;padding:20px;color:var(--muted);font-size:10px;font-family:var(--font-hud)">No batches drying</div>';
+  const n = batches.length;
+  const W = 400, H = 200;
+  const spacing = Math.min(80, W / (n + 1));
+  const startX  = (W - spacing * (n - 1)) / 2;
+
+  let branches = '';
+  batches.forEach((b, i) => {
+    const x   = startX + i * spacing;
+    const rh  = b.dryRH != null ? b.dryRH : 80;
+    const col = rh > 75 ? '#ef4444' : rh > 65 ? '#f97316' : rh >= 58 && rh <= 65 ? '#4ade80' : '#fbbf24';
+    const budC= rh > 75 ? '#2d5a1b' : rh < 45 ? '#7a5c2e' : '#5db356';
+    const budD= rh < 45 ? '#5c4020' : '#1b3a11';
+    const sway = (i % 2 === 0) ? 'sway 2s ease-in-out infinite' : 'sway 2.4s ease-in-out infinite';
+    const delay = (i * 0.3) + 's';
+    const swayOrigin = `${x}px 10px`;
+    const budScale = Math.max(0.6, 1.1 - n * 0.04);
+    branches += `
+    <g style="animation:${sway};animation-delay:${delay};transform-origin:${swayOrigin}">
+      <circle cx="${x}" cy="5" r="3" fill="#8d6c3a"/>
+      <line x1="${x}" y1="8" x2="${x}" y2="30" stroke="#8d6c3a" stroke-width="1.5"/>
+      <path d="M${x},30 Q${x-6},110 ${x+4},185" stroke="#5a8a3a" stroke-width="${Math.max(2,4*budScale)}" fill="none" stroke-linecap="round"/>
+      <path d="M${x},55 Q${x-18},65 ${x-14},80 Q${x-4},70 ${x},55" fill="#3a4f1c" opacity="0.85"/>
+      <path d="M${x},55 Q${x+18},65 ${x+14},80 Q${x+4},70 ${x},55" fill="#3a4f1c" opacity="0.85"/>
+      <path d="M${x+2},90 Q${x-16},100 ${x-10},115" fill="#3a4f1c" opacity="0.8"/>
+      <path d="M${x+2},90 Q${x+20},100 ${x+14},118" fill="#3a4f1c" opacity="0.8"/>
+      ${[45,65,85,105,130,155,175].map((y,bi)=>{
+        const bx = x + (bi%2===0?-8:9)*(budScale);
+        const bs = budScale * (0.6 + bi*0.06);
+        return `<g transform="translate(${bx},${y}) scale(${bs}) rotate(${bi%2===0?150:-160})">
+          <circle cx="-6" cy="-10" r="7" fill="${budC}"/>
+          <circle cx="6"  cy="-8"  r="6" fill="${budC}"/>
+          <circle cx="-9" cy="2"   r="8" fill="${budC}"/>
+          <circle cx="9"  cy="4"   r="7" fill="${budC}"/>
+          <circle cx="0"  cy="12"  r="7" fill="${budC}"/>
+          <path d="M0,-25 C12,-20 18,-5 15,10 C10,22 -10,22 -15,10 C-18,-5 -12,-20 0,-25 Z" fill="${budD}" opacity="0.5"/>
+          <path d="M-5,-12 Q-14,-16 -16,-8" stroke="#d97706" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+          <path d="M5,-10 Q16,-12 14,-4"  stroke="#d97706" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        </g>`;
+      }).join('')}
+      <text x="${x}" y="${H-4}" text-anchor="middle" font-family="monospace" font-size="9" fill="${col}" font-weight="bold">${rh.toFixed(1)}%</text>
+    </g>`;
+  });
+
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+    <defs>
+      <linearGradient id="dryBg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#060e06"/>
+        <stop offset="100%" stop-color="#0a120a"/>
+      </linearGradient>
+    </defs>
+    <rect width="${W}" height="${H}" fill="url(#dryBg)"/>
+    <rect x="0" y="0" width="${W}" height="4" fill="#4a3020" rx="2"/>
+    ${batches.map((_,i)=>`<rect x="${startX + i*spacing - 1}" y="0" width="3" height="10" fill="#6b4c2a"/>`).join('')}
+    ${branches}
+  </svg>`;
+}
+
+function _toggleDryBatch(id) {
+  const el = document.getElementById('dbc-expand-' + id);
+  if (el) el.classList.toggle('open');
+}
+
 function _renderDrying(cont) {
   const batches = (GS.curing || []).filter(b => b.phase === 'drying');
   const g  = GS.gear    || {};
   const dr = GS.dryRoom || {};
 
-  // What does the player own?
   const hasFanGear    = !!(g.fans && g.fans[0]);
   const hasDehuGear   = !!g.dehumidifier;
   const hasACGear     = !!g.acUnit;
   const hasHeaterGear = !!g.heater;
 
-  // What is active?
   const fanOn    = dr.fanOn    && hasFanGear;
   const dehuOn   = dr.dehuOn   && hasDehuGear;
   const acOn     = dr.acOn     && hasACGear;
@@ -7655,148 +7927,141 @@ function _renderDrying(cont) {
   const fanSpeed = dr.fanSpeed != null ? dr.fanSpeed : 50;
   const tempTgt  = dr.tempTarget != null ? dr.tempTarget : 68;
 
-  // Drying speed label
-  let speedLabel = 'VERY SLOW — risky without a fan';
-  let speedColor = 'var(--red)';
-  if (fanOn && dehuOn && acOn) { speedLabel = 'FAST — ~17h to sweet spot'; speedColor = 'var(--green)'; }
-  else if (fanOn && dehuOn)    { speedLabel = 'GOOD — ~28h to sweet spot'; speedColor = 'var(--green)'; }
-  else if (fanOn)              { speedLabel = 'MODERATE — ~45h to sweet spot'; speedColor = 'var(--gold)'; }
+  let speedLabel = 'VERY SLOW — risky without a fan', speedColor = 'var(--red)';
+  if (fanOn && dehuOn && acOn)  { speedLabel = 'FAST — ~17h to sweet spot'; speedColor = 'var(--green)'; }
+  else if (fanOn && dehuOn)     { speedLabel = 'GOOD — ~28h to sweet spot'; speedColor = 'var(--green)'; }
+  else if (fanOn)               { speedLabel = 'MODERATE — ~45h to sweet spot'; speedColor = 'var(--gold)'; }
 
   let html = `
-    <div style="background:var(--card-bg);border:1px solid rgba(34,211,238,0.3);border-radius:12px;padding:16px;margin-bottom:14px">
-      <div style="font-family:var(--font-hud);font-size:11px;color:var(--cyan);letter-spacing:2px;margin-bottom:12px">🌬️ DRYING ROOM CONTROLS</div>
-
-      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);letter-spacing:1.5px;margin-bottom:7px;text-transform:uppercase">Select Equipment</div>
-      <div class="dry-equip-select">
-        <button class="dry-equip-btn ${!hasFanGear ? 'disabled' : fanOn ? 'active' : ''}"
-          onclick="${hasFanGear ? "setDryRoomEquip('fan')" : ''}">
-          🌀 FAN ${!hasFanGear ? '<span style="font-size:7px">(not owned)</span>' : fanOn ? '✓ ON' : 'OFF'}
-        </button>
-        <button class="dry-equip-btn ${!hasDehuGear ? 'disabled' : dehuOn ? 'active' : ''}"
-          onclick="${hasDehuGear ? "setDryRoomEquip('dehu')" : ''}">
-          🌵 DEHU ${!hasDehuGear ? '<span style="font-size:7px">(not owned)</span>' : dehuOn ? '✓ ON' : 'OFF'}
-        </button>
-        <button class="dry-equip-btn ${!hasACGear ? 'disabled' : acOn ? 'active' : ''}"
-          onclick="${hasACGear ? "setDryRoomEquip('ac')" : ''}">
-          ❄️ AC ${!hasACGear ? '<span style="font-size:7px">(not owned)</span>' : acOn ? '✓ ON' : 'OFF'}
-        </button>
-        <button class="dry-equip-btn ${!hasHeaterGear ? 'disabled' : heaterOn ? 'active' : ''}"
-          onclick="${hasHeaterGear ? "setDryRoomEquip('heater')" : ''}">
-          🔥 HEATER ${!hasHeaterGear ? '<span style="font-size:7px">(not owned)</span>' : heaterOn ? '✓ ON' : 'OFF'}
-        </button>
-      </div>
-
-      ${fanOn ? `
-      <div style="margin-top:10px">
-        <div class="dry-ctrl-row">
-          <span class="dry-ctrl-label">🌀 FAN SPEED</span>
-          <input type="range" min="0" max="100" value="${fanSpeed}"
-            oninput="updateDryRoomFanSpeed(this.value)">
+    <div class="dry-room-shared">
+      <div class="dry-room-svg-wrap">${_buildDryRoomSVG(batches)}</div>
+      <div style="padding:12px;border-bottom:1px solid var(--border)">
+        <div style="font-family:var(--font-hud);font-size:10px;color:var(--cyan);letter-spacing:2px;margin-bottom:8px">🌬️ DRYING ROOM CONTROLS</div>
+        <div class="dry-equip-select" style="gap:5px">
+          ${[
+            ['fan',    '🌀 FAN',    hasFanGear,    fanOn],
+            ['dehu',   '🌵 DEHU',   hasDehuGear,   dehuOn],
+            ['ac',     '❄️ AC',     hasACGear,     acOn],
+            ['heater', '🔥 HEATER', hasHeaterGear, heaterOn],
+          ].map(([t,l,has,on])=>`
+            <button class="dry-equip-btn ${!has?'disabled':on?'active-fan':''}" onclick="${has?`setDryRoomEquip('${t}')`:''}" >
+              ${l} ${!has?'<span style="font-size:7px">(not owned)</span>':on?'✓ ON':'OFF'}
+            </button>`).join('')}
+        </div>
+        ${fanOn?`<div class="dry-ctrl-row" style="margin-top:8px">
+          <span class="dry-ctrl-label">🌀 FAN</span>
+          <input type="range" min="0" max="100" value="${fanSpeed}" oninput="updateDryRoomFanSpeed(this.value)">
           <span class="dry-ctrl-val" id="dry-fan-global">${fanSpeed}%</span>
-        </div>
-        ${fanSpeed < 30 ? `<div style="font-size:8px;color:var(--gold);font-family:var(--font-mono);margin-top:3px">⚠️ Low fan speed — mold risk still elevated</div>` : ''}
-      </div>` : ''}
-
-      ${(acOn || heaterOn) ? `
-      <div style="margin-top:8px">
-        <div class="dry-ctrl-row">
-          <span class="dry-ctrl-label">${acOn ? '❄️ AC' : '🔥 HEAT'} TARGET</span>
-          <input type="range" min="55" max="85" value="${tempTgt}"
-            oninput="updateDryRoomTemp(this.value)">
+        </div>`:''}
+        ${(acOn||heaterOn)?`<div class="dry-ctrl-row">
+          <span class="dry-ctrl-label">${acOn?'❄️':'🔥'} TEMP</span>
+          <input type="range" min="55" max="85" value="${tempTgt}" oninput="updateDryRoomTemp(this.value)">
           <span class="dry-ctrl-val" id="dry-temp-global">${tempTgt}°F</span>
+        </div>`:''}
+        <div class="dry-speed-bar" style="margin-top:8px">
+          <span style="color:var(--muted)">SPEED:</span>
+          <span style="color:${speedColor};flex:1">${speedLabel}</span>
+          <span style="font-size:8px;color:var(--muted)">Sweet spot: 58–64% RH</span>
         </div>
-        <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:2px">
-          Ideal dry room temp: 60–70°F · Cooler = slower but safer
-        </div>
-      </div>` : ''}
-
-      <div class="dry-speed-bar" style="margin-top:12px">
-        <span style="color:var(--muted)">SPEED:</span>
-        <span style="color:${speedColor};flex:1">${speedLabel}</span>
-        <span style="font-size:8px;color:var(--muted)">Sweet spot: 62% RH</span>
+        ${!hasFanGear && !hasDehuGear ? `<div class="warning-note" style="margin-top:8px;margin-bottom:0">⚠️ No fan or dehumidifier — buy from Shop → Climate for effective drying.</div>` : ''}
       </div>
-
-      ${!hasFanGear && !hasDehuGear
-        ? `<div class="warning-note" style="margin-top:8px;margin-bottom:0">⚠️ No fan or dehumidifier owned — buy from Shop → Climate for effective drying.</div>`
-        : ''}
+      ${batches.length ? `<div class="dry-batch-shelf">
+        ${batches.map(b=>{
+          const rh  = b.dryRH != null ? b.dryRH : 80;
+          const q   = b.quality || 100;
+          const isMoldRisk = rh > 75;
+          const isSweet    = rh >= 58 && rh <= 65;
+          const isOverDry  = rh < 45;
+          const rhColor= isMoldRisk ? '#ef4444' : isSweet ? '#4ade80' : isOverDry ? '#f97316' : '#fbbf24';
+          const status = isMoldRisk ? '🍄 MOLD RISK' : isSweet ? '✅ SWEET SPOT' : isOverDry ? '❌ OVER-DRY' : '⬇️ DRYING';
+          const chipClass = isMoldRisk ? 'mold-risk' : isSweet ? 'sweet-spot' : isOverDry ? 'overdried' : '';
+          const canCure = rh <= 70;
+          return `<div class="dry-batch-chip ${chipClass}" id="dbc-${b.id}" onclick="_toggleDryBatch('${b.id}')">
+            <div class="dbc-name" title="${b.name}">${b.name}</div>
+            <div class="dbc-rh" style="color:${rhColor}">${rh.toFixed(1)}<span style="font-size:10px;color:var(--muted)">%</span></div>
+            <div class="dbc-status" style="color:${rhColor}">${status}</div>
+            <div class="dbc-quality">Q: ${Math.round(q)}% · ${b.grams}g · ${b.thc}%</div>
+            <div class="dbc-expand" id="dbc-expand-${b.id}">
+              ${b.phase==='drying'?`
+                <div style="display:flex;gap:5px;margin-top:5px;flex-wrap:wrap">
+                  <button class="btn-action btn-purple" style="flex:1;padding:6px;font-size:8px"
+                    onclick="event.stopPropagation();moveToCuringJar('${b.id}')" ${!canCure?'disabled':''}>
+                    🫙 JAR IT
+                  </button>
+                  <button class="btn-action btn-red" style="padding:6px;font-size:8px"
+                    onclick="event.stopPropagation();discardDrying('${b.id}')">🗑️</button>
+                </div>
+                ${!canCure&&GS.difficulty==='easy'?'<div style="font-size:7px;color:var(--gold);margin-top:4px;font-family:var(--font-mono)">Dry below 70% first</div>':''}
+              `:'' }
+            </div>
+          </div>`;
+        }).join('')}
+      </div>` : `<div style="padding:20px;text-align:center;color:var(--muted);font-family:var(--font-hud);font-size:10px">No batches hanging — harvest a plant to start drying.</div>`}
     </div>`;
-
-  if (!batches.length) {
-    html += '<div class="empty-state" style="padding:30px">🌬️ No batches drying.<br>Harvest a plant to start drying.</div>';
-    cont.innerHTML = html;
-    return;
-  }
-
-  batches.forEach(batch => {
-    const rh        = batch.dryRH != null ? batch.dryRH : 80;
-    const q         = batch.quality || 100;
-    const elapsed   = ((Date.now() - (batch.startTs || Date.now())) / 3600000).toFixed(1);
-    const isMoldRisk= rh > 75;
-
-    let rhColor = 'var(--cyan)', phaseLabel = '';
-    if (rh > 75)                    { rhColor = 'var(--red)';   phaseLabel = '🍄 MOLD RISK — turn on fan!'; }
-    else if (rh > 70)               { rhColor = 'var(--red)';   phaseLabel = '⚠️ TOO WET — keep drying'; }
-    else if (rh > 68)               { rhColor = 'var(--gold)';  phaseLabel = '⬇️ DRYING — almost there'; }
-    else if (rh >= 62 && rh < 63)  { rhColor = 'var(--green)'; phaseLabel = '🌟 PERFECT SWEET SPOT!'; }
-    else if (rh >= 58 && rh <= 64) { rhColor = 'var(--green)'; phaseLabel = '✅ PRIME WINDOW — move to curing'; }
-    else if (rh >= 50 && rh < 58)  { rhColor = 'var(--cyan)';  phaseLabel = '👍 ACCEPTABLE — slight quality bonus'; }
-    else if (rh >= 40 && rh < 50)  { rhColor = 'var(--gold)';  phaseLabel = '⚠️ GETTING TOO DRY — move now!'; }
-    else if (rh < 40)              { rhColor = 'var(--red)';   phaseLabel = '❌ OVERDRIED — severe quality loss!'; }
-
-    let qPreview = '', qColor = 'var(--muted)';
-    if      (rh >= 62 && rh < 63)   { qPreview = 'PERFECT → +25% quality bonus!'; qColor = 'var(--green)'; }
-    else if (rh >= 58 && rh <= 64)  { qPreview = 'Prime → +15% quality bonus'; qColor = 'var(--green)'; }
-    else if (rh >= 50 && rh < 58)   { qPreview = 'Good → +10% quality bonus'; qColor = 'var(--cyan)'; }
-    else if (rh >= 68 && rh < 70)   { qPreview = 'Wet → −15% quality'; qColor = 'var(--gold)'; }
-    else if (rh >= 65 && rh < 68)   { qPreview = 'Slightly wet → −5% quality'; qColor = 'var(--gold)'; }
-    else if (rh >= 70)              { qPreview = 'Too wet → −50% quality!'; qColor = 'var(--red)'; }
-    else if (rh >= 40 && rh < 50)   { qPreview = 'Too dry → −20% quality'; qColor = 'var(--gold)'; }
-    else if (rh < 40)               { qPreview = 'Overdried → −50% quality!'; qColor = 'var(--red)'; }
-
-    const canCure = GS.difficulty !== 'easy' || rh <= 70;
-    const easyWarn = GS.difficulty === 'easy' && rh > 70
-      ? `<div class="info-note" style="margin-top:8px;margin-bottom:0">💡 Easy mode: dry below 70% before moving to curing jars.</div>` : '';
-
-    html += `<div class="dry-room-card ${isMoldRisk ? 'mold-risk' : ''}">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
-        <div style="font-family:var(--font-hud);font-size:12px;color:var(--text)">
-          ${batch.name}
-          ${isMoldRisk ? '<span class="mold-badge" style="margin-left:8px">🍄 MOLD RISK</span>' : ''}
-        </div>
-        <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono)">${elapsed}h · ${batch.grams}g · THC ${batch.thc}%</div>
-      </div>
-
-      <div class="dry-sprite-wrap">${getDryingSprite(batch)}</div>
-      <div class="dry-sprite-click-hint">↑ LIVE DRY ROOM VIEW</div>
-
-      <div class="dry-rh-display" style="color:${rhColor}">${rh.toFixed(1)}<span style="font-size:20px;color:var(--muted)">% RH</span></div>
-      <div class="dry-phase-label" style="color:${rhColor};margin-bottom:8px">${phaseLabel}</div>
-
-      <div class="dry-quality-strip">
-        <span class="dry-q-label">QUALITY</span>
-        <div class="dry-q-bar"><div class="dry-q-fill" style="width:${q}%;background:${q>80?'var(--green)':q>50?'var(--gold)':'var(--red)'}"></div></div>
-        <span style="font-family:var(--font-hud);font-size:10px;color:${q>80?'var(--green)':q>50?'var(--gold)':'var(--red)'}">${Math.round(q)}%</span>
-      </div>
-
-      ${qPreview ? `<div style="font-size:8px;font-family:var(--font-hud);color:${qColor};text-align:center;margin-top:5px">${qPreview}</div>` : ''}
-
-      ${easyWarn}
-
-      <div style="display:flex;gap:6px;margin-top:12px">
-        <button class="btn-action btn-purple" style="flex:1;padding:10px"
-          onclick="moveToCuringJar('${batch.id}')"
-          ${!canCure ? 'disabled title="Dry below 70% first (Easy mode)"' : ''}>
-          🫙 MOVE TO JAR CURING
-        </button>
-        <button class="btn-action btn-red" style="padding:10px;min-width:44px"
-          onclick="discardDrying('${batch.id}')" title="Discard batch">🗑️</button>
-      </div>
-    </div>`;
-  });
-
   cont.innerHTML = html;
 }
-// ── JAR CURING ──
+
+function _buildCureShelfSVG(batches) {
+  const n = batches.length;
+  if (!n) return '';
+  const W = 400, H = 150;
+  const perRow = Math.min(n, 8);
+  const jarW = Math.min(44, (W - 20) / perRow);
+  const startX = (W - jarW * perRow) / 2 + jarW / 2;
+
+  let jars = '';
+  batches.forEach((b, i) => {
+    const row  = Math.floor(i / 8);
+    const col  = i % 8;
+    const cx   = startX + col * jarW;
+    const baseY= 100 - row * 55;
+    const rh   = b.jarRH != null ? b.jarRH : 62;
+    const burps= b.burpsDone || 0;
+    const now  = Date.now();
+    const hrs  = (now - (b.lastBurpTs || b.jarStartTs || now)) / 3600000;
+    const burpDue    = rh > 65 && hrs >= 4;
+    const burpOverdue= rh > 70 || (burpDue && hrs >= 10);
+    const sweet = rh >= 54 && rh <= 64;
+    const belowFifty = rh < 50;
+
+    const jarStroke = burpOverdue ? '#ef4444' : burpDue ? '#fbbf24' : sweet ? '#4ade80' : belowFifty ? '#f97316' : '#22d3ee';
+    const budFill   = sweet ? '#6ab04c' : burpDue ? '#f97316' : burpOverdue ? '#ef4444' : belowFifty ? '#7a5c2e' : '#3d7a2a';
+    const glowAnim  = burpOverdue ? 'jarDanger 1s ease-in-out infinite' : burpDue ? 'jarWarn 1.5s ease-in-out infinite' : sweet ? 'jarGlow 3s ease-in-out infinite' : 'none';
+    const jScale = Math.max(0.6, Math.min(1, jarW / 44));
+
+    jars += `<g transform="translate(${cx},${baseY}) scale(${jScale})" style="animation:${glowAnim};cursor:pointer" onclick="_toggleCureJar('${b.id}')">
+      <rect x="-18" y="-45" width="36" height="55" rx="8" fill="rgba(20,40,20,0.9)" stroke="${jarStroke}" stroke-width="1.5"/>
+      <rect x="-16" y="-15" width="32" height="23" rx="4" fill="${budFill}" opacity="0.7"/>
+      <circle cx="-8" cy="-7" r="5" fill="${budFill}"/>
+      <circle cx="5"  cy="-3" r="6" fill="${budFill}"/>
+      <circle cx="-4" cy="5"  r="4" fill="${budFill}"/>
+      <rect x="-16" y="-44" width="8" height="53" rx="4" fill="rgba(255,255,255,0.06)"/>
+      <rect x="-20" y="-56" width="40" height="13" rx="4" fill="rgba(60,80,60,0.95)" stroke="${jarStroke}" stroke-width="1"/>
+      <text x="0" y="22" text-anchor="middle" font-family="monospace" font-size="${jScale<0.8?10:9}" font-weight="bold" fill="${jarStroke}">${rh.toFixed(0)}%</text>
+      ${burps>0?`<text x="14" y="-46" text-anchor="middle" font-family="monospace" font-size="8" fill="${jarStroke}">${burps}</text>`:''}
+      ${burpDue?`<circle cx="14" cy="-52" r="5" fill="#fbbf24" opacity="0.9"/>
+        <text x="14" y="-49" text-anchor="middle" font-family="monospace" font-size="7" fill="#000">!</text>`:''}
+    </g>`;
+  });
+
+  const shelfY = 105;
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+    <rect width="${W}" height="${H}" fill="#080c12"/>
+    <rect x="0" y="${shelfY}" width="${W}" height="8" fill="#3a2e1e" rx="2"/>
+    <rect x="0" y="${shelfY+8}" width="${W}" height="3" fill="#2a1e10"/>
+    ${Array.from({length:8},(_,i)=>`<rect x="${i*52}" y="0" width="1" height="${shelfY}" fill="rgba(255,255,255,0.015)"/>`).join('')}
+    ${jars}
+  </svg>`;
+}
+
+function _toggleCureJar(id) {
+  document.querySelectorAll('.cjc-detail').forEach(el => {
+    if (el.id !== 'cjc-detail-' + id) el.classList.remove('open');
+  });
+  const el = document.getElementById('cjc-detail-' + id);
+  if (el) el.classList.toggle('open');
+}
+
 function _renderCuringJars(cont) {
   const batches = (GS.curing || []).filter(b => b.phase === 'curing');
   if (!batches.length) {
