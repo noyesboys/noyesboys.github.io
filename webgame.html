@@ -550,7 +550,13 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 @keyframes toastIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes toastOut{to{opacity:0;transform:translateX(20px)}}
 .hidden{display:none!important}
-.nav-tab[data-tab="grow"]{display:none!important}
+.nav-tab[data-tab="grow"],
+.nav-tab[data-tab="shop"],
+.nav-tab[data-tab="market"],
+.nav-tab[data-tab="bmarket"],
+.nav-tab[data-tab="quests"],
+.nav-tab[data-tab="stats"],
+.nav-tab[data-tab="mail"]{display:none!important}
 #sb-env,#sb-gear{display:none!important}
 #sb-env+.sidebar-label,#sb-gear+.sidebar-label{display:none!important}
 .flex-between{display:flex;align-items:center;justify-content:space-between}
@@ -969,20 +975,19 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
       <div class="sidebar-circles" id="sidebarCircles">
         <div class="sidebar-btn" id="sb-room" onclick="togglePanel('room')" title="Rooms">🏠</div>
         <div class="sidebar-label">ROOM</div>
-        <div class="sidebar-btn" id="sb-gear" onclick="togglePanel('gear')" title="Equipment">⚙️</div>
-        <div class="sidebar-label">GEAR</div>
-        <div class="sidebar-btn" id="sb-env" onclick="togglePanel('env')" title="Environment">🌡️</div>
-        <div class="sidebar-label">ENV</div>
-        <div class="sidebar-divider"></div>
-        <div class="sidebar-btn" id="sb-lights" onclick="toggleLights()" title="Toggle Lights">💡</div>
-        <div class="sidebar-label" id="sb-lights-lbl">LIGHTS</div>
-        <div class="sidebar-btn" id="sb-spray" onclick="openSprayModal()" title="Spray Plants">🧴</div>
-        <div class="sidebar-label">SPRAY</div>
-        <div class="sidebar-divider"></div>
-        <div class="sidebar-btn" id="sb-diff" onclick="openDiffModal()" title="Change Difficulty">🎯</div>
-        <div class="sidebar-label">MODE</div>
-        <div class="sidebar-btn" id="sb-mail" onclick="showTab('mail')" title="Mailbox">📬</div>
-        <div class="sidebar-label">MAIL</div>
+        <div class="sidebar-btn" id="sb-shops" onclick="togglePanel('shops')" title="Shops">🛒</div>
+        <div class="sidebar-label">SHOPS</div>
+        <!-- hidden legacy refs kept for JS compat -->
+        <div id="sb-gear"  style="display:none"></div>
+        <div id="sb-env"   style="display:none"></div>
+        <div id="sb-lights"style="display:none"></div>
+        <div id="sb-lights-lbl" style="display:none"></div>
+        <div id="sb-spray" style="display:none"></div>
+        <div id="sb-diff"  style="display:none"></div>
+        <div id="sb-mail"  style="display:none"></div>
+        <div style="flex:1"></div>
+        <div class="sidebar-btn" id="sb-menu" onclick="togglePanel('menu')" title="Menu">☰</div>
+        <div class="sidebar-label">MENU</div>
       </div>
 
       <!-- ROOM PANEL -->
@@ -991,7 +996,13 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
           <span class="panel-title">🏠 GROW ROOMS</span>
           <button class="panel-close" onclick="closePanel('room')">✕</button>
         </div>
-        <div style="display:flex;gap:6px;padding:10px 14px;border-bottom:1px solid var(--border)">
+        <div style="padding:10px 14px 6px">
+          <button id="room-panel-lights-btn" onclick="toggleLights()"
+            style="width:100%;padding:9px;background:rgba(251,191,36,0.15);border:2px solid var(--gold);border-radius:7px;color:var(--gold);font-family:var(--font-hud);font-size:10px;letter-spacing:1.5px;cursor:pointer;transition:.2s">
+            💡 LIGHTS ON
+          </button>
+        </div>
+        <div style="display:flex;gap:6px;padding:0 14px 10px;border-bottom:1px solid var(--border)">
           <button onclick="togglePanel('env')"
             style="flex:1;padding:9px 4px;background:rgba(34,211,238,0.08);border:1px solid var(--cyan);border-radius:7px;color:var(--cyan);font-family:var(--font-hud);font-size:10px;letter-spacing:1px;cursor:pointer;transition:.2s">
             🌡️ ENV
@@ -1094,6 +1105,83 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
           <div id="autowater-status" class="autowater-setup hidden">
             <h4>💧 AUTO-WATER STATUS</h4>
             <div id="autowater-status-body"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SHOPS PANEL -->
+      <div class="sidebar-panel" id="panel-shops">
+        <div class="panel-header">
+          <span class="panel-title">🛒 SHOPS</span>
+          <button class="panel-close" onclick="closePanel('shops')">✕</button>
+        </div>
+        <div class="panel-body">
+          <div class="room-btn-list">
+            <div class="room-btn" onclick="closePanel('shops');showTab('shop')">
+              <span class="room-btn-icon">🛒</span>
+              <div class="room-btn-info">
+                <div class="room-btn-name">SHOP HERE</div>
+                <div class="room-btn-sub">Lights, climate, gear, nutrients</div>
+              </div>
+            </div>
+            <div class="room-btn" onclick="closePanel('shops');showTab('market')">
+              <span class="room-btn-icon">💸</span>
+              <div class="room-btn-info">
+                <div class="room-btn-name">SELL HERE</div>
+                <div class="room-btn-sub">Active buyers · sell your vault</div>
+              </div>
+            </div>
+            <div class="room-btn" onclick="closePanel('shops');showTab('bmarket')">
+              <span class="room-btn-icon">🕶️</span>
+              <div class="room-btn-info">
+                <div class="room-btn-name">BLACK MARKET</div>
+                <div class="room-btn-sub">Buy &amp; sell seeds anonymously</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MENU PANEL -->
+      <div class="sidebar-panel" id="panel-menu">
+        <div class="panel-header">
+          <span class="panel-title">☰ MENU</span>
+          <button class="panel-close" onclick="closePanel('menu')">✕</button>
+        </div>
+        <div class="panel-body">
+          <div class="room-btn-list">
+            <div class="room-btn" onclick="closePanel('menu');showTab('quests')">
+              <span class="room-btn-icon">🎯</span>
+              <div class="room-btn-info">
+                <div class="room-btn-name">QUESTS</div>
+                <div class="room-btn-sub">Objectives · rewards · unlocks</div>
+              </div>
+              <span class="room-btn-badge" id="menu-quest-badge" style="display:none;color:var(--red)">!</span>
+            </div>
+            <div class="room-btn" onclick="closePanel('menu');showTab('stats')">
+              <span class="room-btn-icon">📊</span>
+              <div class="room-btn-info">
+                <div class="room-btn-name">STATS &amp; ACHIEVEMENTS</div>
+                <div class="room-btn-sub">Profile · history · badges</div>
+              </div>
+            </div>
+            <div class="room-btn" onclick="closePanel('menu');showTab('mail')">
+              <span class="room-btn-icon">📬</span>
+              <div class="room-btn-info">
+                <div class="room-btn-name">MAILBOX</div>
+                <div class="room-btn-sub">Messages · seed gifts</div>
+              </div>
+              <span class="room-btn-badge" id="menu-mail-badge" style="display:none;color:var(--green)">0</span>
+            </div>
+            <div class="sidebar-divider" style="width:100%;margin:6px 0"></div>
+            <div class="room-btn" onclick="closePanel('menu');openDiffModal()">
+              <span class="room-btn-icon">🎯</span>
+              <div class="room-btn-info">
+                <div class="room-btn-name">CHANGE MODE</div>
+                <div class="room-btn-sub">Easy · Normal · Master</div>
+              </div>
+              <span class="room-btn-badge" id="menu-diff-badge" style="color:var(--gold)">EASY</span>
+            </div>
           </div>
         </div>
       </div>
@@ -6089,6 +6177,27 @@ function updateSidebarWarnings() {
     ll.textContent = room.lightsOn ? 'LIGHTS' : 'DARK';
     lb.classList.toggle('warning', !room.lightsOn);
   }
+  // Room panel lights button
+  const rpLights = document.getElementById('room-panel-lights-btn');
+  if (rpLights) {
+    const on = room.lightsOn;
+    rpLights.textContent = on ? '💡 LIGHTS ON' : '🌙 LIGHTS OFF';
+    rpLights.style.background = on ? 'rgba(251,191,36,0.15)' : 'rgba(59,130,246,0.08)';
+    rpLights.style.borderColor = on ? 'var(--gold)' : 'var(--blue)';
+    rpLights.style.color = on ? 'var(--gold)' : 'var(--blue)';
+  }
+  // Menu panel badges
+  const unreadMail = (GS.mailbox || []).filter(m => !m.read).length;
+  const mmb = document.getElementById('menu-mail-badge');
+  if (mmb) { mmb.textContent = unreadMail; mmb.style.display = unreadMail ? 'inline' : 'none'; }
+  const mqb = document.getElementById('menu-quest-badge');
+  if (mqb) {
+    const claimed = GS.questsClaimed || [];
+    const ready = QUESTS.filter(q => !claimed.includes(q.id) && isQuestAvailable(q) && getQuestOverallProgress(q).allDone).length;
+    mqb.style.display = ready ? 'inline' : 'none';
+  }
+  const mdb = document.getElementById('menu-diff-badge');
+  if (mdb) mdb.textContent = (GS.difficulty || 'easy').toUpperCase();
 }
 
 function renderRoomPanel() {
