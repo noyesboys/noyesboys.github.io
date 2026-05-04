@@ -6883,6 +6883,17 @@ function confirmRenameStrain() {
 // ================================================================
 // GROW TAB
 // ================================================================
+
+function _roomStage(roomId) {
+  const plants = (GS.plants || []).filter(p => p.roomId === roomId && !p.isMale);
+  if (!plants.length) return 'Seedling';
+  const order = { Seedling: 0, Veg: 1, Flower: 2, Ready: 3 };
+  return plants.reduce((best, p) => {
+    const s = p.stage || 'Seedling';
+    return (order[s] > order[best]) ? s : best;
+  }, 'Seedling');
+}
+
 function renderGrow() {
   if (!GS || !GS.rooms) return;
   const room   = GS.rooms[GS.activeRoom || 0] || GS.rooms[0];
