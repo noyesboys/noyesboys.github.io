@@ -556,7 +556,106 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .nav-tab[data-tab="bmarket"],
 .nav-tab[data-tab="quests"],
 .nav-tab[data-tab="stats"],
-.nav-tab[data-tab="mail"]{display:none!important}
+.nav-tab[data-tab="mail"],
+.nav-tab[data-tab="inventory"]{display:none!important}
+/* ── BACKPACK BUBBLE + PANEL ── */
+#backpack-bubble{
+  position:fixed;bottom:22px;left:14px;z-index:2000;
+  width:52px;height:52px;border-radius:50%;
+  background:linear-gradient(135deg,#0d2a0d,#1a3a1a);
+  border:2px solid var(--green);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;cursor:pointer;
+  box-shadow:0 4px 20px rgba(74,222,128,0.18);
+  transition:transform .2s,box-shadow .2s;
+  user-select:none;
+}
+#backpack-bubble:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(74,222,128,0.35);}
+#backpack-bubble.has-alert::after{
+  content:'';position:absolute;top:2px;right:2px;
+  width:11px;height:11px;border-radius:50%;
+  background:var(--red);border:2px solid var(--carbon);
+  animation:dangerPulse 1.5s ease-in-out infinite;
+}
+#backpack-panel{
+  position:fixed;bottom:86px;left:14px;z-index:1999;
+  width:290px;max-height:540px;
+  background:rgba(8,15,8,0.97);border:1px solid var(--border-bright);
+  border-radius:14px;overflow:hidden;
+  display:flex;flex-direction:column;
+  transform:scale(0.92) translateY(12px);opacity:0;pointer-events:none;
+  transition:transform .22s cubic-bezier(.4,0,.2,1),opacity .18s;
+  backdrop-filter:blur(12px);
+  box-shadow:0 8px 40px rgba(0,0,0,0.6);
+}
+#backpack-panel::before{
+  content:'';position:absolute;top:-1px;left:20%;right:20%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);
+}
+#backpack-panel.open{transform:scale(1) translateY(0);opacity:1;pointer-events:auto;}
+.bp-header{
+  padding:12px 14px 8px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.bp-title{font-family:var(--font-hud);font-size:11px;color:var(--green);letter-spacing:2px;}
+.bp-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:2px;transition:.15s;}
+.bp-close:hover{color:var(--red);}
+.bp-tabs{
+  display:flex;gap:4px;padding:8px 10px;
+  background:rgba(0,0,0,0.4);border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.bp-tab{
+  flex:1;padding:6px 4px;border:none;border-radius:6px;
+  font-family:var(--font-hud);font-size:9px;letter-spacing:.8px;
+  cursor:pointer;transition:.2s;background:none;color:var(--muted);
+}
+.bp-tab.active{background:rgba(74,222,128,0.12);color:var(--green);}
+.bp-body{flex:1;overflow-y:auto;padding:10px;}
+/* Equipped slots grid */
+.bp-equip-grid{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:10px;
+}
+.bp-slot{
+  background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:7px;
+  padding:6px 4px;text-align:center;cursor:pointer;transition:.2s;position:relative;
+  min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.bp-slot:hover{border-color:var(--green);background:rgba(74,222,128,0.06);}
+.bp-slot.filled{border-color:rgba(74,222,128,0.4);}
+.bp-slot-icon{font-size:18px;line-height:1;}
+.bp-slot-label{font-family:var(--font-hud);font-size:6px;color:var(--muted);letter-spacing:.3px;margin-top:3px;line-height:1;}
+.bp-slot.filled .bp-slot-label{color:var(--green);}
+/* Items section headers */
+.bp-section-label{
+  font-family:var(--font-hud);font-size:8px;color:var(--muted);
+  letter-spacing:1.5px;text-transform:uppercase;
+  padding:6px 0 4px;border-bottom:1px solid var(--border);margin-bottom:6px;
+}
+.bp-section-label:not(:first-child){margin-top:10px;}
+/* Item icon grid */
+.bp-items-grid{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px;}
+.bp-item{
+  width:40px;height:40px;border-radius:7px;
+  background:rgba(0,0,0,0.5);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;cursor:grab;position:relative;transition:.15s;
+  flex-shrink:0;
+}
+.bp-item:hover{border-color:var(--green);background:rgba(74,222,128,0.08);transform:scale(1.08);}
+.bp-item.dragging{opacity:.5;cursor:grabbing;}
+.bp-item-qty{
+  position:absolute;bottom:1px;right:3px;
+  font-family:var(--font-hud);font-size:7px;color:var(--gold);line-height:1;
+}
+.bp-empty-note{
+  font-family:var(--font-hud);font-size:9px;color:var(--muted);
+  letter-spacing:1px;padding:10px 0;text-align:center;
+}
+/* Seed icon — variety colour dots */
+.bp-item[data-variety="indica"]{border-color:rgba(74,222,128,0.3);}
+.bp-item[data-variety="sativa"]{border-color:rgba(251,191,36,0.3);}
+.bp-item[data-variety="hybrid"]{border-color:rgba(168,85,247,0.3);}
 #sb-env,#sb-gear{display:none!important}
 #sb-env+.sidebar-label,#sb-gear+.sidebar-label{display:none!important}
 .flex-between{display:flex;align-items:center;justify-content:space-between}
@@ -830,6 +929,37 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .collector-card:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 6px 18px rgba(74,222,128,0.1)}
 .collector-card-img{width:100%;display:block;max-height:190px;object-fit:contain}
 .collector-card-label{font-family:var(--font-hud);font-size:8px;color:var(--muted);letter-spacing:.3px;padding:5px 4px;border-top:1px solid var(--border);line-height:1.5}
+.dry-room-modal-overlay {
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);
+  z-index:1100;align-items:center;justify-content:center;padding:16px
+}
+.dry-room-modal-overlay.open { display:flex }
+.dry-room-modal-box {
+  background:var(--panel);border:1px solid rgba(34,211,238,0.5);
+  border-radius:16px;padding:22px;width:480px;max-width:100%;
+  max-height:88vh;overflow-y:auto;position:relative
+}
+.dry-room-modal-box::before {
+  content:'';position:absolute;top:-1px;left:15%;right:15%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent)
+}
+.dry-equip-slot-row {
+  display:flex;align-items:center;gap:8px;padding:7px 10px;
+  background:rgba(0,0,0,0.35);border:1px solid var(--border);
+  border-radius:7px;margin-bottom:6px
+}
+.dry-equip-slot-icon { font-size:18px;flex-shrink:0;width:26px;text-align:center }
+.dry-equip-slot-label { font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:.5px;flex:1 }
+.dry-equip-slot-value { font-family:var(--font-hud);font-size:9px }
+.dry-equip-slot-value.active { color:var(--cyan) }
+.dry-equip-slot-value.inactive { color:var(--muted) }
+.dry-equip-slot-toggle {
+  padding:3px 10px;border-radius:4px;border:1px solid;
+  font-family:var(--font-hud);font-size:8px;cursor:pointer;transition:.15s;flex-shrink:0
+}
+.dry-equip-slot-toggle.on  { background:rgba(34,211,238,0.12);border-color:var(--cyan);color:var(--cyan) }
+.dry-equip-slot-toggle.off { background:rgba(0,0,0,0.3);border-color:var(--border);color:var(--muted) }
+.dry-equip-slot-toggle:disabled { opacity:.3;cursor:not-allowed }
 </style>
 </head>
 
@@ -1399,6 +1529,21 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
       <button class="btn-modal danger" onclick="unequipCurrentSlot()">UNEQUIP</button>
     </div>
   </div>
+</div>
+
+<!-- ===== BACKPACK BUBBLE ===== -->
+<div id="backpack-bubble" title="Inventory">🎒</div>
+
+<div id="backpack-panel">
+  <div class="bp-header">
+    <span class="bp-title">🎒 INVENTORY</span>
+    <button class="bp-close" onclick="closeBackpack()">✕</button>
+  </div>
+  <div class="bp-tabs">
+    <button class="bp-tab active" id="bp-tab-equipped" onclick="switchBpTab('equipped')">EQUIPPED</button>
+    <button class="bp-tab"        id="bp-tab-items"    onclick="switchBpTab('items')">ITEMS</button>
+  </div>
+  <div class="bp-body" id="bp-body"></div>
 </div>
 
 <!-- ===== TOAST CONTAINER ===== -->
@@ -3697,6 +3842,113 @@ function checkAchievements() {
 // ================================================================
 // EQUIP & QUEST HELPERS
 // ================================================================
+
+function openDryRoomModal() {
+  const g  = GS.gear    || {};
+  const dr = GS.dryRoom || {};
+  if (!GS.dryRoom) GS.dryRoom = {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, humidTarget:55, tempTarget:68};
+ 
+  const hasFanGear    = !!(g.fans && g.fans[0]);
+  const hasDehuGear   = !!g.dehumidifier;
+  const hasACGear     = !!g.acUnit;
+  const hasHeaterGear = !!g.heater;
+ 
+  const fanOn    = dr.fanOn    && hasFanGear;
+  const dehuOn   = dr.dehuOn   && hasDehuGear;
+  const acOn     = dr.acOn     && hasACGear;
+  const heaterOn = dr.heaterOn && hasHeaterGear;
+  const fanSpeed   = dr.fanSpeed    != null ? dr.fanSpeed    : 50;
+  const humidTgt   = dr.humidTarget != null ? dr.humidTarget : 55;
+  const tempTgt    = dr.tempTarget  != null ? dr.tempTarget  : 68;
+ 
+  // ── Equipment slots ──
+  const slotsDiv = document.getElementById('dry-room-equip-slots');
+  if (slotsDiv) {
+    const slots = [
+      { key:'fan',    icon:'🌀', label:'FAN',          has:hasFanGear,    on:fanOn,    name: hasFanGear ? (g.fans[0]?.name||'Small Fan') : null },
+      { key:'dehu',   icon:'🌵', label:'DEHUMIDIFIER', has:hasDehuGear,   on:dehuOn,   name: hasDehuGear  ? (g.dehumidifier?.name||'Dehumidifier') : null },
+      { key:'ac',     icon:'❄️', label:'AC UNIT',       has:hasACGear,     on:acOn,     name: hasACGear    ? (g.acUnit?.name||'AC Unit') : null },
+      { key:'heater', icon:'🔥', label:'HEATER',        has:hasHeaterGear, on:heaterOn, name: hasHeaterGear? (g.heater?.name||'Heater') : null },
+    ];
+    slotsDiv.innerHTML = slots.map(s => `
+      <div class="dry-equip-slot-row">
+        <span class="dry-equip-slot-icon">${s.icon}</span>
+        <div style="flex:1;min-width:0">
+          <div class="dry-equip-slot-label">${s.label}</div>
+          <div style="font-size:8px;color:${s.has?(s.on?'var(--cyan)':'var(--muted)'):'rgba(255,255,255,0.15)'};font-family:var(--font-mono);margin-top:1px">
+            ${s.has ? s.name : 'Not owned — buy from Shop → Climate'}
+          </div>
+        </div>
+        <button class="dry-equip-slot-toggle ${s.on?'on':'off'}"
+          onclick="setDryRoomEquip('${s.key}');openDryRoomModal()"
+          ${!s.has?'disabled':''}>
+          ${s.on ? '● ON' : '○ OFF'}
+        </button>
+      </div>`).join('');
+  }
+ 
+  // ── Sliders ──
+  const slidersDiv = document.getElementById('dry-room-slider-controls');
+  if (slidersDiv) {
+    slidersDiv.innerHTML = `
+      ${hasFanGear && fanOn ? `
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <span style="font-family:var(--font-hud);font-size:8px;color:var(--muted);width:80px;flex-shrink:0">🌀 FAN SPEED</span>
+          <input type="range" min="0" max="100" value="${fanSpeed}"
+            style="flex:1;accent-color:var(--cyan);height:3px;cursor:pointer"
+            oninput="GS.dryRoom.fanSpeed=parseInt(this.value);this.nextElementSibling.textContent=this.value+'%';_updateDryRoomSpeedLabel();saveGame()">
+          <span style="font-family:var(--font-hud);font-size:9px;color:var(--cyan);min-width:36px;text-align:right">${fanSpeed}%</span>
+        </div>` : ''}
+      ${hasDehuGear && dehuOn ? `
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <span style="font-family:var(--font-hud);font-size:8px;color:var(--muted);width:80px;flex-shrink:0">🌵 TARGET RH%</span>
+          <input type="range" min="20" max="75" value="${humidTgt}"
+            style="flex:1;accent-color:var(--purple);height:3px;cursor:pointer"
+            oninput="GS.dryRoom.humidTarget=parseInt(this.value);this.nextElementSibling.textContent=this.value+'%';saveGame()">
+          <span style="font-family:var(--font-hud);font-size:9px;color:var(--purple);min-width:36px;text-align:right">${humidTgt}%</span>
+        </div>
+        <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin:-6px 0 10px 88px">Dehu targets this RH · sweet spot: 55–62%</div>` : ''}
+      ${(hasACGear && acOn) || (hasHeaterGear && heaterOn) ? `
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <span style="font-family:var(--font-hud);font-size:8px;color:var(--muted);width:80px;flex-shrink:0">${acOn?'❄️':'🔥'} TARGET °F</span>
+          <input type="range" min="55" max="85" value="${tempTgt}"
+            style="flex:1;accent-color:${acOn?'var(--blue)':'var(--orange)'};height:3px;cursor:pointer"
+            oninput="GS.dryRoom.tempTarget=parseInt(this.value);this.nextElementSibling.textContent=this.value+'°F';saveGame()">
+          <span style="font-family:var(--font-hud);font-size:9px;color:${acOn?'var(--blue)':'var(--orange)'};min-width:36px;text-align:right">${tempTgt}°F</span>
+        </div>` : ''}
+      ${!fanOn && !dehuOn && !acOn && !heaterOn ? `
+        <div style="color:var(--muted);font-size:9px;font-family:var(--font-hud);text-align:center;padding:12px;letter-spacing:1px">
+          Turn on equipment above to see controls.
+        </div>` : ''}`;
+  }
+ 
+  _updateDryRoomSpeedLabel();
+  document.getElementById('modal-dry-room-controls')?.classList.add('open');
+}
+ 
+function closeDryRoomModal() {
+  document.getElementById('modal-dry-room-controls')?.classList.remove('open');
+  // Re-render vault to reflect any changes
+  if (_activeTab === 'vault') renderVault();
+}
+ 
+function _updateDryRoomSpeedLabel() {
+  const dr  = GS.dryRoom || {};
+  const g   = GS.gear    || {};
+  const fanOn    = dr.fanOn    && !!(g.fans && g.fans[0]);
+  const dehuOn   = dr.dehuOn   && !!g.dehumidifier;
+  const acOn     = dr.acOn     && !!g.acUnit;
+  const fanSpeed = dr.fanSpeed != null ? dr.fanSpeed : 50;
+  let label = 'VERY SLOW', color = 'var(--red)';
+  if (fanOn && dehuOn && acOn)           { label = 'FAST — ~17h to sweet spot';       color = 'var(--green)'; }
+  else if (fanOn && dehuOn)              { label = 'GOOD — ~28h to sweet spot';       color = 'var(--green)'; }
+  else if (fanOn && fanSpeed > 60)       { label = 'MODERATE — ~45h to sweet spot';   color = 'var(--gold)'; }
+  else if (fanOn)                        { label = 'SLOW — ~60h (fan too low)';       color = 'var(--gold)'; }
+  else                                   { label = 'VERY SLOW — no fan, mold risk!';  color = 'var(--red)'; }
+  const el = document.getElementById('dry-speed-label');
+  if (el) { el.textContent = label; el.style.color = color; }
+}
+
 function getEquippedBonuses() {
   if (!GS || !GS.equip) return {};
   const bonuses = {yield_pct:0, yield_flat:0, thc_add:0, coins_pct:0, xp_pct:0,
@@ -6197,6 +6449,14 @@ function updateSidebarWarnings() {
   }
   const mdb = document.getElementById('menu-diff-badge');
   if (mdb) mdb.textContent = (GS.difficulty || 'easy').toUpperCase();
+  // sb-menu pulse when quests ready or unread mail
+  const sbMenu = document.getElementById('sb-menu');
+  if (sbMenu) {
+    const _unread2  = (GS.mailbox||[]).filter(m=>!m.read).length;
+    const _claimed2 = GS.questsClaimed||[];
+    const _qReady   = QUESTS.filter(q=>!_claimed2.includes(q.id)&&isQuestAvailable(q)&&getQuestOverallProgress(q).allDone).length;
+    sbMenu.classList.toggle('warning', (_unread2+_qReady) > 0);
+  }
 }
 
 function renderRoomPanel() {
@@ -8047,92 +8307,116 @@ function _toggleDryBatch(id) {
 
 function _renderDrying(cont) {
   const batches = (GS.curing || []).filter(b => b.phase === 'drying');
-  const g  = GS.gear    || {};
-  const dr = GS.dryRoom || {};
-
-  const hasFanGear    = !!(g.fans && g.fans[0]);
-  const hasDehuGear   = !!g.dehumidifier;
-  const hasACGear     = !!g.acUnit;
-  const hasHeaterGear = !!g.heater;
-
-  const fanOn    = dr.fanOn    && hasFanGear;
-  const dehuOn   = dr.dehuOn   && hasDehuGear;
-  const acOn     = dr.acOn     && hasACGear;
-  const heaterOn = dr.heaterOn && hasHeaterGear;
-  const fanSpeed = dr.fanSpeed != null ? dr.fanSpeed : 50;
-  const tempTgt  = dr.tempTarget != null ? dr.tempTarget : 68;
-
-  let speedLabel = 'VERY SLOW — risky without a fan', speedColor = 'var(--red)';
-  if (fanOn && dehuOn && acOn)  { speedLabel = 'FAST — ~17h to sweet spot'; speedColor = 'var(--green)'; }
-  else if (fanOn && dehuOn)     { speedLabel = 'GOOD — ~28h to sweet spot'; speedColor = 'var(--green)'; }
-  else if (fanOn)               { speedLabel = 'MODERATE — ~45h to sweet spot'; speedColor = 'var(--gold)'; }
-
+  if (!GS.dryRoom) GS.dryRoom = {fanOn:false,dehuOn:false,acOn:false,heaterOn:false,fanSpeed:50,humidTarget:55,tempTarget:68};
+  const dr  = GS.dryRoom;
+  const g   = GS.gear || {};
+  const fanOn  = dr.fanOn  && !!(g.fans && g.fans[0]);
+  const dehuOn = dr.dehuOn && !!g.dehumidifier;
+  const acOn   = dr.acOn   && !!g.acUnit;
+ 
+  // Quick status for the control button badge
+  let ctrlStatusColor = 'var(--red)', ctrlStatusLabel = 'NO FAN';
+  if (fanOn && dehuOn && acOn) { ctrlStatusColor = 'var(--green)';  ctrlStatusLabel = 'FAST'; }
+  else if (fanOn && dehuOn)    { ctrlStatusColor = 'var(--green)';  ctrlStatusLabel = 'GOOD'; }
+  else if (fanOn)              { ctrlStatusColor = 'var(--gold)';   ctrlStatusLabel = 'MODERATE'; }
+ 
+  // Active gear summary pills
+  const activePills = [];
+  if (fanOn)  activePills.push(`<span style="background:rgba(34,211,238,0.12);border:1px solid var(--cyan);border-radius:4px;padding:2px 8px;font-size:8px;color:var(--cyan);font-family:var(--font-hud)">🌀 FAN ${dr.fanSpeed||50}%</span>`);
+  if (dehuOn) activePills.push(`<span style="background:rgba(168,85,247,0.1);border:1px solid var(--purple);border-radius:4px;padding:2px 8px;font-size:8px;color:var(--purple);font-family:var(--font-hud)">🌵 DEHU → ${dr.humidTarget||55}% RH</span>`);
+  if (acOn)   activePills.push(`<span style="background:rgba(59,130,246,0.1);border:1px solid var(--blue);border-radius:4px;padding:2px 8px;font-size:8px;color:var(--blue);font-family:var(--font-hud)">❄️ AC → ${dr.tempTarget||68}°F</span>`);
+  if (dr.heaterOn && g.heater) activePills.push(`<span style="background:rgba(249,115,22,0.1);border:1px solid var(--orange);border-radius:4px;padding:2px 8px;font-size:8px;color:var(--orange);font-family:var(--font-hud)">🔥 HEAT → ${dr.tempTarget||68}°F</span>`);
+ 
   let html = `
-    <div class="dry-room-shared">
-      <div class="dry-room-svg-wrap">${_buildDryRoomSVG(batches)}</div>
-      <div style="padding:12px;border-bottom:1px solid var(--border)">
-        <div style="font-family:var(--font-hud);font-size:10px;color:var(--cyan);letter-spacing:2px;margin-bottom:8px">🌬️ DRYING ROOM CONTROLS</div>
-        <div class="dry-equip-select" style="gap:5px">
-          ${[
-            ['fan',    '🌀 FAN',    hasFanGear,    fanOn],
-            ['dehu',   '🌵 DEHU',   hasDehuGear,   dehuOn],
-            ['ac',     '❄️ AC',     hasACGear,     acOn],
-            ['heater', '🔥 HEATER', hasHeaterGear, heaterOn],
-          ].map(([t,l,has,on])=>`
-            <button class="dry-equip-btn ${!has?'disabled':on?'active-fan':''}" onclick="${has?`setDryRoomEquip('${t}')`:''}" >
-              ${l} ${!has?'<span style="font-size:7px">(not owned)</span>':on?'✓ ON':'OFF'}
-            </button>`).join('')}
-        </div>
-        ${fanOn?`<div class="dry-ctrl-row" style="margin-top:8px">
-          <span class="dry-ctrl-label">🌀 FAN</span>
-          <input type="range" min="0" max="100" value="${fanSpeed}" oninput="updateDryRoomFanSpeed(this.value)">
-          <span class="dry-ctrl-val" id="dry-fan-global">${fanSpeed}%</span>
-        </div>`:''}
-        ${(acOn||heaterOn)?`<div class="dry-ctrl-row">
-          <span class="dry-ctrl-label">${acOn?'❄️':'🔥'} TEMP</span>
-          <input type="range" min="55" max="85" value="${tempTgt}" oninput="updateDryRoomTemp(this.value)">
-          <span class="dry-ctrl-val" id="dry-temp-global">${tempTgt}°F</span>
-        </div>`:''}
-        <div class="dry-speed-bar" style="margin-top:8px">
-          <span style="color:var(--muted)">SPEED:</span>
-          <span style="color:${speedColor};flex:1">${speedLabel}</span>
-          <span style="font-size:8px;color:var(--muted)">Sweet spot: 58–64% RH</span>
-        </div>
-        ${!hasFanGear && !hasDehuGear ? `<div class="warning-note" style="margin-top:8px;margin-bottom:0">⚠️ No fan or dehumidifier — buy from Shop → Climate for effective drying.</div>` : ''}
+    <!-- Controls header bar -->
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+      <button onclick="openDryRoomModal()"
+        style="display:flex;align-items:center;gap:8px;padding:9px 16px;background:rgba(34,211,238,0.1);border:1px solid rgba(34,211,238,0.5);border-radius:9px;color:var(--cyan);font-family:var(--font-hud);font-size:10px;letter-spacing:1px;cursor:pointer;transition:.2s;flex-shrink:0"
+        onmouseover="this.style.background='rgba(34,211,238,0.2)'" onmouseout="this.style.background='rgba(34,211,238,0.1)'">
+        ⚙️ DRY ROOM SETUP
+        <span style="background:rgba(0,0,0,0.4);border:1px solid ${ctrlStatusColor};border-radius:4px;padding:1px 7px;font-size:8px;color:${ctrlStatusColor}">${ctrlStatusLabel}</span>
+      </button>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;flex:1">
+        ${activePills.length ? activePills.join('') : `<span style="font-size:9px;color:var(--red);font-family:var(--font-hud);padding:4px 0">⚠️ No equipment active — open setup to configure</span>`}
       </div>
-      ${batches.length ? `<div class="dry-batch-shelf">
-        ${batches.map(b=>{
-          const rh  = b.dryRH != null ? b.dryRH : 80;
-          const q   = b.quality || 100;
-          const isMoldRisk = rh > 75;
-          const isSweet    = rh >= 58 && rh <= 65;
-          const isOverDry  = rh < 45;
-          const rhColor= isMoldRisk ? '#ef4444' : isSweet ? '#4ade80' : isOverDry ? '#f97316' : '#fbbf24';
-          const status = isMoldRisk ? '🍄 MOLD RISK' : isSweet ? '✅ SWEET SPOT' : isOverDry ? '❌ OVER-DRY' : '⬇️ DRYING';
-          const chipClass = isMoldRisk ? 'mold-risk' : isSweet ? 'sweet-spot' : isOverDry ? 'overdried' : '';
-          const canCure = rh <= 70;
-          return `<div class="dry-batch-chip ${chipClass}" id="dbc-${b.id}" onclick="_toggleDryBatch('${b.id}')">
-            <div class="dbc-name" title="${b.name}">${b.name}</div>
-            <div class="dbc-rh" style="color:${rhColor}">${rh.toFixed(1)}<span style="font-size:10px;color:var(--muted)">%</span></div>
-            <div class="dbc-status" style="color:${rhColor}">${status}</div>
-            <div class="dbc-quality">Q: ${Math.round(q)}% · ${b.grams}g · ${b.thc}%</div>
-            <div class="dbc-expand" id="dbc-expand-${b.id}">
-              ${b.phase==='drying'?`
-                <div style="display:flex;gap:5px;margin-top:5px;flex-wrap:wrap">
-                  <button class="btn-action btn-purple" style="flex:1;padding:6px;font-size:8px"
-                    onclick="event.stopPropagation();moveToCuringJar('${b.id}')" ${!canCure?'disabled':''}>
-                    🫙 JAR IT
-                  </button>
-                  <button class="btn-action btn-red" style="padding:6px;font-size:8px"
-                    onclick="event.stopPropagation();discardDrying('${b.id}')">🗑️</button>
-                </div>
-                ${!canCure&&GS.difficulty==='easy'?'<div style="font-size:7px;color:var(--gold);margin-top:4px;font-family:var(--font-mono)">Dry below 70% first</div>':''}
-              `:'' }
-            </div>
-          </div>`;
-        }).join('')}
-      </div>` : `<div style="padding:20px;text-align:center;color:var(--muted);font-family:var(--font-hud);font-size:10px">No batches hanging — harvest a plant to start drying.</div>`}
     </div>`;
+ 
+  // ── Batch tiles grid ──
+  if (!batches.length) {
+    html += `<div style="text-align:center;padding:50px 20px;color:var(--muted);font-family:var(--font-hud);font-size:10px;letter-spacing:2px;line-height:2.2">
+      🌬️ NOTHING HANGING<br>
+      <span style="font-size:9px;opacity:.7">Harvest a plant to start drying.</span>
+    </div>`;
+  } else {
+    html += `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px">`;
+    batches.forEach(b => {
+      const rh         = b.dryRH != null ? b.dryRH : 80;
+      const q          = b.quality || 100;
+      const isMoldRisk = rh > 75;
+      const isTooWet   = rh > 68 && rh <= 75;
+      const isSweet    = rh >= 58 && rh <= 65;
+      const isOverDry  = rh < 45;
+      const canCure    = rh <= 70;
+      const rhColor    = isMoldRisk ? '#ef4444' : isSweet ? '#4ade80' : isOverDry ? '#f97316' : '#fbbf24';
+      const borderC    = isMoldRisk ? 'rgba(239,68,68,0.6)' : isSweet ? 'rgba(74,222,128,0.5)' : isOverDry ? 'rgba(249,115,22,0.5)' : 'rgba(34,211,238,0.35)';
+      const bgC        = isMoldRisk ? 'rgba(239,68,68,0.05)' : isSweet ? 'rgba(74,222,128,0.04)' : 'rgba(13,26,13,0.8)';
+      const statusTxt  = isMoldRisk ? '🍄 MOLD RISK' : isTooWet ? '💧 TOO WET' : isSweet ? '✅ SWEET SPOT' : isOverDry ? '❌ OVER-DRIED' : '⬇️ DRYING';
+      const pulse      = isMoldRisk ? 'animation:dangerPulse 2s ease-in-out infinite' : isSweet ? 'animation:readyGlow 3s ease-in-out infinite' : '';
+ 
+      html += `<div style="background:${bgC};border:1px solid ${borderC};border-radius:12px;overflow:hidden;${pulse}">
+        <!-- Tile header — click to expand -->
+        <div style="padding:14px;cursor:pointer" onclick="_toggleDryBatch('${b.id}')">
+          <!-- Strain name -->
+          <div style="font-family:var(--font-hud);font-size:10px;color:var(--text);letter-spacing:.3px;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${b.name}">${b.name}</div>
+          <!-- Big RH readout -->
+          <div style="font-family:var(--font-hud);font-size:40px;font-weight:700;color:${rhColor};line-height:1;margin-bottom:5px">${rh.toFixed(1)}<span style="font-size:13px;color:var(--muted);font-weight:400"> %RH</span></div>
+          <!-- Status label -->
+          <div style="font-family:var(--font-hud);font-size:8px;letter-spacing:.5px;color:${rhColor};margin-bottom:10px">${statusTxt}</div>
+          <!-- RH gradient bar — sweet zone highlighted -->
+          <div style="position:relative;height:6px;background:rgba(255,255,255,0.05);border-radius:3px;margin-bottom:10px">
+            <div style="position:absolute;left:58%;width:${65-58}%;height:100%;background:rgba(74,222,128,0.35);border-radius:3px"></div>
+            <div style="position:absolute;left:${Math.min(99,Math.max(1,rh))}%;top:-3px;width:3px;height:12px;background:${rhColor};border-radius:2px;transform:translateX(-50%);box-shadow:0 0 6px ${rhColor}"></div>
+          </div>
+          <!-- Stats pills -->
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
+            <span style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-family:var(--font-hud);font-size:8px;color:${q>80?'var(--green)':q>50?'var(--gold)':'var(--red)'}">Q ${Math.round(q)}%</span>
+            <span style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-family:var(--font-hud);font-size:8px;color:var(--cyan)">${b.grams}g</span>
+            <span style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-family:var(--font-hud);font-size:8px;color:var(--gold)">${b.thc}%</span>
+            <span style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">▼ EXPAND</span>
+          </div>
+        </div>
+        <!-- Expandable detail panel -->
+        <div class="dbc-expand" id="dbc-expand-${b.id}" style="border-top:1px solid rgba(255,255,255,0.05)">
+          <div style="padding:12px 14px">
+            <!-- Mini animated sprite -->
+            <div style="height:110px;border-radius:7px;overflow:hidden;margin-bottom:10px;background:#060e06">
+              ${getDryingSprite(b)}
+            </div>
+            <!-- Tip text -->
+            <div style="font-size:8px;font-family:var(--font-mono);color:var(--muted);margin-bottom:10px;line-height:1.7;padding:6px 8px;background:rgba(0,0,0,0.3);border-radius:5px">
+              ${isMoldRisk ? '<span style="color:var(--red)">⚠️ Open Setup and turn on fan immediately — mold forming!</span>' : ''}
+              ${isOverDry  ? '<span style="color:var(--orange)">Jar it now or accept quality penalty from over-drying.</span>' : ''}
+              ${isSweet    ? '<span style="color:var(--green)">Perfect range — jar it for best quality!</span>' : ''}
+              ${!isMoldRisk&&!isOverDry&&!isSweet ? 'Drying toward sweet spot (58–64% RH).' + (canCure?'':' Needs to reach 70% first.') : ''}
+            </div>
+            <!-- Actions -->
+            <div style="display:flex;gap:6px">
+              <button class="btn-action btn-purple" style="flex:1;padding:8px;font-size:9px"
+                onclick="event.stopPropagation();moveToCuringJar('${b.id}')"
+                ${!canCure?'disabled':''}>
+                🫙 MOVE TO JAR
+              </button>
+              <button class="btn-action btn-red" style="padding:8px 12px;font-size:9px"
+                onclick="event.stopPropagation();discardDrying('${b.id}')">🗑️</button>
+            </div>
+            ${!canCure && GS.difficulty==='easy' ? `<div style="font-size:7px;color:var(--gold);margin-top:6px;font-family:var(--font-mono);text-align:center">Dry below 70% RH before jarring</div>` : ''}
+          </div>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+ 
   cont.innerHTML = html;
 }
 
@@ -8200,116 +8484,131 @@ function _toggleCureJar(id) {
 function _renderCuringJars(cont) {
   const batches = (GS.curing || []).filter(b => b.phase === 'curing');
   if (!batches.length) {
-    cont.innerHTML = '<div class="empty-state">🫙 No jars curing.<br>Dry your harvest first, then move to jar curing.</div>';
+    cont.innerHTML = `<div style="text-align:center;padding:50px 20px;color:var(--muted);font-family:var(--font-hud);font-size:10px;letter-spacing:2px;line-height:2.2">
+      🫙 NO JARS CURING<br>
+      <span style="font-size:9px;opacity:.7">Dry a harvest first, then move to jar curing.</span>
+    </div>`;
     return;
   }
   const now = Date.now();
-  let html = '';
+  let html = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px">`;
+ 
   batches.forEach(batch => {
-    const rh    = batch.jarRH != null ? batch.jarRH : 62;
-    const q     = batch.quality || 100;
-    const burps = batch.burpsDone || 0;
+    const rh           = batch.jarRH != null ? batch.jarRH : 62;
+    const q            = batch.quality || 100;
+    const burps        = batch.burpsDone || 0;
     const lastBurp     = batch.lastBurpTs || batch.jarStartTs || now;
     const hrsSinceBurp = (now - lastBurp) / 3600000;
     const burpDue      = rh > 65 && hrsSinceBurp >= 4;
     const burpOverdue  = rh > 70 || (burpDue && hrsSinceBurp >= 10);
-    const everBurpedLow= !!(batch.everBurpedBelow65);
+    const sweetSpot    = rh >= 54 && rh <= 64;
     const belowFifty   = rh < 50;
-    const canVault     = everBurpedLow || belowFifty; // below 50 = always sealable (with penalty)
+    const justBelow    = rh >= 50 && rh < 54;
+    const onCooldown   = hrsSinceBurp < 5 && burps > 0;
+    const canVault     = !!(batch.everBurpedBelow65) || belowFifty;
     const enoughBurps  = burps >= 5;
-    const burpOnCooldown = hrsSinceBurp < 5;
-    const burpCooldownLeft = burpOnCooldown ? (5 - hrsSinceBurp).toFixed(1) : 0;
-
-    let rhColor = 'var(--green)', rhNote = '';
-    if (rh > 70)            { rhColor = 'var(--red)';   rhNote = '⚠️ TOO HIGH — burp immediately!'; }
-    else if (rh > 65)       { rhColor = 'var(--gold)';  rhNote = '💨 HIGH — burp when ready'; }
-    else if (rh >= 54 && rh <= 64) { rhColor = 'var(--green)'; rhNote = '✅ SWEET SPOT (54–64%)'; }
-    else if (rh >= 40 && rh < 54)  { rhColor = 'var(--cyan)';  rhNote = '⬇️ LOW — may seal soon'; }
-    else if (rh < 40)       { rhColor = 'var(--red)';   rhNote = '❌ TOO DRY — quality loss if not sealed'; }
-
-    // Preview quality loss at current RH if sealed now
-    let sealPreview = '';
-    if      (rh >= 54 && rh <= 64)  sealPreview = '✅ No quality loss if sealed now';
-    else if (rh >= 40 && rh < 54)   sealPreview = '−10% quality if sealed now';
-    else if (rh >= 30 && rh < 40)   sealPreview = '−20% quality if sealed now';
-    else if (rh > 0  && rh < 30)    sealPreview = '−50% quality if sealed now';
-    else if (rh > 64 && rh <= 70)   sealPreview = '−5% quality if sealed now';
-    else if (rh > 70)               sealPreview = '−40% quality if sealed now — burp first!';
-
-    // Burp count bonus/penalty preview
-    let burpNote = '';
-    if      (burps === 0) burpNote = '⚠️ Need at least 5 burps for full quality';
-    else if (burps < 5)  burpNote = `${5 - burps} more burps for full quality (${burps}/5)`;
-    else if (burps < 10) burpNote = `✅ ${burps}/5 burps done · Extra burps add +10% quality`;
-    else                 burpNote = '✅ Fully cured — jar stabilized';
-
-    html += `<div class="cure-jar-card ${burpOverdue?'burp-overdue':burpDue?'burp-due':''}">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-        <div style="font-family:var(--font-hud);font-size:12px;color:var(--text)">${batch.name}</div>
-        <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono)">${batch.grams}g · THC ${batch.thc}%</div>
+ 
+    const rhColor   = burpOverdue ? '#ef4444' : burpDue ? '#fbbf24' : sweetSpot ? '#4ade80' : justBelow ? '#22d3ee' : belowFifty ? '#f97316' : '#60a5fa';
+    const borderC   = burpOverdue ? 'rgba(239,68,68,0.6)' : burpDue ? 'rgba(251,191,36,0.6)' : sweetSpot ? 'rgba(74,222,128,0.5)' : justBelow ? 'rgba(34,211,238,0.4)' : belowFifty ? 'rgba(249,115,22,0.5)' : 'rgba(168,85,247,0.35)';
+    const bgC       = burpOverdue ? 'rgba(239,68,68,0.05)' : burpDue ? 'rgba(251,191,36,0.04)' : sweetSpot ? 'rgba(74,222,128,0.04)' : 'rgba(13,26,13,0.8)';
+    const pulse     = burpOverdue ? 'animation:dangerPulse 1.5s ease-in-out infinite' : burpDue ? 'animation:gearWarn 2s ease-in-out infinite' : sweetSpot ? 'animation:readyGlow 3s ease-in-out infinite' : '';
+    const statusTxt = burpOverdue ? '⚠️ BURP OVERDUE' : burpDue ? '💨 NEEDS BURP' : sweetSpot ? '✅ SWEET SPOT' : justBelow ? '⬇️ BELOW SWEET' : belowFifty ? '❌ OVER-DRIED' : onCooldown ? `⏳ CD ${(5-hrsSinceBurp).toFixed(1)}h` : '🫙 CURING';
+ 
+    const burpPct   = Math.min(100, (burps / 10) * 100);
+    const qualColor = q > 80 ? 'var(--green)' : q > 50 ? 'var(--gold)' : 'var(--red)';
+ 
+    html += `<div style="background:${bgC};border:1px solid ${borderC};border-radius:12px;overflow:hidden;${pulse}">
+      <!-- Tile top — click to expand -->
+      <div style="padding:14px;cursor:pointer" onclick="_toggleCureJar('${batch.id}')">
+        <!-- Name -->
+        <div style="font-family:var(--font-hud);font-size:10px;color:var(--text);letter-spacing:.3px;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${batch.name}">${batch.name}</div>
+        <!-- Big RH -->
+        <div style="font-family:var(--font-hud);font-size:40px;font-weight:700;color:${rhColor};line-height:1;margin-bottom:5px">${rh.toFixed(1)}<span style="font-size:13px;color:var(--muted);font-weight:400"> %RH</span></div>
+        <!-- Status -->
+        <div style="font-family:var(--font-hud);font-size:8px;letter-spacing:.5px;color:${rhColor};margin-bottom:10px">${statusTxt}</div>
+        <!-- RH bar with sweet zone -->
+        <div style="position:relative;height:6px;background:rgba(255,255,255,0.05);border-radius:3px;margin-bottom:10px">
+          <div style="position:absolute;left:${54/80*100}%;width:${(64-54)/80*100}%;height:100%;background:rgba(74,222,128,0.3);border-radius:3px"></div>
+          <div style="position:absolute;left:${Math.min(99,Math.max(1,rh/80*100))}%;top:-3px;width:3px;height:12px;background:${rhColor};border-radius:2px;transform:translateX(-50%);box-shadow:0 0 6px ${rhColor}"></div>
+        </div>
+        <!-- Stats row -->
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          <span style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-family:var(--font-hud);font-size:8px;color:${qualColor}">Q ${Math.round(q)}%</span>
+          <span style="background:rgba(0,0,0,0.4);border:1px solid rgba(168,85,247,0.3);border-radius:4px;padding:2px 7px;font-family:var(--font-hud);font-size:8px;color:var(--purple)">${burps} burps</span>
+          <span style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-family:var(--font-hud);font-size:8px;color:var(--cyan)">${batch.grams}g</span>
+          ${burpDue||burpOverdue ? `<span style="background:rgba(251,191,36,0.15);border:1px solid var(--gold);border-radius:4px;padding:2px 7px;font-family:var(--font-hud);font-size:8px;color:var(--gold)">💨 BURP</span>` : ''}
+          <span style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">▼</span>
+        </div>
       </div>
-      <div class="dry-sprite-wrap" style="height:210px">${getCuringSprite(batch)}</div>
-      <div class="dry-sprite-click-hint">↑ LIVE JAR VIEW · CLICK JAR TO BURP</div>
-      <div class="cure-jar-rh" style="color:${rhColor}">${rh.toFixed(1)}<span style="font-size:18px;color:var(--muted)">% RH</span></div>
-      <div style="font-family:var(--font-hud);font-size:9px;text-align:center;color:${rhColor};margin-bottom:6px">${rhNote}</div>
-      <div class="cure-rh-bar">
-        <div class="cure-rh-fill" style="width:${Math.min(100,rh/80*100)}%;background:${rhColor}"></div>
-      </div>
-      <div class="dry-quality-strip">
-        <span class="dry-q-label">QUALITY</span>
-        <div class="dry-q-bar"><div class="dry-q-fill" style="width:${q}%;background:${q>80?'var(--green)':q>50?'var(--gold)':'var(--red)'}"></div></div>
-        <span style="font-family:var(--font-hud);font-size:10px;color:${q>80?'var(--green)':q>50?'var(--gold)':'var(--red)'}">${Math.round(q)}%</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-size:9px;font-family:var(--font-mono);color:var(--muted);margin:8px 0;text-align:center">
-        <div style="background:rgba(0,0,0,0.3);border-radius:5px;padding:5px">BURPS<br><strong style="color:var(--purple);font-size:13px">${burps}</strong></div>
-        <div style="background:rgba(0,0,0,0.3);border-radius:5px;padding:5px">SINCE BURP<br><strong style="color:var(--muted);font-size:13px">${hrsSinceBurp.toFixed(1)}h</strong></div>
-        <div style="background:rgba(0,0,0,0.3);border-radius:5px;padding:5px">ENTRY RH<br><strong style="color:var(--cyan);font-size:13px">${(batch.jarEntryRH||70).toFixed(0)}%</strong></div>
-      </div>
-      <div style="font-size:8px;font-family:var(--font-mono);color:var(--muted);text-align:center;margin-bottom:4px">${sealPreview}</div>
-      <div style="font-size:8px;font-family:var(--font-hud);color:var(--gold);text-align:center;margin-bottom:8px">${burpNote}</div>
-      ${burpOnCooldown
-        ? `<div style="background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.3);border-radius:7px;padding:8px;text-align:center;margin-bottom:6px">
-             <span style="font-family:var(--font-hud);font-size:10px;color:var(--gold)">⏳ BURP COOLDOWN — ${burpCooldownLeft}h left</span><br>
-             <span style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">One burp allowed every 5 real hours</span>
-           </div>`
-        : ''}
-      <div class="burp-btn-row">
-        <button class="burp-btn quick" onclick="burpJar('${batch.id}','quick')" ${rh <= 50 || burpOnCooldown ? 'disabled' : ''}>
-          💨 QUICK<br><span style="font-size:7px;opacity:0.8">5min · −10% RH</span>
-        </button>
-        <button class="burp-btn med" onclick="burpJar('${batch.id}','med')" ${rh <= 50 || burpOnCooldown ? 'disabled' : ''}>
-          💨 MED<br><span style="font-size:7px;opacity:0.8">1hr · −20% RH</span>
-        </button>
-        <button class="burp-btn long" onclick="burpJar('${batch.id}','long')" ${rh <= 50 || burpOnCooldown ? 'disabled' : ''}>
-          ⚠️ LONG<br><span style="font-size:7px;opacity:0.8">4hr · −30% · −5% Q</span>
-        </button>
-      </div>
-      ${belowFifty ? `<div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);text-align:center;margin-top:4px">RH below 50% — over-dried. Slow recovery only. Seal now or wait.</div>` : ''}
-      ${GS.difficulty === 'easy' && !enoughBurps && canVault
-        ? `<div class="info-note" style="margin-top:8px">💡 Tip: ${5-burps} more burps for best quality. You can seal early but quality won't be optimal.</div>`
-        : ''}
-      <div style="margin-top:10px">
-        ${belowFifty
-          ? `<div class="warning-note" style="margin-bottom:6px">
-               ⚠️ <strong>OVER-DRIED</strong> — sealing now applies:<br>
-               <span style="color:var(--red)">−50% quality · −5% THC</span><br>
-               <span style="color:var(--muted);font-size:8px">Alternatively wait for slow RH recovery (${(batch.jarRH||0).toFixed(1)}% → 50%+)</span>
-             </div>
-             <button class="btn-action btn-red" style="width:100%;padding:10px"
-               onclick="moveCuredToVault('${batch.id}')">
-               ⚠️ SEAL WITH PENALTY (OVER-DRIED)
-             </button>`
-          : `<button class="btn-action btn-green" style="width:100%;padding:10px"
-               onclick="moveCuredToVault('${batch.id}')"
-               ${!canVault ? 'disabled' : ''}>
-               📦 SEAL &amp; MOVE TO VAULT
-             </button>
-             ${!canVault ? `<div style="font-size:8px;color:var(--muted);text-align:center;margin-top:4px;font-family:var(--font-mono)">Burp below 65% RH at least once to unlock sealing</div>` : ''}`}
+ 
+      <!-- Expandable detail -->
+      <div class="cjc-detail" id="cjc-detail-${batch.id}" style="border-top:1px solid rgba(255,255,255,0.05)">
+        <div style="padding:12px 14px">
+          <!-- Mini jar sprite -->
+          <div style="height:120px;border-radius:7px;overflow:hidden;margin-bottom:10px;background:#080c12">
+            ${getCuringSprite(batch)}
+          </div>
+ 
+          <!-- Detail stats grid -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:10px;text-align:center">
+            <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:6px;padding:6px">
+              <div style="font-size:7px;color:var(--muted);font-family:var(--font-hud);letter-spacing:.5px;margin-bottom:2px">SINCE BURP</div>
+              <div style="font-family:var(--font-hud);font-size:13px;color:${hrsSinceBurp>6?'var(--gold)':'var(--muted)'}">${hrsSinceBurp.toFixed(1)}h</div>
+            </div>
+            <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:6px;padding:6px">
+              <div style="font-size:7px;color:var(--muted);font-family:var(--font-hud);letter-spacing:.5px;margin-bottom:2px">BURPS</div>
+              <div style="font-family:var(--font-hud);font-size:13px;color:var(--purple)">${burps}/5+</div>
+            </div>
+            <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:6px;padding:6px">
+              <div style="font-size:7px;color:var(--muted);font-family:var(--font-hud);letter-spacing:.5px;margin-bottom:2px">THC</div>
+              <div style="font-family:var(--font-hud);font-size:13px;color:var(--gold)">${batch.thc}%</div>
+            </div>
+          </div>
+ 
+          <!-- Burp progress bar -->
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px">
+            <span style="font-size:8px;color:var(--muted);font-family:var(--font-hud);white-space:nowrap">BURP PROG</span>
+            <div style="flex:1;height:4px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden">
+              <div style="height:100%;width:${burpPct}%;background:linear-gradient(90deg,var(--purple-dim),var(--purple));border-radius:2px;transition:.4s"></div>
+            </div>
+            <span style="font-size:8px;color:var(--purple);font-family:var(--font-mono)">${burps}/10</span>
+          </div>
+ 
+          ${onCooldown ? `<div style="text-align:center;padding:6px;background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.25);border-radius:6px;font-family:var(--font-hud);font-size:9px;color:var(--gold);margin-bottom:8px">⏳ Burp cooldown — ${(5-hrsSinceBurp).toFixed(1)}h left</div>` : ''}
+ 
+          <!-- Burp buttons -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:8px">
+            <button class="burp-btn quick" onclick="burpJar('${batch.id}','quick')" ${rh<=50||onCooldown?'disabled':''}>
+              💨 QUICK<br><span style="font-size:7px;opacity:.75">−10% RH</span>
+            </button>
+            <button class="burp-btn med" onclick="burpJar('${batch.id}','med')" ${rh<=50||onCooldown?'disabled':''}>
+              💨 MED<br><span style="font-size:7px;opacity:.75">−20% RH</span>
+            </button>
+            <button class="burp-btn long" onclick="burpJar('${batch.id}','long')" ${rh<=50||onCooldown?'disabled':''}>
+              ⚠️ LONG<br><span style="font-size:7px;opacity:.75">−30% −5%Q</span>
+            </button>
+          </div>
+ 
+          <!-- Seal button -->
+          ${belowFifty
+            ? `<button class="btn-action btn-red" style="width:100%;padding:8px;font-size:9px" onclick="moveCuredToVault('${batch.id}')">
+                ⚠️ SEAL (OVER-DRIED − PENALTY)
+               </button>`
+            : `<button class="btn-action btn-green" style="width:100%;padding:8px;font-size:9px"
+                onclick="moveCuredToVault('${batch.id}')"
+                ${!canVault?'disabled':''}>
+                📦 SEAL &amp; MOVE TO VAULT
+               </button>
+               ${!canVault ? `<div style="font-size:7px;color:var(--muted);text-align:center;margin-top:4px;font-family:var(--font-mono)">Burp below 65% RH once to unlock</div>` : ''}`}
+        </div>
       </div>
     </div>`;
   });
+ 
+  html += `</div>`;
   cont.innerHTML = html;
 }
+
 
 // ── CURED VAULT ──
 function _renderVaultCured(cont) {
@@ -12366,6 +12665,281 @@ document.addEventListener('visibilitychange', () => {
 window.addEventListener('beforeunload', () => {
   if (GS && GS.username) saveGame();
 });
+
+// ================================================================
+// BACKPACK / INVENTORY BUBBLE
+// ================================================================
+let _bpOpen = false;
+let _bpTab  = 'equipped';
+
+function toggleBackpack() {
+  _bpOpen = !_bpOpen;
+  const panel  = document.getElementById('backpack-panel');
+  const bubble = document.getElementById('backpack-bubble');
+  if (!panel || !bubble) return;
+  if (_bpOpen) {
+    panel.classList.add('open');
+    bubble.style.borderColor = 'var(--cyan)';
+    renderBpTab();
+  } else {
+    closeBackpack();
+  }
+}
+
+function closeBackpack() {
+  _bpOpen = false;
+  document.getElementById('backpack-panel')?.classList.remove('open');
+  const bubble = document.getElementById('backpack-bubble');
+  if (bubble) bubble.style.borderColor = 'var(--green)';
+}
+
+function switchBpTab(tab) {
+  _bpTab = tab;
+  document.querySelectorAll('.bp-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('bp-tab-' + tab)?.classList.add('active');
+  renderBpTab();
+}
+
+function renderBpTab() {
+  const body = document.getElementById('bp-body');
+  if (!body || !GS || !GS.username) return;
+  if (_bpTab === 'equipped') renderBpEquipped(body);
+  else                        renderBpItems(body);
+}
+
+function renderBpEquipped(body) {
+  const equip  = GS.equip || {};
+  const slots  = [
+    {slot:'head',    icon:'🪖', label:'HEAD'},
+    {slot:'cape',    icon:'🧥', label:'CAPE'},
+    {slot:'shirt',   icon:'👕', label:'SHIRT'},
+    {slot:'pants',   icon:'👖', label:'PANTS'},
+    {slot:'gloves',  icon:'🧤', label:'GLOVES'},
+    {slot:'ring_l',  icon:'💍', label:'L RING'},
+    {slot:'ring_r',  icon:'💍', label:'R RING'},
+    {slot:'necklace',icon:'📿', label:'NECK'},
+    {slot:'buff',    icon:'⚡', label:'BUFF'},
+    {slot:'gem',     icon:'💎', label:'GEM'},
+  ];
+
+  const bonuses = getEquippedBonuses();
+  const bonusLabels = {
+    yield_pct:'Yield', thc_add:'THC', coins_pct:'Coins', xp_pct:'XP',
+    temp_add:'Temp', stress_reduce:'Stress', grow_speed:'Speed',
+    cure_quality:'Cure', bm_success:'BM', health_regen:'Heal'
+  };
+  const activeBonuses = Object.entries(bonuses)
+    .filter(([,v]) => v && v !== 0 && v !== 1)
+    .map(([k,v]) => {
+      const isTemp  = k === 'temp_add';
+      const display = isTemp ? (v>0?`+${v}°F`:`${v}°F`) : (k.endsWith('_pct')?`+${v}%`:`+${v}`);
+      return `<div style="display:flex;justify-content:space-between;font-size:8px;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.04)">
+        <span style="color:var(--muted);font-family:var(--font-hud)">${bonusLabels[k]||k}</span>
+        <span style="color:var(--green);font-family:var(--font-hud)">${display}</span>
+      </div>`;
+    }).join('');
+
+  let slotsHtml = '<div class="bp-equip-grid">';
+  slots.forEach(({slot, icon, label}) => {
+    const itemId = equip[slot];
+    const item   = itemId ? EQUIPMENT_ITEMS[itemId] : null;
+    const expired= item?.duration_hrs && GS.equipBuffExpiry?.[slot] && Date.now() > GS.equipBuffExpiry[slot];
+    slotsHtml += `<div class="bp-slot ${item&&!expired?'filled':''}"
+      onclick="closeBackpack();_invTab='equip';showTab('inventory');setTimeout(()=>openEquipSlot('${slot}'),120)"
+      title="${item?item.name:label}">
+      <div class="bp-slot-icon">${item ? item.icon : icon}</div>
+      <div class="bp-slot-label">${item ? (expired?'EXP':item.name.slice(0,6)) : label}</div>
+    </div>`;
+  });
+  slotsHtml += '</div>';
+
+  body.innerHTML = slotsHtml +
+    (activeBonuses
+      ? `<div style="font-family:var(--font-hud);font-size:8px;color:var(--muted);letter-spacing:1px;margin:6px 0 5px">ACTIVE BONUSES</div>
+         <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:7px;padding:8px">${activeBonuses}</div>`
+      : `<div class="bp-empty-note">No active bonuses.<br>Equip items for power-ups!</div>`);
+}
+
+function renderBpItems(body) {
+  if (!GS) return;
+  const seeds     = GS.seeds            || {};
+  const maleSeeds = GS.maleSeedsOwned   || {};
+  const inv       = getInventory();
+  const instances = inv.instances        || [];
+  const cons      = inv.consumables      || {};
+  const g         = GS.gear             || {};
+  let html = '';
+
+  // ── SEEDS ──
+  const femSeeds  = Object.entries(seeds).filter(([,q])=>q>0);
+  const maleS     = Object.entries(maleSeeds).filter(([,q])=>q>0);
+  if (femSeeds.length || maleS.length) {
+    html += `<div class="bp-section-label">🌿 SEEDS</div><div class="bp-items-grid">`;
+    femSeeds.forEach(([name,qty]) => {
+      const s = STRAINS[name] || (GS.bredStrains||[]).find(b=>b.name===name) || {};
+      html += _bpItemIcon(s.emoji||'🌿', qty, name + ' (FEM)', s.variety||'hybrid', `openPlantModalWith('${name.replace(/'/g,"\\'")}')`, false);
+    });
+    maleS.forEach(([name,qty]) => {
+      const s = STRAINS[name] || {};
+      html += _bpItemIcon('♂'+( s.emoji||'🌿'), qty, name + ' (MALE)', 'male', `openPlantMaleWith('${name.replace(/'/g,"\\'")}')`, false);
+    });
+    html += `</div>`;
+  }
+
+  // ── GEAR: LIGHTS ──
+  const lights = instances.filter(x=>(x.equipType||x.type)==='lights');
+  if (lights.length) {
+    html += `<div class="bp-section-label">💡 LIGHTS</div><div class="bp-items-grid">`;
+    lights.forEach(inst => { html += _bpItemIcon(inst.icon||'💡', null, inst.name + (inst.power?' · '+inst.power+'W':''), null, null, true, inst.uid); });
+    html += `</div>`;
+  }
+
+  // ── GEAR: FANS ──
+  const fans = instances.filter(x=>(x.equipType||x.type)==='fan');
+  if (fans.length) {
+    html += `<div class="bp-section-label">🌀 FANS</div><div class="bp-items-grid">`;
+    fans.forEach(inst => { html += _bpItemIcon(inst.icon||'🌀', null, inst.name, null, null, true, inst.uid); });
+    html += `</div>`;
+  }
+
+  // ── GEAR: TEMP ──
+  const tempGear = instances.filter(x=>['acUnit','heater'].includes(x.equipType||x.type));
+  if (tempGear.length) {
+    html += `<div class="bp-section-label">🌡️ TEMP</div><div class="bp-items-grid">`;
+    tempGear.forEach(inst => { html += _bpItemIcon(inst.icon||'❄️', null, inst.name, null, null, true, inst.uid); });
+    html += `</div>`;
+  }
+
+  // ── GEAR: HUMIDITY ──
+  const humGear = instances.filter(x=>['dehumidifier','humidifier'].includes(x.equipType||x.type));
+  if (humGear.length) {
+    html += `<div class="bp-section-label">💧 HUMIDITY</div><div class="bp-items-grid">`;
+    humGear.forEach(inst => { html += _bpItemIcon(inst.icon||'💧', null, inst.name, null, null, true, inst.uid); });
+    html += `</div>`;
+  }
+
+  // ── GEAR: TOOLS ──
+  const toolDefs = [
+    {key:'scope',icon:'🔬',name:"Loupe"},
+    {key:'phmeter',icon:'🧪',name:'pH Meter'},
+    {key:'ecmeter',icon:'🔌',name:'EC Meter'},
+    {key:'scrogNet',icon:'🕸️',name:'SCROG'},
+  ];
+  const ownedTools = toolDefs.filter(t=>g[t.key]);
+  const stsCount   = g.stsSprayCount||0;
+  if (ownedTools.length || stsCount > 0 || g.super_light || g.unbreakable_ph || g.unbreakable_ec) {
+    html += `<div class="bp-section-label">🛠️ TOOLS</div><div class="bp-items-grid">`;
+    ownedTools.forEach(t => { html += _bpItemIcon(t.icon, null, t.name, null, null, false); });
+    if (stsCount>0) html += _bpItemIcon('🧪', stsCount, 'STS Spray', null, null, false);
+    if (g.super_light)    html += _bpItemIcon('💡', null, 'Forbidden Light', null, null, false);
+    if (g.unbreakable_ph) html += _bpItemIcon('🧪', null, 'Unbreakable pH', null, null, false);
+    if (g.unbreakable_ec) html += _bpItemIcon('🔌', null, 'Unbreakable EC', null, null, false);
+    html += `</div>`;
+  }
+
+  // ── NUTES & pH ──
+  const nuteKeys = ['nuteBase','nuteGrow','nuteBloom','nuteCalmag','phUp','phDown'];
+  const nuteIcons = {nuteBase:'🧴',nuteGrow:'🌿',nuteBloom:'🌸',nuteCalmag:'💊',phUp:'⬆️',phDown:'⬇️'};
+  const nuteNames = {nuteBase:'Base',nuteGrow:'Grow',nuteBloom:'Bloom',nuteCalmag:'CaMg',phUp:'pH+',phDown:'pH-'};
+  const activeRoomId2 = (GS.rooms?.[GS.activeRoom||0]||GS.rooms?.[0])?.id||1;
+  const rg2  = getRoomGear(activeRoomId2);
+  const nuteItems2 = nuteKeys.filter(k=>(rg2[k]||0)>0);
+  if (nuteItems2.length) {
+    html += `<div class="bp-section-label">🧴 NUTES</div><div class="bp-items-grid">`;
+    nuteItems2.forEach(k => {
+      const ml = Math.round(rg2[k]||0);
+      html += _bpItemIcon(nuteIcons[k], ml+'ml', nuteNames[k], null, null, false);
+    });
+    html += `</div>`;
+  }
+
+  // ── EQUIP ITEMS ──
+  const equipOwned = (GS.equipItems||[]).filter(x=>x.qty>0);
+  if (equipOwned.length) {
+    html += `<div class="bp-section-label">⚡ EQUIP ITEMS</div><div class="bp-items-grid">`;
+    equipOwned.forEach(owned => {
+      const item = EQUIPMENT_ITEMS[owned.id];
+      if (!item) return;
+      const isEquipped = Object.values(GS.equip||{}).includes(owned.id);
+      html += _bpItemIcon(
+        item.icon, owned.qty > 1 ? owned.qty : null,
+        item.name + (isEquipped ? ' ✅' : ''),
+        null,
+        `closeBackpack();_invTab='equip';showTab('inventory');setTimeout(()=>openEquipSlot('${item.slot}'),120)`,
+        false
+      );
+    });
+    html += `</div>`;
+  }
+
+  // ── CARDS ──
+  const cards = GS.cards||[];
+  if (cards.length) {
+    html += `<div class="bp-section-label">🃏 CARDS (${cards.length})</div><div class="bp-items-grid">`;
+    cards.forEach(strainName => {
+      const s = STRAINS[strainName]||{};
+      html += _bpItemIcon(s.emoji||'🃏', null, strainName, null, `viewCard('${strainName.replace(/'/g,"\\'")}')`, false);
+    });
+    html += `</div>`;
+  }
+
+  if (!html) {
+    html = `<div class="bp-empty-note">Your pack is empty.<br>Redeem codes and buy gear to fill it up!</div>`;
+  }
+  body.innerHTML = html;
+  // Init drag
+  body.querySelectorAll('.bp-item[draggable]').forEach(el => {
+    el.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('text/plain', el.dataset.uid || el.dataset.itemid || el.title);
+      el.classList.add('dragging');
+    });
+    el.addEventListener('dragend', () => el.classList.remove('dragging'));
+  });
+}
+
+function _bpItemIcon(icon, qty, label, variety, onclick, draggable, uid) {
+  const qtyHtml = qty !== null && qty !== undefined
+    ? `<div class="bp-item-qty">${qty}</div>` : '';
+  const dragAttr  = draggable ? 'draggable="true"' : '';
+  const uidAttr   = uid ? `data-uid="${uid}"` : '';
+  const onclickA  = onclick ? `onclick="${onclick}"` : '';
+  const varAttr   = variety ? `data-variety="${variety}"` : '';
+  return `<div class="bp-item" ${dragAttr} ${uidAttr} ${varAttr} ${onclickA} title="${label}">
+    ${icon}${qtyHtml}
+  </div>`;
+}
 </script>
+<!-- DRY ROOM CONTROLS MODAL -->
+<div class="dry-room-modal-overlay" id="modal-dry-room-controls">
+  <div class="dry-room-modal-box">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div style="font-family:var(--font-hud);font-size:13px;color:var(--cyan);letter-spacing:2px">🌬️ DRY ROOM SETUP</div>
+      <button onclick="closeDryRoomModal()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:2px;transition:.15s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--muted)'">✕</button>
+    </div>
+ 
+    <!-- Equipment slots -->
+    <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1.5px;margin-bottom:8px">EQUIPMENT IN DRY ROOM</div>
+    <div id="dry-room-equip-slots"></div>
+ 
+    <!-- Divider -->
+    <div style="height:1px;background:var(--border);margin:14px 0"></div>
+ 
+    <!-- Sliders -->
+    <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1.5px;margin-bottom:10px">ENVIRONMENT TARGETS</div>
+ 
+    <div id="dry-room-slider-controls"></div>
+ 
+    <!-- Speed readout -->
+    <div id="dry-room-speed-readout" style="margin-top:10px;padding:8px 12px;background:rgba(0,0,0,0.35);border-radius:7px;font-family:var(--font-hud);font-size:9px;display:flex;align-items:center;gap:8px">
+      <span style="color:var(--muted)">DRYING SPEED:</span>
+      <span id="dry-speed-label" style="flex:1">—</span>
+      <span style="font-size:8px;color:var(--muted)">Sweet spot: 58–64%</span>
+    </div>
+ 
+    <div style="margin-top:14px">
+      <button onclick="closeDryRoomModal()" style="width:100%;padding:10px;background:rgba(34,211,238,0.12);border:1px solid var(--cyan);border-radius:8px;color:var(--cyan);font-family:var(--font-hud);font-size:10px;letter-spacing:1px;cursor:pointer;transition:.2s" onmouseover="this.style.background='rgba(34,211,238,0.22)'" onmouseout="this.style.background='rgba(34,211,238,0.12)'">✓ DONE</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
