@@ -550,6 +550,9 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 @keyframes toastIn{from{transform:translateX(110%);opacity:0}to{transform:translateX(0);opacity:1}}
 @keyframes toastOut{to{opacity:0;transform:translateX(20px)}}
 .hidden{display:none!important}
+.nav-tab[data-tab="grow"]{display:none!important}
+#sb-env,#sb-gear{display:none!important}
+#sb-env+.sidebar-label,#sb-gear+.sidebar-label{display:none!important}
 .flex-between{display:flex;align-items:center;justify-content:space-between}
 @media(max-width:640px){
   :root{--sidebar-w:44px;--sidebar-panel-w:280px}
@@ -987,6 +990,16 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
         <div class="panel-header">
           <span class="panel-title">🏠 GROW ROOMS</span>
           <button class="panel-close" onclick="closePanel('room')">✕</button>
+        </div>
+        <div style="display:flex;gap:6px;padding:10px 14px;border-bottom:1px solid var(--border)">
+          <button onclick="togglePanel('env')"
+            style="flex:1;padding:9px 4px;background:rgba(34,211,238,0.08);border:1px solid var(--cyan);border-radius:7px;color:var(--cyan);font-family:var(--font-hud);font-size:10px;letter-spacing:1px;cursor:pointer;transition:.2s">
+            🌡️ ENV
+          </button>
+          <button onclick="togglePanel('gear')"
+            style="flex:1;padding:9px 4px;background:rgba(251,191,36,0.08);border:1px solid var(--gold);border-radius:7px;color:var(--gold);font-family:var(--font-hud);font-size:10px;letter-spacing:1px;cursor:pointer;transition:.2s">
+            ⚙️ GEAR
+          </button>
         </div>
         <div class="panel-body">
           <div class="room-btn-list" id="room-btn-list"></div>
@@ -6126,7 +6139,10 @@ function switchRoom(idx) {
   });
   _el('env-room-label', room.name);
   renderRoomPanel(); renderGrow(); renderEnvPanel(); updateSidebarWarnings();
-  toast('Switched to ' + room.name, 'info', 1500);
+  // Close room panel and show grow content
+  closePanel('room');
+  showTab('grow');
+  toast('📍 ' + room.name, 'info', 1500);
 }
 
 // ================================================================
