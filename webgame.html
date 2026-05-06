@@ -202,7 +202,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .pot-slot.god-border{border-color:var(--pink);border-width:2px;animation:godBorder 1.5s ease-in-out infinite}
 @keyframes godBorder{0%,100%{box-shadow:0 0 12px rgba(236,72,153,0.3)}50%{box-shadow:0 0 30px rgba(236,72,153,0.7)}}
 .pot-slot.male-plant{border-color:rgba(59,130,246,0.5)}
-.plant-art-area{height:300px;position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;cursor:pointer;background:#0a1a0a}
+.plant-art-area{height:400px;position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;cursor:pointer;background:#0a1a0a}
 .plant-art-bg{position:absolute;inset:0;background-size:cover;background-position:center top;opacity:0.15;filter:blur(1px)}
 .plant-art-bg-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--card-bg) 100%)}
 .plant-img{position:relative;z-index:2;max-height:680px;max-width:95%;object-fit:contain;transition:.3s}
@@ -823,17 +823,17 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .plant-modal-header{padding:16px 20px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
 .plant-modal-body{flex:1;overflow-y:auto;padding:10px 20px}
 .plant-modal-footer{padding:10px 20px 16px;border-top:1px solid var(--border);flex-shrink:0;background:var(--panel);border-radius:0 0 16px 16px}
-#modal-plant .strain-select-grid{grid-template-columns:repeat(auto-fill,minmax(85px,1fr));gap:5px;max-height:220px}
-#modal-plant .strain-option{padding:6px 4px}
-#modal-plant .strain-option-emoji{font-size:16px;margin-bottom:2px}
-#modal-plant .strain-option-name{font-size:7px;letter-spacing:.2px}
-#modal-plant .strain-option-thc{font-size:7px;margin-top:1px}
-#modal-plant .strain-option-qty{font-size:11px;margin-top:1px}
-#modal-plant .pot-size-grid{grid-template-columns:repeat(auto-fill,minmax(65px,1fr));gap:4px}
-#modal-plant .pot-size-opt{padding:5px 4px}
-#modal-plant .pot-size-opt-icon{font-size:14px}
-#modal-plant .pot-size-opt-name{font-size:7px;margin-top:1px}
-#modal-plant .pot-size-opt-vol{font-size:7px}
+#modal-plant .strain-select-grid{grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:3px;max-height:140px}
+#modal-plant .strain-option{padding:4px 3px}
+#modal-plant .strain-option-emoji{font-size:14px;margin-bottom:1px}
+#modal-plant .strain-option-name{font-size:7px;letter-spacing:.1px}
+#modal-plant .strain-option-thc{font-size:6px;margin-top:1px}
+#modal-plant .strain-option-qty{font-size:10px;margin-top:1px}
+#modal-plant .pot-size-grid{grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:3px}
+#modal-plant .pot-size-opt{padding:4px 3px}
+#modal-plant .pot-size-opt-icon{font-size:13px}
+#modal-plant .pot-size-opt-name{font-size:6px;margin-top:1px}
+#modal-plant .pot-size-opt-vol{font-size:6px}
 .mold-badge{display:inline-block;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.5);border-radius:5px;padding:4px 10px;font-family:var(--font-hud);font-size:9px;color:var(--red);letter-spacing:.5px;animation:dangerPulse 2s ease-in-out infinite}
 /* ── Drying / Curing sprite frames ── */
 .dry-sprite-wrap{width:100%;height:200px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:8px;margin-bottom:12px;background:#060e06}
@@ -1621,8 +1621,10 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
       <div id="plant-additive-grid"></div>
     </div>
     <input type="hidden" id="inp-selected-additive" value="">
-    <div class="modal-actions">
-      <button class="btn-modal confirm" onclick="confirmPlant()">🌱 PLANT</button>
+    </div>
+    <div class="plant-modal-footer">
+      <div class="modal-actions" style="margin:0">
+        <button class="btn-modal confirm" onclick="confirmPlant()">🌱 PLANT</button>
         <button class="btn-modal cancel" onclick="closeModal('modal-plant')">CANCEL</button>
       </div>
     </div>
@@ -10469,6 +10471,10 @@ function doRegister() {
   openModal('modal-seed-phrase');
 
   GS = state;
+  // Give starter pots and soil so new players can plant right away
+  const _regInv = getInventory();
+  _regInv.consumables['pot_1gal'] = 5;
+  _regInv.consumables['soil_1']   = 5;
   // Send welcome mail
   if (!GS._welcomeSent) {
     if (!GS.mailbox) GS.mailbox = [];
@@ -10781,11 +10787,41 @@ function openPlantModal() {
     }
   }
 
-  document.querySelectorAll('.pot-size-opt').forEach(p => p.classList.remove('selected'));
-  const defaultPot = document.querySelector('.pot-size-opt[data-pot="1gal"]');
-  if (defaultPot) defaultPot.classList.add('selected');
-  const potInp = document.getElementById('inp-selected-pot');
-  if (potInp) potInp.value = '1gal';
+  // Rebuild pot grid dynamically with lock states based on inventory
+  const _potGrid = document.getElementById('pot-size-grid');
+  if (_potGrid) {
+    const _invP  = getInventory();
+    const _consP = _invP.consumables || {};
+    const _potDefs = [
+      {size:'0.5gal',icon:'🪣',name:'SEEDLING',vol:'0.5gal'},
+      {size:'1gal',  icon:'🪣',name:'SOLO',    vol:'1gal'},
+      {size:'3gal',  icon:'🪣',name:'SMALL',   vol:'3gal'},
+      {size:'5gal',  icon:'🪣',name:'MEDIUM',  vol:'5gal'},
+      {size:'10gal', icon:'🪣',name:'LARGE',   vol:'10gal'},
+      {size:'25gal', icon:'🪣',name:'XL',      vol:'25gal'},
+    ];
+    _potGrid.innerHTML = _potDefs.map(pd => {
+      const _req     = POT_SOIL_REQ[pd.size];
+      const _hasPot  = !_req || (_consP[_req.potId]  || 0) >= 1;
+      const _hasSoil = !_req || (_consP[_req.soilId] || 0) >= _req.qty;
+      const _ok      = _hasPot && _hasSoil;
+      const _sub     = !_hasPot ? '🔒 no pot' : !_hasSoil ? '🔒 no soil' : pd.vol;
+      return `<div class="pot-size-opt" data-pot="${pd.size}"
+        onclick="${_ok?'selectPot(this)':''}"
+        style="opacity:${_ok?'1':'0.3'};cursor:${_ok?'pointer':'not-allowed'}"
+        title="${_ok?'':'Buy '+pd.vol+' pot & soil in Shop → Water'}">
+        <div class="pot-size-opt-icon">${pd.icon}</div>
+        <div class="pot-size-opt-name">${pd.name}</div>
+        <div class="pot-size-opt-vol" style="color:${_ok?'':'var(--red)'}">${_sub}</div>
+      </div>`;
+    }).join('');
+    // Auto-select first available pot
+    const _first = Array.from(_potGrid.querySelectorAll('.pot-size-opt'))
+      .find(el => el.style.cursor !== 'not-allowed');
+    if (_first) _first.classList.add('selected');
+    const potInp = document.getElementById('inp-selected-pot');
+    if (potInp) potInp.value = _first ? _first.dataset.pot : '';
+  }
   const strainInp = document.getElementById('inp-selected-strain');
   if (strainInp) strainInp.value = '';
   const note = document.getElementById('plant-modal-note');
@@ -10915,6 +10951,15 @@ function confirmPlant() {
 
   if (!strainName) { toast('Select a strain first.','warn'); return; }
   if ((GS.seeds[strainName] || 0) < 1) { toast('No seeds of that strain left.','err'); return; }
+
+  // Check pot and soil requirements
+  const _invCp  = getInventory();
+  const _consCp = _invCp.consumables || {};
+  const _reqCp  = POT_SOIL_REQ[potSize];
+  if (_reqCp) {
+    if ((_consCp[_reqCp.potId]  || 0) < 1)         { toast('🪣 Need a ' + potSize + ' pot — buy in Shop → Water!', 'err', 4500); return; }
+    if ((_consCp[_reqCp.soilId] || 0) < _reqCp.qty) { toast('🌱 Need ' + _reqCp.qty + '× soil bag(s) — buy in Shop → Water!', 'err', 4500); return; }
+  }
 
   const room = GS.rooms ? (GS.rooms[GS.activeRoom || 0] || GS.rooms[0]) : null;
   if (!room) { toast('No room!','err'); return; }
@@ -12619,6 +12664,15 @@ window.addEventListener('load', () => {
 
   // Init autosave
   initAutosave();
+
+  // Click outside any modal overlay to close it
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    if (overlay.id === 'modal-seed-phrase') return; // never auto-close seed phrase
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) closeModal(overlay.id);
+    });
+  });
+
 
   // Show login screen by default
   showScreen('login');
