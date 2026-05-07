@@ -4035,29 +4035,7 @@ function openLightsModal(roomId) {
   }, 1000);
 }
 
-if (timeLft) {
-    if (hoursOn >= 24) timeLft.textContent = '24/7 light — no dark cycle';
-    else if (hoursOn <= 0) timeLft.textContent = 'PERMANENT DARK';
-    else {
-      const dir = room.lightsOn ? 'Lights off in ' : 'Lights on in ';
-      timeLft.textContent = dir + hL + 'h ' + mL + 'm (in-game)';
-      if (room._manualOff) timeLft.textContent += ' · Manual override active';
-      // Early-lights-on warning during flower
-      const isFlowerRoom2 = (GS.plants||[]).some(p => p.roomId === room.id && (p.stage==='Flower'||p.stage==='Ready'));
-      if (!room.lightsOn && isFlowerRoom2 && room.lightsOffAt) {
-        const realMsInDark2 = Date.now() - room.lightsOffAt;
-        const gameHrsInDark2 = (realMsInDark2 / 60000) * GAME_SPEED / 60;
-        if (gameHrsInDark2 < 12 && GS.difficulty === 'easy') {
-          timeLft.textContent += ' · ⚠️ <12h dark — turning on now will cost 25hp + 5% mult!';
-          timeLft.style.color = 'var(--red)';
-        } else {
-          timeLft.style.color = 'var(--muted)';
-        }
-      } else {
-        timeLft.style.color = 'var(--muted)';
-      }
-    }
-}
+
 
 function _llsUpdatePreview(hours, roomId) {
   const h       = parseInt(hours) || 0;
