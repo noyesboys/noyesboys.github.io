@@ -1126,7 +1126,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
           <button class="panel-close" onclick="closePanel('room')">✕</button>
         </div>
         <div style="padding:10px 14px 6px">
-          <button id="room-panel-lights-btn" onclick="toggleLights()"
+          <button id="room-panel-lights-btn" onclick="openLightsModal((GS.rooms[GS.activeRoom||0]||GS.rooms[0])?.id)"
             style="width:100%;padding:9px;background:rgba(251,191,36,0.15);border:2px solid var(--gold);border-radius:7px;color:var(--gold);font-family:var(--font-hud);font-size:10px;letter-spacing:1.5px;cursor:pointer;transition:.2s">
             💡 LIGHTS ON
           </button>
@@ -1517,6 +1517,38 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
   </div><!-- end game-wrapper -->
 </div><!-- end screen-game -->
 
+<!-- LIGHTS SETTINGS MODAL -->
+<div class="modal-overlay" id="modal-lights-settings">
+  <div class="modal-box" style="max-width:440px">
+    <div class="modal-title">💡 LIGHTS — <span id="lls-room-name">—</span></div>
+    <div id="lls-cycle-status" style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:14px;text-align:center">
+      <div id="lls-status-icon" style="font-size:28px;margin-bottom:4px">💡</div>
+      <div id="lls-status-text" style="font-family:var(--font-hud);font-size:13px;color:var(--gold);margin-bottom:4px">LIGHTS ON</div>
+      <div id="lls-time-left" style="font-size:10px;color:var(--muted);font-family:var(--font-mono)">—</div>
+    </div>
+    <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1.5px;margin-bottom:8px">DAILY LIGHT SCHEDULE</div>
+    <div class="env-ctrl-row">
+      <span class="env-ctrl-label">HOURS ON</span>
+      <input type="range" id="lls-hours-slider" min="0" max="24" step="1" value="18"
+        oninput="_llsSliderChange(this.value)">
+      <span class="env-ctrl-val" id="lls-hours-val">18h on / 6h off</span>
+    </div>
+    <div id="lls-sweet-spot-note" style="font-size:9px;font-family:var(--font-mono);padding:5px 8px;background:rgba(0,0,0,0.3);border-radius:5px;margin:6px 0 10px;color:var(--green)"></div>
+    <div id="lls-flip-warning" class="warning-note hidden" style="margin-bottom:8px;white-space:pre-line"></div>
+    <div id="lls-reveg-warning" class="warning-note hidden" style="margin-bottom:8px"></div>
+    <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1.5px;margin-bottom:6px">MANUAL OVERRIDE</div>
+    <button onclick="_llsToggleLights()"
+      style="width:100%;padding:9px;border-radius:7px;border:2px solid var(--gold);background:rgba(251,191,36,0.1);color:var(--gold);font-family:var(--font-hud);font-size:10px;cursor:pointer;transition:.2s;letter-spacing:1px;margin-bottom:10px">
+      TOGGLE LIGHTS ON/OFF NOW
+    </button>
+    <input type="hidden" id="lls-room-id" value="">
+    <div class="modal-actions">
+      <button class="btn-modal confirm" onclick="_llsApplySchedule()">✅ APPLY SCHEDULE</button>
+      <button class="btn-modal cancel" onclick="closeModal('modal-lights-settings')">CLOSE</button>
+    </div>
+  </div>
+</div>
+
 <!-- EQUIP SELECT MODAL -->
 <div class="modal-overlay" id="modal-equip-select">
   <div class="modal-box" style="max-width:520px">
@@ -1848,22 +1880,8 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
   </div>
 </div>
 
-<!-- FLIP TO FLOWER MODAL -->
-<div class="modal-overlay" id="modal-flip">
-  <div class="modal-box">
-    <div class="modal-title">🌸 FLIP TO FLOWER</div>
-    <div class="modal-desc">
-      Switch <strong id="lbl-flip-name" style="color:var(--green)">—</strong> to a 12/12 light cycle to trigger flowering.
-      <span id="lbl-flip-flower-days" style="color:var(--muted);font-family:var(--font-mono);font-size:10px;display:block;margin-top:4px"></span>
-    </div>
-    <input type="hidden" id="inp-flip-plant-id" value="">
-    <div class="info-note">Optimal flip time: after week 4–6 of veg for best yields.</div>
-    <div class="modal-actions">
-      <button class="btn-modal gold" onclick="confirmFlip()">🌸 FLIP TO FLOWER</button>
-      <button class="btn-modal cancel" onclick="closeModal('modal-flip')">NOT YET</button>
-    </div>
-  </div>
-</div>
+<!-- FLIP TO FLOWER MODAL (retired — use Lights modal) -->
+<div class="modal-overlay" id="modal-flip" style="display:none!important"></div>
 
 <!-- REMOVE PLANT MODAL -->
 <div class="modal-overlay" id="modal-remove">
@@ -3990,6 +4008,203 @@ function getEquippedBonuses() {
   return bonuses;
 }
 
+// ================================================================
+// LIGHTS SETTINGS MODAL
+// ================================================================
+function openLightsModal(roomId) {
+  const room = GS.rooms.find(r => r.id === (roomId || (GS.rooms[GS.activeRoom||0]||GS.rooms[0])?.id));
+  if (!room) return;
+  document.getElementById('lls-room-id').value = room.id;
+  document.getElementById('lls-room-name').textContent = room.name.toUpperCase();
+  const h = room.lightScheduleHrs != null ? room.lightScheduleHrs : 18;
+  const sl = document.getElementById('lls-hours-slider');
+  if (sl) { sl.value = h; }
+  const valEl = document.getElementById('lls-hours-val');
+  if (valEl) valEl.textContent = h + 'h on / ' + (24-h) + 'h off';
+  _llsUpdateCycleStatus(room);
+  _llsUpdatePreview(h, room.id);
+  openModal('modal-lights-settings');
+  // Start live countdown — update every real second
+  if (window._llsTimer) clearInterval(window._llsTimer);
+  window._llsTimer = setInterval(() => {
+    const _r = GS.rooms.find(r => r.id === room.id);
+    if (!_r || !document.getElementById('modal-lights-settings')?.classList.contains('open')) {
+      clearInterval(window._llsTimer); window._llsTimer = null; return;
+    }
+    _llsUpdateCycleStatus(_r);
+  }, 1000);
+}
+
+if (timeLft) {
+    if (hoursOn >= 24) timeLft.textContent = '24/7 light — no dark cycle';
+    else if (hoursOn <= 0) timeLft.textContent = 'PERMANENT DARK';
+    else {
+      const dir = room.lightsOn ? 'Lights off in ' : 'Lights on in ';
+      timeLft.textContent = dir + hL + 'h ' + mL + 'm (in-game)';
+      if (room._manualOff) timeLft.textContent += ' · Manual override active';
+      // Early-lights-on warning during flower
+      const isFlowerRoom2 = (GS.plants||[]).some(p => p.roomId === room.id && (p.stage==='Flower'||p.stage==='Ready'));
+      if (!room.lightsOn && isFlowerRoom2 && room.lightsOffAt) {
+        const realMsInDark2 = Date.now() - room.lightsOffAt;
+        const gameHrsInDark2 = (realMsInDark2 / 60000) * GAME_SPEED / 60;
+        if (gameHrsInDark2 < 12 && GS.difficulty === 'easy') {
+          timeLft.textContent += ' · ⚠️ <12h dark — turning on now will cost 25hp + 5% mult!';
+          timeLft.style.color = 'var(--red)';
+        } else {
+          timeLft.style.color = 'var(--muted)';
+        }
+      } else {
+        timeLft.style.color = 'var(--muted)';
+      }
+    }
+}
+
+function _llsUpdatePreview(hours, roomId) {
+  const h       = parseInt(hours) || 0;
+  const noteEl  = document.getElementById('lls-sweet-spot-note');
+  const flipWarn= document.getElementById('lls-flip-warning');
+  const revWarn = document.getElementById('lls-reveg-warning');
+  const room    = GS.rooms.find(r => r.id === roomId);
+  const curH    = room ? (room.lightScheduleHrs != null ? room.lightScheduleHrs : 18) : 18;
+
+  let noteColor='var(--muted)', noteText='';
+  if (h === 0)           { noteColor='var(--red)';    noteText='❌ No light — plants will die'; }
+  else if (h <= 10)      { noteColor='var(--gold)';   noteText='⚠️ '+h+'h — flowering, but below sweet spot'; }
+  else if (h === 11)     { noteColor='var(--gold)';   noteText='⚠️ 11h — flowering (slightly below ideal 12h)'; }
+  else if (h === 12)     { noteColor='var(--green)';  noteText='✅ 12/12 — standard flower schedule (sweet spot)'; }
+  else if (h <= 16)      { noteColor='var(--gold)';   noteText='⚠️ '+h+'h on — plants may not flower properly'; }
+  else if (h >= 17 && h <= 18) { noteColor='var(--green)'; noteText='✅ '+h+'/'+( 24-h)+' — optimal for seedling & veg'; }
+  else if (h === 24)     { noteColor='var(--cyan)';   noteText='💡 24h — continuous light (fine for veg)'; }
+  else                   { noteColor='var(--gold)';   noteText='⚠️ '+h+'h on / '+(24-h)+'h off'; }
+  if (noteEl) { noteEl.textContent = noteText; noteEl.style.color = noteColor; }
+
+  // Flip warning
+  if (room && h <= 12 && curH > 12 && flipWarn) {
+    const vegP = (GS.plants||[]).filter(p => p.roomId === room.id && p.stage==='Veg' && !p.isMale);
+    if (vegP.length) {
+      const early = vegP.filter(p => (p.vegDays||0) < 30);
+      let msg = '🌸 Applying will FLIP ' + vegP.length + ' plant(s) to Flower!';
+      if (early.length && GS.difficulty === 'easy') msg += ' · ⚠️ ' + early.length + ' under day 30 — yield reduced up to 50%!';
+      flipWarn.textContent = msg; flipWarn.classList.remove('hidden');
+    } else flipWarn.classList.add('hidden');
+  } else if (flipWarn) flipWarn.classList.add('hidden');
+
+  // Reveg warning
+  if (room && h > 12 && curH <= 12 && revWarn) {
+    const fP = (GS.plants||[]).filter(p => p.roomId === room.id && (p.stage==='Flower'||p.stage==='Ready') && !p.isMale);
+    const eligible = fP.filter(p => Math.ceil((p.flowerDay||0)/7) >= 2);
+    if (eligible.length) {
+      revWarn.textContent = '🔄 ' + eligible.length + ' plant(s) will enter REVEG mode.';
+      revWarn.classList.remove('hidden');
+    } else revWarn.classList.add('hidden');
+  } else if (revWarn) revWarn.classList.add('hidden');
+}
+
+function _llsSliderChange(val) {
+  const roomId = parseInt(document.getElementById('lls-room-id')?.value || 0);
+  const h = parseInt(val);
+  const el = document.getElementById('lls-hours-val');
+  if (el) el.textContent = h + 'h on / ' + (24-h) + 'h off';
+  _llsUpdatePreview(h, roomId);
+}
+
+function _llsToggleLights() {
+  const roomId = parseInt(document.getElementById('lls-room-id')?.value || 0);
+  const room = GS.rooms.find(r => r.id === roomId);
+  if (!room) return;
+  toggleLights(roomId);
+  _llsUpdateCycleStatus(room);
+}
+
+function _llsApplySchedule() {
+  const roomId  = parseInt(document.getElementById('lls-room-id')?.value || 0);
+  const hoursOn = parseInt(document.getElementById('lls-hours-slider')?.value || 18);
+  if (window._llsTimer) { clearInterval(window._llsTimer); window._llsTimer = null; }
+  setLightSchedule(roomId, hoursOn);
+  closeModal('modal-lights-settings');
+}
+
+function setLightSchedule(roomId, hoursOn) {
+  const room = GS.rooms.find(r => r.id === roomId);
+  if (!room) return;
+  const prevH = room.lightScheduleHrs != null ? room.lightScheduleHrs : 18;
+  room.lightScheduleHrs = hoursOn;
+
+  // Flip to flower
+  if (hoursOn <= 12 && prevH > 12) {
+    const vP = (GS.plants||[]).filter(p => p.roomId === roomId && p.stage==='Veg' && !p.isMale);
+    if (vP.length) flipRoomToFlower(roomId);
+  }
+
+  // Reveg
+  if (hoursOn > 12 && prevH <= 12) {
+    const fP = (GS.plants||[]).filter(p => p.roomId === roomId && (p.stage==='Flower'||p.stage==='Ready') && !p.isMale);
+    fP.forEach(p => {
+      const fw = Math.ceil((p.flowerDay||0)/7);
+      if (fw >= 2) {
+        p.stage = 'Veg';
+        p.isReveg = true;
+        p.revegVegDays = 0;
+        p._revegBonusApplied = false;
+        toast('🔄 ' + (p.name||p.strainName) + ' — REVEG! Keep in veg 2–10 weeks for bonus.','warn',5000);
+        addLog((p.name||p.strainName) + ' entered REVEG','warn');
+      } else {
+        toast('⚠️ ' + (p.name||p.strainName) + ' — must be in flower 2+ weeks to reveg.','warn',3000);
+      }
+    });
+  }
+  // Re-flip reveg plants back to flower: apply reveg bonus now
+  if (hoursOn <= 12 && prevH > 12) {
+    const revegP = (GS.plants||[]).filter(p => p.roomId === roomId && p.isReveg && p.stage==='Veg' && !p._revegBonusApplied);
+    revegP.forEach(p => {
+      const revegWeeks = (p.revegVegDays || 0) / 7;
+      let mult = 0, label = '';
+      if      (revegWeeks >= 10) { mult = 0;   label = '❌ Too long — all reveg bonus lost!'; }
+      else if (revegWeeks >= 6)  { mult = 5.0; label = '🏆 MAX reveg bonus: ×5.0 yield!'; }
+      else if (revegWeeks >= 4)  { mult = 3.0; label = '⭐ ×3.0 reveg bonus'; }
+      else if (revegWeeks >= 2)  { mult = 2.0; label = '✅ ×2.0 reveg bonus'; }
+      else                       { mult = 1.0; label = '⚠️ ×1.0 — reveg too short for bonus'; }
+      if (mult > 0) p.cropMultiplier = Math.min(5.0, (p.cropMultiplier||1.0) * mult);
+      p._revegBonusApplied = true;
+      toast('🔄 ' + (p.name||p.strainName) + ' reflipped! ' + label,'ok',6000);
+      addLog((p.name||p.strainName) + ' reflipped — reveg ' + revegWeeks.toFixed(1) + 'wks · ' + label,'success');
+    });
+  }
+
+  toast('💡 Schedule: ' + hoursOn + 'h on / ' + (24-hoursOn) + 'h off','ok',2000);
+  addLog(room.name + ' schedule → ' + hoursOn + 'h on','info');
+  renderGrow(); renderEnvPanel(); updateSidebarWarnings(); saveGame();
+}
+
+function flipRoomToFlower(roomId) {
+  const vP = (GS.plants||[]).filter(p => p.roomId === roomId && p.stage==='Veg' && !p.isMale);
+  const room = GS.rooms.find(r => r.id === roomId);
+  vP.forEach(p => {
+    p.stage = 'Flower'; p.flowerDay = 0;
+    GS.stats.plantsFlipped = (GS.stats.plantsFlipped||0) + 1;
+    const vd = p.vegDays || 0;
+    if (vd < 14) {
+      p.cropMultiplier = Math.max(0.1, (p.cropMultiplier||1.0) * 0.50);
+      if (GS.difficulty==='easy') toast('⚠️ ' + (p.name||p.strainName) + ': very early flip — 50% yield loss!','err',5000);
+      addLog((p.name||p.strainName) + ' — early flip day '+Math.floor(vd)+' (−50% yield)','warn');
+    } else if (vd < 30) {
+      p.cropMultiplier = Math.max(0.5, (p.cropMultiplier||1.0) * 0.75);
+      if (GS.difficulty==='easy') toast('⚠️ ' + (p.name||p.strainName) + ': early flip (day '+Math.floor(vd)+') — 25% yield loss.','warn',4000);
+      addLog((p.name||p.strainName) + ' — early flip day '+Math.floor(vd)+' (−25% yield)','warn');
+    } else {
+      addLog((p.name||p.strainName) + ' flipped day '+Math.floor(vd),'success');
+    }
+  });
+  if (room) {
+    room._lightCycleGameMins = 0;
+    room._manualOff = false;
+    room.lightsOn = true;
+    room.lightsOffAt = null;
+  }
+  if (vP.length) toast('🌸 ' + vP.length + ' plant(s) flipped to Flower! 12/12 cycle started.','ok',4000);
+  renderGrow(); checkQuestProgress(); saveGame();
+}
+
 function doQuestDonate(type, questId) {
   if (!GS || !GS.stats) return;
   if (type === 'noob_seed') {
@@ -4281,11 +4496,16 @@ function getDailyGoal() {
 }
 
 const BOT_LADDER = [
-  {id:0, name:'Rookie Randy',      avatar:'👨‍🌾', desc:'First-time grower.',              difficulty:'EASY',   target:3.5, reward:{coins:500,   xp:200}},
-  {id:1, name:'Basement Barry',    avatar:'🧔',   desc:'Hobby grower.',                   difficulty:'MEDIUM', target:5.5, reward:{coins:1500,  xp:500}},
-  {id:2, name:'Tent Tyson',        avatar:'💪',   desc:'2-year veteran.',                 difficulty:'HARD',   target:7.0, reward:{coins:4000,  xp:1200}},
-  {id:3, name:'Greenhouse Gloria', avatar:'👩‍🔬', desc:'Expert grower.',                  difficulty:'ELITE',  target:8.5, reward:{coins:10000, xp:3000}},
-  {id:4, name:'The Master',        avatar:'🧙',   desc:'Legendary — only a GOD run wins.',difficulty:'LEGEND', target:9.5, reward:{coins:50000, xp:10000}},
+  {id:0, name:'Rookie Randy',      avatar:'👨‍🌾', desc:'First-time grower. Forgets to water.',             difficulty:'EASY',       diffColor:'#4ade80',  scoreMin:0.5, scoreMax:3.5,  badChance:0.35, updateHrs:12, reward:{coins:750,   xp:300,   items:['buff_crop_1']}},
+  {id:1, name:'Basement Barry',    avatar:'🧔',   desc:'Hobby grower in a 2×2 tent. Inconsistent.',       difficulty:'EASY-MED',   diffColor:'#a3e635',  scoreMin:1.0, scoreMax:5.0,  badChance:0.28, updateHrs:10, reward:{coins:2000,  xp:600,   items:['buff_harvest_1','buff_crop_1']}},
+  {id:2, name:'Tent Tyson',        avatar:'💪',   desc:'2-year vet. Takes feeding very seriously.',        difficulty:'MEDIUM',     diffColor:'#fbbf24',  scoreMin:2.5, scoreMax:7.0,  badChance:0.18, updateHrs:8,  reward:{coins:6000,  xp:1500,  items:['ring_ruby','buff_crop_5']}},
+  {id:3, name:'Hydro Hannah',      avatar:'💧',   desc:'Hydroponic specialist. Suspiciously consistent.', difficulty:'MED-HARD',   diffColor:'#f97316',  scoreMin:3.5, scoreMax:8.0,  badChance:0.12, updateHrs:8,  reward:{coins:10000, xp:2500,  items:['necklace_yield']}},
+  {id:4, name:'Greenhouse Gloria', avatar:'👩‍🔬', desc:'Expert grower. Rarely makes a mistake.',          difficulty:'HARD',       diffColor:'#ef4444',  scoreMin:5.0, scoreMax:8.5,  badChance:0.08, updateHrs:6,  reward:{coins:18000, xp:4000,  items:['ring_diamond']}},
+  {id:5, name:'Clone King Carlos', avatar:'🌿',   desc:'Genetics wizard. Runs F10 lines exclusively.',    difficulty:'HARD-ELITE', diffColor:'#a855f7',  scoreMin:6.0, scoreMax:9.0,  badChance:0.06, updateHrs:6,  reward:{coins:30000, xp:7000,  items:['gem_growth','buff_xp_5']}},
+  {id:6, name:'LED Larry',         avatar:'💡',   desc:'Tech bro with $50k in equipment. Very annoying.', difficulty:'ELITE',      diffColor:'#a855f7',  scoreMin:6.5, scoreMax:9.2,  badChance:0.05, updateHrs:5,  reward:{coins:45000, xp:9000,  items:['crown_fire']}},
+  {id:7, name:'Organic Oscar',     avatar:'🍄',   desc:'No-till living soil. Incredibly patient.',         difficulty:'ELITE',      diffColor:'#a855f7',  scoreMin:7.0, scoreMax:9.3,  badChance:0.04, updateHrs:5,  reward:{coins:55000, xp:11000, items:['super_soil','super_soil','super_soil','gem_gold']}},
+  {id:8, name:'The Master',        avatar:'🧙',   desc:'Legendary. Only a near-perfect grow wins.',        difficulty:'LEGEND',     diffColor:'#ec4899',  scoreMin:8.0, scoreMax:9.8,  badChance:0.02, updateHrs:4,  reward:{coins:75000, xp:18000, items:['crown_platinum','cape_red_trim']}},
+  {id:9, name:'The Noyes Boys',    avatar:'🏆',   desc:'The breeders themselves. Can you beat the masters?',difficulty:'GOD TIER',  diffColor:'#ec4899',  scoreMin:9.0, scoreMax:10.0, badChance:0.01, updateHrs:3,  reward:{coins:200000,xp:50000, items:['crown_god','ring_god','necklace_god']}},
 ];
 
 const ENV_IDEAL = {
@@ -4323,19 +4543,58 @@ const WORDLIST = ['apple','brave','cloud','dance','eagle','flame','grace','happy
 // ================================================================
 let BUYERS = [];
 function initBuyers() {
-  const strainNames = Object.keys(STRAINS).filter(s => !STRAINS[s].isTest);
-  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
-  BUYERS = [
-    {id:'bulk',    name:'Bulk Dispensary',  rate:2,   req:null,                       maxG:99999, icon:'🏪', alwaysOn:true},
-    {id:'premium', name:'Premium Buyer',    rate:5,   req:{thc:22},                   maxG:500,   icon:'💎', alwaysOn:true},
-    {id:'small',   name:'Small Batch Co.',  rate:8,   req:null,                       maxG:60+Math.floor(Math.random()*100), icon:'🧪', alwaysOn:false},
-    {id:'craft',   name:'Craft Buyer',      rate:7,   req:{strain:pick(strainNames)}, maxG:200,   icon:'🎨', alwaysOn:false},
-    {id:'medical', name:'Medical Grade',    rate:10,  req:{thc:25},                   maxG:100,   icon:'⚕️', alwaysOn:false},
-    {id:'celeb',   name:'Celebrity Client', rate:20,  req:null,                       maxG:100,   icon:'⭐', alwaysOn:false},
-    {id:'conno',   name:'Connoisseur',      rate:12,  req:{score:9},                  maxG:50,    icon:'🧐', alwaysOn:false},
-    {id:'whole',   name:'Wholesale',        rate:3,   req:{min:200},                  maxG:1000,  icon:'📦', alwaysOn:true},
-    {id:'flash',   name:'Flash Sale',       rate:6,   req:null,                       maxG:75,    icon:'⚡', alwaysOn:false},
+  if (!GS._buyerState) GS._buyerState = {};
+  const now       = Date.now();
+  const gameHrMs  = 3600000 / GAME_SPEED;
+  const strainNames = Object.keys(STRAINS).filter(s=>!STRAINS[s].isTest);
+  const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+
+  const ALL_BUYERS = [
+    // Always on
+    {id:'bulk',       name:'Bulk Dispensary',    icon:'🏪', rate:2,   type:'flower', alwaysOn:true,  maxG:99999, req:null,               desc:'Takes everything. Lowest rate, no limits.'},
+    {id:'wholesale',  name:'Wholesale Co.',       icon:'📦', rate:3,   type:'flower', alwaysOn:true,  maxG:2000,  req:{min:200},           desc:'200g minimum. Bulk rate.'},
+    // Cycling flower buyers
+    {id:'premium',    name:'Premium Buyer',       icon:'💎', rate:5,   type:'flower', alwaysOn:false, maxG:400,   req:{thc:22},      cycleHrs:8,  stayHrs:6,   desc:'22%+ THC only. Quality gate.'},
+    {id:'small_bat',  name:'Small Batch Co.',     icon:'🧪', rate:9,   type:'flower', alwaysOn:false, maxG:28,    req:{max:28},      cycleHrs:5,  stayHrs:3,   desc:'Under 28g only — pays well for tiny batches.'},
+    {id:'med_batch',  name:'Medium Market',       icon:'⚖️', rate:6,   type:'flower', alwaysOn:false, maxG:100,   req:{range:[28,100]}, cycleHrs:10,stayHrs:7, desc:'Sweet spot 28–100g.'},
+    {id:'craft',      name:'Craft Buyer',         icon:'🎨', rate:7,   type:'flower', alwaysOn:false, maxG:150,   req:{strain:pick(strainNames)}, cycleHrs:12,stayHrs:8, desc:'Wants one specific strain only.'},
+    {id:'medical',    name:'Medical Grade',       icon:'⚕️', rate:10,  type:'flower', alwaysOn:false, maxG:80,    req:{thc:25},      cycleHrs:8,  stayHrs:6,   desc:'Dispensary — 25%+ THC required.'},
+    {id:'conno',      name:'Connoisseur',         icon:'🧐', rate:12,  type:'flower', alwaysOn:false, maxG:40,    req:{score:8},     cycleHrs:16, stayHrs:8,   desc:'Only A-tier. Score 8+ required.'},
+    {id:'flash',      name:'⚡ Flash Sale',       icon:'⚡', rate:7,   type:'flower', alwaysOn:false, maxG:60,    req:null,          cycleHrs:4,  stayHrs:2,   desc:'2hr window only — or miss it.'},
+    {id:'celeb',      name:'VIP Client',          icon:'⭐', rate:20,  type:'flower', alwaysOn:false, maxG:25,    req:{thc:27,score:9}, cycleHrs:24,stayHrs:12, desc:'Very rare. 27%+ THC and score 9+.'},
+    {id:'dispensary', name:'Dispensary Chain',    icon:'🏬', rate:4,   type:'flower', alwaysOn:false, maxG:800,   req:{thc:18},      cycleHrs:12, stayHrs:10,  desc:'Regional chain. Volume buyer. 18%+ THC.'},
+    {id:'export',     name:'Export Order',        icon:'✈️', rate:6,   type:'flower', alwaysOn:false, maxG:500,   req:{min:300,thc:20}, cycleHrs:18,stayHrs:12, desc:'International. 300g+ and 20%+ THC.'},
+    {id:'rarity_hun', name:'Rarity Hunter',       icon:'✨', rate:15,  type:'flower', alwaysOn:false, maxG:50,    req:{rarity:'EP'}, cycleHrs:20, stayHrs:10,  desc:'EP+ phenotypes only. Pays 15¢/g.'},
+    // Seed buyers
+    {id:'seedbank',   name:'Seed Bank',           icon:'🌰', rate:null, type:'seeds', alwaysOn:false, maxG:0, seedRate:400, maxSeeds:20, cycleHrs:12,stayHrs:8, req:null,          desc:'Buys any seeds at 400¢ each. Up to 20.'},
+    {id:'breeder_b',  name:'Master Breeder',      icon:'🧬', rate:null, type:'seeds', alwaysOn:false, maxG:0, seedRate:2000,maxSeeds:5,  cycleHrs:18,stayHrs:10, req:{gen:'bred'},  desc:'Bred genetics only. 2,000¢ per seed.'},
+    // Mystery
+    {id:'mystery',    name:'??? Buyer',           icon:'❓', rate:null, type:'mystery', alwaysOn:false, maxG:99,  cycleHrs:8, stayHrs:4, req:null,              desc:'Unknown buyer — mystery rate. Roll the dice.'},
   ];
+
+  BUYERS = [];
+  ALL_BUYERS.forEach(b => {
+    if (b.alwaysOn) { BUYERS.push({...b}); return; }
+    if (!GS._buyerState[b.id]) {
+      const startActive = Math.random() < 0.5;
+      GS._buyerState[b.id] = startActive
+        ? { activeUntil: now + (b.stayHrs||6)*gameHrMs*(0.5+Math.random()), nextAt: 0 }
+        : { activeUntil: 0, nextAt: now + (b.cycleHrs||8)*gameHrMs*Math.random() };
+    }
+    const st = GS._buyerState[b.id];
+    if (now < st.activeUntil) {
+      BUYERS.push({...b, activeUntil: st.activeUntil});
+    } else {
+      if (st.nextAt > 0 && now >= st.nextAt) {
+        st.activeUntil = now + (b.stayHrs||6)*gameHrMs*(0.8+Math.random()*0.5);
+        st.nextAt = st.activeUntil + (b.cycleHrs||8)*gameHrMs*(0.8+Math.random()*0.5);
+        BUYERS.push({...b, activeUntil: st.activeUntil});
+      } else {
+        if (st.nextAt === 0) st.nextAt = now + (b.cycleHrs||8)*gameHrMs*Math.random();
+        BUYERS.push({...b, inactive:true, nextAt: st.nextAt});
+      }
+    }
+  });
 }
 
 // ================================================================
@@ -4425,6 +4684,8 @@ suitEquipped: 0,
     growTime: 0,           // total in-game minutes elapsed
     _bmBotListings: [],
     _welcomeSent: false,
+    activeGrowoffs: [],
+    _pendingGrowOffBotId: null,
   dryRoom: {fanOn:false, dehuOn:false, acOn:false, heaterOn:false, fanSpeed:50, tempTarget:68},
   };
 }
@@ -4462,6 +4723,8 @@ function defaultRoom(id) {
     lightsOn: true,
     lightsOffAt: null,
     lightScheduleHrs: 18,
+    _lightCycleGameMins: 0,
+    _manualOff: false,
     lastSprayAt: null,
     envTarget: { temp: 78, humid: 65, co2: 400 },
     envActual: { temp: 72, humid: 60, co2: 400 },
@@ -4633,6 +4896,9 @@ function openModal(id) {
 function closeModal(id) {
   const e = document.getElementById(id);
   if (e) e.classList.remove('open');
+  if (id === 'modal-lights-settings' && window._llsTimer) {
+    clearInterval(window._llsTimer); window._llsTimer = null;
+  }
 }
 
 function closeAllModals() {
@@ -4938,6 +5204,17 @@ function stepEnvironment(room, gameMins) {
 
   if (actual.temp > 90) room.tempStressAccum = (room.tempStressAccum||0) + gameMins/60;
   else                  room.tempStressAccum = Math.max(0,(room.tempStressAccum||0) - gameMins/120);
+
+  // ── Lights-off physics: temp drops, RH rises ──
+  if (!room.lightsOn) {
+    // Temperature drops toward ambient (no light heat source)
+    const _ambDark = room.ambientTemp || 68;
+    actual.temp += (_ambDark - actual.temp) * Math.min(0.005 * gameMins, 0.4);
+    // Humidity rises 0.3%/game-hour in dark (plants transpire less, air cools = moisture condenses)
+    const _rhRiseDark = 0.3 * (gameMins / 60);
+    actual.humid = Math.min(85, actual.humid + _rhRiseDark);
+  }
+
   room.envActual = actual;
 }
 
@@ -4992,6 +5269,20 @@ function tickPlant(plant, room, strain, actual, gameMins) {
     }
   } else if (plant.stage === 'Veg') {
     plant.vegDays = (plant.vegDays || 0) + (gameMins / (60 * 24)) * finalSpeedMult;
+    // Reveg bonus: apply crop multiplier based on time in reveg
+    if (plant.isReveg && !plant._revegBonusApplied) {
+      plant.revegVegDays = (plant.revegVegDays || 0) + (gameMins / (60 * 24)) * finalSpeedMult;
+    }
+    // Auto-flip seedlings/plants in a flower-scheduled room after 30 veg days
+    const _roomForPlant = GS.rooms.find(r => r.id === plant.roomId);
+    if (_roomForPlant && (_roomForPlant.lightScheduleHrs || 18) <= 12 && (plant.vegDays||0) >= 30 && !plant._autoFlipDone) {
+      plant._autoFlipDone = true;
+      plant.stage = 'Flower';
+      plant.flowerDay = 0;
+      GS.stats.plantsFlipped = (GS.stats.plantsFlipped||0) + 1;
+      toast('🌸 ' + (plant.name||plant.strainName) + ' auto-flipped after 30 veg days in flower room!','ok',4000);
+      addLog((plant.name||plant.strainName) + ' auto-flipped to flower (30d veg in 12/12 room)','success');
+    }
   } else if (plant.stage === 'Flower' || plant.stage === 'Ready') {
     // Keep advancing flowerDay in Ready so week counter doesn't stall at wk9
     plant.flowerDay = (plant.flowerDay || 0) + (gameMins / (60 * 24)) * finalSpeedMult;
@@ -5509,11 +5800,12 @@ function _tickCuringJar(batch, realHrs, now) {
   if (batch.jarRH <= 70) batch.overduePenaltyApplied = 0;
 }
 
-function tickBlackMarket(now) {  (GS.blackMarket || []).forEach(listing => {
+function tickBlackMarket(now) {
+  (GS.blackMarket || []).forEach(listing => {
     if (listing.status !== 'pending') return;
     const ageMin = (now - listing.listedAt) / 60000;
-    const sellMin = listing.priceCategory === 'below' ? 1 + Math.random() * 3 :
-                    listing.priceCategory === 'market' ? 30 + Math.random() * 60 : null;
+    const sellMin = listing.priceCategory === 'below' ? 1 + Math.random() * 3
+                  : listing.priceCategory === 'market' ? 30 + Math.random() * 60 : null;
     if (sellMin && ageMin >= sellMin) {
       if (Math.random() < 0.85) {
         GS.coins += listing.totalPrice;
@@ -5521,15 +5813,18 @@ function tickBlackMarket(now) {  (GS.blackMarket || []).forEach(listing => {
         listing.status = 'sold';
         GS.stats.bmSales = (GS.stats.bmSales||0) + 1;
         checkQuestProgress();
-        addLog('BM sale: ' + listing.name + ' +' + listing.totalPrice + '¢', 'success');
-        toast('💰 BM Sale: ' + listing.name + ' +' + listing.totalPrice + '¢', 'ok');
+        addLog('BM sale: ' + listing.name + ' +' + _fmtCoins(listing.totalPrice), 'success');
+        toast('💰 BM Sale: ' + listing.name + ' +' + _fmtCoins(listing.totalPrice), 'ok');
       } else {
         listing.status = 'failed';
-        addLog('BM listing failed (ripped): ' + listing.name, 'warn');
+        addLog('BM listing failed: ' + listing.name, 'warn');
         toast('⚠️ BM listing failed — ripped off on ' + listing.name, 'err');
       }
     }
   });
+  // Return expired bot listings don't need action — they just disappear
+  // Tick bot listing restocks
+  _seedBMBotListings();
 }
 
 // ================================================================
@@ -5640,6 +5935,211 @@ function completeDailyGoal() {
   saveGame();
 }
 
+function tickLightCycle(room, gameMins) {
+  const hoursOn = room.lightScheduleHrs != null ? room.lightScheduleHrs : 18;
+  if (hoursOn <= 0) {
+    if (room.lightsOn) { room.lightsOn = false; room.lightsOffAt = Date.now(); }
+    return;
+  }
+  if (hoursOn >= 24) {
+    if (!room.lightsOn && !room._manualOff) { room.lightsOn = true; room.lightsOffAt = null; }
+    return;
+  }
+  room._lightCycleGameMins = (room._lightCycleGameMins || 0) + gameMins;
+  const cycleLen = 24 * 60;
+  const pos = room._lightCycleGameMins % cycleLen;
+  const shouldBeOn = pos < hoursOn * 60;
+  if (shouldBeOn && !room.lightsOn && !room._manualOff) {
+    room.lightsOn = true;
+    room.lightsOffAt = null;
+  } else if (!shouldBeOn && room.lightsOn) {
+    room.lightsOn = false;
+    room.lightsOffAt = Date.now();
+  }
+}
+
+// ================================================================
+// GROW-OFF OPPONENT SCORE ENGINE
+// ================================================================
+function tickOpponentScores(now) {
+  if (!GS || !GS.activeGrowoffs) return;
+  GS.activeGrowoffs.forEach(go => {
+    if (go.status === 'completed' || go.status === 'cancelled') return;
+    const bot = BOT_LADDER.find(b => b.id === go.botIdx);
+    if (!bot) return;
+    if (!go.currentOpponentScore) go.currentOpponentScore = parseFloat((bot.scoreMin + (bot.scoreMax - bot.scoreMin) * 0.25).toFixed(1));
+    const lastUpdate = go._lastScoreUpdate || go.startTs || now;
+    const hrsElapsed = (now - lastUpdate) / 3600000;
+    if (hrsElapsed < (bot.updateHrs || 8)) return;
+    go._lastScoreUpdate = now;
+    let newScore;
+    if (Math.random() < (bot.badChance || 0.15)) {
+      newScore = parseFloat((0.8 + Math.random() * 1.7).toFixed(1));
+      addLog(bot.name + ' had a rough day — score dropped to ' + newScore + '!', 'info');
+    } else if (Math.random() < 0.50) {
+      newScore = parseFloat((bot.scoreMax * (0.85 + Math.random() * 0.15)).toFixed(1));
+    } else {
+      const range = bot.scoreMax - bot.scoreMin;
+      newScore = parseFloat((bot.scoreMin + range * (0.15 + Math.random() * 0.55)).toFixed(1));
+    }
+    newScore = parseFloat(Math.max(0.5, Math.min(10.0, newScore)).toFixed(1));
+    if (!go.scoreHistory) go.scoreHistory = [];
+    go.scoreHistory.push({ score: newScore, ts: now });
+    if (go.scoreHistory.length > 24) go.scoreHistory.shift();
+    go.currentOpponentScore = newScore;
+  });
+}
+
+function calcGrowOffFinalScore(vaultItem, growoffEntry) {
+  // Combines all stages: grow care + curing quality + potency + rarity
+  const growScore   = parseFloat(vaultItem.score || 5) / 10;           // 0–1
+  const quality     = (vaultItem.quality || 100) / 100;                 // 0–1
+  const strainDef   = STRAINS[vaultItem.strainName] || {};
+  const thcRatio    = Math.min(1.25, (vaultItem.thc || 20) / Math.max(1, strainDef.thcBase || 25));
+  const rarBon      = {Standard:0, EP:0.4, Shiny:0.6, Sparkling:0.8, Glowing:1.0, GOD:1.8}[vaultItem.rarity||'Standard'] || 0;
+  const diffBon     = GS.difficulty === 'master' ? 0.6 : GS.difficulty === 'normal' ? 0.25 : 0;
+  const harvestBonus= growoffEntry?.harvestHealth ? ((growoffEntry.harvestHealth / 100) * 0.3) : 0;
+  const raw = (growScore * 3.5) + (quality * 2.0) + (thcRatio * 1.8) + rarBon + diffBon + harvestBonus;
+  return parseFloat(Math.max(0.5, Math.min(10.0, raw)).toFixed(1));
+}
+
+function startGrowOffChallenge(plantId, botId) {
+  const bot = BOT_LADDER.find(b => b.id === botId);
+  if (!bot) return null;
+  if (!GS.activeGrowoffs) GS.activeGrowoffs = [];
+  const startScore = parseFloat((bot.scoreMin + (bot.scoreMax - bot.scoreMin) * (0.15 + Math.random() * 0.25)).toFixed(1));
+  const goEntry = {
+    id: uid(), botIdx: botId, opponentName: bot.name,
+    plantId, startTs: Date.now(),
+    currentOpponentScore: startScore,
+    scoreHistory: [{ score: startScore, ts: Date.now() }],
+    _lastScoreUpdate: Date.now(),
+    status: 'growing',
+    harvestScore: null, harvestHealth: null, harvestRarity: null,
+    vaultItemId: null,
+  };
+  GS.activeGrowoffs.push(goEntry);
+  GS._pendingGrowOffBotId = null;
+  addLog('Grow-Off started vs ' + bot.name, 'info');
+  saveGame();
+  return goEntry.id;
+}
+
+function cancelGrowOff(goId) {
+  if (!confirm('Forfeit this Grow-Off? The challenge will be marked as a loss.')) return;
+  const go = (GS.activeGrowoffs||[]).find(g => g.id === goId);
+  if (!go) return;
+  go.status = 'cancelled';
+  const bot = BOT_LADDER.find(b => b.id === go.botIdx);
+  if (!GS.growoffHistory) GS.growoffHistory = [];
+  GS.growoffHistory.unshift({ plantName:'FORFEIT', opponentName:bot?.name||'?', score:0, opponentScore:go.currentOpponentScore, won:false, ts:Date.now() });
+  toast('🏳️ Forfeited vs ' + (bot?.name||'opponent') + '.', 'warn', 3000);
+  addLog('Grow-Off forfeited vs ' + (bot?.name||'?'), 'warn');
+  saveGame(); renderGrowOff();
+}
+
+function submitVaultToGrowOff(goId) {
+  const go = (GS.activeGrowoffs||[]).find(g => g.id === goId);
+  if (!go) return;
+  const vaultItem = (GS.vault||[]).find(v => v._growoffId === go.id);
+  if (!vaultItem) { toast('No vault item linked to this challenge yet.','warn'); return; }
+  const bot = BOT_LADDER.find(b => b.id === go.botIdx);
+  if (!bot) return;
+  const myScore    = calcGrowOffFinalScore(vaultItem, go);
+  const theirScore = go.currentOpponentScore;
+  const won        = myScore > theirScore;
+  go.status = 'completed';
+  go.won = won;
+  go.finalMyScore    = myScore;
+  go.finalTheirScore = theirScore;
+  if (!GS.growoffHistory) GS.growoffHistory = [];
+  GS.growoffHistory.unshift({ plantName:vaultItem.name, opponentName:bot.name, score:myScore, opponentScore:theirScore, won, ts:Date.now() });
+  GS.stats.growoffSubmits = (GS.stats.growoffSubmits||0) + 1;
+  completeDailyGoal();   // counts for the daily "submit a grow-off entry" goal
+  checkQuestProgress();  // counts toward quest steps (win or loss)
+  if (won) {
+    if (go.botIdx === (GS.growoffUnlocked || 0)) GS.growoffUnlocked = (GS.growoffUnlocked||0) + 1;
+    GS.coins += bot.reward.coins;
+    grantXP(bot.reward.xp);
+    (bot.reward.items||[]).forEach(id => grantEquipItem(id, 1));
+    if (myScore > (GS.seasonBestScore||0)) GS.seasonBestScore = myScore;
+    addLog('Grow-Off WIN vs ' + bot.name + ' · ' + myScore + ' vs ' + theirScore, 'success');
+  } else {
+    addLog('Grow-Off LOSS vs ' + bot.name + ' · ' + myScore + ' vs ' + theirScore, 'warn');
+  }
+  _showGrowOffResult(won, myScore, theirScore, bot, vaultItem);
+  saveGame(); renderGrowOff(); renderVault(); renderHeader();
+}
+
+function _showGrowOffResult(won, myScore, theirScore, bot, vaultItem) {
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = `position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+    background:var(--panel);border:2px solid ${won?'rgba(251,191,36,0.8)':'rgba(239,68,68,0.6)'};
+    border-radius:18px;padding:28px 32px;z-index:10001;
+    max-width:480px;width:90vw;text-align:center;
+    box-shadow:0 0 60px ${won?'rgba(251,191,36,0.2)':'rgba(239,68,68,0.15)'};
+    animation:toastIn .4s ease;overflow-y:auto;max-height:90vh`;
+  const itemLines = (bot.reward.items||[]).reduce((acc,id)=>{
+    const item=EQUIPMENT_ITEMS[id]; if(!item) return acc;
+    const ex=acc.find(x=>x.id===id); if(ex) ex.qty++; else acc.push({id,name:item.name,icon:item.icon,qty:1}); return acc;
+  },[]);
+  wrapper.innerHTML = `
+    <div style="font-size:56px;margin-bottom:10px">${won?'🏆':'💀'}</div>
+    <div style="font-family:var(--font-hud);font-size:20px;color:${won?'var(--gold)':'var(--red)'};letter-spacing:2px;margin-bottom:4px">
+      ${won ? 'YOU WIN!' : 'YOU LOST'}
+    </div>
+    <div style="font-family:var(--font-hud);font-size:10px;color:var(--muted);margin-bottom:18px">${won?'Defeated':'Lost to'} ${bot.name}</div>
+    <div style="display:flex;gap:24px;justify-content:center;align-items:center;margin-bottom:18px">
+      <div>
+        <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin-bottom:4px">YOUR SCORE</div>
+        <div style="font-family:var(--font-hud);font-size:34px;color:${won?'var(--green)':'var(--red)'};font-weight:700">${myScore}</div>
+        <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">${vaultItem?.name||''}</div>
+      </div>
+      <div style="font-size:28px;color:var(--muted)">vs</div>
+      <div>
+        <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin-bottom:4px">${bot.name}</div>
+        <div style="font-family:var(--font-hud);font-size:34px;color:var(--red);font-weight:700">${theirScore}</div>
+        <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">${bot.difficulty}</div>
+      </div>
+    </div>
+    ${won ? `<div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:10px;padding:12px;margin-bottom:16px">
+      <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:8px">REWARDS</div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:8px">
+        <span style="font-family:var(--font-hud);font-size:12px;color:var(--gold)">+${bot.reward.coins.toLocaleString()}¢</span>
+        <span style="font-family:var(--font-hud);font-size:12px;color:var(--purple)">+${bot.reward.xp.toLocaleString()} XP</span>
+      </div>
+      ${itemLines.length?`<div style="display:flex;gap:5px;justify-content:center;flex-wrap:wrap">
+        ${itemLines.map(it=>`<span style="background:rgba(0,0,0,0.4);border:1px solid rgba(251,191,36,0.3);border-radius:4px;padding:3px 8px;font-size:10px;color:var(--gold)">${it.icon} ${it.qty>1?it.qty+'× ':''}${it.name}</span>`).join('')}
+      </div>`:''}
+    </div>` : `<div style="font-size:10px;color:var(--muted);line-height:1.8;margin-bottom:16px">Keep growing. Every harvest teaches you something.<br>Enter again when you have a better cure.</div>`}
+    <button onclick="this.parentElement.remove()"
+      style="padding:11px 32px;background:${won?'rgba(251,191,36,0.15)':'rgba(255,255,255,0.06)'};border:1px solid ${won?'var(--gold)':'var(--border)'};border-radius:8px;color:${won?'var(--gold)':'var(--text)'};font-family:var(--font-hud);font-size:10px;letter-spacing:1.5px;cursor:pointer;transition:.2s"
+      onmouseover="this.style.background='${won?'rgba(251,191,36,0.25)':'rgba(255,255,255,0.12)'}'"
+      onmouseout="this.style.background='${won?'rgba(251,191,36,0.15)':'rgba(255,255,255,0.06)'}'">
+      ${won ? '🎉 AWESOME!' : '💪 TRY AGAIN'}
+    </button>`;
+  document.body.appendChild(wrapper);
+  setTimeout(() => { if (wrapper.parentElement) wrapper.remove(); }, 15000);
+}
+
+function openStartGrowOffModal(botId) {
+  const bot = BOT_LADDER.find(b => b.id === botId);
+  if (!bot) return;
+  const existing = (GS.activeGrowoffs||[]).find(g => g.botIdx === botId && g.status !== 'completed' && g.status !== 'cancelled');
+  if (existing) { toast('Already have an active challenge vs ' + bot.name + '!','warn'); return; }
+  const room = GS.rooms[GS.activeRoom||0] || GS.rooms[0];
+  const inRoom = (GS.plants||[]).filter(p => p.roomId === room.id);
+  const freeSlots = room.slots - inRoom.length;
+  if (freeSlots <= 0) {
+    toast('⚠️ Need a free plant slot first! All ' + room.slots + ' slots are full in ' + room.name + '.','warn',5000);
+    return;
+  }
+  GS._pendingGrowOffBotId = botId;
+  toast('🏆 Challenge accepted vs ' + bot.name + '! Now plant a seed to begin the grow-off. The slot will show a badge.','ok',7000);
+  addLog('Grow-Off pending vs ' + bot.name + ' — plant a seed to start','info');
+  saveGame(); renderGrowOff();
+}
+
 function gameTick() {
   const now = Date.now();
   const realMs = now - _lastTick;
@@ -5648,6 +6148,7 @@ function gameTick() {
   const gameMins = (realMs / 60000) * GAME_SPEED;
 
   GS.rooms.forEach(room => {
+    tickLightCycle(room, gameMins);
     stepEnvironment(room, gameMins);
     tickDiseaseSpread(room, gameMins);
     if (!room.lightsOn && room.lightsOffAt) {
@@ -5692,6 +6193,7 @@ function gameTick() {
 
   tickCuring(now);
   tickBlackMarket(now);
+  tickOpponentScores(now);
 
   // Equipment depletion
   const g  = GS.gear || {};
@@ -5721,7 +6223,7 @@ function gameTick() {
   }
 
   GS.stats.playtime = (GS.stats.playtime || 0) + realMs / 1000;
-  GS.growTime = (GS.growTime || 0) + gameMins;  // accumulate in-game time
+  GS.growTime = (GS.growTime || 0) + gameMins;
   if (!GS.envHistory) GS.envHistory = [];
   GS.envHistory.push({ts: now, temp: ar.envActual.temp, humid: ar.envActual.humid});
   if (GS.envHistory.length > 720) GS.envHistory.shift();
@@ -5753,6 +6255,11 @@ function gameTick() {
         }
       }
     }
+  }
+  // Refresh buyer availability every ~10 real minutes
+  if (!GS._lastBuyerTick || (now - GS._lastBuyerTick) > 600000) {
+    initBuyers();
+    GS._lastBuyerTick = now;
   }
   GS.lastSeen = now;
 
@@ -5790,9 +6297,9 @@ function catchupOffline() {
     }
   }
   const offGameMins = (offMs / 60000) * GAME_SPEED;
-  const chunks = Math.min(Math.floor(offGameMins / 60), 400);
+  const chunks = Math.min(Math.floor(offGameMins / 60), 120);
   for (let i = 0; i < chunks; i++) {
-    GS.rooms.forEach(r => stepEnvironment(r, 60));
+    GS.rooms.forEach(r => { tickLightCycle(r, 60); stepEnvironment(r, 60); });
     GS.plants.forEach(p => {
       const r = GS.rooms.find(x => x.id === p.roomId) || GS.rooms[0];
       if (r) {
@@ -5801,6 +6308,7 @@ function catchupOffline() {
       }
     });
     tickCuring(Date.now());
+    GS.growTime = (GS.growTime || 0) + 60;
   }
   // Reset so next refresh doesn't re-simulate the same period
   GS.lastSeen = Date.now();
@@ -6809,23 +7317,47 @@ function renderEnvChart() {
   }
 }
 
-function toggleLights() {
-  const room = GS.rooms ? (GS.rooms[GS.activeRoom || 0] || GS.rooms[0]) : null;
+function toggleLights(roomId) {
+  const room = roomId
+    ? GS.rooms.find(r => r.id === roomId)
+    : (GS.rooms ? (GS.rooms[GS.activeRoom || 0] || GS.rooms[0]) : null);
   if (!room) return;
+
   if (room.lightsOn) {
-    room.lightsOn  = false;
+    // Turning OFF
+    room.lightsOn = false;
     room.lightsOffAt = Date.now();
-    toast('Lights OFF 🌙', 'info');
+    room._manualOff = true;
+    if (GS.difficulty === 'easy') toast('🌙 Lights OFF — manually turn back on when ready.', 'info', 4000);
+    else toast('Lights OFF 🌙', 'info');
   } else {
+    // Turning ON
+    const hoursOn = room.lightScheduleHrs != null ? room.lightScheduleHrs : 18;
+    const isFlowerRoom = (GS.plants||[]).some(p => p.roomId === room.id && (p.stage==='Flower'||p.stage==='Ready'));
+    // Dark period penalty during flower
+    if (isFlowerRoom && room.lightsOffAt) {
+      const realMsInDark = Date.now() - room.lightsOffAt;
+      const gameHoursInDark = (realMsInDark / 60000) * GAME_SPEED / 60;
+      if (gameHoursInDark < 12) {
+        const flowerPlants = (GS.plants||[]).filter(p => p.roomId === room.id && (p.stage==='Flower'||p.stage==='Ready'));
+        flowerPlants.forEach(p => {
+          p.health = Math.max(0, (p.health||100) - 25);
+          p.cropMultiplier = Math.max(0.1, (p.cropMultiplier||1.0) - 0.05);
+        });
+        toast('⚠️ Lights ON too early during flower! −25 health, −5% mult per plant.','err',5000);
+        addLog(room.name + ' — early lights-on during flower. Penalty applied.','warn');
+      }
+    }
     const sprayed = room.lastSprayAt && (Date.now() - room.lastSprayAt) < 4 * 3600000;
     if (sprayed) {
-      GS.plants.filter(p => p.roomId === room.id).forEach(p => {
-        p.health = Math.max(0, (p.health || 100) - 10);
+      (GS.plants||[]).filter(p => p.roomId === room.id).forEach(p => {
+        p.health = Math.max(0, (p.health||100) - 10);
       });
-      toast('🔥 Spray burn! −10 health per plant', 'err');
+      toast('🔥 Spray burn! −10 health per plant','err');
     }
-    room.lightsOn  = true;
+    room.lightsOn = true;
     room.lightsOffAt = null;
+    room._manualOff = false;
     toast('Lights ON 💡', 'ok');
   }
   renderEnvPanel(); updateSidebarWarnings(); saveGame();
@@ -7353,7 +7885,8 @@ function _buildPlantCard(plant, room) {
       ${rarLbl}
       ${plant.isMale   ? '<div class="male-badge">♂ MALE</div>' : ''}
       ${isAutoWater ? '<div style="position:absolute;bottom:8px;left:8px;background:rgba(74,222,128,0.18);border:1px solid var(--green);border-radius:4px;padding:2px 8px;font-family:var(--font-hud);font-size:8px;color:var(--green);z-index:6;letter-spacing:.5px">💧 AUTO WATER</div>' : ''}
-      ${plant.isBeingPollinated && !plant.hasSeeds ? '<div class="seeded-badge" style="background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.4);color:var(--blue)">💨 POLLINATING</div>' : ''}
+      ${plant.isBeingPollinated && !plant.hasSeeds ? '<div class="seeded-badge" style="background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.4);color:var(--blue)">💨 POLLINATED</div>' : ''}
+      ${(()=>{const _go=(GS.activeGrowoffs||[]).find(g=>g.plantId===plant.id&&g.status==='growing');return _go?`<div style="position:absolute;bottom:42px;left:0;right:0;text-align:center;z-index:7"><span style="background:rgba(168,85,247,0.85);border:1px solid rgba(168,85,247,0.9);border-radius:5px;padding:3px 10px;font-family:var(--font-hud);font-size:8px;color:#fff;letter-spacing:.5px">⚔️ GROW-OFF vs ${_go.opponentName}</span></div>`:''})()}
       ${plant.hasSeeds ? '<div class="seeded-badge">🌱 SEEDED</div>' : ''}
       ${plant.isMale && (plant.flowerDay||0) >= 20 ? '<div class="pollen-cloud"></div>' : ''}
     </div>
@@ -7402,12 +7935,14 @@ function _buildPlantCard(plant, room) {
       <div class="gsm-bar"><div class="gsm-bar-fill" style="width:${Math.min(100, score.score / 10 * 100)}%"></div></div>
       <span class="gsm-label" style="margin-left:4px">${score.grade}</span>
     </div>
-    <div class="night-mode-bar">
-      <span style="font-size:9px">${room.lightsOn ? '💡 LIGHTS ON' : '🌙 DARK'}</span>
+    <div class="night-mode-bar" onclick="openLightsModal(${room.id})" style="cursor:pointer" title="Click to manage lights">
+      <span style="font-size:9px">${room.lightsOn ? '💡 LIGHTS ON' : '🌙 DARK'} · ${room.lightScheduleHrs||18}h/${24-(room.lightScheduleHrs||18)}h</span>
       <div class="lc-indicator">
-        ${room.lightsOn
-          ? '<div class="lc-seg lc-on"></div>'.repeat(12) + '<div class="lc-seg lc-off"></div>'.repeat(4)
-          : '<div class="lc-seg lc-off"></div>'.repeat(16)}
+        ${(() => {
+          const _on = room.lightScheduleHrs != null ? room.lightScheduleHrs : 18;
+          const _segs = Math.round(_on * 16 / 24);
+          return '<div class="lc-seg lc-on"></div>'.repeat(_segs) + '<div class="lc-seg lc-off"></div>'.repeat(16 - _segs);
+        })()}
       </div>
       <span style="flex:1"></span>
       <span style="font-size:9px;color:var(--muted)">${Math.floor(plant.dayAge||0)}d</span>
@@ -7436,9 +7971,7 @@ function _buildPlantCard(plant, room) {
            <button class="btn-action btn-gold" onclick="openHarvestModal('${plant.id}')" ${plant.isDead ? 'disabled' : ''}>${plant.hasSeeds ? '🌱 SEEDS' : '🌾 HARVEST'}</button>
            <button class="btn-action btn-red"  onclick="openRemoveModal('${plant.id}')">🗑️ REMOVE</button>
            <button class="btn-action btn-green" onclick="openTrainModal('${plant.id}')" ${plant.isDead ? 'disabled' : ''}>✂️ TRAIN</button>
-           ${plant.stage === 'Veg' && !plant.isDead
-             ? `<button class="btn-action btn-purple" onclick="openFlipModal('${plant.id}')">🌸 FLIP</button>`
-             : '<button class="btn-action" disabled>🌸 FLIP</button>'}
+           <button class="btn-action btn-gold" onclick="openLightsModal(${room.id})">💡 LIGHTS</button>
            <button class="btn-action" onclick="openSprayModalForPlant('${plant.id}')">🧴 SPRAY</button>
            <button class="btn-action btn-cyan two-wide" onclick="openTransplantModal('${plant.id}')"
              ${(plant.potSize==='25gal'||plant.isDead||plant._permanentlyDead)?'disabled':''}>
@@ -7725,6 +8258,17 @@ function moveCuredToVault(batchId) {
     curedAt: Date.now(), isBred: batch.isBred || false
   });
   GS.curing.splice(idx, 1);
+
+  // Link to grow-off if applicable
+  const _vaultGO = (GS.activeGrowoffs||[]).find(g => g.id === batch._growoffId && (g.status === 'drying' || g.status === 'curing'));
+  if (_vaultGO) {
+    const _newVaultItem = GS.vault[GS.vault.length - 1];
+    _newVaultItem._growoffId  = _vaultGO.id;
+    _vaultGO.status           = 'ready_to_submit';
+    _vaultGO.vaultItemId      = _newVaultItem.id;
+    toast('🏆 Grow-Off entry ready! Go to Grow-Off tab or click SUBMIT on this vault item.', 'ok', 6000);
+    addLog('Grow-Off entry sealed for submission vs ' + _vaultGO.opponentName, 'info');
+  }
 
   const _penaltyMsg = belowFiftyPenalty ? ' · ⚠️ Over-dried −50% quality −5% THC' : '';
   GS.stats.vaultEntries = (GS.stats.vaultEntries||0) + 1;
@@ -8369,8 +8913,9 @@ function _renderDrying(cont) {
         <!-- Tile header — click to expand -->
         <div style="padding:14px;cursor:pointer" onclick="_toggleDryBatch('${b.id}')">
           <!-- Strain name -->
-          <div style="font-family:var(--font-hud);font-size:10px;color:var(--text);letter-spacing:.3px;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${b.name}">${b.name}</div>
-          <!-- Big RH readout -->
+        <div style="font-family:var(--font-hud);font-size:10px;color:var(--text);letter-spacing:.3px;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${b.name}">${b.name}</div>
+        ${(()=>{const _dgo=(GS.activeGrowoffs||[]).find(g=>g.id===b._growoffId&&(g.status==='drying'||g.status==='growing'));return _dgo?`<div style="display:inline-block;margin-bottom:7px;background:rgba(168,85,247,0.2);border:1px solid rgba(168,85,247,0.6);border-radius:4px;padding:2px 8px;font-family:var(--font-hud);font-size:8px;color:var(--purple)">⚔️ GROW-OFF vs ${_dgo.opponentName}</div>`:''})()}
+        <!-- Big RH readout -->
           <div style="font-family:var(--font-hud);font-size:40px;font-weight:700;color:${rhColor};line-height:1;margin-bottom:5px">${rh.toFixed(1)}<span style="font-size:13px;color:var(--muted);font-weight:400"> %RH</span></div>
           <!-- Status label -->
           <div style="font-family:var(--font-hud);font-size:8px;letter-spacing:.5px;color:${rhColor};margin-bottom:10px">${statusTxt}</div>
@@ -8523,7 +9068,8 @@ function _renderCuringJars(cont) {
       <!-- Tile top — click to expand -->
       <div style="padding:14px;cursor:pointer" onclick="_toggleCureJar('${batch.id}')">
         <!-- Name -->
-        <div style="font-family:var(--font-hud);font-size:10px;color:var(--text);letter-spacing:.3px;margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${batch.name}">${batch.name}</div>
+        <div style="font-family:var(--font-hud);font-size:10px;color:var(--text);letter-spacing:.3px;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${batch.name}">${batch.name}</div>
+        ${(()=>{const _cgo=(GS.activeGrowoffs||[]).find(g=>g.id===batch._growoffId&&g.status==='curing');return _cgo?`<div style="display:inline-block;margin-bottom:7px;background:rgba(168,85,247,0.2);border:1px solid rgba(168,85,247,0.6);border-radius:4px;padding:2px 8px;font-family:var(--font-hud);font-size:8px;color:var(--purple)">⚔️ GROW-OFF vs ${_cgo.opponentName}</div>`:''})()}
         <!-- Big RH -->
         <div style="font-family:var(--font-hud);font-size:40px;font-weight:700;color:${rhColor};line-height:1;margin-bottom:5px">${rh.toFixed(1)}<span style="font-size:13px;color:var(--muted);font-weight:400"> %RH</span></div>
         <!-- Status -->
@@ -8621,15 +9167,19 @@ function _renderVaultCured(cont) {
     cont.innerHTML = '<div class="empty-state">📦 No cured harvests yet.<br>Dry → Cure → Seal to fill your vault.</div>';
     return;
   }
-  const totalG = items.reduce((s,v) => s + (v.grams||0), 0);
-  const avgTHC = items.length ? (items.reduce((s,v) => s + (v.thc||0), 0) / items.length).toFixed(1) : 0;
+  const totalG       = items.reduce((s,v) => s + (v.grams||0), 0);
+  const avgTHC       = items.length ? (items.reduce((s,v) => s + (v.thc||0),0) / items.length).toFixed(1) : 0;
+  const goReadyCount = items.filter(v => (GS.activeGrowoffs||[]).some(g => g.vaultItemId === v.id && g.status === 'ready_to_submit')).length;
   let html = `
     <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px">
       <button class="vault-filter-btn" onclick="filterVault('all',this)">ALL</button>
       <button class="vault-filter-btn" onclick="filterVault('rare',this)">RARE</button>
       <button class="vault-filter-btn" onclick="filterVault('highthc',this)">HIGH THC</button>
     </div>
-    <div class="vault-summary">Total: ${totalG.toLocaleString()}g · Avg THC: ${avgTHC}% · ${items.length} batches</div>
+    <div class="vault-summary">
+      Total: ${totalG.toLocaleString()}g · Avg THC: ${avgTHC}% · ${items.length} batches
+      ${goReadyCount > 0 ? `<span style="display:inline-block;margin-left:10px;background:rgba(168,85,247,0.2);border:1px solid rgba(168,85,247,0.6);border-radius:4px;padding:1px 8px;font-family:var(--font-hud);font-size:8px;color:var(--purple);letter-spacing:.5px">⚔️ ${goReadyCount} GROW-OFF READY</span>` : ''}
+    </div>
     <div class="vault-grid">`;
   items.slice().sort((a,b) => (b.score||0)-(a.score||0)).forEach(item => {
     const rarClass = (item.rarity||'Standard').toLowerCase();
@@ -8646,7 +9196,8 @@ function _renderVaultCured(cont) {
       <div class="vault-card-date">${timeSince(item.curedAt)}</div>
       <div class="vault-card-actions">
         <button class="btn-action btn-gold" onclick="openSellVaultModal('${item.id}')">💸 SELL</button>
-        <button class="btn-action btn-red" onclick="openBMListModal('${item.id}')">🕵️ BM</button>
+        <button class="btn-action btn-red"  onclick="openBMListModal('${item.id}')">🕵️ BM</button>
+        ${(()=>{const _vg=(GS.activeGrowoffs||[]).find(g=>g.vaultItemId===item.id&&g.status==='ready_to_submit');return _vg?`<button class="btn-action btn-purple" style="grid-column:span 2" onclick="submitVaultToGrowOff('${_vg.id}')">🏆 SUBMIT GROW-OFF vs ${_vg.opponentName}</button>`:''})()}
       </div>
     </div>`;
   });
@@ -8656,101 +9207,443 @@ function _renderVaultCured(cont) {
 // ================================================================
 // MARKET TAB
 // ================================================================
+let _marketTab = 'buyers';
+
 function renderMarket() {
+  initBuyers();
   const cont = document.getElementById('market-container');
   if (!cont) return;
-  const vault = GS.vault || [];
 
-  let html = '<div class="market-buyers-grid">';
-  BUYERS.forEach(buyer => {
-    const meetsReq = _buyerMeetsReq(buyer, vault);
-    const hasStock = vault.length > 0;
-    html += `<div class="buyer-card ${!meetsReq || !hasStock ? 'locked' : ''}">
-      <div class="buyer-icon">${buyer.icon}</div>
-      <div class="buyer-name">${buyer.name}</div>
-      <div class="buyer-rate">${buyer.rate != null ? buyer.rate + '¢/g' : '???¢/g'}</div>
-      <div class="buyer-req-lbl">${_buyerReqLabel(buyer)}</div>
-      <div class="buyer-max-lbl">${buyer.maxG ? 'Max: ' + buyer.maxG + 'g' : 'Unlimited'}</div>
-      ${meetsReq && hasStock
-        ? `<button class="btn-action btn-gold" style="margin-top:6px" onclick="sellToBuyer('${buyer.id}')">SELL NOW</button>`
-        : `<div class="buyer-locked-label">REQUIREMENTS NOT MET</div>`}
-    </div>`;
-  });
-  html += '</div>';
-  cont.innerHTML = html;
+  cont.innerHTML = `
+    <div style="display:flex;gap:4px;margin-bottom:14px;background:rgba(0,0,0,0.4);border-radius:8px;padding:4px;border:1px solid var(--border)">
+      <button onclick="_marketTab='buyers';renderMarket()"
+        style="flex:1;padding:7px;border:none;background:${_marketTab==='buyers'?'rgba(74,222,128,0.12)':'none'};color:${_marketTab==='buyers'?'var(--green)':'var(--muted)'};border-radius:6px;font-family:var(--font-hud);font-size:9px;letter-spacing:1px;cursor:pointer">
+        💸 BUYERS
+      </button>
+      <button onclick="_marketTab='sell';renderMarket()"
+        style="flex:1;padding:7px;border:none;background:${_marketTab==='sell'?'rgba(239,68,68,0.12)':'none'};color:${_marketTab==='sell'?'var(--red)':'var(--muted)'};border-radius:6px;font-family:var(--font-hud);font-size:9px;letter-spacing:1px;cursor:pointer">
+        🏷️ SELL MY ITEMS
+      </button>
+    </div>
+    <div id="market-tab-body"></div>`;
 
-  // Recent sales
+  const body = document.getElementById('market-tab-body');
+  if (!body) return;
+  if (_marketTab === 'buyers') _renderMarketBuyers(body);
+  else                          _renderMarketSell(body);
+
+  // Recent sales below
   const rs = document.getElementById('recent-sales');
   if (rs) {
-    const sales = (GS.stats.recentSales || []);
-    if (!sales.length) { rs.innerHTML = '<div class="empty-state" style="padding:20px">No sales yet.</div>'; return; }
-    rs.innerHTML = sales.slice(0,10).map(s =>
-      `<div class="stats-sale-row">
-        <span>${s.buyer}</span>
-        <span>${s.grams}g</span>
-        <span class="ok">+${s.coins.toLocaleString()}¢</span>
-        <span style="color:var(--muted)">${timeSince(s.ts)}</span>
-      </div>`
-    ).join('');
+    const sales = GS.stats.recentSales || [];
+    rs.innerHTML = !sales.length
+      ? '<div class="empty-state" style="padding:20px">No sales yet.</div>'
+      : sales.slice(0,10).map(s=>`<div class="stats-sale-row">
+          <span>${s.buyer}</span><span>${s.grams||0}g</span>
+          <span class="ok">+${(s.coins||0).toLocaleString()}¢</span>
+          <span style="color:var(--muted)">${timeSince(s.ts)}</span>
+        </div>`).join('');
   }
 }
 
-function _buyerMeetsReq(buyer, vault) {
+function _renderMarketBuyers(body) {
+  const vault = GS.vault || [];
+  const now   = Date.now();
+  const gameHrMs = 3600000 / GAME_SPEED;
+
+  let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:10px">';
+  BUYERS.forEach(buyer => {
+    const isActive      = !buyer.inactive;
+    const meetsReq      = isActive && _buyerMeetsReq(buyer, vault);
+    const timeLeftHrs   = buyer.activeUntil ? Math.max(0,(buyer.activeUntil-now)/gameHrMs) : 999;
+    const nextAtHrs     = buyer.nextAt ? Math.max(0,(buyer.nextAt-now)/gameHrMs) : 0;
+    const borderCol     = !isActive ? 'rgba(255,255,255,0.04)' : meetsReq ? 'rgba(74,222,128,0.3)' : 'var(--border)';
+    const opacity       = !isActive ? '0.4' : meetsReq ? '1' : '0.62';
+    const rateDisplay   = buyer.type==='mystery' ? '???¢' : buyer.rate ? buyer.rate+'¢/g'
+                        : buyer.seedRate ? buyer.seedRate+'¢/seed' : '—';
+    const timeLabel = !isActive
+      ? `<div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin-top:4px">⏳ ${nextAtHrs.toFixed(0)}h until available</div>`
+      : timeLeftHrs < 500
+        ? `<div style="font-size:8px;color:${timeLeftHrs<2?'var(--red)':'var(--gold)'};font-family:var(--font-hud);margin-top:2px">${timeLeftHrs<2?'⚠️ ':'⏱ '}${timeLeftHrs.toFixed(1)}h left</div>`
+        : '';
+    const maxLabel = buyer.maxG ? buyer.maxG+'g max' : buyer.maxSeeds ? buyer.maxSeeds+' seeds max' : '∞';
+
+    html += `<div style="background:var(--card-bg);border:1px solid ${borderCol};border-radius:10px;padding:12px;opacity:${opacity};display:flex;flex-direction:column;gap:3px;transition:.15s"
+      ${meetsReq?`onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='${borderCol}'" style="cursor:pointer" onclick="openBuyerModal('${buyer.id}')"`:''}>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <span style="font-size:22px">${buyer.icon}</span>
+        <span style="font-size:8px;font-family:var(--font-hud);padding:2px 6px;border-radius:4px;background:${isActive?'rgba(74,222,128,0.1)':'rgba(0,0,0,0.3)'};color:${isActive?'var(--green)':'var(--muted)'}">
+          ${isActive?'● ACTIVE':'AWAY'}
+        </span>
+      </div>
+      <div style="font-family:var(--font-hud);font-size:10px;color:var(--text);margin-top:2px">${buyer.name}</div>
+      <div style="font-family:var(--font-hud);font-size:17px;color:${buyer.type==='mystery'?'var(--purple)':'var(--gold)'}">${rateDisplay}</div>
+      <div style="font-size:8px;color:var(--cyan);font-family:var(--font-mono)">${_buyerReqLabel(buyer)}</div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">${maxLabel}</div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);line-height:1.5;margin-top:2px">${buyer.desc}</div>
+      ${timeLabel}
+      ${isActive&&meetsReq?`<button class="btn-action btn-gold" style="width:100%;margin-top:6px" onclick="event.stopPropagation();openBuyerModal('${buyer.id}')">SELL NOW</button>`:''}
+      ${isActive&&!meetsReq?`<div style="font-size:8px;color:var(--red);font-family:var(--font-hud);margin-top:5px">Requirements not met</div>`:''}
+    </div>`;
+  });
+  html += '</div>';
+  body.innerHTML = html;
+}
+
+function _renderMarketSell(body) {
+  const vault = GS.vault || [];
+  if (!vault.length) {
+    body.innerHTML = `<div class="info-note">Vault is empty. Grow, dry, and cure plants to have product here.</div>
+      <div class="empty-state" style="padding:20px">Nothing to sell yet.</div>`;
+    return;
+  }
+  let html = `<div class="info-note" style="margin-bottom:12px">🏷️ Sell vault items directly. <strong>25% market fee</strong> applies — you receive 75% of your chosen rate.</div>
+    <div style="display:flex;flex-direction:column;gap:8px">`;
+  vault.forEach(item => {
+    const qualColor = (item.quality||100)>80?'var(--green)':(item.quality||100)>50?'var(--gold)':'var(--red)';
+    html += `<div class="shop-item" style="border-color:rgba(74,222,128,0.25);align-items:center">
+      <div class="shop-item-icon">📦</div>
+      <div class="shop-item-info" style="flex:1">
+        <div class="shop-item-name">${item.name}</div>
+        <div style="font-size:9px;color:var(--muted);margin-bottom:5px">${item.grams}g · ${item.thc}%T · ${item.rarity||'Std'} · <span style="color:${qualColor}">Q${Math.round(item.quality||100)}%</span></div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <input type="number" id="msell-g-${item.id}" min="1" max="${item.grams}" value="${item.grams}"
+            style="width:68px;background:rgba(0,15,0,0.8);border:1px solid var(--border);border-radius:5px;padding:4px 6px;color:var(--green);font-family:var(--font-hud);font-size:11px;outline:none"
+            oninput="updateMSellTotal('${item.id}',${item.grams})">
+          <span style="font-size:9px;color:var(--muted)">g @</span>
+          <input type="number" id="msell-r-${item.id}" min="1" max="50" value="4"
+            style="width:52px;background:rgba(0,15,0,0.8);border:1px solid var(--border);border-radius:5px;padding:4px 6px;color:var(--gold);font-family:var(--font-hud);font-size:11px;outline:none"
+            oninput="updateMSellTotal('${item.id}',${item.grams})">
+          <span style="font-size:9px;color:var(--muted)">¢/g</span>
+          <span style="font-size:9px;color:var(--muted)">→</span>
+          <span id="msell-pay-${item.id}" style="font-family:var(--font-hud);font-size:10px;color:var(--gold)">—</span>
+        </div>
+      </div>
+      <button class="btn-action btn-gold" style="padding:8px 12px;flex-shrink:0;align-self:center;margin-left:6px" onclick="confirmMSell('${item.id}')">SELL</button>
+    </div>`;
+  });
+  html += '</div>';
+  body.innerHTML = html;
+  vault.forEach(item => updateMSellTotal(item.id, item.grams));
+}
+
+function updateMSellTotal(itemId, maxG) {
+  const g   = Math.min(parseInt(document.getElementById('msell-g-'+itemId)?.value||0), maxG);
+  const r   = parseFloat(document.getElementById('msell-r-'+itemId)?.value||0);
+  const pay = Math.round(g * r * 0.75);
+  const el  = document.getElementById('msell-pay-'+itemId);
+  if (el) el.textContent = pay.toLocaleString() + '¢ (after 25% fee)';
+}
+
+function confirmMSell(itemId) {
+  const item = (GS.vault||[]).find(v=>v.id===itemId);
+  if (!item) return;
+  const grams  = Math.min(parseInt(document.getElementById('msell-g-'+itemId)?.value||0), item.grams);
+  const rate   = parseFloat(document.getElementById('msell-r-'+itemId)?.value||1);
+  if (grams < 1) { toast('Enter a valid amount.','warn'); return; }
+  const earned = Math.round(grams * rate * 0.75);
+  item.grams -= grams;
+  if (item.grams <= 0) GS.vault = GS.vault.filter(v=>v.id!==itemId);
+  GS.coins += earned;
+  GS.stats.totalCoins = (GS.stats.totalCoins||0) + earned;
+  if (!GS.stats.recentSales) GS.stats.recentSales = [];
+  GS.stats.recentSales.unshift({buyer:'Market (Direct)', grams, coins:earned, ts:Date.now()});
+  completeDailyGoal();
+  toast('🏷️ Sold ' + grams + 'g for ' + earned.toLocaleString() + '¢ (after 25% fee)', 'ok', 4000);
+  addLog('Market sell: ' + grams + 'g = ' + earned + '¢', 'success');
+  saveGame(); renderMarket(); renderVault(); renderHeader();
+}
+
+function _buyerMeetsReq(buyer, vault, seeds, maleSeeds) {
+  vault = vault || GS.vault || [];
+  if (buyer.type === 'seeds') {
+    const s = seeds || GS.seeds || {};
+    const totalSeeds = Object.values(s).reduce((a,b)=>a+b,0);
+    if (buyer.req?.gen === 'bred') return (GS.bredStrains||[]).some(b=>(s[b.name]||0)>0);
+    return totalSeeds > 0;
+  }
+  if (buyer.type === 'mystery') return vault.length > 0;
   if (!vault.length) return false;
+  return vault.some(v => _vaultItemMeetsBuyer(buyer, v));
+}
+
+function _vaultItemMeetsBuyer(buyer, item) {
   if (!buyer.req) return true;
-  if (buyer.req.thc)    return vault.some(v => (v.thc||0) >= buyer.req.thc);
-  if (buyer.req.score)  return vault.some(v => (v.score||0) >= buyer.req.score);
-  if (buyer.req.strain) return vault.some(v => v.strainName === buyer.req.strain);
-  if (buyer.req.min)    return vault.reduce((s,v)=>s+(v.grams||0),0) >= buyer.req.min;
+  if (buyer.req.thc    && (item.thc||0)   < buyer.req.thc)    return false;
+  if (buyer.req.score  && (item.score||0) < buyer.req.score)  return false;
+  if (buyer.req.strain && item.strainName !== buyer.req.strain) return false;
+  if (buyer.req.min    && (item.grams||0) < buyer.req.min)    return false;
+  if (buyer.req.max    && (item.grams||0) > buyer.req.max)    return false;
+  if (buyer.req.range  && ((item.grams||0)<buyer.req.range[0]||(item.grams||0)>buyer.req.range[1])) return false;
+  if (buyer.req.rarity) {
+    const order = {Standard:0,EP:1,Shiny:2,Sparkling:3,Glowing:4,GOD:5};
+    return (order[item.rarity]||0) >= (order[buyer.req.rarity]||0);
+  }
   return true;
 }
 
 function _buyerReqLabel(buyer) {
+  if (buyer.type === 'seeds')   return buyer.req?.gen === 'bred' ? '🧬 Bred seeds only' : '🌰 Buying any seeds';
+  if (buyer.type === 'mystery') return '❓ Requirements: ???';
   if (!buyer.req) return 'No requirements';
-  if (buyer.req.thc)    return 'Requires ' + buyer.req.thc + '%+ THC';
-  if (buyer.req.score)  return 'Requires score ' + buyer.req.score + '+';
-  if (buyer.req.strain) return 'Wants: ' + buyer.req.strain;
-  if (buyer.req.min)    return 'Min: ' + buyer.req.min + 'g';
-  return '';
+  const p = [];
+  if (buyer.req.thc)    p.push(buyer.req.thc + '%+ THC');
+  if (buyer.req.score)  p.push('Score ' + buyer.req.score + '+');
+  if (buyer.req.strain) p.push('Wants: ' + buyer.req.strain);
+  if (buyer.req.min && !buyer.req.range) p.push('Min ' + buyer.req.min + 'g');
+  if (buyer.req.max && !buyer.req.range) p.push('Max ' + buyer.req.max + 'g');
+  if (buyer.req.range)  p.push(buyer.req.range[0] + '–' + buyer.req.range[1] + 'g');
+  if (buyer.req.rarity) p.push(buyer.req.rarity + '+ rarity');
+  return p.join(' · ') || 'No requirements';
+}
+
+function openBuyerModal(buyerId) {
+  const buyer = BUYERS.find(b=>b.id===buyerId);
+  if (!buyer) return;
+  const vault    = GS.vault || [];
+  const seeds    = GS.seeds || {};
+  const maleS    = GS.maleSeedsOwned || {};
+  const now      = Date.now();
+  const gameHrMs = 3600000 / GAME_SPEED;
+  const timeLeftHrs = buyer.activeUntil ? Math.max(0,(buyer.activeUntil-now)/gameHrMs) : 999;
+  const eb       = getEquippedBonuses();
+  const cMult    = 1 + ((eb.coins_pct||0)/100);
+
+  // Mystery buyer reveals rate now
+  const effectiveRate = buyer.type === 'mystery'
+    ? (2 + Math.floor(Math.random() * 23))
+    : (buyer.rate || buyer.seedRate || 0);
+
+  // Ensure modal exists
+  if (!document.getElementById('modal-buyer-detail')) {
+    const div = document.createElement('div');
+    div.className = 'modal-overlay';
+    div.id = 'modal-buyer-detail';
+    div.innerHTML = '<div class="modal-box wide" id="buyer-detail-box"></div>';
+    document.body.appendChild(div);
+  }
+  const box = document.getElementById('buyer-detail-box');
+  if (!box) return;
+
+  const rateStr = buyer.type === 'mystery'
+    ? `<span style="color:var(--purple)">???</span><span style="font-size:10px;color:var(--muted)"> → revealed: </span><span style="color:var(--gold)">${effectiveRate}¢/g</span>`
+    : buyer.rate    ? buyer.rate + '¢/g'
+    : buyer.seedRate ? buyer.seedRate + '¢/seed' : '—';
+
+  const headerHtml = `
+    <div class="modal-title">${buyer.icon} ${buyer.name}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:12px;text-align:center">
+      <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:7px;padding:8px">
+        <div style="font-size:7px;color:var(--muted);font-family:var(--font-hud);margin-bottom:3px">RATE</div>
+        <div style="font-family:var(--font-hud);font-size:12px;color:var(--gold)">${rateStr}</div>
+      </div>
+      <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:7px;padding:8px">
+        <div style="font-size:7px;color:var(--muted);font-family:var(--font-hud);margin-bottom:3px">MAX BUY</div>
+        <div style="font-family:var(--font-hud);font-size:12px;color:var(--cyan)">${buyer.maxG?buyer.maxG+'g':buyer.maxSeeds?buyer.maxSeeds+' seeds':'∞'}</div>
+      </div>
+      <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:7px;padding:8px">
+        <div style="font-size:7px;color:var(--muted);font-family:var(--font-hud);margin-bottom:3px">TIME LEFT</div>
+        <div style="font-family:var(--font-hud);font-size:12px;color:${timeLeftHrs<2?'var(--red)':'var(--green)'}">${timeLeftHrs>500?'Always':timeLeftHrs.toFixed(1)+'h'}</div>
+      </div>
+    </div>
+    <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);padding:8px 10px;background:rgba(0,0,0,0.3);border-radius:6px;margin-bottom:12px;line-height:1.7">
+      ${buyer.desc}${buyer.req?'<br><span style="color:var(--cyan)">'+_buyerReqLabel(buyer)+'</span>':''}
+    </div>`;
+
+  // ── SEED BUYER ──
+  if (buyer.type === 'seeds') {
+    const isBredOnly = buyer.req?.gen === 'bred';
+    const allEntries = [];
+    Object.entries(seeds).forEach(([n,q]) => {
+      if (q <= 0) return;
+      const bred = (GS.bredStrains||[]).find(b=>b.name===n);
+      if (isBredOnly && !bred) return;
+      allEntries.push({name:n, qty:q, isMale:false, bred});
+    });
+    Object.entries(maleS).forEach(([n,q]) => {
+      if (q <= 0) return;
+      const bred = (GS.bredStrains||[]).find(b=>b.name===n);
+      if (isBredOnly && !bred) return;
+      allEntries.push({name:n, qty:q, isMale:true, bred});
+    });
+
+    if (!allEntries.length) {
+      box.innerHTML = headerHtml + `
+        <div style="text-align:center;padding:20px;color:var(--muted);font-family:var(--font-hud);font-size:10px">
+          No eligible seeds. ${isBredOnly?'This buyer only wants bred genetics (F2+ or BX1+).':'Get seeds by redeeming codes or breeding plants.'}
+        </div>
+        <div class="modal-actions"><button class="btn-modal cancel" onclick="closeModal('modal-buyer-detail')">CLOSE</button></div>`;
+    } else {
+      const maxPerSeed = buyer.maxSeeds || 10;
+      const seedRate   = buyer.seedRate || 400;
+      const listHtml   = allEntries.map(e => {
+        const cap = Math.min(e.qty, maxPerSeed);
+        const genLabel = e.bred ? ` [${e.bred.gen}]` : '';
+        return `<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:7px;margin-bottom:5px">
+          <div style="font-size:18px">${e.isMale?'♂':''}🌿</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-family:var(--font-hud);font-size:10px;color:var(--text)">${e.name}${genLabel}</div>
+            <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">${e.qty} available · ${seedRate}¢ each${e.isMale?' · MALE':''}</div>
+          </div>
+          <input type="number" id="seed-sell-qty-${e.name.replace(/[^a-z0-9]/gi,'_')}"
+            min="0" max="${cap}" value="${cap}"
+            style="width:60px;background:rgba(0,15,0,0.8);border:1px solid var(--border);border-radius:5px;padding:5px 6px;color:var(--green);font-family:var(--font-hud);font-size:11px;outline:none"
+            oninput="_updateSeedBuyerTotal('${buyerId}',${seedRate})">
+          <span style="font-size:9px;color:var(--muted)">seeds</span>
+        </div>`;
+      }).join('');
+
+      box.innerHTML = headerHtml +
+        `<div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:8px">SELECT SEEDS TO SELL (max ${maxPerSeed} per strain)</div>
+        ${listHtml}
+        <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:7px;padding:10px;text-align:center;margin-top:8px">
+          <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin-bottom:4px">YOU'LL RECEIVE</div>
+          <div id="buyer-modal-total" style="font-family:var(--font-hud);font-size:20px;color:var(--gold)">0¢</div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-modal confirm" onclick="confirmSeedBuyerSell('${buyerId}',${seedRate})">💸 SELL SEEDS</button>
+          <button class="btn-modal cancel" onclick="closeModal('modal-buyer-detail')">CANCEL</button>
+        </div>`;
+
+      // Store entries for confirm
+      box.dataset.seedEntries = JSON.stringify(allEntries.map(e=>({name:e.name,isMale:e.isMale})));
+      _updateSeedBuyerTotal(buyerId, seedRate);
+    }
+    document.getElementById('modal-buyer-detail').classList.add('open');
+    return;
+  }
+
+  // ── FLOWER / MYSTERY BUYER ──
+  const eligible = vault.filter(v => _vaultItemMeetsBuyer(buyer, v));
+  const eligibleHtml = eligible.length
+    ? eligible.map(v => {
+        const maxSell = Math.min(v.grams, buyer.maxG || v.grams);
+        const qualColor = (v.quality||100) > 80 ? 'var(--green)' : 'var(--gold)';
+        return `<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:7px;margin-bottom:5px">
+          <div style="flex:1;min-width:0">
+            <div style="font-family:var(--font-hud);font-size:10px;color:var(--text)">${v.name}</div>
+            <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">${v.grams}g · ${v.thc}%T · ${v.rarity||'Std'} · <span style="color:${qualColor}">Q${Math.round(v.quality||100)}%</span></div>
+          </div>
+          <input type="number" id="bsd-g-${v.id}" min="1" max="${maxSell}" value="${maxSell}"
+            style="width:68px;background:rgba(0,15,0,0.8);border:1px solid var(--border);border-radius:5px;padding:5px 6px;color:var(--green);font-family:var(--font-hud);font-size:11px;outline:none"
+            oninput="_updateBuyerModalTotal('${buyerId}',${effectiveRate})">
+          <span style="font-size:9px;color:var(--muted)">g</span>
+        </div>`;
+      }).join('')
+    : `<div style="color:var(--muted);font-family:var(--font-hud);font-size:10px;padding:16px;text-align:center">No eligible vault items for this buyer's requirements.</div>`;
+
+  box.innerHTML = headerHtml +
+    `<div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:8px">SELECT GRAMS TO SELL</div>
+    ${eligibleHtml}
+    <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:7px;padding:10px;text-align:center;margin-top:8px">
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);margin-bottom:4px">YOU'LL RECEIVE</div>
+      <div id="buyer-modal-total" style="font-family:var(--font-hud);font-size:20px;color:var(--gold)">0¢</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal confirm" onclick="confirmSellToBuyer('${buyerId}',${effectiveRate})">💸 SELL</button>
+      <button class="btn-modal cancel" onclick="closeModal('modal-buyer-detail')">CANCEL</button>
+    </div>`;
+
+  _updateBuyerModalTotal(buyerId, effectiveRate);
+  document.getElementById('modal-buyer-detail').classList.add('open');
+}
+
+function _updateSeedBuyerTotal(buyerId, seedRate) {
+  const box = document.getElementById('buyer-detail-box');
+  if (!box || !box.dataset.seedEntries) return;
+  const entries = JSON.parse(box.dataset.seedEntries||'[]');
+  let total = 0;
+  entries.forEach(e => {
+    const safeKey = e.name.replace(/[^a-z0-9]/gi,'_');
+    const q = parseInt(document.getElementById('seed-sell-qty-'+safeKey)?.value||0);
+    total += q * seedRate;
+  });
+  const el = document.getElementById('buyer-modal-total');
+  if (el) el.textContent = total.toLocaleString() + '¢';
+}
+
+function confirmSeedBuyerSell(buyerId, seedRate) {
+  const buyer = BUYERS.find(b=>b.id===buyerId);
+  if (!buyer) return;
+  const box = document.getElementById('buyer-detail-box');
+  if (!box || !box.dataset.seedEntries) return;
+  const entries = JSON.parse(box.dataset.seedEntries||'[]');
+  let totalEarned = 0, totalSeeds = 0;
+  entries.forEach(e => {
+    const safeKey = e.name.replace(/[^a-z0-9]/gi,'_');
+    const q    = parseInt(document.getElementById('seed-sell-qty-'+safeKey)?.value||0);
+    if (q < 1) return;
+    const pool = e.isMale ? GS.maleSeedsOwned : GS.seeds;
+    if ((pool[e.name]||0) < q) return;
+    pool[e.name] -= q;
+    totalEarned  += q * seedRate;
+    totalSeeds   += q;
+  });
+  if (totalSeeds < 1) { toast('Select at least 1 seed to sell.','warn'); return; }
+  const eb     = getEquippedBonuses();
+  const cMult  = 1 + ((eb.coins_pct||0)/100);
+  const earned = Math.round(totalEarned * cMult);
+  GS.coins += earned;
+  GS.stats.totalCoins = (GS.stats.totalCoins||0) + earned;
+  if (!GS.stats.recentSales) GS.stats.recentSales = [];
+  GS.stats.recentSales.unshift({buyer:buyer.name, grams:0, coins:earned, ts:Date.now()});
+  closeModal('modal-buyer-detail');
+  toast('💸 Sold ' + totalSeeds + ' seeds to ' + buyer.name + ' — +' + earned.toLocaleString() + '¢!', 'ok', 5000);
+  addLog('Seed sale to ' + buyer.name + ': ' + totalSeeds + ' seeds = ' + earned + '¢','success');
+  saveGame(); renderMarket(); renderSeeds(); renderHeader();
+}
+
+function _updateBuyerModalTotal(buyerId, rate) {
+  const buyer   = BUYERS.find(b=>b.id===buyerId);
+  if (!buyer) return;
+  const vault   = GS.vault || [];
+  const eligible= vault.filter(v=>_vaultItemMeetsBuyer(buyer,v));
+  const eb      = getEquippedBonuses();
+  const cMult   = 1 + ((eb.coins_pct||0)/100);
+  let total = 0;
+  eligible.forEach(v => {
+    const g = parseInt(document.getElementById('bsd-g-'+v.id)?.value||0);
+    total  += g * rate * cMult;
+  });
+  const el = document.getElementById('buyer-modal-total');
+  if (el) el.textContent = Math.round(total).toLocaleString() + '¢';
+}
+
+function confirmSellToBuyer(buyerId, rate) {
+  const buyer   = BUYERS.find(b=>b.id===buyerId);
+  if (!buyer) return;
+  const vault   = GS.vault || [];
+  const eligible= vault.filter(v=>_vaultItemMeetsBuyer(buyer,v));
+  const eb      = getEquippedBonuses();
+  const cMult   = 1 + ((eb.coins_pct||0)/100);
+  let totalEarned=0, totalGrams=0;
+
+  eligible.forEach(v => {
+    const inp  = document.getElementById('bsd-g-'+v.id);
+    const grams= Math.min(parseInt(inp?.value||0), v.grams, buyer.maxG||99999);
+    if (grams < 1) return;
+    totalEarned += Math.round(grams * rate * cMult);
+    totalGrams  += grams;
+    v.grams -= grams;
+    if (v.grams <= 0) GS.vault = GS.vault.filter(x=>x.id!==v.id);
+  });
+
+  if (totalGrams < 1) { toast('Select at least 1g to sell.','warn'); return; }
+  GS.coins += totalEarned;
+  GS.stats.totalCoins = (GS.stats.totalCoins||0) + totalEarned;
+  if (!GS.stats.recentSales) GS.stats.recentSales = [];
+  GS.stats.recentSales.unshift({buyer:buyer.name, grams:totalGrams, coins:totalEarned, ts:Date.now()});
+  if (GS.stats.recentSales.length > 20) GS.stats.recentSales.pop();
+  closeModal('modal-buyer-detail');
+  completeDailyGoal();
+  toast('💸 Sold ' + totalGrams + 'g to ' + buyer.name + ' — +' + totalEarned.toLocaleString() + '¢!', 'ok', 5000);
+  addLog('Sale to ' + buyer.name + ': ' + totalGrams + 'g = ' + totalEarned + '¢', 'success');
+  saveGame(); renderMarket(); renderVault(); renderHeader();
 }
 
 function sellToBuyer(buyerId) {
-  const buyer = BUYERS.find(b => b.id === buyerId);
-  if (!buyer) return;
-  const vault    = GS.vault || [];
-  const eligible = vault.filter(v => {
-    if (!buyer.req) return true;
-    if (buyer.req.thc)    return (v.thc||0) >= buyer.req.thc;
-    if (buyer.req.score)  return (v.score||0) >= buyer.req.score;
-    if (buyer.req.strain) return v.strainName === buyer.req.strain;
-    if (buyer.req.min)    return true;
-    return true;
-  });
-  if (!eligible.length) { toast('No eligible batches for this buyer.','warn'); return; }
-
-  const maxG    = buyer.maxG || 99999;
-  const rate    = buyer.rate != null ? buyer.rate : (8 + Math.floor(Math.random() * 12));
-  let remaining = maxG;
-  const toRemove= [];
-  for (const item of eligible) {
-    if (remaining <= 0) break;
-    if ((item.grams||0) <= remaining) { remaining -= item.grams; toRemove.push(item.id); }
-    else { item.grams -= remaining; remaining = 0; }
-  }
-  const soldG   = maxG - remaining;
-  const eb      = getEquippedBonuses();
-  const coinMult= 1 + ((eb.coins_pct||0)/100);
-  const earned  = Math.round(soldG * rate * coinMult);
-  GS.vault = GS.vault.filter(v => !toRemove.includes(v.id));
-  GS.coins += earned;
-  GS.stats.totalCoins = (GS.stats.totalCoins || 0) + earned;
-  if (!GS.stats.recentSales) GS.stats.recentSales = [];
-  GS.stats.recentSales.unshift({buyer:buyer.name, grams:soldG, coins:earned, ts:Date.now()});
-  if (GS.stats.recentSales.length > 20) GS.stats.recentSales.pop();
-  completeDailyGoal();
-  toast('💸 Sold ' + soldG + 'g to ' + buyer.name + ' for ' + earned.toLocaleString() + '¢!', 'ok', 5000);
-  addLog('Sale to ' + buyer.name + ': ' + soldG + 'g = ' + earned + '¢', 'success');
-  saveGame(); renderMarket(); renderVault(); renderHeader();
+  // Legacy shim — route through new modal system
+  openBuyerModal(buyerId);
 }
 
 // ================================================================
@@ -9394,142 +10287,181 @@ function doBreed() {
 function renderGrowOff() {
   const cont = document.getElementById('growoff-container');
   if (!cont) return;
-  const unlocked   = GS.growoffUnlocked || 0;
-  const readyPlants= (GS.plants||[]).filter(p => p.stage === 'Ready' && !p.isMale);
+  if (!GS.activeGrowoffs) GS.activeGrowoffs = [];
+  const activeGOs    = GS.activeGrowoffs.filter(g => g.status !== 'completed' && g.status !== 'cancelled');
+  const completedGOs = GS.activeGrowoffs.filter(g => g.status === 'completed');
+  const totalWins    = completedGOs.filter(g => g.won).length;
+  const unlocked     = GS.growoffUnlocked || 0;
+  const pending      = GS._pendingGrowOffBotId != null ? BOT_LADDER.find(b => b.id === GS._pendingGrowOffBotId) : null;
 
-  let html = `<div class="growoff-section">
-    <div class="growoff-header">
-      <div class="growoff-title">🏆 GROW-OFF CHALLENGE</div>
-      <div class="growoff-subtitle">Submit a ready plant. Beat each opponent to climb the ladder and earn rewards.</div>
-    </div>
-    <div style="margin-bottom:14px">`;
+  let html = `<div style="max-width:750px">`;
+
+  // ── PENDING CHALLENGE BANNER ──
+  if (pending) {
+    html += `<div style="background:rgba(168,85,247,0.1);border:2px solid rgba(168,85,247,0.6);border-radius:10px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;animation:readyGlow 2s ease-in-out infinite">
+      <div style="font-size:28px">${pending.avatar}</div>
+      <div style="flex:1">
+        <div style="font-family:var(--font-hud);font-size:11px;color:var(--purple);letter-spacing:1px">⚔️ CHALLENGE PENDING VS ${pending.name.toUpperCase()}</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:3px">Plant a seed to start the grow-off. The plant slot will be tagged with your opponent's name.</div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="btn-action btn-green" style="padding:7px 12px" onclick="showTab('grow');openPlantModal()">🌱 PLANT NOW</button>
+        <button class="btn-action btn-red" style="padding:7px 10px" onclick="GS._pendingGrowOffBotId=null;saveGame();renderGrowOff()">✕</button>
+      </div>
+    </div>`;
+  }
+
+  // ── ACTIVE CHALLENGES ──
+  if (activeGOs.length) {
+    html += `<div style="margin-bottom:22px">
+      <div style="font-family:var(--font-hud);font-size:11px;color:var(--purple);letter-spacing:2px;margin-bottom:12px">⚔️ ACTIVE CHALLENGES (${activeGOs.length})</div>`;
+
+    activeGOs.forEach(go => {
+      const bot = BOT_LADDER.find(b => b.id === go.botIdx);
+      if (!bot) return;
+      const plant     = GS.plants.find(p => p.id === go.plantId);
+      const curing    = (GS.curing||[]).find(b => b._growoffId === go.id);
+      const vaultItem = (GS.vault||[]).find(v => v._growoffId === go.id);
+      const opScore   = go.currentOpponentScore || parseFloat((bot.scoreMin + (bot.scoreMax - bot.scoreMin) * 0.3).toFixed(1));
+      const hist      = go.scoreHistory || [];
+      const canSubmit = !!vaultItem;
+
+      const statusLabel = canSubmit ? '📦 READY TO SUBMIT' :
+        curing ? (curing.phase === 'drying' ? '🌬️ DRYING' : '🫙 CURING') :
+        plant  ? '🌱 ' + plant.stage.toUpperCase() + ' WK' + getPlantWeek(plant) : '⏳ PROCESSING';
+      const statusColor = canSubmit ? 'var(--green)' : plant && plant.stage === 'Ready' ? 'var(--gold)' : 'var(--cyan)';
+
+      // Build score mini-chart
+      let chartPath = '', chartDots = '';
+      if (hist.length > 1) {
+        const W = 180, H = 32;
+        const toX = (i) => (i / Math.max(hist.length-1, 1)) * (W-20) + 10;
+        const toY = (s) => H - (s / 10) * H + 2;
+        const pts = hist.map((h,i) => toX(i) + ',' + toY(h.score)).join(' ');
+        chartPath = `<polyline points="${pts}" fill="none" stroke="rgba(239,68,68,0.8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+        const last = hist[hist.length-1];
+        chartDots = `<circle cx="${toX(hist.length-1)}" cy="${toY(last.score)}" r="3" fill="var(--red)"/>`;
+        // Trend line labels
+        const mn = Math.min(...hist.map(h=>h.score)), mx = Math.max(...hist.map(h=>h.score));
+        chartPath += `<line x1="0" y1="${toY(mn)}" x2="${W}" y2="${toY(mn)}" stroke="rgba(74,222,128,0.15)" stroke-width="0.5" stroke-dasharray="3,3"/>
+          <line x1="0" y1="${toY(mx)}" x2="${W}" y2="${toY(mx)}" stroke="rgba(239,68,68,0.15)" stroke-width="0.5" stroke-dasharray="3,3"/>`;
+      }
+
+      html += `<div style="background:var(--card-bg);border:2px solid rgba(168,85,247,0.5);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 0 14px rgba(168,85,247,0.08)">
+        <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:14px;flex-wrap:wrap">
+          <div style="font-size:36px">${bot.avatar}</div>
+          <div style="flex:1;min-width:150px">
+            <div style="font-family:var(--font-hud);font-size:13px;color:var(--text);letter-spacing:.5px;margin-bottom:3px">${bot.name}</div>
+            <div style="font-size:9px;color:var(--muted);margin-bottom:5px">${bot.desc}</div>
+            <span style="display:inline-block;padding:2px 9px;border-radius:4px;font-family:var(--font-hud);font-size:8px;letter-spacing:1px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);color:${bot.diffColor}">${bot.difficulty}</span>
+          </div>
+          <div style="text-align:center;min-width:90px">
+            <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);letter-spacing:.5px;margin-bottom:3px">THEIR SCORE NOW</div>
+            <div style="font-family:var(--font-hud);font-size:34px;font-weight:700;color:var(--red);line-height:1">${opScore}</div>
+            <div style="font-size:7px;color:var(--muted);font-family:var(--font-mono);margin-top:2px">updates every ~${bot.updateHrs}h</div>
+          </div>
+        </div>
+
+        ${hist.length > 1 ? `<div style="margin-bottom:12px">
+          <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);letter-spacing:.5px;margin-bottom:4px">${bot.name.toUpperCase()}'S SCORE HISTORY</div>
+          <svg viewBox="0 0 180 36" style="width:100%;height:44px;background:rgba(0,0,0,0.35);border-radius:6px;overflow:visible">
+            ${chartPath}${chartDots}
+          </svg>
+          <div style="display:flex;justify-content:space-between;font-size:7px;color:var(--muted);font-family:var(--font-mono);margin-top:2px;padding:0 4px">
+            <span>oldest</span><span>latest: ${opScore}</span>
+          </div>
+        </div>` : `<div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-bottom:12px">Score history will appear after the first update (~${bot.updateHrs}h)</div>`}
+
+        <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center">
+          <div>
+            <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud);letter-spacing:.5px;margin-bottom:3px">YOUR STATUS</div>
+            <div style="font-family:var(--font-hud);font-size:10px;color:${statusColor}">${statusLabel}</div>
+            ${plant ? `<div style="font-size:8px;color:var(--muted);margin-top:2px;font-family:var(--font-mono)">${plant.name||plant.strainName} · Health ${Math.round(plant.health||0)}% · PPM ${plant.soilPPM||0}</div>` : ''}
+            ${curing ? `<div style="font-size:8px;color:var(--muted);margin-top:2px;font-family:var(--font-mono)">RH: ${curing.phase==='drying'?((curing.dryRH||80).toFixed(1)+'% drying'):(curing.jarRH||62).toFixed(1)+'% curing'} · Q ${Math.round(curing.quality||100)}%</div>` : ''}
+            ${vaultItem ? `<div style="font-size:9px;color:var(--green);margin-top:3px;font-family:var(--font-hud)">${vaultItem.name} · ${vaultItem.grams}g · ${vaultItem.thc}% · Q${Math.round(vaultItem.quality||100)}% · ${vaultItem.rarity||'Standard'}</div>` : ''}
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px">
+            ${canSubmit ? `<button class="btn-action btn-purple" style="padding:9px 14px;white-space:nowrap" onclick="submitVaultToGrowOff('${go.id}')">🏆 SUBMIT</button>` : ''}
+            <button class="btn-action btn-red" style="padding:5px 8px;font-size:8px" onclick="cancelGrowOff('${go.id}')">FORFEIT</button>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;padding:8px 10px;background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:6px;font-family:var(--font-hud);font-size:9px;color:var(--gold)">
+          PRIZE: ${bot.reward.coins.toLocaleString()}¢ · ${bot.reward.xp.toLocaleString()} XP ${(bot.reward.items||[]).slice(0,4).map(id=>EQUIPMENT_ITEMS[id]?.icon||'').join(' ')}
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // ── HOW IT WORKS (first time / no active) ──
+  if (!activeGOs.length && !completedGOs.length) {
+    html += `<div style="background:rgba(74,222,128,0.04);border:1px solid rgba(74,222,128,0.2);border-radius:10px;padding:16px;margin-bottom:20px">
+      <div style="font-family:var(--font-hud);font-size:11px;color:var(--green);letter-spacing:1px;margin-bottom:10px">🏆 HOW GROW-OFFS WORK</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${['⚔️ Click CHALLENGE below to pick an opponent','🌱 Plant any seed — the slot is tagged with your opponent','🌱→🌸→🌾 Grow it properly — health, environment, and nutrients all count','🌬️ Dry it in the vault until ~60% RH','🫙 Jar cure it — burp regularly for max quality','📦 Submit from the vault → your final score is judged vs theirs','🏆 Win and claim coins, XP, and rare gear rewards'].map((s,i) => `<div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="font-family:var(--font-hud);font-size:9px;color:var(--purple);flex-shrink:0;min-width:16px">${i+1}</div>
+          <div style="font-size:10px;color:var(--text);font-family:var(--font-hud);letter-spacing:.3px">${s}</div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  // ── CHALLENGE LADDER ──
+  html += `<div style="margin-bottom:22px">
+    <div style="font-family:var(--font-hud);font-size:11px;color:var(--green);letter-spacing:2px;margin-bottom:12px">🏆 CHALLENGE LADDER · ${totalWins} wins</div>`;
 
   BOT_LADDER.forEach((bot, i) => {
     const beaten  = i < unlocked;
-    const current = i === unlocked;
-    html += `<div class="bot-card ${beaten ? 'beaten' : ''} ${current ? 'current' : ''}">
+    const isCurrent = i === unlocked;
+    const locked  = i > unlocked + 3;
+    const activeFor = activeGOs.find(g => g.botIdx === bot.id);
+    const isPending = pending && pending.id === bot.id;
+    const wins = completedGOs.filter(g => g.botIdx === bot.id && g.won).length;
+    const losses= completedGOs.filter(g => g.botIdx === bot.id && !g.won).length;
+
+    html += `<div class="bot-card ${beaten?'beaten':''} ${isCurrent&&!activeFor?'current':''}"
+      style="${locked?'opacity:.25;pointer-events:none;':''}${activeFor?'border-color:rgba(168,85,247,0.7);box-shadow:0 0 18px rgba(168,85,247,0.15);':''}${isPending?'border-color:rgba(74,222,128,0.7);':''}">
       <div class="bot-avatar">${bot.avatar}</div>
       <div class="bot-info">
-        <div class="bot-name">${beaten ? '✅ ' : ''}${bot.name}</div>
+        <div class="bot-name">${beaten?'✅ ':''}${bot.name}
+          ${wins>0?`<span style="font-size:8px;color:var(--green);font-family:var(--font-hud);margin-left:6px">${wins}W${losses>0?' / '+losses+'L':''}</span>`:''}
+        </div>
         <div class="bot-desc">${bot.desc}</div>
-        <div class="bot-diff" style="font-family:var(--font-mono);font-size:9px;color:var(--muted)">Target score: <b style="color:var(--gold)">${bot.target}</b></div>
-        ${!beaten ? `<div class="bot-reward">Reward: ${bot.reward.coins.toLocaleString()}¢ + ${bot.reward.xp.toLocaleString()} XP</div>` : ''}
+        <div style="display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap">
+          <span style="display:inline-block;padding:2px 8px;border-radius:4px;font-family:var(--font-hud);font-size:8px;letter-spacing:1px;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.08);color:${bot.diffColor}">${bot.difficulty}</span>
+          ${!beaten?`<span style="font-family:var(--font-hud);font-size:9px;color:var(--gold)">🏆 ${bot.reward.coins.toLocaleString()}¢ · ${bot.reward.xp.toLocaleString()} XP ${(bot.reward.items||[]).slice(0,3).map(id=>EQUIPMENT_ITEMS[id]?.icon||'').join('')}</span>`:''}
+        </div>
       </div>
-      ${beaten ? '<div class="bot-beaten-badge">BEATEN</div>' : ''}
+      ${beaten?`<div class="bot-beaten-badge">BEATEN</div>`:''}
+      ${activeFor?`<div style="font-family:var(--font-hud);font-size:9px;color:var(--purple);text-align:center;padding:4px">⚔️ ACTIVE</div>`:''}
+      ${isPending?`<div style="font-family:var(--font-hud);font-size:9px;color:var(--green);text-align:center;padding:4px">⏳ PENDING<br><span style="font-size:8px">Plant a seed!</span></div>`:''}
+      ${!beaten&&!activeFor&&!isPending&&!locked?`<button class="btn-action btn-purple" style="padding:7px 12px;flex-shrink:0;white-space:nowrap"
+        onclick="openStartGrowOffModal(${bot.id})">⚔️ CHALLENGE</button>`:''}
     </div>`;
   });
-  html += '</div>';
 
-  const currentBot = BOT_LADDER[unlocked];
-  if (unlocked >= BOT_LADDER.length) {
-    html += '<div class="success-note">🏆 You\'ve beaten every opponent! Legend status achieved.</div>';
-  } else if (readyPlants.length) {
-    html += `<div class="growoff-submit-section">
-      <div class="growoff-submit-title">CURRENT CHALLENGE: ${currentBot.name}</div>
-      <div class="growoff-submit-sub">Target grow score: <strong style="color:var(--gold)">${currentBot.target}</strong> — select a ready plant to submit</div>
-      <div class="growoff-plant-list">`;
-    readyPlants.forEach(plant => {
-      const sc = calcGrowScore(plant);
-      const cls= sc.score >= currentBot.target ? 'ok' : 'warn';
-      html += `<div class="growoff-plant-row" onclick="openGrowOffModal(${unlocked},'${plant.id}')">
-        <span class="gop-name">${plant.name||plant.strainName}</span>
-        <span class="gop-score ${cls}">${sc.score}</span>
-        <span class="gop-strain">${plant.strainName}</span>
-        <span class="gop-rarity ${(plant.rarity||'Standard').toLowerCase()}">${plant.rarity||'Standard'}</span>
-        <button class="btn-action btn-gold" style="padding:4px 10px">SUBMIT</button>
-      </div>`;
-    });
-    html += '</div></div>';
-  } else {
-    html += `<div class="growoff-no-plants">No ready plants to submit. Grow a plant to the Ready stage first.</div>`;
-  }
+  html += `</div>`;
 
+  // ── HISTORY ──
   if ((GS.growoffHistory||[]).length) {
-    html += `<div class="growoff-history">
-      <div style="font-family:var(--font-hud);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:8px;margin-top:4px">RECENT ENTRIES</div>`;
-    GS.growoffHistory.slice(0,5).forEach(h => {
+    html += `<div>
+      <div style="font-family:var(--font-hud);font-size:10px;color:var(--muted);letter-spacing:2px;border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:10px">RECENT RESULTS</div>`;
+    (GS.growoffHistory||[]).slice(0, 10).forEach(h => {
       html += `<div class="growoff-history-row">
         <span>${h.plantName}</span>
-        <span class="${h.won ? 'ok' : 'fail'}">${h.won ? '🏆 WON' : '❌ LOST'}</span>
-        <span>Score: ${h.score} vs ${h.target}</span>
+        <span class="${h.won?'ok':'fail'}">${h.won?'🏆 WIN':'❌ LOSS'}</span>
+        <span>You: ${h.score} vs ${h.opponentName||'?'}: ${h.opponentScore||'?'}</span>
         <span style="color:var(--muted)">${timeSince(h.ts)}</span>
       </div>`;
     });
-    html += '</div>';
+    html += `</div>`;
   }
-  html += '</div>';
+
+  html += `</div>`;
   cont.innerHTML = html;
 }
 
-function openGrowOffModal(botIdx, plantId) {
-  const bot   = BOT_LADDER[botIdx];
-  if (!bot) return;
-  const plant = GS.plants.find(p => p.id === plantId);
-  if (!plant) return;
-  _el('lbl-go-bot-name', bot.name);
-  _el('lbl-go-target',   bot.target);
-  const inp1 = document.getElementById('inp-go-bot-idx');
-  const inp2 = document.getElementById('inp-go-plant-id');
-  if (inp1) inp1.value = botIdx;
-  if (inp2) inp2.value = plantId;
-  const res = document.getElementById('go-result');
-  const acts= document.getElementById('go-submit-actions');
-  if (res)  res.classList.add('hidden');
-  if (acts) acts.classList.remove('hidden');
-  const list = document.getElementById('go-plant-list');
-  if (list) {
-    const sc = calcGrowScore(plant);
-    const cls= sc.score >= bot.target ? 'ok' : 'warn';
-    list.innerHTML = `<div class="go-vault-item selected">
-      <span class="go-vault-name">${plant.name||plant.strainName}</span>
-      <div class="go-vault-stats">Score: <span class="${cls}">${sc.score}</span> · ${plant.strainName} · ${plant.rarity||'Standard'}</div>
-    </div>`;
-  }
-  openModal('modal-growoff-submit');
-}
-
-function confirmGrowOffSubmit() {
-  const botIdx  = parseInt(document.getElementById('inp-go-bot-idx')?.value || 0);
-  const plantId = document.getElementById('inp-go-plant-id')?.value;
-  const bot     = BOT_LADDER[botIdx];
-  const plant   = GS.plants.find(p => p.id === plantId);
-  if (!bot || !plant) return;
-
-  const sc  = calcGrowScore(plant);
-  const won = sc.score >= bot.target;
-
-  if (!GS.growoffHistory) GS.growoffHistory = [];
-  GS.growoffHistory.unshift({plantName:plant.name||plant.strainName, score:sc.score, target:bot.target, won, ts:Date.now()});
-
-  const resIcon = document.getElementById('go-result-icon');
-  const resTxt  = document.getElementById('go-result-text');
-  const resDet  = document.getElementById('go-result-detail');
-  const res     = document.getElementById('go-result');
-  const acts    = document.getElementById('go-submit-actions');
-  if (res)  res.classList.remove('hidden');
-  if (acts) acts.classList.add('hidden');
-  GS.stats.growoffSubmits = (GS.stats.growoffSubmits||0) + 1;
-  if (won) {
-    GS.growoffUnlocked = botIdx + 1;
-    GS.coins += bot.reward.coins;
-    grantXP(bot.reward.xp);
-    if (sc.score > (GS.seasonBestScore||0)) GS.seasonBestScore = sc.score;
-    if (resIcon) resIcon.textContent = '🏆';
-    if (resTxt)  resTxt.textContent  = 'YOU WIN!';
-    if (resDet)  resDet.textContent  = 'Beat ' + bot.name + ' · Score ' + sc.score + ' ≥ ' + bot.target + ' · +' + bot.reward.coins.toLocaleString() + '¢ +' + bot.reward.xp.toLocaleString() + ' XP';
-    completeDailyGoal();
-    checkQuestProgress();
-    toast('🏆 Beat ' + bot.name + '! +' + bot.reward.coins.toLocaleString() + '¢', 'ok', 6000);
-    addLog('Grow-Off WIN vs ' + bot.name + ' (score: ' + sc.score + ')', 'success');
-  } else {
-    if (resIcon) resIcon.textContent = '❌';
-    if (resTxt)  { resTxt.textContent = 'YOU LOST'; resTxt.style.color = 'var(--red)'; }
-    if (resDet)  resDet.textContent  = 'Score ' + sc.score + ' < target ' + bot.target + ' — grow better and try again!';
-    toast('❌ Lost to ' + bot.name + '. Score: ' + sc.score + ' / needed: ' + bot.target, 'err', 5000);
-    addLog('Grow-Off LOSS vs ' + bot.name, 'warn');
-  }
-  saveGame(); renderGrowOff(); renderHeader();
-}
 // ================================================================
 // BLACK MARKET
 // ================================================================
@@ -9542,93 +10474,344 @@ function renderBlackMarket() {
 }
 
 function _renderBMBrowse(cont) {
-  const listings = (GS._bmBotListings || []).filter(l => l.status === 'active');
+  _seedBMBotListings();
+  const listings = (GS._bmBotListings || []).filter(l => l.status === 'active' && l.qty > 0);
+  const now = Date.now();
+  const gameHourMs = 3600000 / GAME_SPEED;
+
   if (!listings.length) {
-    cont.innerHTML = `<div class="empty-state">🕶️ No listings right now.<br>Check back later — new seeds appear regularly.</div>`;
-    _seedBMBotListings();
+    cont.innerHTML = `<div style="text-align:center;padding:50px 20px;color:var(--muted);font-family:var(--font-hud);font-size:11px;letter-spacing:1.5px;line-height:2.8">
+      🕶️ BLACK MARKET SEEMS EMPTY AT THIS TIME<br>
+      <span style="font-size:9px;opacity:.6">Dealers are restocking — check back in a few hours.</span><br>
+      <span style="font-size:8px;color:rgba(255,255,255,0.18)">Stock rotates continuously. Empty windows last 1–2 in-game hours max.</span>
+    </div>`;
     return;
   }
-  let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px">';
-  listings.forEach(l => {
-    const strain = STRAINS[l.strain] || {genetics:'Unknown', thcBase:'?', variety:'hybrid'};
-    html += `<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:13px;display:flex;flex-direction:column;gap:5px;transition:.2s" onmouseover="this.style.borderColor='rgba(239,68,68,0.5)'" onmouseout="this.style.borderColor='var(--border)'">
-      <div style="font-size:20px;text-align:center">${STRAINS[l.strain]?.emoji||'🌿'}</div>
-      <div style="font-family:var(--font-hud);font-size:10px;color:var(--text);text-align:center">${l.strain}</div>
-      <div style="font-size:8px;color:var(--muted);font-style:italic;text-align:center">${strain.genetics||'Unknown'}</div>
-      <div style="display:flex;justify-content:space-between;font-family:var(--font-hud);font-size:9px;margin-top:3px">
-        <span style="color:var(--gold)">${l.price.toLocaleString()}¢</span>
-        <span style="color:var(--muted)">${l.qty}x seeds</span>
+
+  const sorted = [...listings].sort((a,b) => a.priceEach - b.priceEach);
+  let html = `<div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-bottom:12px;padding:6px 10px;background:rgba(0,0,0,0.3);border-radius:6px">
+    ${listings.length} listing(s) active · Prices vary by genetics generation · 85% purchase success rate
+  </div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:10px">`;
+
+  sorted.forEach(l => {
+    const strain = STRAINS[l.strain] || {emoji:'🌿',thcBase:'?',variety:'hybrid',genetics:'Unknown'};
+    const bredDef = (GS.bredStrains||[]).find(b=>b.name===l.strain);
+    const genLabel = l.gen && l.gen !== 'original' ? l.gen : bredDef ? bredDef.gen : '';
+    const timeLeftHrs = l.expiresAt ? Math.max(0,(l.expiresAt - now)/gameHourMs) : 999;
+    const timeStr = timeLeftHrs > 99  ? 'No expiry shown'
+                  : timeLeftHrs < 1   ? `⚠️ <1h left!`
+                  : timeLeftHrs < 4   ? `⚠️ ${timeLeftHrs.toFixed(1)}h left`
+                  : `${Math.round(timeLeftHrs)}h left`;
+    const urgentColor = timeLeftHrs < 2 ? 'var(--red)' : timeLeftHrs < 6 ? 'var(--gold)' : 'var(--muted)';
+    const priceColor = l.priceEach < 30000 ? 'var(--green)' : l.priceEach < 200000 ? 'var(--gold)'
+                     : l.priceEach < 1000000 ? 'var(--orange)' : 'var(--pink)';
+    const priceFmt = _fmtCoins(l.priceEach);
+    const soldPct  = Math.round((1 - l.qty / (l.originalQty||1)) * 100);
+    const borderCol = l.priceEach < 30000 ? 'rgba(74,222,128,0.3)'
+                    : l.priceEach < 200000 ? 'rgba(251,191,36,0.3)'
+                    : l.priceEach < 1000000 ? 'rgba(249,115,22,0.35)' : 'rgba(236,72,153,0.4)';
+
+    html += `<div style="background:var(--card-bg);border:1px solid ${borderCol};border-radius:10px;padding:13px;display:flex;flex-direction:column;gap:4px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">
+        <div style="font-size:22px">${l.isMale?'♂':''}${strain.emoji||'🌿'}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-family:var(--font-hud);font-size:9px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${l.strain}</div>
+          ${genLabel?`<div style="font-size:8px;color:var(--purple);font-family:var(--font-hud)">${genLabel}${l.isMale?' ♂':''}</div>`:''}
+          <div style="font-size:7px;color:var(--muted);font-family:var(--font-mono)">${strain.genetics||''}</div>
+        </div>
+      </div>
+      ${soldPct>0?`<div style="display:flex;align-items:center;gap:5px">
+        <div style="flex:1;height:3px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden">
+          <div style="height:100%;width:${soldPct}%;background:rgba(239,68,68,0.5)"></div>
+        </div>
+        <span style="font-size:7px;color:var(--muted);font-family:var(--font-mono)">${soldPct}% gone</span>
+      </div>`:''}
+      <div style="display:flex;align-items:baseline;justify-content:space-between">
+        <span style="font-family:var(--font-hud);font-size:17px;color:${priceColor}">${priceFmt}</span>
+        <span style="font-family:var(--font-hud);font-size:11px;color:var(--cyan)">${l.qty}x left</span>
       </div>
       <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">THC: ${strain.thcBase||'?'}% · ${strain.variety||'hybrid'}</div>
       <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">by: ${l.seller}</div>
-      <button class="btn-action btn-red" style="margin-top:4px" onclick="buyFromBM('${l.id}')">🕶️ BUY (85%)</button>
+      <div style="font-size:8px;color:${urgentColor};font-family:var(--font-hud)">${timeStr}</div>
+      <div style="display:flex;gap:5px;align-items:center;margin-top:6px">
+        <select id="bm-qty-${l.id}" style="width:58px;background:rgba(0,0,0,0.7);border:1px solid var(--border);border-radius:5px;padding:5px 4px;color:var(--text);font-family:var(--font-body);font-size:13px;outline:none"
+          oninput="document.getElementById('bmt-${l.id}').textContent=_fmtCoins(${l.priceEach}*parseInt(this.value||1))">
+          ${Array.from({length:Math.min(l.qty,10)},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('')}
+        </select>
+        <button class="btn-action btn-red" style="flex:1;padding:7px 4px;font-size:9px" onclick="buyFromBM('${l.id}')">🕶️ BUY (85%)</button>
+      </div>
+      <div style="font-size:8px;color:${priceColor};font-family:var(--font-mono);text-align:right" id="bmt-${l.id}">${priceFmt}</div>
     </div>`;
   });
   html += '</div>';
   cont.innerHTML = html;
 }
 
+function _bmSeedPrice(gen) {
+  const r = {
+    'original':[5000,25000],'F1':[8000,20000],'F2':[15000,45000],
+    'F3':[35000,90000],'F4':[60000,140000],'F5':[90000,200000],
+    'F6':[140000,320000],'F7':[220000,550000],'F8':[350000,800000],
+    'F9':[550000,1400000],'F10':[900000,2500000],'F*':[2000000,5000000],
+    'BX1':[18000,55000],'BX2':[35000,90000],'BX3':[55000,140000],
+    'BX4':[80000,200000],'BX5':[130000,320000],'BX6':[220000,550000],
+    'BX7':[350000,800000],'BX8':[550000,1400000],'BX9':[800000,2000000],
+    'BX10':[1200000,3500000],'BX*':[2500000,6000000],
+  }[gen] || [5000,25000];
+  return Math.round((r[0] + Math.random() * (r[1] - r[0])) / 500) * 500;
+}
+function _bmExpireHrs(priceEach) {
+  if (priceEach < 20000)   return 64 + Math.random() * 32;
+  if (priceEach < 100000)  return 32 + Math.random() * 16;
+  if (priceEach < 500000)  return 16 + Math.random() * 8;
+  if (priceEach < 2000000) return 8  + Math.random() * 4;
+  return 4 + Math.random() * 4;
+}
+function _bmRandQty(priceEach) {
+  if (priceEach < 20000)  return 3 + Math.floor(Math.random() * 8);
+  if (priceEach < 100000) return 1 + Math.floor(Math.random() * 5);
+  if (priceEach < 500000) return 1 + Math.floor(Math.random() * 3);
+  return 1;
+}
+function _fmtCoins(n) {
+  if (!n) return '0¢';
+  if (n >= 1000000) return (n/1000000).toFixed(2)+'M¢';
+  if (n >= 1000)    return Math.round(n/1000)+'k¢';
+  return n.toLocaleString()+'¢';
+}
+
 function _seedBMBotListings() {
   if (!GS._bmBotListings) GS._bmBotListings = [];
-  const active = GS._bmBotListings.filter(l => l.status === 'active').length;
-  if (active >= 6) return;
-  const strainNames = Object.keys(STRAINS).filter(s => !STRAINS[s].isTest);
-  const botNames = ['anon_grower','ghost_leaf','unnamed_user','shadow_420','mystery_farmer','stealth_kush'];
-  const toAdd = 6 - active;
-  for (let i = 0; i < toAdd; i++) {
-    const strain = strainNames[Math.floor(Math.random() * strainNames.length)];
-    const qty    = [1,3,5,10][Math.floor(Math.random() * 4)];
-    const price  = qty * (150 + Math.floor(Math.random() * 150));
+  if (!GS._bmLastRestock) GS._bmLastRestock = Date.now();
+  const now = Date.now();
+  const gameHourMs = 3600000 / GAME_SPEED;
+
+  // Expire listings and simulate bot buying activity
+  GS._bmBotListings.forEach(l => {
+    if (l.status !== 'active') return;
+    // Expire check
+    if (l.expiresAt && now > l.expiresAt) { l.status = 'expired'; return; }
+    // Bot buyers: cheap listings sell faster
+    const ageMins = (now - l.listedAt) / 60000;
+    const buyChance  = l.priceEach < 30000 ? 0.45 : l.priceEach < 150000 ? 0.22 : l.priceEach < 800000 ? 0.08 : 0.03;
+    const minAgeMins = l.priceEach < 30000 ? 8    : l.priceEach < 150000 ? 25   : l.priceEach < 800000 ? 90  : 300;
+    if (ageMins > minAgeMins && Math.random() < buyChance) {
+      const buyQty = Math.min(l.qty, 1 + Math.floor(Math.random() * 2));
+      l.qty -= buyQty;
+      if (l.qty <= 0) l.status = 'bot_sold';
+    }
+  });
+
+  const active = GS._bmBotListings.filter(l => l.status === 'active' && l.qty > 0).length;
+  const sinceLastRestock = now - GS._bmLastRestock;
+
+  // Max 8 active, restock 1 at a time every 4 in-game hours
+  if (active >= 8) return;
+  if (active > 0 && sinceLastRestock < 4 * gameHourMs) return;
+
+  // If fully empty, hold for 1–2.5 in-game hours before restocking
+  if (active === 0) {
+    if (!GS._bmEmptyAt) { GS._bmEmptyAt = now; return; }
+    const emptyHrs = (now - GS._bmEmptyAt) / gameHourMs;
+    const holdHrs  = 1 + Math.random() * 1.5;
+    if (emptyHrs < holdHrs) return;
+    GS._bmEmptyAt = null;
+  }
+
+  GS._bmLastRestock = now;
+
+  const addCount = active === 0 ? 2 + Math.floor(Math.random() * 4) : 1;
+  const botNames = ['anon_g','ghost_leaf','unnamed_usr','shadow_420','mystery_farm',
+                    'stealth_kush','purp_dealer','420_anon','bagman','the_source'];
+  const allStrains = Object.keys(STRAINS).filter(s => !STRAINS[s].isTest);
+  const bredStrains = GS.bredStrains || [];
+
+  for (let i = 0; i < addCount; i++) {
+    let strainName, gen;
+    const useBred = bredStrains.length > 0 && Math.random() < 0.3;
+    if (useBred) {
+      const b = bredStrains[Math.floor(Math.random() * bredStrains.length)];
+      strainName = b.name; gen = b.gen || 'F2';
+    } else {
+      strainName = allStrains[Math.floor(Math.random() * allStrains.length)];
+      gen = 'original';
+    }
+    const priceEach = _bmSeedPrice(gen);
+    const qty       = _bmRandQty(priceEach);
+    const expireHrs = _bmExpireHrs(priceEach);
+    const isMale    = !useBred && Math.random() < 0.12;
     GS._bmBotListings.push({
-      id: uid(), strain, qty, price,
+      id: uid(), strain: strainName, gen, qty, originalQty: qty,
+      priceEach, isMale, totalPrice: priceEach * qty,
       seller: botNames[Math.floor(Math.random() * botNames.length)],
-      status: 'active', listedAt: Date.now()
+      status: 'active', listedAt: now,
+      expiresAt: now + expireHrs * gameHourMs,
     });
   }
-  saveGame();
+}
+
+function _bmReturnExpired() {
+  const now      = Date.now();
+  const gameHrMs = 3600000 / GAME_SPEED;
+  (GS.blackMarket||[]).forEach(l => {
+    if (l.status !== 'pending') return;
+    const ageHrs = (now - l.listedAt) / gameHrMs;
+    const maxHrs = l.priceCategory === 'above' ? 24 : l.priceCategory === 'market' ? 48 : 72;
+    if (ageHrs < maxHrs) return;
+    l.status = 'returned';
+    if (l.isSeed) {
+      const pool = l.isMale ? GS.maleSeedsOwned : GS.seeds;
+      if (!GS.maleSeedsOwned) GS.maleSeedsOwned = {};
+      pool[l.strainName] = (pool[l.strainName]||0) + (l.qty||1);
+      toast('📬 BM expired — ' + (l.qty||1) + 'x ' + (l.strainName||l.name) + ' seeds returned to inventory.', 'info', 4000);
+    } else if (l.grams) {
+      if (!GS.vault) GS.vault = [];
+      GS.vault.push({
+        id:uid(), name:l.name, strainName:l.strainName,
+        grams:l.grams, thc:l.thc||0, rarity:l.rarity||'Standard',
+        quality:90, curedAt:Date.now(), isBred:false
+      });
+      toast('📬 BM expired — ' + l.grams + 'g of ' + l.name + ' returned to vault.', 'info', 4000);
+    }
+    addLog('BM listing expired and returned: ' + (l.name||l.strainName), 'info');
+  });
 }
 
 function _renderBMMine(cont) {
-  const mine = (GS.blackMarket || []);
+  _bmReturnExpired();
+
+  const mine = GS.blackMarket || [];
+  const now  = Date.now();
+  const gameHrMs = 3600000 / GAME_SPEED;
+
   if (!mine.length) {
-    cont.innerHTML = `<div class="empty-state">📋 No active listings.<br>Go to LIST ITEM to sell your seeds.</div>`;
+    cont.innerHTML = `<div class="empty-state">📋 No listings yet.<br>Go to LIST ITEM to sell your seeds or vault items.</div>`;
     return;
   }
+
+  const active   = mine.filter(l => l.status === 'pending');
+  const sold     = mine.filter(l => l.status === 'sold');
+  const failed   = mine.filter(l => l.status === 'failed');
+  const returned = mine.filter(l => l.status === 'returned');
+
   let html = '';
-  mine.forEach(l => {
-    const statusColor = l.status === 'pending' ? 'var(--gold)' : l.status === 'sold' ? 'var(--green)' : 'var(--red)';
-    const statusLabel = l.status === 'pending' ? '⏳ PENDING' : l.status === 'sold' ? '✅ SOLD' : '❌ FAILED';
-    html += `<div class="bm-listing-card">
-      <div class="bm-listing-strain">${l.name} <span style="font-size:9px" style="color:${statusColor}">${statusLabel}</span></div>
-      <div class="bm-listing-meta">
-        <span class="bm-price">${l.totalPrice.toLocaleString()}¢</span>
-        <span style="font-size:9px;color:var(--muted)">Listed ${timeSince(l.listedAt)}</span>
-      </div>
-      ${l.status === 'pending'
-        ? `<button class="btn-action btn-red" style="margin-top:6px" onclick="cancelBMListing('${l.id}')">CANCEL</button>`
-        : `<div style="font-size:9px;color:${statusColor};font-family:var(--font-hud);margin-top:6px">${statusLabel}</div>`}
-    </div>`;
-  });
+
+  if (active.length) {
+    html += `<div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1.5px;margin-bottom:8px">⏳ ACTIVE LISTINGS</div>`;
+    active.forEach(l => {
+      const ageHrs   = (now - l.listedAt) / gameHrMs;
+      const maxHrs   = l.priceCategory === 'above' ? 24 : l.priceCategory === 'market' ? 48 : 72;
+      const pctWait  = Math.min(100, Math.round(ageHrs / maxHrs * 100));
+      const timeLeft = Math.max(0, maxHrs - ageHrs);
+      const pColor   = l.priceEach > 500000 ? 'var(--pink)' : l.priceEach > 50000 ? 'var(--orange)' : 'var(--gold)';
+      html += `<div class="bm-listing-card" style="border-color:rgba(251,191,36,0.45)">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+          <div style="flex:1;min-width:120px">
+            <div class="bm-listing-strain">${l.name}</div>
+            <div class="bm-listing-genetics">${l.strainName||''} · ${l.isSeed?'🌿 Seeds':'📦 Flower'}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-family:var(--font-hud);font-size:15px;color:${pColor}">${_fmtCoins(l.totalPrice)}</div>
+            ${l.priceEach?`<div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">${_fmtCoins(l.priceEach)} each</div>`:''}
+          </div>
+        </div>
+        <!-- Wait progress bar -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <div style="flex:1;height:4px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:${pctWait}%;background:${pctWait>80?'var(--red)':pctWait>50?'var(--gold)':'var(--green)'};border-radius:2px;transition:.5s"></div>
+          </div>
+          <span style="font-size:8px;color:var(--muted);font-family:var(--font-mono);white-space:nowrap">${ageHrs.toFixed(0)}h / expires ${timeLeft.toFixed(0)}h</span>
+        </div>
+        <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-bottom:8px">
+          Category: <span style="color:var(--gold)">${l.priceCategory||'?'}</span> · Listed ${timeSince(l.listedAt)}
+          ${l.priceCategory==='above'?'<br><span style="color:var(--orange)">Above market — may take longer to sell</span>':''}
+          ${l.priceCategory==='below'?'<br><span style="color:var(--green)">Below market — selling very fast</span>':''}
+        </div>
+        <button class="btn-action btn-red" style="padding:6px 14px;font-size:9px" onclick="cancelBMListing('${l.id}')">CANCEL (returns item)</button>
+      </div>`;
+    });
+  }
+
+  if (sold.length) {
+    html += `<div style="font-family:var(--font-hud);font-size:9px;color:var(--green);letter-spacing:1.5px;margin:14px 0 8px">✅ SOLD (${sold.length})</div>`;
+    sold.slice(0,8).forEach(l => {
+      html += `<div class="bm-listing-card" style="border-color:rgba(74,222,128,0.3);opacity:.82">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
+          <div>
+            <div style="font-family:var(--font-hud);font-size:10px;color:var(--green)">✅ ${l.name}</div>
+            <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">${timeSince(l.listedAt)}</div>
+          </div>
+          <div style="font-family:var(--font-hud);font-size:14px;color:var(--green)">+${_fmtCoins(l.totalPrice)}</div>
+        </div>
+      </div>`;
+    });
+  }
+
+  if (returned.length) {
+    html += `<div style="font-family:var(--font-hud);font-size:9px;color:var(--cyan);letter-spacing:1.5px;margin:14px 0 8px">📬 RETURNED — EXPIRED (${returned.length})</div>`;
+    returned.slice(0,5).forEach(l => {
+      const unitLabel = l.isSeed ? (l.qty||1) + 'x seeds' : (l.grams||0) + 'g';
+      html += `<div class="bm-listing-card" style="border-color:rgba(34,211,238,0.3);opacity:.78">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
+          <div>
+            <div style="font-family:var(--font-hud);font-size:10px;color:var(--cyan)">📬 ${l.name}</div>
+            <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">No buyer found — returned to inventory</div>
+          </div>
+          <div style="font-family:var(--font-hud);font-size:10px;color:var(--cyan)">${unitLabel} back</div>
+        </div>
+      </div>`;
+    });
+  }
+
+  if (failed.length) {
+    html += `<div style="font-family:var(--font-hud);font-size:9px;color:var(--red);letter-spacing:1.5px;margin:14px 0 8px">❌ RIPPED OFF (${failed.length})</div>`;
+    failed.slice(0,5).forEach(l => {
+      html += `<div class="bm-listing-card" style="border-color:rgba(239,68,68,0.3);opacity:.72">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
+          <div>
+            <div style="font-family:var(--font-hud);font-size:10px;color:var(--red)">❌ ${l.name}</div>
+            <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">${timeSince(l.listedAt)} · buyer ghosted you</div>
+          </div>
+          <div style="font-family:var(--font-hud);font-size:12px;color:var(--red)">−${_fmtCoins(l.totalPrice)}</div>
+        </div>
+      </div>`;
+    });
+  }
+
+  if (!html) html = '<div class="empty-state">No activity yet.</div>';
+
+  // Prune old closed entries (keep max 30 total, always keep pending)
+  if (mine.length > 30) {
+    GS.blackMarket = mine.filter(l=>l.status==='pending')
+      .concat(mine.filter(l=>l.status!=='pending').slice(-20));
+    saveGame();
+  }
+
   cont.innerHTML = html;
 }
 
 function _renderBMList(cont) {
-  const seeds     = GS.seeds     || {};
+  const seeds     = GS.seeds || {};
   const maleSeeds = GS.maleSeedsOwned || {};
+  const vault     = GS.vault || [];
   const available = [];
-  Object.entries(seeds).forEach(([n,q]) => { if (q>0) available.push({id:'fem:'+n, name:n, qty:q, isMale:false}); });
-  Object.entries(maleSeeds).forEach(([n,q]) => { if (q>0) available.push({id:'male:'+n, name:n+' (MALE)', qty:q, isMale:true}); });
+  Object.entries(seeds).forEach(([n,q]) => { if (q>0) available.push({id:'fem:'+n,  name:n,              qty:q, isSeed:true,  isMale:false}); });
+  Object.entries(maleSeeds).forEach(([n,q]) => { if (q>0) available.push({id:'male:'+n, name:n+' (MALE)', qty:q, isSeed:true,  isMale:true}); });
+  vault.forEach(v => available.push({id:'vault:'+v.id, name:v.name, qty:v.grams, isSeed:false, isMale:false, grams:v.grams}));
 
   if (!available.length) {
-    cont.innerHTML = `<div class="empty-state">🌰 No seeds to list.<br>Redeem codes or breed plants to get seeds.</div>`;
+    cont.innerHTML = `<div class="empty-state">🌰 Nothing to list. Grow plants or get seeds to sell here.</div>`;
     return;
   }
-  let html = `<div class="bm-list-label">SELECT SEEDS TO LIST</div>`;
-  available.forEach(entry => {
-    html += `<div class="bm-list-item" onclick="openBMListModalForSeed('${entry.id}','${entry.name}',${entry.qty})">
-      <div>
-        <div class="bm-li-name">${entry.name}</div>
-        <div class="bm-li-stats">${entry.qty}x available</div>
+  let html = `<div class="bm-list-label">SELECT ITEM TO LIST</div>`;
+  available.forEach(e => {
+    const unitLabel = e.isSeed ? e.qty + 'x seeds' : e.qty + 'g cured';
+    const icon      = e.isSeed ? (e.isMale ? '♂🌿' : '🌿') : '📦';
+    html += `<div class="bm-list-item" onclick="openBMListModalForSeed('${e.id}','${e.name}',${e.qty},${e.isSeed?1:0})">
+      <div style="font-size:16px">${icon}</div>
+      <div style="flex:1;min-width:0">
+        <div class="bm-li-name">${e.name}</div>
+        <div class="bm-li-stats">${unitLabel} available</div>
       </div>
       <button class="btn-action btn-red" style="padding:5px 10px">LIST →</button>
     </div>`;
@@ -9637,63 +10820,126 @@ function _renderBMList(cont) {
 }
 
 function buyFromBM(listingId) {
-  const listing = (GS._bmBotListings || []).find(l => l.id === listingId);
-  if (!listing || listing.status !== 'active') { toast('Listing no longer available.','warn'); return; }
-  if (GS.coins < listing.price) { toast('Not enough coins! Need ' + listing.price.toLocaleString() + '¢','err'); return; }
-  GS.coins -= listing.price;
+  const listing = (GS._bmBotListings||[]).find(l=>l.id===listingId);
+  if (!listing || listing.status !== 'active' || listing.qty <= 0) { toast('Listing no longer available.','warn'); return; }
+  const qtyEl = document.getElementById('bm-qty-' + listingId);
+  const qty   = Math.min(parseInt(qtyEl?.value||1), listing.qty);
+  const total = listing.priceEach * qty;
+  if (GS.coins < total) { toast('Need ' + _fmtCoins(total) + ' — only have ' + _fmtCoins(Math.floor(GS.coins)),'err'); return; }
+  GS.coins -= total;
   if (Math.random() < 0.85) {
-    GS.seeds[listing.strain] = (GS.seeds[listing.strain] || 0) + listing.qty;
-    listing.status = 'sold';
-    toast('✅ BM purchase success! Got ' + listing.qty + 'x ' + listing.strain, 'ok', 4000);
-    addLog('BM buy: ' + listing.qty + 'x ' + listing.strain + ' for ' + listing.price + '¢', 'success');
-    GS.stats.seedsRedeemed = (GS.stats.seedsRedeemed || 0) + listing.qty;
-    GS.stats.bmPurchases = (GS.stats.bmPurchases||0) + 1;
+    const pool = listing.isMale ? GS.maleSeedsOwned : GS.seeds;
+    if (!GS.maleSeedsOwned) GS.maleSeedsOwned = {};
+    pool[listing.strain] = (pool[listing.strain]||0) + qty;
+    listing.qty -= qty;
+    if (listing.qty <= 0) listing.status = 'bot_sold';
+    GS.stats.seedsRedeemed = (GS.stats.seedsRedeemed||0) + qty;
+    GS.stats.bmPurchases   = (GS.stats.bmPurchases||0) + 1;
     checkQuestProgress();
+    toast('✅ Got ' + qty + 'x ' + listing.strain + (listing.isMale?' ♂':'') + ' for ' + _fmtCoins(total), 'ok', 4000);
+    addLog('BM buy: ' + qty + 'x ' + listing.strain + ' — ' + _fmtCoins(total), 'success');
   } else {
-    listing.status = 'sold';
-    toast('❌ Ripped off! Lost ' + listing.price.toLocaleString() + '¢ — no seeds received.', 'err', 5000);
-    addLog('BM ripped off: ' + listing.price + '¢ lost', 'warn');
+    listing.qty = Math.max(0, listing.qty - qty);
+    if (listing.qty <= 0) listing.status = 'bot_sold';
+    toast('❌ RIPPED OFF — lost ' + _fmtCoins(total) + '. No seeds arrived. That\'s the BM.', 'err', 7000);
+    addLog('BM ripped off: ' + _fmtCoins(total) + ' lost', 'warn');
   }
-  const bmBadge = document.getElementById('bm-badge');
-  if (bmBadge) { const pend = (GS.blackMarket||[]).filter(l=>l.status==='pending').length; bmBadge.style.display = pend ? 'inline' : 'none'; }
   saveGame(); renderBlackMarket(); renderSeeds(); renderHeader();
 }
 
 function cancelBMListing(listingId) {
-  const l = (GS.blackMarket || []).find(x => x.id === listingId);
-  if (!l || l.status !== 'pending') return;
-  l.status = 'cancelled';
-  // Refund seeds
-  if (l.isMale) GS.maleSeedsOwned[l.strainName] = (GS.maleSeedsOwned[l.strainName] || 0) + l.qty;
-  else          GS.seeds[l.strainName]            = (GS.seeds[l.strainName]           || 0) + l.qty;
-  toast('Listing cancelled — seeds returned.', 'info');
-  saveGame(); renderBlackMarket(); renderSeeds();
+  const l = (GS.blackMarket||[]).find(x=>x.id===listingId);
+  if (!l || l.status !== 'pending') { toast('Cannot cancel — already processed.','warn'); return; }
+  l.status = 'returned';
+  if (l.isSeed) {
+    const pool = l.isMale ? GS.maleSeedsOwned : GS.seeds;
+    if (!GS.maleSeedsOwned) GS.maleSeedsOwned = {};
+    pool[l.strainName] = (pool[l.strainName]||0) + (l.qty||1);
+    toast('📬 Cancelled — ' + (l.qty||1) + 'x ' + (l.strainName||l.name) + ' seeds returned.','info',3000);
+  } else if (l.grams) {
+    if (!GS.vault) GS.vault = [];
+    GS.vault.push({
+      id:uid(), name:l.name, strainName:l.strainName,
+      grams:l.grams, thc:l.thc||0, rarity:l.rarity||'Standard',
+      quality:90, curedAt:Date.now(), isBred:false
+    });
+    toast('📬 Cancelled — ' + l.grams + 'g of ' + l.name + ' returned to vault.','info',3000);
+  } else {
+    toast('Listing cancelled.','info',2000);
+  }
+  addLog('BM listing cancelled: ' + (l.name||l.strainName),'info');
+  saveGame(); renderBlackMarket(); renderSeeds(); renderVault(); renderHeader();
 }
 
-function openBMListModalForSeed(entryId, displayName, qty) {
-  const inp  = document.getElementById('inp-bm-list-item-id');
-  const nm   = document.getElementById('lbl-bm-list-name');
-  const st   = document.getElementById('lbl-bm-list-stats');
-  const pr   = document.getElementById('inp-bm-list-price');
-  if (inp) inp.value = entryId;
-  if (nm)  nm.textContent = displayName;
-  if (st)  st.textContent = qty + 'x available · 85% success rate';
-  if (pr)  { pr.value = qty * 200; updateBmPriceNote(); }
+function openBMListModalForSeed(entryId, displayName, qty, isSeed) {
+  isSeed = isSeed === 1 || isSeed === true || isSeed === '1';
+  const isMale = entryId.startsWith('male:');
+  const strainName = isMale ? entryId.slice(5) : entryId.startsWith('fem:') ? entryId.slice(4) : '';
+  const bred = strainName ? (GS.bredStrains||[]).find(b=>b.name===strainName) : null;
+  const gen  = bred?.gen || 'original';
+
+  let suggestedEach = isSeed ? Math.round(_bmSeedPrice(gen) * 0.85) : 400;
+  const qtyMax = Math.min(qty, isSeed ? 30 : 9999);
+  const unitWord = isSeed ? 'seed' : 'gram';
+
+  const box = document.querySelector('#modal-bm-list .modal-box');
+  if (!box) return;
+  box.innerHTML = `
+    <div class="modal-title">🕶️ LIST ON BLACK MARKET</div>
+    <input type="hidden" id="inp-bm-list-item-id" value="${entryId}">
+    <input type="hidden" id="bm-list-is-seed" value="${isSeed?'1':'0'}">
+    <div style="font-family:var(--font-hud);font-size:12px;color:var(--text);margin-bottom:4px">${displayName}</div>
+    <div style="font-size:10px;color:var(--muted);font-family:var(--font-mono);margin-bottom:12px">${qty} ${unitWord}(s) available · 85% sell success rate</div>
+    <div class="warning-note" style="margin-bottom:12px">15% chance of being ripped off. Expired listings return to your inventory.</div>
+
+    <div style="margin-bottom:10px">
+      <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:6px">QUANTITY TO LIST</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <input type="range" id="bm-list-qty-sl" min="1" max="${qtyMax}" value="1"
+          style="flex:1;accent-color:var(--red);height:3px"
+          oninput="document.getElementById('bm-list-qty').value=this.value;_bmUpdateListTotal()">
+        <input type="number" id="bm-list-qty" min="1" max="${qtyMax}" value="1"
+          style="width:65px;background:rgba(0,0,0,0.8);border:1px solid var(--border);border-radius:5px;padding:5px 7px;color:var(--gold);font-family:var(--font-hud);font-size:12px;outline:none;text-align:center"
+          oninput="document.getElementById('bm-list-qty-sl').value=this.value;_bmUpdateListTotal()">
+        <span style="font-size:10px;color:var(--muted)">${unitWord}s</span>
+      </div>
+    </div>
+
+    <div style="margin-bottom:10px">
+      <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:6px">PRICE PER ${unitWord.toUpperCase()} (¢)</div>
+      <input type="number" id="bm-list-price-each" min="1" value="${suggestedEach}"
+        style="width:100%;background:rgba(0,0,0,0.8);border:1px solid rgba(239,68,68,0.4);border-radius:7px;padding:10px 12px;color:var(--red);font-family:var(--font-hud);font-size:16px;outline:none;text-align:center"
+        oninput="_bmUpdateListTotal()">
+      ${isSeed?`<div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:3px">Suggested [${gen}]: ${_fmtCoins(suggestedEach)} each</div>`:''}
+    </div>
+
+    <div id="bm-list-total-display" style="background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:6px;padding:10px;text-align:center;font-family:var(--font-hud);font-size:16px;color:var(--gold);margin-bottom:6px">TOTAL: —</div>
+    <div id="bm-price-note" style="font-size:9px;font-family:var(--font-mono);color:var(--muted);text-align:center;margin-bottom:10px"></div>
+
+    <div class="modal-actions">
+      <button class="btn-modal danger" onclick="confirmBMListing()">🕶️ LIST IT</button>
+      <button class="btn-modal cancel" onclick="closeModal('modal-bm-list')">CANCEL</button>
+    </div>`;
+
+  _bmUpdateListTotal();
   openModal('modal-bm-list');
 }
 
-function openBMListModal(vaultItemId) {
-  const item = (GS.vault || []).find(v => v.id === vaultItemId);
-  if (!item) return;
-  const inp  = document.getElementById('inp-bm-list-item-id');
-  const nm   = document.getElementById('lbl-bm-list-name');
-  const st   = document.getElementById('lbl-bm-list-stats');
-  const pr   = document.getElementById('inp-bm-list-price');
-  if (inp) inp.value = 'vault:' + vaultItemId;
-  if (nm)  nm.textContent = item.name;
-  if (st)  st.textContent = item.grams + 'g · ' + item.thc + '% THC · ' + (item.rarity || 'Standard');
-  if (pr)  { pr.value = Math.round(item.grams * 8); updateBmPriceNote(); }
-  openModal('modal-bm-list');
+function _bmUpdateListTotal() {
+  const qty  = parseInt(document.getElementById('bm-list-qty')?.value || 1);
+  const each = parseInt(document.getElementById('bm-list-price-each')?.value || 0);
+  const tot  = document.getElementById('bm-list-total-display');
+  const note = document.getElementById('bm-price-note');
+  const sl   = document.getElementById('bm-list-qty-sl');
+  if (sl) sl.value = qty;
+  if (tot) tot.textContent = 'TOTAL: ' + _fmtCoins(qty * each);
+  if (note) {
+    if      (each < 1000)    { note.textContent = '💚 Very cheap — will move fast.';       note.style.color = 'var(--green)'; }
+    else if (each < 20000)   { note.textContent = '💚 Below market — quick sale likely.';   note.style.color = 'var(--green)'; }
+    else if (each < 150000)  { note.textContent = '🟡 Market rate — solid sell speed.';     note.style.color = 'var(--gold)'; }
+    else if (each < 800000)  { note.textContent = '🟠 Above market — may take a while.';   note.style.color = 'var(--orange)'; }
+    else                     { note.textContent = '🔴 Very expensive — patient sellers only.'; note.style.color = 'var(--red)'; }
+  }
 }
 
 function updateBmPriceNote() {
@@ -9709,47 +10955,47 @@ function updateBmPriceNote() {
 }
 
 function confirmBMListing() {
-  const entryId = document.getElementById('inp-bm-list-item-id')?.value || '';
-  const price   = parseInt(document.getElementById('inp-bm-list-price')?.value || 0);
-  if (!entryId || price <= 0) { toast('Fill in all fields.','warn'); return; }
+  const entryId  = document.getElementById('inp-bm-list-item-id')?.value || '';
+  const qty      = parseInt(document.getElementById('bm-list-qty')?.value || 1);
+  const each     = parseInt(document.getElementById('bm-list-price-each')?.value || 0);
+  const isSeed   = document.getElementById('bm-list-is-seed')?.value === '1';
+  if (!entryId || qty < 1 || each < 1) { toast('Fill in all fields.','warn'); return; }
 
-  const perG  = price / 100;
-  const categ = perG < 3 ? 'below' : perG < 8 ? 'market' : 'above';
+  const totalPrice = qty * each;
+  const categ = each < 10000 ? 'below' : each < 100000 ? 'market' : 'above';
 
   if (entryId.startsWith('vault:')) {
     const vaultId = entryId.slice(6);
     const item    = (GS.vault||[]).find(v=>v.id===vaultId);
     if (!item) { toast('Item not found.','err'); return; }
-    const idx = GS.vault.findIndex(v=>v.id===vaultId);
-    GS.vault.splice(idx,1);
+    if (qty > item.grams) { toast('Not enough grams.','err'); return; }
+    if (qty === item.grams) GS.vault = GS.vault.filter(v=>v.id!==vaultId);
+    else item.grams -= qty;
     if (!GS.blackMarket) GS.blackMarket = [];
     GS.blackMarket.push({
-      id: uid(), name: item.name, strainName: item.strainName,
-      grams: item.grams, thc: item.thc, rarity: item.rarity,
-      totalPrice: price, priceCategory: categ,
-      status: 'pending', listedAt: Date.now(), isMale: false, qty: 0
+      id:uid(), name: item.name + ' (' + qty + 'g)', strainName: item.strainName,
+      grams: qty, thc: item.thc, rarity: item.rarity, isSeed: false,
+      qty, priceEach: each, totalPrice, priceCategory: categ,
+      status: 'pending', listedAt: Date.now(), isMale: false
     });
-    toast('🕶️ Listed on BM: ' + item.name + ' for ' + price.toLocaleString() + '¢', 'ok', 3000);
   } else {
-    const isMale   = entryId.startsWith('male:');
-    const strainName = isMale ? entryId.slice(5) : entryId.slice(4);
-    const pool     = isMale ? GS.maleSeedsOwned : GS.seeds;
-    if ((pool[strainName] || 0) < 1) { toast('Not enough seeds.','err'); return; }
-    pool[strainName]--;
+    const isMale     = entryId.startsWith('male:');
+    const strainName = isMale ? entryId.slice(5) : entryId.startsWith('fem:') ? entryId.slice(4) : '';
+    const pool       = isMale ? GS.maleSeedsOwned : GS.seeds;
+    if ((pool[strainName]||0) < qty) { toast('Not enough seeds.','err'); return; }
+    pool[strainName] -= qty;
     if (!GS.blackMarket) GS.blackMarket = [];
     GS.blackMarket.push({
-      id: uid(), name: strainName + (isMale ? ' (MALE)' : '') + ' seed',
-      strainName, isMale, qty: 1,
-      totalPrice: price, priceCategory: categ,
-      status: 'pending', listedAt: Date.now()
+      id:uid(), name: strainName + (isMale?' ♂':'') + ' ×' + qty,
+      strainName, isMale, qty, priceEach: each, totalPrice, priceCategory: categ,
+      status: 'pending', listedAt: Date.now(), isSeed: true
     });
-    toast('🕶️ Seed listed on BM for ' + price.toLocaleString() + '¢', 'ok', 3000);
   }
-
   const bmBadge = document.getElementById('bm-badge');
-  if (bmBadge) { const pend = (GS.blackMarket||[]).filter(l=>l.status==='pending').length; bmBadge.style.display = pend ? 'inline' : 'none'; bmBadge.textContent = '!'; }
+  if (bmBadge) { const p=(GS.blackMarket||[]).filter(l=>l.status==='pending').length; bmBadge.style.display=p?'inline':'none'; bmBadge.textContent='!'; }
   closeModal('modal-bm-list');
-  addLog('BM listing created: ' + price + '¢', 'info');
+  toast('🕶️ Listed ' + qty + (isSeed?' seed(s)':'g') + ' at ' + _fmtCoins(each) + ' each = ' + _fmtCoins(totalPrice), 'ok', 3500);
+  addLog('BM listing: ' + _fmtCoins(totalPrice), 'info');
   saveGame(); renderBlackMarket(); renderVault(); renderSeeds(); renderHeader();
 }
 
@@ -10225,19 +11471,32 @@ function renderStats() {
   const playtimeSec  = s.playtime || 0;
   const growTimeMins = GS.growTime || 0;
   const growTimeDays = Math.floor(growTimeMins / (60 * 24));
-  const growTimeHrs  = Math.floor((growTimeMins % (60 * 24)) / 60);
   const realtimeH    = Math.floor(playtimeSec / 3600);
   const realtimeM    = Math.floor((playtimeSec % 3600) / 60);
 
-  let html = `<div class="clock-row">
-    <div class="clock-card">
-      <div class="clock-val">${realtimeH}h ${realtimeM}m</div>
-      <div class="clock-lbl">Real Time Played</div>
-    </div>
-    <div class="clock-card">
-      <div class="clock-val" style="color:var(--green)">${growTimeDays}d ${growTimeHrs}h</div>
-      <div class="clock-lbl">In-Game Grow Time</div>
-    </div>
+  // Account age
+  const _created    = GS.created || Date.now();
+  const _ageDays    = Math.floor((Date.now() - _created) / 86400000);
+  const _ageMonths  = Math.floor(_ageDays / 30);
+  const _ageYears   = Math.floor(_ageDays / 365);
+  const _ageStr     = _ageYears >= 1 ? _ageYears + (_ageYears===1?' year':' years') + ' ago'
+                    : _ageMonths >= 1 ? _ageMonths + (_ageMonths===1?' month':' months') + ' ago'
+                    : _ageDays >= 1 ? _ageDays + (_ageDays===1?' day':' days') + ' ago'
+                    : 'today';
+  // In-game grow time
+  const _gtY = Math.floor(growTimeDays / 365);
+  const _gtM = Math.floor((growTimeDays % 365) / 30);
+  const _gtD = growTimeDays % 30;
+  const _gtParts = [];
+  if (_gtY) _gtParts.push(_gtY + 'yr');
+  if (_gtM) _gtParts.push(_gtM + 'mo');
+  if (_gtD || !_gtParts.length) _gtParts.push(_gtD + 'd');
+  const _gtStr = _gtParts.join(' ');
+
+  let html = `<div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:14px;font-family:var(--font-hud);font-size:10px;color:var(--muted);letter-spacing:.5px;line-height:2.2;text-align:center">
+    Account Created: <strong style="color:var(--text)">${_ageStr}</strong>
+    &nbsp;·&nbsp; Play Time: <strong style="color:var(--cyan)">${realtimeH}h ${realtimeM}m</strong>
+    &nbsp;·&nbsp; In-Game Grow Time: <strong style="color:var(--gold)">${_gtStr}</strong>
   </div>`;
 
   // ── STATS GRID ──
@@ -10605,7 +11864,11 @@ suitEquipped: 0,
   if (GS.gear && GS.gear.autoWaterPlant !== undefined) delete GS.gear.autoWaterPlant;
 
   GS.rooms.forEach(r => {
-    if (!GS.roomGear[r.id]) GS.roomGear[r.id] = defaultGear();    if (!r.size) r.size = 'small';
+    if (!GS.roomGear[r.id]) GS.roomGear[r.id] = defaultGear();
+    if (r._lightCycleGameMins == null) r._lightCycleGameMins = 0;
+    if (r._manualOff == null) r._manualOff = false;
+    if (!r.lightScheduleHrs) r.lightScheduleHrs = 18;
+    if (!r.size) r.size = 'small';
     if (!r.lightScheduleHrs) r.lightScheduleHrs = 18;
     if (!r.envTarget.light) r.envTarget.light = 100;
     if (!r.envActual.co2)   r.envActual.co2 = 400;
@@ -10622,8 +11885,10 @@ suitEquipped: 0,
     if (!r.envTarget) r.envTarget = {temp:78, humid:65, co2:400, light:100};
   });
 
-  if (!GS.equip)          GS.equip          = {};
-  if (!GS.equipItems)     GS.equipItems     = [];
+  if (!GS.equip)           GS.equip           = {};
+  if (!GS.equipItems)      GS.equipItems      = [];
+  if (!GS.activeGrowoffs)  GS.activeGrowoffs  = [];
+  if (GS._pendingGrowOffBotId === undefined) GS._pendingGrowOffBotId = null;
   if (!GS.questsClaimed)  GS.questsClaimed  = [];
   if (!GS.equipBuffExpiry)GS.equipBuffExpiry= {};
 
@@ -10867,6 +12132,28 @@ function openPlantModal() {
   const addInp = document.getElementById('inp-selected-additive');
   if (addInp) addInp.value = '';
 
+  // ── Grow-Off section ──
+  const existingGoSect = document.getElementById('plant-modal-growoff');
+  if (existingGoSect) existingGoSect.remove();
+  const activeGOs = (GS.activeGrowoffs||[]).filter(g => g.status !== 'completed' && g.status !== 'cancelled');
+  const availBots = BOT_LADDER.filter((b,i) => i <= (GS.growoffUnlocked||0) + 2 && !activeGOs.find(g => g.botIdx === b.id));
+  const modalBody = document.querySelector('#modal-plant .plant-modal-body');
+  if (modalBody && availBots.length) {
+    const goSect = document.createElement('div');
+    goSect.id = 'plant-modal-growoff';
+    goSect.style.cssText = 'margin-top:12px;padding:10px 12px;background:rgba(168,85,247,0.06);border:1px solid rgba(168,85,247,0.35);border-radius:8px';
+    const pending = GS._pendingGrowOffBotId != null ? BOT_LADDER.find(b => b.id === GS._pendingGrowOffBotId) : null;
+    goSect.innerHTML = `
+      <div style="font-family:var(--font-hud);font-size:9px;color:var(--purple);letter-spacing:1px;margin-bottom:6px">🏆 GROW-OFF CHALLENGE <span style="color:var(--muted)">(optional)</span></div>
+      ${pending ? `<div style="font-size:9px;color:var(--green);font-family:var(--font-hud);margin-bottom:5px">⚔️ Ready vs ${pending.name}! Selecting this seed will start the challenge.</div>` : ''}
+      <select id="plant-growoff-select" style="width:100%;background:rgba(0,15,0,0.85);border:1px solid rgba(168,85,247,0.4);border-radius:7px;padding:7px 10px;color:var(--text);font-family:var(--font-body);font-size:13px;outline:none">
+        <option value="">${pending?'✅ Use pending challenge ('+pending.name+')':'— No challenge this grow —'}</option>
+        ${availBots.map(b=>`<option value="${b.id}" ${pending&&b.id===pending.id?'selected':''}>⚔️ vs ${b.name} [${b.difficulty}] · 🏆 ${b.reward.coins.toLocaleString()}¢</option>`).join('')}
+      </select>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:4px">Your opponent grows in real-time. Submit from the vault after curing to judge.</div>`;
+    modalBody.appendChild(goSect);
+  }
+
   openModal('modal-plant');
 }
 
@@ -11030,7 +12317,18 @@ function confirmPlant() {
   GS.stats.plantsPlanted = (GS.stats.plantsPlanted||0) + 1;
   checkQuestProgress();
   closeModal('modal-plant');
-  toast('🌱 Planted ' + plant.name + '! (' + rarity + (isBred ? ' · name at harvest' : '') + ')', 'ok', 3000);
+  // ── Start Grow-Off if selected ──
+  const growoffSelectEl = document.getElementById('plant-growoff-select');
+  const growoffBotId    = growoffSelectEl ? parseInt(growoffSelectEl.value) : NaN;
+  const pendingBotId    = GS._pendingGrowOffBotId;
+  const chosenBotId     = !isNaN(growoffBotId) && growoffBotId ? growoffBotId : (pendingBotId != null ? pendingBotId : null);
+  if (chosenBotId != null) {
+    startGrowOffChallenge(plant.id, chosenBotId);
+    const bot2 = BOT_LADDER.find(b => b.id === chosenBotId);
+    toast('🌱 Planted + ⚔️ Grow-Off started vs ' + (bot2?.name||'opponent') + '! Watch the Grow-Off tab.', 'ok', 5000);
+  } else {
+    toast('🌱 Planted ' + plant.name + '! (' + rarity + (isBred ? ' · name at harvest' : '') + ')', 'ok', 3000);
+  }
   addLog('Planted: ' + plant.name + ' [' + rarity + ']', 'success');
   saveGame(); renderGrow(); renderSeeds(); renderHeader();
 }
@@ -12004,14 +13302,24 @@ if (plant._permanentlyDead) {
 
   // Move to curing
   if (!GS.curing) GS.curing = [];
-  GS.curing.push({
+  const _newBatch = {
     id: uid(), name: batchName, strainName: plant.strainName,
     grams: yield_, thc, score: score.score, rarity: plant.rarity || 'Standard',
     quality: 100, phase: 'drying', startTs: Date.now(),
     dryRH: 80,
     _lastCuringTick: Date.now(),
     isBred: !!(GS.bredStrains||[]).find(b=>b.name===plant.strainName)
-  });
+  };
+  // Link to active grow-off
+  const _harvestGO = (GS.activeGrowoffs||[]).find(g => g.plantId === plantId && g.status === 'growing');
+  if (_harvestGO) {
+    _harvestGO.status       = 'drying';
+    _harvestGO.harvestScore  = score.score;
+    _harvestGO.harvestHealth = plant.health || 0;
+    _harvestGO.harvestRarity = plant.rarity || 'Standard';
+    _newBatch._growoffId     = _harvestGO.id;
+  }
+  GS.curing.push(_newBatch);
 
   GS.plants = GS.plants.filter(p => p.id !== plantId);
 
