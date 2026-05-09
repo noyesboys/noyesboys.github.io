@@ -960,6 +960,28 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .dry-equip-slot-toggle.on  { background:rgba(34,211,238,0.12);border-color:var(--cyan);color:var(--cyan) }
 .dry-equip-slot-toggle.off { background:rgba(0,0,0,0.3);border-color:var(--border);color:var(--muted) }
 .dry-equip-slot-toggle:disabled { opacity:.3;cursor:not-allowed }
+/* ── Items Panel (secondary backpack popup) ── */
+#backpack-items-panel{
+  position:fixed;bottom:86px;right:calc(14px + 298px + 8px);z-index:1998;
+  width:260px;max-height:540px;
+  background:rgba(8,15,8,0.97);border:1px solid rgba(34,211,238,0.5);
+  border-radius:14px;overflow:hidden;display:flex;flex-direction:column;
+  transform:scale(0.92) translateY(12px);opacity:0;pointer-events:none;
+  transition:transform .22s cubic-bezier(.4,0,.2,1),opacity .18s;
+  backdrop-filter:blur(12px);box-shadow:0 8px 40px rgba(0,0,0,0.7);
+}
+#backpack-items-panel::before{content:'';position:absolute;top:-1px;left:20%;right:20%;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent)}
+#backpack-items-panel.open{transform:scale(1) translateY(0);opacity:1;pointer-events:auto;}
+#bp-items-body{flex:1;overflow-y:auto;padding:10px;}
+.bp-slot.drag-over{border-color:var(--green)!important;background:rgba(74,222,128,0.14)!important;}
+.pot-slot.empty-slot.drag-over{border-color:var(--green)!important;background:rgba(74,222,128,0.07)!important;box-shadow:0 0 14px rgba(74,222,128,0.2);}
+.bp-item-grid{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.bp-item-card{display:flex;flex-direction:column;align-items:center;background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:7px;padding:5px 3px;width:54px;min-width:54px;cursor:pointer;transition:.15s;text-align:center}
+.bp-item-card:hover{border-color:var(--green);background:rgba(74,222,128,0.08);transform:scale(1.06)}
+.bp-item-card .bic-icon{font-size:18px;line-height:1.2}
+.bp-item-card .bic-qty{font-size:8px;color:var(--gold);font-family:var(--font-hud);line-height:1.2}
+.bp-item-card .bic-label{font-size:7px;color:var(--muted);font-family:var(--font-hud);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52px;margin-top:2px}
+@media(max-width:680px){#backpack-items-panel{right:14px;bottom:calc(86px + 8px + 540px);width:calc(100vw - 28px)}}
 </style>
 </head>
 
@@ -1576,6 +1598,15 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
     <button class="bp-tab"        id="bp-tab-items"    onclick="switchBpTab('items')">ITEMS</button>
   </div>
   <div class="bp-body" id="bp-body"></div>
+</div>
+
+<!-- ===== ITEMS PANEL (secondary backpack popup) ===== -->
+<div id="backpack-items-panel">
+  <div class="bp-header">
+    <span class="bp-title">📦 ALL ITEMS</span>
+    <button class="bp-close" onclick="closeBpItemsPanel()">✕</button>
+  </div>
+  <div id="bp-items-body"></div>
 </div>
 
 <!-- ===== TOAST CONTAINER ===== -->
@@ -4414,6 +4445,198 @@ function doQuestDonate(type, questId) {
   addLog('Quest donation: ' + type, 'info');
   checkQuestProgress();
   saveGame(); renderQuests(); renderHeader();
+}
+
+// ── Items panel close ──
+function closeBpItemsPanel() {
+  document.getElementById('backpack-items-panel')?.classList.remove('open');
+  document.getElementById('bp-tab-items')?.classList.remove('active');
+  document.getElementById('bp-tab-equipped')?.classList.add('active');
+}
+
+// ── Drop an equip item onto a bp slot ──
+function handleBpSlotDrop(event, slot) {
+  event.preventDefault();
+  const iType  = event.dataTransfer.getData('item-type');
+  const itemId = event.dataTransfer.getData('item-id');
+  if (iType !== 'equip' || !itemId) return;
+  if (!GS.generatedItems) GS.generatedItems = {};
+  const item = EQUIPMENT_ITEMS[itemId] || GS.generatedItems[itemId];
+  if (!item) return;
+  if (item.slot !== slot) {
+    toast('⚠️ ' + item.name + ' belongs in the ' + SLOT_LABELS[item.slot] + ' slot!','warn',3000);
+    return;
+  }
+  showItemActionPrompt(itemId, slot);
+}
+
+// ── Item action prompt — shows options instead of instant equip ──
+function showItemActionPrompt(itemId, preSlot) {
+  if (!GS.generatedItems) GS.generatedItems = {};
+  const item = EQUIPMENT_ITEMS[itemId] || GS.generatedItems[itemId];
+  if (!item) return;
+  const slot      = preSlot || item.slot;
+  const curId     = (GS.equip||{})[slot];
+  const curItem   = curId ? (EQUIPMENT_ITEMS[curId] || GS.generatedItems[curId]) : null;
+  const tierMeta  = ITEM_TIERS[item.rarity] || null;
+  const iColor    = tierMeta ? tierMeta.color : 'var(--green)';
+  const bonLines  = Object.entries(item.bonuses||{}).map(([k,v]) => {
+    const lab = {yield_pct:`+${v}% yield`,thc_add:`+${v}% THC`,coins_pct:`+${v}% coins`,
+      xp_pct:`+${v}% XP`,temp_add:`${v>0?'+':''}${v}°F`,stress_reduce:`-${v}% stress`,
+      grow_speed:`+${v}% speed`,cure_quality:`+${v}% cure`,yield_flat:`+${v}g flat`,
+      bm_success:`+${v}% BM rate`,water_drain_reduce:`-${v}% drain`,health_regen:`×${v} regen`};
+    return `<span style="display:inline-block;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.22);border-radius:4px;padding:2px 6px;font-size:8px;color:var(--green);margin:2px;font-family:var(--font-hud)">${lab[k]||k+':+'+v}</span>`;
+  }).join('');
+  const wrapper = document.createElement('div');
+  wrapper.setAttribute('data-action-prompt','1');
+  wrapper.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:10002;display:flex;align-items:center;justify-content:center;animation:toastIn .2s ease';
+  wrapper.innerHTML = `
+    <div style="background:var(--panel);border:2px solid ${iColor}66;border-radius:16px;padding:22px;width:300px;max-width:90vw;text-align:center;box-shadow:0 0 50px rgba(0,0,0,0.8)">
+      <div style="font-size:32px;margin-bottom:6px">${item.icon}</div>
+      <div style="font-family:var(--font-hud);font-size:12px;color:${iColor};margin-bottom:2px">${item.name}</div>
+      <div style="font-size:8px;color:${iColor};font-family:var(--font-hud);opacity:.8;margin-bottom:8px">${item.rarity} · ${SLOT_LABELS[slot]}</div>
+      <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);line-height:1.6;margin-bottom:8px">${item.desc}</div>
+      <div style="margin-bottom:8px">${bonLines}</div>
+      ${curItem ? `<div style="padding:6px 10px;background:rgba(251,191,36,0.07);border:1px solid rgba(251,191,36,0.25);border-radius:6px;font-size:8px;color:var(--gold);font-family:var(--font-hud);margin-bottom:10px">📤 Replaces: ${curItem.icon} ${curItem.name}</div>` : ''}
+      <div style="display:flex;gap:7px">
+        <button
+          onclick="equipItem('${slot}','${itemId}');renderBpEquipped(document.getElementById('bp-body'));this.closest('[data-action-prompt]').remove()"
+          style="flex:1;padding:10px;background:rgba(74,222,128,0.12);border:1px solid var(--green);border-radius:8px;color:var(--green);font-family:var(--font-hud);font-size:9px;cursor:pointer;letter-spacing:.5px">
+          ✅ EQUIP
+        </button>
+        <button onclick="this.closest('[data-action-prompt]').remove()"
+          style="flex:1;padding:10px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:var(--font-hud);font-size:9px;cursor:pointer">
+          CANCEL
+        </button>
+      </div>
+    </div>`;
+  wrapper.addEventListener('click', e => { if(e.target===wrapper) wrapper.remove(); });
+  document.body.appendChild(wrapper);
+}
+
+// ── Render the secondary items panel ──
+function renderBpItemsPanel() {
+  const body = document.getElementById('bp-items-body');
+  if (!body || !GS || !GS.username) return;
+  const seeds      = GS.seeds           || {};
+  const maleSeeds  = GS.maleSeedsOwned  || {};
+  const inv        = getInventory();
+  const cons       = inv.consumables    || {};
+  const g          = GS.gear            || {};
+  const allShopFlat= Object.values(SHOP_ITEMS).flat();
+  if (!GS.generatedItems) GS.generatedItems = {};
+  let html = '';
+
+  // ── Equip items ──
+  const equipOwned = (GS.equipItems||[]).filter(x=>x.qty>0);
+  if (equipOwned.length) {
+    html += `<div class="bp-section-label">⚡ EQUIP ITEMS <span style="color:rgba(74,222,128,0.4);font-size:7px">DRAG TO SLOT · CLICK FOR OPTIONS</span></div><div class="bp-item-grid">`;
+    equipOwned.forEach(owned => {
+      const item = EQUIPMENT_ITEMS[owned.id] || GS.generatedItems[owned.id];
+      if (!item) return;
+      const tm       = ITEM_TIERS[item.rarity]||null;
+      const iCol     = tm ? tm.color : 'var(--muted)';
+      const isEq     = Object.values(GS.equip||{}).includes(owned.id);
+      const safe     = owned.id.replace(/'/g,"\\'");
+      html += `<div class="bp-item-card" draggable="true"
+        style="border-color:${iCol}44;position:relative"
+        ondragstart="event.dataTransfer.setData('item-id','${safe}');event.dataTransfer.setData('item-type','equip')"
+        onclick="showItemActionPrompt('${safe}')" title="${item.name} (${item.rarity})">
+        <div class="bic-icon">${item.icon}</div>
+        ${owned.qty>1?`<div class="bic-qty">${owned.qty}×</div>`:''}
+        <div class="bic-label" style="color:${iCol}">${item.name.slice(0,7)}</div>
+        ${isEq?`<div style="position:absolute;top:1px;right:2px;font-size:9px">✅</div>`:''}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // ── Female seeds ──
+  const femE = Object.entries(seeds).filter(([,q])=>q>0);
+  if (femE.length) {
+    html += `<div class="bp-section-label">🌿 FEM SEEDS <span style="color:rgba(74,222,128,0.4);font-size:7px">DRAG TO PLANT SLOT</span></div><div class="bp-item-grid">`;
+    femE.forEach(([name,qty]) => {
+      const s    = STRAINS[name]||(GS.bredStrains||[]).find(b=>b.name===name)||{};
+      const bd   = (GS.bredStrains||[]).find(b=>b.name===name);
+      const safe = name.replace(/'/g,"\\'");
+      html += `<div class="bp-item-card" draggable="true"
+        style="border-color:rgba(74,222,128,0.3)"
+        ondragstart="event.dataTransfer.setData('seed-name','${safe}');event.dataTransfer.setData('item-type','seed')"
+        onclick="openPlantModalWith('${safe}')" title="${name} ×${qty}${bd?' ['+bd.gen+']':''}">
+        <div class="bic-icon">${s.emoji||'🌿'}</div>
+        <div class="bic-qty">${qty}×</div>
+        <div class="bic-label" style="color:var(--green)">${name.slice(0,7)}</div>
+        ${bd?`<div style="font-size:6px;color:var(--purple);font-family:var(--font-hud)">${bd.gen}</div>`:''}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // ── Male seeds ──
+  const maleE = Object.entries(maleSeeds).filter(([,q])=>q>0);
+  if (maleE.length) {
+    html += `<div class="bp-section-label">♂ MALE SEEDS <span style="color:rgba(74,222,128,0.4);font-size:7px">DRAG TO PLANT SLOT</span></div><div class="bp-item-grid">`;
+    maleE.forEach(([name,qty]) => {
+      const s    = STRAINS[name]||{};
+      const safe = name.replace(/'/g,"\\'");
+      html += `<div class="bp-item-card" draggable="true"
+        style="border-color:rgba(59,130,246,0.4)"
+        ondragstart="event.dataTransfer.setData('seed-name','${safe}');event.dataTransfer.setData('item-type','seed-male')"
+        onclick="openPlantMaleWith('${safe}')" title="♂ ${name} ×${qty}">
+        <div class="bic-icon">♂${s.emoji||'🌿'}</div>
+        <div class="bic-qty">${qty}×</div>
+        <div class="bic-label" style="color:var(--blue)">${name.slice(0,7)}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // ── Pots & Soil ──
+  const potItems = Object.entries(cons).filter(([,q])=>q>0);
+  if (potItems.length) {
+    html += `<div class="bp-section-label">🪣 POTS & SOIL</div><div class="bp-item-grid">`;
+    potItems.forEach(([id,qty]) => {
+      const item = allShopFlat.find(i=>i.id===id);
+      if (!item) return;
+      html += `<div class="bp-item-card" title="${item.name} ×${qty}">
+        <div class="bic-icon">${item.icon||'📦'}</div>
+        <div class="bic-qty">${qty}×</div>
+        <div class="bic-label">${item.name.slice(0,8)}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // ── Tools ──
+  const toolDefs3 = [{key:'scope',icon:'🔬',name:'Loupe'},{key:'phmeter',icon:'🧪',name:'pH Meter'},{key:'ecmeter',icon:'🔌',name:'EC Meter'},{key:'scrogNet',icon:'🕸️',name:'SCROG'}];
+  const ownedT3 = toolDefs3.filter(t=>g[t.key]);
+  if (ownedT3.length || (g.stsSprayCount||0)>0 || g.super_light || g.unbreakable_ph || g.unbreakable_ec) {
+    html += `<div class="bp-section-label">🛠️ TOOLS</div><div class="bp-item-grid">`;
+    ownedT3.forEach(t => { html += `<div class="bp-item-card" style="border-color:rgba(74,222,128,0.35)" title="${t.name}"><div class="bic-icon">${t.icon}</div><div class="bic-label" style="color:var(--green)">${t.name.slice(0,7)}</div></div>`; });
+    if ((g.stsSprayCount||0)>0) html += `<div class="bp-item-card" style="border-color:rgba(168,85,247,0.4)" title="STS Spray ×${g.stsSprayCount}"><div class="bic-icon">🧪</div><div class="bic-qty">${g.stsSprayCount}×</div><div class="bic-label" style="color:var(--purple)">STS</div></div>`;
+    if (g.super_light)    html += `<div class="bp-item-card" style="border-color:var(--gold)" title="Forbidden Light"><div class="bic-icon">💡</div><div class="bic-label" style="color:var(--gold)">F.Light</div></div>`;
+    if (g.unbreakable_ph) html += `<div class="bp-item-card" style="border-color:var(--cyan)" title="Unbreakable pH Meter"><div class="bic-icon">🧪</div><div class="bic-label" style="color:var(--cyan)">∞pH</div></div>`;
+    if (g.unbreakable_ec) html += `<div class="bp-item-card" style="border-color:var(--cyan)" title="Unbreakable EC Meter"><div class="bic-icon">🔌</div><div class="bic-label" style="color:var(--cyan)">∞EC</div></div>`;
+    html += `</div>`;
+  }
+
+  // ── Cards ──
+  const cards2 = GS.cards||[];
+  if (cards2.length) {
+    html += `<div class="bp-section-label">🃏 CARDS (${cards2.length})</div><div class="bp-item-grid">`;
+    cards2.forEach(sn => {
+      const s    = STRAINS[sn]||{};
+      const safe = sn.replace(/'/g,"\\'");
+      html += `<div class="bp-item-card" onclick="viewCard('${safe}')" title="${sn}">
+        <div class="bic-icon">${s.emoji||'🃏'}</div>
+        <div class="bic-label">${sn.slice(0,8)}</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  if (!html) html = `<div class="bp-empty-note">Nothing here yet.<br>Get seeds and gear to fill your pack!</div>`;
+  body.innerHTML = html;
 }
 
 function equipItem(slot, itemId) {
@@ -8328,6 +8551,17 @@ function renderGrow() {
     slot.className = 'pot-slot empty-slot';
     slot.innerHTML = '<span class="plus-icon">+</span><span class="empty-label">PLANT A SEED</span>';
     slot.onclick   = () => openPlantModal();
+    slot.ondragover  = e => { e.preventDefault(); slot.classList.add('drag-over'); };
+    slot.ondragleave = () => slot.classList.remove('drag-over');
+    slot.ondrop      = e => {
+      e.preventDefault();
+      slot.classList.remove('drag-over');
+      const iType = e.dataTransfer.getData('item-type');
+      const sName = e.dataTransfer.getData('seed-name');
+      if (!sName) return;
+      if (iType === 'seed-male') openPlantMaleWith(sName);
+      else if (iType === 'seed') openPlantModalWith(sName);
+    };
     grid.appendChild(slot);
   }
 }
@@ -14501,17 +14735,20 @@ window.addEventListener('load', () => {
   // Init autosave
   initAutosave();
 
- // Click outside sidebar panels / backpack closes them
+ // Click outside sidebar panels / backpack / items panel closes them
   document.addEventListener('click', e => {
     if (!GS || !GS.username) return;
-    const hasOpen = document.querySelector('.sidebar-panel.open') ||
-                    document.getElementById('backpack-panel')?.classList.contains('open');
-    if (!hasOpen) return;
+    const bpOpen   = document.getElementById('backpack-panel')?.classList.contains('open');
+    const bipOpen  = document.getElementById('backpack-items-panel')?.classList.contains('open');
+    const panOpen  = document.querySelector('.sidebar-panel.open');
+    if (!panOpen && !bpOpen && !bipOpen) return;
     const inside = e.target.closest('.sidebar-panel') ||
                    e.target.closest('.sidebar-circles') ||
                    e.target.closest('#backpack-panel') ||
+                   e.target.closest('#backpack-items-panel') ||
                    e.target.closest('#backpack-bubble') ||
-                   e.target.closest('.modal-overlay');
+                   e.target.closest('.modal-overlay') ||
+                   e.target.closest('[data-action-prompt]');
     if (!inside) {
       document.querySelectorAll('.sidebar-panel').forEach(p => p.classList.remove('open'));
       document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
@@ -14588,7 +14825,10 @@ function toggleBackpack() {
   if (_bpOpen) {
     panel.classList.add('open');
     bubble.style.borderColor = 'var(--cyan)';
-    renderBpTab();
+    _bpTab = 'equipped';
+    document.querySelectorAll('.bp-tab').forEach(b => b.classList.remove('active'));
+    document.getElementById('bp-tab-equipped')?.classList.add('active');
+    renderBpEquipped(document.getElementById('bp-body'));
   } else {
     closeBackpack();
   }
@@ -14597,75 +14837,87 @@ function toggleBackpack() {
 function closeBackpack() {
   _bpOpen = false;
   document.getElementById('backpack-panel')?.classList.remove('open');
+  document.getElementById('backpack-items-panel')?.classList.remove('open');
+  document.getElementById('bp-tab-items')?.classList.remove('active');
   const bubble = document.getElementById('backpack-bubble');
   if (bubble) bubble.style.borderColor = 'var(--green)';
 }
 
 function switchBpTab(tab) {
-  _bpTab = tab;
   document.querySelectorAll('.bp-tab').forEach(b => b.classList.remove('active'));
+  if (tab === 'items') {
+    const ip = document.getElementById('backpack-items-panel');
+    const isOpen = ip?.classList.contains('open');
+    if (!isOpen) { ip?.classList.add('open'); renderBpItemsPanel(); document.getElementById('bp-tab-items')?.classList.add('active'); }
+    else { closeBpItemsPanel(); }
+    // Always show equipped in main panel
+    renderBpEquipped(document.getElementById('bp-body'));
+    return;
+  }
+  _bpTab = tab;
   document.getElementById('bp-tab-' + tab)?.classList.add('active');
+  document.getElementById('backpack-items-panel')?.classList.remove('open');
   renderBpTab();
 }
 
 function renderBpTab() {
   const body = document.getElementById('bp-body');
   if (!body || !GS || !GS.username) return;
-  if (_bpTab === 'equipped') renderBpEquipped(body);
-  else                        renderBpItems(body);
+  renderBpEquipped(body); // main panel always shows equipped (body layout)
 }
 
 function renderBpEquipped(body) {
+  if (!body || !GS) return;
   const equip  = GS.equip || {};
-  const slots  = [
-    {slot:'head',    icon:'🪖', label:'HEAD'},
-    {slot:'cape',    icon:'🧥', label:'CAPE'},
-    {slot:'shirt',   icon:'👕', label:'SHIRT'},
-    {slot:'pants',   icon:'👖', label:'PANTS'},
-    {slot:'gloves',  icon:'🧤', label:'GLOVES'},
-    {slot:'ring_l',  icon:'💍', label:'L RING'},
-    {slot:'ring_r',  icon:'💍', label:'R RING'},
-    {slot:'necklace',icon:'📿', label:'NECK'},
-    {slot:'buff',    icon:'⚡', label:'BUFF'},
-    {slot:'gem',     icon:'💎', label:'GEM'},
-  ];
+  if (!GS.generatedItems) GS.generatedItems = {};
 
-  const bonuses = getEquippedBonuses();
-  const bonusLabels = {
-    yield_pct:'Yield', thc_add:'THC', coins_pct:'Coins', xp_pct:'XP',
-    temp_add:'Temp', stress_reduce:'Stress', grow_speed:'Speed',
-    cure_quality:'Cure', bm_success:'BM', health_regen:'Heal'
-  };
-  const activeBonuses = Object.entries(bonuses)
-    .filter(([,v]) => v && v !== 0 && v !== 1)
-    .map(([k,v]) => {
-      const isTemp  = k === 'temp_add';
-      const display = isTemp ? (v>0?`+${v}°F`:`${v}°F`) : (k.endsWith('_pct')?`+${v}%`:`+${v}`);
-      return `<div style="display:flex;justify-content:space-between;font-size:8px;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.04)">
-        <span style="color:var(--muted);font-family:var(--font-hud)">${bonusLabels[k]||k}</span>
-        <span style="color:var(--green);font-family:var(--font-hud)">${display}</span>
-      </div>`;
-    }).join('');
-
-  let slotsHtml = '<div class="bp-equip-grid">';
-  slots.forEach(({slot, icon, label}) => {
-    const itemId = equip[slot];
-    const item   = itemId ? EQUIPMENT_ITEMS[itemId] : null;
-    const expired= item?.duration_hrs && GS.equipBuffExpiry?.[slot] && Date.now() > GS.equipBuffExpiry[slot];
-    slotsHtml += `<div class="bp-slot ${item&&!expired?'filled':''}"
-      onclick="closeBackpack();_invTab='equip';showTab('inventory');setTimeout(()=>openEquipSlot('${slot}'),120)"
-      title="${item?item.name:label}">
-      <div class="bp-slot-icon">${item ? item.icon : icon}</div>
-      <div class="bp-slot-label">${item ? (expired?'EXP':item.name.slice(0,6)) : label}</div>
+  const slotCard = (slot) => {
+    const itemId  = equip[slot];
+    const item    = itemId ? (EQUIPMENT_ITEMS[itemId] || GS.generatedItems[itemId]) : null;
+    const tierMeta= item ? (ITEM_TIERS[item.rarity]||null) : null;
+    const expired = item?.duration_hrs && GS.equipBuffExpiry?.[slot] && Date.now() > GS.equipBuffExpiry[slot];
+    const iColor  = tierMeta ? tierMeta.color : 'rgba(74,222,128,0.4)';
+    const borderC = item ? (expired ? 'rgba(239,68,68,0.5)' : iColor) : 'var(--border)';
+    const shortNm = item ? (expired ? 'EXPIRED' : item.name.slice(0,8)) : '— empty —';
+    return `<div class="bp-slot ${item&&!expired?'filled':''}"
+      onclick="openEquipSlot('${slot}')"
+      ondragover="event.preventDefault();this.classList.add('drag-over')"
+      ondragleave="this.classList.remove('drag-over')"
+      ondrop="this.classList.remove('drag-over');handleBpSlotDrop(event,'${slot}')"
+      style="border-color:${borderC};flex:1;min-width:62px;max-width:80px;min-height:62px;padding:5px 3px"
+      title="${item?item.name:SLOT_LABELS[slot]}">
+      <div class="bp-slot-icon" style="font-size:${item?'20px':'14px'}">${item ? item.icon : SLOT_ICONS[slot]}</div>
+      <div class="bp-slot-label" style="font-size:7px;color:${item?(expired?'var(--red)':iColor):'var(--muted)'};margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:76px">
+        ${SLOT_LABELS[slot]}
+      </div>
+      <div style="font-family:var(--font-hud);font-size:7px;color:${item?(expired?'var(--red)':iColor):'rgba(255,255,255,0.2)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:76px">
+        ${shortNm}
+      </div>
+      ${item?.ilvl?`<div style="font-size:6px;color:${iColor};opacity:.7">ilvl${item.ilvl}</div>`:''}
     </div>`;
-  });
-  slotsHtml += '</div>';
+  };
 
-  body.innerHTML = slotsHtml +
-    (activeBonuses
-      ? `<div style="font-family:var(--font-hud);font-size:8px;color:var(--muted);letter-spacing:1px;margin:6px 0 5px">ACTIVE BONUSES</div>
-         <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:7px;padding:8px">${activeBonuses}</div>`
-      : `<div class="bp-empty-note">No active bonuses.<br>Equip items for power-ups!</div>`);
+  const row = (...slots) => `<div style="display:flex;gap:4px;justify-content:center;margin-bottom:4px">${slots.map(slotCard).join('')}</div>`;
+
+  const bonuses   = getEquippedBonuses();
+  const nonZero   = Object.entries(bonuses).filter(([,v])=>v&&v!==0&&v!==1);
+  const bonLabs   = {yield_pct:'Yield',thc_add:'THC',coins_pct:'Coins',xp_pct:'XP',temp_add:'Temp',stress_reduce:'Stress',grow_speed:'Speed',cure_quality:'Cure',bm_success:'BM',health_regen:'Heal'};
+  const bonHTML   = nonZero.slice(0,8).map(([k,v])=>{
+    const isT=k==='temp_add', d=isT?(v>0?`+${v}°F`:`${v}°F`):(k.endsWith('_pct')?`+${v}%`:`+${v}`);
+    return `<span style="background:rgba(0,0,0,0.4);border:1px solid rgba(74,222,128,0.15);border-radius:3px;padding:2px 4px;font-family:var(--font-hud);font-size:7px;color:${v<0?'var(--red)':'var(--green)'}">${bonLabs[k]||k}:${d}</span>`;
+  }).join('');
+
+  body.innerHTML = `
+    <!-- Body layout: ring_l | head | ring_r  /  necklace | cape | gem  /  gloves | shirt | buff  /  pants | boots -->
+    ${row('ring_l','head','ring_r')}
+    ${row('necklace','cape','gem')}
+    ${row('gloves','shirt','buff')}
+    <div style="display:flex;gap:4px;justify-content:center;margin-bottom:8px">
+      ${slotCard('pants')}${slotCard('boots')}
+    </div>
+    <div style="font-family:var(--font-hud);font-size:7px;color:var(--muted);letter-spacing:1px;margin-bottom:5px">ACTIVE BONUSES</div>
+    <div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:6px">${bonHTML||'<span style="font-size:8px;color:var(--muted)">None — equip items for power-ups</span>'}</div>
+    <div style="font-size:7px;color:rgba(74,222,128,0.3);font-family:var(--font-hud);text-align:center">CLICK SLOT TO CHANGE · DRAG ITEMS FROM 📦 ITEMS</div>`;
 }
 
 function renderBpItems(body) {
