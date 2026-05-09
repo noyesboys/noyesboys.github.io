@@ -982,6 +982,19 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .bp-item-card .bic-qty{font-size:8px;color:var(--gold);font-family:var(--font-hud);line-height:1.2}
 .bp-item-card .bic-label{font-size:7px;color:var(--muted);font-family:var(--font-hud);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52px;margin-top:2px}
 @media(max-width:680px){#backpack-items-panel{right:14px;bottom:calc(86px + 8px + 540px);width:calc(100vw - 28px)}}
+/* ── Gear panel visual slot cards ── */
+.gear-slot-card{background:rgba(0,0,0,0.4);border:1.5px dashed rgba(74,222,128,0.2);border-radius:8px;padding:8px 10px;margin-top:7px;display:flex;align-items:center;gap:8px;transition:.2s;min-height:54px}
+.gear-slot-card.filled{border-style:solid;border-color:rgba(74,222,128,0.4);cursor:default}
+.gear-slot-card.empty{justify-content:center;text-align:center;flex-direction:row;gap:10px;cursor:default}
+.gear-slot-card.gear-slot-hover{border-color:var(--green)!important;background:rgba(74,222,128,0.1)!important;transform:scale(1.01)}
+.gear-inv-strip{display:flex;flex-wrap:wrap;gap:5px;padding:8px;background:rgba(0,0,0,0.3);border:1px solid rgba(34,211,238,0.2);border-radius:8px;margin-bottom:12px}
+.gear-inv-chip{display:flex;flex-direction:column;align-items:center;background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:7px;padding:5px 4px;width:58px;cursor:grab;transition:.15s;text-align:center;user-select:none}
+.gear-inv-chip:hover{border-color:var(--cyan);background:rgba(34,211,238,0.06);transform:scale(1.06)}
+.gear-inv-chip:active{cursor:grabbing;opacity:.6}
+.gear-inv-chip.in-use{border-color:rgba(74,222,128,0.4);opacity:.65}
+.gear-inv-chip .gic-icon{font-size:18px;line-height:1.3}
+.gear-inv-chip .gic-name{font-size:7px;color:var(--muted);font-family:var(--font-hud);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:56px;margin-top:2px}
+.gear-inv-chip .gic-stat{font-size:7px;color:var(--gold);font-family:var(--font-hud)}
 </style>
 </head>
 
@@ -1288,6 +1301,13 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
               <div class="room-btn-info">
                 <div class="room-btn-name">BLACK MARKET</div>
                 <div class="room-btn-sub">Buy &amp; sell seeds anonymously</div>
+              </div>
+            </div>
+            <div class="room-btn" onclick="closePanel('shops');showTab('seeds')">
+              <span class="room-btn-icon">🌰</span>
+              <div class="room-btn-info">
+                <div class="room-btn-name">REDEEM SEED CODES</div>
+                <div class="room-btn-sub">Enter codes · manage your seed vault</div>
               </div>
             </div>
           </div>
@@ -4608,6 +4628,34 @@ function renderBpItemsPanel() {
     html += `</div>`;
   }
 
+  // ── Physical gear (lights, fans, climate) — drag to gear panel slots ──
+  const _gearInstances = instances.filter(x =>
+    ['lights','fan','acUnit','heater','dehumidifier','humidifier'].includes(x.equipType||x.type)
+  );
+  if (_gearInstances.length) {
+    const _allGrps2 = ['lights','fans','acUnits','heaters','dehumidifiers','humidifiers'];
+    const _isUsed2  = uid => GS.rooms.some(r2 =>
+      _allGrps2.some(g2 => (getRoomGear(r2.id)[g2]||[]).some(sl => sl?.instanceUid === uid))
+    );
+    html += `<div class="bp-section-label">⚙️ GEAR <span style="color:rgba(74,222,128,0.4);font-size:7px">DRAG TO GEAR PANEL SLOTS ⚙️</span></div><div class="bp-item-grid">`;
+    _gearInstances.forEach(inst => {
+      const _used = _isUsed2(inst.uid);
+      const _safe = inst.uid.replace(/'/g,"\\'");
+      const _type = inst.equipType||inst.type;
+      html += `<div class="bp-item-card" draggable="true"
+        ondragstart="event.dataTransfer.setData('gear-uid','${_safe}');event.dataTransfer.setData('gear-type','${_type}')"
+        style="border-color:${_used?'rgba(74,222,128,0.4)':'var(--border)'}"
+        title="${inst.name}${_used?' — assigned':' — unassigned'}">
+        <div class="bic-icon">${inst.icon||'📦'}</div>
+        ${inst.power?`<div class="bic-qty">${inst.power}W</div>`:inst.size?`<div class="bic-qty">${inst.size}</div>`:''}
+        <div class="bic-label" style="color:${_used?'var(--green)':'var(--muted)'}">${inst.name.slice(0,8)}</div>
+        ${_used?`<div style="font-size:6px;color:rgba(74,222,128,0.5);font-family:var(--font-hud)">IN USE</div>`:'<div style="font-size:6px;color:rgba(255,255,255,0.2);font-family:var(--font-hud)">FREE</div>'}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  
   // ── Tools ──
   const toolDefs3 = [{key:'scope',icon:'🔬',name:'Loupe'},{key:'phmeter',icon:'🧪',name:'pH Meter'},{key:'ecmeter',icon:'🔌',name:'EC Meter'},{key:'scrogNet',icon:'🕸️',name:'SCROG'}];
   const ownedT3 = toolDefs3.filter(t=>g[t.key]);
@@ -5114,47 +5162,49 @@ const WORDLIST = ['apple','brave','cloud','dance','eagle','flame','grace','happy
 const GAME_MODES = {
   easy: {
     key:'easy', label:'EASY', color:'var(--green)', icon:'🌱',
-    growMult: 1.0, harvestMult: 1.0, stressMult: 0.7,
-    warnings:'all', noDisease: false, alwaysPerfect: false,
-    levelReq: 0, desc:'All hints on. Normal grow speed.',
-    coinMult: 1.0,
+    growMult:1.0, harvestMult:1.0, stressMult:0.7,
+    warnings:'all', noDisease:false, alwaysPerfect:false,
+    levelReq:0, achReq:0,
+    desc:'All hints on. Normal grow speed. Best for learning.',
+    coinMult:1.0, rewardNote:'Base rewards',
   },
   medium: {
     key:'medium', label:'MEDIUM', color:'var(--gold)', icon:'⭐',
-    growMult: 0.75, harvestMult: 2.0, stressMult: 1.0,
-    warnings:'critical', noDisease: false, alwaysPerfect: false,
-    levelReq: 25, desc:'25% slower grow · 2× harvest weight · Critical warnings only',
-    coinMult: 1.15,
-    requireAllAchievements: 'easy',
+    growMult:0.75, harvestMult:2.0, stressMult:1.0,
+    warnings:'critical', noDisease:false, alwaysPerfect:false,
+    levelReq:25, achReq:8,
+    desc:'25% slower grows · 2× harvest weight · Critical warnings only',
+    coinMult:1.15, rewardNote:'+15% coins · 2× harvest weight',
   },
   hard: {
     key:'hard', label:'HARD', color:'var(--orange)', icon:'🔥',
-    growMult: 0.50, harvestMult: 4.0, stressMult: 1.25,
-    warnings:'none', noDisease: false, alwaysPerfect: false,
-    levelReq: 50, desc:'50% slower grow · 4× harvest weight · No warnings',
-    coinMult: 1.35,
-    requireAllAchievements: 'medium',
+    growMult:0.50, harvestMult:4.0, stressMult:1.25,
+    warnings:'none', noDisease:false, alwaysPerfect:false,
+    levelReq:50, achReq:18,
+    desc:'50% slower grows · 4× harvest weight · No warnings at all',
+    coinMult:1.35, rewardNote:'+35% coins · 4× harvest weight',
   },
   master: {
     key:'master', label:'MASTER', color:'var(--red)', icon:'💀',
-    growMult: 0.25, harvestMult: 5.0, stressMult: 1.5,
-    warnings:'none', noDisease: false, alwaysPerfect: false,
-    levelReq: 100, desc:'75% slower grow · 5× harvest weight · Zero guidance',
-    coinMult: 1.5,
-    requireAllAchievements: 'hard',
+    growMult:0.25, harvestMult:5.0, stressMult:1.5,
+    warnings:'none', noDisease:false, alwaysPerfect:false,
+    levelReq:100, achReq:30,
+    desc:'75% slower grows · 5× harvest weight · Ultimate test',
+    coinMult:1.5, rewardNote:'+50% coins · 5× harvest weight',
   },
   god: {
     key:'god', label:'GOD MODE', color:'var(--pink)', icon:'✨',
-    growMult: 10.0, harvestMult: 1.0, stressMult: 0.0,
-    warnings:'none', noDisease: true, alwaysPerfect: true,
-    levelReq: 1000, desc:'1 day per real minute · No disease · Always perfect harvests',
-    coinMult: 1.0,
-    requireChallenges: ['god_challenge_1','god_challenge_2','god_challenge_3'],
+    growMult:10.0, harvestMult:1.0, stressMult:0.0,
+    warnings:'none', noDisease:true, alwaysPerfect:true,
+    levelReq:1000, achReq:0,
+    desc:'1 day per real minute · No disease · Always perfect · Pure fun',
+    coinMult:1.0, rewardNote:'No multipliers — just for fun',
+    requireChallenges:['god_challenge_1','god_challenge_2','god_challenge_3'],
   },
 };
 
-// Legacy key mapping (old saves used 'normal' for medium behavior)
-const MODE_KEY_MAP = { normal: 'medium' };
+// Legacy key map — old saves used 'normal' to mean what is now 'medium'
+const MODE_KEY_MAP = { normal:'medium' };
 
 function getModeDef() {
   const raw = GS?.difficulty || 'easy';
@@ -5163,144 +5213,230 @@ function getModeDef() {
 }
 
 // ================================================================
-// LEVEL TRACKS — Total, Growing, Dry/Cure, Breeder
+// LEVEL TRACKS
 // ================================================================
-const XP_PER_LEVEL = { total: 500, growing: 400, dry: 350, breeder: 600 };
+const XP_PER_LEVEL = { total:500, growing:400, dry:350, breeder:600 };
 
 function getLevelFromXP(xp, track) {
-  return Math.floor((xp || 0) / (XP_PER_LEVEL[track] || 500)) + 1;
+  return Math.floor((xp||0) / (XP_PER_LEVEL[track]||500)) + 1;
 }
-
 function getXPProgress(xp, track) {
-  const perLv = XP_PER_LEVEL[track] || 500;
-  return ((xp || 0) % perLv) / perLv;
+  const p = XP_PER_LEVEL[track]||500;
+  return ((xp||0) % p) / p;
+}
+function getXPToNextLevel(xp, track) {
+  const p = XP_PER_LEVEL[track]||500;
+  return p - ((xp||0) % p);
 }
 
-function getXPToNextLevel(xp, track) {
-  const perLv = XP_PER_LEVEL[track] || 500;
-  return perLv - ((xp || 0) % perLv);
+// ================================================================
+// BREEDING GATES
+// Rules: total level 25 unlocks breeding tab + male purchase.
+// F-gen gates are based on BREEDER LEVEL, not total level.
+// Core gameplay (plant → water → harvest → dry → cure → sell)
+// is NEVER level-gated. Only enhancements are gated.
+// ================================================================
+function canBreed() {
+  return (GS.level||1) >= 25;
+}
+
+function getMaxFGenNumber() {
+  if (!canBreed()) return 0;
+  const bLv = getLevelFromXP(GS.breederXP||0, 'breeder');
+  if (bLv < 3)  return 1;   // F1 only
+  if (bLv < 8)  return 2;   // F2 unlocked
+  if (bLv < 12) return 3;   // F3
+  if (bLv < 16) return 4;   // F4
+  if (bLv < 22) return 5;   // F5
+  if (bLv < 25) return 7;   // F6–F7
+  if (bLv < 35) return 9;   // F8–F9
+  if (bLv < 50) return 10;  // F10
+  return 99;                 // F*
+}
+
+function getMaxBXGenNumber() {
+  if (!canBreed()) return 0;
+  const bLv = getLevelFromXP(GS.breederXP||0, 'breeder');
+  if (bLv < 20) return 0;
+  if (bLv < 28) return 1;
+  if (bLv < 40) return 5;
+  if (bLv < 50) return 9;
+  if (bLv < 60) return 10;
+  return 99;
+}
+
+function canPlantBreedGen(gen) {
+  // F1 REGs can't be planted — they need to be bred into F2 first
+  // This is enforced already in confirmPlant via canGrow:false on F1s
+  if (!gen || gen === 'original') return true;
+  if (!canBreed()) return false;
+  if (gen === 'F1') return true; // F1s are REG and can't be planted anyway
+  const maxF  = getMaxFGenNumber();
+  const maxBX = getMaxBXGenNumber();
+  if (gen === 'F*')  return maxF  >= 99;
+  if (gen === 'BX*') return maxBX >= 99;
+  if (gen.startsWith('F'))  return parseInt(gen.slice(1)||'1')  <= maxF;
+  if (gen.startsWith('BX')) return parseInt(gen.slice(2)||'1') <= maxBX;
+  return true;
+}
+
+function getMinBreederLvForGen(gen) {
+  const map = {
+    'F2':3,'F3':8,'F4':12,'F5':16,'F6':22,'F7':22,
+    'F8':25,'F9':25,'F10':35,'F*':50,
+    'BX1':20,'BX2':28,'BX3':28,'BX4':28,'BX5':28,
+    'BX6':40,'BX7':40,'BX8':40,'BX9':40,'BX10':50,'BX*':60,
+  };
+  return map[gen] || 0;
 }
 
 // ================================================================
 // LEVEL UNLOCK TABLE
+// Principle: only enhancements are gated, never essentials.
+// Essentials available at level 1: basic lights, basic fan,
+// 1gal pots, soil, nutrients, pH meter, EC meter, harvesting,
+// hang drying, jar curing, selling, inspecting, watering.
 // ================================================================
 const LEVEL_UNLOCKS = {
   total: [
-    {lv:2,  icon:'💧', label:'Drip Emitters available in Shop → Water'},
-    {lv:3,  icon:'🌀', label:'Small Fan in Shop → Climate'},
-    {lv:5,  icon:'🧴', label:'Base Nutrients unlocked in Shop → Water'},
-    {lv:7,  icon:'🧪', label:'pH Meter unlocked in Shop → Tools'},
-    {lv:10, icon:'🏠', label:'Room 2 can be unlocked (Shop → Rooms)', highlight:true},
-    {lv:12, icon:'🔌', label:'EC/PPM Meter unlocked in Shop → Tools'},
-    {lv:15, icon:'🔬', label:"Jeweler's Loupe unlocked · Inspect buds for ripeness"},
-    {lv:18, icon:'🌵', label:'Dehumidifier unlocked in Shop → Climate'},
-    {lv:20, icon:'💡', label:'HID 400W light unlocked · Serious yields begin'},
-    {lv:22, icon:'🫧', label:'CO₂ Tank unlocked in Shop → Climate'},
-    {lv:25, icon:'⭐', label:'MEDIUM MODE unlockable (all Easy achievements required)', highlight:true},
+    {lv:1,  icon:'🌱', label:'Full grow cycle available — plant, water, harvest, dry, cure, sell'},
+    {lv:2,  icon:'💡', label:'CFL 200W unlocked — extra seedling power'},
+    {lv:3,  icon:'🌀', label:'Medium Fan unlocked — better airflow, lower temp'},
+    {lv:4,  icon:'💰', label:'Wholesale Co. buyer unlocked — bulk 200g+ sales'},
+    {lv:5,  icon:'🧴', label:'Grow (N) nutrient formula unlocked in Shop → Water'},
+    {lv:6,  icon:'🧴', label:'Bloom (PK) nutrient formula unlocked'},
+    {lv:7,  icon:'💡', label:'CFL 250W unlocked — solid starter light'},
+    {lv:8,  icon:'💡', label:'CMH 315W unlocked — excellent spectrum for veg'},
+    {lv:9,  icon:'💧', label:'Emitter packs + hosing unlocked — auto-water prep'},
+    {lv:10, icon:'🏠', label:'Room 2 purchase available in Shop → Rooms', highlight:true},
+    {lv:12, icon:'💡', label:'HID 400W unlocked — first serious flowering light'},
+    {lv:14, icon:'🌵', label:'Small Dehumidifier unlocked in Shop → Climate'},
+    {lv:16, icon:'💡', label:'HID 600W unlocked — high output'},
+    {lv:18, icon:'🌵', label:'Medium Dehumidifier unlocked'},
+    {lv:20, icon:'🫧', label:'CO₂ Tank unlocked — boost to 1500ppm'},
+    {lv:22, icon:'💡', label:'LED 480W Quantum Board unlocked'},
+    {lv:25, icon:'🧬', label:'BREEDING SYSTEM UNLOCKED — buy males, breed genetics!', highlight:true},
     {lv:28, icon:'🕸️', label:'SCROG Net unlocked in Shop → Tools'},
-    {lv:30, icon:'🏠', label:'Room 3 can be unlocked (10 plant slots)', highlight:true},
-    {lv:32, icon:'💡', label:'LED 480W Quantum Board unlocked'},
-    {lv:35, icon:'🧪', label:'STS Spray unlocked · Reverse females to make FEM seeds'},
-    {lv:38, icon:'❄️', label:'AC Unit unlocked in Shop → Climate'},
-    {lv:40, icon:'💡', label:'HID 600W unlocked · High output'},
-    {lv:42, icon:'🔥', label:'Heater unlocked in Shop → Climate'},
+    {lv:30, icon:'🏠', label:'Room 3 purchase available (10 plant slots)', highlight:true},
+    {lv:32, icon:'💡', label:'HID 750W unlocked'},
+    {lv:35, icon:'🧪', label:'STS Spray unlocked — reverse females for FEM pollen'},
+    {lv:38, icon:'❄️', label:'Small AC Unit unlocked in Shop → Climate'},
+    {lv:40, icon:'🔥', label:'Small Heater unlocked in Shop → Climate'},
+    {lv:42, icon:'💡', label:'LED 720W Pro unlocked'},
     {lv:45, icon:'🛢️', label:'2,000 Gal Reservoir unlocked'},
-    {lv:48, icon:'💡', label:'HID 750W unlocked · Serious production'},
-    {lv:50, icon:'🔥', label:'HARD MODE unlockable (all Medium achievements required)', highlight:true},
-    {lv:55, icon:'💡', label:'LED 720W Pro unlocked'},
-    {lv:60, icon:'🏠', label:'Room 4 can be unlocked (15 plant slots)', highlight:true},
-    {lv:65, icon:'🛢️', label:'5,000 Gal Reservoir unlocked'},
-    {lv:70, icon:'💡', label:'HID 1000W unlocked · Maximum traditional power'},
-    {lv:75, icon:'💡', label:'LED 1000W Pro unlocked · Commercial grade'},
+    {lv:48, icon:'❄️', label:'Medium AC Unit unlocked'},
+    {lv:50, icon:'⭐', label:'MEDIUM MODE unlockable (Level 25 + 8 achievements)', highlight:true},
+    {lv:55, icon:'💡', label:'HID 1000W unlocked — maximum traditional power'},
+    {lv:60, icon:'🏠', label:'Room 4 purchase available (15 plant slots)', highlight:true},
+    {lv:65, icon:'💡', label:'LED 1000W Pro unlocked — commercial grade'},
+    {lv:70, icon:'🛢️', label:'5,000 Gal Reservoir unlocked'},
+    {lv:75, icon:'❄️', label:'Large AC Unit unlocked'},
     {lv:80, icon:'🛢️', label:'10,000 Gal Reservoir unlocked'},
-    {lv:90, icon:'👑', label:'FORBIDDEN LIGHT hint — complete 10 perfect A-grade grows'},
-    {lv:100,icon:'💀', label:'MASTER MODE unlockable (all Hard achievements required)', highlight:true},
-    {lv:200,icon:'🏠', label:'Room 5 can be unlocked (20 plant slots)', highlight:true},
-    {lv:500,icon:'👑', label:'Prestige content begins...'},
-    {lv:1000,icon:'✨','label':'GOD MODE unlockable (3 impossible challenges required)', highlight:true},
+    {lv:90, icon:'👑', label:'Complete 10 A-grade grows → Forbidden Light unlocks'},
+    {lv:100,icon:'🔥', label:'HARD MODE unlockable (Level 50 + 18 achievements)', highlight:true},
+    {lv:150,icon:'💀', label:'MASTER MODE unlockable (Level 100 + 30 achievements)', highlight:true},
+    {lv:200,icon:'🏠', label:'Room 5 purchase available (20 plant slots)', highlight:true},
+    {lv:1000,icon:'✨', label:'GOD MODE unlockable (3 impossible challenges)', highlight:true},
   ],
   growing: [
-    {lv:1,  icon:'🌱', label:'First grow started — water regularly!'},
-    {lv:2,  icon:'✂️', label:'LST Training unlocked — bend & tie'},
-    {lv:3,  icon:'✂️', label:'Topping unlocked — remove apical tip'},
-    {lv:5,  icon:'🌿', label:'FIM training unlocked — 3-5 new growth points'},
-    {lv:7,  icon:'💥', label:'Supercrop (Intentional Snap) unlocked'},
-    {lv:10, icon:'🪣', label:'3 Gal pots unlocked — room to grow'},
-    {lv:12, icon:'🪣', label:'5 Gal pots unlocked — medium plants'},
-    {lv:15, icon:'💧', label:'Auto-water drip emitter system unlocked'},
-    {lv:18, icon:'🪣', label:'10 Gal pots unlocked — large plants'},
-    {lv:20, icon:'🌾', label:'Early harvest mastered — better yields at any week'},
-    {lv:25, icon:'🪣', label:'25 Gal XL pots unlocked', highlight:true},
-    {lv:30, icon:'🌸', label:'Reveg mastered — reflip bonus discovered'},
-    {lv:40, icon:'🌿', label:'SCROG training unlocked via total level 28'},
-    {lv:50, icon:'🏆', label:'Perfect grower badge — 10 A-grade grows'},
-    {lv:75, icon:'👑', label:'Elite grower — harvest weight multiplier caps raised'},
-    {lv:100,icon:'✨', label:'Master cultivar — all training methods perfected', highlight:true},
+    {lv:1,  icon:'🌱', label:'All training types immediately available — LST, Top, FIM, Supercrop'},
+    {lv:1,  icon:'🪣', label:'All pot sizes purchasable from Shop → Water from day 1'},
+    {lv:2,  icon:'✂️', label:'LST stress reduced — bending costs 10% less health'},
+    {lv:3,  icon:'🌱', label:'Seedling growth rate +5% faster'},
+    {lv:4,  icon:'💥', label:'Supercrop yield bonus increases from +8% to +10%'},
+    {lv:5,  icon:'🌿', label:'FIM creates an extra growth point — canopy bonus'},
+    {lv:7,  icon:'🌸', label:'Topping: 3rd top becomes possible for +10% extra yield'},
+    {lv:10, icon:'💧', label:'Auto-water dry-at/stop-at controls expand in range', highlight:true},
+    {lv:12, icon:'🌾', label:'Harvest window: A-grade now achievable from Week 9'},
+    {lv:15, icon:'🌸', label:'Reveg discovered — flip back to flower for big multiplier'},
+    {lv:20, icon:'⚡', label:'Plant health regen +15% faster in ideal conditions'},
+    {lv:25, icon:'🏆', label:'Perfect grower — health penalties from training reduced'},
+    {lv:30, icon:'🌿', label:'Disease resistance naturally higher — pests spawn 15% less'},
+    {lv:40, icon:'⭐', label:'Elite timing — optimal watering window +2 hours'},
+    {lv:50, icon:'👑', label:'Master cultivar — all grow bonuses at full efficiency'},
+    {lv:75, icon:'✨', label:'Legendary grower — harvest weight cap increased by 10%'},
+    {lv:100,icon:'🌟', label:'Grandmaster — plants grow 5% faster in all stages'},
   ],
   dry: [
-    {lv:1,  icon:'🌬️', label:'Hang drying unlocked (always available)'},
-    {lv:2,  icon:'💨', label:'Fan speed controls unlocked for drying'},
-    {lv:3,  icon:'🌵', label:'Dehumidifier integration for dry room'},
-    {lv:5,  icon:'🫙', label:'Jar curing system unlocked', highlight:true},
-    {lv:7,  icon:'💨', label:'Quick Burp method mastered (−10% RH)'},
-    {lv:10, icon:'💨', label:'Medium Burp mastered (−20% RH)'},
-    {lv:12, icon:'🎯', label:'Sweet spot detection — auto-highlight 58–64% zone'},
-    {lv:15, icon:'💨', label:'Long Burp unlocked (−30% RH, −5% quality)'},
-    {lv:20, icon:'⭐', label:'Curing quality bonus tier 2 — 10+ burps bonus'},
-    {lv:25, icon:'🏆', label:'Premium curing — vault items command higher prices'},
-    {lv:30, icon:'✨', label:'Optimal curer — quality rarely drops below 90%'},
-    {lv:50, icon:'👑', label:'Elite curer — buyers pay premium for your batches'},
+    {lv:1,  icon:'🌬️', label:'Full dry & cure cycle available at level 1 — hang dry, jar cure, sell'},
+    {lv:2,  icon:'💨', label:'Sweet spot zone (58–64%) highlighted automatically'},
+    {lv:3,  icon:'⚡', label:'Drying speed +8% — batches finish faster'},
+    {lv:4,  icon:'🌵', label:'Dehumidifier efficiency +10% in dry room'},
+    {lv:5,  icon:'⭐', label:'Burp cooldown reduced from 5h to 4.5h'},
+    {lv:7,  icon:'💨', label:'Drying speed +15% cumulative bonus'},
+    {lv:10, icon:'🏆', label:'High RH mold risk threshold increases — more forgiving', highlight:true},
+    {lv:12, icon:'⚡', label:'Drying speed +20% cumulative'},
+    {lv:15, icon:'🌟', label:'Curing quality: 10+ burps gives extra +10% quality bonus'},
+    {lv:20, icon:'💰', label:'Cured product commands +5% from premium buyers'},
+    {lv:25, icon:'👑', label:'Elite curer — over-dried penalty reduced by 25%'},
+    {lv:30, icon:'✨', label:'Burp cooldown reduced to 4h'},
+    {lv:50, icon:'🏅', label:'Master curer — all dry/cure negatives reduced by 20%'},
   ],
   breeder: [
-    {lv:1,  icon:'🧬', label:'Breeding system introduced — plant males to pollinate'},
-    {lv:2,  icon:'♂️', label:'Male seed purchase unlocked (Shop → ♂ MALES)', highlight:true},
-    {lv:5,  icon:'🧬', label:'F1 seeds produceable (plant male + female)'},
-    {lv:8,  icon:'🏷️', label:'Strain naming unlocked for custom crosses'},
-    {lv:10, icon:'🧬', label:'F2 generation breeding unlocked (breed two F1s)', highlight:true},
-    {lv:12, icon:'📊', label:'Rarity preview in Cross Calculator'},
-    {lv:15, icon:'🧬', label:'F3 generation unlocked — stability improving'},
-    {lv:18, icon:'💧', label:'STS Spray available (after total level 35)'},
-    {lv:20, icon:'🧬', label:'F4 generation unlocked', highlight:true},
-    {lv:25, icon:'🧬', label:'F5 generation — GOD pheno chances rising', highlight:true},
-    {lv:30, icon:'🧬', label:'BX1 backcross generation unlocked'},
-    {lv:35, icon:'🧬', label:'F6–F7 — elite stability range'},
-    {lv:40, icon:'🧬', label:'BX2–BX3 backcross mastered'},
-    {lv:50, icon:'🧬', label:'F8–F9 — near GOD territory', highlight:true},
-    {lv:60, icon:'🧬', label:'BX4–BX5 advanced backcross'},
-    {lv:75, icon:'👑', label:'F10 / F* generation unlocked — true breeding lines', highlight:true},
-    {lv:100,icon:'✨', label:'BX* — fully stabilized backcross lines', highlight:true},
+    // Note: breeder XP starts at total level 25 when breeding unlocks
+    {lv:1,  icon:'🧬', label:'Breeding active! Plant males alongside females for F1 REG seeds'},
+    {lv:2,  icon:'♂️', label:'Male pollen spreads 1 week sooner — less wait for seeds'},
+    {lv:3,  icon:'🧬', label:'F2 FEM seeds unlocked — breed two F1s for growable seeds!', highlight:true},
+    {lv:4,  icon:'📊', label:'Cross Preview Calculator shows live rarity percentages'},
+    {lv:5,  icon:'🏷️', label:'Strain naming unlocked — give your crosses custom names', highlight:true},
+    {lv:6,  icon:'💰', label:'Bred seeds sell for 10% more on the Black Market'},
+    {lv:8,  icon:'🧬', label:'F3 generation unlocked — stability improving', highlight:true},
+    {lv:10, icon:'⭐', label:'Phenotype quality +5% on all bred plants you grow'},
+    {lv:12, icon:'🧬', label:'F4 generation unlocked', highlight:true},
+    {lv:15, icon:'🧪', label:'STS Spray (via total level 35) makes FEM pollen from your plants'},
+    {lv:16, icon:'🧬', label:'F5 generation unlocked — GOD pheno rates rising', highlight:true},
+    {lv:20, icon:'🧬', label:'BX1 Backcross generation unlocked — stabilize your lines', highlight:true},
+    {lv:22, icon:'🧬', label:'F6 and F7 generation unlocked'},
+    {lv:25, icon:'🧬', label:'F8 and F9 — near GOD territory', highlight:true},
+    {lv:28, icon:'🧬', label:'BX2 through BX5 backcross unlocked'},
+    {lv:30, icon:'💰', label:'Bred seed auction value +25% — collectors pay more'},
+    {lv:35, icon:'🧬', label:'F10 unlocked — true breeding line begins', highlight:true},
+    {lv:40, icon:'🧬', label:'BX6 through BX9 advanced backcross unlocked'},
+    {lv:50, icon:'👑', label:'F* generation unlocked — permanently stable genetics', highlight:true},
+    {lv:60, icon:'✨', label:'BX* generation unlocked — ultimate backcross line', highlight:true},
+    {lv:75, icon:'🌟', label:'Master breeder — GOD pheno chance at absolute maximum'},
+    {lv:100,icon:'✨', label:'Legendary breeder — all generation bonuses maximized', highlight:true},
   ],
 };
 
-// GOD MODE challenge definitions
+// GOD MODE challenges
 const GOD_CHALLENGES = [
-  {id:'god_challenge_1', icon:'👑', name:'The Impossible Harvest', desc:'Achieve a perfect 10.0 grow score on any plant.', check: s => (s.perfectScore10s||0) >= 1},
-  {id:'god_challenge_2', icon:'🧬', name:'Genetic Singularity',   desc:'Breed a GOD phenotype from a self-built F* line.',  check: s => (s.godFromFStar||0)  >= 1},
-  {id:'god_challenge_3', icon:'🏆', name:'The Undefeated',         desc:'Win 10 Grow-Offs in a row without a single loss.',  check: (s,gs) => (gs.consecutiveGrowOffWins||0) >= 10},
+  {id:'god_challenge_1', icon:'👑', name:'The Impossible Harvest',
+   desc:'Achieve a perfect 10.0 grow score on any plant.',
+   check: s => (s.perfectScore10s||0) >= 1},
+  {id:'god_challenge_2', icon:'🧬', name:'Genetic Singularity',
+   desc:'Breed a GOD phenotype from a self-built F* or BX* line.',
+   check: s => (s.godFromFStar||0) >= 1},
+  {id:'god_challenge_3', icon:'🏆', name:'The Undefeated',
+   desc:'Win 10 Grow-Off challenges in a row without a single loss.',
+   check: (s,gs) => (gs.consecutiveGrowOffWins||0) >= 10},
 ];
 
 function getModeUnlockStatus(modeKey) {
   const def = GAME_MODES[modeKey];
-  if (!def) return {unlocked: false, reason:'Unknown mode'};
-  if (!GS || !GS.username) return {unlocked: false, reason:'Not logged in'};
+  if (!def) return {unlocked:false, reason:'Unknown mode'};
+  if (!GS || !GS.username) return {unlocked:false, reason:'Not logged in'};
+  if (modeKey === 'easy') return {unlocked:true};
 
   const totalLv = GS.level || 1;
-  if (totalLv < def.levelReq) return {unlocked: false, reason:`Need Level ${def.levelReq} (you are ${totalLv})`};
+  if (totalLv < def.levelReq)
+    return {unlocked:false, reason:`Need Level ${def.levelReq} (you are ${totalLv})`};
+
+  if (def.achReq) {
+    const earned = (GS.achievements||[]).length;
+    if (earned < def.achReq)
+      return {unlocked:false, reason:`Need ${def.achReq} achievements (you have ${earned})`};
+  }
 
   if (def.requireChallenges) {
-    const missing = def.requireChallenges.filter(cid => !(GS.completedGodChallenges||[]).includes(cid));
-    if (missing.length) return {unlocked: false, reason:`Need ${missing.length} more Impossible Challenge(s)`};
+    const missing = def.requireChallenges.filter(
+      cid => !(GS.completedGodChallenges||[]).includes(cid)
+    );
+    if (missing.length)
+      return {unlocked:false, reason:`Need ${missing.length} more Impossible Challenge(s) — check Stats`};
   }
 
-  if (def.requireAllAchievements) {
-    const reqMode = def.requireAllAchievements;
-    const modeAchs = ACHIEVEMENTS.filter(a => !a.secret);
-    const earned   = new Set((GS.achievements||[]).map(a=>a.id));
-    const missing  = modeAchs.filter(a => !earned.has(a.id));
-    if (missing.length > 0) return {unlocked: false, reason:`Need ${missing.length} more achievement(s) from ${reqMode.toUpperCase()} mode`};
-  }
-
-  return {unlocked: true};
+  return {unlocked:true};
 }
 
 // ================================================================
@@ -6929,6 +7065,19 @@ function submitVaultToGrowOff(goId) {
   let dropsAwarded = [];
 
   if (won) {
+    GS.consecutiveGrowOffWins = (GS.consecutiveGrowOffWins||0) + 1;
+    // Check Impossible Challenge 3
+    GOD_CHALLENGES.forEach(ch => {
+      if (ch.id === 'god_challenge_3' && !(GS.completedGodChallenges||[]).includes(ch.id)) {
+        let passed = false;
+        try { passed = ch.check(GS.stats||{}, GS); } catch(e) {}
+        if (passed) {
+          if (!GS.completedGodChallenges) GS.completedGodChallenges = [];
+          GS.completedGodChallenges.push(ch.id);
+          toast('👑 Impossible Challenge Complete: ' + ch.name + '!', 'special', 8000);
+        }
+      }
+    });
     // Increment prestige for this boss
     if (!GS.bossPrestige) GS.bossPrestige = {};
     GS.bossPrestige[go.botIdx] = (GS.bossPrestige[go.botIdx] || 0) + 1;
@@ -6951,6 +7100,7 @@ function submitVaultToGrowOff(goId) {
     if (myScore > (GS.seasonBestScore||0)) GS.seasonBestScore = myScore;
     addLog('Grow-Off WIN vs ' + boss.baseName + ' (P' + (prestige-1) + ') · ' + myScore + ' vs ' + theirScore + ' · ' + dropsAwarded.length + ' drops', 'success');
   } else {
+    GS.consecutiveGrowOffWins = 0; // reset streak on loss
     addLog('Grow-Off LOSS vs ' + boss.baseName + ' · ' + myScore + ' vs ' + theirScore, 'warn');
   }
 
@@ -8465,6 +8615,59 @@ function toggleLights(roomId) {
 // ================================================================
 // GEAR PANEL
 // ================================================================
+// ── Drop handler: gear item dragged to a gear panel slot ──
+function dropToGearSlot(event, roomId, group, idx, equipType) {
+  event.preventDefault();
+  const uid   = event.dataTransfer.getData('gear-uid');
+  const iType = event.dataTransfer.getData('gear-type');
+  if (!uid) { toast('Drag a gear item from the inventory strip above.','warn',2500); return; }
+  const typeMap = {lights:'Light',fan:'Fan',acUnit:'AC',heater:'Heater',dehumidifier:'Dehumidifier',humidifier:'Humidifier'};
+  if (iType !== equipType) {
+    toast('⚠️ Wrong type — this slot needs a ' + (typeMap[equipType]||equipType) + ', not a ' + (typeMap[iType]||iType) + '.','warn',3000);
+    return;
+  }
+  assignRoomSlot(roomId, group, idx, uid);
+  renderGearPanel();
+}
+
+// ── Fallback picker modal (tap-to-assign for touch users) ──
+function _showGearPicker(roomId, group, idx, equipType) {
+  const rg    = getRoomGear(roomId);
+  const inv   = getInventoryInstances();
+  const _grps = ['lights','fans','acUnits','heaters','dehumidifiers','humidifiers'];
+  const isUsed= uid => GS.rooms.some(r2 => _grps.some(g2 =>
+    (getRoomGear(r2.id)[g2]||[]).some((sl,j2) =>
+      sl?.instanceUid === uid && !(r2.id===roomId && g2===group && j2===idx)
+    )
+  ));
+  const available = inv.filter(x => (x.equipType||x.type)===equipType && !isUsed(x.uid));
+  const typeLabel = {lights:'Light',fan:'Fan',acUnit:'AC Unit',heater:'Heater',dehumidifier:'Dehumidifier',humidifier:'Humidifier'}[equipType]||equipType;
+  const wrapper = document.createElement('div');
+  wrapper.setAttribute('data-action-prompt','1');
+  wrapper.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:10002;display:flex;align-items:center;justify-content:center';
+  const items = available.map(inst => `
+    <div onclick="assignRoomSlot(${roomId},'${group}',${idx},'${inst.uid}');renderGearPanel();this.closest('[data-action-prompt]').remove()"
+      style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(0,0,0,0.5);border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:.15s;margin-bottom:6px"
+      onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'">
+      <span style="font-size:22px">${inst.icon||'📦'}</span>
+      <div style="flex:1">
+        <div style="font-family:var(--font-hud);font-size:10px;color:var(--text)">${inst.name}</div>
+        ${inst.power?`<div style="font-size:8px;color:var(--gold)">${inst.power}W</div>`:''}
+        ${inst.size?`<div style="font-size:8px;color:var(--muted)">${inst.size}</div>`:''}
+      </div>
+    </div>`).join('');
+  wrapper.innerHTML = `
+    <div style="background:var(--panel);border:1px solid var(--border-bright);border-radius:14px;padding:20px;width:340px;max-width:90vw;max-height:80vh;overflow-y:auto">
+      <div style="font-family:var(--font-hud);font-size:12px;color:var(--green);letter-spacing:1.5px;margin-bottom:12px">📦 SELECT ${typeLabel.toUpperCase()}</div>
+      ${available.length ? items
+        : `<div style="color:var(--muted);font-family:var(--font-hud);font-size:10px;text-align:center;padding:20px;line-height:2">No ${typeLabel}s available.<br><span style="font-size:9px">Buy one from Shop.</span></div>`}
+      <button onclick="this.closest('[data-action-prompt]').remove()"
+        style="width:100%;padding:8px;margin-top:8px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:7px;color:var(--muted);font-family:var(--font-hud);font-size:9px;cursor:pointer">CANCEL</button>
+    </div>`;
+  wrapper.addEventListener('click', e => { if(e.target===wrapper) wrapper.remove(); });
+  document.body.appendChild(wrapper);
+}
+
 function renderGearPanel() {
   const body = document.getElementById('gear-panel-body');
   if (!body) return;
@@ -8487,31 +8690,54 @@ function renderGearPanel() {
   ensureSlotArray(rg,'acUnits',acC); ensureSlotArray(rg,'heaters',htC);
   ensureSlotArray(rg,'dehumidifiers',dhC); ensureSlotArray(rg,'humidifiers',hmC);
 
-  // Dropdown builder
+  // Visual slot card (replaces dropdown — drag items from the strip above or tap PICK)
+  const _grps  = ['lights','fans','acUnits','heaters','dehumidifiers','humidifiers'];
+  const _isUsed= (uid, grp, i2) => GS.rooms.some(r2 => _grps.some(g2 =>
+    (getRoomGear(r2.id)[g2]||[]).some((sl,j2) =>
+      sl?.instanceUid === uid && !(r2.id===room.id && g2===grp && j2===i2)
+    )
+  ));
+
   const sel = (group, idx, equipType) => {
-    const cur = (rg[group]||[])[idx]?.instanceUid || '';
-    const opts = inv.filter(x => (x.equipType||x.type) === equipType);
-    let s = `<select style="width:100%;background:rgba(0,15,0,0.85);border:1px solid var(--border);border-radius:5px;padding:5px 7px;color:var(--text);font-family:var(--font-body);font-size:12px;outline:none;margin-top:5px;cursor:pointer"
-      onchange="assignRoomSlot(${room.id},'${group}',${idx},this.value);renderGearPanel()">
-      <option value="">— Not Installed —</option>`;
-    opts.forEach(inst => {
-      let inUse = false;
-      const groups2 = ['lights','fans','acUnits','heaters','dehumidifiers','humidifiers'];
-      for (const r2 of GS.rooms||[]) {
-        const rg2 = getRoomGear(r2.id);
-        for (const g2 of groups2) {
-          if ((rg2[g2]||[]).some((sl,j) => {
-            const isCurrentSlot = r2.id===room.id && g2===group && j===idx;
-            return !isCurrentSlot && sl?.instanceUid===inst.uid;
-          })) { inUse=true; break; }
-        }
-        if (inUse) break;
-      }
-      s += `<option value="${inst.uid}" ${inst.uid===cur?'selected':''} ${inUse?'disabled':''}>
-        ${inst.icon||'📦'} ${inst.name}${inUse?' (in use)':''}
-      </option>`;
-    });
-    return s + '</select>';
+    const uid    = (rg[group]||[])[idx]?.instanceUid || '';
+    const inst   = uid ? inv.find(x => x.uid === uid) : null;
+    const avail  = inv.filter(x => (x.equipType||x.type)===equipType && !_isUsed(x.uid,group,idx));
+    const dOpts  = `ondragover="event.preventDefault();this.classList.add('gear-slot-hover')"
+      ondragleave="this.classList.remove('gear-slot-hover')"
+      ondrop="this.classList.remove('gear-slot-hover');dropToGearSlot(event,${room.id},'${group}',${idx},'${equipType}')"`;
+
+    if (inst) {
+      return `<div class="gear-slot-card filled" ${dOpts}>
+        <span style="font-size:20px;flex-shrink:0">${inst.icon||'📦'}</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-family:var(--font-hud);font-size:9px;color:var(--green);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${inst.name}</div>
+          ${inst.power?`<div style="font-size:8px;color:var(--gold)">${inst.power}W</div>`:''}
+          ${inst.size?`<div style="font-size:8px;color:var(--muted)">${inst.size}</div>`:''}
+        </div>
+        <button onclick="assignRoomSlot(${room.id},'${group}',${idx},null);renderGearPanel()"
+          style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.35);border-radius:5px;padding:3px 8px;color:var(--red);font-family:var(--font-hud);font-size:8px;cursor:pointer;flex-shrink:0;transition:.15s"
+          onmouseover="this.style.background='rgba(239,68,68,0.25)'" onmouseout="this.style.background='rgba(239,68,68,0.1)'">✕ REMOVE</button>
+      </div>`;
+    } else if (avail.length) {
+      return `<div class="gear-slot-card empty" ${dOpts}>
+        <span style="font-size:22px;opacity:.35">📥</span>
+        <div style="flex:1">
+          <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud)">DRAG HERE or</div>
+          <div style="font-size:7px;color:rgba(74,222,128,0.4);margin-top:1px">${avail.length} item(s) available</div>
+        </div>
+        <button onclick="_showGearPicker(${room.id},'${group}',${idx},'${equipType}')"
+          style="background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.4);border-radius:5px;padding:4px 9px;color:var(--green);font-family:var(--font-hud);font-size:8px;cursor:pointer;flex-shrink:0;transition:.15s"
+          onmouseover="this.style.background='rgba(74,222,128,0.22)'" onmouseout="this.style.background='rgba(74,222,128,0.1)'">PICK</button>
+      </div>`;
+    } else {
+      return `<div class="gear-slot-card empty" style="opacity:.5">
+        <span style="font-size:20px;opacity:.3">➕</span>
+        <div style="text-align:center">
+          <div style="font-size:8px;color:var(--muted);font-family:var(--font-hud)">None owned</div>
+          <div style="font-size:7px;color:rgba(255,255,255,0.2);margin-top:1px">Buy from Shop</div>
+        </div>
+      </div>`;
+    }
   };
 
   // Thermostat slider (no re-render on slide — uses updateRoomTherm)
@@ -8593,7 +8819,38 @@ function renderGearPanel() {
   const hasAnyDehu = (rg.dehumidifiers||[]).some(s=>s?.instanceUid);
   const hasAnyHum  = (rg.humidifiers||[]).some(s=>s?.instanceUid);
 
-  let html = `<div style="font-family:var(--font-hud);font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">${room.name.toUpperCase()}</div>`;
+  // Build unassigned inventory strip
+  const _allGrps = ['lights','fans','acUnits','heaters','dehumidifiers','humidifiers'];
+  const _unassigned = inv.filter(x => !GS.rooms.some(r2 =>
+    _allGrps.some(g2 => (getRoomGear(r2.id)[g2]||[]).some(sl => sl?.instanceUid === x.uid))
+  ));
+  const _assigned = inv.filter(x => !_unassigned.includes(x));
+  const _allGearInv = [..._unassigned, ..._assigned]; // unassigned first
+
+  const _invStripHtml = _allGearInv.length
+    ? `<div style="font-family:var(--font-hud);font-size:8px;color:var(--cyan);letter-spacing:1.5px;margin-bottom:6px">
+        📦 YOUR GEAR — DRAG TO SLOTS BELOW
+        <span style="color:var(--muted);font-size:7px"> · ${_unassigned.length} unassigned</span>
+       </div>
+       <div class="gear-inv-strip">
+         ${_allGearInv.map(inst => {
+           const _used = _assigned.includes(inst);
+           const _safeUid = inst.uid.replace(/'/g,"\\'");
+           const _iType = inst.equipType||inst.type;
+           return `<div class="gear-inv-chip ${_used?'in-use':''}" draggable="true"
+             ondragstart="event.dataTransfer.setData('gear-uid','${_safeUid}');event.dataTransfer.setData('gear-type','${_iType}')"
+             title="${inst.name}${_used?' (assigned)':' (unassigned)'}">
+             <div class="gic-icon">${inst.icon||'📦'}</div>
+             ${inst.power?`<div class="gic-stat">${inst.power}W</div>`:inst.size?`<div class="gic-stat">${inst.size}</div>`:''}
+             <div class="gic-name" style="color:${_used?'rgba(74,222,128,0.6)':'var(--muted)'}">${inst.name.slice(0,9)}</div>
+             ${_used?'<div style="font-size:6px;color:rgba(74,222,128,0.5);font-family:var(--font-hud)">IN USE</div>':''}
+           </div>`;
+         }).join('')}
+       </div>`
+    : '';
+
+  let html = `<div style="font-family:var(--font-hud);font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)">${room.name.toUpperCase()}</div>
+    ${_invStripHtml}`;
 
   // LIGHTS
   html += `<div class="gear-item">
@@ -9280,6 +9537,7 @@ function burpJar(batchId, burpType) {
 
   completeDailyGoal();
   addLog(batch.name + ' burped (' + label + ') RH: ' + batch.jarRH.toFixed(1) + '%', 'info');
+  grantXPType(12, 'dry');
   GS.stats.totalBurps = (GS.stats.totalBurps||0) + 1;
   saveGame(); renderVault(); renderCuring();
 }
@@ -9316,8 +9574,9 @@ function moveToCuringJar(batchId) {
 
   const qGain = qualityMod > 0 ? ' (+' + qualityMod + '% quality bonus!)' :
                 qualityMod < 0 ? ' (' + qualityMod + '% quality loss)' : ' (no change)';
+  grantXPType(40, 'dry');
   if (rh < 70) GS.stats.dryBelow70 = (GS.stats.dryBelow70||0) + 1;
-GS.stats.moveToCuringCount = (GS.stats.moveToCuringCount||0) + 1;
+  GS.stats.moveToCuringCount = (GS.stats.moveToCuringCount||0) + 1;
   toast('🫙 ' + batch.name + ' → jar curing at ' + rh.toFixed(1) + '% RH' + qGain, qualityMod < 0 ? 'warn' : 'ok', 4000);
   addLog(batch.name + ' moved to jar curing at ' + rh.toFixed(1) + '% RH (quality: ' + Math.round(batch.quality) + '%)', 'info');
   saveGame(); renderVault(); renderCuring();
@@ -9381,6 +9640,7 @@ function moveCuredToVault(batchId) {
   }
 
   const _penaltyMsg = belowFiftyPenalty ? ' · ⚠️ Over-dried −50% quality −5% THC' : '';
+  grantXPType(Math.round(50 + (finalQ / 100) * 150), 'dry');
   GS.stats.vaultEntries = (GS.stats.vaultEntries||0) + 1;
   checkQuestProgress();
   toast('📦 Sealed & vaulted: ' + batch.name + ' · Quality: ' + finalQ + '% · THC: ' + finalTHC + '%' + _penaltyMsg, belowFiftyPenalty ? 'warn' : 'ok', 5000);
@@ -10857,6 +11117,16 @@ function renderShop() {
   if (!cont) return;
 
   if (_shopSection === 'males') {
+    if (!canBreed()) {
+      const totalLv = GS.level || 1;
+      cont.innerHTML = `<div style="text-align:center;padding:40px 20px">
+        <div style="font-size:40px;margin-bottom:10px">🔒</div>
+        <div style="font-family:var(--font-hud);font-size:13px;color:var(--gold);margin-bottom:8px">BREEDING UNLOCKS AT LEVEL 25</div>
+        <div style="font-size:10px;color:var(--muted);line-height:1.7">You are Level ${totalLv}. Keep growing to unlock the full breeding system.</div>
+        <button onclick="showTab('breed')" style="margin-top:14px;padding:8px 20px;background:rgba(74,222,128,0.1);border:1px solid var(--green);border-radius:7px;color:var(--green);font-family:var(--font-hud);font-size:9px;cursor:pointer">CHECK PROGRESS</button>
+      </div>`;
+      return;
+    }
     const strainNames = Object.keys(STRAINS).filter(s => !STRAINS[s].isTest);
     let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px">';
     strainNames.forEach(name => {
@@ -11201,6 +11471,32 @@ function renderBreedCrossPreview() {
 function renderBreed() {
   const cont = document.getElementById('breed-container');
   if (!cont) return;
+
+  // Breeding locked until total level 25
+  if (!canBreed()) {
+    const totalLv = GS.level || 1;
+    const xpNeeded = Math.max(0, 25 * (XP_PER_LEVEL.total||500) - (GS.xp||0));
+    cont.innerHTML = `
+      <div style="text-align:center;padding:50px 20px;max-width:500px;margin:0 auto">
+        <div style="font-size:56px;margin-bottom:16px">🔒</div>
+        <div style="font-family:var(--font-hud);font-size:16px;color:var(--gold);letter-spacing:2px;margin-bottom:8px">BREEDING UNLOCKS AT LEVEL 25</div>
+        <div style="font-size:10px;color:var(--muted);line-height:1.8;margin-bottom:18px">
+          You are Level <strong style="color:var(--green)">${totalLv}</strong>.<br>
+          ${xpNeeded.toLocaleString()} XP to go — keep growing, harvesting, and curing!<br><br>
+          Once unlocked you'll be able to buy male seeds, pollinate females,<br>
+          and build your own custom genetics from F1 all the way to F*.
+        </div>
+        <div style="height:6px;background:rgba(255,255,255,0.05);border-radius:3px;max-width:300px;margin:0 auto 14px;overflow:hidden">
+          <div style="height:100%;width:${Math.min(100,Math.round(totalLv/25*100))}%;background:linear-gradient(90deg,var(--green-dark),var(--green));border-radius:3px;transition:.5s"></div>
+        </div>
+        <div style="font-family:var(--font-hud);font-size:10px;color:var(--muted)">${totalLv} / 25 levels</div>
+        <button onclick="openLevelPanel('total')" style="margin-top:18px;padding:10px 24px;background:rgba(74,222,128,0.1);border:1px solid var(--green);border-radius:8px;color:var(--green);font-family:var(--font-hud);font-size:10px;letter-spacing:1px;cursor:pointer">
+          ⭐ VIEW LEVEL PROGRESS
+        </button>
+      </div>`;
+    return;
+  }
+
   const seeds       = GS.seeds       || {};
   const maleSeeds   = GS.maleSeedsOwned || {};
   const bredStrains = GS.bredStrains || [];
@@ -13114,8 +13410,30 @@ suitEquipped: 0,
     if (!r.envTarget) r.envTarget = {temp:78, humid:65, co2:400, light:100};
   });
 
-  if (!GS.equip)           GS.equip           = {};
-  if (!GS.equipItems)      GS.equipItems      = [];
+  // Migrate old 'normal' difficulty to 'medium'
+  if (GS.difficulty === 'normal') GS.difficulty = 'medium';
+  // Init new multi-track XP fields
+  if (GS.growingXP    == null) GS.growingXP    = 0;
+  if (GS.dryXP        == null) GS.dryXP        = 0;
+  if (GS.breederXP    == null) GS.breederXP    = 0;
+  if (!GS.unlockedModes)       GS.unlockedModes = ['easy'];
+  if (!GS.completedGodChallenges) GS.completedGodChallenges = [];
+  if (GS.consecutiveGrowOffWins == null) GS.consecutiveGrowOffWins = 0;
+  // Always include current difficulty in unlockedModes
+  if (GS.difficulty && !GS.unlockedModes.includes(GS.difficulty)) {
+    GS.unlockedModes.push(GS.difficulty);
+  }
+  // Check god challenges on every login
+  GOD_CHALLENGES.forEach(ch => {
+    if (!(GS.completedGodChallenges||[]).includes(ch.id)) {
+      let passed = false;
+      try { passed = ch.check(GS.stats||{}, GS); } catch(e) {}
+      if (passed) {
+        GS.completedGodChallenges.push(ch.id);
+        toast('👑 Impossible Challenge Complete: ' + ch.name + '!', 'special', 8000);
+      }
+    }
+  });
   if (!GS.activeGrowoffs)  GS.activeGrowoffs  = [];
   if (!GS.bossPrestige)    GS.bossPrestige    = {};
   if (!GS.generatedItems)  GS.generatedItems  = {};
@@ -13233,18 +13551,26 @@ function openPlantModal() {
         const div = document.createElement('div');
         div.className = 'strain-option';
         div.dataset.strain = name;
-        div.innerHTML = `
-          <div class="strain-option-emoji">${strain.emoji||'🌿'}</div>
+        const bd2 = (GS.bredStrains||[]).find(b=>b.name===name);
+    const isLocked = bd2 && bd2.gen && bd2.gen !== 'F1' && !canPlantBreedGen(bd2.gen);
+    const needLv   = isLocked ? getMinBreederLvForGen(bd2.gen) : 0;
+    div.style.opacity = isLocked ? '0.38' : '1';
+    div.innerHTML = `
+          <div class="strain-option-emoji">${isLocked ? '🔒' : (strain.emoji||'🌿')}</div>
           <div class="strain-option-name">${name}</div>
-          <div class="strain-option-thc">${strain.thcBase||'?'}% THC</div>
-          <div class="strain-option-qty">${qty}x</div>`;
-        div.onclick = () => {
-          grid.querySelectorAll('.strain-option').forEach(s => s.classList.remove('selected'));
-          div.classList.add('selected');
-          const inp = document.getElementById('inp-selected-strain');
-          if (inp) inp.value = name;
-          _updatePlantModalNote();
-        };
+          <div class="strain-option-thc">${isLocked ? 'Breeder Lv' + needLv + ' req' : (strain.thcBase||'?') + '% THC'}</div>
+          <div class="strain-option-qty" style="color:${isLocked?'var(--red)':'var(--gold)'}">${isLocked ? '🔒' : qty + 'x'}</div>`;
+    div.onclick = () => {
+      if (isLocked) {
+        toast(`🔒 ${bd2.gen} needs Breeder Level ${needLv} — keep breeding F1/F2 to level up!`, 'warn', 5000);
+        return;
+      }
+      grid.querySelectorAll('.strain-option').forEach(s => s.classList.remove('selected'));
+      div.classList.add('selected');
+      const inp = document.getElementById('inp-selected-strain');
+      if (inp) inp.value = name;
+      _updatePlantModalNote();
+    };
         grid.appendChild(div);
       });
     }
@@ -13430,6 +13756,7 @@ function openPlantMaleWith(strainName) {
   if (!GS.plants) GS.plants = [];
   GS.plants.push(plant);
   GS.stats.malePlanted = (GS.stats.malePlanted||0) + 1;
+  grantXPType(60, 'breeder');
   toast('♂ Male ' + strainName + ' planted!', 'info', 3000);
   addLog('Planted male: ' + strainName, 'info');
   saveGame(); renderGrow(); renderHeader();
@@ -13487,6 +13814,22 @@ function confirmPlant() {
     GS.seeds[strainName]++;
     toast('⚠️ F1 REGs cannot be planted — breed two F1s to make growable F2 FEMs.','warn',5000);
     return;
+  }
+
+  // Gate higher bred gens by Breeder Level
+  if (isBred && bredDef && bredDef.gen && bredDef.gen !== 'F1' && bredDef.gen !== 'original') {
+    if (!canBreed()) {
+      GS.seeds[strainName]++;
+      toast('🔒 Breeding system unlocks at Total Level 25.','warn',4000);
+      return;
+    }
+    if (!canPlantBreedGen(bredDef.gen)) {
+      GS.seeds[strainName]++;
+      const bLv  = getLevelFromXP(GS.breederXP||0,'breeder');
+      const need = getMinBreederLvForGen(bredDef.gen);
+      toast(`🔒 ${bredDef.gen} seeds require Breeder Level ${need} (you are Breeder Lv${bLv}). Keep breeding lower gens to level up!`,'warn',6000);
+      return;
+    }
   }
 
   const rarity = rollRarity(strain, isBred ? (strain.gen||'F2') : null, isBred);
@@ -14493,6 +14836,14 @@ if (plant._permanentlyDead) {
       const xpGain = Math.round(score.score * 40 * diffMult);
       grantXP(xpGain);
 
+      // Breeder XP — scales with gen and seed count
+      const _breedXPBase = {F1:80,F2:160,F3:250,F4:350,F5:500,F6:650,F7:800,F8:1000,F9:1200,F10:1500,'F*':2000,BX1:200,BX2:300,BX3:420,BX4:540,BX5:660,BX6:800,BX7:960,BX8:1100,BX9:1300,BX10:1600,'BX*':2200}[breedResult.gen] || 80;
+      const _breedXPFinal = Math.round(_breedXPBase * Math.min(3, seedQty / 10));
+      grantXPType(_breedXPFinal, 'breeder');
+      // Track GOD from F* challenge
+      if ((breedResult.gen==='F*'||breedResult.gen==='BX*') && plant.rarity==='GOD') {
+        GS.stats.godFromFStar = (GS.stats.godFromFStar||0) + 1;
+      }
       _returnPotToInv(plant.potSize);
       GS.plants = GS.plants.filter(p => p.id !== plantId);
       closeModal('modal-harvest');
@@ -14555,6 +14906,17 @@ if (plant._permanentlyDead) {
     GS.stats.totalGrams    = (GS.stats.totalGrams   ||0) + yield_;
     grantXP(xpGain);
     if (score.score >= 9.5) GS.stats.perfectGrows = (GS.stats.perfectGrows||0) + 1;
+    if (score.score >= 10.0) {
+      GS.stats.perfectScore10s = (GS.stats.perfectScore10s||0) + 1;
+      // Check Impossible Challenge 1
+      GOD_CHALLENGES.forEach(ch => {
+        if (ch.id === 'god_challenge_1' && !(GS.completedGodChallenges||[]).includes(ch.id)) {
+          if (!GS.completedGodChallenges) GS.completedGodChallenges = [];
+          GS.completedGodChallenges.push(ch.id);
+          toast('👑 Impossible Challenge Complete: ' + ch.name + '!', 'special', 10000);
+        }
+      });
+    }
     if (plant.rarity === 'GOD') GS.stats.godPhenoCount = (GS.stats.godPhenoCount||0) + 1;
     // Track unique strains + rarities grown
     if (!GS.stats.uniqueStrains) GS.stats.uniqueStrains = [];
@@ -14577,6 +14939,9 @@ if (allPlantCount > (GS.stats.maxSimultaneous||0))
   _returnPotToInv(plant.potSize);
   closeModal('modal-harvest');
   toast('🌾 Harvested ' + (plant.name||plant.strainName)+ '! ' + yield_ + 'g · ' + thc + '% THC · +' + xpGain + ' XP', 'ok', 5000);
+  // Sub-track XP
+  const _growXPAmt = Math.round(score.score * 40 * (getModeDef().harvestMult||1));
+  grantXPType(_growXPAmt, 'growing');
   addLog('Harvested: ' + (plant.name||plant.strainName) + ' — ' + yield_ + 'g [' + score.grade + ']', 'success');
   saveGame(); renderGrow(); renderCuring(); renderHeader();
 }
