@@ -1089,9 +1089,10 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
       <div class="header-stats">
         <div class="stat-pill">💰 <span class="val gold" id="hdr-coins">0</span>¢</div>
         <div class="stat-pill">⭐ <span class="val purple" id="hdr-xp">0</span> XP</div>
-        <div class="level-bar-wrap stat-pill">
+        <div class="level-bar-wrap stat-pill" id="hdr-level-wrap" style="cursor:pointer" title="Click to see level unlocks">
           LV <span class="val green" id="hdr-level">1</span>
           <div class="level-bar-track"><div class="level-bar-fill" id="hdr-xpbar" style="width:0%"></div></div>
+          <span style="font-size:7px;color:var(--muted);margin-left:3px;font-family:var(--font-hud)">▲</span>
         </div>
         <div class="stat-pill">🌿 <span class="val green" id="hdr-plants">0</span> plants</div>
         <div class="stat-pill">🏦 <span class="val cyan" id="hdr-grams">0</span>g</div>
@@ -5107,6 +5108,201 @@ const WORDLIST = ['apple','brave','cloud','dance','eagle','flame','grace','happy
   'frost','globe','haven','iris','jade','karma','light','moon','nova','orbit','prism',
   'quartz','realm','solar','thorn','unity','vapor','wave','yarn','zone'];
 
+  // ================================================================
+// GAME MODES — unlockable difficulty tiers
+// ================================================================
+const GAME_MODES = {
+  easy: {
+    key:'easy', label:'EASY', color:'var(--green)', icon:'🌱',
+    growMult: 1.0, harvestMult: 1.0, stressMult: 0.7,
+    warnings:'all', noDisease: false, alwaysPerfect: false,
+    levelReq: 0, desc:'All hints on. Normal grow speed.',
+    coinMult: 1.0,
+  },
+  medium: {
+    key:'medium', label:'MEDIUM', color:'var(--gold)', icon:'⭐',
+    growMult: 0.75, harvestMult: 2.0, stressMult: 1.0,
+    warnings:'critical', noDisease: false, alwaysPerfect: false,
+    levelReq: 25, desc:'25% slower grow · 2× harvest weight · Critical warnings only',
+    coinMult: 1.15,
+    requireAllAchievements: 'easy',
+  },
+  hard: {
+    key:'hard', label:'HARD', color:'var(--orange)', icon:'🔥',
+    growMult: 0.50, harvestMult: 4.0, stressMult: 1.25,
+    warnings:'none', noDisease: false, alwaysPerfect: false,
+    levelReq: 50, desc:'50% slower grow · 4× harvest weight · No warnings',
+    coinMult: 1.35,
+    requireAllAchievements: 'medium',
+  },
+  master: {
+    key:'master', label:'MASTER', color:'var(--red)', icon:'💀',
+    growMult: 0.25, harvestMult: 5.0, stressMult: 1.5,
+    warnings:'none', noDisease: false, alwaysPerfect: false,
+    levelReq: 100, desc:'75% slower grow · 5× harvest weight · Zero guidance',
+    coinMult: 1.5,
+    requireAllAchievements: 'hard',
+  },
+  god: {
+    key:'god', label:'GOD MODE', color:'var(--pink)', icon:'✨',
+    growMult: 10.0, harvestMult: 1.0, stressMult: 0.0,
+    warnings:'none', noDisease: true, alwaysPerfect: true,
+    levelReq: 1000, desc:'1 day per real minute · No disease · Always perfect harvests',
+    coinMult: 1.0,
+    requireChallenges: ['god_challenge_1','god_challenge_2','god_challenge_3'],
+  },
+};
+
+// Legacy key mapping (old saves used 'normal' for medium behavior)
+const MODE_KEY_MAP = { normal: 'medium' };
+
+function getModeDef() {
+  const raw = GS?.difficulty || 'easy';
+  const key = MODE_KEY_MAP[raw] || raw;
+  return GAME_MODES[key] || GAME_MODES.easy;
+}
+
+// ================================================================
+// LEVEL TRACKS — Total, Growing, Dry/Cure, Breeder
+// ================================================================
+const XP_PER_LEVEL = { total: 500, growing: 400, dry: 350, breeder: 600 };
+
+function getLevelFromXP(xp, track) {
+  return Math.floor((xp || 0) / (XP_PER_LEVEL[track] || 500)) + 1;
+}
+
+function getXPProgress(xp, track) {
+  const perLv = XP_PER_LEVEL[track] || 500;
+  return ((xp || 0) % perLv) / perLv;
+}
+
+function getXPToNextLevel(xp, track) {
+  const perLv = XP_PER_LEVEL[track] || 500;
+  return perLv - ((xp || 0) % perLv);
+}
+
+// ================================================================
+// LEVEL UNLOCK TABLE
+// ================================================================
+const LEVEL_UNLOCKS = {
+  total: [
+    {lv:2,  icon:'💧', label:'Drip Emitters available in Shop → Water'},
+    {lv:3,  icon:'🌀', label:'Small Fan in Shop → Climate'},
+    {lv:5,  icon:'🧴', label:'Base Nutrients unlocked in Shop → Water'},
+    {lv:7,  icon:'🧪', label:'pH Meter unlocked in Shop → Tools'},
+    {lv:10, icon:'🏠', label:'Room 2 can be unlocked (Shop → Rooms)', highlight:true},
+    {lv:12, icon:'🔌', label:'EC/PPM Meter unlocked in Shop → Tools'},
+    {lv:15, icon:'🔬', label:"Jeweler's Loupe unlocked · Inspect buds for ripeness"},
+    {lv:18, icon:'🌵', label:'Dehumidifier unlocked in Shop → Climate'},
+    {lv:20, icon:'💡', label:'HID 400W light unlocked · Serious yields begin'},
+    {lv:22, icon:'🫧', label:'CO₂ Tank unlocked in Shop → Climate'},
+    {lv:25, icon:'⭐', label:'MEDIUM MODE unlockable (all Easy achievements required)', highlight:true},
+    {lv:28, icon:'🕸️', label:'SCROG Net unlocked in Shop → Tools'},
+    {lv:30, icon:'🏠', label:'Room 3 can be unlocked (10 plant slots)', highlight:true},
+    {lv:32, icon:'💡', label:'LED 480W Quantum Board unlocked'},
+    {lv:35, icon:'🧪', label:'STS Spray unlocked · Reverse females to make FEM seeds'},
+    {lv:38, icon:'❄️', label:'AC Unit unlocked in Shop → Climate'},
+    {lv:40, icon:'💡', label:'HID 600W unlocked · High output'},
+    {lv:42, icon:'🔥', label:'Heater unlocked in Shop → Climate'},
+    {lv:45, icon:'🛢️', label:'2,000 Gal Reservoir unlocked'},
+    {lv:48, icon:'💡', label:'HID 750W unlocked · Serious production'},
+    {lv:50, icon:'🔥', label:'HARD MODE unlockable (all Medium achievements required)', highlight:true},
+    {lv:55, icon:'💡', label:'LED 720W Pro unlocked'},
+    {lv:60, icon:'🏠', label:'Room 4 can be unlocked (15 plant slots)', highlight:true},
+    {lv:65, icon:'🛢️', label:'5,000 Gal Reservoir unlocked'},
+    {lv:70, icon:'💡', label:'HID 1000W unlocked · Maximum traditional power'},
+    {lv:75, icon:'💡', label:'LED 1000W Pro unlocked · Commercial grade'},
+    {lv:80, icon:'🛢️', label:'10,000 Gal Reservoir unlocked'},
+    {lv:90, icon:'👑', label:'FORBIDDEN LIGHT hint — complete 10 perfect A-grade grows'},
+    {lv:100,icon:'💀', label:'MASTER MODE unlockable (all Hard achievements required)', highlight:true},
+    {lv:200,icon:'🏠', label:'Room 5 can be unlocked (20 plant slots)', highlight:true},
+    {lv:500,icon:'👑', label:'Prestige content begins...'},
+    {lv:1000,icon:'✨','label':'GOD MODE unlockable (3 impossible challenges required)', highlight:true},
+  ],
+  growing: [
+    {lv:1,  icon:'🌱', label:'First grow started — water regularly!'},
+    {lv:2,  icon:'✂️', label:'LST Training unlocked — bend & tie'},
+    {lv:3,  icon:'✂️', label:'Topping unlocked — remove apical tip'},
+    {lv:5,  icon:'🌿', label:'FIM training unlocked — 3-5 new growth points'},
+    {lv:7,  icon:'💥', label:'Supercrop (Intentional Snap) unlocked'},
+    {lv:10, icon:'🪣', label:'3 Gal pots unlocked — room to grow'},
+    {lv:12, icon:'🪣', label:'5 Gal pots unlocked — medium plants'},
+    {lv:15, icon:'💧', label:'Auto-water drip emitter system unlocked'},
+    {lv:18, icon:'🪣', label:'10 Gal pots unlocked — large plants'},
+    {lv:20, icon:'🌾', label:'Early harvest mastered — better yields at any week'},
+    {lv:25, icon:'🪣', label:'25 Gal XL pots unlocked', highlight:true},
+    {lv:30, icon:'🌸', label:'Reveg mastered — reflip bonus discovered'},
+    {lv:40, icon:'🌿', label:'SCROG training unlocked via total level 28'},
+    {lv:50, icon:'🏆', label:'Perfect grower badge — 10 A-grade grows'},
+    {lv:75, icon:'👑', label:'Elite grower — harvest weight multiplier caps raised'},
+    {lv:100,icon:'✨', label:'Master cultivar — all training methods perfected', highlight:true},
+  ],
+  dry: [
+    {lv:1,  icon:'🌬️', label:'Hang drying unlocked (always available)'},
+    {lv:2,  icon:'💨', label:'Fan speed controls unlocked for drying'},
+    {lv:3,  icon:'🌵', label:'Dehumidifier integration for dry room'},
+    {lv:5,  icon:'🫙', label:'Jar curing system unlocked', highlight:true},
+    {lv:7,  icon:'💨', label:'Quick Burp method mastered (−10% RH)'},
+    {lv:10, icon:'💨', label:'Medium Burp mastered (−20% RH)'},
+    {lv:12, icon:'🎯', label:'Sweet spot detection — auto-highlight 58–64% zone'},
+    {lv:15, icon:'💨', label:'Long Burp unlocked (−30% RH, −5% quality)'},
+    {lv:20, icon:'⭐', label:'Curing quality bonus tier 2 — 10+ burps bonus'},
+    {lv:25, icon:'🏆', label:'Premium curing — vault items command higher prices'},
+    {lv:30, icon:'✨', label:'Optimal curer — quality rarely drops below 90%'},
+    {lv:50, icon:'👑', label:'Elite curer — buyers pay premium for your batches'},
+  ],
+  breeder: [
+    {lv:1,  icon:'🧬', label:'Breeding system introduced — plant males to pollinate'},
+    {lv:2,  icon:'♂️', label:'Male seed purchase unlocked (Shop → ♂ MALES)', highlight:true},
+    {lv:5,  icon:'🧬', label:'F1 seeds produceable (plant male + female)'},
+    {lv:8,  icon:'🏷️', label:'Strain naming unlocked for custom crosses'},
+    {lv:10, icon:'🧬', label:'F2 generation breeding unlocked (breed two F1s)', highlight:true},
+    {lv:12, icon:'📊', label:'Rarity preview in Cross Calculator'},
+    {lv:15, icon:'🧬', label:'F3 generation unlocked — stability improving'},
+    {lv:18, icon:'💧', label:'STS Spray available (after total level 35)'},
+    {lv:20, icon:'🧬', label:'F4 generation unlocked', highlight:true},
+    {lv:25, icon:'🧬', label:'F5 generation — GOD pheno chances rising', highlight:true},
+    {lv:30, icon:'🧬', label:'BX1 backcross generation unlocked'},
+    {lv:35, icon:'🧬', label:'F6–F7 — elite stability range'},
+    {lv:40, icon:'🧬', label:'BX2–BX3 backcross mastered'},
+    {lv:50, icon:'🧬', label:'F8–F9 — near GOD territory', highlight:true},
+    {lv:60, icon:'🧬', label:'BX4–BX5 advanced backcross'},
+    {lv:75, icon:'👑', label:'F10 / F* generation unlocked — true breeding lines', highlight:true},
+    {lv:100,icon:'✨', label:'BX* — fully stabilized backcross lines', highlight:true},
+  ],
+};
+
+// GOD MODE challenge definitions
+const GOD_CHALLENGES = [
+  {id:'god_challenge_1', icon:'👑', name:'The Impossible Harvest', desc:'Achieve a perfect 10.0 grow score on any plant.', check: s => (s.perfectScore10s||0) >= 1},
+  {id:'god_challenge_2', icon:'🧬', name:'Genetic Singularity',   desc:'Breed a GOD phenotype from a self-built F* line.',  check: s => (s.godFromFStar||0)  >= 1},
+  {id:'god_challenge_3', icon:'🏆', name:'The Undefeated',         desc:'Win 10 Grow-Offs in a row without a single loss.',  check: (s,gs) => (gs.consecutiveGrowOffWins||0) >= 10},
+];
+
+function getModeUnlockStatus(modeKey) {
+  const def = GAME_MODES[modeKey];
+  if (!def) return {unlocked: false, reason:'Unknown mode'};
+  if (!GS || !GS.username) return {unlocked: false, reason:'Not logged in'};
+
+  const totalLv = GS.level || 1;
+  if (totalLv < def.levelReq) return {unlocked: false, reason:`Need Level ${def.levelReq} (you are ${totalLv})`};
+
+  if (def.requireChallenges) {
+    const missing = def.requireChallenges.filter(cid => !(GS.completedGodChallenges||[]).includes(cid));
+    if (missing.length) return {unlocked: false, reason:`Need ${missing.length} more Impossible Challenge(s)`};
+  }
+
+  if (def.requireAllAchievements) {
+    const reqMode = def.requireAllAchievements;
+    const modeAchs = ACHIEVEMENTS.filter(a => !a.secret);
+    const earned   = new Set((GS.achievements||[]).map(a=>a.id));
+    const missing  = modeAchs.filter(a => !earned.has(a.id));
+    if (missing.length > 0) return {unlocked: false, reason:`Need ${missing.length} more achievement(s) from ${reqMode.toUpperCase()} mode`};
+  }
+
+  return {unlocked: true};
+}
+
 // ================================================================
 // BUYERS — initialized at runtime
 // ================================================================
@@ -5248,6 +5444,14 @@ suitEquipped: 0,
     seasonBestScore: 0,
     growoffUnlocked: 0,
     dailyGoalDate: '',
+    // Multi-track XP
+    growingXP: 0, dryXP: 0, breederXP: 0,
+    // Mode unlock tracking
+    unlockedModes: ['easy'],
+    completedGodChallenges: [],
+    consecutiveGrowOffWins: 0,
+    // Level panel state
+    lastLevelPanelTab: 'total',
     dailyGoalDone: false,
     dailyGoalId: '',
     cards: [],
@@ -5532,6 +5736,32 @@ function getHoliday() {
   return null;
 }
 
+function grantXPType(amount, type) {
+  // type: 'growing' | 'dry' | 'breeder' | 'total'
+  if (!GS || !amount) return;
+  const eb = GS.username ? getEquippedBonuses() : {};
+  const modeMult = 1 + ((eb.xp_pct||0)/100);
+  const final = Math.round(amount * modeMult);
+  if (type === 'growing') {
+    GS.growingXP = (GS.growingXP||0) + final;
+    const oldLv = getLevelFromXP(GS.growingXP - final, 'growing');
+    const newLv = getLevelFromXP(GS.growingXP, 'growing');
+    if (newLv > oldLv) { toast('🌱 Growing Level ' + newLv + '!', 'ok', 4000); }
+  } else if (type === 'dry') {
+    GS.dryXP = (GS.dryXP||0) + final;
+    const oldLv = getLevelFromXP(GS.dryXP - final, 'dry');
+    const newLv = getLevelFromXP(GS.dryXP, 'dry');
+    if (newLv > oldLv) { toast('🌬️ Dry/Cure Level ' + newLv + '!', 'ok', 4000); }
+  } else if (type === 'breeder') {
+    GS.breederXP = (GS.breederXP||0) + final;
+    const oldLv = getLevelFromXP(GS.breederXP - final, 'breeder');
+    const newLv = getLevelFromXP(GS.breederXP, 'breeder');
+    if (newLv > oldLv) { toast('🧬 Breeder Level ' + newLv + '!', 'ok', 4000); }
+  }
+  // Always grant to total too (sub-track XP also contributes to total)
+  if (type !== 'total') grantXP(Math.round(amount * 0.5)); // 50% of sub-track goes to total
+}
+
 function grantXP(amount) {
   if (!GS) return;
   const eb = GS.username ? getEquippedBonuses() : {};
@@ -5539,12 +5769,25 @@ function grantXP(amount) {
   const final = Math.round(amount * mult);
   GS.xp = (GS.xp || 0) + final;
   GS.stats.totalXP = (GS.stats.totalXP || 0) + final;
-  const newLevel = Math.floor(GS.xp / 500) + 1;
+  const xpPerLv = XP_PER_LEVEL.total || 500;
+  const newLevel = Math.floor(GS.xp / xpPerLv) + 1;
   if (newLevel > (GS.level || 1)) {
     GS.level = newLevel;
-    GS.coins = (GS.coins || 0) + 1000;
-    toast('🎉 LEVEL UP! Now Level ' + newLevel + ' · +1,000¢', 'ok', 5000);
-    addLog('Level up! Now Level ' + newLevel + ' +1,000¢', 'success');
+    GS.coins = (GS.coins || 0) + newLevel * 200; // bonus coins scale with level
+    const bonusCoins = newLevel * 200;
+    toast('🎉 LEVEL UP! Now Level ' + newLevel + ' · +' + bonusCoins.toLocaleString() + '¢', 'ok', 5000);
+    addLog('Level up! Now Level ' + newLevel + ' +' + bonusCoins + '¢', 'success');
+    // Check if any modes are newly unlockable
+    Object.keys(GAME_MODES).forEach(mk => {
+      if (mk === 'easy') return;
+      const status = getModeUnlockStatus(mk);
+      if (status.unlocked && !(GS.unlockedModes||[]).includes(mk)) {
+        if (!GS.unlockedModes) GS.unlockedModes = ['easy'];
+        GS.unlockedModes.push(mk);
+        toast('🔓 ' + GAME_MODES[mk].label + ' unlocked! Go to Stats → Change Mode.', 'special', 8000);
+      }
+    });
+    checkQuestProgress();
   }
 }
 
@@ -5837,7 +6080,8 @@ function tickPlant(plant, room, strain, actual, gameMins) {
   const speedMult = genSpeedMult * healthGrowthMult * pHGrowthMult;
 
   const transplantSlowMult = plant.transplanting ? 0.4 : 1.0;
-  const finalSpeedMult = speedMult * transplantSlowMult;
+  const _modeDef = getModeDef();
+  const finalSpeedMult = speedMult * transplantSlowMult * (_modeDef.growMult || 1.0);
 
   if (plant.stage === 'Seedling') {
     plant.seedlingDays = (plant.seedlingDays || 0) + (gameMins / (60 * 24)) * finalSpeedMult;
@@ -6431,8 +6675,7 @@ function tickPlantRulebook(plant, room, gameMins) {
   else if (actual.humid < 45)     stressDelta += 0.3 * (gameMins / 60);
   else                            stressDelta -= 0.1 * (gameMins / 60);
 
-  const diff = GS.difficulty || 'easy';
-  stressDelta *= (diff === 'master' ? 1.5 : diff === 'normal' ? 1.0 : 0.7);
+  stressDelta *= (getModeDef().stressMult ?? 0.7);
 
   // Stress natural decay: -2% per in-game hour if env is acceptable, -1% if off
   const envOk = actual.temp >= 65 && actual.temp <= 95 && actual.humid >= 30 && actual.humid <= 80;
@@ -7016,6 +7259,125 @@ function _renderTab(name) {
   if (name === 'stats')    renderStats();
 }
 
+// ================================================================
+// LEVEL PANEL — Fortnite-style unlock viewer
+// ================================================================
+let _levelPanelOpen = false;
+let _levelPanelTab  = 'total';
+
+function openLevelPanel(tab) {
+  _levelPanelTab = tab || 'total';
+  // Build or show the panel overlay
+  let overlay = document.getElementById('level-panel-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'level-panel-overlay';
+    overlay.style.cssText = `position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:2500;display:flex;align-items:center;justify-content:center;padding:16px;animation:toastIn .2s ease`;
+    overlay.addEventListener('click', e => { if(e.target===overlay) closeLevelPanel(); });
+    document.body.appendChild(overlay);
+  }
+  overlay.style.display = 'flex';
+  renderLevelPanel(overlay);
+}
+
+function closeLevelPanel() {
+  const el = document.getElementById('level-panel-overlay');
+  if (el) el.style.display = 'none';
+}
+
+function renderLevelPanel(overlay) {
+  if (!overlay || !GS) return;
+  const tabs = [
+    {key:'total',   icon:'⭐', label:'TOTAL',   xp: GS.xp||0,        track:'total',   color:'var(--purple)'},
+    {key:'growing', icon:'🌿', label:'GROWING',  xp: GS.growingXP||0, track:'growing', color:'var(--green)'},
+    {key:'dry',     icon:'🌬️', label:'DRY/CURE', xp: GS.dryXP||0,    track:'dry',     color:'var(--cyan)'},
+    {key:'breeder', icon:'🧬', label:'BREEDER',   xp: GS.breederXP||0,track:'breeder', color:'var(--purple)'},
+  ];
+
+  const cur   = tabs.find(t=>t.key===_levelPanelTab) || tabs[0];
+  const curLv = getLevelFromXP(cur.xp, cur.track);
+  const pct   = Math.round(getXPProgress(cur.xp, cur.track) * 100);
+  const toNxt = getXPToNextLevel(cur.xp, cur.track);
+  const perLv = XP_PER_LEVEL[cur.track] || 500;
+
+  // Get unlocks for current tab
+  const allUnlocks = LEVEL_UNLOCKS[cur.key] || [];
+  // Show next 8 unlocks from current level, plus past 2
+  const nearUnlocks = allUnlocks.filter(u => u.lv >= curLv - 2).slice(0, 12);
+
+  const tabsHTML = tabs.map(t => {
+    const lv = getLevelFromXP(t.xp, t.track);
+    const p  = Math.round(getXPProgress(t.xp, t.track) * 100);
+    return `<button onclick="_levelPanelTab='${t.key}';renderLevelPanel(document.getElementById('level-panel-overlay'))"
+      style="flex:1;padding:10px 4px;border:${t.key===_levelPanelTab?'2px solid '+t.color:'1px solid var(--border)'};border-radius:8px;background:${t.key===_levelPanelTab?t.color+'18':'rgba(0,0,0,0.3)'};color:${t.key===_levelPanelTab?t.color:'var(--muted)'};font-family:var(--font-hud);font-size:8px;letter-spacing:.5px;cursor:pointer;text-align:center;transition:.15s">
+      <div style="font-size:14px;margin-bottom:2px">${t.icon}</div>
+      <div>${t.label}</div>
+      <div style="font-size:9px;margin-top:1px">LV ${lv}</div>
+      <div style="height:3px;background:rgba(255,255,255,0.05);border-radius:2px;margin-top:4px;overflow:hidden"><div style="height:100%;width:${p}%;background:${t.color};border-radius:2px"></div></div>
+    </button>`;
+  }).join('');
+
+  const unlocksHTML = nearUnlocks.map(u => {
+    const done = u.lv <= curLv;
+    const curr = u.lv === curLv;
+    const near = u.lv <= curLv + 3 && !done;
+    return `<div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:${curr?cur.color+'18':done?'rgba(74,222,128,0.04)':'rgba(0,0,0,0.3)'};border:1px solid ${curr?cur.color:done?'rgba(74,222,128,0.2)':u.highlight&&near?cur.color+'55':'rgba(255,255,255,0.04)'};border-radius:8px;margin-bottom:6px;transition:.15s;opacity:${done&&!curr?'0.6':'1'}">
+      <div style="font-size:20px;flex-shrink:0">${u.icon}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:var(--font-hud);font-size:8px;color:${done?'var(--green)':u.highlight&&near?cur.color:'var(--muted)'};letter-spacing:.5px;margin-bottom:2px">LV ${u.lv}</div>
+        <div style="font-size:10px;color:${curr?cur.color:done?'var(--muted)':'var(--text)'};line-height:1.4">${u.label}</div>
+      </div>
+      <div style="font-size:14px;flex-shrink:0">${done ? '✅' : curr ? cur.icon : ''}</div>
+    </div>`;
+  }).join('');
+
+  // Mode unlock status
+  const modeStatusHTML = cur.key === 'total' ? Object.entries(GAME_MODES).map(([mk, md]) => {
+    const status = getModeUnlockStatus(mk);
+    const isCur  = (GS.difficulty === mk || (mk === 'medium' && GS.difficulty === 'normal'));
+    return `<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(0,0,0,0.3);border:1px solid ${status.unlocked?md.color+'44':'rgba(255,255,255,0.04)'};border-radius:7px;margin-bottom:5px;opacity:${status.unlocked?'1':'0.55'}">
+      <span style="font-size:16px">${md.icon}</span>
+      <div style="flex:1">
+        <div style="font-family:var(--font-hud);font-size:9px;color:${status.unlocked?md.color:'var(--muted)'}">${md.label} ${isCur?'← ACTIVE':''}</div>
+        <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">${status.unlocked?md.desc:status.reason}</div>
+      </div>
+      ${status.unlocked&&!isCur?`<button onclick="closeLevelPanel();openDiffModal()" style="padding:4px 10px;background:${md.color}18;border:1px solid ${md.color};border-radius:5px;color:${md.color};font-family:var(--font-hud);font-size:8px;cursor:pointer">SWITCH</button>`:''}
+      ${!status.unlocked?`<span style="font-size:10px">🔒</span>`:''}
+    </div>`;
+  }).join('') : '';
+
+  overlay.innerHTML = `
+    <div style="background:var(--panel);border:1px solid var(--border-bright);border-radius:18px;width:560px;max-width:95vw;max-height:88vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 60px rgba(0,0,0,0.8)">
+      <!-- Header -->
+      <div style="padding:18px 20px 14px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-family:var(--font-hud);font-size:14px;color:${cur.color};letter-spacing:2px">${cur.icon} ${cur.label} LEVEL ${curLv}</div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);margin-top:3px">${(cur.xp||0).toLocaleString()} XP total · ${toNxt.toLocaleString()} XP to Level ${curLv+1}</div>
+        </div>
+        <button onclick="closeLevelPanel()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;padding:4px" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--muted)'">✕</button>
+      </div>
+      <!-- XP Bar -->
+      <div style="padding:10px 20px;border-bottom:1px solid var(--border);flex-shrink:0">
+        <div style="height:8px;background:rgba(255,255,255,0.05);border-radius:4px;overflow:hidden;margin-bottom:4px">
+          <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,${cur.color}88,${cur.color});border-radius:4px;transition:.5s"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-family:var(--font-hud);font-size:8px;color:var(--muted)">
+          <span>LV ${curLv}</span>
+          <span>${pct}% · ${toNxt.toLocaleString()} XP remaining</span>
+          <span>LV ${curLv+1}</span>
+        </div>
+      </div>
+      <!-- Tabs -->
+      <div style="display:flex;gap:5px;padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0">${tabsHTML}</div>
+      <!-- Scroll area -->
+      <div style="flex:1;overflow-y:auto;padding:14px 16px">
+        ${modeStatusHTML ? `<div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1.5px;margin-bottom:8px">GAME MODES</div>${modeStatusHTML}<div style="height:1px;background:var(--border);margin:14px 0"></div>` : ''}
+        <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1.5px;margin-bottom:8px">📋 LEVEL UNLOCKS</div>
+        ${unlocksHTML || '<div style="color:var(--muted);font-size:10px;font-family:var(--font-hud);text-align:center;padding:20px">All unlocks complete!</div>'}
+      </div>
+    </div>`;
+}
+
 function renderAll() {
   renderHeader();
   _renderTab(_activeTab);
@@ -7535,18 +7897,34 @@ function renderHeader() {
   const crown = document.getElementById('hdr-crown');
   if (crown) crown.style.display = GS.username === MOD_USER ? 'inline' : 'none';
 
-  const xpForThisLevel = (GS.level || 1) * 500;
-  const xpProgress = ((GS.xp || 0) % xpForThisLevel) / xpForThisLevel * 100;
+  const xpPerLv     = XP_PER_LEVEL.total;
+  const xpProgress  = ((GS.xp || 0) % xpPerLv) / xpPerLv * 100;
+  const xpToNext    = getXPToNextLevel(GS.xp || 0, 'total');
   const bar = document.getElementById('hdr-xpbar');
   if (bar) bar.style.width = Math.min(100, xpProgress) + '%';
+
+  // Level wrap — hover and click
+  const lvWrap = document.getElementById('hdr-level-wrap');
+  if (lvWrap) {
+    lvWrap.title = xpToNext.toLocaleString() + ' XP to Level ' + ((GS.level||1)+1) + ' · Click to see unlocks';
+    lvWrap.style.cursor = 'pointer';
+    lvWrap.onclick = () => openLevelPanel('total');
+  }
 
   const totalG = (GS.vault || []).reduce((s, v) => s + (v.grams || 0), 0);
   _el('hdr-grams', totalG.toLocaleString());
 
+  const modeDef = getModeDef();
   const diff = document.getElementById('hdr-diff');
   if (diff) {
-    diff.textContent  = (GS.difficulty || 'easy').toUpperCase();
-    diff.className    = 'difficulty-badge ' + (GS.difficulty || 'easy');
+    diff.textContent  = modeDef.label;
+    // Dynamic class
+    diff.className    = 'difficulty-badge';
+    diff.style.background  = '';
+    diff.style.borderColor = '';
+    diff.style.color       = modeDef.color;
+    diff.style.border      = '1px solid ' + modeDef.color + '55';
+    diff.style.background  = modeDef.color + '18';
   }
 
   const unread = (GS.mailbox || []).filter(m => !m.read).length;
@@ -10503,9 +10881,13 @@ function renderShop() {
   const items = SHOP_ITEMS[_shopSection] || [];
   if (!items.length) { cont.innerHTML = '<div class="empty-state">Nothing here yet.</div>'; return; }
 
+  // One-time only: once owned, no re-buy button
+  const ONE_TIME = new Set(['scope','phmeter','ecmeter','scrogNet','co2Tank','unlockRoom']);
+  // Equipment that lives in inventory instances — can buy multiples, can sell
+  const EQUIP_TYPES = new Set(['lights','fan','acUnit','heater','dehumidifier','humidifier']);
+
   let html = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px">';
   items.forEach(item => {
-    // Determine owned count correctly
     let count = 0;
     if (['scope','phmeter','ecmeter','scrogNet','co2Tank'].includes(item.type)) {
       count = _toolOwned(item.type) ? 1 : 0;
@@ -10522,27 +10904,66 @@ function renderShop() {
       count = ownedCount(item.id);
     }
 
-    const canAfford  = GS.coins >= item.price;
-    const isOwned    = count > 0 && !['nute_base','nute_grow','nute_bloom','nute_calmag','ph_up','ph_down','emitters','hosing','health_spray','stsSpray','pot_halfgal','pot_1gal','pot_3gal','pot_5gal','pot_10gal','pot_25gal','soil_halfgal','soil_1','soil_5','soil_25'].includes(item.id);
-    const borderColor= isOwned ? 'rgba(74,222,128,0.4)' : canAfford ? 'var(--border)' : 'rgba(255,255,255,0.05)';
-    const roomLocked = item.type === 'unlockRoom' && count === 0 && (GS.level||1) < (ROOM_DEFS[item.roomId]?.levelReq||0);
+    const canAfford   = GS.coins >= item.price;
+    const roomLocked  = item.type === 'unlockRoom' && count === 0 && (GS.level||1) < (ROOM_DEFS[item.roomId]?.levelReq||0);
+    const isOneTime   = ONE_TIME.has(item.type);
+    const alreadyDone = isOneTime && count > 0;  // truly can't buy again
+    const canBuy      = !alreadyDone && !roomLocked && canAfford;
+    const canSell     = EQUIP_TYPES.has(item.type) && count > 0;
+    const sellPrice   = Math.round(item.price * 0.75);
 
-    html += `<div style="background:var(--card-bg);border:1px solid ${borderColor};border-radius:10px;padding:11px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;opacity:${!canAfford&&!isOwned?'0.6':'1'}">
+    const borderColor = alreadyDone    ? 'rgba(74,222,128,0.45)'
+                      : count > 0      ? 'rgba(74,222,128,0.2)'
+                      : canAfford      ? 'var(--border)'
+                      :                  'rgba(255,255,255,0.05)';
+
+    html += `<div style="background:var(--card-bg);border:1px solid ${borderColor};border-radius:10px;padding:11px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;opacity:${!canAfford&&!alreadyDone?'0.6':'1'}">
       <div style="font-size:22px;margin-bottom:2px">${item.icon}</div>
-      <div style="font-family:var(--font-hud);font-size:9px;color:${isOwned?'var(--green)':'var(--text)'};letter-spacing:.3px;line-height:1.3">${item.name}</div>
+      <div style="font-family:var(--font-hud);font-size:9px;color:${alreadyDone?'var(--green)':'var(--text)'};letter-spacing:.3px;line-height:1.3">${item.name}</div>
       <div style="font-size:7px;color:var(--muted);line-height:1.4;min-height:28px;flex:1">${item.desc}</div>
-      <div style="font-family:var(--font-hud);font-size:10px;color:${isOwned?'var(--green)':'var(--gold)'}">${isOwned?'✅ OWNED':item.price.toLocaleString()+'¢'}</div>
-      ${count>0?`<div style="font-size:8px;color:var(--muted);font-family:var(--font-hud)">Owned: ${count}</div>`:''}
-      ${roomLocked?`<div style="font-size:8px;color:var(--red);font-family:var(--font-hud)">Need Lv${ROOM_DEFS[item.roomId]?.levelReq}</div>`:''}
-      ${!isOwned||['nute_base','nute_grow','nute_bloom','nute_calmag','ph_up','ph_down','emitters','hosing','health_spray','stsSpray','pot_halfgal','pot_1gal','pot_3gal','pot_5gal','pot_10gal','pot_25gal','soil_halfgal','soil_1','soil_5','soil_25'].includes(item.id)
-        ? `<button class="btn-action btn-gold" style="width:100%;padding:5px;margin-top:3px"
-            onclick="buyGear('${item.id}')"
-            ${(!canAfford||roomLocked)?'disabled':''}>BUY</button>`
-        : ''}
+      <div style="font-family:var(--font-hud);font-size:10px;color:${alreadyDone?'var(--green)':'var(--gold)'}">
+        ${alreadyDone ? '✅ OWNED' : item.price.toLocaleString()+'¢'}
+      </div>
+      ${count > 0 ? `<div style="font-size:8px;color:${alreadyDone?'var(--green)':'var(--cyan)'};font-family:var(--font-hud)">Owned: ${count}</div>` : ''}
+      ${roomLocked ? `<div style="font-size:8px;color:var(--red);font-family:var(--font-hud)">Need Lv${ROOM_DEFS[item.roomId]?.levelReq}</div>` : ''}
+      ${!alreadyDone ? `<button class="btn-action btn-gold" style="width:100%;padding:5px;margin-top:3px"
+          onclick="buyGear('${item.id}')"
+          ${!canBuy?'disabled':''}>
+          ${count > 0 ? 'BUY ANOTHER' : 'BUY'}
+        </button>` : ''}
+      ${canSell ? `<button class="btn-action btn-red" style="width:100%;padding:4px;margin-top:2px;font-size:8px"
+          onclick="sellGear('${item.id}',${sellPrice})">
+          SELL · ${sellPrice.toLocaleString()}¢ (−25%)
+        </button>` : ''}
     </div>`;
   });
   html += '</div>';
   cont.innerHTML = html;
+}
+
+function sellGear(itemId, sellPrice) {
+  const inv = getInventory();
+  // Prefer selling an unassigned instance first
+  let idx = inv.instances.findIndex(x => {
+    if (x.itemId !== itemId) return false;
+    return !_instanceRoomUsage(x.uid);
+  });
+  if (idx < 0) {
+    // All instances are assigned — find any and tell user to unassign
+    const anyInst = inv.instances.find(x => x.itemId === itemId);
+    if (anyInst) {
+      const usedIn = _instanceRoomUsage(anyInst.uid);
+      toast('⚠️ Unassign from ' + (usedIn||'room') + ' first — open ⚙️ Gear panel → set that slot to empty.', 'warn', 5000);
+    } else {
+      toast('No item found to sell.', 'warn');
+    }
+    return;
+  }
+  inv.instances.splice(idx, 1);
+  GS.coins += sellPrice;
+  toast('💸 Sold for ' + sellPrice.toLocaleString() + '¢ (25% loss)', 'ok', 3000);
+  addLog('Gear sold for ' + sellPrice + '¢', 'info');
+  saveGame(); renderShop(); renderGearPanel(); renderHeader();
 }
 
 function buyMaleSeed(strainName) {
@@ -12250,7 +12671,42 @@ function renderStats() {
   if (_gtD || !_gtParts.length) _gtParts.push(_gtD + 'd');
   const _gtStr = _gtParts.join(' ');
 
-  let html = `<div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:14px;font-family:var(--font-hud);font-size:10px;color:var(--muted);letter-spacing:.5px;line-height:2.2;text-align:center">
+  const _gLv = getLevelFromXP(GS.growingXP||0,'growing');
+  const _dLv = getLevelFromXP(GS.dryXP||0,'dry');
+  const _bLv = getLevelFromXP(GS.breederXP||0,'breeder');
+  const _tLv = GS.level || 1;
+  const _tPct= Math.round(getXPProgress(GS.xp||0,'total')*100);
+  const _gPct= Math.round(getXPProgress(GS.growingXP||0,'growing')*100);
+  const _dPct= Math.round(getXPProgress(GS.dryXP||0,'dry')*100);
+  const _bPct= Math.round(getXPProgress(GS.breederXP||0,'breeder')*100);
+
+  let html = `
+  <!-- LEVEL OVERVIEW CARD -->
+  <div style="background:rgba(0,0,0,0.5);border:1px solid var(--border-bright);border-radius:12px;padding:16px;margin-bottom:16px;cursor:pointer"
+    onclick="openLevelPanel('total')" title="Click to see all level unlocks">
+    <div style="text-align:center;margin-bottom:12px">
+      <div style="font-family:var(--font-hud);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:2px">TOTAL LEVEL</div>
+      <div style="font-family:var(--font-hud);font-size:36px;color:var(--purple);line-height:1">${_tLv}</div>
+      <div style="height:6px;background:rgba(255,255,255,0.05);border-radius:3px;overflow:hidden;margin:8px 0 4px">
+        <div style="height:100%;width:${_tPct}%;background:linear-gradient(90deg,var(--purple-dim),var(--purple));border-radius:3px;transition:.5s"></div>
+      </div>
+      <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono)">${getXPToNextLevel(GS.xp||0,'total').toLocaleString()} XP to next level · hover for details</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+      ${[['🌿','GROWING',_gLv,_gPct,'var(--green)','growing'],['🌬️','DRY/CURE',_dLv,_dPct,'var(--cyan)','dry'],['🧬','BREEDER',_bLv,_bPct,'var(--purple)','breeder']].map(([ic,lb,lv,pct,col,tk])=>`
+      <div onclick="event.stopPropagation();openLevelPanel('${tk}')" style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:7px;padding:8px;text-align:center;cursor:pointer">
+        <div style="font-size:14px">${ic}</div>
+        <div style="font-family:var(--font-hud);font-size:7px;color:var(--muted);letter-spacing:.5px;margin:2px 0">${lb}</div>
+        <div style="font-family:var(--font-hud);font-size:16px;color:${col}">LV ${lv}</div>
+        <div style="height:3px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden;margin-top:4px">
+          <div style="height:100%;width:${pct}%;background:${col};border-radius:2px"></div>
+        </div>
+      </div>`).join('')}
+    </div>
+    <div style="text-align:center;margin-top:10px;font-size:8px;color:rgba(168,85,247,0.5);font-family:var(--font-hud)">⭐ CLICK TO VIEW FULL LEVEL UNLOCKS</div>
+  </div>
+
+  <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:14px;font-family:var(--font-hud);font-size:10px;color:var(--muted);letter-spacing:.5px;line-height:2.2;text-align:center">
     Account Created: <strong style="color:var(--text)">${_ageStr}</strong>
     &nbsp;·&nbsp; Play Time: <strong style="color:var(--cyan)">${realtimeH}h ${realtimeM}m</strong>
     &nbsp;·&nbsp; In-Game Grow Time: <strong style="color:var(--gold)">${_gtStr}</strong>
@@ -12367,25 +12823,37 @@ function renderStats() {
     </div>`;
   }
 
+  // Build dynamic mode selector
+  const _curMode = GS.difficulty || 'easy';
+  const _modeRows = Object.entries(GAME_MODES).map(([mk, md]) => {
+    const status  = getModeUnlockStatus(mk);
+    const isCur   = _curMode === mk || (mk === 'medium' && _curMode === 'normal');
+    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:${isCur?md.color+'14':'rgba(0,0,0,0.3)'};border:${isCur?'2px solid '+md.color:'1px solid var(--border)'};border-radius:9px;margin-bottom:7px;opacity:${status.unlocked?'1':'0.45'}">
+      <span style="font-size:20px">${md.icon}</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-family:var(--font-hud);font-size:10px;color:${isCur?md.color:'var(--text)'};margin-bottom:2px">${md.label} ${isCur?'← CURRENT':''}</div>
+        <div style="font-size:8px;color:var(--muted);line-height:1.5">${md.desc}</div>
+        ${!status.unlocked?`<div style="font-size:8px;color:var(--red);margin-top:2px;font-family:var(--font-hud)">🔒 ${status.reason}</div>`:''}
+      </div>
+      ${status.unlocked && !isCur
+        ? `<button class="btn-diff" style="flex-shrink:0;min-width:70px;color:${md.color};border-color:${md.color}55"
+            onclick="changeDifficulty('${mk}')">SWITCH</button>`
+        : isCur
+          ? `<span style="font-family:var(--font-hud);font-size:9px;color:${md.color}">✅ ACTIVE</span>`
+          : `<span style="font-size:12px">🔒</span>`}
+    </div>`;
+  }).join('');
+
   html += `<div class="stats-section">
-    <div class="stats-section-title">CHANGE DIFFICULTY</div>
-    <div style="font-size:10px;color:var(--muted);margin-bottom:10px;line-height:1.6">
-      Can only be changed when all rooms are empty. Higher difficulty gives better rewards AND harder daily goals.
+    <div class="stats-section-title">GAME MODE</div>
+    <div style="font-size:10px;color:var(--muted);margin-bottom:12px;line-height:1.6">
+      Modes unlock by reaching the required level AND completing all achievements from the previous mode.
+      Remove all plants before switching. Higher modes multiply harvest weight significantly.
     </div>
-    <div class="diff-options">
-      <button class="btn-diff ${GS.difficulty==='easy'?'active':''}"
-        onclick="changeDifficulty('easy')" ${GS.difficulty==='easy'?'disabled':''}>
-        EASY<span class="diff-sub">All hints on</span>
-      </button>
-      <button class="btn-diff ${GS.difficulty==='normal'?'active':''}"
-        onclick="changeDifficulty('normal')" ${GS.difficulty==='normal'?'disabled':''}>
-        NORMAL<span class="diff-sub">+10% rewards</span>
-      </button>
-      <button class="btn-diff ${GS.difficulty==='master'?'active':''}"
-        onclick="changeDifficulty('master')" ${GS.difficulty==='master'?'disabled':''}>
-        MASTER<span class="diff-sub">+25% rewards</span>
-      </button>
-    </div>
+    ${_modeRows}
+    <button onclick="openLevelPanel('total')" style="width:100%;margin-top:8px;padding:9px;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.4);border-radius:8px;color:var(--purple);font-family:var(--font-hud);font-size:9px;letter-spacing:1px;cursor:pointer">
+      ⭐ VIEW LEVEL UNLOCKS & PROGRESS
+    </button>
   </div>`;
 
   if ((s.recentSales||[]).length) {
@@ -12419,12 +12887,16 @@ function renderStats() {
 
 function changeDifficulty(diff) {
   const anyPlants = (GS.plants||[]).length > 0;
-  if (anyPlants) {
-    toast('⚠️ Remove all plants before changing difficulty.','warn'); return;
-  }
+  if (anyPlants) { toast('⚠️ Remove all plants before changing difficulty.','warn'); return; }
+  const status = getModeUnlockStatus(diff);
+  if (!status.unlocked) { toast('🔒 ' + status.reason, 'warn', 5000); return; }
+  const prev = GS.difficulty;
   GS.difficulty = diff;
-  toast('Difficulty set to ' + diff.toUpperCase(), 'ok', 3000);
-  addLog('Difficulty changed to ' + diff, 'info');
+  if (!GS.unlockedModes) GS.unlockedModes = ['easy'];
+  if (!GS.unlockedModes.includes(diff)) GS.unlockedModes.push(diff);
+  const modeDef = GAME_MODES[diff] || GAME_MODES.easy;
+  toast(modeDef.icon + ' Switched to ' + modeDef.label + '!', 'ok', 3000);
+  addLog('Mode changed: ' + prev + ' → ' + diff, 'info');
   saveGame(); renderStats(); renderHeader();
 }
 // ================================================================
@@ -12734,14 +13206,8 @@ function openDiffModal() {
 
 function confirmDiffChange() {
   const diff = document.getElementById('inp-diff-change')?.value || 'easy';
-  if ((GS.plants||[]).length > 0) {
-    toast('⚠️ Remove all plants first.', 'warn'); return;
-  }
-  GS.difficulty = diff;
   closeModal('modal-difficulty');
-  toast('Difficulty set to ' + diff.toUpperCase(), 'ok', 3000);
-  addLog('Difficulty changed to ' + diff, 'info');
-  saveGame(); renderHeader(); renderStats();
+  changeDifficulty(diff);
 }
 
 // ================================================================
@@ -13876,7 +14342,7 @@ function openHarvestModal(plantId) {
   const fw     = Math.ceil((plant.flowerDay || 1) / 7);
   const sg     = score.score >= 9 ? 'A' : score.score >= 7 ? 'B' : score.score >= 5 ? 'C' : 'D';
   const hg     = (plant.health||0) >= 80 ? 'A' : (plant.health||0) >= 60 ? 'B' : (plant.health||0) >= 40 ? 'C' : 'D';
-  const diffMult = GS.difficulty === 'master' ? 1.25 : GS.difficulty === 'normal' ? 1.1 : 1.0;
+  const diffMult = getModeDef().harvestMult || 1.0;
   const xpGain   = Math.round(score.score * 50 * diffMult);
 
   const gradeEl  = document.getElementById('lbl-harvest-grade');
@@ -13967,7 +14433,7 @@ if (plant._permanentlyDead) {
      if (plant._permanentlyDead) { toast('☠️ Cannot harvest — permanently dead.','err'); closeModal('modal-harvest'); return; }
   const strain  = STRAINS[plant.strainName] || (GS.bredStrains||[]).find(b=>b.name===plant.strainName) || {};
   const score   = calcGrowScore(plant);
-  const diffMult= GS.difficulty === 'master' ? 1.25 : GS.difficulty === 'normal' ? 1.1 : 1.0;
+  const diffMult = getModeDef().harvestMult || 1.0;
   const fw      = Math.ceil((plant.flowerDay || 1) / 7);
   const isTest  = !!(STRAINS[plant.strainName]?.isTest);
 
