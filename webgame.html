@@ -1346,8 +1346,44 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
               <span class="room-btn-badge" id="menu-mail-badge" style="display:none;color:var(--green)">0</span>
             </div>
             <div class="sidebar-divider" style="width:100%;margin:6px 0"></div>
+            <div class="room-btn" onclick="closePanel('menu');openHowToModal()">
+              <span class="room-btn-icon">📖</span>
+              <div class="room-btn-info">
+                <div class="room-btn-name">HOW TO PLAY</div>
+                <div class="room-btn-sub">Full guide · first seed · tips</div>
+              </div>
+            </div>
+            <div class="room-btn" onclick="closePanel('menu');openBossDropsModal()">
+              <span class="room-btn-icon">🎁</span>
+              <div class="room-btn-info">
+                <div class="room-btn-name">BOSS DROP TABLES</div>
+                <div class="room-btn-sub">What each tier can drop</div>
+              </div>
+            </div>
+            <div class="room-btn" onclick="closePanel('menu');openLegendModal()">
+              <span class="room-btn-icon">📋</span>
+              <div class="room-btn-info">
+                <div class="room-btn-name">LEGEND</div>
+                <div class="room-btn-sub">Abbreviations · terms · glossary</div>
+              </div>
+            </div>
+            <div class="room-btn" onclick="closePanel('menu');openUpdatesModal()">
+              <span class="room-btn-icon">🔔</span>
+              <div class="room-btn-info">
+                <div class="room-btn-name">UPDATES</div>
+                <div class="room-btn-sub">Recent changes · coming soon</div>
+              </div>
+            </div>
+            <div class="room-btn" onclick="closePanel('menu');window.location.href='mailto:thenoyesboyz@gmail.com?subject=Noyes Boys Grow-Off Feedback'">
+              <span class="room-btn-icon">✉️</span>
+              <div class="room-btn-info">
+                <div class="room-btn-name">FEEDBACK</div>
+                <div class="room-btn-sub">Ideas · bugs · suggestions</div>
+              </div>
+            </div>
+            <div class="sidebar-divider" style="width:100%;margin:6px 0"></div>
             <div class="room-btn" onclick="closePanel('menu');openDiffModal()">
-              <span class="room-btn-icon">🎯</span>
+              <span class="room-btn-icon">🎮</span>
               <div class="room-btn-info">
                 <div class="room-btn-name">CHANGE MODE</div>
                 <div class="room-btn-sub">Easy · Normal · Master</div>
@@ -1458,7 +1494,6 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
             <button class="shop-inv-tab" onclick="showShopTab('irrigation',this)">WATER</button>
             <button class="shop-inv-tab" onclick="showShopTab('tools',this)">TOOLS</button>
             <button class="shop-inv-tab" onclick="showShopTab('males',this)">♂ MALES</button>
-            <button class="shop-inv-tab" onclick="showShopTab('rooms',this)">ROOMS</button>
           </div>
           <div id="shop-container"></div>
         </div>
@@ -1603,6 +1638,61 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
       <button class="btn-modal cancel" onclick="closeModal('modal-equip-select')">CANCEL</button>
       <button class="btn-modal danger" onclick="unequipCurrentSlot()">UNEQUIP</button>
     </div>
+  </div>
+</div>
+
+<!-- HOW TO PLAY MODAL -->
+<div class="modal-overlay" id="modal-how-to-play">
+  <div class="modal-box wide" style="max-height:88vh;overflow-y:auto;padding:0">
+    <div style="position:sticky;top:0;background:var(--panel);border-bottom:1px solid var(--border);padding:16px 20px;z-index:5;display:flex;align-items:center;justify-content:space-between">
+      <div class="modal-title" style="margin:0">📖 HOW TO PLAY</div>
+      <button class="panel-close" onclick="closeModal('modal-how-to-play')">✕</button>
+    </div>
+    <div style="display:flex;gap:3px;padding:10px 16px;background:rgba(0,0,0,0.4);border-bottom:1px solid var(--border);flex-wrap:wrap" id="htp-tabs">
+      <button onclick="showHTPTab(0)" class="htp-tab active" style="padding:5px 10px;border:1px solid var(--green);background:rgba(74,222,128,0.12);color:var(--green);border-radius:5px;font-family:var(--font-hud);font-size:8px;letter-spacing:.5px;cursor:pointer">🌱 START</button>
+      <button onclick="showHTPTab(1)" class="htp-tab" style="padding:5px 10px;border:1px solid var(--border);background:none;color:var(--muted);border-radius:5px;font-family:var(--font-hud);font-size:8px;letter-spacing:.5px;cursor:pointer">💧 GROWING</button>
+      <button onclick="showHTPTab(2)" class="htp-tab" style="padding:5px 10px;border:1px solid var(--border);background:none;color:var(--muted);border-radius:5px;font-family:var(--font-hud);font-size:8px;letter-spacing:.5px;cursor:pointer">✂️ TRAINING</button>
+      <button onclick="showHTPTab(3)" class="htp-tab" style="padding:5px 10px;border:1px solid var(--border);background:none;color:var(--muted);border-radius:5px;font-family:var(--font-hud);font-size:8px;letter-spacing:.5px;cursor:pointer">🧪 NUTRIENTS</button>
+      <button onclick="showHTPTab(4)" class="htp-tab" style="padding:5px 10px;border:1px solid var(--border);background:none;color:var(--muted);border-radius:5px;font-family:var(--font-hud);font-size:8px;letter-spacing:.5px;cursor:pointer">🌾 HARVEST</button>
+      <button onclick="showHTPTab(5)" class="htp-tab" style="padding:5px 10px;border:1px solid var(--border);background:none;color:var(--muted);border-radius:5px;font-family:var(--font-hud);font-size:8px;letter-spacing:.5px;cursor:pointer">🌬️ DRY+CURE</button>
+      <button onclick="showHTPTab(6)" class="htp-tab" style="padding:5px 10px;border:1px solid var(--border);background:none;color:var(--muted);border-radius:5px;font-family:var(--font-hud);font-size:8px;letter-spacing:.5px;cursor:pointer">🧬 BREEDING</button>
+      <button onclick="showHTPTab(7)" class="htp-tab" style="padding:5px 10px;border:1px solid var(--border);background:none;color:var(--muted);border-radius:5px;font-family:var(--font-hud);font-size:8px;letter-spacing:.5px;cursor:pointer">💸 SELLING</button>
+      <button onclick="showHTPTab(8)" class="htp-tab" style="padding:5px 10px;border:1px solid var(--border);background:none;color:var(--muted);border-radius:5px;font-family:var(--font-hud);font-size:8px;letter-spacing:.5px;cursor:pointer">🏆 GROW-OFF</button>
+    </div>
+    <div id="htp-body" style="padding:18px 20px;font-size:11px;color:var(--muted);line-height:1.8"></div>
+  </div>
+</div>
+
+<!-- LEGEND MODAL -->
+<div class="modal-overlay" id="modal-legend">
+  <div class="modal-box" style="max-height:88vh;overflow-y:auto;padding:0">
+    <div style="position:sticky;top:0;background:var(--panel);border-bottom:1px solid var(--border);padding:16px 20px;z-index:5;display:flex;align-items:center;justify-content:space-between">
+      <div class="modal-title" style="margin:0">📋 LEGEND &amp; GLOSSARY</div>
+      <button class="panel-close" onclick="closeModal('modal-legend')">✕</button>
+    </div>
+    <div style="padding:16px 20px" id="legend-body"></div>
+  </div>
+</div>
+
+<!-- UPDATES MODAL -->
+<div class="modal-overlay" id="modal-updates">
+  <div class="modal-box" style="max-height:88vh;overflow-y:auto;padding:0">
+    <div style="position:sticky;top:0;background:var(--panel);border-bottom:1px solid var(--border);padding:16px 20px;z-index:5;display:flex;align-items:center;justify-content:space-between">
+      <div class="modal-title" style="margin:0">🔔 UPDATES</div>
+      <button class="panel-close" onclick="closeModal('modal-updates')">✕</button>
+    </div>
+    <div style="padding:16px 20px" id="updates-body"></div>
+  </div>
+</div>
+
+<!-- BOSS DROPS MODAL -->
+<div class="modal-overlay" id="modal-boss-drops">
+  <div class="modal-box wide" style="max-height:88vh;overflow-y:auto;padding:0">
+    <div style="position:sticky;top:0;background:var(--panel);border-bottom:1px solid var(--border);padding:16px 20px;z-index:5;display:flex;align-items:center;justify-content:space-between">
+      <div class="modal-title" style="margin:0">🎁 BOSS DROP TABLES</div>
+      <button class="panel-close" onclick="closeModal('modal-boss-drops')">✕</button>
+    </div>
+    <div style="padding:16px 20px" id="boss-drops-body"></div>
   </div>
 </div>
 
@@ -4538,154 +4628,162 @@ function showItemActionPrompt(itemId, preSlot) {
 // ── Render the secondary items panel ──
 function renderBpItemsPanel() {
   const body = document.getElementById('bp-items-body');
-  if (!body || !GS || !GS.username) return;
-  const seeds      = GS.seeds           || {};
-  const maleSeeds  = GS.maleSeedsOwned  || {};
-  const inv        = getInventory();
-  const cons       = inv.consumables    || {};
-  const g          = GS.gear            || {};
-  const allShopFlat= Object.values(SHOP_ITEMS).flat();
+  if (!body) return;
+  if (!GS || !GS.username) { body.innerHTML = '<div class="bp-empty-note">Not logged in.</div>'; return; }
+
+  const seeds     = GS.seeds           || {};
+  const maleSeeds = GS.maleSeedsOwned  || {};
+  const equip     = GS.equip           || {};
+  const g         = GS.gear            || {};
+  const invObj    = getInventory();
+  const cons      = invObj.consumables  || {};
+  const allShopF  = Object.values(SHOP_ITEMS).flat();
   if (!GS.generatedItems) GS.generatedItems = {};
+
+  const card = (icon, topLabel, bottomLabel, border, draggableAttrs, clickFn, badge) =>
+    `<div class="bp-item-card" ${draggableAttrs||''} ${clickFn?`onclick="${clickFn}"`:''} style="border-color:${border||'var(--border)'}" title="${topLabel}">
+      <div class="bic-icon">${icon}</div>
+      ${badge?`<div class="bic-qty">${badge}</div>`:''}
+      <div class="bic-label" style="color:${border&&border!=='var(--border)'?border:'var(--muted)'}">${bottomLabel}</div>
+    </div>`;
+
   let html = '';
 
-  // ── Equip items ──
-  const equipOwned = (GS.equipItems||[]).filter(x=>x.qty>0);
+  // ── EQUIP ITEMS ──────────────────────────────────────────────────────
+  const equipOwned = (GS.equipItems||[]).filter(x=>(x.qty||0)>0);
   if (equipOwned.length) {
-    html += `<div class="bp-section-label">⚡ EQUIP ITEMS <span style="color:rgba(74,222,128,0.4);font-size:7px">DRAG TO SLOT · CLICK FOR OPTIONS</span></div><div class="bp-item-grid">`;
+    html += `<div class="bp-section-label">⚡ EQUIP ITEMS <span style="font-size:7px;color:rgba(74,222,128,0.35)">DRAG TO SLOTS · CLICK FOR OPTIONS</span></div><div class="bp-item-grid">`;
     equipOwned.forEach(owned => {
       const item = EQUIPMENT_ITEMS[owned.id] || GS.generatedItems[owned.id];
       if (!item) return;
-      const tm       = ITEM_TIERS[item.rarity]||null;
-      const iCol     = tm ? tm.color : 'var(--muted)';
-      const isEq     = Object.values(GS.equip||{}).includes(owned.id);
-      const safe     = owned.id.replace(/'/g,"\\'");
+      const tm    = ITEM_TIERS[item.rarity]||null;
+      const iCol  = tm ? tm.color : 'var(--muted)';
+      const isEq  = Object.values(equip).includes(owned.id);
+      const safe  = owned.id.replace(/'/g,"\\'");
       html += `<div class="bp-item-card" draggable="true"
-        style="border-color:${iCol}44;position:relative"
         ondragstart="event.dataTransfer.setData('item-id','${safe}');event.dataTransfer.setData('item-type','equip')"
-        onclick="showItemActionPrompt('${safe}')" title="${item.name} (${item.rarity})">
+        onclick="showItemActionPrompt('${safe}')"
+        style="border-color:${iCol}44;position:relative" title="${item.name} · ${item.rarity}">
         <div class="bic-icon">${item.icon}</div>
         ${owned.qty>1?`<div class="bic-qty">${owned.qty}×</div>`:''}
-        <div class="bic-label" style="color:${iCol}">${item.name.slice(0,7)}</div>
-        ${isEq?`<div style="position:absolute;top:1px;right:2px;font-size:9px">✅</div>`:''}
+        <div class="bic-label" style="color:${iCol}">${item.name.slice(0,8)}</div>
+        ${isEq?`<div style="font-size:7px;color:var(--green);font-family:var(--font-hud)">EQUIPPED</div>`:''}
       </div>`;
     });
     html += `</div>`;
   }
 
-  // ── Female seeds ──
+  // ── FEM SEEDS ────────────────────────────────────────────────────────
   const femE = Object.entries(seeds).filter(([,q])=>q>0);
   if (femE.length) {
-    html += `<div class="bp-section-label">🌿 FEM SEEDS <span style="color:rgba(74,222,128,0.4);font-size:7px">DRAG TO PLANT SLOT</span></div><div class="bp-item-grid">`;
+    html += `<div class="bp-section-label">🌿 FEM SEEDS <span style="font-size:7px;color:rgba(74,222,128,0.35)">DRAG TO PLANT SLOT</span></div><div class="bp-item-grid">`;
     femE.forEach(([name,qty]) => {
       const s    = STRAINS[name]||(GS.bredStrains||[]).find(b=>b.name===name)||{};
       const bd   = (GS.bredStrains||[]).find(b=>b.name===name);
       const safe = name.replace(/'/g,"\\'");
       html += `<div class="bp-item-card" draggable="true"
-        style="border-color:rgba(74,222,128,0.3)"
         ondragstart="event.dataTransfer.setData('seed-name','${safe}');event.dataTransfer.setData('item-type','seed')"
-        onclick="openPlantModalWith('${safe}')" title="${name} ×${qty}${bd?' ['+bd.gen+']':''}">
+        onclick="openPlantModalWith('${safe}')"
+        style="border-color:rgba(74,222,128,0.35)" title="${name} ×${qty}${bd?' ['+bd.gen+']':''}">
         <div class="bic-icon">${s.emoji||'🌿'}</div>
         <div class="bic-qty">${qty}×</div>
-        <div class="bic-label" style="color:var(--green)">${name.slice(0,7)}</div>
+        <div class="bic-label" style="color:var(--green)">${name.slice(0,8)}</div>
         ${bd?`<div style="font-size:6px;color:var(--purple);font-family:var(--font-hud)">${bd.gen}</div>`:''}
       </div>`;
     });
     html += `</div>`;
   }
 
-  // ── Male seeds ──
+  // ── MALE SEEDS ───────────────────────────────────────────────────────
   const maleE = Object.entries(maleSeeds).filter(([,q])=>q>0);
   if (maleE.length) {
-    html += `<div class="bp-section-label">♂ MALE SEEDS <span style="color:rgba(74,222,128,0.4);font-size:7px">DRAG TO PLANT SLOT</span></div><div class="bp-item-grid">`;
+    html += `<div class="bp-section-label">♂ MALE SEEDS <span style="font-size:7px;color:rgba(74,222,128,0.35)">DRAG TO PLANT SLOT</span></div><div class="bp-item-grid">`;
     maleE.forEach(([name,qty]) => {
       const s    = STRAINS[name]||{};
       const safe = name.replace(/'/g,"\\'");
       html += `<div class="bp-item-card" draggable="true"
-        style="border-color:rgba(59,130,246,0.4)"
         ondragstart="event.dataTransfer.setData('seed-name','${safe}');event.dataTransfer.setData('item-type','seed-male')"
-        onclick="openPlantMaleWith('${safe}')" title="♂ ${name} ×${qty}">
+        onclick="openPlantMaleWith('${safe}')"
+        style="border-color:rgba(59,130,246,0.4)" title="♂ ${name} ×${qty}">
         <div class="bic-icon">♂${s.emoji||'🌿'}</div>
         <div class="bic-qty">${qty}×</div>
-        <div class="bic-label" style="color:var(--blue)">${name.slice(0,7)}</div>
+        <div class="bic-label" style="color:var(--blue)">${name.slice(0,8)}</div>
       </div>`;
     });
     html += `</div>`;
   }
 
-  // ── Pots & Soil ──
+  // ── PHYSICAL GEAR (drag to gear panel slots) ─────────────────────────
+  const gearInst = (invObj.instances||[]).filter(x =>
+    ['lights','fan','acUnit','heater','dehumidifier','humidifier'].includes(x.equipType||x.type)
+  );
+  if (gearInst.length) {
+    const _allGrps = ['lights','fans','acUnits','heaters','dehumidifiers','humidifiers'];
+    const _gUsed   = uid => GS.rooms.some(r2 =>
+      _allGrps.some(g2 => (getRoomGear(r2.id)[g2]||[]).some(sl => sl?.instanceUid===uid))
+    );
+    html += `<div class="bp-section-label">⚙️ GEAR <span style="font-size:7px;color:rgba(74,222,128,0.35)">DRAG TO ⚙️ GEAR PANEL SLOTS</span></div><div class="bp-item-grid">`;
+    gearInst.forEach(inst => {
+      const used = _gUsed(inst.uid);
+      const safe = inst.uid.replace(/'/g,"\\'");
+      const iType= inst.equipType||inst.type;
+      const iCol = used?'rgba(74,222,128,0.5)':'var(--border)';
+      html += `<div class="bp-item-card" draggable="true"
+        ondragstart="event.dataTransfer.setData('gear-uid','${safe}');event.dataTransfer.setData('gear-type','${iType}')"
+        style="border-color:${iCol}" title="${inst.name}${used?' (assigned)':' (free)'}">
+        <div class="bic-icon">${inst.icon||'📦'}</div>
+        ${inst.power?`<div class="bic-qty">${inst.power}W</div>`:inst.size?`<div class="bic-qty">${inst.size}</div>`:''}
+        <div class="bic-label" style="color:${used?'var(--green)':'var(--muted)'}">${inst.name.slice(0,8)}</div>
+        ${used?`<div style="font-size:6px;color:rgba(74,222,128,0.5);font-family:var(--font-hud)">IN USE</div>`:''}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // ── POTS & SOIL ──────────────────────────────────────────────────────
   const potItems = Object.entries(cons).filter(([,q])=>q>0);
   if (potItems.length) {
     html += `<div class="bp-section-label">🪣 POTS & SOIL</div><div class="bp-item-grid">`;
     potItems.forEach(([id,qty]) => {
-      const item = allShopFlat.find(i=>i.id===id);
+      const item = allShopF.find(i=>i.id===id);
       if (!item) return;
       html += `<div class="bp-item-card" title="${item.name} ×${qty}">
         <div class="bic-icon">${item.icon||'📦'}</div>
         <div class="bic-qty">${qty}×</div>
-        <div class="bic-label">${item.name.slice(0,8)}</div>
+        <div class="bic-label">${item.name.slice(0,9)}</div>
       </div>`;
     });
     html += `</div>`;
   }
 
-  // ── Physical gear (lights, fans, climate) — drag to gear panel slots ──
-  const _gearInstances = instances.filter(x =>
-    ['lights','fan','acUnit','heater','dehumidifier','humidifier'].includes(x.equipType||x.type)
-  );
-  if (_gearInstances.length) {
-    const _allGrps2 = ['lights','fans','acUnits','heaters','dehumidifiers','humidifiers'];
-    const _isUsed2  = uid => GS.rooms.some(r2 =>
-      _allGrps2.some(g2 => (getRoomGear(r2.id)[g2]||[]).some(sl => sl?.instanceUid === uid))
-    );
-    html += `<div class="bp-section-label">⚙️ GEAR <span style="color:rgba(74,222,128,0.4);font-size:7px">DRAG TO GEAR PANEL SLOTS ⚙️</span></div><div class="bp-item-grid">`;
-    _gearInstances.forEach(inst => {
-      const _used = _isUsed2(inst.uid);
-      const _safe = inst.uid.replace(/'/g,"\\'");
-      const _type = inst.equipType||inst.type;
-      html += `<div class="bp-item-card" draggable="true"
-        ondragstart="event.dataTransfer.setData('gear-uid','${_safe}');event.dataTransfer.setData('gear-type','${_type}')"
-        style="border-color:${_used?'rgba(74,222,128,0.4)':'var(--border)'}"
-        title="${inst.name}${_used?' — assigned':' — unassigned'}">
-        <div class="bic-icon">${inst.icon||'📦'}</div>
-        ${inst.power?`<div class="bic-qty">${inst.power}W</div>`:inst.size?`<div class="bic-qty">${inst.size}</div>`:''}
-        <div class="bic-label" style="color:${_used?'var(--green)':'var(--muted)'}">${inst.name.slice(0,8)}</div>
-        ${_used?`<div style="font-size:6px;color:rgba(74,222,128,0.5);font-family:var(--font-hud)">IN USE</div>`:'<div style="font-size:6px;color:rgba(255,255,255,0.2);font-family:var(--font-hud)">FREE</div>'}
-      </div>`;
-    });
-    html += `</div>`;
-  }
-
-  
-  // ── Tools ──
+  // ── TOOLS ────────────────────────────────────────────────────────────
   const toolDefs3 = [{key:'scope',icon:'🔬',name:'Loupe'},{key:'phmeter',icon:'🧪',name:'pH Meter'},{key:'ecmeter',icon:'🔌',name:'EC Meter'},{key:'scrogNet',icon:'🕸️',name:'SCROG'}];
-  const ownedT3 = toolDefs3.filter(t=>g[t.key]);
-  if (ownedT3.length || (g.stsSprayCount||0)>0 || g.super_light || g.unbreakable_ph || g.unbreakable_ec) {
+  const ownedT3   = toolDefs3.filter(t=>g[t.key]);
+  const stsCount  = g.stsSprayCount||0;
+  if (ownedT3.length||stsCount>0||g.super_light||g.unbreakable_ph||g.unbreakable_ec) {
     html += `<div class="bp-section-label">🛠️ TOOLS</div><div class="bp-item-grid">`;
-    ownedT3.forEach(t => { html += `<div class="bp-item-card" style="border-color:rgba(74,222,128,0.35)" title="${t.name}"><div class="bic-icon">${t.icon}</div><div class="bic-label" style="color:var(--green)">${t.name.slice(0,7)}</div></div>`; });
-    if ((g.stsSprayCount||0)>0) html += `<div class="bp-item-card" style="border-color:rgba(168,85,247,0.4)" title="STS Spray ×${g.stsSprayCount}"><div class="bic-icon">🧪</div><div class="bic-qty">${g.stsSprayCount}×</div><div class="bic-label" style="color:var(--purple)">STS</div></div>`;
+    ownedT3.forEach(t => { html += `<div class="bp-item-card" style="border-color:rgba(74,222,128,0.35)" title="${t.name}"><div class="bic-icon">${t.icon}</div><div class="bic-label" style="color:var(--green)">${t.name.slice(0,8)}</div></div>`; });
+    if (stsCount>0) html += `<div class="bp-item-card" style="border-color:rgba(168,85,247,0.4)" title="STS Spray ×${stsCount}"><div class="bic-icon">🧪</div><div class="bic-qty">${stsCount}×</div><div class="bic-label" style="color:var(--purple)">STS</div></div>`;
     if (g.super_light)    html += `<div class="bp-item-card" style="border-color:var(--gold)" title="Forbidden Light"><div class="bic-icon">💡</div><div class="bic-label" style="color:var(--gold)">F.Light</div></div>`;
-    if (g.unbreakable_ph) html += `<div class="bp-item-card" style="border-color:var(--cyan)" title="Unbreakable pH Meter"><div class="bic-icon">🧪</div><div class="bic-label" style="color:var(--cyan)">∞pH</div></div>`;
-    if (g.unbreakable_ec) html += `<div class="bp-item-card" style="border-color:var(--cyan)" title="Unbreakable EC Meter"><div class="bic-icon">🔌</div><div class="bic-label" style="color:var(--cyan)">∞EC</div></div>`;
+    if (g.unbreakable_ph) html += `<div class="bp-item-card" style="border-color:var(--cyan)" title="Unbreakable pH Meter"><div class="bic-icon">🧪</div><div class="bic-label" style="color:var(--cyan)">∞ pH</div></div>`;
+    if (g.unbreakable_ec) html += `<div class="bp-item-card" style="border-color:var(--cyan)" title="Unbreakable EC Meter"><div class="bic-icon">🔌</div><div class="bic-label" style="color:var(--cyan)">∞ EC</div></div>`;
     html += `</div>`;
   }
 
-  // ── Cards ──
+  // ── CARDS ────────────────────────────────────────────────────────────
   const cards2 = GS.cards||[];
   if (cards2.length) {
     html += `<div class="bp-section-label">🃏 CARDS (${cards2.length})</div><div class="bp-item-grid">`;
-    cards2.forEach(sn => {
-      const s    = STRAINS[sn]||{};
+    cards2.slice(0,20).forEach(sn => {
+      const s = STRAINS[sn]||{};
       const safe = sn.replace(/'/g,"\\'");
-      html += `<div class="bp-item-card" onclick="viewCard('${safe}')" title="${sn}">
-        <div class="bic-icon">${s.emoji||'🃏'}</div>
-        <div class="bic-label">${sn.slice(0,8)}</div>
-      </div>`;
+      html += `<div class="bp-item-card" onclick="viewCard('${safe}')" title="${sn}"><div class="bic-icon">${s.emoji||'🃏'}</div><div class="bic-label">${sn.slice(0,8)}</div></div>`;
     });
+    if (cards2.length>20) html += `<div class="bp-item-card"><div class="bic-icon" style="font-size:12px">+${cards2.length-20}</div><div class="bic-label">more</div></div>`;
     html += `</div>`;
   }
 
-  if (!html) html = `<div class="bp-empty-note">Nothing here yet.<br>Get seeds and gear to fill your pack!</div>`;
-  body.innerHTML = html;
+  body.innerHTML = html || `<div class="bp-empty-note">📦 Nothing here yet.<br><span style="font-size:9px;color:rgba(255,255,255,0.3)">Redeem seed codes, buy gear, and equip items to fill your pack.</span></div>`;
 }
 
 function equipItem(slot, itemId) {
@@ -7176,6 +7274,110 @@ function _showGrowOffResult(won, myScore, theirScore, boss, vaultItem, drops) {
   setTimeout(() => { if (wrapper.parentElement) wrapper.remove(); }, 18000);
 }
 
+function showBossDetail(bossId) {
+  const def      = BOSS_DEFS.find(b=>b.id===bossId);
+  if (!def) return;
+  const boss     = getBossLive(bossId);
+  const prestige = GS.bossPrestige?.[bossId]||0;
+  const history  = (GS.growoffHistory||[]).filter(h=>h.opponentName===def.name||h.opponentName===boss?.baseName);
+  const wins     = history.filter(h=>h.won).length;
+  const losses   = history.filter(h=>!h.won).length;
+  const isActive = (GS.activeGrowoffs||[]).some(g=>g.botIdx===bossId&&g.status!=='completed'&&g.status!=='cancelled');
+  const isPending= GS._pendingGrowOffBotId===bossId;
+  const locked   = !_isBossAvailable(bossId);
+  const table    = BOSS_DROP_TABLES[def.tier]||BOSS_DROP_TABLES.baby;
+
+  const dropRows = table.map(entry => {
+    const finalChance = Math.min(entry.baseChance*3, entry.baseChance + prestige*0.04);
+    const pct   = (finalChance*100).toFixed(1);
+    const tmeta = ITEM_TIERS[entry.tier]||ITEM_TIERS.Common;
+    const slots = entry.slots.slice(0,4).map(s=>SLOT_LABELS[s]||s).join(', ');
+    return `<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(0,0,0,0.35);border:1px solid ${tmeta.color}22;border-radius:6px;margin-bottom:4px">
+      <div style="font-family:var(--font-hud);font-size:10px;color:${tmeta.color};min-width:72px;font-weight:700">${entry.tier}</div>
+      <div style="flex:1;font-size:8px;color:var(--muted);font-family:var(--font-mono)">${slots}</div>
+      <div style="font-family:var(--font-hud);font-size:13px;color:${tmeta.color};min-width:44px;text-align:right">${pct}%</div>
+    </div>`;
+  }).join('');
+
+  const histRows = history.slice(0,5).map(h=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:5px 8px;background:rgba(0,0,0,0.3);border:1px solid ${h.won?'rgba(74,222,128,0.2)':'rgba(239,68,68,0.2)'};border-radius:5px;margin-bottom:3px;font-size:9px;font-family:var(--font-mono)">
+      <span style="font-family:var(--font-hud);color:${h.won?'var(--green)':'var(--red)'}">${h.won?'WIN':'LOSS'}</span>
+      <span style="flex:1;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.plantName||'?'}</span>
+      <span style="color:var(--text)">${h.score} vs ${h.opponentScore||'?'}</span>
+      <span style="color:var(--muted)">${timeSince(h.ts)}</span>
+    </div>`).join('');
+
+  const wrapper = document.createElement('div');
+  wrapper.setAttribute('data-action-prompt','1');
+  wrapper.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.87);z-index:10002;display:flex;align-items:center;justify-content:center;padding:14px;overflow-y:auto';
+  wrapper.innerHTML = `
+    <div style="background:var(--panel);border:2px solid ${boss.diffColor}44;border-radius:18px;padding:22px;width:450px;max-width:100%;max-height:90vh;overflow-y:auto;position:relative">
+      <!-- Header -->
+      <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;flex-wrap:wrap">
+        <div style="font-size:48px;line-height:1;flex-shrink:0">${def.av}</div>
+        <div style="flex:1;min-width:150px">
+          <div style="font-family:var(--font-hud);font-size:14px;color:var(--text);margin-bottom:4px">${boss.name}</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px">
+            <span style="background:rgba(0,0,0,0.5);border:1px solid ${boss.diffColor}55;border-radius:4px;padding:2px 8px;font-family:var(--font-hud);font-size:8px;color:${boss.diffColor}">${boss.difficulty}</span>
+            <span style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-family:var(--font-hud);font-size:8px;color:var(--muted)">Level ${def.minLv}+</span>
+            ${prestige>0?`<span style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.4);border-radius:4px;padding:2px 8px;font-family:var(--font-hud);font-size:8px;color:var(--gold)">⭐ Prestige ${prestige}</span>`:''}
+          </div>
+          <div style="font-size:9px;color:var(--muted);font-family:var(--font-mono);line-height:1.6">${def.desc}</div>
+        </div>
+        ${wins+losses>0?`<div style="text-align:center;flex-shrink:0;background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:8px 12px">
+          <div style="font-family:var(--font-hud);font-size:20px;color:var(--green)">${wins}</div>
+          <div style="font-size:7px;color:var(--muted);font-family:var(--font-hud)">WINS</div>
+          <div style="font-family:var(--font-hud);font-size:20px;color:var(--red);margin-top:4px">${losses}</div>
+          <div style="font-size:7px;color:var(--muted);font-family:var(--font-hud)">LOSSES</div>
+        </div>`:''}
+      </div>
+
+      <!-- Stats row -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:14px">
+        <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:9px;text-align:center">
+          <div style="font-size:7px;color:var(--muted);font-family:var(--font-hud);margin-bottom:3px">SCORE RANGE</div>
+          <div style="font-family:var(--font-hud);font-size:14px;color:var(--text)">${boss.scoreMin.toFixed(1)}–${boss.scoreMax.toFixed(1)}</div>
+        </div>
+        <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:9px;text-align:center">
+          <div style="font-size:7px;color:var(--muted);font-family:var(--font-hud);margin-bottom:3px">COINS</div>
+          <div style="font-family:var(--font-hud);font-size:14px;color:var(--gold)">${boss.reward.coins.toLocaleString()}¢</div>
+        </div>
+        <div style="background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:9px;text-align:center">
+          <div style="font-size:7px;color:var(--muted);font-family:var(--font-hud);margin-bottom:3px">XP</div>
+          <div style="font-family:var(--font-hud);font-size:14px;color:var(--purple)">${boss.reward.xp.toLocaleString()}</div>
+        </div>
+      </div>
+
+      ${prestige>0?`<div style="padding:8px 12px;background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.25);border-radius:7px;font-size:9px;color:var(--gold);font-family:var(--font-hud);margin-bottom:14px;line-height:1.9">
+        ⭐ Each prestige makes this boss <strong>+${(prestige*8).toFixed(0)}% harder</strong> and increases your <strong>item drop chance by +${(prestige*4).toFixed(0)}%</strong>
+      </div>`:''}
+
+      <!-- Drop table -->
+      <div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1.5px;margin-bottom:8px">🎁 ITEM DROP TABLE</div>
+      ${dropRows||'<div style="color:var(--muted);font-size:9px;font-family:var(--font-mono);padding:10px;text-align:center">No item drops at this tier.</div>'}
+      <div style="font-size:7px;color:rgba(255,255,255,0.2);font-family:var(--font-mono);margin-top:4px;margin-bottom:14px">Drops roll once per win. Higher prestige increases all percentages above. Items are generated at tier ilvl.</div>
+
+      <!-- Match history -->
+      ${history.length?`<div style="font-family:var(--font-hud);font-size:9px;color:var(--muted);letter-spacing:1.5px;margin-bottom:8px">RECENT MATCHES</div>${histRows}`:''}
+
+      <!-- Actions -->
+      <div style="display:flex;gap:7px;margin-top:16px">
+        ${!locked&&!isActive&&!isPending
+          ?`<button onclick="openStartGrowOffModal(${bossId});this.closest('[data-action-prompt]').remove()"
+              style="flex:2;padding:11px;background:rgba(168,85,247,0.12);border:1px solid var(--purple);border-radius:8px;color:var(--purple);font-family:var(--font-hud);font-size:10px;cursor:pointer;letter-spacing:1px">⚔️ CHALLENGE</button>`
+          :isActive
+          ?`<div style="flex:2;padding:11px;text-align:center;font-family:var(--font-hud);font-size:9px;color:var(--purple);background:rgba(168,85,247,0.06);border:1px solid rgba(168,85,247,0.3);border-radius:8px">⚔️ ACTIVE CHALLENGE</div>`
+          :isPending
+          ?`<div style="flex:2;padding:11px;text-align:center;font-family:var(--font-hud);font-size:9px;color:var(--green);background:rgba(74,222,128,0.06);border:1px solid rgba(74,222,128,0.3);border-radius:8px">⏳ PENDING — PLANT A SEED</div>`
+          :`<div style="flex:2;padding:11px;text-align:center;font-family:var(--font-hud);font-size:9px;color:var(--muted);background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:8px">${!_isTierUnlocked(def.tier)?'🔒 TIER LOCKED':'🔒 LV'+def.minLv+' REQUIRED'}</div>`}
+        <button onclick="this.closest('[data-action-prompt]').remove()"
+          style="flex:1;padding:11px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:var(--font-hud);font-size:9px;cursor:pointer">CLOSE</button>
+      </div>
+    </div>`;
+  wrapper.addEventListener('click',e=>{if(e.target===wrapper)wrapper.remove();});
+  document.body.appendChild(wrapper);
+}
+
 function openStartGrowOffModal(botId) {
   const bot = getBossLive(botId);
   if (!bot) return;
@@ -8819,38 +9021,10 @@ function renderGearPanel() {
   const hasAnyDehu = (rg.dehumidifiers||[]).some(s=>s?.instanceUid);
   const hasAnyHum  = (rg.humidifiers||[]).some(s=>s?.instanceUid);
 
-  // Build unassigned inventory strip
-  const _allGrps = ['lights','fans','acUnits','heaters','dehumidifiers','humidifiers'];
-  const _unassigned = inv.filter(x => !GS.rooms.some(r2 =>
-    _allGrps.some(g2 => (getRoomGear(r2.id)[g2]||[]).some(sl => sl?.instanceUid === x.uid))
-  ));
-  const _assigned = inv.filter(x => !_unassigned.includes(x));
-  const _allGearInv = [..._unassigned, ..._assigned]; // unassigned first
-
-  const _invStripHtml = _allGearInv.length
-    ? `<div style="font-family:var(--font-hud);font-size:8px;color:var(--cyan);letter-spacing:1.5px;margin-bottom:6px">
-        📦 YOUR GEAR — DRAG TO SLOTS BELOW
-        <span style="color:var(--muted);font-size:7px"> · ${_unassigned.length} unassigned</span>
-       </div>
-       <div class="gear-inv-strip">
-         ${_allGearInv.map(inst => {
-           const _used = _assigned.includes(inst);
-           const _safeUid = inst.uid.replace(/'/g,"\\'");
-           const _iType = inst.equipType||inst.type;
-           return `<div class="gear-inv-chip ${_used?'in-use':''}" draggable="true"
-             ondragstart="event.dataTransfer.setData('gear-uid','${_safeUid}');event.dataTransfer.setData('gear-type','${_iType}')"
-             title="${inst.name}${_used?' (assigned)':' (unassigned)'}">
-             <div class="gic-icon">${inst.icon||'📦'}</div>
-             ${inst.power?`<div class="gic-stat">${inst.power}W</div>`:inst.size?`<div class="gic-stat">${inst.size}</div>`:''}
-             <div class="gic-name" style="color:${_used?'rgba(74,222,128,0.6)':'var(--muted)'}">${inst.name.slice(0,9)}</div>
-             ${_used?'<div style="font-size:6px;color:rgba(74,222,128,0.5);font-family:var(--font-hud)">IN USE</div>':''}
-           </div>`;
-         }).join('')}
-       </div>`
-    : '';
-
-  let html = `<div style="font-family:var(--font-hud);font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)">${room.name.toUpperCase()}</div>
-    ${_invStripHtml}`;
+  let html = `<div style="font-family:var(--font-hud);font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">
+    ${room.name.toUpperCase()}
+    <div style="font-size:7px;color:rgba(34,211,238,0.45);letter-spacing:.5px;margin-top:3px;font-family:var(--font-body)">🎒 Open inventory popup → drag gear items to slots below</div>
+  </div>`;
 
   // LIGHTS
   html += `<div class="gear-item">
@@ -11099,6 +11273,391 @@ const SHOP_ITEMS = {
   ]
 };
 
+function unlockRoom(roomId, cost) {
+  const def = ROOM_DEFS[roomId];
+  if (!def) { toast('Room not found.','err'); return; }
+  if ((GS.level||1) < def.levelReq) { toast('⚠️ Need Level ' + def.levelReq,'warn'); return; }
+  if (GS.coins < cost) { toast('Not enough coins!','err'); return; }
+  if ((GS.rooms||[]).some(r => r.id === roomId)) { toast('Already unlocked!','warn'); return; }
+  GS.coins -= cost;
+  GS.rooms.push(defaultRoom(roomId));
+  if (!GS.roomGear) GS.roomGear = {};
+  GS.roomGear[roomId] = defaultGear();
+  toast('🏠 ' + def.name + ' unlocked!', 'ok', 3000);
+  addLog('Room ' + roomId + ' unlocked for ' + cost.toLocaleString() + '¢', 'success');
+  saveGame(); renderHeader(); renderRoomPanel(); openModal_unlockRoom();
+}
+
+const HTP_SECTIONS = [
+  {
+    title:'🌱 Getting Started — Your First Seed',
+    content:`
+      <div class="success-note">Welcome to the Noyes Boys Grow-Off! Here's how to get your first plant in the ground.</div>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin:12px 0 6px">STEP 1 — GET SEEDS</h3>
+      <p>Open the sidebar 🛒 <strong>SHOPS</strong> button and tap <strong>REDEEM SEED CODES</strong>. Enter the code from your Noyes Boys pack, or type <code style="color:var(--green);background:rgba(0,0,0,0.4);padding:1px 5px;border-radius:3px">TESTPACK</code> for 3 free TestStrain seeds (no XP/coins, for learning only).</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin:12px 0 6px">STEP 2 — GET POTS &amp; SOIL</h3>
+      <p>Before planting you need a pot and soil. Go to 🛒 <strong>SHOP</strong> → <strong>WATER</strong> tab and buy at least a <strong>1 Gal Pot (×5)</strong> and <strong>1 Gal Soil Bag</strong>. These are consumed when you plant.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin:12px 0 6px">STEP 3 — PLANT</h3>
+      <p>On the Grow tab, click <strong>+ PLANT A SEED</strong>. Select your strain and pot size, then confirm. Your plant starts as a Seedling.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin:12px 0 6px">STEP 4 — INSTALL A LIGHT</h3>
+      <p>Plants need light to grow! Buy a light from 🛒 <strong>SHOP → LIGHTS</strong>, then open the ⚙️ <strong>GEAR</strong> panel from the 🏠 Room sidebar and assign it to a light slot. Without light the plant won't progress.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin:12px 0 6px">STAGE PROGRESSION</h3>
+      <p>Every plant goes through: <strong style="color:var(--cyan)">Seedling</strong> → <strong style="color:var(--green)">Veg</strong> → <strong style="color:var(--purple)">Flower</strong> → <strong style="color:var(--gold)">Ready</strong>. You flip to flower by setting the light schedule to 12/12 (12h on, 12h off) using the 💡 <strong>LIGHTS</strong> button on each plant card.`
+  },
+  {
+    title:'💧 Growing — Watering, Environment & Health',
+    content:`
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin:0 0 6px">WATERING</h3>
+      <p>Click 💧 <strong>WATER</strong> on any plant card. Don't let soil hit 0% — at 0% the plant loses health and can permanently die after 12 real hours. Water before it hits 20%. The "Dry-back" technique is watering when soil is 25–50% for best results.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin:12px 0 6px">TEMPERATURE &amp; HUMIDITY</h3>
+      <p>Install gear from the Shop → Climate tab, then assign it in the ⚙️ Gear panel. Set thermostat triggers per unit:</p>
+      <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:8px 12px;margin:6px 0;font-family:var(--font-mono);font-size:9px;line-height:2">
+        🌱 Seedling: Temp 76–80°F · Humidity 65–75%<br>
+        🌿 Veg: Temp 80–84°F · Humidity 55–65%<br>
+        🌸 Flower: Temp 78–82°F · Humidity 40–55%<br>
+        ✅ Ready: Temp 72–80°F · Humidity 38–48%
+      </div>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin:12px 0 6px">PLANT HEALTH</h3>
+      <p>Health (0–100%) is affected by: watering schedule, temperature, humidity, diseases, and overfeeding. Keep health above 80% for maximum yield and THC. If health hits 0%, use 💉 <strong>Health Spray</strong> (Shop → Tools) within 12 real hours or the plant dies permanently.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin:12px 0 6px">STRESS</h3>
+      <p>Stress (0–100%) builds from bad conditions and excessive training. High stress reduces water drain rate temporarily but causes health damage at 50%+. A good fan helps reduce mildew risk and keeps stress low.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin:12px 0 6px">DISEASES</h3>
+      <p>🐛 <strong>Spider Mites / Aphids</strong> — treat with Neem Oil or Pesticide spray.<br>🍄 <strong>Mildew</strong> — treat with Sulfur Spray. Prevent with a fan and dehumidifier below 65% RH.<br>Diseases spread to other plants in the same room if left untreated. Use 🔍 <strong>INSPECT</strong> regularly to get 12-hour shields.`
+  },
+  {
+    title:'✂️ Training — LST, Topping, FIM & More',
+    content:`
+      <div class="info-note">Training is done in the Veg stage only. It's irreversible — choose your style and stick with it.</div>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--cyan);margin:12px 0 6px">🔗 LST — Low Stress Training</h3>
+      <p><strong>Effect:</strong> +5% yield per application · Max 5 beneficial applications (6–10 are harmful)<br><strong>Best for:</strong> Beginners, plants with limited headroom<br><strong>Note:</strong> Once you LST, that style is locked in — you can't switch to FIM or Supercrop.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--gold);margin:12px 0 6px">✂️ TOPPING</h3>
+      <p><strong>Effect:</strong> +15% yield (first top) · +30% yield (second top) · Max 2 tops<br><strong>Best for:</strong> Even canopies, maximum colas<br><strong>Note:</strong> Topping locks out other training styles.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--purple);margin:12px 0 6px">🌿 FIM — "F*** I Missed"</h3>
+      <p><strong>Effect:</strong> +10% yield, creates 3–5 new growth points<br><strong>Best for:</strong> Bushy, wide canopies<br><strong>Note:</strong> One-time style lock.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--orange);margin:12px 0 6px">💥 SUPERCROP</h3>
+      <p><strong>Effect:</strong> +8% yield · −5 health<br><strong>Best for:</strong> Advanced growers comfortable with temporary stress<br><strong>Note:</strong> Redirects growth hormone for a strong comeback.</p>
+      <div class="warning-note">Seedling training adds stress but no yield bonus — wait until Veg for any benefit. Clicking a plant too fast (5+ times) causes branch snap: −0.1× yield multiplier.</div>`
+  },
+  {
+    title:'🧪 Nutrients, pH & PPM',
+    content:`
+      <div class="warning-note">⚠️ You MUST own an EC/PPM Meter (Shop → Tools, 2,500¢) before feeding nutrients. Blind feeding causes −5 HP and −0.1% yield per watering.</div>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--cyan);margin:12px 0 6px">WHAT IS PPM?</h3>
+      <p>PPM (Parts Per Million) measures the concentration of nutrients in your water/soil. Too low = hungry plant. Too high = nutrient burn. The runoff popup after watering shows you exactly where you are.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin:12px 0 6px">TARGET PPM BY STAGE</h3>
+      <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:8px 12px;font-family:var(--font-mono);font-size:9px;line-height:2">
+        🌱 Seedling: 0–300 ppm (plain water or very light)<br>
+        🌿 Early Veg: 200–600 ppm<br>
+        🌿 Late Veg: 400–1,200 ppm<br>
+        🌸 Early Flower (Wk 1–4): 600–1,200 ppm<br>
+        🌸 Peak Flower (Wk 5–8): 1,000–1,800 ppm<br>
+        🌸 Late Flower (Wk 9–11): 600–1,200 ppm<br>
+        ✅ Flush Zone (Wk 12+): 0–400 ppm
+      </div>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--gold);margin:12px 0 6px">WHAT IS pH?</h3>
+      <p>pH controls whether your plant can actually absorb nutrients. Without pH control, even perfect PPM won't work. You need: pH Meter (2,500¢) + pH Up or pH Down (1,000¢ each) from Shop → Water.</p>
+      <p>Ideal soil pH: <strong style="color:var(--green)">6.0–6.5</strong>. Soil pH naturally drifts upward over time — each watering with pH-adjusted water resets it. Above 7.0 the plant drinks slower and grows less efficiently.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--purple);margin:12px 0 6px">FEED MODES</h3>
+      <p><strong>Stack</strong> — adds feed PPM on top of current soil PPM (default)<br><strong>Run-off</strong> — sets soil PPM directly to your feed mix<br><strong>Flush</strong> — plain water only, drives soil PPM toward a target`
+  },
+  {
+    title:'🌾 Harvesting — Timing & Score',
+    content:`
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin:0 0 6px">WHEN TO HARVEST</h3>
+      <p>The plant shows <strong style="color:var(--gold)">✅ READY</strong> once it reaches its strain's target flower days. For maximum yield and THC, harvest at <strong>Week 10 or later</strong>. Early harvest severely cuts yield.</p>
+      <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:8px 12px;font-family:var(--font-mono);font-size:9px;line-height:2">
+        Week 1–2: ~10–20g (almost nothing)<br>
+        Week 3–6: 20–80g (still early)<br>
+        Week 7–9: 90–200g (decent but not full)<br>
+        Week 10–11: Full yield potential ✅<br>
+        Week 12+: Peak THC (amber trichomes)
+      </div>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin:12px 0 6px">GROW SCORE (1–10)</h3>
+      <p>Your grow score factors in: environment quality (40%), feeding accuracy (20%), watering timing (20%), health (10%), disease-free time (10%). A score of 9.5+ earns a PERFECT grow achievement.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--purple);margin:12px 0 6px">PHENOTYPE RARITY</h3>
+      <p>Each harvest rolls a phenotype rarity. Higher generations (F5+, BX5+) have much better odds:</p>
+      <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:8px 12px;font-family:var(--font-mono);font-size:9px;line-height:2">
+        <span style="color:var(--muted)">Standard</span> — base yields/THC<br>
+        <span style="color:var(--purple)">EP (Elite Pheno)</span> — +10% yield · rare<br>
+        <span style="color:var(--gold)">Shiny</span> — +15% yield · +1% THC<br>
+        <span style="color:var(--cyan)">Sparkling</span> — +20% yield · +1.5% THC<br>
+        <span style="color:var(--orange)">Glowing</span> — +30% yield · +2% THC<br>
+        <span style="color:var(--pink)">GOD</span> — +50% yield · +3% THC · legendary
+      </div>`
+  },
+  {
+    title:'🌬️ Drying & Jar Curing',
+    content:`
+      <p>After harvesting, your plant goes straight to the <strong>Drying Room</strong> in the Vault tab. This is a critical stage — rushing it kills quality.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--cyan);margin:12px 0 6px">STEP 1 — DRYING (Vault → Drying tab)</h3>
+      <p>Your harvest hangs to dry. Watch the <strong>RH%</strong> readout:</p>
+      <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:8px 12px;font-family:var(--font-mono);font-size:9px;line-height:2">
+        Above 75% RH — 🍄 Mold risk! Turn on fan immediately<br>
+        65–75% — Too wet, still drying<br>
+        58–65% — ✅ Sweet spot, jar it now for +15–25% quality<br>
+        Below 50% — Over-dried, quality penalty
+      </div>
+      <p>Speed up drying by enabling equipment in <strong>Dry Room Setup</strong> (the ⚙️ button at the top of the Drying tab). Fan is essential — no fan means very slow drying and high mold risk.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--purple);margin:12px 0 6px">STEP 2 — JAR CURING (Vault → Curing tab)</h3>
+      <p>Once RH hits 58–64%, click <strong>Move to Jar</strong>. Curing in a jar develops terpenes and improves quality. You must <strong>burp</strong> the jar regularly:</p>
+      <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:8px 12px;font-family:var(--font-mono);font-size:9px;line-height:2">
+        Burp when RH goes above 65%<br>
+        Minimum 5-hour cooldown between burps<br>
+        Quick burp: −10% RH (safest)<br>
+        Med burp: −20% RH<br>
+        Long burp: −30% RH but −5% quality<br>
+        10+ burps: jar stabilizes automatically
+      </div>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin:12px 0 6px">STEP 3 — SEAL & SELL</h3>
+      <p>Once you've burped at least once below 65% RH and you're happy with quality %, click <strong>Seal & Move to Vault</strong>. From the Vault (Cured tab) you can sell via the Market tab.</p>`
+  },
+  {
+    title:'🧬 Breeding — Males, Reversals & Generations',
+    content:`
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin:0 0 6px">METHOD 1 — MALE SEEDS</h3>
+      <p>Buy a male seed from 🛒 <strong>Shop → ♂ MALES</strong> (5,000¢). Plant it in the same room as your females. One male per room max.</p>
+      <p><strong>Timeline:</strong> Male reaches Flower Week 2 → pollen drops · Female must be pollinated for 2+ in-game weeks · Male reaches Week 8 → seeds start forming · Harvest the female to collect seeds.</p>
+      <p><strong>REG seeds</strong> (male × original female) produce 50/50 male/female seeds.<br><strong>FEM seeds</strong> come from reversed females or F2+ crosses.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--purple);margin:12px 0 6px">METHOD 2 — STS SPRAY (Reversed Females)</h3>
+      <p>Buy STS Spray (Shop → Tools, 10,000¢). Spray a female during Veg or early Flower. She becomes REVERSED — drops pollen like a male but produces <strong>100% FEM seeds</strong>. After 2 flower weeks she pollinates all females in the room.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--gold);margin:12px 0 6px">GENERATIONS (F-SERIES &amp; BX-SERIES)</h3>
+      <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:8px 12px;font-family:var(--font-mono);font-size:9px;line-height:2">
+        F1 = First cross (REG only, can't grow directly — breed 2× F1 to get F2 FEM)<br>
+        F2–F10 = Successive inbreeding generations<br>
+        F* = Fully stable line<br>
+        BX1–BX10 = Backcross to original parent<br>
+        BX* = Fully stable backcross line
+      </div>
+      <p>Higher generations unlock better rarity odds (GOD phenos become possible at F5+), generation bonuses (yield, speed, resist), and can be given a custom name. Name your strain in the Breed tab — it's permanent once set.</p>
+      <div class="warning-note">Water-spraying a plant washes off pollen carrier status. If a seeded female is moved to a new room, she carries pollen for 2 in-game weeks and may cross-pollinate plants there.</div>`
+  },
+  {
+    title:'💸 Selling — Buyers, Market & Black Market',
+    content:`
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--green);margin:0 0 6px">MARKET TAB</h3>
+      <p>Once your product is in the Vault (cured), go to the <strong>💸 MARKET</strong> tab. Buyers appear and disappear on rotation. Each has different requirements:</p>
+      <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:8px 12px;font-family:var(--font-mono);font-size:9px;line-height:2">
+        Bulk Dispensary — always open · 2¢/g · no limits<br>
+        Wholesale Co. — always open · 3¢/g · 200g min<br>
+        Premium Buyer — 5¢/g · 22%+ THC required<br>
+        Medical Grade — 10¢/g · 25%+ THC required<br>
+        Connoisseur — 12¢/g · score 8+ required<br>
+        VIP Client — 20¢/g · 27%+ THC + score 9+ · very rare
+      </div>
+      <p>Your equipped items (rings, gloves, necklace) can add bonus % to coin earnings.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--red);margin:12px 0 6px">🕶️ BLACK MARKET</h3>
+      <p>Higher risk, anonymous. <strong>85% success rate</strong> — 15% chance of being ripped off with no refund. Use it to buy rare genetics from other players/dealers or list your own seeds for sale. Prices vary wildly by generation — F* and BX* seeds can fetch millions.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--gold);margin:12px 0 6px">SELL SEEDS</h3>
+      <p>Seeds can be sold directly from the 🌰 Redeem Seeds page, or via the Market → SELL MY ITEMS tab. Bred seeds (higher generation) sell for significantly more on the Black Market.</p>`
+  },
+  {
+    title:'🏆 Grow-Off — Challenges & Boss Drops',
+    content:`
+      <p>The Grow-Off pits your best plants against AI opponents of increasing difficulty. Win to earn coins, XP, and rare equipment drops.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--purple);margin:12px 0 6px">HOW IT WORKS</h3>
+      <p>1. Open the 🏆 <strong>GROW-OFF</strong> tab and select an opponent tier<br>
+      2. Click <strong>CHALLENGE</strong> on any available boss<br>
+      3. Plant a seed — that plant is now your entry. Grow it as well as you can.<br>
+      4. After harvest, dry and cure it<br>
+      5. Submit from the Vault tab → boss is judged by a combined score of grow quality, cure %, THC and rarity<br>
+      6. Beat their score to win!</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--gold);margin:12px 0 6px">PRESTIGE SYSTEM</h3>
+      <p>Every time you beat a boss they get stronger (Prestige ⭐). Prestige bosses drop better gear and give more XP/coins. Defeating 2 bosses in a tier unlocks the next tier.</p>
+      <h3 style="font-family:var(--font-hud);font-size:11px;color:var(--orange);margin:12px 0 6px">SCORING FORMULA</h3>
+      <div style="background:rgba(0,0,0,0.3);border-radius:6px;padding:8px 12px;font-family:var(--font-mono);font-size:9px;line-height:2">
+        Grow Score (×3.5) + Cure Quality (×2.0) + THC ratio (×1.8)<br>
+        + Rarity Bonus + Difficulty Bonus + Harvest Health Bonus<br>
+        = Final Score out of 10.0
+      </div>
+      <p>Tips: High-generation bred strains give rarity bonuses. Master difficulty gives +0.6 bonus to your final score. Cure as close to 62% RH as possible for maximum quality.</p>`
+  }
+];
+
+function showHTPTab(idx) {
+  document.querySelectorAll('.htp-tab').forEach((b,i) => {
+    const active = i === idx;
+    b.style.background   = active ? 'rgba(74,222,128,0.12)' : 'none';
+    b.style.borderColor  = active ? 'var(--green)' : 'var(--border)';
+    b.style.color        = active ? 'var(--green)' : 'var(--muted)';
+  });
+  const sec = HTP_SECTIONS[idx];
+  const body = document.getElementById('htp-body');
+  if (!sec || !body) return;
+  body.innerHTML = `<h2 style="font-family:var(--font-hud);font-size:13px;color:var(--green);letter-spacing:1px;margin-bottom:14px">${sec.title}</h2>${sec.content}`;
+}
+
+function openHowToModal() {
+  openModal('modal-how-to-play');
+  showHTPTab(0);
+}
+
+function openLegendModal() {
+  const body = document.getElementById('legend-body');
+  if (body) body.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px">
+      ${[
+        {cat:'🌱 Genetics / Seeds', items:[
+          ['F1','Filial 1 — First cross between two different strains. REG seeds only.'],
+          ['F2','Filial 2 — Cross of two F1 plants. First growable FEM generation.'],
+          ['F3–F10','Successive inbreeding generations. Higher = more stable, better rarity odds.'],
+          ['F*','Fully stabilized filial line. Maximum rarity potential.'],
+          ['BX1–BX*','Backcross — bred back to an original parent strain. Stabilizes traits.'],
+          ['REG','Regular seeds — 50/50 chance of male or female when germinated.'],
+          ['FEM','Feminized seeds — nearly 100% female. No males to worry about.'],
+          ['EP','Elite Phenotype — rare, exceptional expression of a strain.'],
+          ['STS','Silver Thiosulfate Spray — chemically reverses a female to produce FEM seeds.'],
+        ]},
+        {cat:'🧪 Nutrients & Chemistry', items:[
+          ['PPM','Parts Per Million — measures nutrient concentration in water or soil runoff.'],
+          ['EC','Electrical Conductivity — another way to measure nutrient strength (related to PPM).'],
+          ['pH','Potential of Hydrogen — scale 0–14 measuring acidity. Ideal: 6.0–6.5 for cannabis.'],
+          ['N-P-K','Nitrogen–Phosphorus–Potassium. The 3 main macronutrients in cannabis.'],
+          ['CaMg / Cal-Mag','Calcium & Magnesium supplement — prevents deficiencies in fast-growing plants.'],
+          ['Base Feed','Foundation nutrient solution providing balanced N-P-K.'],
+          ['Run-off','Water that drains through the pot — used to check actual soil PPM and pH.'],
+          ['Flush','Watering with plain water to drive excess nutrients out of the soil.'],
+          ['Lockout','Nutrient lockout — plant can\'t absorb nutrients, usually due to wrong pH or overfeed.'],
+        ]},
+        {cat:'🌡️ Environment', items:[
+          ['RH','Relative Humidity — percentage of moisture in the air. Critical for mildew prevention.'],
+          ['VPD','Vapor Pressure Deficit — measure of how much moisture air can still hold. Ideal 0.8–1.2 kPa.'],
+          ['CO₂','Carbon Dioxide — supplementing above 400ppm speeds growth and increases yield.'],
+          ['HVAC','Heating, Ventilation & Air Conditioning — general term for climate control gear.'],
+          ['Dehu','Dehumidifier — removes moisture from air to prevent mildew.'],
+          ['AC','Air Conditioner — lowers room temperature.'],
+        ]},
+        {cat:'✂️ Training Methods', items:[
+          ['LST','Low Stress Training — bending and tying branches without cutting.'],
+          ['FIM','FIMing ("F*** I Missed") — aggressive pinching to create multiple tops.'],
+          ['SCROG','Screen of Green — a net used to even out the canopy for more light exposure.'],
+          ['Supercrop','Crushing the stem to redirect growth hormone to lower branches.'],
+          ['Topping','Removing the apical tip to force 2 main colas instead of one.'],
+          ['Mainline','Advanced training technique creating a symmetrical multi-cola plant.'],
+        ]},
+        {cat:'🌾 Harvest & Curing', items:[
+          ['THC','Tetrahydrocannabinol — primary psychoactive compound. Higher = stronger.'],
+          ['Terpenes','Aromatic compounds giving cannabis its flavour and smell. Developed during curing.'],
+          ['Trichomes','Resin glands where THC and terpenes are produced. Visible as frosty coating.'],
+          ['Phenotype','The physical expression of genetics. Same seeds can produce different phenos.'],
+          ['Hang Dry','First drying phase — plant hangs in controlled environment to remove bulk moisture.'],
+          ['Burping','Opening curing jar briefly to release CO₂ and excess moisture. Prevents mold.'],
+          ['Sweet Spot','Ideal RH range during curing: 58–64%. Best quality, prevents mold and over-drying.'],
+        ]},
+        {cat:'🎮 Game Terms', items:[
+          ['Grow-Off','Competitive grow challenge against an AI opponent. Judged on final score.'],
+          ['Prestige','Each time you defeat a boss they gain a prestige level — harder but better drops.'],
+          ['Grow Score','1–10 rating of how well you grew a plant. Affects harvest yield in Grow-Off.'],
+          ['Dry-back','Technique of letting soil dry to 25–50% before rewatering for best root health.'],
+          ['Room Gear','Equipment (lights, fans, climate) assigned per room via the ⚙️ Gear panel.'],
+          ['ilvl','Item level — stat of an equipment drop. Higher ilvl = better stats.'],
+        ]},
+      ].map(cat => `
+        <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:12px">
+          <div style="font-family:var(--font-hud);font-size:10px;color:var(--green);letter-spacing:1px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)">${cat.cat}</div>
+          ${cat.items.map(([abbr, def]) => `
+            <div style="display:flex;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.03)">
+              <div style="font-family:var(--font-hud);font-size:9px;color:var(--gold);min-width:70px;flex-shrink:0">${abbr}</div>
+              <div style="font-size:9px;color:var(--muted);line-height:1.4">${def}</div>
+            </div>`).join('')}
+        </div>`).join('')}
+    </div>`;
+  openModal('modal-legend');
+}
+
+function openUpdatesModal() {
+  const body = document.getElementById('updates-body');
+  if (body) body.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+      <div>
+        <div style="font-family:var(--font-hud);font-size:11px;color:var(--green);letter-spacing:2px;margin-bottom:12px">✅ RECENT UPDATES — v3.1</div>
+        ${[
+          ['New Equipment System','Lights, fans and climate gear now live in a proper inventory — buy multiples, assign per room, sell for 75% loss.'],
+          ['Grow-Off Tiers','100 bosses across 7 tiers (Baby → Legend). Prestige system adds challenge and better drops each rematch.'],
+          ['Generated Item Drops','Boss wins now drop procedurally generated equipment (ilvl, tier, random stats).'],
+          ['pH Soil Drift','Soil pH naturally drifts upward over time. Requires active management to keep in the 6.0–6.5 sweet spot.'],
+          ['Transplant System','Plants can now be transplanted to larger pots using pots + soil from inventory.'],
+          ['Strain Card Flip','Clicking non-interactive areas of a plant card flips to show strain details and collector card art.'],
+          ['Water Dry-back Graph','Each plant now shows a real-time dry-back history chart in the Env panel.'],
+          ['Reveg System','Switching lights back to 18+ hours will reveg flowering plants. Time your reveg for massive multiplier bonuses.'],
+          ['Auto-Water Reservoir','Buy a reservoir + emitters + hosing to set up per-plant auto-watering with custom dry-out and stop targets.'],
+          ['BM Price Tiers','Black Market listings now have dynamic wait times based on asking price — undercut the market and they sell fast.'],
+        ].map(([title, desc]) => `
+          <div style="background:rgba(74,222,128,0.03);border:1px solid rgba(74,222,128,0.15);border-radius:8px;padding:10px;margin-bottom:6px">
+            <div style="font-family:var(--font-hud);font-size:9px;color:var(--green);margin-bottom:3px">● ${title}</div>
+            <div style="font-size:9px;color:var(--muted);line-height:1.5">${desc}</div>
+          </div>`).join('')}
+      </div>
+      <div>
+        <div style="font-family:var(--font-hud);font-size:11px;color:var(--gold);letter-spacing:2px;margin-bottom:12px">🔜 COMING SOON</div>
+        ${[
+          ['Player vs Player Grow-Off','Challenge real players directly. Submit your cured harvest to go head-to-head.'],
+          ['Strain Leaderboard','Top 10 growers for each official Noyes Boys strain — weekly reset, prizes.'],
+          ['Seasonal Events','Holiday grows with exclusive strains, limited codes, and special phenotypes.'],
+          ['Outdoor Growing','New room type — weather, seasons, and natural light cycles change the game.'],
+          ['Concentrate Processing','After curing, process your vault into rosin, hash, or live resin for premium sale prices.'],
+          ['Genetics Lab','Advanced breeding UI showing trait inheritance probabilities before you commit a cross.'],
+          ['Co-op Rooms','Share a room with another player — split costs, combine gear, share the yield.'],
+          ['Strain Catalogue','Browse every Noyes Boys strain with full lineage trees, terpene profiles and grow notes.'],
+          ['Achievement Showcase','Display your rarest achievements and GOD phenotypes on a public profile page.'],
+        ].map(([title, desc]) => `
+          <div style="background:rgba(251,191,36,0.03);border:1px solid rgba(251,191,36,0.15);border-radius:8px;padding:10px;margin-bottom:6px">
+            <div style="font-family:var(--font-hud);font-size:9px;color:var(--gold);margin-bottom:3px">◌ ${title}</div>
+            <div style="font-size:9px;color:var(--muted);line-height:1.5">${desc}</div>
+          </div>`).join('')}
+        <div style="margin-top:12px;padding:10px;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:8px;font-size:9px;color:var(--muted);line-height:1.6">
+          💡 Have an idea? Use the <strong style="color:var(--green)">Feedback</strong> button in this menu to email us at<br>
+          <a href="mailto:thenoyesboyz@gmail.com" style="color:var(--cyan)">thenoyesboyz@gmail.com</a>
+        </div>
+      </div>
+    </div>`;
+  openModal('modal-updates');
+}
+
+function openBossDropsModal() {
+  const body = document.getElementById('boss-drops-body');
+  if (!body) return;
+  const TIER_INFO = [
+    {key:'baby',  color:'#9d9d9d', label:'👶 BABY',    desc:'Levels 1–9. Starter drops.'},
+    {key:'rookie',color:'#1eff00', label:'🌱 ROOKIE',  desc:'Levels 3–9. Better slots unlock.'},
+    {key:'inter', color:'#fbbf24', label:'🌿 INTER',   desc:'Levels 10–15. Rare drops appear.'},
+    {key:'adv',   color:'#f97316', label:'⚡ ADV',     desc:'Levels 16–24. Epic drops possible.'},
+    {key:'expert',color:'#a855f7', label:'💜 EXPERT',  desc:'Levels 25–32. Legendary drops.'},
+    {key:'master',color:'#ef4444', label:'🔴 MASTER',  desc:'Levels 35–48. Mythic drops.'},
+    {key:'legend',color:'#ec4899', label:'🏆 LEGEND',  desc:'Levels 50+. Artifact drops possible.'},
+  ];
+  body.innerHTML = `
+    <div class="info-note" style="margin-bottom:14px">Each boss win rolls against these tables. Prestige (+⭐) increases drop chance by +4% per level, capped at 3× base chance.</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      ${TIER_INFO.map(tier => {
+        const table = BOSS_DROP_TABLES[tier.key] || [];
+        return `<div style="background:var(--card-bg);border:1px solid ${tier.color}33;border-radius:10px;padding:13px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+            <div style="font-family:var(--font-hud);font-size:11px;color:${tier.color}">${tier.label}</div>
+            <div style="font-size:9px;color:var(--muted)">${tier.desc}</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            ${table.map(entry => {
+              const tm = ITEM_TIERS[entry.tier] || {};
+              const slots = entry.slots.slice(0,4).join(', ');
+              return `<div style="background:rgba(0,0,0,0.4);border:1px solid ${tm.color||'var(--border)'}44;border-radius:6px;padding:6px 10px">
+                <div style="font-family:var(--font-hud);font-size:9px;color:${tm.color||'var(--muted)'}">${entry.tier}</div>
+                <div style="font-size:8px;color:var(--gold);font-family:var(--font-hud);margin-top:2px">${(entry.baseChance*100).toFixed(1)}% base · ${Math.min(entry.baseChance*3*100,100).toFixed(1)}% max (P10)</div>
+                <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:2px">Slots: ${slots}${entry.slots.length>4?' +more':''}</div>
+              </div>`;
+            }).join('')}
+          </div>
+          <div style="font-size:8px;color:var(--muted);font-family:var(--font-mono);margin-top:8px">
+            Item level range: ${(ITEM_TIERS[table[0]?.tier]?.ilvlRange||[0,0])[0]}–${(ITEM_TIERS[table[table.length-1]?.tier]?.ilvlRange||[0,0])[1]} ilvl
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+    <div style="margin-top:14px;padding:10px 12px;background:rgba(168,85,247,0.06);border:1px solid rgba(168,85,247,0.3);border-radius:8px;font-size:9px;color:var(--muted);line-height:1.8">
+      🎲 <strong style="color:var(--purple)">How drops work:</strong> After every win, each row in your tier's table is rolled independently. You can get 0, 1, or multiple drops per win. Higher prestige dramatically improves your chances — a Baby boss at P10 drops as reliably as an Intermediate boss on first clear.
+    </div>`;
+  openModal('modal-boss-drops');
+}
+
 function _toolOwned(type) {
   // Tools stored as booleans in GS.gear
   const g = GS.gear || {};
@@ -11901,6 +12460,7 @@ function renderGrowOff() {
         <div style="flex-shrink:0;display:flex;flex-direction:column;gap:4px;align-items:flex-end;min-width:80px">
           <div style="font-size:9px;color:var(--gold);font-family:var(--font-hud)">${live.reward.coins.toLocaleString()}¢</div>
           <div style="font-size:8px;color:var(--purple);font-family:var(--font-hud)">${live.reward.xp.toLocaleString()} XP</div>
+         <button class="btn-action" style="padding:5px 8px;font-size:8px;margin-top:4px;width:100%" onclick="showBossDetail(${def.id})">📊 VIEW DETAILS</button>
           ${!locked && !activeFor && !isPending
             ? `<button class="btn-action btn-purple" style="padding:6px 10px;font-size:8px;white-space:nowrap;margin-top:4px" onclick="openStartGrowOffModal(${def.id})">⚔️ CHALLENGE</button>`
             : activeFor
@@ -12023,16 +12583,17 @@ function _renderBMBrowse(cont) {
 
 function _bmSeedPrice(gen) {
   const r = {
-    'original':[5000,25000],'F1':[8000,20000],'F2':[15000,45000],
-    'F3':[35000,90000],'F4':[60000,140000],'F5':[90000,200000],
-    'F6':[140000,320000],'F7':[220000,550000],'F8':[350000,800000],
-    'F9':[550000,1400000],'F10':[900000,2500000],'F*':[2000000,5000000],
-    'BX1':[18000,55000],'BX2':[35000,90000],'BX3':[55000,140000],
-    'BX4':[80000,200000],'BX5':[130000,320000],'BX6':[220000,550000],
-    'BX7':[350000,800000],'BX8':[550000,1400000],'BX9':[800000,2000000],
-    'BX10':[1200000,3500000],'BX*':[2500000,6000000],
-  }[gen] || [5000,25000];
-  return Math.round((r[0] + Math.random() * (r[1] - r[0])) / 500) * 500;
+    'original':[8000,35000],'F1':[12000,28000],'F2':[20000,55000],
+    'F3':[45000,100000],'F4':[75000,160000],'F5':[110000,240000],
+    'F6':[160000,380000],'F7':[260000,650000],'F8':[400000,950000],
+    'F9':[650000,1600000],'F10':[1000000,2800000],'F*':[2200000,6000000],
+    'BX1':[22000,65000],'BX2':[40000,110000],'BX3':[65000,165000],
+    'BX4':[95000,240000],'BX5':[155000,380000],'BX6':[260000,650000],
+    'BX7':[410000,950000],'BX8':[650000,1600000],'BX9':[950000,2400000],
+    'BX10':[1400000,4200000],'BX*':[3000000,7500000],
+  }[gen] || [8000,35000];
+  // Hard minimum: never below 5,000¢
+  return Math.max(5000, Math.round((r[0] + Math.random() * (r[1] - r[0])) / 500) * 500);
 }
 function _bmExpireHrs(priceEach) {
   if (priceEach < 20000)   return 64 + Math.random() * 32;
@@ -12298,7 +12859,15 @@ function buyFromBM(listingId) {
   if (!listing || listing.status !== 'active' || listing.qty <= 0) { toast('Listing no longer available.','warn'); return; }
   const qtyEl = document.getElementById('bm-qty-' + listingId);
   const qty   = Math.min(parseInt(qtyEl?.value||1), listing.qty);
-  const total = listing.priceEach * qty;
+  // Hard guard: never allow 0-price purchases (stale data protection)
+  const priceEach = listing.priceEach || 0;
+  if (priceEach <= 0) {
+    toast('⚠️ Invalid listing price — refreshing market.','err',3000);
+    listing.status = 'expired';
+    saveGame(); renderBlackMarket(); return;
+  }
+  const total = priceEach * qty;
+  if (total <= 0) { toast('Invalid amount.','err'); return; }
   if (GS.coins < total) { toast('Need ' + _fmtCoins(total) + ' — only have ' + _fmtCoins(Math.floor(GS.coins)),'err'); return; }
   GS.coins -= total;
   if (Math.random() < 0.85) {
@@ -12433,7 +13002,9 @@ function confirmBMListing() {
   const qty      = parseInt(document.getElementById('bm-list-qty')?.value || 1);
   const each     = parseInt(document.getElementById('bm-list-price-each')?.value || 0);
   const isSeed   = document.getElementById('bm-list-is-seed')?.value === '1';
-  if (!entryId || qty < 1 || each < 1) { toast('Fill in all fields.','warn'); return; }
+  if (!entryId || qty < 1) { toast('Fill in all fields.','warn'); return; }
+  if (each < 500) { toast('Minimum price is 500¢ per item.','warn'); return; }
+  if (isSeed && each < 5000) { toast('Seed minimum is 5,000¢ each — the market has standards.','warn'); return; }
 
   const totalPrice = qty * each;
   const categ = each < 10000 ? 'below' : each < 100000 ? 'market' : 'above';
@@ -13907,26 +14478,46 @@ function confirmPlant() {
 function openModal_unlockRoom() {
   const opts = document.getElementById('unlock-room-options');
   if (!opts) return;
-  const roomItems = [
-    {id:'room2', name:'Unlock Room 2', price:15000, roomId:2},
-    {id:'room3', name:'Unlock Room 3', price:50000, roomId:3},
+  const ALL_ROOMS = [
+    {roomId:2, price:15000,  levelReq:10,  slots:5,  name:'Room 2 — Small+',  icon:'🏠', desc:'5 plant slots · 2 light slots · Independent environment & lights'},
+    {roomId:3, price:60000,  levelReq:25,  slots:10, name:'Room 3 — Medium',   icon:'🏡', desc:'10 plant slots · 3 light slots · Full climate control'},
+    {roomId:4, price:200000, levelReq:50,  slots:15, name:'Room 4 — Large',    icon:'🏭', desc:'15 plant slots · 5 light slots · Commercial scale'},
+    {roomId:5, price:750000, levelReq:100, slots:20, name:'Room 5 — XXL',      icon:'🌐', desc:'20 plant slots · 10 light slots · Maximum production'},
   ];
   opts.innerHTML = '';
-  roomItems.forEach(item => {
-    const owned = (GS.rooms||[]).some(r => r.id === item.roomId);
-    const canAfford = GS.coins >= item.price;
+  ALL_ROOMS.forEach(room => {
+    const owned     = (GS.rooms||[]).some(r => r.id === room.roomId);
+    const canAfford = GS.coins >= room.price;
+    const levelOk   = (GS.level||1) >= room.levelReq;
+    const canBuy    = !owned && canAfford && levelOk;
     const div = document.createElement('div');
-    div.className = 'shop-item ' + (owned ? 'owned' : (!canAfford ? 'cant-afford' : ''));
+    div.style.cssText = `background:var(--card-bg);border:1px solid ${owned?'rgba(74,222,128,0.5)':'var(--border)'};border-radius:10px;padding:13px;opacity:${!levelOk&&!owned?'0.45':'1'}`;
     div.innerHTML = `
-      <div class="shop-item-icon">🏠</div>
-      <div class="shop-item-info">
-        <div class="shop-item-name">${item.name}</div>
-        <div class="shop-item-price">${owned ? '✅ UNLOCKED' : item.price.toLocaleString() + '¢'}</div>
-      </div>
-      ${!owned ? `<button class="btn-action btn-gold" style="padding:6px 10px" ${!canAfford ? 'disabled' : ''}
-        onclick="buyGear('${item.id}');closeModal('modal-unlock-room');renderRoomPanel()">BUY</button>` : ''}`;
+      <div style="display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap">
+        <div style="font-size:24px;flex-shrink:0">${room.icon}</div>
+        <div style="flex:1;min-width:120px">
+          <div style="font-family:var(--font-hud);font-size:11px;color:${owned?'var(--green)':'var(--text)'};margin-bottom:3px">${room.name}</div>
+          <div style="font-size:9px;color:var(--muted);margin-bottom:5px;line-height:1.5">${room.desc}</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;font-family:var(--font-hud);font-size:9px">
+            <span style="color:var(--cyan)">🌿 ${room.slots} plant slots</span>
+            <span style="color:${levelOk?'var(--green)':'var(--red)'}">📈 Level ${room.levelReq} required</span>
+            <span style="color:${canAfford?'var(--gold)':'var(--red)'}">💰 ${room.price.toLocaleString()}¢</span>
+          </div>
+          ${!levelOk ? `<div style="font-size:8px;color:var(--red);font-family:var(--font-hud);margin-top:5px">🔒 You are Level ${GS.level||1} — need Level ${room.levelReq}</div>` : ''}
+          ${levelOk && !canAfford ? `<div style="font-size:8px;color:var(--red);font-family:var(--font-hud);margin-top:5px">Need ${(room.price-(GS.coins||0)).toLocaleString()}¢ more</div>` : ''}
+        </div>
+        <div style="flex-shrink:0;align-self:center">
+          ${owned
+            ? `<div style="font-family:var(--font-hud);font-size:10px;color:var(--green);padding:6px 12px;background:rgba(74,222,128,0.1);border:1px solid var(--green);border-radius:6px">✅ UNLOCKED</div>`
+            : `<button style="padding:8px 14px;background:${canBuy?'rgba(74,222,128,0.12)':'rgba(0,0,0,0.3)'};border:1px solid ${canBuy?'var(--green)':'var(--border)'};border-radius:7px;color:${canBuy?'var(--green)':'var(--muted)'};font-family:var(--font-hud);font-size:9px;letter-spacing:1px;cursor:${canBuy?'pointer':'not-allowed'};transition:.2s"
+              onclick="unlockRoom(${room.roomId},${room.price})" ${!canBuy?'disabled':''}>
+              UNLOCK
+            </button>`}
+        </div>
+      </div>`;
     opts.appendChild(div);
   });
+  openModal('modal-unlock-room');
 }
 
 // Override openModal to handle unlock-room special case
@@ -15733,10 +16324,16 @@ function renderBpEquipped(body) {
   const bonuses   = getEquippedBonuses();
   const nonZero   = Object.entries(bonuses).filter(([,v])=>v&&v!==0&&v!==1);
   const bonLabs   = {yield_pct:'Yield',thc_add:'THC',coins_pct:'Coins',xp_pct:'XP',temp_add:'Temp',stress_reduce:'Stress',grow_speed:'Speed',cure_quality:'Cure',bm_success:'BM',health_regen:'Heal'};
-  const bonHTML   = nonZero.slice(0,8).map(([k,v])=>{
-    const isT=k==='temp_add', d=isT?(v>0?`+${v}°F`:`${v}°F`):(k.endsWith('_pct')?`+${v}%`:`+${v}`);
-    return `<span style="background:rgba(0,0,0,0.4);border:1px solid rgba(74,222,128,0.15);border-radius:3px;padding:2px 4px;font-family:var(--font-hud);font-size:7px;color:${v<0?'var(--red)':'var(--green)'}">${bonLabs[k]||k}:${d}</span>`;
-  }).join('');
+  const bonHTML   = nonZero.length
+    ? nonZero.slice(0,10).map(([k,v])=>{
+        const isT=k==='temp_add', d=isT?(v>0?`+${v}°F`:`${v}°F`):(k.endsWith('_pct')?`+${v}%`:k==='thc_add'?`+${v}%`:`+${v}`);
+        const col = v<0?'var(--red)':'var(--green)';
+        return `<div style="display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.04)">
+          <span style="font-family:var(--font-hud);font-size:8px;color:var(--muted)">${bonLabs[k]||k}</span>
+          <span style="font-family:var(--font-hud);font-size:9px;color:${col};font-weight:700">${d}</span>
+        </div>`;
+      }).join('')
+    : `<div style="font-size:8px;color:var(--muted);text-align:center;padding:4px 0">No bonuses active</div>`;
 
   body.innerHTML = `
     <!-- Body layout: ring_l | head | ring_r  /  necklace | cape | gem  /  gloves | shirt | buff  /  pants | boots -->
@@ -15747,7 +16344,7 @@ function renderBpEquipped(body) {
       ${slotCard('pants')}${slotCard('boots')}
     </div>
     <div style="font-family:var(--font-hud);font-size:7px;color:var(--muted);letter-spacing:1px;margin-bottom:5px">ACTIVE BONUSES</div>
-    <div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:6px">${bonHTML||'<span style="font-size:8px;color:var(--muted)">None — equip items for power-ups</span>'}</div>
+    <div style="background:rgba(0,0,0,0.35);border:1px solid var(--border);border-radius:7px;padding:7px 10px;margin-bottom:6px">${bonHTML}</div>
     <div style="font-size:7px;color:rgba(74,222,128,0.3);font-family:var(--font-hud);text-align:center">CLICK SLOT TO CHANGE · DRAG ITEMS FROM 📦 ITEMS</div>`;
 }
 
