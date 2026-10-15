@@ -1,1068 +1,377 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Noyes Boys - Merchandise</title>
-    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
-            color: #f5f5f5;
-            line-height: 1.4;
-            margin: 0;
-            padding: 0;
-            padding-top: 70px;
-            min-height: 100vh;
-            zoom: 0.50;
-        }
-
-        /* Header Navigation - Matching deals page exactly */
-        header {
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
-                        url('assets/img/bg-masthead.jpg');
-            background-size: cover;
-            background-position: center;
-            padding: 0.5rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.5);
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-            min-height: 60px;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #4ade80;
-            text-decoration: none;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        
-        .logo-img {
-            width: 35px;
-            height: 35px;
-            margin-right: 8px;
-            border-radius: 50%;
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 1rem;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            font-size: 0.9rem;
-            padding: 0.5rem 0.8rem;
-            border-radius: 8px;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        
-        .nav-links a:hover {
-            color: #4ade80;
-            background: rgba(74, 222, 128, 0.1);
-            border-color: #4ade80;
-            transform: translateY(-2px);
-        }
-
-        .nav-links a.active {
-            background: #4ade80;
-            color: #0a0a0a;
-            border-color: #4ade80;
-        }
-
-        /* Cart Button - Keep gradient */
-        .header-cart-button, .cart-button {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-            color: #0a0a0a;
-            border: none;
-            border-radius: 20px;
-            padding: 0.5rem 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .header-cart-button:hover, .cart-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
-        }
-
-        .header-cart-count, .cart-count {
-            background: #0a0a0a;
-            color: #4ade80;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.65rem;
-            font-weight: bold;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            background: transparent;
-            min-height: calc(100vh - 70px);
-        }
-        
-        /* Masthead Section matching deals page */
-        .masthead {
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
-                        url('assets/img/bg-masthead.jpg');
-            background-size: cover;
-            background-position: center;
-            padding: 2rem 0;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .masthead-content h1 {
-            color: #4ade80;
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-        }
-
-        .masthead-content h2 {
-            color: white;
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-        }
-
-        .nav-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        /* Navigation Buttons matching deals page */
-        .btn {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-            color: #0a0a0a;
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
-        }
-        
-        /* Header section - matching deals page style */
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            background: rgba(0,0,0,0.8);
-            color: #f5f5f5;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            border: 1px solid rgba(74, 222, 128, 0.2);
-        }
-        
-        .header h1 {
-            color: #4ade80;
-            font-size: 2.2em;
-            margin-bottom: 8px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        
-        .header p {
-            color: #ccc;
-            font-size: 1.1em;
-            margin-bottom: 10px;
-        }
-
-        .payment-methods {
-            color: #4ade80;
-            font-weight: bold;
-            font-size: 0.95em;
-        }
-        
-        /* Section containers - matching deals page */
-        .section-container {
-            background: rgba(0,0,0,0.7);
-            border-radius: 15px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            overflow: hidden;
-            border: 1px solid rgba(74, 222, 128, 0.1);
-        }
-        
-        .section-header {
-            background: linear-gradient(135deg, #2d5a2d 0%, #4a7c4a 100%);
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .section-header h2, .section-header h3 {
-            font-size: 1.8em;
-            margin-bottom: 5px;
-        }
-        
-        .section-header p {
-            font-size: 1em;
-            opacity: 0.9;
-        }
-
-        /* Apparel layout using pricing card style */
-        .apparel-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .apparel-main, .apparel-options {
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%),
-                        url('assets/img/bg-masthead.jpg');
-            background-size: cover;
-            background-position: center;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            border: 2px solid rgba(74, 222, 128, 0.2);
-            position: relative;
-        }
-
-        .merch-image-container {
-            height: 300px;
-            background: rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #f5f5f5;
-            font-weight: bold;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            overflow: hidden;
-            position: relative;
-            border: 1px solid rgba(74, 222, 128, 0.2);
-        }
-
-        /* Fixed image styling */
-        .merch-image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-
-        /* For single images */
-        .merch-image-container img:only-child {
-            object-fit: contain;
-        }
-
-        /* For multiple images - create a grid */
-        .merch-image-container:has(img + img) {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 5px;
-            padding: 10px;
-        }
-
-        .merch-image-container:has(img + img) img {
-            width: 100%;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-
-        .merch-title {
-            font-size: 1.4em;
-            color: #4ADE806E;
-            margin-bottom: 10px;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-        }
-
-        .merch-description {
-            color: #f5f5f5;
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-
-        .merch-options {
-            margin-bottom: 15px;
-        }
-
-        .merch-options label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #4ade80;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-        }
-
-        .merch-select {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid rgba(74, 222, 128, 0.2);
-            border-radius: 8px;
-            background: rgba(0,0,0,0.7);
-            color: #f5f5f5;
-            font-size: 1rem;
-            margin-bottom: 10px;
-        }
-
-        .merch-select:focus {
-            border-color: #4ade80;
-            outline: none;
-        }
-
-        .price-display {
-            font-size: 1.8em;
-            color: #4ade80;
-            font-weight: bold;
-            margin: 10px 0;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-        }
-
-        .order-button {
-            background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%);
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-
-        .order-button:hover {
-            background: linear-gradient(135deg, #2d5a2d 0%, #1e3c1e 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(74, 124, 74, 0.4);
-        }
-
-        .options-title {
-            color: #4ade80;
-            font-size: 1.3em;
-            margin-bottom: 15px;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-        }
-
-        .logo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .logo-option {
-            aspect-ratio: 1;
-            background: rgba(0,0,0,0.5);
-            border: 2px solid rgba(74, 222, 128, 0.2);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #f5f5f5;
-            font-size: 0.8rem;
-            text-align: center;
-            padding: 3px;
-            overflow: hidden;
-            width: 80px;
-            height: 80px;
-            transition: all 0.3s ease;
-        }
-
-        .logo-option:hover {
-            border-color: #4ade80;
-            transform: translateY(-2px);
-        }
-
-        .logo-option.interactive-design {
-            cursor: pointer;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .logo-option.interactive-design:hover {
-            border-color: #4ade80;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
-        }
-
-        .logo-option.interactive-design.selected {
-            border-color: #4ade80;
-            background: rgba(74, 222, 128, 0.2);
-            box-shadow: 0 0 15px rgba(74, 222, 128, 0.4);
-        }
-
-        /* Fixed logo option images */
-        .logo-option img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 4px;
-        }
-
-        .merch-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .merch-item {
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%),
-                        url('assets/img/bg-masthead.jpg');
-            background-size: cover;
-            background-position: center;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            border: 2px solid rgba(74, 222, 128, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .merch-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-            border-color: #4ade80;
-        }
-
-        .merch-content {
-            padding: 20px;
-        }
-
-        .strain-cards-layout {
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 30px;
-            padding: 20px;
-        }
-
-        .strain-selector, .strain-display {
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%),
-                        url('assets/img/bg-masthead.jpg');
-            background-size: cover;
-            background-position: center;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            border: 2px solid rgba(74, 222, 128, 0.2);
-        }
-
-        .strain-card-preview {
-            background: rgba(0,0,0,0.3);
-            border: 2px solid rgba(74, 222, 128, 0.2);
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .strain-card-image {
-            width: 100%;
-            height: 200px;
-            background: rgba(0,0,0,0.5);
-            border-radius: 10px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #f5f5f5;
-            font-weight: bold;
-            border: 1px solid rgba(74, 222, 128, 0.2);
-        }
-
-        .strain-details {
-            background: rgba(74, 124, 74, 0.2);
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-            border: 1px solid rgba(74, 222, 128, 0.3);
-        }
-
-        .strain-details ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .strain-details li {
-            padding: 3px 0;
-            border-bottom: 1px solid rgba(74, 222, 128, 0.2);
-            color: #f5f5f5;
-        }
-
-        /* Cart Modal */
-        .cart-modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
-        }
-
-        .cart-modal-content {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-            color: #f5f5f5;
-            margin: 5% auto;
-            padding: 2rem;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            border: 1px solid rgba(74, 222, 128, 0.2);
-        }
-
-        .cart-close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 1;
-        }
-
-        .cart-close:hover {
-            color: #4ade80;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 1rem;
-            background: rgba(0,0,0,0.3);
-            border-radius: 8px;
-        }
-
-        .cart-item-info {
-            flex: 1;
-        }
-
-        .cart-item-name {
-            color: #4ade80;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .cart-item-variant {
-            color: #ccc;
-            font-size: 0.9rem;
-        }
-
-        .cart-item-price {
-            color: #4ade80;
-            font-weight: bold;
-        }
-
-        .cart-item-controls {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .quantity-btn {
-            background: #4a7c4a;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .quantity-display {
-            min-width: 30px;
-            text-align: center;
-            font-weight: bold;
-            color: #f5f5f5;
-        }
-
-        .remove-item {
-            background: #dc2626;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 0.5rem;
-            cursor: pointer;
-        }
-
-        .cart-total {
-            text-align: center;
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 2px solid rgba(74, 222, 128, 0.2);
-        }
-
-        .cart-total h3 {
-            color: #4ade80;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .checkout-btn {
-            background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            padding: 1rem 2rem;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            width: 100%;
-            margin-top: 1rem;
-        }
-
-        .empty-cart {
-            text-align: center;
-            padding: 2rem;
-            color: #ccc;
-        }
-
-        /* Mobile responsiveness */
-        @media (max-width: 768px) {
-            body {
-                padding-top: 80px;
-            }
-            
-            nav {
-                flex-direction: column;
-                gap: 8px;
-                min-height: 70px;
-                padding: 8px 20px;
-            }
-
-            .nav-links {
-                gap: 0.5rem;
-            }
-
-            .nav-links a {
-                padding: 0.4rem 0.6rem;
-                font-size: 0.8rem;
-            }
-
-            .logo {
-                font-size: 1.2rem;
-            }
-
-            .logo-img {
-                width: 30px;
-                height: 30px;
-            }
-
-            .apparel-layout {
-                grid-template-columns: 1fr;
-            }
-            
-            .merch-image-container:has(img + img) {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .logo-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            
-            .logo-option {
-                width: 60px;
-                height: 60px;
-            }
-
-            .masthead-content h1 {
-                font-size: 2rem;
-            }
-
-            .nav-buttons {
-                gap: 0.5rem;
-            }
-
-            .btn {
-                padding: 0.5rem 1rem;
-                font-size: 0.8rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .logo-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .logo-option {
-                width: 70px;
-                height: 70px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Noyes Boys - Merchandise</title>
+<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+<style>
+:root{--g:#4ade80;--g2:#22c55e;--bg:#0c0f0c;--p:#151a15;--ln:rgba(74,222,128,.2);--tx:#f2f5f2;--mut:#98a498}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+body{font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:radial-gradient(1200px 600px at 70% -10%,#1a2a1c,transparent),var(--bg);color:var(--tx);min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--g);outline-offset:2px}
+
+/* Header + cart + masthead: same classes/markup as the original page */
+header{background:linear-gradient(to bottom,rgba(22,22,22,.3) 0%,rgba(22,22,22,.7) 75%,#161616 100%),url('assets/img/bg-masthead.jpg');background-size:cover;background-position:center;padding:.5rem 0;position:sticky;top:0;z-index:1000;box-shadow:0 2px 20px rgba(0,0,0,.5)}
+nav{display:flex;justify-content:space-between;align-items:center;max-width:1400px;margin:0 auto;padding:0 20px;min-height:60px;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;font-size:1.4rem;font-weight:bold;color:#4ade80;text-decoration:none;text-shadow:2px 2px 4px rgba(0,0,0,.5)}
+.logo-img{width:35px;height:35px;margin-right:8px;border-radius:50%}
+.nav-links{display:flex;list-style:none;gap:1rem;flex-wrap:wrap;align-items:center}
+.nav-links a{color:#fff;text-decoration:none;transition:all .3s ease;font-weight:600;font-size:.9rem;padding:.5rem .8rem;border-radius:8px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2)}
+.nav-links a:hover{color:#4ade80;background:rgba(74,222,128,.1);border-color:#4ade80;transform:translateY(-2px)}
+.header-cart-button,.cart-button{background:linear-gradient(135deg,#4ade80 0%,#22c55e 100%);color:#0a0a0a;border:none;border-radius:20px;padding:.5rem 1rem;font-weight:bold;cursor:pointer;display:flex;align-items:center;gap:.5rem;transition:all .3s ease;font-size:.85rem;text-transform:uppercase;letter-spacing:1px}
+.header-cart-button:hover,.cart-button:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(74,222,128,.4)}
+.header-cart-count,.cart-count{background:#0a0a0a;color:#4ade80;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:bold}
+.masthead{background:linear-gradient(to bottom,rgba(22,22,22,.3) 0%,rgba(22,22,22,.7) 75%,#161616 100%),url('assets/img/bg-masthead.jpg');background-size:cover;background-position:center;padding:2rem 0;text-align:center}
+.masthead-content h1{color:#4ade80;font-size:2.5rem;margin-bottom:.5rem;text-shadow:2px 2px 4px rgba(0,0,0,.8)}
+.masthead-content h2{color:#fff;font-size:1.2rem;margin-bottom:1.5rem;opacity:.9;text-shadow:1px 1px 2px rgba(0,0,0,.8)}
+.nav-buttons{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;max-width:800px;margin:0 auto}
+.btn{background:linear-gradient(135deg,#4ade80 0%,#22c55e 100%);color:#0a0a0a;text-decoration:none;padding:.75rem 1.5rem;border-radius:25px;font-weight:bold;transition:all .3s ease;font-size:.9rem;text-transform:uppercase;letter-spacing:1px}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(74,222,128,.4)}
+.cart-modal{display:none;position:fixed;z-index:2000;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,.9)}
+.cart-modal-content{background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%);color:#f5f5f5;margin:5% auto;padding:2rem;border-radius:15px;width:90%;max-width:600px;max-height:80vh;overflow-y:auto;border:1px solid rgba(74,222,128,.2)}
+.cart-close{color:#aaa;float:right;font-size:28px;font-weight:bold;cursor:pointer;line-height:1}
+.cart-close:hover{color:#4ade80}
+.cart-item{display:flex;justify-content:space-between;align-items:center;padding:1rem;border-bottom:1px solid rgba(255,255,255,.1);margin-bottom:1rem;background:rgba(0,0,0,.3);border-radius:8px}
+.cart-item-info{flex:1}
+.cart-item-name{color:#4ade80;font-weight:bold;margin-bottom:.5rem}
+.cart-item-variant{color:#ccc;font-size:.9rem}
+.cart-item-price{color:#4ade80;font-weight:bold}
+.cart-item-controls{display:flex;align-items:center;gap:1rem}
+.quantity-controls{display:flex;align-items:center;gap:.5rem}
+.quantity-btn{background:#4a7c4a;color:#fff;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:bold}
+.quantity-display{min-width:30px;text-align:center;font-weight:bold;color:#f5f5f5}
+.remove-item{background:#dc2626;color:#fff;border:none;border-radius:5px;padding:.5rem;cursor:pointer}
+.cart-total{text-align:center;margin-top:2rem;padding-top:1rem;border-top:2px solid rgba(74,222,128,.2)}
+.cart-total h3{color:#4ade80;font-size:1.5rem;margin-bottom:1rem}
+.checkout-btn{background:linear-gradient(135deg,#4a7c4a 0%,#2d5a2d 100%);color:#fff;border:none;border-radius:25px;padding:1rem 2rem;font-weight:bold;cursor:pointer;font-size:1.1rem;text-transform:uppercase;letter-spacing:1px;width:100%;margin-top:1rem}
+.empty-cart{text-align:center;padding:2rem;color:#ccc}
+
+/* Studio */
+.wrap{max-width:1280px;margin:auto;padding:22px 18px 60px}
+.intro{color:var(--mut);max-width:62ch}
+.intro small{display:block;margin-top:4px}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}
+.tabs button{background:var(--p);border:1px solid var(--ln);border-radius:12px;padding:12px 14px;text-align:left}
+.tabs b{display:block}
+.tabs span{color:var(--g);font-weight:700}
+.tabs [aria-pressed=true]{background:var(--g);color:#0a0a0a;border-color:var(--g)}
+.tabs [aria-pressed=true] span{color:#0a0a0a}
+.studio{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:22px;align-items:start}
+.stage{position:sticky;top:84px;background:radial-gradient(circle at 50% 30%,#2b3a2d,#0f130f 70%);border:1px solid var(--ln);border-radius:16px;overflow:hidden}
+.bar{display:flex;justify-content:center;padding:10px 12px;min-height:50px}
+.seg{display:flex;background:rgba(0,0,0,.4);border-radius:99px;padding:3px}
+.seg button{padding:6px 22px;border-radius:99px;font-size:.85rem;font-weight:600}
+.seg [aria-pressed=true]{background:var(--g);color:#0a0a0a}
+.stage svg{display:block;width:100%;height:min(66vh,600px)}
+.cap{padding:8px 14px 14px;text-align:center}
+.cap b{font-size:1.15rem}
+.cap span{display:block;color:var(--mut);font-size:.85rem}
+.ctl{background:var(--p);border:1px solid var(--ln);border-radius:16px;padding:20px}
+.ctl h2{font:900 1.5rem "Arial Black",Impact,sans-serif}
+.ctl>p{color:var(--mut);margin:2px 0 14px}
+.blk{margin-bottom:18px}
+.lab{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px;font-weight:700;color:var(--g)}
+.lab em{font-style:normal;color:var(--mut);font-weight:500;font-size:.9rem}
+.lab input{background:#0c0f0c;border:1px solid var(--ln);color:var(--tx);border-radius:8px;padding:6px 10px;width:55%;font:inherit;font-size:.9rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px;max-height:320px;overflow:auto;padding:2px}
+.tile{background:#0c0f0c;border:1px solid var(--ln);border-radius:10px;padding:6px;text-align:center;font-size:.72rem;line-height:1.2}
+.tile i{display:grid;place-items:center;aspect-ratio:1;background:#232b23;border-radius:6px;margin-bottom:5px;overflow:hidden;font-style:normal;font-weight:800;color:var(--g);font-size:.8rem}
+.tile img{width:100%;height:100%;object-fit:contain}
+.tile:hover{border-color:var(--g)}
+.tile[aria-pressed=true]{border-color:var(--g);background:rgba(74,222,128,.14);box-shadow:0 0 0 1px var(--g)}
+.grid.chips{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+.chips .tile i{display:none}
+.chips .tile{padding:9px 8px;font-size:.82rem}
+#cust{width:100%;margin-top:8px;background:#0c0f0c;border:1px solid var(--g);color:var(--tx);border-radius:8px;padding:10px;font:inherit}
+.note{display:block;color:var(--mut);margin-top:8px;font-size:.8rem}
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pills button{padding:7px 14px;border-radius:8px;border:1px solid var(--ln);background:#0c0f0c;font-weight:600;font-size:.9rem}
+.pills [aria-pressed=true]{background:var(--g);color:#0a0a0a;border-color:var(--g)}
+.sw{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.sw button,.sw label{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,255,.25)}
+.sw [aria-pressed=true],.sw label.on{box-shadow:0 0 0 3px var(--p),0 0 0 5px var(--g)}
+.sw label{position:relative;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);overflow:hidden;cursor:pointer}
+.sw input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}
+input[type=range]{width:100%;accent-color:var(--g)}
+.buy{display:flex;align-items:center;gap:14px;padding-top:16px;border-top:1px solid var(--ln)}
+.price{font:900 1.8rem "Arial Black",Impact,sans-serif;color:var(--g);white-space:nowrap}
+.add{flex:1;background:linear-gradient(135deg,var(--g),var(--g2));color:#0a0a0a;font-weight:800;padding:13px 20px;border-radius:99px;text-transform:uppercase;letter-spacing:1px;font-size:.9rem;transition:.15s}
+.add:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(74,222,128,.35)}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--g);color:#0a0a0a;font-weight:700;padding:10px 20px;border-radius:99px;opacity:0;transition:.25s;z-index:3000;pointer-events:none}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.pr{animation:in .18s}
+@keyframes in{from{opacity:.15}}
+@media(max-width:900px){header{position:static}.studio{grid-template-columns:1fr}.stage{top:0;z-index:20}.stage svg{height:min(40vh,360px)}.tabs b{font-size:.9rem}.masthead-content h1{font-size:2rem}.btn{padding:.5rem 1rem;font-size:.8rem}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="FeminizedSeedsHomepage.html" class="logo">
-                <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
-                The Noyes Boys
-            </a>
-            <ul class="nav-links">
-                <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
-                <li><a href="contact_us.html">Contact</a></li>
-            </ul>
-            <button class="cart-button" onclick="openCart()">
-                <i class="fas fa-shopping-cart"></i>
-                Cart
-                <span class="cart-count" id="cartCount">0</span>
-            </button>
-        </nav>
-    </header>
+<header>
+    <nav>
+        <a href="FeminizedSeedsHomepage.html" class="logo">
+            <img src="assets/img/noyes boys logo.png" alt="Noyes Boys Logo" class="logo-img">
+            The Noyes Boys
+        </a>
+        <ul class="nav-links">
+            <li><a href="FeminizedSeedsHomepage.html">Home</a></li>
+            <li><a href="contact_us.html">Contact</a></li>
+        </ul>
+        <button class="cart-button" onclick="openCart()">
+            <i class="fas fa-shopping-cart"></i>
+            Cart
+            <span class="cart-count" id="cartCount">0</span>
+        </button>
+    </nav>
+</header>
 
-    <section class="masthead">
-        <div class="masthead-content">
-            <h1>Noyes Boys Merchandise</h1>
-            <h2>Represent Your Favorite Strains</h2>
-            <div class="nav-buttons">
-                <a class="btn" href="FeminizedSeedsHomepage.html">Home</a>
-                <a class="btn" href="deals.html">Seeds</a>
-                <a class="btn" href="merch.html">Merch</a>
-                <a class="btn" href="straincards.html">Strain Cards</a>
-            </div>
+<section class="masthead">
+    <div class="masthead-content">
+        <h1>Noyes Boys Merchandise</h1>
+        <h2>Represent Your Favorite Strains</h2>
+        <div class="nav-buttons">
+            <a class="btn" href="FeminizedSeedsHomepage.html">Home</a>
+            <a class="btn" href="deals.html">Seeds</a>
+            <a class="btn" href="merch.html">Merch</a>
+            <a class="btn" href="straincards.html">Strain Cards</a>
         </div>
+    </div>
+</section>
+
+<main class="wrap">
+  <p class="intro">Pick a product, then tap any strain to see it on the garment. Hover over a design to preview it before you choose.
+    <small>Accepting: E-Transfer • PayPal • Cryptocurrency</small></p>
+  <div class="tabs" id="tabs"></div>
+
+  <div class="studio">
+    <section class="stage" aria-label="Product preview">
+      <div class="bar"><div class="seg" id="views"><button data-v="front">Front</button><button data-v="back">Back</button></div></div>
+      <svg id="stage" viewBox="60 104 280 280" role="img" aria-label="Live preview of your merch">
+        <defs>
+          <linearGradient id="sh" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".3"/><stop offset=".3" stop-color="#fff" stop-opacity=".07"/><stop offset=".7" stop-color="#000" stop-opacity=".02"/><stop offset="1" stop-color="#000" stop-opacity=".32"/></linearGradient>
+          <clipPath id="lc" clipPathUnits="objectBoundingBox"><circle cx=".5" cy=".5" r=".5"/></clipPath>
+          <path id="tee" d="M176 124Q200 150 224 124L262 136L318 178L292 212L254 192L254 372L146 372L146 192L108 212L82 178L138 136Z"/>
+          <path id="teeb" d="M176 124Q200 134 224 124L262 136L318 178L292 212L254 192L254 372L146 372L146 192L108 212L82 178L138 136Z"/>
+          <path id="hb" d="M170 122Q200 150 230 122L270 134L334 238L330 372L292 378L288 246L282 222L284 384L116 384L118 222L112 246L108 378L70 372L66 238L130 134Z"/>
+          <g id="cap"><path d="M106 142Q92 6 200 2Q308 6 294 142Z"/><rect x="100" y="136" width="200" height="86" rx="14"/></g>
+        </defs>
+        <g id="art"></g>
+      </svg>
+      <div class="cap"><b id="capn"></b><span id="capd"></span></div>
     </section>
 
-    <div class="container">
-        <div class="header">
-            <h1>Official Noyes Boys Merchandise</h1>
-            <p>Premium apparel and accessories featuring your favorite strain genetics</p>
-            <div style="color: #666; font-weight: bold; font-size: 0.95em; margin-top: 10px;">
-                Accepting: E-Transfer • PayPal • Cryptocurrency
-            </div>
-        </div>
+    <section class="ctl">
+      <h2 id="ph"></h2>
+      <p id="pd"></p>
 
-        <!-- Toques -->
-        <div class="section-container" id="apparel">
-            <div class="section-header">
-                <h3>Strain Toques</h3>
-            </div>
-            <div class="apparel-layout">
-                <div class="apparel-main">
-                    <div class="merch-image-container">
-                        <img src="assets/sept22edits/websiteimagedata/clothes/noyesboyshats.jpg" alt="Toque">
-                    </div>
-                    <div class="merch-content">
-                        <div class="merch-title">Custom Strain Toque</div>
-                        <div class="merch-description">Premium knit toques featuring custom strain artwork. Keep warm while repping your favorite genetics.</div>
-                        <div class="merch-options">
-                            <label>Select Strain Design:</label>
-                            <select class="merch-select" id="toque-strain">
-                                <option value="No Strain Text" data-price="20">No Text</option>
-                                <option value="purple-rainbow" data-price="20">Purple Rainbow</option>
-                                <option value="rainbow-cakes" data-price="20">Rainbow Cakes</option>
-                                <option value="cake-breath" data-price="20">Cake Breath</option>
-                                <option value="alienoyes-kush" data-price="20">Alienoyes Kush</option>
-                                <option value="mangonoyes-kush" data-price="20">Mangonoyes Kush</option>
-                                <option value="citronoyes-kush" data-price="20">Citronoyes Kush</option>
-                                <option value="noyes-haze" data-price="20">Noyes Haze</option>
-                                <option value="noyes-breath" data-price="20">Noyes Breath</option>
-                                <option value="meat-cakes" data-price="20">Meat Cakes</option>
-                                <option value="biscotti-rocks" data-price="20">Biscotti Rocks</option>
-                                <option value="yesno-kush" data-price="20">YesNo Kush</option>
-                                <option value="shiny-rocks" data-price="20">Shiny Rocks</option>
-                                <option value="noyes-rocks" data-price="20">Noyes Rocks</option>
-                                <option value="noyes-pebbles" data-price="20">Noyes Pebbles</option>
-                                <option value="mango-rocks" data-price="20">Mango Rocks</option>
-                                <option value="citrus-pebbles" data-price="20">Citrus Pebbles</option>
-                                <option value="citrus-rocks" data-price="20">Citrus Rocks</option>
-                                <option value="alien-rocks" data-price="20">Alien Rocks</option>
-                                <option value="citrus-haze-breath" data-price="20">Citrus Haze Breath</option>
-                                <option value="mango-aliens" data-price="20">Mango Aliens</option>
-                                <option value="OTHER" data-price="20">CUSTOM</option>
-                            </select>
-                            <label>Color:</label>
-                            <select class="merch-select" id="toque-color">
-                                <option value="black">Black</option>
-                                <option value="custom">Custom Color</option>
-                            </select>
-                        </div>
-                        <div class="price-display" id="toque-price">$20.00 CAD</div>
-                        <button class="order-button" onclick="addToCart('toque', 'Toque', 20)">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="apparel-options">
-                    <div class="options-title">Strain Text Options</div>
-                    <div class="logo-grid">
-                     <label>Original (pictured) OR  Any text / Strain Name Customized to order</label>   
-                    </div>
-                    <p style="color: #666; font-size: 0.9rem; text-align: center;">Strain Arts Are Available.</p>
-                </div>
-            </div>
-        </div>
-        <!-- T-Shirts -->
-        <div class="section-container">
-            <div class="section-header">
-                <h3>Custom Strain T-Shirts</h3>
-            </div>
-            <div class="apparel-layout">
-                <div class="apparel-main">
-                    <div class="merch-image-container">
-                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt1.png" alt="T-shirt">
-                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt2.png" alt="T-shirt">
-                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt3.png" alt="T-shirt">
-                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt4.png" alt="T-shirt">
-                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt5.png" alt="T-shirt">
-                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt6.png" alt="T-shirt">
-                        <img src="assets/sept22edits/websiteimagedata/clothes/shirtsfinished/shirt7.png" alt="T-shirt">
-                    </div>
-                    <div class="merch-content">
-                        <div class="merch-title">Custom Strain T-Shirt</div>
-                        <div class="merch-description">Premium cotton t-shirts featuring vibrant strain artwork. Available in sizes S-3XL.</div>
-                        <div class="merch-options">
-                            <label>Select Strain Design:</label>
-                            <select class="merch-select" id="tshirt-strain">
-                                <option value="purple-rainbow" data-price="40">Purple Rainbow</option>
-                                <option value="rainbow-cakes" data-price="40">Rainbow Cakes</option>
-                                <option value="cake-breath" data-price="40">Cake Breath</option>
-                                <option value="alienoyes-kush" data-price="40">Alienoyes Kush</option>
-                                <option value="mangonoyes-kush" data-price="40">Mangonoyes Kush</option>
-                                <option value="citronoyes-kush" data-price="40">Citronoyes Kush</option>
-                                <option value="noyes-haze" data-price="40">Noyes Haze</option>
-                                <option value="noyes-breath" data-price="40">Noyes Breath</option>
-                                <option value="meat-cakes" data-price="40">Meat Cakes</option>
-                                <option value="biscotti-rocks" data-price="40">Biscotti Rocks</option>
-                                <option value="yesno-kush" data-price="40">YesNo Kush</option>
-                                <option value="shiny-rocks" data-price="40">Shiny Rocks</option>
-                                <option value="noyes-rocks" data-price="40">Noyes Rocks</option>
-                                <option value="noyes-pebbles" data-price="40">Noyes Pebbles</option>
-                                <option value="mango-rocks" data-price="40">Mango Rocks</option>
-                                <option value="citrus-pebbles" data-price="40">Citrus Pebbles</option>
-                                <option value="citrus-rocks" data-price="40">Citrus Rocks</option>
-                                <option value="alien-rocks" data-price="40">Alien Rocks</option>
-                                <option value="citrus-haze-breath" data-price="40">Citrus Haze Breath</option>
-                                <option value="mango-aliens" data-price="40">Mango Aliens</option>
-                                <option value="OTHER" data-price="40">CUSTOM</option>
-                            </select>
-                            <label>Size:</label>
-                            <select class="merch-select" id="tshirt-size">
-                                <option value="small">Small</option>
-                                <option value="medium">Medium</option>
-                                <option value="large">Large</option>
-                                <option value="xl">X-Large</option>
-                                <option value="2xl">2X-Large</option>
-                                <option value="3xl">3X-Large</option>
-                            </select>
-                            <label>Color:</label>
-                            <select class="merch-select" id="tshirt-color">
-                                <option value="black">Black</option>
-                                <option value="custom">Custom Color</option>
-                            </select>
-                        </div>
-                        <div class="price-display" id="tshirt-price">$40.00 CAD</div>
-                        <button class="order-button" onclick="addToCart('tshirt', 'Tshirt', 40)">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="apparel-options">
-                    <div class="options-title">Design Previews</div>
-                    <div class="options-title">Full Strain Arts (with backgrounds) are also Available</div>
-                    <div class="logo-grid">
-                        <div class="logo-option interactive-design" data-strain="alienoyes-kush" onclick="selectStrainDesign('tshirt', 'alienoyes-kush')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/alienizedskunk.png" alt="Alienoyes Kush"></div>
-                        <div class="logo-option interactive-design" data-strain="afghani-noyes" onclick="selectStrainDesign('tshirt', 'afghani-noyes')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/afghaninoyes.png" alt="Afghani Noyes"></div>
-                        <div class="logo-option interactive-design" data-strain="albino-skunk" onclick="selectStrainDesign('tshirt', 'albino-skunk')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/albinoskunk.png" alt="Albino Skunk"></div>
-                        <div class="logo-option interactive-design" data-strain="alienoyes-kush" onclick="selectStrainDesign('tshirt', 'alienoyes-kush')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/alienoyes_kush.png" alt="Alienoyes Kush"></div>
-                        <div class="logo-option interactive-design" data-strain="alien-rocks" onclick="selectStrainDesign('tshirt', 'alien-rocks')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/alienrocks.png" alt="Alien Rocks"></div>
-                        <div class="logo-option interactive-design" data-strain="biscotti-rocks" onclick="selectStrainDesign('tshirt', 'biscotti-rocks')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/biscotti rocks.png" alt="Biscotti Rocks"></div>
-                        <div class="logo-option interactive-design" data-strain="bubba-noyes-kush" onclick="selectStrainDesign('tshirt', 'bubba-noyes-kush')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/bubba kush x noyes kush.png" alt="Bubba Noyes Kush"></div>
-                        <div class="logo-option interactive-design" data-strain="bubba-noyes" onclick="selectStrainDesign('tshirt', 'bubba-noyes')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/bubbanoyes.png" alt="Bubba Noyes"></div>
-                        <div class="logo-option interactive-design" data-strain="cake-breath" onclick="selectStrainDesign('tshirt', 'cake-breath')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/cake_breath.png" alt="Cake Breath"></div>
-                        <div class="logo-option interactive-design" data-strain="cheeto-fingers" onclick="selectStrainDesign('tshirt', 'cheeto-fingers')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/cheetofingers.png" alt="Cheeto Fingers"></div>
-                        <div class="logo-option interactive-design" data-strain="captain-noyes" onclick="selectStrainDesign('tshirt', 'captain-noyes')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/captainnoyes.png" alt="Captain Noyes"></div>
-                        <div class="logo-option interactive-design" data-strain="captain-noyes-2" onclick="selectStrainDesign('tshirt', 'captain-noyes-2')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/captinnoyes2.png" alt="Captain Noyes 2"></div>
-                        <div class="logo-option interactive-design" data-strain="citrus-squirts" onclick="selectStrainDesign('tshirt', 'citrus-squirts')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/citrussquirts.png" alt="Citrus Squirts"></div>
-                        <div class="logo-option interactive-design" data-strain="durban-noyes-kush" onclick="selectStrainDesign('tshirt', 'noyes-poison')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/durban poison x noyes kush.png" alt="Durban Noyes Kush"></div>
-                        <div class="logo-option interactive-design" data-strain="citronoyes-haze" onclick="selectStrainDesign('tshirt', 'citronoyes-haze')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/citronoyeshaze.png" alt="Citronoyes Haze"></div>
-                        <div class="logo-option interactive-design" data-strain="hashplant-noyes-kush" onclick="selectStrainDesign('tshirt', 'hashfingers')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/hashfingers.png" alt="Hashplant Noyes Kush"></div>
-                        <div class="logo-option interactive-design" data-strain="noyes-haze" onclick="selectStrainDesign('tshirt', 'noyes-haze')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/noyes_haze.png" alt="Noyes Haze"></div>
-                        <div class="logo-option interactive-design" data-strain="le-pew" onclick="selectStrainDesign('tshirt', 'le-pew')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/lepew.png" alt="Le Pew"></div>
-                        <div class="logo-option interactive-design" data-strain="mango-aliens" onclick="selectStrainDesign('tshirt', 'mango-aliens')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/mango_aliens.png" alt="Mango Aliens"></div>
-                        <div class="logo-option interactive-design" data-strain="mango-rocks" onclick="selectStrainDesign('tshirt', 'mango-rocks')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/mango_rocks.png" alt="Mango Rocks"></div>
-                        <div class="logo-option interactive-design" data-strain="mangonoyes-kush" onclick="selectStrainDesign('tshirt', 'mangonoyes-kush')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/mangonoyes_kush.png" alt="Mangonoyes Kush"></div>
-                        <div class="logo-option interactive-design" data-strain="meat-cakes" onclick="selectStrainDesign('tshirt', 'meat-cakes')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/meat _cakes.png" alt="Meat Cakes"></div>
-                        <div class="logo-option interactive-design" data-strain="noyes-breath" onclick="selectStrainDesign('tshirt', 'noyes-breath')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/noyes breath.png" alt="Noyes Breath"></div>
-                        <div class="logo-option interactive-design" data-strain="noyes-thunder" onclick="selectStrainDesign('tshirt', 'noyes-thunder')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/noyes thunder.webp" alt="Noyes Thunder"></div>
-                        <div class="logo-option interactive-design" data-strain="noyes-haze" onclick="selectStrainDesign('tshirt', 'noyes-haze')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/noyes_haze.png" alt="Noyes Haze"></div>
-                        <div class="logo-option interactive-design" data-strain="noyes-pebbles" onclick="selectStrainDesign('tshirt', 'noyes-pebbles')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/noyes_pebbles.png" alt="Noyes Pebbles"></div>
-                        <div class="logo-option interactive-design" data-strain="noyes-og" onclick="selectStrainDesign('tshirt', 'noyes-og')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/noyesog.png" alt="Noyes OG"></div>
-                        <div class="logo-option interactive-design" data-strain="noyes-rocks" onclick="selectStrainDesign('tshirt', 'noyes-rocks')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/noyes_rocks.png" alt="Noyes Rocks"></div>
-                        <div class="logo-option interactive-design" data-strain="noyes-poison" onclick="selectStrainDesign('tshirt', 'noyes-poison')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/noyespoison.png" alt="Noyes Poison"></div>
-                        <div class="logo-option interactive-design" data-strain="noyes-rocks" onclick="selectStrainDesign('tshirt', 'noyes-rocks')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/noyesrocks.png" alt="Noyes Rocks"></div>
-                        <div class="logo-option interactive-design" data-strain="orange-noyes-kush" onclick="selectStrainDesign('tshirt', 'orange-noyes-kush')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/orange kush x noyes kush.png" alt="Orange Noyes Kush"></div>
-                        <div class="logo-option interactive-design" data-strain="purple-rainbow" onclick="selectStrainDesign('tshirt', 'purple-rainbow')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/purple rainbow.png" alt="Purple Rainbow"></div>
-                        <div class="logo-option interactive-design" data-strain="rainbow-cakes" onclick="selectStrainDesign('tshirt', 'rainbow-cakes')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/rainbow_cakes.png" alt="Rainbow Cakes"></div>
-                        <div class="logo-option interactive-design" data-strain="rainbow-skunk" onclick="selectStrainDesign('tshirt', 'rainbow-skunk')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/rainbowskunk.png" alt="Rainbow Skunk"></div>
-                        <div class="logo-option interactive-design" data-strain="shiny-rocks" onclick="selectStrainDesign('tshirt', 'shiny-rocks')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/shiny_rocks.png" alt="Shiny Rocks"></div>
-                        <div class="logo-option interactive-design" data-strain="skunk-breath" onclick="selectStrainDesign('tshirt', 'skunk-breath')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/skunkbreath.png" alt="Skunk Breath"></div>
-                        <div class="logo-option interactive-design" data-strain="skunk-cake" onclick="selectStrainDesign('tshirt', 'skunk-cake')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/skunkcake.png" alt="Skunk Cake"></div>
-                        <div class="logo-option interactive-design" data-strain="skunk-capone" onclick="selectStrainDesign('tshirt', 'skunk-capone')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/skunkcapone.png" alt="Skunk Capone"></div>
-                        <div class="logo-option interactive-design" data-strain="stink" onclick="selectStrainDesign('tshirt', 'stink')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/stink.png" alt="Stink"></div>
-                        <div class="logo-option interactive-design" data-strain="skunk-face" onclick="selectStrainDesign('tshirt', 'skunk-face')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/skunkface.png" alt="Skunk Face"></div>
-                        <div class="logo-option interactive-design" data-strain="white-noyes" onclick="selectStrainDesign('tshirt', 'white-noyes')"><img src="assets/sept22edits/websiteimagedata/sweater images/sweaterimages/whitenoyes.png" alt="White Noyes"></div>
-                    </div>
-                    <p style="color: #666; font-size: 0.9rem; text-align: center;">Other Strain Arts Are Available.</p>
-                </div>
-            </div>
-        </div>
-        <!-- Sweaters -->
-        <div class="section-container">
-            <div class="section-header">
-                <h3>Strain Sweaters</h3>
-            </div>
-            <div class="apparel-layout">
-                <div class="apparel-main">
-                    <div class="merch-image-container">
-                        <img src="assets/sept22edits/websiteimagedata/clothes/sweater1.jpg" alt="Sweater">
-                        <img src="assets/sept22edits/websiteimagedata/clothes/sweater2.jpg" alt="Sweater">
-                    </div>
-                    <div class="merch-content">
-                        <div class="merch-title">Premium Strain Sweater</div>
-                        <div class="merch-description">Luxury hooded sweaters featuring detailed strain artwork. Premium fleece blend for ultimate comfort.</div>
-                        <div class="merch-options">
-                            <label>Select Strain Design:</label>
-                            <select class="merch-select" id="sweater-strain">
-                                <option value="purple-rainbow" data-price="80">Purple Rainbow</option>
-                                <option value="rainbow-cakes" data-price="80">Rainbow Cakes</option>
-                                <option value="cake-breath" data-price="80">Cake Breath</option>
-                                <option value="alienoyes-kush" data-price="80">Alienoyes Kush</option>
-                                <option value="mangonoyes-kush" data-price="80">Mangonoyes Kush</option>
-                                <option value="citronoyes-kush" data-price="80">Citronoyes Kush</option>
-                                <option value="noyes-haze" data-price="80">Noyes Haze</option>
-                                <option value="noyes-breath" data-price="80">Noyes Breath</option>
-                                <option value="meat-cakes" data-price="80">Meat Cakes</option>
-                                <option value="biscotti-rocks" data-price="80">Biscotti Rocks</option>
-                                <option value="yesno-kush" data-price="80">YesNo Kush</option>
-                                <option value="shiny-rocks" data-price="80">Shiny Rocks</option>
-                                <option value="noyes-rocks" data-price="80">Noyes Rocks</option>
-                                <option value="noyes-pebbles" data-price="80">Noyes Pebbles</option>
-                                <option value="mango-rocks" data-price="80">Mango Rocks</option>
-                                <option value="citrus-pebbles" data-price="80">Citrus Pebbles</option>
-                                <option value="citrus-rocks" data-price="80">Citrus Rocks</option>
-                                <option value="alien-rocks" data-price="80">Alien Rocks</option>
-                                <option value="citrus-haze-breath" data-price="80">Citrus Haze Breath</option>
-                                <option value="mango-aliens" data-price="80">Mango Aliens</option>
-                                <option value="OTHER" data-price="80">CUSTOM</option>
-                            </select>
-                            <label>Size:</label>
-                            <select class="merch-select" id="sweater-size">
-                                <option value="small">Small</option>
-                                <option value="medium">Medium</option>
-                                <option value="large">Large</option>
-                                <option value="xl">X-Large</option>
-                                <option value="2xl">2X-Large</option>
-                                <option value="3xl">3X-Large</option>
-                            </select>
-                            <label>Color:</label>
-                            <select class="merch-select" id="sweater-color">
-                                <option value="black">Black</option>
-                                <option value="custom">Custom Color</option>
-                            </select>
-                        </div>
-                        <div class="price-display" id="sweater-price">$80.00 CAD</div>
-                        <button class="order-button" onclick="addToCart('sweater', 'Sweater', 80)">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="apparel-options">
-                    <div class="options-title">Sweater Designs</div>
-                    <div class="logo-grid">
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/clothes/s1 (1).jfif" alt="Design"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/clothes/s1 (2).jfif" alt="Design"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/clothes/s1 (3).jfif" alt="Design"></div>
-                        <div class="logo-option"><img src="assets/sept22edits/websiteimagedata/clothes/s1 (4).jfif" alt="Design"></div> 
-                    </div>
-                    <p style="color: #666; font-size: 0.9rem; text-align: center;">Other strains are available.</p>
-                </div>
-            </div>
+      <div class="blk" id="brb"><div class="lab"><span>Brim</span></div><div class="pills" id="brims"><button data-b="strain">Strain name</button><button data-b="tnb">The Noyes Boys</button><button data-b="logo">Logo only</button></div><small class="note" id="brn"></small></div>
+
+      <div class="blk" id="stb">
+        <div class="lab"><span>Strain design</span><input id="q" type="search" placeholder="Search strains" aria-label="Search strains"></div>
+        <div class="grid" id="grid"></div>
+        <input id="cust" type="text" maxlength="28" placeholder="Type your custom text or strain name" hidden>
+        <small class="note">Full strain art with backgrounds and other strain arts are available on request. Choose Custom text and tell us what you want.</small>
+      </div>
+
+      <div class="blk" id="plb"><div class="lab"><span>Strain art location</span></div><div class="pills" id="places"><button data-pl="back">On the back</button><button data-pl="front">On the front</button></div><small class="note" id="pln"></small></div>
+      <div class="blk" id="szb"><div class="lab"><span>Size</span></div><div class="pills" id="sizes"></div></div>
+      <div class="blk"><div class="lab"><span>Color</span><em id="cn"></em></div><div class="sw" id="sw"></div></div>
+      <div class="blk" id="scb"><div class="lab"><span>Print size</span></div><input type="range" id="sc" min="50" max="120" value="100" aria-label="Print size"></div>
+      <div class="buy"><div class="price" id="pr"></div><button class="add" id="add">Add to Cart</button></div>
+    </section>
+  </div>
+</main>
+
+<!-- Cart Modal -->
+<div id="cartModal" class="cart-modal">
+    <div class="cart-modal-content">
+        <span class="cart-close" onclick="closeCart()">&times;</span>
+        <h2 style="color: #4ade80; margin-bottom: 1rem;">Shopping Cart</h2>
+        <div id="cartItems"></div>
+        <div class="cart-total">
+            <h3>Total: $<span id="cartTotal">0</span> CAD</h3>
+            <button class="checkout-btn" onclick="checkout()">
+                <i class="fas fa-credit-card"></i> Proceed to Checkout
+            </button>
         </div>
     </div>
+</div>
+<div id="toast" role="status"></div>
 
-    <!-- Cart Modal -->
-    <div id="cartModal" class="cart-modal">
-        <div class="cart-modal-content">
-            <span class="cart-close" onclick="closeCart()">&times;</span>
-            <h2 style="color: #2d5a2d; margin-bottom: 1rem;">Shopping Cart</h2>
-            <div id="cartItems"></div>
-            <div class="cart-total">
-                <h3>Total: $<span id="cartTotal">0</span> CAD</h3>
-                <button class="checkout-btn" onclick="checkout()">
-                    <i class="fas fa-credit-card"></i> Proceed to Checkout
-                </button>
-            </div>
-        </div>
-    </div>
+<script>
+/* ---------- Config: edit these ---------- */
+const BASE='assets/sept22edits/websiteimagedata/sweater images/sweaterimages/';
+const LOGO='assets/img/noyes boys logo.png';   // badge + toque + big back logo (swap in a dedicated big-logo file here if you have one)
+// Name|image file (leave the file blank for text-only strains)
+const RAW=`Purple Rainbow|purple rainbow.png
+Rainbow Cakes|rainbow_cakes.png
+Cake Breath|cake_breath.png
+Alienoyes Kush|alienoyes_kush.png
+Alienized Skunk|alienizedskunk.png
+Mangonoyes Kush|mangonoyes_kush.png
+Citronoyes Haze|citronoyeshaze.png
+Noyes Haze|noyes_haze.png
+Noyes Breath|noyes breath.png
+Meat Cakes|meat _cakes.png
+Biscotti Rocks|biscotti rocks.png
+Shiny Rocks|shiny_rocks.png
+Noyes Rocks|noyes_rocks.png
+Noyes Pebbles|noyes_pebbles.png
+Mango Rocks|mango_rocks.png
+Alien Rocks|alienrocks.png
+Mango Aliens|mango_aliens.png
+Afghani Noyes|afghaninoyes.png
+Albino Skunk|albinoskunk.png
+Bubba Noyes Kush|bubba kush x noyes kush.png
+Bubba Noyes|bubbanoyes.png
+Cheeto Fingers|cheetofingers.png
+Captain Noyes|captainnoyes.png
+Captain Noyes 2|captinnoyes2.png
+Citrus Squirts|citrussquirts.png
+Durban Noyes Kush|durban poison x noyes kush.png
+Hashplant Noyes Kush|hashfingers.png
+Le Pew|lepew.png
+Noyes Thunder|noyes thunder.webp
+Noyes OG|noyesog.png
+Noyes Poison|noyespoison.png
+Orange Noyes Kush|orange kush x noyes kush.png
+Rainbow Skunk|rainbowskunk.png
+Skunk Breath|skunkbreath.png
+Skunk Cake|skunkcake.png
+Skunk Capone|skunkcapone.png
+Stink|stink.png
+Skunk Face|skunkface.png
+White Noyes|whitenoyes.png
+Citronoyes Kush|
+YesNo Kush|
+Citrus Pebbles|
+Citrus Rocks|
+Citrus Haze Breath|`;
+const P={
+  toque:{n:'Toque',cart:'Toque',price:20,d:'Knit toque with the Noyes Boys logo and your choice of brim text.'},
+  tshirt:{n:'T-Shirt',cart:'Tshirt',price:40,d:'Premium cotton tee. Strain art on the back, Noyes Boys badge on the chest. Sizes S to 3XL.'},
+  sweater:{n:'Sweater',cart:'Sweater',price:80,d:'Fleece-blend hooded sweater. Strain art on the back, Noyes Boys badge on the chest. Sizes S to 3XL.'}
+};
+const SIZES=['S','M','L','XL','2XL','3XL'];
+const COL=[['Black','#0c0c0c'],['White','#f1f1ee'],['Charcoal','#3a3d3c'],['Forest','#1f4a31'],['Navy','#1b2a4a']];
 
-    <script>
-        // Cart Management System
+/* ---------- Studio ---------- */
+const S=RAW.split('\n').map(l=>{const[n,f]=l.split('|');return{id:n.toLowerCase().replace(/\W+/g,'-'),n,f:f||null}});
+const CUS={id:'custom',n:'Custom text',f:null};
+const V={toque:'80 -12 240 246',tshirt:'60 104 280 280',sweater:'44 80 312 320'};
+let st={p:'tshirt',view:'back',place:'back',brim:'strain',strain:S[0].id,hover:null,size:'L',color:COL[0][1],cname:'Black',scale:100,custom:'',q:''};
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const lum=h=>{const n=parseInt(h.slice(1),16);return((n>>16&255)*.299+(n>>8&255)*.587+(n&255)*.114)/255};
+const get=id=>id==='custom'?CUS:S.find(s=>s.id===id);
+const label=id=>id==='custom'?(st.custom.trim()||'Custom text'):get(id).n;
+const shade=u=>`<use href="#${u}" fill="url(#sh)"/>`;
+const artSide=()=>st.place==='back'?'back':'front';
+const logo=(cx,cy,d,ink)=>`<image href="${encodeURI(LOGO)}" x="${cx-d/2}" y="${cy-d/2}" width="${d}" height="${d}" clip-path="url(#lc)"/><circle cx="${cx}" cy="${cy}" r="${d/2}" fill="none" stroke="${ink}" opacity=".4" stroke-width="1.2"/>`;
+const rib='<g fill="#000" opacity=".2"><rect x="116" y="368" width="168" height="16"/><rect x="68" y="360" width="42" height="18"/><rect x="290" y="360" width="42" height="18"/></g>';
+const hoodie=c=>`<g style="color:${c}"><use href="#hb" fill="currentColor"/><path d="M162 116Q200 92 238 116Q236 170 200 182Q164 170 162 116Z" fill="currentColor"/><ellipse cx="200" cy="124" rx="27" ry="12" fill="#000" opacity=".5"/>${shade('hb')}${rib}<path d="M150 316H250L266 368H134Z" fill="none" stroke="#000" opacity=".35" stroke-width="2"/><path d="M188 168L186 198M212 168L214 198" stroke="#e8e8e8" stroke-width="2.5"/></g>`;
+const hoodieB=c=>`<g style="color:${c}"><use href="#hb" fill="currentColor"/><path d="M148 110Q200 68 252 110Q262 196 200 214Q138 196 148 110Z" fill="currentColor"/><path d="M200 84V210" stroke="#000" opacity=".25" stroke-width="2"/>${shade('hb')}<path d="M148 110Q200 68 252 110Q262 196 200 214Q138 196 148 110Z" fill="url(#sh)"/>${rib}</g>`;
+
+function printArt(s,t,y,z,ink){
+  if(s.f)return `<image class="pr" href="${encodeURI(BASE+s.f)}" x="${200-z/2}" y="${y}" width="${z}" height="${z}"/>`;
+  const w=t.split(' '),h=Math.ceil(w.length/2),L=w.length>1&&t.length>9?[w.slice(0,h).join(' '),w.slice(h).join(' ')]:[t];
+  const fs=Math.min(26,z*1.1/(Math.max(...L.map(l=>l.length))*.6));
+  return `<g class="pr" font-family="Impact,'Arial Black',sans-serif" font-weight="900" text-anchor="middle" fill="${ink}" font-size="${fs.toFixed(1)}">${L.map((l,i)=>`<text x="200" y="${(y+z/2+(i-(L.length-1)/2)*fs*1.15+fs*.35).toFixed(1)}">${esc(l.toUpperCase())}</text>`).join('')}</g>`;
+}
+
+function stage(){
+  const id=st.hover||st.strain,s=get(id),t=label(id),p=st.p,c=st.color,tg=p==='toque',ink=lum(c)<.55?'#f4f4f0':'#141414';
+  let g='',cn=t,cd;
+  if(tg){
+    const bt=st.brim==='tnb'?'THE NOYES BOYS':t.toUpperCase(),fs=Math.min(28,136/(bt.length*.72)),tw=bt.length*.72*fs,x0=200-(tw+8+40)/2;
+    let r='';for(let x=116;x<=284;x+=16)r+=`M${x} 140v78`;
+    g+=`<g style="color:${c}"><use href="#cap" fill="currentColor"/><rect x="100" y="136" width="200" height="86" rx="14" fill="#000" opacity=".16"/><path d="${r}M200 4V138M150 22Q136 80 134 138M250 22Q264 80 266 138" stroke="#000" opacity=".14" stroke-width="2" fill="none"/>${shade('cap')}</g>`;
+    g+=st.brim==='logo'
+      ?`<g class="pr">${logo(200,179,64,ink)}</g>`
+      :`<g class="pr"><text x="${x0.toFixed(1)}" y="${(180+fs*.35).toFixed(1)}" font-size="${fs.toFixed(1)}" font-weight="800" font-family="Georgia,serif" textLength="${tw.toFixed(1)}" lengthAdjust="spacingAndGlyphs" fill="${ink}">${esc(bt)}</text>${logo(x0+tw+8+20,179,40,ink)}</g>`;
+    cn=st.brim==='logo'?'Logo on the brim':st.brim==='tnb'?'The Noyes Boys':t;
+    cd='Toque in '+st.cname+(st.hover?' (preview)':'');
+  }else{
+    const hd=p==='sweater',z=st.scale,back=st.view==='back',artHere=(st.place==='back')===back;
+    g+=hd?(back?hoodieB(c):hoodie(c)):`<g style="color:${c}"><use href="#${back?'teeb':'tee'}" fill="currentColor"/>${shade(back?'teeb':'tee')}<path d="${back?'M176 124Q200 134 224 124':'M176 124Q200 150 224 124'}" fill="none" stroke="#000" opacity=".3" stroke-width="5"/></g>`;
+    if(artHere){
+      g+=printArt(s,t,back?(hd?216:150):(hd?204:164),z,ink);
+    }else if(!back){
+      g+=`<g class="pr">${logo(hd?250:232,hd?200:172,30,ink)}</g>`;            // front chest badge
+    }else{
+      const y=hd?216:150,d=z*.85,fs=Math.min(16,z*.95/(14*.62));               // big logo on back
+      g+=`<g class="pr">${logo(200,y+d/2,d,ink)}<g font-family="Impact,'Arial Black',sans-serif" font-weight="900" text-anchor="middle" fill="${ink}" font-size="${fs.toFixed(1)}"><text x="200" y="${(y+d+fs*1.2).toFixed(1)}">THE NOYES BOYS</text><text x="200" y="${(y+d+fs*2.4).toFixed(1)}" letter-spacing="3">GENETICS</text></g></g>`;
+    }
+    cd=P[p].n+' in '+st.cname+', '+(back?'back':'front')+' view'+(st.hover?' (preview)':'');
+  }
+  $('#art').innerHTML=g;
+  $('#stage').setAttribute('viewBox',V[p]);
+  $$('#views button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===st.view));
+  $('#capn').textContent=cn;$('#capd').textContent=cd;
+}
+
+function tiles(){
+  const q=st.q.toLowerCase(),tg=st.p==='toque';
+  const L=[...S,CUS].filter(s=>s.id==='custom'||s.n.toLowerCase().includes(q));
+  $('#grid').innerHTML=L.map(s=>`<button class="tile" data-id="${s.id}"><i>${s.f&&!tg?`<img loading="lazy" src="${encodeURI(BASE+s.f)}" alt="">`:'Aa'}</i>${s.n}</button>`).join('');
+}
+
+function sync(){
+  const tg=st.p==='toque';
+  $$('#tabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.p===st.p));
+  $$('#sizes button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===st.size));
+  $$('#sw button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.c===st.color));
+  $$('#places button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.pl===st.place));
+  $$('#brims button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.b===st.brim));
+  $$('.tile').forEach(t=>t.setAttribute('aria-pressed',t.dataset.id===st.strain));
+  $('#cl').classList.toggle('on',st.cname.startsWith('Custom'));
+  $('#ph').textContent=P[st.p].n;$('#pd').textContent=P[st.p].d;
+  $('#views').hidden=$('#szb').hidden=$('#scb').hidden=$('#plb').hidden=tg;
+  $('#brb').hidden=!tg;
+  $('#stb').hidden=tg&&st.brim!=='strain';
+  $('#grid').classList.toggle('chips',tg);
+  $('#cust').hidden=st.strain!=='custom';
+  $('#cn').textContent=st.cname;
+  $('#pln').textContent=st.place==='back'?'Strain art goes on the back. The Noyes Boys logo sits on the front chest as a badge.':'Strain art goes on the front. A big The Noyes Boys Genetics logo covers the back.';
+  $('#brn').textContent=st.brim==='strain'?'The brim has the strain name followed by the logo.':st.brim==='tnb'?'The brim has The Noyes Boys followed by the logo.':'Just the logo on the brim.';
+  $('#pr').textContent='$'+P[st.p].price.toFixed(2)+' CAD';
+  stage();
+}
+
+$('#tabs').innerHTML=Object.keys(P).map(k=>`<button data-p="${k}"><b>${P[k].n}</b><span>$${P[k].price}</span></button>`).join('');
+$('#sizes').innerHTML=SIZES.map(s=>`<button data-s="${s}">${s}</button>`).join('');
+$('#sw').innerHTML=COL.map(([n,h])=>`<button data-c="${h}" data-n="${n}" style="background:${h}" aria-label="${n}" title="${n}"></button>`).join('')+`<label id="cl" title="Custom color"><input type="color" id="cp" value="#6b21a8" aria-label="Custom color"></label>`;
+
+$('#tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;st.p=b.dataset.p;st.q='';$('#q').value='';tiles();sync()};
+$('#views').onclick=e=>{const b=e.target.closest('button');if(b){st.view=b.dataset.v;sync()}};
+$('#places').onclick=e=>{const b=e.target.closest('button');if(b){st.place=b.dataset.pl;st.view=artSide();sync()}};
+$('#brims').onclick=e=>{const b=e.target.closest('button');if(b){st.brim=b.dataset.b;sync()}};
+$('#sizes').onclick=e=>{const b=e.target.closest('button');if(b){st.size=b.dataset.s;sync()}};
+$('#sw').onclick=e=>{const b=e.target.closest('button');if(b){st.color=b.dataset.c;st.cname=b.dataset.n;sync()}};
+$('#cp').oninput=e=>{st.color=e.target.value;st.cname='Custom '+e.target.value;sync()};
+$('#sc').oninput=e=>{st.scale=+e.target.value;stage()};
+$('#q').oninput=e=>{st.q=e.target.value;tiles();sync()};
+$('#cust').oninput=e=>{st.custom=e.target.value;stage()};
+const grid=$('#grid');
+grid.onclick=e=>{const t=e.target.closest('.tile');if(!t)return;st.strain=t.dataset.id;st.hover=null;if(st.p!=='toque')st.view=artSide();sync();if(st.strain==='custom')$('#cust').focus()};
+grid.onmouseover=e=>{const t=e.target.closest('.tile');if(t&&st.hover!==t.dataset.id){st.hover=t.dataset.id;if(st.p!=='toque')st.view=artSide();stage()}};
+grid.onmouseleave=()=>{if(st.hover){st.hover=null;stage()}};
+
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),1800)}
+
+$('#add').onclick=function(){
+  const tg=st.p==='toque',id=st.strain,cl=s=>s.replace(/[<>&"]/g,'');
+  if((!tg||st.brim==='strain')&&id==='custom'&&!st.custom.trim()){toast('Type your custom text first');$('#cust').focus();return}
+  const design=cl(id==='custom'?'Custom: '+st.custom.trim():get(id).n);
+  const v=tg
+    ?[st.brim==='strain'?'Brim: '+design:st.brim==='tnb'?'Brim: The Noyes Boys':'Brim: Logo only','Color: '+st.cname]
+    :[design,'Strain art on '+(st.place==='back'?'back (logo badge on front)':'front (big logo on back)'),'Size: '+st.size,'Color: '+st.cname];
+  addToCart(st.p,P[st.p].cart,P[st.p].price,v.join(' - '));
+};
+
+/* ---------- Cart (same as the original page) ---------- */
         class CartManager {
             constructor() {
                 this.cart = [];
@@ -1197,82 +506,9 @@
         // Initialize cart manager
         const cartManager = new CartManager();
 
-        // Global function to select strain design from image click
-        function selectStrainDesign(productType, strainValue) {
-            const selectElement = document.getElementById(`${productType}-strain`);
-            if (selectElement) {
-                // Check if the option exists, if not add it
-                let optionExists = false;
-                for (let option of selectElement.options) {
-                    if (option.value === strainValue) {
-                        optionExists = true;
-                        break;
-                    }
-                }
-                
-                // If option doesn't exist, add it
-                if (!optionExists && strainValue !== 'OTHER') {
-                    const newOption = document.createElement('option');
-                    newOption.value = strainValue;
-                    newOption.textContent = strainValue.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                    newOption.setAttribute('data-price', '60'); // Default price for new strains
-                    selectElement.appendChild(newOption);
-                }
-                
-                selectElement.value = strainValue;
-                
-                const changeEvent = new Event('change');
-                selectElement.dispatchEvent(changeEvent);
-                
-                // Clear all previous selections first (only highlight one at a time)
-                const allImages = document.querySelectorAll('.interactive-design');
-                allImages.forEach(img => img.classList.remove('selected'));
-                
-                // Only highlight the clicked image, not all images with same strain
-                const clickedElement = event.target.closest('.interactive-design');
-                if (clickedElement) {
-                    clickedElement.classList.add('selected');
-                }
-                
-                const notification = document.createElement('div');
-                notification.innerHTML = `<i class="fas fa-check"></i> Selected: ${strainValue.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`;
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 100px;
-                    right: 20px;
-                    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-                    color: #0a0a0a;
-                    padding: 10px 20px;
-                    border-radius: 25px;
-                    font-weight: bold;
-                    z-index: 1500;
-                    opacity: 0;
-                    transform: translateY(-20px);
-                    transition: all 0.3s ease;
-                `;
-                
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    notification.style.opacity = '1';
-                    notification.style.transform = 'translateY(0)';
-                }, 10);
-                
-                setTimeout(() => {
-                    notification.style.opacity = '0';
-                    notification.style.transform = 'translateY(-20px)';
-                    setTimeout(() => {
-                        if (notification.parentNode) {
-                            notification.parentNode.removeChild(notification);
-                        }
-                    }, 300);
-                }, 2000);
-            }
-        }
-
-        function addToCart(strainId, strainName, price) {
-            if (cartManager.addItem(strainId, strainName, price)) {
-                const button = event.target;
+        function addToCart(strainId, strainName, price, variant) {
+            if (cartManager.addItem(strainId, strainName, price, variant)) {
+                const button = (typeof event !== 'undefined' && event) ? event.target : null;
                 if (button) {
                     const originalText = button.innerHTML;
                     button.innerHTML = '<i class="fas fa-check"></i> Added!';
@@ -1318,14 +554,14 @@
             closeCart();
             
             // Generate order summary for email
-            let orderSummary = 'NOYES BOYS MERCHANDISE ORDER\\n\\n';
-            orderSummary += 'Items:\\n';
+            let orderSummary = 'NOYES BOYS MERCHANDISE ORDER\n\n';
+            orderSummary += 'Items:\n';
             cartManager.cart.forEach((item, index) => {
-                orderSummary += `${index + 1}. ${item.strainName} - ${item.variantText}\\n`;
-                orderSummary += `   Quantity: ${item.quantity} @ ${item.price.toFixed(2)} CAD each\\n`;
-                orderSummary += `   Subtotal: ${(item.price * item.quantity).toFixed(2)} CAD\\n\\n`;
+                orderSummary += `${index + 1}. ${item.strainName} - ${item.variantText}\n`;
+                orderSummary += `   Quantity: ${item.quantity} @ ${item.price.toFixed(2)} CAD each\n`;
+                orderSummary += `   Subtotal: ${(item.price * item.quantity).toFixed(2)} CAD\n\n`;
             });
-            orderSummary += `TOTAL: ${cartManager.getTotal().toFixed(2)} CAD\\n\\n`;
+            orderSummary += `TOTAL: ${cartManager.getTotal().toFixed(2)} CAD\n\n`;
             orderSummary += 'Please reply with your shipping address and preferred payment method.';
 
             // Create mailto link
@@ -1350,6 +586,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             cartManager.updateCartDisplay();
         });
-    </script>
+
+tiles();sync();
+</script>
 </body>
 </html>
