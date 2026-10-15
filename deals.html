@@ -8,679 +8,112 @@
     <meta name="keywords" content="cannabis seeds canada, feminized seeds, craft cannabis, noyes boys, cannabis genetics, seed bank canada">
     <!-- Font Awesome icons -->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-        <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
-            color: #f5f5f5;
-            line-height: 1.4;
-            margin: 0;
-            padding: 0;
-            padding-top: 70px;
-            min-height: 100vh;
-            zoom: 0.50;
-        }
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%); color: #f5f5f5; line-height: 1.4; margin: 0; padding: 0; padding-top: 70px; min-height: 100vh; zoom: 0.50; }
 
         /* Header Navigation - Keep the masthead background */
-        header {
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
-                        url('assets/img/bg-masthead.jpg');
-            background-size: cover;
-            background-position: center;
-            padding: 0.5rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.5);
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px;
-            min-height: 60px;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: #4ade80;
-            text-decoration: none;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        
-        .logo-img {
-            width: 35px;
-            height: 35px;
-            margin-right: 8px;
-            border-radius: 50%;
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 1rem;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            font-size: 0.9rem;
-            padding: 0.5rem 0.8rem;
-            border-radius: 8px;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        
-        .nav-links a:hover {
-            color: #4ade80;
-            background: rgba(74, 222, 128, 0.1);
-            border-color: #4ade80;
-            transform: translateY(-2px);
-        }
-
-        .nav-links a.active {
-            background: #4ade80;
-            color: #0a0a0a;
-            border-color: #4ade80;
-        }
+        header { background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%), url('assets/img/bg-masthead.jpg'); background-size: cover; background-position: center; padding: 0.5rem 0; position: fixed; width: 100%; top: 0; left: 0; z-index: 1000; box-shadow: 0 2px 20px rgba(0,0,0,0.5); }
+        nav { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; padding: 0 20px; min-height: 60px; }
+        .logo { display: flex; align-items: center; font-size: 1.4rem; font-weight: bold; color: #4ade80; text-decoration: none; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .logo-img { width: 35px; height: 35px; margin-right: 8px; border-radius: 50%; }
+        .nav-links { display: flex; list-style: none; gap: 1rem; flex-wrap: wrap; align-items: center; }
+        .nav-links a { color: white; text-decoration: none; transition: all 0.3s ease; font-weight: 600; font-size: 0.9rem; padding: 0.5rem 0.8rem; border-radius: 8px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); }
+        .nav-links a:hover { color: #4ade80; background: rgba(74, 222, 128, 0.1); border-color: #4ade80; transform: translateY(-2px); }
+        .nav-links a.active { background: #4ade80; color: #0a0a0a; border-color: #4ade80; }
 
         /* Cart Button - Keep gradient */
-        .header-cart-button, .cart-button {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-            color: #0a0a0a;
-            border: none;
-            border-radius: 20px;
-            padding: 0.5rem 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .header-cart-button, .cart-button { background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); color: #0a0a0a; border: none; border-radius: 20px; padding: 0.5rem 1rem; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 0.5rem; transition: all 0.3s ease; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+        .header-cart-button:hover, .cart-button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4); }
+        .header-cart-count, .cart-count { background: #0a0a0a; color: #4ade80; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: bold; }
 
-        .header-cart-button:hover, .cart-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
-        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; background: transparent; min-height: calc(100vh - 70px); }
+        .header { text-align: center; margin-bottom: 30px; background: rgba(0,0,0,0.8); color: #f5f5f5; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); border: 1px solid rgba(74, 222, 128, 0.2); }
+        .header h1 { color: #4ade80; font-size: 2.2em; margin-bottom: 8px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        .header p { color: #ccc; font-size: 1.1em; margin-bottom: 10px; }
+        .payment-methods { color: #4ade80; font-weight: bold; font-size: 0.95em; }
+        .section-container { background: rgba(0,0,0,0.7); border-radius: 15px; margin-bottom: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); overflow: hidden; border: 1px solid rgba(74, 222, 128, 0.1); }
+        .section-header { background: linear-gradient(135deg, #2d5a2d 0%, #4a7c4a 100%); color: white; padding: 20px; text-align: center; }
+        .section-header h2 { font-size: 1.8em; margin-bottom: 5px; }
+        .section-header p { font-size: 1em; opacity: 0.9; }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; padding: 20px; }
+        .compact-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+        .row-grid { display: flex; flex-wrap: wrap; gap: 15px; padding: 20px; justify-content: center; }
+        .row-grid .pricing-card { flex: 1; min-width: 220px; max-width: 280px; }
 
-        .header-cart-count, .cart-count {
-            background: #0a0a0a;
-            color: #4ade80;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.65rem;
-            font-weight: bold;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-            background: transparent;
-            min-height: calc(100vh - 70px);
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            background: rgba(0,0,0,0.8);
-            color: #f5f5f5;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-            border: 1px solid rgba(74, 222, 128, 0.2);
-        }
-        
-        .header h1 {
-            color: #4ade80;
-            font-size: 2.2em;
-            margin-bottom: 8px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-        
-        .header p {
-            color: #ccc;
-            font-size: 1.1em;
-            margin-bottom: 10px;
-        }
-        
-        .payment-methods {
-            color: #4ade80;
-            font-weight: bold;
-            font-size: 0.95em;
-        }
-        
-        .section-container {
-            background: rgba(0,0,0,0.7);
-            border-radius: 15px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            overflow: hidden;
-            border: 1px solid rgba(74, 222, 128, 0.1);
-        }
-        
-        .section-header {
-            background: linear-gradient(135deg, #2d5a2d 0%, #4a7c4a 100%);
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .section-header h2 {
-            font-size: 1.8em;
-            margin-bottom: 5px;
-        }
-        
-        .section-header p {
-            font-size: 1em;
-            opacity: 0.9;
-        }
-        
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px;
-            padding: 20px;
-        }
-        
-        .compact-grid {
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 12px;
-        }
-        
-        .row-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            padding: 20px;
-            justify-content: center;
-        }
-        
-        .row-grid .pricing-card {
-            flex: 1;
-            min-width: 220px;
-            max-width: 280px;
-        }
-        
-        /* Pricing Cards - Use masthead background for visual appeal */
-        .pricing-card {
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%),
-                        url('assets/img/bg-masthead.jpg');
-            background-size: cover;
-            background-position: center;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 2px solid rgba(74, 222, 128, 0.2);
-            position: relative;
-        }
-        
-        .pricing-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-            border-color: #4ade80;
-        }
-        
-        /* Featured cards - use green accent instead of red */
-        .pricing-card.featured {
-            border-color: #4ade80;
-            background: linear-gradient(to bottom, rgba(74, 222, 128, 0.15) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%),
-                        url('assets/img/bg-masthead.jpg');
-            box-shadow: 0 0 15px rgba(74, 222, 128, 0.2);
-        }
-        
-        /* Promo cards - use purple/blue accent instead of orange */
-        .pricing-card.promo {
-            border-color: #8b5cf6;
-            background: linear-gradient(to bottom, rgba(139, 92, 246, 0.15) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%),
-                        url('assets/img/bg-masthead.jpg');
-            box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
-        }
-        
-        .card-header {
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        
-        .card-title {
-            font-size: 1.3em;
-            color: #4ade80;
-            margin-bottom: 8px;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-        }
-        
-        .card-price {
-            font-size: 2.2em;
-            color: #10b981; /* Green instead of red */
-            font-weight: bold;
-            margin-bottom: 5px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-        }
-        
-        .card-subtitle {
-            color: #ccc;
-            font-size: 0.85em;
-        }
-        
-        .card-features {
-            list-style: none;
-            margin: 15px 0;
-            font-size: 0.9em;
-            color: #f5f5f5;
-        }
-        
-        .card-features li {
-            padding: 5px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            position: relative;
-            padding-left: 20px;
-        }
-        
-        .card-features li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #4ade80;
-            font-weight: bold;
-        }
-        
-        .card-features li:last-child {
-            border-bottom: none;
-        }
-        
-        /* Order Buttons - Keep gradient for visual appeal */
-        .order-button {
-            background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%);
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-top: 15px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-        
-        .order-button:hover {
-            background: linear-gradient(135deg, #2d5a2d 0%, #1e3c1e 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(74, 124, 74, 0.4);
-        }
+        /* Pricing Cards */
+        .pricing-card { background: linear-gradient(to bottom, rgba(22, 22, 22, 0.8) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%), url('assets/img/bg-masthead.jpg'); background-size: cover; background-position: center; border-radius: 12px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 2px solid rgba(74, 222, 128, 0.2); position: relative; }
+        .pricing-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.4); border-color: #4ade80; }
+        .pricing-card.featured { border-color: #4ade80; background: linear-gradient(to bottom, rgba(74, 222, 128, 0.15) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%), url('assets/img/bg-masthead.jpg'); box-shadow: 0 0 15px rgba(74, 222, 128, 0.2); }
+        .pricing-card.promo { border-color: #8b5cf6; background: linear-gradient(to bottom, rgba(139, 92, 246, 0.15) 0%, rgba(22, 22, 22, 0.9) 75%, rgba(22, 22, 22, 0.95) 100%), url('assets/img/bg-masthead.jpg'); box-shadow: 0 0 15px rgba(139, 92, 246, 0.2); }
+        .card-header { text-align: center; margin-bottom: 15px; }
+        .card-title { font-size: 1.3em; color: #4ade80; margin-bottom: 8px; font-weight: bold; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+        .card-price { font-size: 2.2em; color: #10b981; font-weight: bold; margin-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+        .card-subtitle { color: #ccc; font-size: 0.85em; }
+        .card-features { list-style: none; margin: 15px 0; font-size: 0.9em; color: #f5f5f5; }
+        .card-features li { padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.1); position: relative; padding-left: 20px; }
+        .card-features li:before { content: "✓"; position: absolute; left: 0; color: #4ade80; font-weight: bold; }
+        .card-features li:last-child { border-bottom: none; }
 
-        .order-button:disabled {
-            background: #666;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .strain-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 8px;
-            margin: 10px 0;
-        }
-        
-        .strain-item {
-            background: rgba(74, 222, 128, 0.1);
-            padding: 6px 8px;
-            border-radius: 6px;
-            text-align: center;
-            font-weight: bold;
-            color: #4ade80;
-            font-size: 0.75em;
-            border: 1px solid rgba(74, 222, 128, 0.2);
-        }
-        
-        .promo-banner {
-            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
-            color: white;
-            padding: 8px;
-            border-radius: 6px;
-            text-align: center;
-            margin-bottom: 10px;
-            font-weight: bold;
-            font-size: 0.85em;
-        }
-        
-        .ended-banner {
-            background: linear-gradient(135deg, #666 0%, #555 100%);
-        }
-        
-        .compact-card {
-            padding: 15px;
-        }
-        
-        .compact-card .card-price {
-            font-size: 1.8em;
-        }
-        
-        .compact-card .card-title {
-            font-size: 1.1em;
-        }
-        
-        .two-column {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            padding: 20px;
-        }
+        /* Order Buttons */
+        .order-button { background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%); color: white; padding: 10px 20px; border: none; border-radius: 8px; font-size: 0.9em; font-weight: bold; cursor: pointer; transition: all 0.3s ease; width: 100%; margin-top: 15px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+        .order-button:hover { background: linear-gradient(135deg, #2d5a2d 0%, #1e3c1e 100%); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(74, 124, 74, 0.4); }
+        .order-button:disabled { background: #666; cursor: not-allowed; transform: none; box-shadow: none; }
+        .strain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin: 10px 0; }
+        .strain-item { background: rgba(74, 222, 128, 0.1); padding: 6px 8px; border-radius: 6px; text-align: center; font-weight: bold; color: #4ade80; font-size: 0.75em; border: 1px solid rgba(74, 222, 128, 0.2); }
+        .promo-banner { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); color: white; padding: 8px; border-radius: 6px; text-align: center; margin-bottom: 10px; font-weight: bold; font-size: 0.85em; }
+        .ended-banner { background: linear-gradient(135deg, #666 0%, #555 100%); }
+        .compact-card { padding: 15px; }
+        .compact-card .card-price { font-size: 1.8em; }
+        .compact-card .card-title { font-size: 1.1em; }
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px; }
 
         /* Cart Modal */
-        .cart-modal {
-            display: none;
-            position: fixed;
-            z-index: 2000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.9);
-        }
+        .cart-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); }
+        .cart-modal-content { background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%); color: #f5f5f5; margin: 5% auto; padding: 2rem; border-radius: 15px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; border: 1px solid rgba(74, 222, 128, 0.2); }
+        .cart-close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; line-height: 1; }
+        .cart-close:hover { color: #4ade80; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px; }
+        .cart-item-info { flex: 1; }
+        .cart-item-name { color: #4ade80; font-weight: bold; margin-bottom: 0.5rem; }
+        .cart-item-variant { color: #ccc; font-size: 0.9rem; }
+        .cart-item-price { color: #4ade80; font-weight: bold; }
+        .cart-item-controls { display: flex; align-items: center; gap: 1rem; }
+        .quantity-controls { display: flex; align-items: center; gap: 0.5rem; }
+        .quantity-btn { background: #4a7c4a; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .quantity-display { min-width: 30px; text-align: center; font-weight: bold; color: #f5f5f5; }
+        .remove-item { background: #dc2626; color: white; border: none; border-radius: 5px; padding: 0.5rem; cursor: pointer; }
+        .cart-total { text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 2px solid rgba(74, 222, 128, 0.2); }
+        .cart-total h3 { color: #4ade80; font-size: 1.5rem; margin-bottom: 1rem; }
+        .checkout-btn { background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%); color: white; border: none; border-radius: 25px; padding: 1rem 2rem; font-weight: bold; cursor: pointer; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; width: 100%; margin-top: 1rem; }
+        .empty-cart { text-align: center; padding: 2rem; color: #ccc; }
 
-        .cart-modal-content {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-            color: #f5f5f5;
-            margin: 5% auto;
-            padding: 2rem;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            border: 1px solid rgba(74, 222, 128, 0.2);
-        }
+        /* Masthead Section */
+        .masthead { background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%), url('assets/img/bg-masthead.jpg'); background-size: cover; background-position: center; padding: 2rem 0; text-align: center; margin-bottom: 2rem; }
+        .masthead-content { max-width: 800px; margin: 0 auto; }
+        .masthead h1 { font-family: 'Arial', sans-serif; font-size: 2.5rem; line-height: 2.5rem; letter-spacing: 0.8rem; background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0)); -webkit-text-fill-color: transparent; -webkit-background-clip: text; background-clip: text; text-transform: uppercase; font-weight: 700; margin-bottom: 2rem; }
+        .masthead h2 { font-size: 1rem; color: rgba(255, 255, 255, 0.5); margin-bottom: 2rem; max-width: 20rem; margin-left: auto; margin-right: auto; }
+        .nav-buttons { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; max-width: 800px; margin: 0 auto; }
+        .btn { background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); color: #0a0a0a; text-decoration: none; padding: 0.75rem 1.5rem; border-radius: 25px; font-weight: bold; transition: all 0.3s ease; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4); }
 
-        .cart-close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 1;
-        }
-
-        .cart-close:hover {
-            color: #4ade80;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 1rem;
-            background: rgba(0,0,0,0.3);
-            border-radius: 8px;
-        }
-
-        .cart-item-info {
-            flex: 1;
-        }
-
-        .cart-item-name {
-            color: #4ade80;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-
-        .cart-item-variant {
-            color: #ccc;
-            font-size: 0.9rem;
-        }
-
-        .cart-item-price {
-            color: #4ade80;
-            font-weight: bold;
-        }
-
-        .cart-item-controls {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .quantity-controls {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .quantity-btn {
-            background: #4a7c4a;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .quantity-display {
-            min-width: 30px;
-            text-align: center;
-            font-weight: bold;
-            color: #f5f5f5;
-        }
-
-        .remove-item {
-            background: #dc2626;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 0.5rem;
-            cursor: pointer;
-        }
-
-        .cart-total {
-            text-align: center;
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 2px solid rgba(74, 222, 128, 0.2);
-        }
-
-        .cart-total h3 {
-            color: #4ade80;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .checkout-btn {
-            background: linear-gradient(135deg, #4a7c4a 0%, #2d5a2d 100%);
-            color: white;
-            border: none;
-            border-radius: 25px;
-            padding: 1rem 2rem;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            width: 100%;
-            margin-top: 1rem;
-        }
-
-        .empty-cart {
-            text-align: center;
-            padding: 2rem;
-            color: #ccc;
-        }
-
-        /* Masthead Section - Keep masthead background */
-        .masthead {
-            background: linear-gradient(to bottom, rgba(22, 22, 22, 0.3) 0%, rgba(22, 22, 22, 0.7) 75%, #161616 100%),
-                        url('assets/img/bg-masthead.jpg');
-            background-size: cover;
-            background-position: center;
-            padding: 2rem 0;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-         .masthead-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .masthead h1 {
-            font-family: 'Arial', sans-serif;
-            font-size: 2.5rem;
-            line-height: 2.5rem;
-            letter-spacing: 0.8rem;
-            background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
-            -webkit-text-fill-color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            text-transform: uppercase;
-            font-weight: 700;
-            margin-bottom: 2rem;
-        }
-        
-        .masthead h2 {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 2rem;
-            max-width: 20rem;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .nav-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        /* Navigation Buttons - Keep gradient for visual appeal */
-        .btn {
-            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-            color: #0a0a0a;
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(74, 222, 128, 0.4);
-        }
-        
         @media (max-width: 768px) {
-            body {
-                padding-top: 80px;
-            }
-            
-            nav {
-                flex-direction: column;
-                gap: 8px;
-                min-height: 70px;
-                padding: 8px 20px;
-            }
-
-            .nav-links {
-                gap: 0.5rem;
-            }
-
-            .nav-links a {
-                padding: 0.4rem 0.6rem;
-                font-size: 0.8rem;
-            }
-
-            .logo {
-                font-size: 1.2rem;
-            }
-
-            .logo-img {
-                width: 30px;
-                height: 30px;
-            }
-            
-            .pricing-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .compact-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .row-grid {
-                flex-direction: column;
-            }
-            
-            .row-grid .pricing-card {
-                max-width: none;
-                min-width: auto;
-            }
-            
-            .two-column {
-                grid-template-columns: 1fr;
-            }
-            
-            .header h1 {
-                font-size: 1.8em;
-            }
-            
-            .strain-grid {
-                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            }
-
-            .masthead-content h1 {
-                font-size: 2rem;
-            }
-
-            .nav-buttons {
-                gap: 0.5rem;
-            }
-
-            .btn {
-                padding: 0.5rem 1rem;
-                font-size: 0.8rem;
-            }
+            body { padding-top: 80px; }
+            nav { flex-direction: column; gap: 8px; min-height: 70px; padding: 8px 20px; }
+            .nav-links { gap: 0.5rem; }
+            .nav-links a { padding: 0.4rem 0.6rem; font-size: 0.8rem; }
+            .logo { font-size: 1.2rem; }
+            .logo-img { width: 30px; height: 30px; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .compact-grid { grid-template-columns: 1fr; }
+            .row-grid { flex-direction: column; }
+            .row-grid .pricing-card { max-width: none; min-width: auto; }
+            .two-column { grid-template-columns: 1fr; }
+            .header h1 { font-size: 1.8em; }
+            .strain-grid { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); }
+            .masthead-content h1 { font-size: 2rem; }
+            .nav-buttons { gap: 0.5rem; }
+            .btn { padding: 0.5rem 1rem; font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -712,9 +145,9 @@
                 <a class="btn" href="/FeminizedSeedsHomepage">Home</a>
                 <a class="btn" href="/genetics">Genetic Lineups</a>
                 <a class="btn" href="/nextstrains">Next Release</a>
-                 <a class="btn" href="/merch">Merch</a>
-                 <a class="btn" href="/straincards">Strain Cards</a>
-                  <a class="btn" href="/strains">All Strains</a>
+                <a class="btn" href="/merch">Merch</a>
+                <a class="btn" href="/straincards">Strain Cards</a>
+                <a class="btn" href="/strains">All Strains</a>
                 <a class="btn" href="/order_now">Order Now</a>
                 <a class="btn" href="/reviews">Reviews</a>
                 <a class="btn" href="/readmore">Growing Guide</a>
@@ -736,7 +169,7 @@
                 <h2>Feminized Seed Packs</h2>
                 <p>Feminized Seed Packs • $10-$20</p>
             </div>
-             <div class="row-grid">
+            <div class="row-grid">
                 <div class="pricing-card compact-card">
                     <div class="card-header">
                         <div class="card-title">Single Seed</div>
@@ -748,7 +181,7 @@
                         <li>No minimum order</li>
                         <li>Feminized seeds</li>
                     </ul>
-                    </div>
+                </div>
 
                 <div class="pricing-card compact-card">
                     <div class="card-header">
@@ -761,7 +194,7 @@
                         <li>Premium genetics</li>
                         <li>Great starter pack</li>
                     </ul>
-                    </div>
+                </div>
 
                 <div class="pricing-card compact-card featured">
                     <div class="card-header">
@@ -774,7 +207,7 @@
                         <li>Popular choice</li>
                         <li>Quality guaranteed</li>
                     </ul>
-                    </div>
+                </div>
 
                 <div class="pricing-card compact-card">
                     <div class="card-header">
@@ -787,8 +220,7 @@
                         <li>Serious growers</li>
                         <li>Free shipping eligible</li>
                     </ul>
-                    </div>
-
+                </div>
             </div>
         </div>
         <!-- REG Seed Packs -->
@@ -809,7 +241,7 @@
                         <li>No minimum order</li>
                         <li>NON-Feminized seeds</li>
                     </ul>
-                    </div>
+                </div>
 
                 <div class="pricing-card compact-card">
                     <div class="card-header">
@@ -822,7 +254,7 @@
                         <li>Premium genetics</li>
                         <li>Great starter pack</li>
                     </ul>
-                    </div>
+                </div>
 
                 <div class="pricing-card compact-card featured">
                     <div class="card-header">
@@ -835,7 +267,7 @@
                         <li>Popular choice</li>
                         <li>Quality guaranteed</li>
                     </ul>
-                    </div>
+                </div>
 
                 <div class="pricing-card compact-card">
                     <div class="card-header">
@@ -848,33 +280,29 @@
                         <li>Serious growers</li>
                         <li>Free shipping eligible</li>
                     </ul>
-                    </div>
-
+                </div>
             </div>
         </div>
-         <!-- Deals  -->
-                <div class="section-container">
-            <div class="section-header">
-                <h2>Year Round Deals</h2>
-                <p>Bulk options</p>
-            </div>
-            <div class="two-column">
-                <div>
-                    <div class="pricing-grid" style="gap: 10px;">
-                <div class="pricing-card featured compact-card">
-                    <div class="card-header">
-                        <div class="card-title">Complete Line 1-3 Collection</div>
-                        <div class="card-price">$400</div>
-                        <div class="card-subtitle">30 seeds - Every strain</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>30 strains</li>
-                        <li>Our Complete First Three Genetic Lines</li>
-                        <li>Free shipping</li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('complete-collection', 'Complete Collection (30 Seeds - Every Strain)', 400)">Add to Cart</button>
-                </div>
 
+<!-- Deals (new Lines 1-3 prices) -->
+<style>
+    .per-seed{display:inline-block;margin-top:8px;padding:2px 12px;border-radius:99px;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);color:#4ade80;font-size:.85em;font-weight:700}
+    .price-note{background:rgba(0,0,0,.7);border:1px solid rgba(74,222,128,.25);border-left:4px solid #4ade80;border-radius:12px;padding:16px 20px;margin-bottom:25px;color:#ccc;font-size:.9em;line-height:1.6}
+    .price-note strong{display:block;color:#4ade80;letter-spacing:1px;margin-bottom:6px}
+    .price-note p+p{margin-top:6px}
+    .card-price .was{color:#ef4444;text-decoration:line-through;text-decoration-thickness:2px;font-size:.6em;font-weight:700;margin-right:8px}
+    .card-price .now{color:#4ade80}
+</style>
+
+<div class="section-container">
+    <div class="section-header">
+        <h2>Year Round Deals</h2>
+        <p>Bulk options</p>
+    </div>
+    <div class="two-column">
+        <div>
+            <div class="pricing-grid" style="gap: 10px;">
+                <div id="mainDeals" style="display:contents;"></div>
                 <div class="pricing-card compact-card">
                     <div class="card-header">
                         <div class="card-title">Surprise Seeds</div>
@@ -886,197 +314,71 @@
                         <li>Bonus with large orders</li>
                         <li>Surprise genetics</li>
                     </ul>
-                    </div>
+                </div>
             </div>
         </div>
-        
-        <!-- Line 1 Deals -->
+        <div id="lineDeals" style="display:contents;"></div>
+    </div>
+</div>
+
+<script>
+    // [cart id, title, price, subtitle, seed count, features[], cart name, featured?]
+    const DEALS_MAIN = [
+        ['complete-collection','Complete Line 1-3 Collection',200,'30 seeds - Every strain',30,['30 strains','Our Complete First Three Genetic Lines','Free shipping'],'Complete Collection (30 Seeds - Every Strain)',true]
+    ];
+    const DEALS_LINES = [
+        { h:'Line 1 Deals - The Originals', p:'Purple Rainbow • Rainbow Cakes • Cake Breath • Alienoyes Kush • Mangonoyes Kush • Citronoyes Kush • Noyes Haze • Noyes Breath • Meat Cakes • Biscotti Rocks', cards:[
+            ['line1-double-noyes','Double Noyes Pack',75,'10 seeds - Noyes strains',10,['2x Alienoyes, Mangonoyes','2x Citronoyes, Noyes Haze','2x Noyes Breath'],'Line 1 - Double Noyes Pack (10 Seeds)'],
+            ['line1-double-starter','Double Starter Pack',75,'10 seeds - Starter strains',10,['2x Purple Rainbow, 2x Rainbow Cakes','2x Cake Breath, 2x Meat Cakes','2x Biscotti Rocks'],'Line 1 - Double Starter Pack (10 Seeds)'],
+            ['line1-two-of-each','Two of Each',135,'2x10 different strains = 20 seeds',20,['backup seeds','Complete line coverage','Free shipping'],'Line 1 - Two of Each (20 Seeds - 2 of Each Strain)'],
+            ['line1-complete','Complete Line 1',75,'10 different strains',10,['All Original genetics','Full line coverage','Free shipping'],'Line 1 - Complete (10 Different Strains)']
+        ]},
+        { h:'Line 2 Deals - The Geodes', p:'YesNo Kush • Shiny Rocks • Noyes Rocks • Noyes Pebbles • Mango Rocks • Citrus Pebbles • Citrus Rocks • Alien Rocks • Citrus Haze Breath • Mango Aliens', cards:[
+            ['line2-rock-pack','Rock Pack',40,'5 seeds - Rock genetics',5,['Noyes Rocks, Shiny Rocks, Alien Rocks','MangoRocks, Citrus Rocks'],'Line 2 - Rock Pack (5 Seeds)'],
+            ['line2-citrus-pack','Citrus Pack',40,'5 seeds - Citrus genetics',5,['Mango Aliens, Mango Rocks','Citrus Rocks, Citrus Pebbles','Citrus Haze Breath'],'Line 2 - Citrus Pack (5 Seeds)'],
+            ['line2-two-of-each','Two of Each',135,'2x10 different strains = 20 seeds',20,['Sample every strain','Backup seeds','Free shipping'],'Line 2 - Two of Each (20 Seeds - 2 of Each Strain)'],
+            ['line2-complete','Complete Line 2',75,'10 different strains',10,['All geode genetics','Full line coverage','Free shipping'],'Line 2 - Complete (10 Different Strains)']
+        ]},
+        { h:'Line 3 Deals - The OGs', p:'Loud dreams, Blueberry Fingers, Cheeto Fingers, Hash fingers, Noyes OG , Bubba Noyes, Captain Noyes , Noyes Poison , Afghani Noyes , White Noyes', cards:[
+            ['line3-og-pack','OG Pack',40,'5 seeds',5,['5 og classics like;','Bubba Noyes, Captain Noyes , Noyes Poison , Afghani Noyes , White Noyes'],'Line 3 - OG Pack (5 Seeds)'],
+            ['line3-oldschool-pack','Old School/Fingers Pack',40,'5 seeds',5,['Loud dreams, Blueberry Fingers, Cheeto Fingers, Hash fingers, Noyes OG'],'Line 3 - Old School Pack (5 Seeds)'],
+            ['line3-complete','Complete Line 3',75,'10 strains',10,['One seed of every OG strain'],'Line 3 - Complete (10 Different Strains)'],
+            ['line3-double','Line 3 Double Pack',135,'2x10 different strains = 20 seeds',20,['2 of each seed (2 x 10 strains)'],'Line 3 - Double Pack (20 Seeds - 2 of Each)']
+        ]}
+    ];
+
+    // Old prices, shown slashed out in red. Delete an entry to stop showing it.
+    const WAS = {'complete-collection':400,'line1-double-noyes':130,'line1-double-starter':130,'line1-two-of-each':230,'line1-complete':130,'line2-rock-pack':75,'line2-citrus-pack':75,'line2-two-of-each':230,'line2-complete':130,'line3-og-pack':75,'line3-oldschool-pack':75,'line3-complete':130,'line3-double':230};
+
+    function dealCard([id, title, price, sub, seeds, feats, name, featured]) {
+        return `
+        <div class="pricing-card compact-card${featured ? ' featured' : ''}">
+            <div class="card-header">
+                <div class="card-title">${title}</div>
+                <div class="card-price">${WAS[id] ? `<span class="was">$${WAS[id]}</span>` : ''}<span class="now">$${price}</span></div>
+                <div class="card-subtitle">${sub}</div>
+                <div class="per-seed">$${(price / seeds).toFixed(2)}/seed</div>
+            </div>
+            <ul class="card-features">${feats.map(f => `<li>${f}</li>`).join('')}</ul>
+            <button class="order-button" onclick="addToCart('${id}', '${name}', ${price})">Add to Cart</button>
+        </div>`;
+    }
+
+    document.getElementById('mainDeals').innerHTML = DEALS_MAIN.map(dealCard).join('');
+    document.getElementById('lineDeals').innerHTML = DEALS_LINES.map(l => `
         <div class="section-container">
-            <div class="section-header">
-                <h2>Line 1 Deals - The Originals</h2>
-                <p>Purple Rainbow • Rainbow Cakes • Cake Breath • Alienoyes Kush • Mangonoyes Kush • Citronoyes Kush • Noyes Haze • Noyes Breath • Meat Cakes • Biscotti Rocks</p>
-            </div>
-            <div class="row-grid">
-                <div class="pricing-card compact-card">
-                    <div class="card-header">
-                        <div class="card-title">Double Noyes Pack</div>
-                        <div class="card-price">$130</div>
-                        <div class="card-subtitle">10 seeds - Noyes strains</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>2x Alienoyes, Mangonoyes</li>
-                        <li>2x Citronoyes, Noyes Haze</li>
-                        <li>2x Noyes Breath</li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('line1-double-noyes', 'Line 1 - Double Noyes Pack (10 Seeds)', 130)">Add to Cart</button>
-                </div>
+            <div class="section-header"><h2>${l.h}</h2><p>${l.p}</p></div>
+            <div class="row-grid">${l.cards.map(dealCard).join('')}</div>
+        </div>`).join('');
 
-                <div class="pricing-card compact-card">
-                    <div class="card-header">
-                        <div class="card-title">Double Starter Pack</div>
-                        <div class="card-price">$130</div>
-                        <div class="card-subtitle">10 seeds - Starter strains</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>2x Purple Rainbow, 2x Rainbow Cakes</li>
-                        <li>2x Cake Breath, 2x Meat Cakes</li>
-                        <li>2x Biscotti Rocks</li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('line1-double-starter', 'Line 1 - Double Starter Pack (10 Seeds)', 130)">Add to Cart</button>
-                </div>
-                
-                <div class="pricing-card compact-card">
-                    <div class="card-header">
-                        <div class="card-title">Two of Each</div>
-                        <div class="card-price">$230</div>
-                        <div class="card-subtitle">2x10 different strains = 20 seeds</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>backup seeds</li>
-                        <li>Complete line coverage</li>
-                        <li>Free shipping</li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('line2-one-each', 'Line 2 - One of Each (10 Different Strains)', 230)">Add to Cart</button>
-                </div>
-
-                <div class="pricing-card compact-card">
-                    <div class="card-header">
-                        <div class="card-title">Complete Line 1</div>
-                        <div class="card-price">$130</div>
-                        <div class="card-subtitle">10 different strains</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>All Original genetics</li>
-                        <li>Full line coverage</li>
-                        <li>Free shipping</li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('line2-complete', 'Line 2 - Complete (10 Different Strains)', 130)">Add to Cart</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Line 2 Deals -->
-        <div class="section-container">
-            <div class="section-header">
-                <h2>Line 2 Deals - The Geodes</h2>
-                <p>YesNo Kush • Shiny Rocks • Noyes Rocks • Noyes Pebbles • Mango Rocks • Citrus Pebbles • Citrus Rocks • Alien Rocks • Citrus Haze Breath • Mango Aliens</p>
-            </div>
-            <div class="row-grid">
-                <div class="pricing-card compact-card">
-                    <div class="card-header">
-                        <div class="card-title">Rock Pack</div>
-                        <div class="card-price">$75</div>
-                        <div class="card-subtitle">5 seeds - Rock genetics</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>Noyes Rocks, Shiny Rocks, Alien Rocks</li>
-                        <li>MangoRocks, Citrus Rocks</li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('line2-rock-pack', 'Line 2 - Rock Pack (5 Seeds)', 75)">Add to Cart</button>
-                </div>
-
-                <div class="pricing-card compact-card">
-                    <div class="card-header">
-                        <div class="card-title">Citrus Pack</div>
-                        <div class="card-price">$75</div>
-                        <div class="card-subtitle">5 seeds - Citrus genetics</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>Mango Aliens, Mango Rocks</li>
-                        <li>Citrus Rocks, Citrus Pebbles</li>
-                        <li>Citrus Haze Breath</li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('line2-citrus-pack', 'Line 2 - Citrus Pack (5 Seeds)', 75)">Add to Cart</button>
-                </div>
-                    
-                <div class="pricing-card compact-card">
-                    <div class="card-header">
-                        <div class="card-title">Two of Each</div>
-                        <div class="card-price">$230</div>
-                        <div class="card-subtitle">2x10 different strains = 20 seeds</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>Sample every strain</li>
-                        <li>Backup seeds</li>
-                        <li>Free shipping</li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('line2-one-each', 'Line 2 - One of Each (10 Different Strains)', 230)">Add to Cart</button>
-                </div>
-
-                <div class="pricing-card compact-card">
-                    <div class="card-header">
-                        <div class="card-title">Complete Line 2</div>
-                        <div class="card-price">$130</div>
-                        <div class="card-subtitle">10 different strains</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>All geode genetics</li>
-                        <li>Full line coverage</li>
-                        <li>Free shipping</li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('line2-complete', 'Line 2 - Complete (10 Different Strains)', 130)">Add to Cart</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Line 3 Deals -->
-        <div class="section-container">
-            <div class="section-header">
-                <h2>Line 3 Deals - The OGs</h2>
-                <p>Loud dreams, Blueberry Fingers, Cheeto Fingers, Hash fingers, Noyes OG , Bubba Noyes, Captain Noyes , Noyes Poison , Afhgani Noyes , White Noyes </p>
-            </div>
-            <div class="row-grid">
-                <div class="pricing-card compact-card">
-                    <div class="card-header">
-                        <div class="card-title">OG Pack</div>
-                        <div class="card-price">$75</div>
-                        <div class="card-subtitle">5 seeds</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>5 og classics like;</li>
-                        <li>Bubba Noyes, Captain Noyes , Noyes Poison , Afhgani Noyes , White Noyes</li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('line3-og-pack', 'Line 3 - OG Pack (5 Seeds)', 75)">Add to Cart</button>
-                </div>
-
-                <div class="pricing-card compact-card">
-                    <div class="card-header">
-                        <div class="card-title">Old School/Fingers Pack</div>
-                        <div class="card-price">$75</div>
-                        <div class="card-subtitle">5 seeds</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>Loud dreams, Blueberry Fingers, Cheeto Fingers, Hash fingers, Noyes OG </li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('line3-oldschool-pack', 'Line 3 - Old School Pack (5 Seeds)', 75)">Add to Cart</button>
-                </div>
-
-                <div class="pricing-card compact-card">
-                    <div class="card-header">
-                        <div class="card-title">Complete Line 3</div>
-                        <div class="card-price">$130</div>
-                        <div class="card-subtitle">10 strains</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>One seed of every OG strain</li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('line3-complete', 'Line 3 - Complete (10 Different Strains)', 130)">Add to Cart</button>
-                </div>
-
-                <div class="pricing-card compact-card">
-                    <div class="card-header">
-                        <div class="card-title">Line 3 Double Pack</div>
-                        <div class="card-price">$230</div>
-                        <div class="card-subtitle">2x10 different strains = 20 seeds</div>
-                    </div>
-                    <ul class="card-features">
-                        <li>2 of each seed (2 x 10 strains)</li>
-                    </ul>
-                    <button class="order-button" onclick="addToCart('line3-double', 'Line 3 - Double Pack (20 Seeds - 2 of Each)', 230)">Add to Cart</button>
-                </div>
-            </div>
-        </div>
-        </div>
+    // Pricing notice, placed above the first price section on the page
+    document.querySelector('.section-container').insertAdjacentHTML('beforebegin', `
+        <div class="price-note">
+            <strong>PRICES ARE BEFORE ANY DEALS ARE APPLIED</strong>
+            <p>Prices on this page are shown before any promo codes or monthly deals.</p>
+            <p>Older lineups drop in price after 2 years in storage. Seed stock is refreshed after 3–4 years at most, or sooner when a strain is nearly sold out. Nothing that has sat for 5+ years is ever sold.</p>
+        </div>`);
+</script>
 
         <div class="section-container">
             <div class="section-header">
@@ -1368,7 +670,7 @@
             return true;
         }
 
-       // Update variant price display
+        // Update variant price display
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize price displays
             document.querySelectorAll('select[id$="-variant"]').forEach(select => {
