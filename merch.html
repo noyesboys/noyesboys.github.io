@@ -371,29 +371,44 @@ $('#add').onclick=function(){
   addToCart(st.p,P[st.p].cart,P[st.p].price,v.join(' - '));
 };
 
-/* ---------- Cart (same as the original page) ---------- */
+/* ---------- Cart: same CartManager, storage keys and checkout hand-off as deals.html ---------- */
         class CartManager {
             constructor() {
-                this.cart = [];
+                this.storageKey = 'noyesboys_cart';
+                this.checkoutKey = 'noyesboys_checkout_data';
+                this.cart = this.loadCart();
                 this.updateCartDisplay();
             }
 
+            // Load cart from local storage (shared with deals.html and checkout.html)
+            loadCart() {
+                try {
+                    const stored = localStorage.getItem(this.storageKey);
+                    return stored ? JSON.parse(stored) : [];
+                } catch (e) {
+                    console.error('Error loading cart:', e);
+                    return [];
+                }
+            }
+
+            saveCart() {
+                try {
+                    localStorage.setItem(this.storageKey, JSON.stringify(this.cart));
+                } catch (e) {
+                    console.error('Error saving cart:', e);
+                }
+            }
+
             addItem(strainId, strainName, price = null, variant = 'Standard') {
-                const select = document.getElementById(strainId + '-strain');
-                const sizeSelect = document.getElementById(strainId + '-size');
-                const colorSelect = document.getElementById(strainId + '-color');
-                
+                const select = document.getElementById(strainId + '-variant');
+
                 let finalPrice, finalVariant, variantText;
-                
+
                 if (select) {
                     const selectedOption = select.options[select.selectedIndex];
-                    const selectedStrain = selectedOption.value;
-                    const selectedSize = sizeSelect ? sizeSelect.value : 'N/A';
-                    const selectedColor = colorSelect ? colorSelect.value : 'N/A';
-                    
-                    finalPrice = price;
-                    finalVariant = `${selectedStrain} - Size: ${selectedSize} - Color: ${selectedColor}`;
-                    variantText = finalVariant;
+                    finalVariant = selectedOption.value;
+                    finalPrice = parseFloat(selectedOption.getAttribute('data-price'));
+                    variantText = selectedOption.textContent;
                 } else if (price !== null) {
                     finalPrice = price;
                     finalVariant = variant;
@@ -403,7 +418,7 @@ $('#add').onclick=function(){
                     return false;
                 }
 
-                const existingItem = this.cart.find(item => 
+                const existingItem = this.cart.find(item =>
                     item.strainId === strainId && item.variant === finalVariant
                 );
 
@@ -421,6 +436,7 @@ $('#add').onclick=function(){
                     });
                 }
 
+                this.saveCart();
                 this.updateCartDisplay();
                 return true;
             }
@@ -429,23 +445,26 @@ $('#add').onclick=function(){
                 if (index < 0 || index >= this.cart.length) return;
 
                 this.cart[index].quantity += change;
-                
+
                 if (this.cart[index].quantity <= 0) {
                     this.cart.splice(index, 1);
                 }
-                
+
+                this.saveCart();
                 this.updateCartDisplay();
             }
 
             removeItem(index) {
                 if (index < 0 || index >= this.cart.length) return;
-                
+
                 this.cart.splice(index, 1);
+                this.saveCart();
                 this.updateCartDisplay();
             }
 
             clearCart() {
                 this.cart = [];
+                this.saveCart();
                 this.updateCartDisplay();
             }
 
@@ -475,8 +494,6 @@ $('#add').onclick=function(){
 
                     const total = this.getTotal();
                     cartItems.innerHTML = this.cart.map((item, index) => {
-                        const itemTotal = item.price * item.quantity;
-
                         return `
                             <div class="cart-item">
                                 <div class="cart-item-info">
@@ -501,22 +518,57 @@ $('#add').onclick=function(){
                     cartTotal.textContent = total.toFixed(2);
                 }
             }
+
+            // Export cart data for the checkout page
+            exportCartForCheckout() {
+                const cartData = {
+                    items: this.cart,
+                    total: this.getTotal(),
+                    itemCount: this.getTotalItems(),
+                    timestamp: Date.now(),
+                    currency: 'CAD'
+                };
+
+                try {
+                    localStorage.setItem(this.checkoutKey, JSON.stringify(cartData));
+                } catch (e) {
+                    console.error('Error storing checkout data:', e);
+                }
+
+                return cartData;
+            }
+
+            getCheckoutData() {
+                try {
+                    const stored = localStorage.getItem(this.checkoutKey);
+                    return stored ? JSON.parse(stored) : null;
+                } catch (e) {
+                    console.error('Error loading checkout data:', e);
+                    return null;
+                }
+            }
+
+            clearCheckoutData() {
+                try {
+                    localStorage.removeItem(this.checkoutKey);
+                } catch (e) {
+                    console.error('Error clearing checkout data:', e);
+                }
+            }
         }
 
-        // Initialize cart manager
         const cartManager = new CartManager();
 
         function addToCart(strainId, strainName, price, variant) {
             if (cartManager.addItem(strainId, strainName, price, variant)) {
-                const button = (typeof event !== 'undefined' && event) ? event.target : null;
-                if (button) {
+                const button = document.getElementById('add');
+                if (button && !button.dataset.busy) {
+                    button.dataset.busy = '1';
                     const originalText = button.innerHTML;
                     button.innerHTML = '<i class="fas fa-check"></i> Added!';
-                    button.style.background = '#22c55e';
-                    
                     setTimeout(() => {
                         button.innerHTML = originalText;
-                        button.style.background = '';
+                        delete button.dataset.busy;
                     }, 1000);
                 }
             }
@@ -551,27 +603,14 @@ $('#add').onclick=function(){
                 return false;
             }
 
-            closeCart();
-            
-            // Generate order summary for email
-            let orderSummary = 'NOYES BOYS MERCHANDISE ORDER\n\n';
-            orderSummary += 'Items:\n';
-            cartManager.cart.forEach((item, index) => {
-                orderSummary += `${index + 1}. ${item.strainName} - ${item.variantText}\n`;
-                orderSummary += `   Quantity: ${item.quantity} @ ${item.price.toFixed(2)} CAD each\n`;
-                orderSummary += `   Subtotal: ${(item.price * item.quantity).toFixed(2)} CAD\n\n`;
-            });
-            orderSummary += `TOTAL: ${cartManager.getTotal().toFixed(2)} CAD\n\n`;
-            orderSummary += 'Please reply with your shipping address and preferred payment method.';
+            // Export cart data for checkout page
+            cartManager.exportCartForCheckout();
 
-            // Create mailto link
-            const subject = encodeURIComponent('Noyes Boys Merchandise Order');
-            const body = encodeURIComponent(orderSummary);
-            const mailtoLink = `mailto:noyesboysseeds@gmail.com?subject=${subject}&body=${body}`;
-            
-            // Open email client
-            window.location.href = mailtoLink;
-            
+            closeCart();
+
+            // Same redirect as deals.html
+            window.location.href = 'checkout.html';
+
             return true;
         }
 
@@ -582,6 +621,14 @@ $('#add').onclick=function(){
                 closeCart();
             }
         }
+
+        window.getNoyesBoysCart = function() {
+            return cartManager;
+        };
+
+        window.getNoyesBoysCheckoutData = function() {
+            return cartManager.getCheckoutData();
+        };
 
         document.addEventListener('DOMContentLoaded', function() {
             cartManager.updateCartDisplay();
