@@ -178,6 +178,14 @@
                 </div>
 
                 <div class="form-group">
+                    <label>Noyes Boys Lines</label>
+                    <select id="noyesGroup" onchange="calculate()">
+                        <option value="A">Lines 1 to 3 (new prices)</option>
+                        <option value="B">Lines 4 to 6</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label>Seed Type</label>
                     <select id="seedType" onchange="calculate()">
                         <option value="fem">Feminized</option>
@@ -192,7 +200,7 @@
                         <option value="3">Small Pack (3 seeds)</option>
                         <option value="5" selected>Standard Pack (5 seeds)</option>
                         <option value="10">Large Pack (10 seeds)</option>
-                        <option value="30">Bulk Pack (30 seeds)</option>
+                        <option value="30">Mix &amp; Match (30 seeds)</option>
                     </select>
                 </div>
 
@@ -267,7 +275,8 @@
                     <li>Collector card per strain</li>
                     <li>Waterproof plant tag(s)</li>
                     <li>Free sticker pack on $50+ orders</li>
-                    <li>Bonus seed pack on $200+ orders</li>
+                    <li>Free shipping on 10+ seeds</li>
+                    <li>Free surprise seeds on $200+ orders (after deals)</li>
                     <li>Free merch on $500+ orders</li>
                     <li>95%+ germination guarantee</li>
                     <li>Hand-bred Canadian genetics</li>
@@ -285,6 +294,7 @@
 
             <div class="results-area" id="resultsArea">
                 <div class="deal-info-box" id="dealInfoBox"></div>
+                <div class="deal-info-box" id="perkBox"></div>
 
                 <div class="winner-banner">
                     <div class="winner-trophy">🏆</div>
@@ -350,9 +360,8 @@ const BANKS = {
         name:"Noyes Boys", region:"ca", tier:"craft",
         regionLabel:"🇨🇦 Ontario — hand-bred craft",
         isNoyes:true,
-        notes:"Hand-bred craft genetics. Includes collector cards, waterproof plant tags, sticker packs, and bonus extras with every order. 95%+ germination guaranteed. Ships to all of Canada.",
-        fem:{ 1:20, 3:16.67, 5:15, 10:13, 30:10 },
-        reg:{ 1:15, 3:13.33, 5:10, 10:8.5, 30:5 }
+        notes:"Hand-bred craft genetics. Includes collector cards, waterproof plant tags, sticker packs, and bonus extras with every order. 95%+ germination guaranteed. Ships to all of Canada. Feminized only. Lines 1 to 3 use the new prices; Lines 4 to 6 keep the earlier prices. Free shipping on 10+ seeds and free surprise seeds on $200+ orders (after deals).",
+        fem:{ 1:1, 3:1, 5:1, 10:1, 30:1 }   // placeholder so Noyes shows for feminized. Real prices are in NOYES_PRICES below. No regular seeds.
     },
 
     cropking: {
@@ -706,6 +715,16 @@ const BANKS = {
     }
 };
 
+// Noyes Boys pack prices in CAD (pack total). Edit here.
+// A = Lines 1 to 3 (new prices).  B = Lines 4 to 6 (earlier prices).
+// The 30 seed price is the mix and match price (single seeds from any strains).
+const NOYES_PRICES = {
+    A:{ 1:15, 3:30, 5:40,  10:75,  30:200 },
+    B:{ 1:20, 3:50, 5:75,  10:130, 30:300 }
+};
+// Perks shown in the results (match the /deals page)
+const NOYES_PERKS = { freeShipSeeds:10, surpriseAt:200 };
+
 // Deal multipliers for Noyes Boys
 const DEAL_FX = {
     none:1, jan_newyear25:0.75, jan_ship:1, feb_purple30:0.70,
@@ -780,6 +799,7 @@ function calculate(){
     const type = document.getElementById('seedType').value;
     const pack = document.getElementById('packSize').value;
     const deal = document.getElementById('deal').value;
+    const group = document.getElementById('noyesGroup').value;
     const banks = getFiltered(type, pack);
     if(!banks.length) return;
 
@@ -790,14 +810,14 @@ function calculate(){
     let countParts = [`${caCount} Canadian`];
     if(usCount) countParts.push(`${usCount} US`);
     if(euCount) countParts.push(`${euCount} European`);
-    document.getElementById('regionCount').textContent = `Showing ${banks.length} banks: ${countParts.join(', ')}`;
+    document.getElementById('regionCount').textContent = `Showing ${banks.length} banks: ${countParts.join(', ')}` + (type==='reg' ? ' · Noyes Boys sells feminized seeds only' : '');
 
     let results = banks.map(b => {
-        let perSeed = b[type][pack];
+        let perSeed = b.isNoyes ? NOYES_PRICES[group][pack] / parseInt(pack) : b[type][pack];
         if(b.isNoyes && deal!=='none') perSeed *= (DEAL_FX[deal]||1);
         return { key:b.key, name:b.name, region:b.region, tier:b.tier,
                  regionLabel:b.regionLabel, notes:b.notes,
-                 isNoyes:!!b.isNoyes, perSeed, packTotal:perSeed*parseInt(pack) };
+                 isNoyes:!!b.isNoyes, perSeed, packTotal:Math.round(perSeed*parseInt(pack)*100)/100 };
     });
 
     results.sort((a,b) => a.perSeed - b.perSeed);
@@ -817,6 +837,18 @@ function calculate(){
     else dealBox.classList.remove('show');
 
     const noyesPrice = results.find(r=>r.isNoyes)?.perSeed ?? null;
+
+    const nr = results.find(r=>r.isNoyes);
+    const perkBox = document.getElementById('perkBox');
+    if(nr){
+        const seeds = parseInt(pack);
+        const ship = seeds >= NOYES_PERKS.freeShipSeeds;
+        const surprise = nr.packTotal >= NOYES_PERKS.surpriseAt;
+        perkBox.classList.add('show');
+        perkBox.innerHTML = `<strong>🌿 Noyes Boys perks on this order</strong><br>` +
+            (ship ? '✓ Free shipping unlocked' : `Free shipping at ${NOYES_PERKS.freeShipSeeds}+ seeds (add ${NOYES_PERKS.freeShipSeeds-seeds} more)`) + '<br>' +
+            (surprise ? '✓ Free surprise seeds unlocked' : `Free surprise seeds at $${NOYES_PERKS.surpriseAt}+ after deals (spend $${(NOYES_PERKS.surpriseAt-nr.packTotal).toFixed(2)} more)`);
+    } else perkBox.classList.remove('show');
 
     document.getElementById('resultsBody').innerHTML = results.map((r,i) => {
         const rank = i+1;
@@ -906,27 +938,7 @@ function renderChart(results, pack, dealInfo){
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    // Auto-select this month's primary deal in the dropdown
-    const MONTH_TO_DEAL = {
-        0:  'jan_newyear25',
-        1:  'feb_purple30',
-        2:  'mar_outdoor35',
-        3:  'apr_haze28',
-        4:  'may_sativa32',
-        5:  'jun_summer33',
-        6:  'jul_canada35',
-        7:  'aug_fast22',
-        8:  'sep_learn26',
-        9:  'oct_spooky27',
-        10: 'nov_thanks29',
-        11: 'dec_holiday40'
-    };
-    const currentMonth = new Date().getMonth();
-    const dealForMonth = MONTH_TO_DEAL[currentMonth];
-    if(dealForMonth){
-        const dealSelect = document.getElementById('deal');
-        if(dealSelect) dealSelect.value = dealForMonth;
-    }
+    // Starts on full price so the new prices show as they are. Pick a code to see it applied.
     calculate();
 });
 </script>
