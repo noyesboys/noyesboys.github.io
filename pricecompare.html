@@ -180,7 +180,7 @@
                 <div class="form-group">
                     <label>Noyes Boys Lines</label>
                     <select id="noyesGroup" onchange="calculate()">
-                        <option value="A">Lines 1 to 3 (new prices)</option>
+                        <option value="A">Lines 1 to 3 </option>
                         <option value="B">Lines 4 to 6</option>
                     </select>
                 </div>
@@ -360,7 +360,7 @@ const BANKS = {
         name:"Noyes Boys", region:"ca", tier:"craft",
         regionLabel:"🇨🇦 Ontario — hand-bred craft",
         isNoyes:true,
-        notes:"Hand-bred craft genetics. Includes collector cards, waterproof plant tags, sticker packs, and bonus extras with every order. 95%+ germination guaranteed. Ships to all of Canada. Feminized only. Lines 1 to 3 use the new prices; Lines 4 to 6 keep the earlier prices. Free shipping on 10+ seeds and free surprise seeds on $200+ orders (after deals).",
+        notes:"Hand-bred craft genetics. Includes collector cards, waterproof plant tags, sticker packs, and bonus extras with every order. 95%+ germination guaranteed. Ships to all of Canada. Feminized only. Free shipping on 10+ seeds and free surprise seeds on $200+ orders (after deals).",
         fem:{ 1:1, 3:1, 5:1, 10:1, 30:1 }   // placeholder so Noyes shows for feminized. Real prices are in NOYES_PRICES below. No regular seeds.
     },
 
@@ -716,7 +716,7 @@ const BANKS = {
 };
 
 // Noyes Boys pack prices in CAD (pack total). Edit here.
-// A = Lines 1 to 3 (new prices).  B = Lines 4 to 6 (earlier prices).
+// A = Lines 1 to 3 .  B = Lines 4 to 6 .
 // The 30 seed price is the mix and match price (single seeds from any strains).
 const NOYES_PRICES = {
     A:{ 1:15, 3:30, 5:40,  10:75,  30:200 },
