@@ -115,6 +115,20 @@
             .nav-buttons { gap: 0.5rem; }
             .btn { padding: 0.5rem 1rem; font-size: 0.8rem; }
         }
+
+        /* Price compare popup */
+        .pc-overlay { display: none; position: fixed; inset: 0; z-index: 2100; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; padding: 16px; }
+        .pc-overlay.show { display: flex; }
+        .pc-box { position: relative; background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%); color: #f5f5f5; border: 1px solid rgba(74, 222, 128, 0.35); border-radius: 15px; padding: 2.25rem 2rem 1.75rem; width: 100%; max-width: 460px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 30px rgba(74, 222, 128, 0.12); }
+        .pc-close { position: absolute; top: 10px; right: 16px; background: none; border: none; color: #aaa; font-size: 28px; font-weight: bold; line-height: 1; cursor: pointer; }
+        .pc-close:hover { color: #4ade80; }
+        .pc-icon { font-size: 2rem; color: #4ade80; margin-bottom: 0.75rem; }
+        .pc-box h2 { font-size: 1.4rem; line-height: 1.35; margin-bottom: 0.6rem; color: #fff; }
+        .pc-box p { color: #cbd5e1; font-size: 1rem; margin-bottom: 1.5rem; }
+        .pc-box .btn { display: inline-block; }
+        .pc-later { display: block; margin: 1rem auto 0; background: none; border: none; color: #94a3b8; font-size: 0.8rem; cursor: pointer; text-decoration: underline; }
+        .pc-later:hover { color: #4ade80; }
+        @media (max-width: 480px) { .pc-box { padding: 2rem 1.25rem 1.5rem; } .pc-box h2 { font-size: 1.2rem; } }
     </style>
 </head>
 <body>
@@ -742,6 +756,42 @@
                 }
             }
         });
+    </script>
+
+    <!-- Price compare popup -->
+    <div id="pcPromo" class="pc-overlay" role="dialog" aria-modal="true" aria-labelledby="pcTitle">
+        <div class="pc-box">
+            <button type="button" class="pc-close" id="pcClose" aria-label="Close">&times;</button>
+            <div class="pc-icon"><i class="fas fa-chart-bar"></i></div>
+            <h2 id="pcTitle">Were you wondering how our prices compare to the other guys?</h2>
+            <p>We did the work for you.</p>
+            <a href="https://noyesboys.com/pricecompare" class="btn" id="pcGo">See the price comparison</a>
+            <button type="button" class="pc-later" id="pcLater">Maybe later</button>
+        </div>
+    </div>
+    <script>
+        // Shows once per visit, a couple of seconds after the page loads.
+        (function () {
+            var KEY = 'pcPromoSeen';
+            var box = document.getElementById('pcPromo');
+            if (!box) return;
+            try { if (sessionStorage.getItem(KEY)) return; } catch (e) {}
+            function close() {
+                box.classList.remove('show');
+                try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
+            }
+            document.getElementById('pcClose').addEventListener('click', close);
+            document.getElementById('pcLater').addEventListener('click', close);
+            document.getElementById('pcGo').addEventListener('click', function () {
+                try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
+            });
+            box.addEventListener('click', function (e) { if (e.target === box) close(); });
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && box.classList.contains('show')) close(); });
+            setTimeout(function () {
+                box.classList.add('show');
+                document.getElementById('pcGo').focus();
+            }, 2500);
+        })();
     </script>
 </body>
 </html>
