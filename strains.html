@@ -74,6 +74,7 @@ header.site{position:sticky;top:0;z-index:30;height:var(--hdr);background:rgba(2
 .ptable .sv{color:var(--good);font-weight:600}
 .ptable tr.sec th{padding-top:.9rem;font-weight:600;color:var(--frost)}
 .bundles{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:.8rem;margin-bottom:1.2rem}
+.linedeals{margin-top:1.6rem}
 .bundle{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:.9rem 1rem;display:grid;gap:.45rem;align-content:start}
 .bundle h3{font-size:1.1rem}
 .bundle p{font-size:.92rem;color:var(--muted)}
@@ -767,6 +768,8 @@ function tileHtml(s){
 
 /* ---------------- render page ---------------- */
 var linesEl=document.getElementById("lines"), tabsEl=document.getElementById("tabs"), out="", tabs="";
+var colHtml=bundlesHtml(0);
+var colBlock=colHtml?'<div class="collection linedeals"><p class="dealnote"><b>Complete Collection:</b> one seed of every strain in Lines 1 to 3 for the 30 seed Mix and match price.</p>'+colHtml+'</div>':"";
 LINES.forEach(function(ln){
   var list=STRAINS.filter(function(s){return s.line===ln.n}), st="--accent:"+ln.accent+";--accent-soft:"+ln.soft;
   var pr=PRICES[tierOf(ln.n)];
@@ -775,12 +778,11 @@ LINES.forEach(function(ln){
     '<div class="line-head"><div><h2 id="h-line'+ln.n+'"><span class="ln">Line '+ln.n+'</span>'+esc(ln.name)+'</h2><p>'+esc(ln.blurb)+'</p></div>'+
     '<div class="line-act"><span class="count">'+list.length+' strains</span><a class="btn btn-ghost" href="'+ln.page+'">'+(ln.n<5?'Shop Line '+ln.n:'Line '+ln.n+' page')+'</a></div></div>'+
     '<div class="lineprice">'+PACKS.map(function(p){return '<span><b>'+money(pr[p])+'</b> for '+p+'</span>'}).join("")+'</div>'+
-    (ln.n<=4?'<p class="dealnote" data-dealgroup="'+tierOf(ln.n)+'"></p>'+bundlesHtml(ln.n):'')+
     (ln.upcoming?'<p class="upcoming">'+esc(ln.upcoming)+' <a href="/testers">Join the testers</a> to get unreleased genetics first.</p>':'')+
-    '<div class="grid">'+list.map(tileHtml).join("")+'</div></section>';
+    '<div class="grid">'+list.map(tileHtml).join("")+'</div>'+
+    (ln.n<=4?'<div class="linedeals"><p class="dealnote" data-dealgroup="'+tierOf(ln.n)+'"></p>'+bundlesHtml(ln.n)+'</div>':'')+'</section>';
+  if(ln.n===3) out+=colBlock;
 });
-var colHtml=bundlesHtml(0);
-if(colHtml) out='<div class="collection" style="padding-top:2rem"><p class="dealnote"><b>Complete Collection:</b> one seed of every strain in Lines 1 to 3 for the 30 seed Mix and match price.</p>'+colHtml+'</div>'+out;
 linesEl.insertAdjacentHTML("beforeend",out); tabsEl.innerHTML=tabs;
 document.getElementById("count-line").textContent=STRAINS.length+" feminized, Canadian-bred crosses across "+LINES.length+" lines.";
 var famEl=document.getElementById("fam");
