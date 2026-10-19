@@ -339,6 +339,130 @@
             transform: translateX(-50%) translateY(10px);
             pointer-events: none;
         }
+
+        /* ===== GENETICS HUB: unique buttons + lineup dropdown ===== */
+        .masthead { height: auto; min-height: 100vh; padding-bottom: 6rem; }
+        .hub { max-width: 980px; margin: 0 auto 2rem; text-align: left; }
+        .hub-top { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 1.4rem; }
+        .hb { position: relative; display: inline-flex; align-items: center; gap: .6rem; color: #fff; text-decoration: none; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; transition: transform .25s, box-shadow .25s, filter .25s; }
+        .hb:hover { transform: translateY(-4px) scale(1.04); }
+        /* Home: the logo itself is the button */
+        .hb-home { flex-direction: column; gap: .35rem; font-size: .8rem; color: #4ade80; }
+        .hb-home img { width: 74px; height: 74px; border-radius: 50%; border: 3px solid #4ade80; background: #0a0a0a; padding: 4px; box-shadow: 0 0 0 5px rgba(74,222,128,.15), 0 0 22px rgba(74,222,128,.5); transition: transform .6s; }
+        .hb-home:hover img { transform: rotate(360deg); }
+        /* Hot Deals: real fire (layered SVG flames) */
+        .hb-deals { margin-top: 46px; padding: 16px 30px; font-size: 1.05rem; color: #fff; text-shadow: 0 1px 3px #3b0a05, 0 0 8px #7f1d1d; border-radius: 12px; background: linear-gradient(0deg, #4a0d05 0, #9a2a08 45%, #e8590c 100%); box-shadow: 0 -6px 26px rgba(255,120,20,.65), 0 6px 18px rgba(0,0,0,.5), inset 0 2px 0 rgba(255,200,90,.6); animation: heat 1.1s ease-in-out infinite alternate; }
+        @keyframes heat { to { box-shadow: 0 -10px 34px rgba(255,150,30,.85), 0 6px 18px rgba(0,0,0,.5), inset 0 2px 0 rgba(255,220,120,.8); } }
+        .hb-deals .fire { position: absolute; left: -4px; right: -4px; bottom: calc(100% - 9px); width: calc(100% + 8px); height: 62px; pointer-events: none; transform-origin: 50% 100%; animation: flame 0.9s ease-in-out infinite alternate; overflow: visible; }
+        @keyframes flame { from { transform: scaleY(.93) scaleX(.99); } to { transform: scaleY(1.07) scaleX(1.01); } }
+        .hb-deals i { color: #ffd966; filter: drop-shadow(0 0 5px #ff7a00); }
+        .hb-deals > span { position: relative; }
+        /* Strain Cards: a tilted collector card */
+        .hb-cards { padding: 12px 22px; background: linear-gradient(160deg, #1b2b22, #0c140f); border: 2px solid #4ade80; border-radius: 10px; transform: rotate(-3deg); box-shadow: 5px 5px 0 rgba(74,222,128,.35); }
+        .hb-cards:hover { transform: rotate(0) translateY(-4px) scale(1.05); }
+        .hb-cards::before { content: ""; position: absolute; top: 4px; right: 4px; bottom: 4px; left: 4px; border: 1px dashed rgba(74,222,128,.4); border-radius: 6px; pointer-events: none; }
+        /* Full Strain List: lined notebook paper */
+        .hb-list { align-items: flex-end; min-height: 66px; padding: 0 26px 0 62px; line-height: 22px; transform: rotate(1.5deg); border-radius: 3px; text-transform: none; letter-spacing: .5px; font-size: 1.05rem; color: #1e3a8a;
+            font-family: "Segoe Print", "Bradley Hand", "Comic Sans MS", "Chalkboard SE", cursive;
+            background-color: #fffef6; background-image: linear-gradient(90deg, transparent 46px, rgba(220,38,38,.8) 46px, rgba(220,38,38,.8) 48px, transparent 48px), linear-gradient(#8fb8e0 1px, transparent 1px); background-size: 100% 100%, 100% 22px; background-position: 0 0, 0 21px;
+            box-shadow: 0 8px 18px rgba(0,0,0,.5), 0 0 0 1px rgba(0,0,0,.15); }
+        .hb-list::before { content: ""; position: absolute; left: 12px; top: 0; bottom: 0; width: 18px; pointer-events: none;
+            background: radial-gradient(circle at 50% 16%, #0b0b0b 0 6px, rgba(0,0,0,.25) 6px 7.5px, transparent 8px), radial-gradient(circle at 50% 50%, #0b0b0b 0 6px, rgba(0,0,0,.25) 6px 7.5px, transparent 8px), radial-gradient(circle at 50% 84%, #0b0b0b 0 6px, rgba(0,0,0,.25) 6px 7.5px, transparent 8px); }
+        .hb-list::after { content: ""; position: absolute; top: 0; right: 0; width: 0; height: 0; border-style: solid; border-width: 0 16px 16px 0; border-color: transparent #0f0f0f transparent transparent; filter: drop-shadow(-1px 1px 0 rgba(0,0,0,.2)); }
+        .hb-list:hover { transform: rotate(0) translateY(-4px) scale(1.04); }
+        .hb-list i { position: static; color: #e11d48; margin-right: .1rem; }
+        .hb-list span { padding-bottom: 0; }
+        /* Lineups dropdown */
+        .lineups { background: rgba(10,10,10,.55); border: 1px solid rgba(74,222,128,.35); border-radius: 20px; backdrop-filter: blur(4px); overflow: hidden; }
+        .lineups summary { list-style: none; display: flex; align-items: center; gap: 1rem; padding: .9rem 1.2rem; cursor: pointer; background: linear-gradient(135deg, rgba(74,222,128,.22), rgba(34,197,94,.08)); }
+        .lineups summary::-webkit-details-marker { display: none; }
+        .lineups summary img { width: 46px; height: 46px; border-radius: 50%; background: #0a0a0a; padding: 3px; border: 2px solid #4ade80; }
+        .sum-text { flex: 1; display: flex; flex-direction: column; }
+        .sum-text b { font-size: 1.15rem; text-transform: uppercase; letter-spacing: 2px; color: #4ade80; }
+        .sum-text small { color: #cbd5e1; }
+        .sum-chev { color: #4ade80; transition: transform .3s; }
+        .lineups[open] .sum-chev { transform: rotate(180deg); }
+        .sum-hint { font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 6px 12px; border-radius: 20px; background: #4ade80; color: #052e16; white-space: nowrap; animation: hintPulse 1.8s ease-out infinite; }
+        .hint-close { display: none; }
+        .lineups[open] .hint-open { display: none; }
+        .lineups[open] .hint-close { display: inline; }
+        .lineups[open] .sum-hint { animation: none; background: rgba(74,222,128,.15); color: #4ade80; border: 1px solid rgba(74,222,128,.5); }
+        @keyframes hintPulse { 0% { box-shadow: 0 0 0 0 rgba(74,222,128,.65); } 80%, 100% { box-shadow: 0 0 0 12px rgba(74,222,128,0); } }
+        .lineups:not([open]) .sum-chev { animation: chevBounce 1.2s ease-in-out infinite; }
+        @keyframes chevBounce { 50% { transform: translateY(5px); } }
+        .lineups summary:hover { filter: brightness(1.2); }
+        .lineup-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1rem; padding: 1.2rem; animation: luOpen .35s ease; }
+        @keyframes luOpen { from { opacity: 0; transform: translateY(-10px); } }
+        .lu { position: relative; overflow: hidden; display: flex; align-items: center; gap: .9rem; min-height: 88px; padding: 1rem 1.1rem; border-radius: 16px; color: #fff; text-decoration: none; transition: transform .3s, box-shadow .3s; isolation: isolate; }
+        .lu:hover { transform: translateY(-5px) rotate(-.6deg); }
+        .lu > * { position: relative; z-index: 2; }
+        .lu-logo { position: absolute !important; z-index: 1 !important; right: -14px; bottom: -18px; width: 96px; opacity: .16; filter: grayscale(1) brightness(2); transition: opacity .3s, transform .5s; }
+        .lu:hover .lu-logo { opacity: .4; transform: rotate(-18deg) scale(1.12); }
+        .lu-ico { font-size: 1.9rem; width: 46px; text-align: center; }
+        .lu-body { flex: 1; display: flex; flex-direction: column; }
+        .lu-body b { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .lu-body small { opacity: .85; }
+        .lu-count { font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; padding: 3px 9px; border-radius: 20px; background: rgba(0,0,0,.4); }
+        /* 1 Original 10: our logo as the background */
+        .lu-orig { background: #2a1060; box-shadow: 0 6px 20px rgba(139,92,246,.5); text-shadow: 0 1px 5px rgba(0,0,0,.8); }
+        .lu-orig::before { content: ""; position: absolute; top: -110%; right: -15%; bottom: -110%; left: -15%; z-index: 0; transform: rotate(-12deg); animation: origPan 16s linear infinite; background: url("assets/img/noyes boys logo.png") 0 0 / 56px 56px repeat; }
+        .lu-orig::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(28,8,64,.86) 0, rgba(28,8,64,.5) 42%, rgba(28,8,64,0) 100%); }
+        @keyframes origPan { to { background-position: 56px 56px; } }
+        .lu-orig .lu-logo { display: none; }
+        .lu-orig .lu-ico { color: #fcd34d; filter: drop-shadow(0 0 8px #fcd34d); }
+        /* 2 Geode: cut gemstone */
+        .lu-geode { background: #5b21b6; border-radius: 0; clip-path: polygon(18px 0, calc(100% - 18px) 0, 100% 18px, 100% calc(100% - 18px), calc(100% - 18px) 100%, 18px 100%, 0 calc(100% - 18px), 0 18px);
+            background: linear-gradient(135deg, #2e1065 0, #6d28d9 28%, #22d3ee 50%, #7c3aed 72%, #1e1b4b 100%); box-shadow: inset 0 0 0 2px rgba(255,255,255,.6), inset 0 0 30px rgba(165,243,252,.5); }
+        .lu-geode::before { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,.3) 0 22%, transparent 22%), linear-gradient(225deg, rgba(255,255,255,.18) 0 22%, transparent 22%), linear-gradient(45deg, rgba(0,0,0,.28) 0 22%, transparent 22%), linear-gradient(315deg, rgba(0,0,0,.2) 0 22%, transparent 22%); }
+        .lu-geode::after { content: ""; position: absolute; top: 10px; right: 24px; bottom: 10px; left: 24px; z-index: 0; border: 1px solid rgba(255,255,255,.5); background: linear-gradient(120deg, rgba(255,255,255,.3), transparent 45%, rgba(255,255,255,.12)); background-size: 250% 100%; transition: background-position .8s; }
+        .lu-geode:hover::after { background-position: 100% 0; }
+        .lu-geode:hover { filter: brightness(1.25) saturate(1.2); }
+        .lu-geode .lu-ico { color: #ecfeff; filter: drop-shadow(0 0 8px #22d3ee); }
+        .lu-geode .lu-logo { opacity: .12; }
+        /* 3 OG: aged vintage label */
+        .lu-og { background: #e3cf9a; border-radius: 6px; font-family: Georgia, "Times New Roman", serif; color: #3b2410; border: 4px double #5b3a12;
+            background: radial-gradient(ellipse at 30% 15%, rgba(255,255,255,.4), transparent 60%), repeating-linear-gradient(0deg, rgba(120,80,30,.08) 0 2px, transparent 2px 5px), #e3cf9a;
+            box-shadow: inset 0 0 40px rgba(110,70,20,.6), 0 4px 14px rgba(0,0,0,.55); }
+        .lu-og::before { content: "OG"; position: absolute; right: 56px; top: -8px; font: 900 5rem/1 Impact, sans-serif; color: rgba(91,58,18,.16); transform: rotate(-10deg); z-index: 0; }
+        .lu-og::after { content: ""; position: absolute; top: 4px; right: 4px; bottom: 4px; left: 4px; border: 1px solid rgba(91,58,18,.55); pointer-events: none; z-index: 0; }
+        .lu-og .lu-body b { letter-spacing: 3px; text-shadow: 1px 1px 0 rgba(255,255,255,.45); }
+        .lu-og .lu-ico { color: #9b1c1c; }
+        .lu-og .lu-logo { filter: sepia(1) brightness(.55); opacity: .22; }
+        .lu-og .lu-count { background: none; color: #9b1c1c; border: 2px solid #9b1c1c; border-radius: 4px; transform: rotate(-6deg); }
+        /* 4 Skunk: stripes, toxic glow, rising fumes */
+        .lu-skunk { background: #060606; border: 2px solid #f5f5f5; box-shadow: 0 0 16px rgba(132,204,22,.55), 0 6px 20px rgba(0,0,0,.6); }
+        .lu-skunk::before { content: ""; position: absolute; top: -30%; bottom: -30%; left: 20%; width: 64px; z-index: 0; transform: skewX(-16deg); transition: transform .5s;
+            background: linear-gradient(90deg, #f5f5f5 0 24px, transparent 24px 40px, #f5f5f5 40px 64px); }
+        .lu-skunk:hover::before { transform: skewX(-16deg) translateX(40px); }
+        .lu-skunk::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 120%; z-index: 0; pointer-events: none; opacity: .85; animation: fume 3.2s linear infinite;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='70'%3E%3Cpath d='M22 70C4 52 40 40 22 24C10 12 28 6 22 0' fill='none' stroke='%2384cc16' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") 0 0 / 44px 70px repeat-x; }
+        @keyframes fume { from { transform: translateY(24px); opacity: 0; } 30% { opacity: .85; } to { transform: translateY(-30px); opacity: 0; } }
+        .lu-skunk .lu-body b { color: #fff; text-shadow: 0 0 6px #000, 0 0 12px #000, 0 0 3px #84cc16; }
+        .lu-skunk .lu-body small { color: #bef264; text-shadow: 0 0 6px #000; }
+        .lu-skunk .lu-ico { font-size: 2.7rem; width: 56px; filter: drop-shadow(0 0 6px #000); }
+        /* 5 Back Burners: glowing stove coil */
+        .lu-burn { background: radial-gradient(circle at 88% 50%, #ff6a00 0, #dc2626 20%, #1c0a06 21%); box-shadow: 0 6px 22px rgba(255,90,20,.4); animation: burn 2.4s ease-in-out infinite alternate; }
+        .lu-burn::before { content: ""; position: absolute; right: -40px; top: 50%; width: 150px; height: 150px; margin-top: -75px; border-radius: 50%; z-index: 0; background: repeating-radial-gradient(circle, rgba(255,140,40,.7) 0 3px, transparent 3px 11px); }
+        @keyframes burn { to { box-shadow: 0 6px 34px rgba(255,90,20,.75); } }
+        .lu-burn .lu-ico { color: #ffb347; filter: drop-shadow(0 0 8px #ff6a00); }
+        /* 6 Next Release: holographic foil with sparkles */
+        .lu-next { background: #10b981; border: 2px solid rgba(255,255,255,.75); color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,.7); animation: foil 4s linear infinite;
+            background: linear-gradient(115deg, #064e3b, #10b981, #a7f3d0, #fde68a, #f9a8d4, #93c5fd, #10b981, #064e3b) 0 0 / 400px 100% repeat-x;
+            box-shadow: 0 0 24px rgba(167,243,208,.6), 0 6px 20px rgba(0,0,0,.4); }
+        @keyframes foil { to { background-position: 400px 0; } }
+        .lu-next::before { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; z-index: 1; pointer-events: none; animation: twinkle 1.4s ease-in-out infinite alternate;
+            background: radial-gradient(circle at 12% 28%, #fff 0 1.5px, transparent 2.5px), radial-gradient(circle at 30% 78%, #fff 0 1px, transparent 2px), radial-gradient(circle at 52% 18%, #fff 0 2px, transparent 3px), radial-gradient(circle at 68% 68%, #fff 0 1.5px, transparent 2.5px), radial-gradient(circle at 84% 30%, #fff 0 2px, transparent 3px), radial-gradient(circle at 93% 82%, #fff 0 1px, transparent 2px); }
+        .lu-next::after { content: ""; position: absolute; top: 0; left: -80%; width: 50%; height: 100%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.6), transparent); transform: skewX(-20deg); animation: hbShine 2.8s infinite; z-index: 1; pointer-events: none; }
+        @keyframes twinkle { from { opacity: .25; } to { opacity: 1; } }
+        .spk { position: absolute !important; z-index: 3 !important; color: #fff; font-style: normal; text-shadow: 0 0 8px #fff, 0 0 14px #a7f3d0; animation: spark 1.6s ease-in-out infinite; }
+        .spk.s1 { top: 6px; left: 38%; font-size: 1rem; } .spk.s2 { bottom: 8px; left: 22%; font-size: .8rem; animation-delay: .5s; }
+        .spk.s3 { top: 14px; right: 30%; font-size: .7rem; animation-delay: 1s; } .spk.s4 { bottom: 6px; right: 14%; font-size: 1.1rem; animation-delay: .3s; }
+        @keyframes spark { 0%,100% { transform: scale(.3) rotate(0); opacity: .2; } 50% { transform: scale(1.2) rotate(45deg); opacity: 1; } }
+        .lu-ribbon { position: absolute !important; top: 9px; right: -28px; width: 96px; text-align: center; font-size: .62rem; font-weight: 900; letter-spacing: 2px; padding: 2px 0; background: linear-gradient(90deg, #fde047, #fff7ae, #fde047); color: #422006; text-shadow: none; transform: rotate(40deg); z-index: 4 !important; }
+        .lu-next .lu-ico { color: #fff; filter: drop-shadow(0 0 8px #a7f3d0); }
+        @media (prefers-reduced-motion: reduce) { .hb-deals, .hb-deals .fire, .lu-orig::before, .lu-skunk::after, .lu-burn, .lu-next, .lu-next::before, .lu-next::after, .spk, .lineup-grid, .sum-hint, .lineups:not([open]) .sum-chev { animation: none; } .hb, .lu, .hb-home img { transition: none; } }
+        @media (max-width: 560px) { .sum-hint { font-size: .62rem; padding: 5px 9px; } .sum-text b { font-size: 1rem; letter-spacing: 1px; } .hb-home img { width: 60px; height: 60px; } .lineup-grid { grid-template-columns: 1fr; padding: .9rem; } }
             </style>
             
             <!-- Google tag (gtag.js) -->
@@ -376,17 +500,75 @@
                 <h1>NOYES BOYS GENETICS</h1>
                 <h2>Pick a Genetic Line Below to Browse Strains</h2>
                 
-                <div class="cta-buttons">
-                    <a class="btn btn-primary" href="/FeminizedSeedsHomepage">Home</a>
-                    <a class="btn btn-primary" href="/deals">Hot Deals</a>
-                    <a class="btn btn-primary" href="/line1">Original 10</a>
-                    <a class="btn btn-primary" href="/line2">Geode Lineup</a>
-                    <a class="btn btn-primary" href="/line3">OG Lineup</a>
-                    <a class="btn btn-primary" href="/line4">Skunk Lineup</a>
-                    <a class="btn btn-primary" href="/line5">Back Burners</a>
-                    <a class="btn btn-primary" href="/nextstrains">Next Release</a>
-                    <a class="btn btn-primary" href="/straincards">Strain Cards</a>
-                    <a class="btn btn-primary" href="/strains">Full Strain List</a>
+                <div class="hub">
+                    <div class="hub-top">
+                        <a class="hb hb-home" href="/FeminizedSeedsHomepage"><img src="assets/img/noyes boys logo.png" alt=""><span>Home</span></a>
+                        <a class="hb hb-deals" href="/deals">
+                        <svg class="fire" viewBox="0 0 200 70" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                            <defs>
+                                <linearGradient id="fgO" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ffb300"/><stop offset=".4" stop-color="#ff5a00"/><stop offset=".85" stop-color="#b91c1c" stop-opacity=".85"/><stop offset="1" stop-color="#7f1d1d" stop-opacity="0"/></linearGradient>
+                                <linearGradient id="fgM" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ffe066"/><stop offset=".55" stop-color="#ff9a1a"/><stop offset="1" stop-color="#ff5a00" stop-opacity="0"/></linearGradient>
+                                <linearGradient id="fgC" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#fffbe6"/><stop offset=".6" stop-color="#ffe680"/><stop offset="1" stop-color="#ffc83d" stop-opacity="0"/></linearGradient>
+                                <filter id="fwob" x="-5%" y="-15%" width="110%" height="130%">
+                                    <feTurbulence type="fractalNoise" baseFrequency="0.03 0.08" numOctaves="2" seed="4" result="n"><animate attributeName="baseFrequency" dur="1.8s" values="0.03 0.08;0.042 0.11;0.03 0.08" repeatCount="indefinite"/></feTurbulence>
+                                    <feDisplacementMap in="SourceGraphic" in2="n" scale="14" xChannelSelector="R" yChannelSelector="G"/>
+                                    <feGaussianBlur stdDeviation="0.7"/>
+                                </filter>
+                            </defs>
+                            <g filter="url(#fwob)"><path fill="url(#fgO)" d="M0 70 L0 60 L-5.0 60 C-5.0 48.0 7.8 35.2 12.0 20.0 C16.2 40.0 29.0 50.0 29.0 60 L21.0 60 C21.0 43.8 33.8 26.5 38.0 6.0 C42.2 33.0 55.0 46.5 55.0 60 L47.0 60 C47.0 46.2 59.8 31.5 64.0 14.0 C68.2 37.0 81.0 48.5 81.0 60 L75.0 60 C75.0 41.4 87.8 21.6 92.0 -2.0 C96.2 29.0 109.0 44.5 109.0 60 L103.0 60 C103.0 45.0 115.8 29.0 120.0 10.0 C124.2 35.0 137.0 47.5 137.0 60 L131.0 60 C131.0 42.6 143.8 24.0 148.0 2.0 C152.2 31.0 165.0 45.5 165.0 60 L159.0 60 C159.0 48.6 171.8 36.4 176.0 22.0 C180.2 41.0 193.0 50.5 193.0 60 L200 60 L200 70 Z"/><path fill="url(#fgM)" d="M0 70 L0 60 L2.0 60 C2.0 51.4 11.8 42.1 15.0 31.2 C18.2 45.6 28.0 52.8 28.0 60 L28.0 60 C28.0 48.3 37.8 35.9 41.0 21.1 C44.2 40.6 54.0 50.3 54.0 60 L54.0 60 C54.0 50.1 63.8 39.5 67.0 26.9 C70.2 43.4 80.0 51.7 80.0 60 L82.0 60 C82.0 46.6 91.8 32.3 95.0 15.4 C98.2 37.7 108.0 48.8 108.0 60 L110.0 60 C110.0 49.2 119.8 37.7 123.0 24.0 C126.2 42.0 136.0 51.0 136.0 60 L138.0 60 C138.0 47.5 147.8 34.1 151.0 18.2 C154.2 39.1 164.0 49.6 164.0 60 L166.0 60 C166.0 51.8 175.8 43.0 179.0 32.6 C182.2 46.3 192.0 53.2 192.0 60 L200 60 L200 70 Z"/><path fill="url(#fgC)" d="M0 70 L0 60 L1.0 60 C1.0 55.0 7.8 49.6 10.0 43.2 C12.2 51.6 19.0 55.8 19.0 60 L27.0 60 C27.0 53.2 33.8 45.9 36.0 37.3 C38.2 48.7 45.0 54.3 45.0 60 L53.0 60 C53.0 54.2 59.8 48.0 62.0 40.7 C64.2 50.3 71.0 55.2 71.0 60 L81.0 60 C81.0 52.2 87.8 43.9 90.0 34.0 C92.2 47.0 99.0 53.5 99.0 60 L109.0 60 C109.0 53.7 115.8 47.0 118.0 39.0 C120.2 49.5 127.0 54.8 127.0 60 L137.0 60 C137.0 52.7 143.8 44.9 146.0 35.6 C148.2 47.8 155.0 53.9 155.0 60 L165.0 60 C165.0 55.2 171.8 50.1 174.0 44.0 C176.2 52.0 183.0 56.0 183.0 60 L200 60 L200 70 Z"/></g>
+                            <g fill="#ffd27a"><circle cx="40" cy="50" r="1.1"><animate attributeName="cy" values="52;4" dur="2.3s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;0" dur="2.3s" repeatCount="indefinite"/></circle><circle cx="104" cy="52" r=".9"><animate attributeName="cy" values="52;2" dur="1.9s" begin=".6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;0" dur="1.9s" begin=".6s" repeatCount="indefinite"/></circle><circle cx="160" cy="50" r="1.2"><animate attributeName="cy" values="50;6" dur="2.7s" begin="1.1s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;0" dur="2.7s" begin="1.1s" repeatCount="indefinite"/></circle></g>
+                        </svg>
+                        <i class="fas fa-fire"></i><span>Hot Deals</span></a>
+                        <a class="hb hb-cards" href="/straincards"><i class="fas fa-clone"></i><span>Strain Cards</span></a>
+                        <a class="hb hb-list" href="/strains"><i class="fas fa-list-ul"></i><span>Full Strain List</span></a>
+                    </div>
+                    <details class="lineups" id="lineups">
+                        <summary>
+                            <img src="assets/img/noyes boys logo.png" alt="">
+                            <span class="sum-text"><b>Browse the Lineups</b><small>Pick a genetic line</small></span>
+                            <span class="sum-hint"><span class="hint-open">Open dropdown</span><span class="hint-close">Close dropdown</span></span>
+                            <span class="sum-chev"><i class="fas fa-chevron-down"></i></span>
+                        </summary>
+                        <div class="lineup-grid">
+                        <a class="lu lu-orig" href="/line1">
+                            <img class="lu-logo" src="assets/img/noyes boys logo.png" alt="">
+                            <span class="lu-ico"><i class="fas fa-crown"></i></span>
+                            <span class="lu-body"><b>Original 10</b><small>The originals</small></span>
+                            <span class="lu-count">10 strains</span>
+                        </a>
+                        <a class="lu lu-geode" href="/line2">
+                            <img class="lu-logo" src="assets/img/noyes boys logo.png" alt="">
+                            <span class="lu-ico"><i class="fas fa-gem"></i></span>
+                            <span class="lu-body"><b>Geode Lineup</b><small>Geode crosses</small></span>
+                            <span class="lu-count">10 strains</span>
+                        </a>
+                        <a class="lu lu-og" href="/line3">
+                            <img class="lu-logo" src="assets/img/noyes boys logo.png" alt="">
+                            <span class="lu-ico"><i class="fas fa-star"></i></span>
+                            <span class="lu-body"><b>OG Lineup</b><small>OG crosses</small></span>
+                            <span class="lu-count">10 strains</span>
+                        </a>
+                        <a class="lu lu-skunk" href="/line4">
+                            <img class="lu-logo" src="assets/img/noyes boys logo.png" alt="">
+                            <span class="lu-ico">&#129448;</span>
+                            <span class="lu-body"><b>Skunk Lineup</b><small>Skunk crosses</small></span>
+                            <span class="lu-count">10 strains</span>
+                        </a>
+                        <a class="lu lu-burn" href="/line5">
+                            <img class="lu-logo" src="assets/img/noyes boys logo.png" alt="">
+                            <span class="lu-ico"><i class="fas fa-fire-flame-curved"></i></span>
+                            <span class="lu-body"><b>Back Burners</b><small>Upcoming releases</small></span>
+                            <span class="lu-count">10 strains</span>
+                        </a>
+                        <a class="lu lu-next" href="/nextstrains">
+                            <span class="lu-ribbon">NEW</span><i class="spk s1">&#10022;</i><i class="spk s2">&#10022;</i><i class="spk s3">&#10022;</i><i class="spk s4">&#10022;</i>
+                            <img class="lu-logo" src="assets/img/noyes boys logo.png" alt="">
+                            <span class="lu-ico"><i class="fas fa-rocket"></i></span>
+                            <span class="lu-body"><b>Next Release</b><small>Super strains</small></span>
+                            <span class="lu-count">10 strains</span>
+                        </a>
+                        </div>
+                    </details>
                 </div>
                 <div>
                 </div>
@@ -508,6 +690,10 @@
 
         // Event listener
         window.addEventListener('scroll', handleScrollHint);
+    </script>
+    <script>
+        // A link to genetics#lineups opens the dropdown
+        if (location.hash === '#lineups') document.getElementById('lineups').open = true;
     </script>
 </body>
 </html>
