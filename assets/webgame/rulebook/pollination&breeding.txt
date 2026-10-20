@@ -1,3 +1,12 @@
+males can techniqually be moved from room to room and pollinate multiple rooms, but it takes two weeks for that pollen to kick in once moved to a room, and once the male is moved out seed count should only increase at 50% but be at the 100% rate we have now is the male is in the room still
+
+
+harvesting a male or reversed female should give nothing besides experience points 
+
+
+
+
+_____DONE________________________________________________
 moving plants:
 you should have the option (if you have multiple rooms) to move a plant to another room
 the reason for this is if you want to flower just one plant at a time, or have a plant veg longer but flip one, want to have a breeding room, etc etc, lots of reasons actually 
@@ -42,10 +51,7 @@ there should be even more info here i just cant quite think of what exactly,
 WHEN BREEDING:
 after the male/reversed female hits week two, the females should get a "seeded" badge, those same females should now also say "seed" instead of "g" when you click harvest, and show the amount of seeds youll get instead of the amount of grams 
 
-
-
-
-
+the amount of seeds you get should vary and just like bud you dont get ANY seeds until atleast week EIGHT of flower with seeds, then in increases from 50-100 at week 8 to 450 or so (before multipliers and denominations) at week 12+ 
 
 
 

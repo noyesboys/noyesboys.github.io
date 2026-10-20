@@ -1,3 +1,11 @@
+show all transplant options
+
+
+
+
+
+DONE_____________________________________
+
 
 we lost our transplant button from our previous version; it was used to up pot plants at any point
 this should require you to have the right size pot and enough soil, bought from the store

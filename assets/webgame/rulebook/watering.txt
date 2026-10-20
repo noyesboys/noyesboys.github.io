@@ -1,5 +1,57 @@
+
+
+
+
+TEST THIS:
+
+DYING PLANT:
+when a plant hits 0% water, it should start a count down, after 8 hours health starts to go down by 1 every hour (real time) once it hits 0 the plant will then die after an addition 12 hours (real time) and the only thing you can do at that point is to remnove it (no harvest, no bonus or points or exp etc)
+
+
+(watering from 0 water and 0 health should NOT heal the plant, and should only water the plant if it is not at 0 health and water for more than 12 hours, you would then need to heal the plant with a spray or it will die again in 12 hours, on easy mode it should prompt you to use a health spray after or you still risk loosing your plant as just watering alone wont save it here, it clearly wasn't healing if it was slowly dropping to 0 and stayed at 0 (bad environment etc))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_______________DONE_______________
+
+
+
+PH up and down should be used at a rate of 1ml; per gallon of pot size, if its a 25 gallon pot it should use 25ml
+there should also be a ph level each plant has, it should slightly go up over 3 days (real time) to a cap of 7.5, 6.2- 6.4 is the sweet spot and by then youll most likely be watering again and fixing it, if not the plant grows slower and drinks faster 
+
+
+
+
+
+should be a connected to reservoir badge like, "AUTO WATER" and its a green badge 
+
+
+
+
+
+INSPECTING:
+inspecting plants should require jewelers loup for inspecting buds
+and should require a ph meter/ec meter  for checking run off
+if you want to ph or check ppm of your feed, if you dont have a ph or ec meter or ph up or down from the store you cant ph your plants when you feed both are only 1000c on the market but required if you want to know the ppm or ph if not it is a mystery when you feed and much easier to burn the plant and it will result in -5 health and a -0.1% harvest every water without proper ph , or without proper ec / ppm checking
+the sliders should say "?" until you have an ec meter and the ph slider should be locked until you have a ph meter .
+easy mode will prompt you to buy them as feeding blind is a bad idea
+
+
+
 FEED/NUTRIENTS:
-you should need to buy each nutrient ( i believe we have these already) , the nutrient bottles have 1000ppm of each, if you use 50ppm of it on a feed it has 950ppm left to use
+you should need to buy each nutrient ( i believe we have these already) , the nutrient bottles have 1000ppm of each though, if you use 50ppm of it on a feed it has 950ppm left to use
 watering should have an option to stack ec, "run-off" Ec, or flush
 flush is straight water until the soil drops to your set ppm from wherever it is , for example its at 1000, you flush , and set it down to 200, you only use water in this instance
 run off will decrease your ppm to the ppm of the feed
@@ -10,11 +62,6 @@ if you only feed 25 % it will only use 25% of the ppm used from the bottle
 example : 100% of a bottle is 1000ppm, i use 250ppm of veg nutrients but i only feed 25% water, that would only be 62.5ppm used from the bottle , even though im feeding 250ppm 
 
 
-DYING PLANT:
-when a plant hits 0% water, it should start a count down, after 8 hours health starts to go down by 1 every hour (real time) once it hits 0 the plant will then die after an addition 12 hours (real time) and the only thing you can do at that point is to remnove it (no harvest, no bonus or points or exp etc)
-
-there should be a way to heal your plants, with a spray, it should heal 25% health and only be usable once per phase, costing 1000c and this will diminish your return by 5% per spray used.
-(watering from 0 water and 0 health should NOT heal the plant, and should only water the plant if it is not at 0 health and water for more than 12 hours, you would then need to heal the plant with a spray or it will die again in 12 hours, on easy mode it should prompt you to use a health spray after or you still risk loosing your plant as just watering alone wont save it here, it clearly wasn't healing if it was slowly dropping to 0 and stayed at 0 (bad environment etc))
 
 
 
@@ -33,27 +80,6 @@ this will use nutrients up like a normal feed does.
 if you use half a bottle of nutrients there should be an item in the inventory now called "half bottle (x)L"
 
 
-INSPECTING:
-inspecting plants should require jewelers loup for inspecting buds
-and should require a ph meter/ec meter  for checking run off
-if you want to ph or check ppm of your feed, if you dont have a ph or ec meter or ph up or down from the store you cant ph your plants when you feed both are only 1000c on the market but required if you want to know the ppm or ph if not it is a mystery when you feed and much easier to burn the plant and it will result in -5 health and a -0.1% harvest every water without proper ph , or without proper ec / ppm checking
-the sliders should say "?" until you have an ec meter and the ph slider should be locked until you have a ph meter .
-easy mode will prompt you to buy them as feeding blind is a bad idea
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-_______________DONE_______________
 
 
 2>water is drying out way to fast i belive the rule we set was 50% in twelve hours unless temps are above 90F at that point itll be 60% in 12 hours, 

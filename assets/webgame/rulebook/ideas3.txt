@@ -1,0 +1,35 @@
+
+
+
+______________________________________DONE______________________________________
+QUESTS:
+
+
+quests should be multiple steps like a checklist
+they should also mainly be geared towards new growers, and showing them the ropes of the game
+example: plant a seed (step 1) inspect x amount of times before flower (step 2) .... continued
+or it could teach them when to train, how to train, when and how to water, etc, there can be lots of things from our game that quests can help them learn, the rewards should be geared towards that subject if its about heat and humidity, maybe the reward had a resistance bonus to that
+
+some quests should unlock other quests
+
+
+
+quests that aren't geared towards new growers should be level locked or achievement locked
+
+
+
+some wearables should even have level requirments
+
+
+silly quests: 
+
+you have to help a master grower and bring him an insane amount of nutrients, you can bring him small amounts at a time and it eventually will add up to what he needs (you are unaware of how much but it is ALOT it just shows a completed bar moving up but doesn't show how much is needed
+this will unlock a super huge reservoir as a reward and exp
+
+
+help a noob grower: 
+supply a noob grower with a seed and a light
+
+part2: he needs help learning nutrients
+
+part3: he needs help harvesting

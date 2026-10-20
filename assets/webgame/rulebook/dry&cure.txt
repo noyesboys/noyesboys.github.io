@@ -1,5 +1,21 @@
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 ______________________________DONE___________________
+
+can we make the dry and cure tab more animated with sprites just like the grow tab is ?
+interactive sprites, ones that change with the humidity, temp, etc
 
 
 
@@ -15,6 +31,8 @@ it will drop from 50 - 10 within 48 hours slowly and gradually, and then from 10
 drying sweet spot should take about 20 hours to hit around 62% and that is the ultimate peak point and bonus point (25% quality gain for 62 exactly)
 15% quality gain for 58-64%, 10% for  50-54%, and 65-68 is a 5% quality loss, 68-70 is a 15% quality loss and 70-80 is a 50% quality loss going in to curing
 
+
+FANS ETC ARE FOR THE WHOLE ROOM NOT PER PLANT
 
 QUALITY:
 that quality number goes like this

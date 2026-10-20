@@ -1,18 +1,23 @@
 
 log in / account saves (on my end for backup):
-this info will need to be saved somewhere, i was thinking it should be saved in a folder on my end, same with the usernames and passwords and key phrases that are created for a secure back up, im not sure how this will be implemented but it can be the final step, just so we have everything backed up entirely 
-there can be all the stats and stuff id want to see in this file along with credentials, we can even edit the text file and give them free seeds that way or reimburse a seed if something happened kind of thing .
+account name, password, and an email should now be required 
+this info will need to be saved somewhere, i was thinking it should be saved in a folder on my end, same with the usernames and passwords we can remove key phrases , im not sure how this will be implemented but it can be the final step, just so we have everything backed up entirely 
+there can be all the stats and stuff id want to see in this file along with credentials, we can even edit the text file and give them free seeds or re-roll stats that way or reimburse a seed if something happened kind of thing .
 
 
 black market:
- live like an auction house 
-
+ live like an auction house (remove bots)
+buy/sell/ fee / timer limit 
 
 
 scoreboard / leaderboard:
 there should be a scoreboard added in the final touches
-you can see whos got the best score in that strain etc
-the winner should receive a trophy in their inventory they can use to get a single seed pack (in real life too) (one time use) or hold onto the trophy as a souvenier 
+you can see whos got the best score in that strain
+whos grown the most of that strain
+pvp scores
+etc
+
+the leader should receive a trophy in their inventory that will be removed once they are no longer in the lead (should have a substancial bonus if equipped in hands slot
 
 
 live notifications:
@@ -27,4 +32,26 @@ view other grow rooms
 
 
 pvp / grow off mode:
+
+grow offs should now have a "bots" tab and a "pvp" tab, where you can essentially open a challange and have someone else accept it and then you are facing that player when you both plant a seed 
+
  spread mildew to someones grow etc 
+
+
+
+co-op grows (kind of like a guild type of setup)
+you would join a party of up to 5 players in real time and difficulty on every aspect of the grow would multiply by 5-10x , work together to grow in a room of up to 100 plants (co-op only room) and work together to get the best crops , invest in the best gear etc
+guild leader is in charge of equipment and funds (guild coffer can be added to by anyone)
+there should be guild achivments, quests, and high end rewards only achievable this way 
+
+
+
+
+
+checking in on another players grow
+you should be able to inspect or notify the grower (if theres a problem) and it should send a notification to that players email saying "X has inspected your room and noticed X"
+
+
+
+
+

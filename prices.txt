@@ -1,0 +1,47 @@
+WAS                                  IS NOW
+
+deal           each    -----      deal        each
+                                         
+
+1-40           40                   1          20
+3-100          33                  3/50       16.66
+5-150          30                  5/75        15
+10-200         20                  10/130      13
+30-300         10                  30/300      10
+
+reg
+1-15            15                  1          15
+3-40            13                 3/40        13.33
+5-50            10                 5/50        10
+10-85           8.5                10/85       8.5
+30-150          5                  30/150      5
+
+
+line1
+
+10-220          22                 10-130      13           
+20-420          21                 20-230      11.5
+remove triple line 1 420
+
+line2
+5-170           34
+20-420          21
+10-220          22
+remove triple 420
+
+line3
+5-170          34
+10-220         22
+triple 420 (make this double)
+
+
+
+
+
+remove yesnokush
+
+
+remove order button on
+free seed
+single-bulk seed prices
+reg seed prices

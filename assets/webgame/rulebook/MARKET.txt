@@ -1,10 +1,30 @@
+__________________DONE________
+
+
 BLACKMARKET:
 seeds on the blackmarket should have x amount of time left and then change to something else, or sometimes have only one or two seeds you can buy, sometimes 10, sometimes 0 seeds, if its ever 0 it should show a message saying blackmarket seems empty at this time - please check back later but it should only ever be empty for an hour or two in game time maxiumum.
 the seeds that are loaded should only stay for X amount of time depending on how good the deal is and how many seeds are there, if its lots, maybe some get sold but not the whole lot.
 essentially make it feel like a more active market place like there are people or bots really buying and selling on here, right now the sales stay around too long or until you clear them and then instantly reload, if someone buys them all, it should take awhile to restock, and only restock one at a time, every few in game hours.
-seed prices in the black market should be very high , like 1000-2000c each on the DEAL end, and 5000-10000c each on the more common end, f1s are cheaper than f10s, f10s or bx10s can be seen posted for up to 50,000c - 150000c for sale for super strains
+seed prices in the black market should be very high , like 10000-20000c each on the DEAL end, and 500000-10000000c each on the more common end, f1s are cheaper than f10s, f10s or bx10s can be seen posted for up to 5000000 and for sale for super strains
 
 when selling on the black market you should be able to choose how many seeds/product you sell, and how much each, not just a bulk price but all three, price should slightly go down the more seeds you try to sell 
+
+MARKET:
+
+when selling your harvest you should be able to set how many grams you want to sell to a certain buyer, not just sell it all
+and there should only be x amount the buyer wants to buy, usually a low amount to promote the players to choose to sell it to the lower teir buyers aswell 
+or limits like above x thc precent, make sure you cant sell to them unless you hit those requirments, there should be up to 10 buyers at a time with different requirments , sometimes as low as only 2 buyers , there can be loading spots to show how long before other buyers come back, and certain ones can be a ? to show they are random
+
+buyers should have a pop up that shows when you hit buy with their requierments, when they will be back, how long they are around for, etc
+
+i want even more types of buyers, seed buyers, flower buyers, small batch buyers (<28g) medium batch (<100g) etc
+get creative here.
+
+
+
+you should be able to SELL your items on the market aswell, but for a 25% loss in price from the original price 
+right now a bug on the market is that you can only hit buy once there should be a number showing how many items you own and you can still buy more 
+_________________DONE______________________
 
 
 STORE:
@@ -15,8 +35,7 @@ room 3 had 3 light slots 3 fan slots
 room 4 has 5 light slots 5 fan slots
 room 5 has 10 light slots 10 fan slots 2 ac slots 2 dehu slots and 2 humidifier slots 
 
-i would also like a lot more customizable options on the equipment tab, light height and intensity should be on this tab under lights, fan speed and direction (up down center), etc
-* this will mean removing light intensity from the environment tab and putting it here*
+
 
 
 there should be small medium and large and xl for each item, fans, heater, dehu, hu, ac, etc, and again you should be able to buy multiple so you can use them for each room, and your dry out tents etc, meaning you cant just use the same one for every room you will need multiple, it should show you how many you own, and they can only be used in one slot at a time, and only in one area not in two rooms or areas at the same time.
@@ -24,13 +43,11 @@ there should be small medium and large and xl for each item, fans, heater, dehu,
 ec/ppm meter & health spray when bought still say "buy" currently even after you buy, so something is different, currently all lights say purchased as well even though we didn't purchase
 
 
+other items say owned when you should be able to buy more than one of them etc
+
+we should have an "inventory" tab on the tab row up top to show what items we have and how many we own after all of these updates.
 
 
 
-_________________DONE______________________
 
 
-
-when selling your harvest you should be able to set how many grams you want to sell to a certain buyer, not just sell it all
-and there should only be x amount the buyer wants to buy, usually a low amount to promote the players to choose to sell it to the lower teir buyers aswell 
-or limits like above x thc precent, make sure you cant sell to them unless you hit those requirments, there should be up to 10 buyers at a time with different requirments , sometimes as low as only 2 buyers , there can be loading spots to show how long before other buyers come back, and certain ones can be a ? to show they are random

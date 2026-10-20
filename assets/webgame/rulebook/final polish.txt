@@ -1,42 +1,81 @@
+add our logo to the top toolbar far left
+add our logo to the log in screen instead of an emoji
+
+
+add name titles
+click on your name in the top tool bar and add a "of the XXXX" or "Master grower XXXX" etc, titles that would show off achievments / quests etc 
+
+add "skins" for things in game, like for plants, there could be a glowing skin, a fire skin, a winter skin, etc, just a glowing aura around your plants
+another idea for skins could be for curing jars 
 
 
 
-LEVEL UPS:
-there should something that pops up when you click your level that shows you what you can unlock with each level you reach,
-that being said we need to put more things behind level up barriers
+when i click on cure or the dry box's can it be a pop up instead of opening the whole row bigger
+(make sprites bigger this way to show details) (the "buds" are bigger than the jar and pertruding out of it, can we make it so the green buds actually FIT inside the jar please)
+when i do click on the boxs now to make them open, it refreshes after a few seconds and closes it automatically, that shouldn't happen after we fix it to a pop up .
+
+
+growoffs tiers should be level capped by level 1, 15, 30, 45, 60, 75, 100
+each boss should be "level recommended: X" but not actually capped 
+
+we can remove the dry/cure from the grow page as its already in vault and thats good enough
+if there is items in vault curing or drying the red popup showing how many should also show next to vault on the toolbar too please
+
+
+
+can quests be more of a "click to expand" look and also much more of a grid rather than just a long list with every step already visible 
+
+
+add strain/line specific quests and gear rewards ?
+
+super strain quests , turn super seeds into superhero strains ((build on this))
+
+
+not all available challanges showing up in the plant a seed tab
+
+
+items when equipped dont show until i minimize and re open then inventory pop up, it should be instant 
+
+
+POWERDRAW: 
+does the price of 0.01c per watt per in game hour sound reasonable?
+everything that uses power should measure how long its on for and how many watts its using for how many hours and at the end of the day, a pop up comes in saying "Daily BIll"with a breakdown of what it cost you for the day, that can include nutrients used and cost, equipment hydro costs, and any sprays etc
+obviously the nutrients and sprays are already "paid for" but the bill will ask you to pay for the power, if you cant, (big implement) you should have your lights turned off until you make some cash.
+
+EASY MODE (power is free but still shows this pop up but the button to pay says FREE IN EASY MODE)
+medium mode you have to pay but lights wont get turned off for 60 in game days on your first warning, 30 days on your second warning, and istantly on your third warning.
+hard mode lights instantly get cut off if you cant pay your bill
+
+there should be a spot in stats im thinking where it shows your hydro, cost, what you average per in game day, etc
+and there will also be a spot to pay your outstanding bill if there is one applicable.
+
+
+
+
+
+TESTSTRAIN:
+you should only be able to use the TESTPACK code once, and you should not be able to breed with it, even if you have breeding unlocked. 
 
 
 
 COINS:
-you should receive 1000 coins per level up
+start new account with 25000 coinms*********------done
+you should receive 1000 coins per level up ----------done
+
+change c to $ but c if its $0.xx (EVERYWHERE)
+grams should be 0.50c per gram in extreme bulk and as high as 2$ a gram in bulk, 5$ a gram in low amounts and 10$ a gram if amounts like an ounce or two .
+seeds should be about the same when selling as a gram when selling, but much higher when buying . *until we implement a live auction house (males are 10000-20000 ea still in the shop )
 
 
 
-STRAIN CARDS:
-can we include our "strain cards" in a few ways
-1: the slightly faded image we are using for the background of the plant, its a zoomed in , faded version of the plant sprite that is currently being used, can we instead use a zoomed in, slightly faded version of our strain card? say its rainbow skunk im growing, we use the zoomed in on ART from the rainbow skunk card , slightly faded, as the background, and then we can still use option 3 (below) to turn over the tile and see the full card with the stats that are below the art and the name that is above the art, i would want this cropped out here in option 1, making option 3 still relevant. 
-2: when we harvest, id like the icon for each strain in the harvest tab to be their respective card.
-3: i want something showing the card with the stats, on the original grow tab, im thinking if you click anywhere that doesn't already have a click use, it will flip that idividual plant tab over and show the card on the backside .
-( i will include the card files for each strain in this prompt, they are found in "assets/sept22edits/websiteimagedata/cards/finished/_____" (____ = strain name)
-ALSO:
-you should also receive a "strain card" item for each code you put in, so when you buy purple rainbow seeds and enter the code you receive the seeds and a collecter item in your "cards" tab in your inventory, it will show you an image of the card (small) and let you click it to view it (big), just there for show and for something cool to look at or show off what seeds youve bought in the past .
+levels should progressively take more and more exp to hit a level up
+1-25 is easy leveling
+25-50 is advanced leveling
+50-100 is moderately slow and
+100-1000 should take 100s of harvests
+above 1000 would be super super super slow 
+if there needs to be a cap it should be 10000
 
-strains that aren't our strains should get whatever strain they originally used to make that seed as the art, if it was albino skunk even 5 generations ago, itll still be an albino skunk art related to it .
-
-
-
-
-
-MODES:
-make more modes, make them unlockable
-say you need level 25 and all of your easy achievments in easy mode to unlock medium mode, level 50 and all of your achievments in medium mode to unlock hard mode and level 100 and all of your achievments to unlock master mode, and level 1000 and 3 near impossible challanges to unlock GOD MODE
-god mode is a near joke as no one should ever reach this, but plants will grow near instantly with the click of a button, and harvests are always perfect, breeding is always f10, etc, its just a joke. 
-
-easy mode plants grow normal and all of the warnings occur,
-medium mode only critical warnings occur and plants grow 25% slower - 2x crop multiplier for harvest weight
-hard mode no warnings, plants grow 50% slower than normal 4x crop multiplier
-mastermode even less than no warnings, you can essentially do everything wrong imaginable, ultimate test mode essentially no restrictions, 75% slower grow speed, meaning in game time passes almost as slow as real time, 5X multiplier
-GOD MODE - in game time passes by a day per real time minute, no multiplier, just a "fun mode" "god mode" feel, plants dont get sick, etc
 
 EMAIL:
 want us to email you if something in game happens to your plant? enter email "here" spot ( if this is possible)
@@ -44,7 +83,7 @@ want us to email you if something in game happens to your plant? enter email "he
 
 
 POSTGROW:
-post grow breakdowns on why they didn't hit a perfect grow if they didn't, where they could improve , what they did right, etc 
+post cure/grow popup breakdowns on why they didn't hit a perfect grow if they didn't, where they could improve , what they did right, etc 
 warnings can also be implemented if they have the light too close for too long, maybe they loose up to 5% and then are warned, they click ok but dont fix the problem and wont be warned again, it could be a little pop up perhaps 
 
 
@@ -52,8 +91,163 @@ warnings can also be implemented if they have the light too close for too long, 
 ------------
 
 
-EQUIPABLES:
-in our inventory you should have an "Equip-Ables"  tab with a character lay out (im picturing a medieval game with armor equipment) there you can wear pants, a shirt, a hat, gloves , two rings, a necklace, and a cape and a slot for a "buff"
+-------------
+
+
+
+FINAL FINAL FINAL POLISH:
+can we move away from using so many emojis as the icons and make up actual icon images? ones that look like a light or a heater or a fan, etc 
+emojis work for now but this would be a nice polish step
+
+
+is there a way to make this more visual in a sense of , if you have a fan, the first tab before any of the plant sprite tabs could be an "equipment in this room tab" and show a  little "fan" sprite , a little c02 tank sprite, a water reservoir, etc, all of our equipment could have a little image showing that hey its in the room, if we are missing a fan for example it would be a grayed out fan showing we can put one in that spot still
+if anything, if its something you can fill or have to empty it should be half lit up at 50% and half grayed out showing its fill line
+you cant mess with any settings here but clicking on one of them will open the environment tab
+you should be able to minimize this tab so that its not always showing if you dont want it to be . (actual plant tabs are not minimizable)
+
+
+
+
+--------
+
+MAKE EVERYTHING HARDER TO GET:
+ AS PER SEEDS, more multipliers for bad effects to give less seeds
+make black market very very expensive
+market place seeds should be more expensive
+males should be 50-550k each and level guarded STARTING at level 25 - 100
+buyers/sellers need to appear at random and feel more scarce , also level guarded 
+breeding should be unlocked at level 25, you can make f1s
+at level 30 you can make f2s, all the way to level 100 for f10s and level 110 for bx10s
+once you hit level 1000 you can make f* and bx* in god mode
+spraying plants with STS should be level guarded at level 75, super strains cant be reversed until level 100, and other strains get level gaurds too, with prompts like " try a lower level strain" & "this plant is reversable at level X"
+equipment should be level guarded (eg: small ac is unlocked at level 1 but medium is level 15 and large is level 30)
+certain items should be quest guarded (new items, nothing that is essential, but things that help, feel free to add more)
+quests should have part2 that upgrade and replace the part 1 item
+levels should take a bit more experience per level up, especially for the further levels past level 25
+grow offs even more level capped, baby rank level 1 for a few, level 3 for a few, level 5 for 1 , etc
+rookie would be levels 10-20
+intermediate would be 20-30 and so on 
+
+
+
+
+
+
+-------------------------DONE----------------------------------------------------
+black market isn't actually taking/requiring coins?
+should never be seeds for 0 or anywhere near that cheap
+
+should be able to click on each person that your about to challange to a grow off and see their potential drops and chances etc
+
+active bonus's in inventory pop up looked much better as a clean list rather than all in a line
+inventory popup isn't loading our items?
+
+
+
+
+MENU:
+-How to:
+i would like a how to play / how to do certain things pop up in the menu list , it should go into detail on how to play each part of the game, and how to obtain your first seed etc 
+another menu pop up for boss drops 
+
+
+-LEGEND:
+i also want to add a "Legend" button and  pop up to the bottom of the menu popup list
+the legend will conist of any abreviations we use like
+
+f1 = filal cross
+bx = back cross
+EC = electric conductiving 
+ppm - part per million (measuring nutrients)
+ETC
+
+-Updates: Most recent updates are found here, and proposed next updates , 
+
+-Feedback:
+there can also be a feedback button for the player to send in any ideas/feedback/bugs to our email thenoyesboyz@gmail.com
+
+
+
+ROOMS:
+you should be able to "unlock rooms" from the rooms tab, not buy rooms in the shop tab
+currently only two of our rooms appear in that tab to unlock, they should all show up there , and only need to be unlocked the once 
+the info that is with the rooms in the shop tab however should be carried over to their new homes in the unlock room tab
+we should be able to see all the rooms not just two at a time.
+
+
+
+
+___________________DONE______________________________
+MODES:
+make more modes, make them unlockable, here are some examples, but add to these so there is always something to strive towards :
+say you need level 25 and all of your easy achievments in easy mode to unlock medium mode, level 50 and all of your achievments in medium mode to unlock hard mode and level 100 and all of your achievments to unlock master mode, and level 1000 and 3 near impossible challanges to unlock GOD MODE
+god mode is a near joke as no one should ever reach this, but plants will grow near instantly with the click of a button, and harvests are always perfect, breeding is always f10, etc, its just a joke. 
+easy mode plants grow normal and all of the warnings occur,
+medium mode only critical warnings occur and plants grow 25% slower - 2x crop multiplier for harvest weight
+hard mode no warnings, plants grow 50% slower than normal 4x crop multiplier
+mastermode even less than no warnings, you can essentially do everything wrong imaginable, ultimate test mode essentially no restrictions, 75% slower grow speed, meaning in game time passes almost as slow as real time, 5X multiplier
+GOD MODE - in game time passes by a day per real time minute, no multiplier, just a "fun mode" "god mode" feel, plants dont get sick, etc
+
+(there should be things unlocked with almost every level , but 100% something is unlocked every 5 levels up to 100 (5,10,15,20,25,30,35,40...)
+when you click on your level there should be a progress bar with things that you unlock with the next few levels and showing your progress
+(im thinking like fortnites battlepass type style)
+and when you hover over your exp bar it should show you how much exp left you need for a level up 
+
+
+there can be a TOTAL LEVEL(added all levels together): , GROWING LEVEL: DRY/CURE LEVEL: and a BREEDER LEVEL:
+all with their own experience bars, unlocks and achievments 
+but the only exp bar on the top tool bar is the total level bar 
+hovering should say click to see unlocks
+clicking on the level bar should show you what unlocks come next for the next few levels like a "fortnite game pass" type of unlocks, where almost every level unlocks something new gear, quests, different male seeds, bigger lights , fans , dehu , hu, heater, ac , etc 
+there will be different unlocks for each exp bar type
+
+breeding will unlock at level 25 for f1s and 30 for f2s 40 for f3s and continue on to level 100
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+_________________________________DONE____________________
+
+
+
+inventory instead of being a tab at the top should be a pop up button on the bottom right by itelf, this pop up should look more like a game inventory with different tabs in for the items, but be smaller more concise neater, more videogame like
+it would be cool if the items in it were drag and drop over to slots that were in the equipment tab instead of a drop menu
+
+
+
+
+Markets:
+" should be another pop up tab on the left side that pops up a small pop up window with
+ "Sell Here" (market tab from the top toolbar)(REMOVE FROM TOP TOOLBAR)
+"SHOP HERE"
+BLK Market ( remove from top toolbar)
+
+(*this will get rid of three tabs at the top for one on the left)
+
+remove spray tab and mail tab from the left panel, they are in other spots already 
+
+
+also : when you click the Room tab on the left it should bring you to "grow" and the room you selected, that being said we can get rid of the grow tab now too as this will be the way to get there .
+
+Room tab should have two buttons at the top to switch to ENV and EQUIPMENT tabs instead of them being their own button on the left panel 
+
+
+
+
+
+EQUIPABLES: (wearables)
+in our inventory you should have an "Equip-Ables"  tab with a character lay out (im picturing a medieval game with armor equipment slots where you can wear pants, a shirt, a hat, gloves , two rings, a necklace, and a cape and a slot for a "buff"
 
 these items are gathered from quests, and have power ups.
 
@@ -77,35 +271,18 @@ trimmed capes- master level achievments
 hoods - black market achievments
 gloves - trimming gloves, curing gloves, pest preventative gloves or mildew preventative gloves (when you inspect it auto protects these if your wearing them)etc
 pants/shirts- tie die (+harvest or thc %) , suit ( secretly adds more problems .. lol) , 
-hat slot - beard ( gives wisdom or something) , beanie (keeps plants warmer by 1-5) etc
-rings/necklace - more $ for your crops, higher thc % , etc  (all stackable bonus's)
+hat slot - beard ( gives wisdom or something) , beanie (keeps plants warmer by 1-5) etc, wizard hat, pirates hat, santa hat, chefs hat, etc
+rings/necklace -different gems = more $ for your crops, higher thc % , etc  (all stackable bonus's)
 buffs - crop buffs of different levels, harvest buffs, drying buffs, etc could be level 1 -10 buffs for each kind too
 
--------------
 
+STRAIN CARDS:
+can we include our "strain cards" in a few ways
+1: the slightly faded image we are using for the background of the plant, its a zoomed in , faded version of the plant sprite that is currently being used, can we instead use a zoomed in, slightly faded version of our strain card? say its rainbow skunk im growing, we use the zoomed in on ART from the rainbow skunk card , slightly faded, as the background, and then we can still use option 3 (below) to turn over the tile and see the full card with the stats that are below the art and the name that is above the art, i would want this cropped out here in option 1, making option 3 still relevant. 
+2: when we harvest, id like the icon for each strain in the harvest tab to be their respective card.
+3: i want something showing the card with the stats, on the original grow tab, im thinking if you click anywhere that doesn't already have a click use, it will flip that idividual plant tab over and show the card on the backside .
+( i will include the card files for each strain in this prompt, they are found in "assets/sept22edits/websiteimagedata/cards/finished/_____" (____ = strain name)
+ALSO:
+you should also receive a "strain card" item for each code you put in, so when you buy purple rainbow seeds and enter the code you receive the seeds and a collecter item in your "cards" tab in your inventory, it will show you an image of the card (small) and let you click it to view it (big), just there for show and for something cool to look at or show off what seeds youve bought in the past .
 
-
-FINAL FINAL FINAL POLISH:
-can we move away from using so many emojis as the icons and make up actual icon images? ones that look like a light or a heater or a fan, etc 
-emojis work for now but this would be a nice polish step
-
-
-is there a way to make this more visual in a sense of , if you have a fan, the first tab before any of the plant sprite tabs could be an "equipment in this room tab" and show a  little "fan" sprite , a little c02 tank sprite, a water reservoir, etc, all of our equipment could have a little image showing that hey its in the room, if we are missing a fan for example it would be a grayed out fan showing we can put one in that spot still
-if anything, if its something you can fill or have to empty it should be half lit up at 50% and half grayed out showing its fill line
-you cant mess with any settings here but clicking on one of them will open the environment tab
-you should be able to minimize this tab so that its not always showing if you dont want it to be . (actual plant tabs are not minimizable)
-
-
-
-
---------
-
-MAKE EVERYTHING HARDER TO GET:
- AS PER SEEDS, more multipliers for bad effects to give less seeds
-market place seeds should be more expensive
-males should be 10-15k each and less accessable, maybe only found on the black market and at random instead of every single one being available all the time
-buyers/sellers need to appear at random and feel more scarce 
-breeding should be unlocked at level 25, you can make f1s
-at level 30 you can make f2s, all the way to level 100 for f10s and level 110 for bx10s
-once you hit level 1000 you can make f* and bx* in god mode
-
+strains that aren't our strains should get whatever strain they originally used to make that seed as the art, if it was albino skunk even 5 generations ago, itll still be an albino skunk art related to it .

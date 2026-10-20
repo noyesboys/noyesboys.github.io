@@ -1,0 +1,929 @@
+🌿 NOYES BOYS — COMPREHENSIVE ITEM SYSTEM DESIGN
+This is a brainstorm + implementation blueprint. Next prompt we code them all in.
+
+IMPLEMENTATION ARCHITECTURE (how items plug into the game)
+Item types I'm proposing:
+
+consumable — one-use, applied to a plant or room
+passive_room — placed in a room slot, always-on effect
+passive_player — held in inventory, global effect
+triggered — activates on a specific event (harvest, disease, etc.)
+timed — effect lasts X real hours
+equipment_upgrade — attaches to existing gear to modify it
+genetic — affects breeding/seeds specifically
+combo — only works when held alongside a partner item
+cursed — has a downside AND an upside (risk/reward)
+
+New inventory structure needed:
+javascriptGS.itemInventory = {
+  instances: [],  // { uid, itemId, qty, metadata, equippedRoomId, equippedPlantId }
+  activeEffects: [] // { itemId, expiresAt, source }
+}
+Items live alongside the existing equipItems array but in their own dedicated itemInventory so they don't clash with wearable gear.
+
+CATEGORY 1: SOIL & ROOT ADDITIVES (consumable, 1× per plant at planting OR water)
+javascript// Applied at planting time like current additives, OR during watering
+
+SOIL_001: {
+  name: 'Root Stimulator',
+  icon: '🌱', rarity: 'Common',
+  desc: 'Cuts transplant root-bind timer in half. Seedling phase 25% faster.',
+  effect: { transplantBindReduction: 0.5, seedlingSpeedBonus: 25 },
+  type: 'consumable', useAt: 'plant'
+},
+SOIL_002: {
+  name: 'Silica Supplement',
+  icon: '💎', rarity: 'Common',
+  desc: 'Strengthens cell walls. Reduces all stress damage by 20% for the full grow.',
+  effect: { stressDamageReduction: 20 },
+  type: 'consumable', useAt: 'plant'
+},
+SOIL_003: {
+  name: 'Humic Acid Pack',
+  icon: '🟫', rarity: 'Uncommon',
+  desc: 'Improves nutrient uptake. Reduces nutrient lockout chance by 40%. +5% yield.',
+  effect: { lockoutResist: 40, yield_pct: 5 },
+  type: 'consumable', useAt: 'plant'
+},
+SOIL_004: {
+  name: 'B-52 Vitamin Boost',
+  icon: '💊', rarity: 'Common',
+  desc: 'Stress recovery 3× faster. One-time injection at transplant.',
+  effect: { stressRecoveryMult: 3, duration_days: 7 },
+  type: 'consumable', useAt: 'plant'
+},
+SOIL_005: {
+  name: 'Kelp Extract Drench',
+  icon: '🌿', rarity: 'Common',
+  desc: 'Natural growth hormone. +15% veg growth speed for 10 in-game days.',
+  effect: { growSpeed: 15, duration_gameDays: 10 },
+  type: 'consumable', useAt: 'water'
+},
+SOIL_006: {
+  name: 'Coconut Water (Cyt)',
+  icon: '🥥', rarity: 'Uncommon',
+  desc: 'Cytokinins trigger explosive new growth points. +3 bud sites on next top/FIM.',
+  effect: { budSiteBonus: 3 },
+  type: 'consumable', useAt: 'plant'
+},
+SOIL_007: {
+  name: 'Beneficial Bacteria Pack',
+  icon: '🦠', rarity: 'Uncommon',
+  desc: 'Living soil microbes. Permanently improves root zone — plant never gets root rot this grow.',
+  effect: { rootRotImmune: true },
+  type: 'consumable', useAt: 'plant'
+},
+SOIL_008: {
+  name: 'Diatomaceous Earth',
+  icon: '⬜', rarity: 'Common',
+  desc: 'Top-dress the soil. Kills any crawling pest immediately on contact. One-time cure + 7-day prevention.',
+  effect: { instantKillPests: true, pestPreventDays: 7 },
+  type: 'consumable', useAt: 'plant'
+},
+SOIL_009: {
+  name: 'Neem Cake (Soil Mix)',
+  icon: '🫙', rarity: 'Uncommon',
+  desc: 'Passive pest deterrent baked into soil. All pest spawn chance −30% for entire grow.',
+  effect: { pestSpawnReduction: 30 },
+  type: 'consumable', useAt: 'plant'
+},
+SOIL_010: {
+  name: 'Predatory Mite Colony',
+  icon: '🕷️', rarity: 'Rare',
+  desc: 'Release predators into the room. Eliminates spider mites AND prevents re-infestation for 10 real days. Room-wide.',
+  effect: { roomWide: true, miteImmunity_realDays: 10, curesMites: true },
+  type: 'consumable', useAt: 'room'
+},
+SOIL_011: {
+  name: 'Trichome Booster',
+  icon: '❄️', rarity: 'Rare',
+  desc: 'Apply in weeks 6-8 of flower. +1.5% THC. Miss the window = wasted.',
+  effect: { thcBonus: 1.5, windowFlowerWeek: [6, 8] },
+  type: 'consumable', useAt: 'water'
+},
+SOIL_012: {
+  name: 'Frost Enhancer',
+  icon: '✨', rarity: 'Epic',
+  desc: 'Final 2 weeks of flower only. Doubles trichome density. +2% THC AND doubles GOD pheno chance this harvest.',
+  effect: { thcBonus: 2, godPhenoMult: 2, windowFlowerWeek: [11, 13] },
+  type: 'consumable', useAt: 'water'
+},
+SOIL_013: {
+  name: 'Hydrogen Peroxide Drench',
+  icon: '💧', rarity: 'Common',
+  desc: 'Oxygenates the root zone. Cures root rot AND overwatering stress immediately.',
+  effect: { curesRootRot: true, curesOverwater: true, healthBonus: 10 },
+  type: 'consumable', useAt: 'water'
+},
+SOIL_014: {
+  name: 'Iron Chelate Fix',
+  icon: '🔴', rarity: 'Common',
+  desc: 'Fixes iron/manganese deficiency instantly. +5 health + removes purple stem penalty.',
+  effect: { healthBonus: 5, fixesIronDef: true },
+  type: 'consumable', useAt: 'water'
+},
+SOIL_015: {
+  name: 'Air Pot Insert',
+  icon: '🕳️', rarity: 'Uncommon',
+  desc: 'Air-prune roots for any pot. +12% yield from better root zone. Can\'t be combined with fabric pots.',
+  effect: { yield_pct: 12, incompatibleWith: ['fabric_pot'] },
+  type: 'consumable', useAt: 'plant'
+},
+
+CATEGORY 2: TERPENE & QUALITY ITEMS (consumable, harvest quality focused)
+javascriptTERP_001: {
+  name: 'Terpene Preservation Spray',
+  icon: '🌸', rarity: 'Rare',
+  desc: 'Applied during last 3 days before harvest. Locks terpene profile. +15% curing quality BASE.',
+  effect: { curQualityBonus: 15, windowFlowerWeek: [11, 14] },
+  type: 'consumable', useAt: 'spray'
+},
+TERP_002: {
+  name: 'Boveda 62% Pack',
+  icon: '📦', rarity: 'Common',
+  desc: 'Put in curing jar. Automatically stabilizes RH at 62%. Eliminates ALL burp timing — just wait.',
+  effect: { jarAutoStabilize: 62, noNeedToBurp: true },
+  type: 'consumable', useAt: 'curing_jar'
+},
+TERP_003: {
+  name: 'Boveda 58% Pack',
+  icon: '📦', rarity: 'Uncommon',
+  desc: 'Stabilizes at 58% — the ultra-premium window. Curing quality +20% vs standard 62%.',
+  effect: { jarAutoStabilize: 58, qualityBonus: 20 },
+  type: 'consumable', useAt: 'curing_jar'
+},
+TERP_004: {
+  name: 'Hash Bag Kit (3-bag)',
+  icon: '🧲', rarity: 'Uncommon',
+  desc: 'Process dry trim into bubble hash. Adds a bonus 15-25g hash yield to any harvest. Sold at 3× flower rate.',
+  effect: { bonusHashGrams: { min: 15, max: 25 }, hashPriceMultiplier: 3 },
+  type: 'consumable', useAt: 'harvest'
+},
+TERP_005: {
+  name: 'Rosin Press Token',
+  icon: '💰', rarity: 'Epic',
+  desc: 'Convert 20g of cured flower into 4g rosin. Rosin sells at 10× the flower rate. One press per token.',
+  effect: { inputGrams: 20, outputGrams: 4, outputType: 'rosin', sellMult: 10 },
+  type: 'consumable', useAt: 'vault'
+},
+TERP_006: {
+  name: 'Lab Analysis Certificate',
+  icon: '🔬', rarity: 'Rare',
+  desc: 'Get a real THC test. Reveals if your actual THC is ±3% from displayed. Changes sell price accordingly. Sometimes you discover you\'re HIGHER than shown.',
+  effect: { revealTrueTHC: true, priceAdjust: true },
+  type: 'consumable', useAt: 'vault'
+},
+TERP_007: {
+  name: 'Flushing Agent (Pro)',
+  icon: '🚿', rarity: 'Common',
+  desc: 'Clears nutrient buildup 3× faster than plain water. Soil PPM drops 80% in one flush.',
+  effect: { flushEfficiency: 3 },
+  type: 'consumable', useAt: 'water'
+},
+TERP_008: {
+  name: 'Ripening Agent',
+  icon: '🌅', rarity: 'Rare',
+  desc: 'Triggers final ripening. Skips last week of flower — harvest at week 10 with week 11 quality.',
+  effect: { skipFlowerDays: 7, qualityNoLoss: true },
+  type: 'consumable', useAt: 'plant'
+},
+
+CATEGORY 3: GENETIC & BREEDING ITEMS (the most unique category)
+javascriptGENE_001: {
+  name: 'Pollen Collector Kit',
+  icon: '🌬️', rarity: 'Rare',
+  desc: 'Collect and STORE male pollen. Use stored pollen on any female, any time, without a male in the room. Pollen lasts 30 real days.',
+  effect: { collectPollen: true, pollenStorageDays: 30, useOnFemale: true },
+  type: 'consumable', useAt: 'male_plant'
+  // IMPLEMENTATION: openPollenCollectorModal(maleId), stores to GS.storedPollen[]
+},
+GENE_002: {
+  name: 'DNA Stabilizer',
+  icon: '🧬', rarity: 'Epic',
+  desc: 'Apply to a bred strain\'s next grow. Adds +1 generation of stability (F3 acts like F4, etc). Cannot exceed F*.',
+  effect: { stabilityGenBoost: 1 },
+  type: 'consumable', useAt: 'plant'
+},
+GENE_003: {
+  name: 'Mutation Serum',
+  icon: '☢️', rarity: 'Legendary',
+  desc: 'WILD CARD. Water a plant with this during veg. 40% chance: GOD pheno + mystery bonus. 30% chance: EP/Shiny guaranteed. 30% chance: plant gets a permanent "mutant" trait (random good or bad).',
+  effect: { mutationRoll: true },
+  cursedRisk: 0.30,
+  type: 'consumable', useAt: 'water'
+},
+GENE_004: {
+  name: 'Phenotype Hunter Kit',
+  icon: '🔭', rarity: 'Epic',
+  desc: 'Plants 3 seeds at once in one slot. You keep only the best — discard the other two. 3× more rarity rolls in one slot.',
+  effect: { triplePlant: true, keepBest: true },
+  type: 'consumable', useAt: 'plant'
+},
+GENE_005: {
+  name: 'Gene Lock Crystal',
+  icon: '🔒', rarity: 'Legendary',
+  desc: 'PERMANENT. Lock a bred strain at its current gen as a "finished" line. Future seeds always maintain this gen\'s stability and rarity rates forever, even without more breeding.',
+  effect: { lockGeneration: true, permanentStability: true },
+  type: 'consumable', useAt: 'strain'
+},
+GENE_006: {
+  name: 'Autoflower Conversion Kit',
+  icon: '⏰', rarity: 'Epic',
+  desc: 'Convert any photoperiod strain into an autoflower. No light flip needed — flowers automatically after 30 veg days. Slightly lower yield, perfect for tight rooms.',
+  effect: { makeAutoflower: true, autoTriggerVegDays: 30, yieldReduction: 15 },
+  type: 'consumable', useAt: 'plant'
+},
+GENE_007: {
+  name: 'Hybrid Vigor Token',
+  icon: '💪', rarity: 'Master',
+  desc: 'Apply to an F1 seed before planting. MAKES F1 GROWABLE. Unlocks the normally ungrabbable generation. Stats are unpredictable — could be incredible or terrible.',
+  effect: { makeF1Growable: true, statsVariance: 'extreme' },
+  type: 'consumable', useAt: 'seed'
+},
+GENE_008: {
+  name: 'Clone Machine',
+  icon: '🔄', rarity: 'Rare',
+  desc: 'Take a cutting from any veg plant. Creates a NEW seed of that exact plant (same rarity, same stats, no random roll). Limited to 3 clones per machine.',
+  effect: { cloneCount: 3, preserveRarity: true, preserveStats: true },
+  type: 'consumable', useAt: 'plant'
+},
+GENE_009: {
+  name: 'Generation Skip Serum',
+  icon: '⏭️', rarity: 'GOD',
+  desc: 'EXTREMELY RARE. Jumps a strain from its current gen to F*/BX* immediately. Instant legendary-tier genetics in one use.',
+  effect: { skipToMaxGen: true },
+  type: 'consumable', useAt: 'seed'
+},
+GENE_010: {
+  name: 'Landrace Discovery Pack',
+  icon: '🗺️', rarity: 'Legendary',
+  desc: 'Seeds from ancient unmodified landrace genetics. Stats completely unknown until harvest. Could be 35% THC or 10%. Always has a unique name generator.',
+  effect: { unknownStats: true, uniqueNameGen: true, rarityRange: 'EP to GOD' },
+  type: 'consumable', useAt: 'seed_pack'
+},
+
+CATEGORY 4: ROOM PASSIVE ITEMS (placed in room, persistent effect)
+javascript// New concept: GS.roomItems[roomId] = [] (max 5 per room)
+// Rendered in the Gear panel as "Room Items" section
+
+ROOM_001: {
+  name: 'Reflective Mylar Kit',
+  icon: '🪞', rarity: 'Common',
+  desc: '+12% effective light intensity in any room. Cheap and permanent.',
+  effect: { lightEfficiency: 12 },
+  type: 'passive_room', maxPerRoom: 1
+},
+ROOM_002: {
+  name: 'UV Lamp Attachment',
+  icon: '🔆', rarity: 'Uncommon',
+  desc: 'Attaches to any light. Mildew spawn chance −60% room-wide. Slightly increases terpene production.',
+  effect: { mildewSpawnReduction: 60, terpeneBonus: 3 },
+  type: 'passive_room', maxPerRoom: 2
+},
+ROOM_003: {
+  name: 'CO2 Bag (Organic)',
+  icon: '🫧', rarity: 'Common',
+  desc: 'Low-tech CO2. Adds +200ppm naturally. No tank needed. Lasts 21 real days then needs replacement.',
+  effect: { co2Bonus: 200, expiresRealDays: 21 },
+  type: 'passive_room', maxPerRoom: 3
+},
+ROOM_004: {
+  name: 'Ozone Generator',
+  icon: '🌀', rarity: 'Rare',
+  desc: 'One-time use. Obliterates ALL diseases and pests in the entire room instantly. Also resets all plant disease timers.',
+  effect: { clearAllDiseases: true, clearAllPests: true, oneTimeUse: true },
+  type: 'passive_room'
+},
+ROOM_005: {
+  name: 'Negative Ion Generator',
+  icon: '⚡', rarity: 'Uncommon',
+  desc: 'Ionizes room air. Pest spawn chance −25% and mildew −15% permanently while in room.',
+  effect: { pestSpawnReduction: 25, mildewSpawnReduction: 15 },
+  type: 'passive_room', maxPerRoom: 1
+},
+ROOM_006: {
+  name: 'Worm Farm',
+  icon: '🪱', rarity: 'Uncommon',
+  desc: 'Passive item. Produces 200ml of worm casting tea every 48 real hours. Auto-fills base nutrient. Never needs restocking.',
+  effect: { generateNuteBase_ml: 200, intervalRealHrs: 48 },
+  type: 'passive_room', maxPerRoom: 1
+},
+ROOM_007: {
+  name: 'Compost Tea Brewer',
+  icon: '🍵', rarity: 'Rare',
+  desc: 'Brews organic nutrients from waste. Reduces all nutrient bottle consumption by 40% while in room.',
+  effect: { nuteConsumptionReduction: 40 },
+  type: 'passive_room', maxPerRoom: 1
+},
+ROOM_008: {
+  name: 'Rain Water Collector',
+  icon: '🌧️', rarity: 'Common',
+  desc: 'Collects 50 gallons of pure water every 24 real hours. Auto-tops reservoir with pH-perfect water.',
+  effect: { generateWaterGal: 50, intervalRealHrs: 24, naturalPH: 6.2 },
+  type: 'passive_room', maxPerRoom: 1
+},
+ROOM_009: {
+  name: 'Motivational Grow Poster',
+  icon: '🖼️', rarity: 'Common',
+  desc: '"She\'s Always Late But She\'s Always Worth It." +2% yield for all plants in room. Because positivity.',
+  effect: { yield_pct: 2 },
+  type: 'passive_room', maxPerRoom: 3
+},
+ROOM_010: {
+  name: 'Feng Shui Layout',
+  icon: '☯️', rarity: 'Uncommon',
+  desc: 'Rearrange the room for harmony. Stress generation for all plants −10%. Energy flows freely.',
+  effect: { stressGenerationReduction: 10 },
+  type: 'passive_room', maxPerRoom: 1
+},
+ROOM_011: {
+  name: 'Himalayan Salt Lamp',
+  icon: '🪨', rarity: 'Common',
+  desc: 'Ambient negative ions. −3% RH naturally. +5% grow score bonus from "ambiance".',
+  effect: { humidReduction: 3, growScoreBonus: 5 },
+  type: 'passive_room', maxPerRoom: 2
+},
+ROOM_012: {
+  name: 'Quantum Reflector Hood',
+  icon: '🪄', rarity: 'Rare',
+  desc: 'Attaches to HID. Makes any HID act 15% more powerful. Stack with Cool Tube for heat reduction.',
+  effect: { hidEfficiency: 15 },
+  type: 'passive_room', maxPerRoom: 2, requiresGear: 'lights'
+},
+ROOM_013: {
+  name: 'Cool Tube (HID Add-on)',
+  icon: '🧊', rarity: 'Uncommon',
+  desc: 'Ducted HID cooling. Reduces heat produced by HID by 35%. Pairs with Quantum Hood.',
+  effect: { hidHeatReduction: 35 },
+  type: 'passive_room', maxPerRoom: 2, requiresGear: 'lights'
+},
+ROOM_014: {
+  name: 'Smart Timer Upgrade',
+  icon: '⏱️', rarity: 'Uncommon',
+  desc: 'Precision light timing. Eliminates all light-cycle stress. Lights flip EXACTLY on schedule, no drift.',
+  effect: { eliminateLightCycleStress: true },
+  type: 'passive_room', maxPerRoom: 1
+},
+ROOM_015: {
+  name: 'Yellow Sticky Traps (×10)',
+  icon: '🟡', rarity: 'Common',
+  desc: 'Early warning system. Shows pest presence 24 real hours before they would normally damage plants.',
+  effect: { earlyPestWarning_hrs: 24 },
+  type: 'passive_room', maxPerRoom: 3
+},
+ROOM_016: {
+  name: 'Security Camera',
+  icon: '📷', rarity: 'Uncommon',
+  desc: 'Watches the room. BM theft risk on stored seeds −50%. Also reduces "random negative event" chance.',
+  effect: { bmTheftReduction: 50, randomEventReduction: 20 },
+  type: 'passive_room', maxPerRoom: 2
+},
+
+CATEGORY 5: PET / COMPANION ITEMS (completely novel mechanic!)
+javascript// New concept: Each room can have ONE companion
+// Companions generate random events logged to event log + toasts
+// They level up with the room (visits, harvests)
+
+PET_001: {
+  name: 'Carl the Cat',
+  icon: '🐱', rarity: 'Rare',
+  desc: 'Unpredictable. 8% chance each day he knocks something over (−5 health random plant). 15% daily chance he chases a pest away before it can infect. Leveling Carl unlocks rare behaviors.',
+  dailyEvents: [
+    { chance: 0.08, type: 'negative', effect: { randomPlantDamage: 5 }, msg: '😾 Carl knocked over your nutes. -5 health to a plant.' },
+    { chance: 0.15, type: 'positive', effect: { cureRandomPest: true }, msg: '😸 Carl caught something in the grow room. One pest eliminated!' },
+    { chance: 0.03, type: 'special',  effect: { findCoin: [50, 200] }, msg: '😺 Carl dug up something shiny. +50-200¢!' }
+  ],
+  type: 'companion', maxPerRoom: 1
+},
+PET_002: {
+  name: 'Bob the Dog',
+  icon: '🐕', rarity: 'Uncommon',
+  desc: 'Loyal watchdog. Detects diseases and pests 2 real hours before they would normally trigger. Also wakes you up (toast notification) when any plant hits critical health.',
+  effect: { earlyDiseaseDetection_hrs: 2, criticalHealthAlert: true },
+  type: 'companion', maxPerRoom: 1
+},
+PET_003: {
+  name: 'Lucky Frog',
+  icon: '🐸', rarity: 'Epic',
+  desc: '+1.5% chance of EP or higher rarity every harvest while in room. Also randomly produces "lucky charm" consumables every 5 real days.',
+  effect: { rarityChanceBonus: 1.5, generateLuckyCharm_days: 5 },
+  type: 'companion', maxPerRoom: 1
+},
+PET_004: {
+  name: 'Owl Statue',
+  icon: '🦉', rarity: 'Rare',
+  desc: '"All-seeing." Passive: pest spawn −20%. Rare (1%) chance each harvest to reveal a hidden phenotype bonus. If your plant had a hidden GOD potential you didn\'t get, the owl shows you a clue.',
+  effect: { pestSpawnReduction: 20, hiddenPhenoReveal: 0.01 },
+  type: 'companion', maxPerRoom: 1
+},
+PET_005: {
+  name: 'Praying Mantis Colony',
+  icon: '🦗', rarity: 'Uncommon',
+  desc: 'Biological IPM. Eliminates all aphids immediately. Reduces all future pest spawns by 30% permanently for this room.',
+  effect: { curesAphids: true, pestSpawnReduction: 30, permanent: true },
+  type: 'companion', maxPerRoom: 1
+},
+PET_006: {
+  name: 'Ladybug Colony',
+  icon: '🐞', rarity: 'Common',
+  desc: 'Biological pest control. Spider mites and aphids −40% spawn. Passive, zero maintenance.',
+  effect: { miteSpawnReduction: 40, aphidSpawnReduction: 40 },
+  type: 'companion', maxPerRoom: 1
+},
+PET_007: {
+  name: 'Gnome Figurine',
+  icon: '🪄', rarity: 'Rare',
+  desc: 'Mystical guardian. Each in-game week, 5% chance the gnome "fixes" one random minor issue silently (low water, minor disease, nutrient imbalance). You\'ll notice things just... working out.',
+  effect: { weeklyRandomFix: 0.05 },
+  type: 'companion', maxPerRoom: 1
+},
+
+CATEGORY 6: EQUIPMENT UPGRADE CHIPS (attach to existing gear)
+javascript// Attached to specific gear instances. Stored in gear instance metadata.
+// UI: in Gear Panel, each assigned slot has an "Upgrade" button
+
+CHIP_001: {
+  name: 'Overclock Fan Chip',
+  icon: '🔴', rarity: 'Rare',
+  desc: 'Pushes fan to 150% efficiency. BUT: 25% chance per real day of fan burnout. Gear protection items reduce risk.',
+  effect: { fanEfficiencyBonus: 50 },
+  burnoutRisk: 0.25,
+  attachesTo: 'fan',
+  type: 'equipment_upgrade'
+},
+CHIP_002: {
+  name: 'Silent Motor Mod',
+  icon: '🔇', rarity: 'Common',
+  desc: 'Reduces fan noise (lore). Actually reduces fan speed needed for effective airflow by 30%.',
+  effect: { fanSpeedRequired: -30 },
+  attachesTo: 'fan',
+  type: 'equipment_upgrade'
+},
+CHIP_003: {
+  name: 'Smart Thermostat Pro',
+  icon: '🧠', rarity: 'Epic',
+  desc: 'AC/Heater responds instantly instead of lagging. Eliminates all temperature fluctuation stress. Temp holds exactly at target.',
+  effect: { eliminateTempFluctuation: true, snapToTarget: true },
+  attachesTo: ['acUnit', 'heater'],
+  type: 'equipment_upgrade'
+},
+CHIP_004: {
+  name: 'LED Flower Spectrum Chip',
+  icon: '🔴', rarity: 'Rare',
+  desc: 'Adds deep red (730nm) to any LED. Boosts flower quality by 8% and reduces stretch.',
+  effect: { flowerQualityBonus: 8, stretchReduction: true },
+  attachesTo: 'lights',
+  type: 'equipment_upgrade'
+},
+CHIP_005: {
+  name: 'Quantum Driver Upgrade',
+  icon: '💡', rarity: 'Epic',
+  desc: 'Replaces the LED driver. +20% PPFD from same LED, same heat. Effectively makes your LED 20% bigger.',
+  effect: { lightPowerBonus: 20 },
+  attachesTo: 'lights',
+  type: 'equipment_upgrade'
+},
+CHIP_006: {
+  name: 'Precision pH Electrode',
+  icon: '🧪', rarity: 'Uncommon',
+  desc: 'Upgrade for pH Meter. ±0.01 accuracy vs ±0.1 standard. Reveals true pH drift on plants.',
+  effect: { pHPrecision: true, showSoilPHDrift: true },
+  attachesTo: 'phmeter',
+  type: 'equipment_upgrade'
+},
+CHIP_007: {
+  name: 'Wireless EC Monitor',
+  icon: '📡', rarity: 'Rare',
+  desc: 'Upgrade for EC Meter. Shows real-time runoff PPM on plant cards without manual testing.',
+  effect: { showLiveRunoff: true },
+  attachesTo: 'ecmeter',
+  type: 'equipment_upgrade'
+},
+CHIP_008: {
+  name: 'Dehu Autopilot',
+  icon: '🎛️', rarity: 'Epic',
+  desc: 'Auto-adjusts dehu intensity based on plant transpiration. RH stays in ideal range with 60% less work.',
+  effect: { autoRHManagement: true, dehuEfficiency: 60 },
+  attachesTo: 'dehumidifier',
+  type: 'equipment_upgrade'
+},
+
+CATEGORY 7: TRIGGERED / EVENT ITEMS (activate on specific game events)
+javascript// These sit in inventory passively and fire their effect when a trigger condition is met
+// Trigger types: on_harvest, on_disease, on_death, on_veg_start, on_flower_start, on_sale
+
+TRIG_001: {
+  name: 'Harvest Moon Insurance',
+  icon: '🌕', rarity: 'Uncommon',
+  desc: 'Pay 500¢ per grow. If anything catastrophic happens (disease kills plant, permanent death), receive 50% of projected harvest value as coins. Auto-activates on planting.',
+  cost_per_grow: 500,
+  trigger: 'on_permanent_death',
+  effect: { refundPct: 50 },
+  type: 'triggered'
+},
+TRIG_002: {
+  name: 'Disease Shield Token',
+  icon: '🛡️', rarity: 'Rare',
+  desc: 'Sits in inventory. When ANY plant gets its first disease this grow, this item activates and CURES IT for free. Single use, one plant, one time.',
+  trigger: 'on_first_disease',
+  effect: { autoCureFirst: true },
+  oneTimeUse: true,
+  type: 'triggered'
+},
+TRIG_003: {
+  name: 'Critical Health Stabilizer',
+  icon: '💉', rarity: 'Epic',
+  desc: 'Auto-triggers when any plant in your rooms drops below 10 health. Injects a heal automatically. Saves the plant before you even notice. One use.',
+  trigger: 'on_health_below_10',
+  effect: { autoHeal: 40 },
+  oneTimeUse: true,
+  type: 'triggered'
+},
+TRIG_004: {
+  name: 'Harvest Multiplier Seed',
+  icon: '🎲', rarity: 'Legendary',
+  desc: 'At harvest, roll dice. 33% chance: +50% yield. 33% chance: normal. 33% chance: this also plants a duplicate clone for free.',
+  trigger: 'on_harvest',
+  effect: { rollOnHarvest: { win: { yield_pct: 50 }, bonus: { freeClone: true } } },
+  type: 'triggered'
+},
+TRIG_005: {
+  name: 'Pheno-Reveal Lens',
+  icon: '🔍', rarity: 'Epic',
+  desc: 'At harvest, reveals the plant\'s TRUE potential rarity — what it COULD have been with perfect conditions. If you didn\'t achieve it, shows you what you missed.',
+  trigger: 'on_harvest',
+  effect: { revealTruePotential: true },
+  type: 'triggered'
+},
+TRIG_006: {
+  name: 'Sale Turbocharge Card',
+  icon: '💳', rarity: 'Rare',
+  desc: 'Next sale ONLY: buyer pays 3× their listed rate. One use. Best used with a large, high-quality batch.',
+  trigger: 'on_next_sale',
+  effect: { saleMultiplier: 3 },
+  oneTimeUse: true,
+  type: 'triggered'
+},
+TRIG_007: {
+  name: 'BM Anonymizer',
+  icon: '😷', rarity: 'Uncommon',
+  desc: 'Next Black Market sale: 0% chance of being ripped off. Fully anonymous guaranteed transaction.',
+  trigger: 'on_next_bm_sale',
+  effect: { bmSuccessRate: 1.0 },
+  oneTimeUse: true,
+  type: 'triggered'
+},
+TRIG_008: {
+  name: 'Second Chance Token',
+  icon: '↩️', rarity: 'Legendary',
+  desc: 'When a plant reaches permanent death, this token activates. Revives it at 5% health. Once per account, ever.',
+  trigger: 'on_permanent_death',
+  effect: { reviveAtHealth: 5 },
+  oneTimeUse: true, globalCooldown: true,
+  type: 'triggered'
+},
+TRIG_009: {
+  name: 'Grow-Off Crowd Pleaser',
+  icon: '🎤', rarity: 'Rare',
+  desc: 'In an active Grow-Off, submit this with your entry. Judges give a 0.5-point bonus to your final score regardless of quality. The crowd loves you.',
+  trigger: 'on_growoff_submit',
+  effect: { growoffScoreBonus: 0.5 },
+  oneTimeUse: true,
+  type: 'triggered'
+},
+
+CATEGORY 8: CURSED / RISK ITEMS (high risk, high reward)
+javascript// The "cursed" field means these have a downside even when working correctly
+// Some are intentionally negative (but give achievements/rewards for surviving them)
+
+CURSE_001: {
+  name: 'The Black Thumb',
+  icon: '🖤', rarity: 'Legendary',
+  desc: 'When you pick this up, one random plant dies instantly. BUT: that dead plant drops a GOD Pheno Token for your NEXT harvest. Grief for future glory.',
+  onPickup: { killRandomPlant: true },
+  effect: { grantGodToken: true },
+  cursed: true,
+  type: 'triggered'
+},
+CURSE_002: {
+  name: 'Devil\'s Deal',
+  icon: '😈', rarity: 'GOD',
+  desc: 'Use on a plant in flower. Triples yield AND THC. But this plant\'s curing jar can NEVER use Boveda packs — must be manually burped perfectly. Miss a burp → lose it all.',
+  effect: { yield_pct: 200, thcMult: 3 },
+  downside: { noBovedaAllowed: true, perfectBurpRequired: true },
+  cursed: true,
+  type: 'consumable', useAt: 'flower_plant'
+},
+CURSE_003: {
+  name: 'Chaos Seed',
+  icon: '🌪️', rarity: 'Legendary',
+  desc: 'Plant it. Stats are completely random. Could be 5% THC and 50g yield. Could be 40% THC and 800g yield. No way to know. Rarity guaranteed EP or higher.',
+  effect: { randomStats: true, rarityMin: 'EP' },
+  cursed: true,
+  type: 'seed'
+},
+CURSE_004: {
+  name: 'Competitor\'s Clone',
+  icon: '🏴‍☠️', rarity: 'Black Market',
+  desc: 'Stolen clone from a competition winner. Stats are incredible. BUT: 20% chance it arrives with spider mites already. 10% chance "the original owner finds out" — one of your BM listings fails.',
+  effect: { statsBonus: 'elite', rarityBonus: 'Shiny+' },
+  downside: { miteChance: 0.20, bmListingFailChance: 0.10 },
+  cursed: true,
+  type: 'seed'
+},
+CURSE_005: {
+  name: 'Untested Nutrient Sample',
+  icon: '🧪', rarity: 'Uncommon',
+  desc: 'Free nutrients from an unknown brand. 50% chance: +20% yield and +1% THC. 50% chance: burns the plant for -30 health and locks PPM at 0 for 3 game days.',
+  effect: { rollOutcome: { win: { yield_pct: 20, thc_add: 1 }, lose: { healthDmg: 30, ppmLock_days: 3 } } },
+  cursed: true,
+  type: 'consumable', useAt: 'water'
+},
+CURSE_006: {
+  name: 'Mystery Clone Box',
+  icon: '📦', rarity: 'Black Market',
+  desc: 'Someone mailed you an unlabeled clone. You don\'t know the strain until harvest. It could be anything. Rarity distribution: 30% Standard, 30% EP, 20% Shiny, 10% Sparkling, 8% Glowing, 2% GOD.',
+  effect: { unknownStrain: true, revealAtHarvest: true, rarityTable: 'boosted' },
+  cursed: false, // it's exciting, not cursed
+  type: 'seed'
+},
+CURSE_007: {
+  name: 'Experimental Growth Hormone',
+  icon: '💉', rarity: 'Epic',
+  desc: '70% chance: +3 game weeks of veg added INSTANTLY (no time passes, just veg stats). 30% chance: plant stress locks at 95% for 5 game days.',
+  effect: { rollOutcome: { win: { instantVegDays: 21 }, lose: { stressLock: 95, gameDays: 5 } } },
+  cursed: true,
+  type: 'consumable', useAt: 'veg_plant'
+},
+
+CATEGORY 9: ECONOMY & MARKET ITEMS
+javascriptECON_001: {
+  name: 'Buyer Loyalty Card',
+  icon: '💳', rarity: 'Uncommon',
+  desc: 'After 10 sales to any single buyer, your next sale to them has NO market fee. Auto-tracks per buyer.',
+  effect: { freeAfterSales: 10, zeroFee: true },
+  type: 'passive_player'
+},
+ECON_002: {
+  name: 'Bulk Deal Broker',
+  icon: '📊', rarity: 'Rare',
+  desc: 'Sell 500g+ in one transaction? Get +25% coins on top of rate. Encourages stacking vault before selling.',
+  effect: { bulkSaleThreshold: 500, bonusPct: 25 },
+  type: 'passive_player'
+},
+ECON_003: {
+  name: 'Auction House Ticket',
+  icon: '🔨', rarity: 'Epic',
+  desc: 'Put one vault item to auction. Price goes to highest bidder — roll between 0.5× and 12× market rate. Gamble your best batch.',
+  effect: { auctionMultRange: [0.5, 12] },
+  oneTimeUse: true,
+  type: 'consumable', useAt: 'vault'
+},
+ECON_004: {
+  name: 'Haggling Diploma',
+  icon: '🎓', rarity: 'Rare',
+  desc: 'PERMANENT upgrade. Market fee reduced from 25% to 18% forever. Achievement-level item.',
+  effect: { marketFeeReduction: 7, permanent: true },
+  type: 'passive_player', permanent: true
+},
+ECON_005: {
+  name: 'Magazine Feature Deal',
+  icon: '📰', rarity: 'Legendary',
+  desc: 'Your best grow was featured in High Times. Permanent: all future sales get +8% bonus. Cannot stack with another Magazine Feature.',
+  effect: { permanentSaleBonus: 8 },
+  type: 'passive_player', permanent: true, unique: true
+},
+ECON_006: {
+  name: 'Sponsor Contract',
+  icon: '🤝', rarity: 'Epic',
+  desc: 'Brand sponsorship deal. For 30 real days: +20% coins on all sales AND each harvest generates a free "sample item" from the sponsor. Brand randomly chosen from item pool.',
+  effect: { coinBonus: 20, freeItemOnHarvest: true },
+  duration_realDays: 30,
+  type: 'timed'
+},
+ECON_007: {
+  name: 'Tax Receipt (Medical License)',
+  icon: '📋', rarity: 'Master',
+  desc: 'Fake medical license. BM risk −30%, market fee −10%, all buyer requirements loosened by 2% THC.',
+  effect: { bmRiskReduction: 30, marketFeeReduction: 10, buyerThcRequirementReduction: 2 },
+  type: 'passive_player'
+},
+ECON_008: {
+  name: 'Celebrity Endorsement',
+  icon: '⭐', rarity: 'GOD',
+  desc: 'A famous celebrity tweeted about your strain. For 7 real days: ALL vault items sell at 5× rate, ALL buyers accept anything. Twitter is powerful.',
+  effect: { allSalesMultiplier: 5, noRequirements: true },
+  duration_realDays: 7,
+  type: 'timed'
+},
+
+CATEGORY 10: LORE / STORY / COLLECTION ITEMS
+javascript// These unlock tabs, mechanics, or cosmetics — not direct stat bonuses
+
+LORE_001: {
+  name: 'The Old Grower\'s Journal',
+  icon: '📖', rarity: 'Legendary',
+  desc: 'A worn notebook filled with secrets. Unlocks a hidden "WISDOM" tab showing perfect grow windows for every strain, optimal curing charts, and the original Noyes Boys genetics story.',
+  effect: { unlockWisdomTab: true, showOptimalWindows: true },
+  type: 'passive_player', cosmetic: true
+},
+LORE_002: {
+  name: 'First Harvest Certificate',
+  icon: '🏅', rarity: 'Common',
+  desc: 'Auto-awarded on your very first harvest. Framed in your Stats tab forever. No effect — just bragging rights.',
+  type: 'cosmetic', displayIn: 'stats'
+},
+LORE_003: {
+  name: 'Contest Trophy',
+  icon: '🏆', rarity: 'Rare',
+  desc: 'Permanent trophy from winning a Grow-Off. Displayed in stats. Passive +5% XP on all grows.',
+  effect: { xp_pct: 5 },
+  type: 'passive_player', cosmetic: true, displayIn: 'stats'
+},
+LORE_004: {
+  name: 'Genetics Family Tree Map',
+  icon: '🌳', rarity: 'Uncommon',
+  desc: 'Visual diagram of all your bred strains and their lineages. Unlocks a "FAMILY TREE" view in the Breed tab.',
+  effect: { unlockFamilyTree: true },
+  type: 'passive_player', cosmetic: true
+},
+LORE_005: {
+  name: 'Cryo Preservation Tank',
+  icon: '🧊', rarity: 'Epic',
+  desc: 'Store up to 50 seeds in cryo. These seeds NEVER degrade, expire, or lose viability. Shows a separate "frozen vault" in Seeds tab.',
+  effect: { cryoSlots: 50, noDegradation: true },
+  type: 'passive_player'
+},
+LORE_006: {
+  name: 'Secret Menu Code',
+  icon: '🤫', rarity: 'Black Market',
+  desc: 'Unlocks a hidden buyer who doesn\'t appear normally. Pays 2× market rate but only buys on Fridays (real calendar day).',
+  effect: { unlockSecretBuyer: true },
+  type: 'passive_player', unique: true
+},
+LORE_007: {
+  name: 'Grow Journal (Auto)',
+  icon: '📓', rarity: 'Uncommon',
+  desc: 'Auto-generates a complete grow diary from event log. View it in Stats. Future feature: "export to PDF." Each harvest gets its own entry.',
+  effect: { autoJournal: true },
+  type: 'passive_player', cosmetic: true
+},
+LORE_008: {
+  name: 'Strain Named After You',
+  icon: '👑', rarity: 'GOD',
+  desc: 'Only obtainable by beating The Noyes Boys in a Grow-Off. A new random strain is added to the game named after your username. One person per year. Pure status.',
+  effect: { namedStrainInGame: true },
+  type: 'cosmetic', unique: true, unobtainium: true
+},
+
+CATEGORY 11: SEASONAL / LIMITED TIME
+javascriptSEASON_001: {
+  name: '420 Pack',
+  icon: '4️⃣2️⃣0️⃣', rarity: 'Seasonal',
+  desc: 'Released April 20 only. Contains: 4 random items (guaranteed 1 Rare+) + a 420 branded seed.',
+  contains: { items: 4, rarityMin: 'Rare', bonusSeed: '420 OG (Seasonal)' },
+  available: { month: 4, day: 20 },
+  type: 'bundle'
+},
+SEASON_002: {
+  name: 'Harvest Moon Bundle',
+  icon: '🌕', rarity: 'Seasonal',
+  desc: 'October only. All items inside are double-sized. +1 bonus Glowing pheno token.',
+  available: { month: 10 },
+  type: 'bundle'
+},
+SEASON_003: {
+  name: 'Christmas Grow Pack',
+  icon: '🎁', rarity: 'Seasonal',
+  desc: 'December 24-26 only. Random drop of 5 items + the rare "Santa\'s Private Reserve" mystery seed.',
+  available: { month: 12, day_range: [24, 26] },
+  type: 'bundle'
+},
+SEASON_004: {
+  name: 'New Year Pheno Token',
+  icon: '🎆', rarity: 'Seasonal',
+  desc: 'January 1 only. Guarantees next harvest is EP or higher. A fresh start.',
+  effect: { guaranteeMinRarity: 'EP' },
+  available: { month: 1, day: 1 },
+  oneTimeUse: true,
+  type: 'consumable', useAt: 'plant'
+},
+
+CATEGORY 12: GROW METHODOLOGY (DWC, Coco, etc. — new grow styles)
+javascript// These convert the plant's substrate, changing its entire growth profile
+
+METHOD_001: {
+  name: 'DWC Bucket Kit',
+  icon: '🪣', rarity: 'Rare',
+  desc: 'Convert any plant to Deep Water Culture. +50% veg growth speed. BUT: pH fluctuates 3× faster — needs more active management. Water drain replaced with "reservoir refresh" every 48h.',
+  effect: { vegSpeedBonus: 50, pHDriftMult: 3 },
+  substrate: 'dwc',
+  type: 'consumable', useAt: 'plant'
+},
+METHOD_002: {
+  name: 'Coco Fiber Block',
+  icon: '🥥', rarity: 'Uncommon',
+  desc: 'Coco substrate. Better drainage — overwatering almost impossible. BUT: nutrients feed every watering required, higher baseline PPM needed.',
+  effect: { overwaterRisk: -80, nuteFrequencyRequired: true, ppmMinimum: 400 },
+  substrate: 'coco',
+  type: 'consumable', useAt: 'plant'
+},
+METHOD_003: {
+  name: 'Living Soil Block (No-Till)',
+  icon: '🌍', rarity: 'Epic',
+  desc: 'Pre-charged organic no-till soil. Zero nutrients needed for first 8 game weeks. After that, just water. +20% terpene quality. Slower growth but incredible harvest.',
+  effect: { noNutesNeeded_gameDays: 56, terpeneBonus: 20, growSpeedReduction: 15 },
+  substrate: 'living_soil',
+  type: 'consumable', useAt: 'plant'
+},
+METHOD_004: {
+  name: 'Fabric Smart Pot (w/ Air Pruning)',
+  icon: '🧶', rarity: 'Uncommon',
+  desc: 'Air-prunes roots automatically. +15% yield vs same-size plastic pot. Dries out 30% faster though.',
+  effect: { yield_pct: 15, waterDrainIncrease: 30 },
+  type: 'consumable', useAt: 'plant'
+},
+
+CATEGORY 13: MUTATION TOKENS (plant visual + stat modifications)
+javascript// Applied to a plant in veg or early flower
+// Changes the plant's appearance AND adds a stat modifier
+// Some are cosmetic-only, some have gameplay impact
+
+MUTATION_001: {
+  name: 'Purple Mutation Token',
+  icon: '💜', rarity: 'Rare',
+  desc: 'Plant turns purple. Premium bag appeal. +12% coins on sale (looks more exotic). Purely aesthetic + economic.',
+  effect: { visualMutation: 'purple', coinBonus: 12 },
+  type: 'consumable', useAt: 'veg_plant'
+},
+MUTATION_002: {
+  name: 'Albino Mutation Token',
+  icon: '⬜', rarity: 'Legendary',
+  desc: 'White plant. Extremely rare appearance. +2% THC (chlorophyll-deficient plants push sugars elsewhere). Grow score bonus +0.5 for the rarity.',
+  effect: { visualMutation: 'albino', thcBonus: 2, growScoreBonus: 0.5 },
+  type: 'consumable', useAt: 'veg_plant'
+},
+MUTATION_003: {
+  name: 'Giant Mutation Token',
+  icon: '🔺', rarity: 'Epic',
+  desc: 'Plant grows to 200% size. +35% yield. BUT needs 2× water and 1.5× light to maintain — your equipment is stressed.',
+  effect: { yieldBonus: 35, waterDrainMult: 2, lightRequirementMult: 1.5 },
+  type: 'consumable', useAt: 'seedling'
+},
+MUTATION_004: {
+  name: 'Nano Mutation Token',
+  icon: '🔻', rarity: 'Rare',
+  desc: 'Dwarf plant. Tiny. Flowers in 60% of normal flower time. −30% yield but you can have TWO dwarf plants in one slot.',
+  effect: { flowerTimeReduction: 0.6, yieldReduction: 30, twoInOneSlot: true },
+  type: 'consumable', useAt: 'seedling'
+},
+MUTATION_005: {
+  name: 'Bioluminescent Token',
+  icon: '💚', rarity: 'GOD',
+  desc: 'Plant glows faintly in the dark. Zero stat effect. Pure cosmetic GOD-tier item. Collectors go insane for these.',
+  effect: { visualMutation: 'bioluminescent' },
+  type: 'consumable', useAt: 'plant', cosmetic: true
+},
+
+IMPLEMENTATION PLAN FOR NEXT PROMPT
+Here's what we need to code:
+1. New data structure: GS.itemInventory = { instances: [], activeEffects: [] }
+2. New constant: GAME_ITEMS = { ...all items above } organized by id
+3. New functions needed:
+
+grantItem(itemId, qty)
+useItem(itemId, targetType, targetId)
+checkActiveEffects() — runs each tick
+renderItemInventory() — new sub-tab
+openUseItemModal(itemId) — pick target
+
+4. Where items get granted:
+
+Quest rewards (expand existing q.rewards.items[] with item IDs)
+BM purchases (add items to bot listings)
+Seasonal drops (check date on login)
+Achievement unlocks
+grantItem() mod tool
+Companion pets generate items over time
+
+5. UI additions needed:
+
+"ITEMS" sub-tab inside Inventory tab
+Room items section in Gear Panel (passive_room items)
+"USE" button on applicable vault/plant/water screens
+Companion slot in each room's gear section
+Equipment upgrade slot per gear instance
+
+
+WHAT WASN'T COVERED (next prompt topics)
+
+Full code implementation of all item effects in tickPlant, confirmWater, confirmHarvest
+The passive_room rendering in Gear Panel
+Companion daily event ticker
+Pollen Collector Kit modal flow
+DWC/Coco substrate full growth model
+Mutation visual changes in sprite system
+Shop listings for purchasable items
+BM bot listing integration for items
+
+That's 200+ items across 13 categories. Ready to start coding when you are — the architecture above should make implementation clean.
