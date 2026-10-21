@@ -59,10 +59,17 @@ svg.near .star text,.star:hover text,.star:focus-visible text,.star.sel text,.st
 .cta a.p{background:var(--grn);color:#052e16;border-color:var(--grn)}
 #x{position:absolute;top:12px;right:12px;width:32px;height:32px;border-radius:50%;border:0;background:rgba(255,255,255,.08);color:var(--ink);font-size:18px;cursor:pointer}
 .hint{position:absolute;right:18px;bottom:16px;color:var(--mut);font-size:12px;pointer-events:none}
-@media(max-width:700px){header{max-width:none;right:18px}h1{font-size:21px}header p{display:none}.leg{grid-template-columns:1fr 1fr;margin-top:8px}.hint{display:none}
+@media(max-width:700px){header{max-width:none;right:84px}.home{width:48px;height:48px;top:10px;right:14px}h1{font-size:21px}header p{display:none}.leg{grid-template-columns:1fr 1fr;margin-top:8px}.hint{display:none}
 #card{left:0;right:0;top:auto;bottom:0;width:auto;max-height:58%;border-radius:18px 18px 0 0}.ctrl{bottom:auto;top:auto;left:auto;right:14px;bottom:18px;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.home{position:absolute;top:12px;right:16px;z-index:6;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(14,12,32,.88);border:2px solid var(--grn);box-shadow:0 0 0 4px rgba(74,222,128,.14),0 6px 22px rgba(0,0,0,.55),0 0 18px rgba(74,222,128,.35);transition:transform .25s,box-shadow .25s;text-decoration:none;overflow:hidden}
+.home img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.home span{display:none;color:var(--grn);font:700 11px/1 Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.home.noimg span{display:block}.home.noimg img{display:none}
+.home:hover{transform:scale(1.08) rotate(-4deg);box-shadow:0 0 0 5px rgba(74,222,128,.22),0 8px 26px rgba(0,0,0,.6),0 0 28px rgba(74,222,128,.6)}
+.home:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 </style></head><body>
+<a class="home" href="/index" aria-label="Back to the Noyes Boys home page" title="Back to the home page"><img src="assets/img/noyes boys logo.png" alt="" onerror="this.parentNode.classList.add('noimg')"><span>Home</span></a>
 <svg id="map" role="group" aria-label="Noyes Boys genetic lineage star map"><defs>
 <radialGradient id="gN"><stop offset="0" stop-color="#bbf7d0" stop-opacity=".95"/><stop offset=".35" stop-color="#22c55e" stop-opacity=".45"/><stop offset="1" stop-color="#22c55e" stop-opacity="0"/></radialGradient>
 <radialGradient id="gA"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".4" stop-color="#ddd8ff" stop-opacity=".3"/><stop offset="1" stop-color="#ddd8ff" stop-opacity="0"/></radialGradient><radialGradient id="gG"><stop offset="0" stop-color="#fffbe0"/><stop offset=".25" stop-color="#ffd479" stop-opacity=".85"/><stop offset=".6" stop-color="#f5a623" stop-opacity=".3"/><stop offset="1" stop-color="#f5a623" stop-opacity="0"/></radialGradient><radialGradient id="gO"><stop offset="0" stop-color="#ffe3c4" stop-opacity=".95"/><stop offset=".4" stop-color="#ff9f43" stop-opacity=".4"/><stop offset="1" stop-color="#ff9f43" stop-opacity="0"/></radialGradient></defs>
