@@ -712,7 +712,7 @@ function dealTable(k){
   CODES.forEach(function(c){if(c.until&&c.until<today())return;
     li+='<li>Use code <span class="code">'+esc(c.code)+'</span> for '+esc(c.label||"savings")+(c.until?' (until '+esc(c.until)+')':'')+'.</li>'});
   li+='<li>Mix and match: single seeds from any strains in the same lines add up toward the 5, 10, 20, and 30 seed prices.</li>';
-  li+='<li>Free shipping on orders of '+DEALS.freeShipSeeds+' or more seeds.</li>';
+  li+='<li>Free shipping on orders of '+DEALS.freeShipSeeds+' or more packs.</li>';
   li+='<li>Free surprise seeds on orders of '+money(DEALS.surpriseAt)+' or more, after deals.</li>';
   li+='<li><a href="/testers">Become a tester</a> and get unreleased Super crosses first. <a href="/deals">See all deals</a></li>';
   document.getElementById("deal-list").innerHTML=li;
