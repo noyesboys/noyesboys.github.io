@@ -450,6 +450,7 @@
                                 <span id="addressStatusText">Verifying…</span>
                             </div>
 
+                            <div id="billingWrap">
                             <!-- ── BILLING ADDRESS TOGGLE ── -->
                             <div class="billing-toggle" style="margin-top:1rem;">
                                 <input type="checkbox" id="billingDifferent" onchange="toggleBilling()">
@@ -491,6 +492,7 @@
                                     </select>
                                 </div>
                             </div>
+                            </div><!-- /billingWrap -->
                         </div>
 
                         <!-- Shipping Method -->
@@ -576,6 +578,9 @@
                             <!-- Interac e-Transfer panel -->
                             <div class="et-panel" id="etPanel">
                                 <div class="et-head"><i class="fas fa-building-columns"></i> Pay by Interac e-Transfer</div>
+                                <div class="notice canada" style="margin-top:0.25rem;">
+                                    <strong>🇨🇦 Canada only.</strong> Interac e-Transfer requires a Canadian bank account, and we only ship to verified Canadian addresses.
+                                </div>
                                 <div class="et-row">
                                     <span class="et-label">Amount to send</span>
                                     <span><span class="et-value green" id="etAmount">—</span><button type="button" class="et-copy" onclick="copyEt(this,'etAmount')">Copy</button></span>
@@ -597,7 +602,7 @@
                                     <span><span class="et-value mono" id="etOrderRef">—</span><button type="button" class="et-copy" onclick="copyEt(this,'etOrderRef')">Copy</button></span>
                                 </div>
                                 <div class="notice" style="margin-bottom:0;">
-                                    <strong>How it works:</strong> Click the button below to place your order, then send the e-Transfer from your online banking using the details above. Your order ships once we receive your payment.
+                                    <strong>How it works:</strong> Click the button below to send us your order — no card info needed. Then send the e-Transfer from your online banking using the details above. Once we've received your payment, we'll email you back with your confirmation, tracking code and order details. 📧
                                 </div>
                                 <button type="button" class="et-place-btn" id="etPlaceBtn" onclick="placeEtransferOrder()"><i class="fas fa-paper-plane"></i> Place Order — I'll Send the e-Transfer</button>
                             </div>
@@ -667,7 +672,7 @@
                     Answer: <strong>noyesboyz</strong><br>
                     Message: <strong id="successEtRef"></strong>
                 </p>
-                <p>Once your e-Transfer arrives, we'll email your tracking number within <strong>3 business days</strong>.</p>
+                <p>Once we've received your payment, we'll email you back with your <strong>confirmation, tracking code</strong> and order details. 📧</p>
             </div>
             <p style="margin-top:0.5rem;">Thank you for choosing Noyes Boys genetics! 🍁</p>
             <p id="successRedirect" style="margin-top:0.75rem;font-size:0.78rem;">Redirecting home shortly…</p>
@@ -1122,6 +1127,7 @@ function applyPayMethod(){
     document.getElementById('paypal-button-container').style.display=isET?'none':'block';
     document.getElementById('ppNote').style.display=isET?'none':'flex';
     document.getElementById('etPanel').classList.toggle('show',isET);
+    document.getElementById('billingWrap').style.display=isET?'none':'';
     if(isET){
         if(!etOrderId) etOrderId='NB-'+Date.now()+'-'+Math.random().toString(36).substr(2,5).toUpperCase();
         refreshEtransfer();
@@ -1151,6 +1157,7 @@ async function sendEtransferEmail(orderId){
         const params=buildEmailParams(orderId,'⚠ PENDING — customer has NOT paid yet — CHOSE INTERAC E-TRANSFER (watch '+ET_EMAIL+' for the deposit)',null);
         params.payment_method='Interac e-Transfer';
         params.paypal_txn_id='N/A — paying by e-Transfer';
+        params.billing_address='N/A — paying by e-Transfer';
         await emailjs.send('service_viyn3ld','template_l8l5a4o',params);
         return true;
     } catch(e){ console.error('e-Transfer order email failed:',e); return false; }
@@ -1158,6 +1165,12 @@ async function sendEtransferEmail(orderId){
 
 async function placeEtransferOrder(){
     if(etSubmitted||!cartData) return;
+    const postalNow=document.getElementById('postalCode').value.trim();
+    const provNow=document.getElementById('province').value;
+    if(!addressValidated||!isCanadianPostal(postalNow)||!postalMatchesProvince(postalNow,provNow)){
+        alert('Interac e-Transfer orders are for verified Canadian addresses only. Please check your shipping address.');
+        return;
+    }
     etSubmitted=true;
     const btn=document.getElementById('etPlaceBtn');
     const btnHTML=btn.innerHTML;
