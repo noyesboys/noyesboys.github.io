@@ -178,6 +178,32 @@
         .pp-note { text-align: center; font-size: 0.76rem; color: var(--muted); margin-bottom: 0.6rem; display: none; align-items: center; justify-content: center; gap: 0.4rem; }
         .paypal-zone { margin-top: 1.5rem; }
 
+        /* ── PAYMENT METHOD PICKER + E-TRANSFER ── */
+        .pay-methods { display: none; gap: 0.65rem; margin-bottom: 1rem; }
+        .pay-methods.show { display: flex; }
+        .pay-method { flex: 1; background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 0.8rem 0.6rem; cursor: pointer; text-align: center; font-family: 'Inter', sans-serif; color: var(--muted); font-size: 0.86rem; font-weight: 600; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+        .pay-method i { font-size: 1.15rem; }
+        .pay-method small { font-weight: 400; font-size: 0.72rem; color: var(--muted); }
+        .pay-method:hover { border-color: rgba(74,222,128,0.4); }
+        .pay-method.selected { border-color: var(--green); background: rgba(74,222,128,0.06); color: var(--green); }
+
+        .et-panel { display: none; background: rgba(74,222,128,0.03); border: 1px solid rgba(74,222,128,0.25); border-radius: 12px; padding: 1.25rem; }
+        .et-panel.show { display: block; }
+        .et-head { font-family: 'Oswald', sans-serif; font-size: 1rem; font-weight: 600; color: var(--green); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .et-row { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; padding: 0.6rem 0; border-bottom: 1px solid var(--border); font-size: 0.86rem; }
+        .et-row:last-of-type { border-bottom: none; }
+        .et-label { color: var(--muted); flex-shrink: 0; }
+        .et-value { color: var(--text); font-weight: 600; text-align: right; word-break: break-all; }
+        .et-value.green { color: var(--green); font-size: 1rem; }
+        .et-value.mono { font-family: monospace; font-size: 0.82rem; }
+        .et-copy { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 6px; font-size: 0.7rem; padding: 0.2rem 0.5rem; margin-left: 0.5rem; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; white-space: nowrap; }
+        .et-copy:hover { border-color: var(--green); color: var(--green); }
+        .et-place-btn { width: 100%; margin-top: 0.75rem; padding: 1rem; background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%); border: none; border-radius: 10px; color: #0a0a0a; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: 'Oswald', sans-serif; letter-spacing: 2px; text-transform: uppercase; transition: all 0.2s; }
+        .et-place-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(74,222,128,0.4); }
+        .et-place-btn:disabled { opacity: 0.6; cursor: wait; transform: none; box-shadow: none; }
+        .success-et-box { background: var(--surface); border-radius: 10px; padding: 0.85rem 1rem; text-align: left; color: var(--text) !important; font-size: 0.88rem !important; line-height: 1.8 !important; margin: 0.75rem 0 !important; }
+        .success-home-btn { display: inline-block; margin-top: 1rem; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, var(--green) 0%, var(--green-dark) 100%); color: #0a0a0a; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 0.9rem; }
+
         /* ── ORDER REVIEW MODAL ── */
         .review-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 8000; align-items: center; justify-content: center; padding: 1rem; }
         .review-overlay.show { display: flex; }
@@ -515,7 +541,7 @@
                         </div>
 
                         <div class="notice">
-                            <strong>How it works:</strong> Review your order, then pay securely via PayPal or card. We'll email your tracking number within 3 business days. 🍁
+                            <strong>How it works:</strong> Review your order, then pay securely via PayPal, card, or Interac e-Transfer. We'll email your tracking number within 3 business days. 🍁
                         </div>
 
                         <!-- ── ORDER REVIEW BUTTON (shows when checklist complete) ── -->
@@ -531,11 +557,50 @@
                                 Complete the checklist to unlock:
                                 <ul class="lock-list" id="lockList"></ul>
                             </div>
+                            <div class="pay-methods" id="payMethods">
+                                <button type="button" class="pay-method selected" id="pm-paypal" onclick="selectPayMethod('paypal')">
+                                    <i class="fab fa-paypal"></i> PayPal / Card
+                                    <small>Pay instantly online</small>
+                                </button>
+                                <button type="button" class="pay-method" id="pm-etransfer" onclick="selectPayMethod('etransfer')">
+                                    <i class="fas fa-building-columns"></i> Interac e-Transfer
+                                    <small>Send from your bank</small>
+                                </button>
+                            </div>
                             <div class="pp-note" id="ppNote" style="margin-bottom:0.6rem;">
                                 <i class="fas fa-lock" style="color:var(--green);"></i>
                                 Secured by PayPal — Visa, Mastercard, debit, or PayPal account accepted
                             </div>
                             <div id="paypal-button-container" style="display:none;"></div>
+
+                            <!-- Interac e-Transfer panel -->
+                            <div class="et-panel" id="etPanel">
+                                <div class="et-head"><i class="fas fa-building-columns"></i> Pay by Interac e-Transfer</div>
+                                <div class="et-row">
+                                    <span class="et-label">Amount to send</span>
+                                    <span><span class="et-value green" id="etAmount">—</span><button type="button" class="et-copy" onclick="copyEt(this,'etAmount')">Copy</button></span>
+                                </div>
+                                <div class="et-row">
+                                    <span class="et-label">Send to</span>
+                                    <span><span class="et-value" id="etEmail">thenoyesboyz@gmail.com</span><button type="button" class="et-copy" onclick="copyEt(this,'etEmail')">Copy</button></span>
+                                </div>
+                                <div class="et-row">
+                                    <span class="et-label">Security question</span>
+                                    <span class="et-value">breeder?</span>
+                                </div>
+                                <div class="et-row">
+                                    <span class="et-label">Security answer</span>
+                                    <span><span class="et-value" id="etAnswer">noyesboyz</span><button type="button" class="et-copy" onclick="copyEt(this,'etAnswer')">Copy</button></span>
+                                </div>
+                                <div class="et-row">
+                                    <span class="et-label">Message (order #)</span>
+                                    <span><span class="et-value mono" id="etOrderRef">—</span><button type="button" class="et-copy" onclick="copyEt(this,'etOrderRef')">Copy</button></span>
+                                </div>
+                                <div class="notice" style="margin-bottom:0;">
+                                    <strong>How it works:</strong> Click the button below to place your order, then send the e-Transfer from your online banking using the details above. Your order ships once we receive your payment.
+                                </div>
+                                <button type="button" class="et-place-btn" id="etPlaceBtn" onclick="placeEtransferOrder()"><i class="fas fa-paper-plane"></i> Place Order — I'll Send the e-Transfer</button>
+                            </div>
                         </div>
 
                     </form>
@@ -588,12 +653,25 @@
     <div class="success-overlay" id="successOverlay">
         <div class="success-modal">
             <div class="success-icon">🌿</div>
-            <h2>Order Confirmed!</h2>
+            <h2 id="successTitle">Order Confirmed!</h2>
             <div class="success-order-id" id="successOrderId"></div>
-            <p>Payment received! We'll email your tracking number within <strong>3 business days</strong>.</p>
-            <p style="margin-top:0.5rem;">A confirmation has been sent to your email. 📧</p>
+            <div id="successPaid">
+                <p>Payment received! We'll email your tracking number within <strong>3 business days</strong>.</p>
+                <p style="margin-top:0.5rem;">A confirmation has been sent to your email. 📧</p>
+            </div>
+            <div id="successEt" style="display:none;">
+                <p><strong style="color:var(--text);">One last step!</strong> Send <strong id="successEtAmount" style="color:var(--green);"></strong> by Interac e-Transfer:</p>
+                <p class="success-et-box">
+                    To: <strong>thenoyesboyz@gmail.com</strong><br>
+                    Security question: <strong>breeder?</strong><br>
+                    Answer: <strong>noyesboyz</strong><br>
+                    Message: <strong id="successEtRef"></strong>
+                </p>
+                <p>Once your e-Transfer arrives, we'll email your tracking number within <strong>3 business days</strong>.</p>
+            </div>
             <p style="margin-top:0.5rem;">Thank you for choosing Noyes Boys genetics! 🍁</p>
-            <p style="margin-top:0.75rem;font-size:0.78rem;">Redirecting home shortly…</p>
+            <p id="successRedirect" style="margin-top:0.75rem;font-size:0.78rem;">Redirecting home shortly…</p>
+            <a id="successHomeBtn" class="success-home-btn" href="FeminizedSeedsHomepage.html" style="display:none;">Back to Home</a>
         </div>
     </div>
 
@@ -638,6 +716,10 @@ let addressValidating= false;
 let addrTimer        = null;
 let ppRendered       = false;
 let ppAttempts       = 0;
+let payMethod        = 'paypal';   // 'paypal' | 'etransfer'
+let etOrderId        = null;
+let etSubmitted      = false;
+const ET_EMAIL       = 'thenoyesboyz@gmail.com';
 let billingDiff      = false;
 
 const SHIP_COSTS = { 'free-bubble':0, 'tracked-25':25, 'free-upgrade':0 };
@@ -836,6 +918,7 @@ function updateTotals(){
     if(result.discount>0){ dRow.style.display='flex'; document.getElementById('discountLabel').textContent=result.label||'Promo Discount'; document.getElementById('discountVal').textContent=result.discount.toFixed(2); } else dRow.style.display='none';
     const sEl=document.getElementById('shippingVal');
     if(ship===null) sEl.textContent='—'; else if(ship===0) sEl.textContent='FREE'; else sEl.textContent=`$${ship.toFixed(2)} CAD`;
+    if(payMethod==='etransfer') refreshEtransfer();
 }
 
 function getFinalTotal(){
@@ -920,14 +1003,15 @@ function updateChecklist(){
 
     if(allDone){
         locked.style.display='none';
-        ppCon.style.display='block';
-        ppNote.style.display='flex';
+        document.getElementById('payMethods').classList.add('show');
         reviewBtn.classList.add('visible');
-        if(!ppRendered) attemptPayPal();
+        applyPayMethod();
     } else {
         locked.style.display='block';
         ppCon.style.display='none';
         ppNote.style.display='none';
+        document.getElementById('payMethods').classList.remove('show');
+        document.getElementById('etPanel').classList.remove('show');
         reviewBtn.classList.remove('visible');
         ppRendered=false; ppCon.innerHTML='';
         document.getElementById('lockList').innerHTML=Object.entries(checks).map(([id,pass])=>`<li class="${pass?'done':'pending'}">${pass?'✓':'○'} ${CHECK_LABELS[id]}</li>`).join('');
@@ -985,8 +1069,8 @@ function closeReviewModal(){
 
 function confirmAndPay(){
     closeReviewModal();
-    // Scroll PayPal buttons into view smoothly
-    document.getElementById('paypal-button-container').scrollIntoView({behavior:'smooth',block:'center'});
+    // Scroll the payment options into view smoothly
+    document.getElementById('payMethods').scrollIntoView({behavior:'smooth',block:'center'});
 }
 
 // ══════════════════════════════════════════════════════════
@@ -1027,6 +1111,80 @@ function attemptPayPal(){
 }
 
 // ══════════════════════════════════════════════════════════
+// PAYMENT METHOD PICKER + INTERAC E-TRANSFER
+// ══════════════════════════════════════════════════════════
+function selectPayMethod(m){ payMethod=m; applyPayMethod(); }
+
+function applyPayMethod(){
+    const isET=payMethod==='etransfer';
+    document.getElementById('pm-paypal').classList.toggle('selected',!isET);
+    document.getElementById('pm-etransfer').classList.toggle('selected',isET);
+    document.getElementById('paypal-button-container').style.display=isET?'none':'block';
+    document.getElementById('ppNote').style.display=isET?'none':'flex';
+    document.getElementById('etPanel').classList.toggle('show',isET);
+    if(isET){
+        if(!etOrderId) etOrderId='NB-'+Date.now()+'-'+Math.random().toString(36).substr(2,5).toUpperCase();
+        refreshEtransfer();
+    } else if(!ppRendered){
+        attemptPayPal();
+    }
+}
+
+function refreshEtransfer(){
+    const total=getFinalTotal();
+    const amt=document.getElementById('etAmount');
+    amt.textContent=`$${total.toFixed(2)} CAD`;
+    amt.dataset.copy=total.toFixed(2);
+    if(etOrderId) document.getElementById('etOrderRef').textContent=etOrderId;
+}
+
+function copyEt(btn,id){
+    const el=document.getElementById(id);
+    const text=el.dataset.copy||el.textContent.trim();
+    const done=()=>{ const old=btn.textContent; btn.textContent='Copied ✓'; setTimeout(()=>{ btn.textContent=old; },1500); };
+    try { navigator.clipboard.writeText(text).then(done,()=>{}); } catch(e){}
+}
+
+// Email to YOU — customer picked e-Transfer, NOT paid yet
+async function sendEtransferEmail(orderId){
+    try {
+        const params=buildEmailParams(orderId,'⚠ PENDING — customer has NOT paid yet — CHOSE INTERAC E-TRANSFER (watch '+ET_EMAIL+' for the deposit)',null);
+        params.payment_method='Interac e-Transfer';
+        params.paypal_txn_id='N/A — paying by e-Transfer';
+        await emailjs.send('service_viyn3ld','template_l8l5a4o',params);
+        return true;
+    } catch(e){ console.error('e-Transfer order email failed:',e); return false; }
+}
+
+async function placeEtransferOrder(){
+    if(etSubmitted||!cartData) return;
+    etSubmitted=true;
+    const btn=document.getElementById('etPlaceBtn');
+    const btnHTML=btn.innerHTML;
+    btn.disabled=true;
+    btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Placing order…';
+
+    const total=getFinalTotal();
+    const ok=await sendEtransferEmail(etOrderId);
+    if(!ok){
+        etSubmitted=false; btn.disabled=false; btn.innerHTML=btnHTML;
+        alert('We couldn\'t place your order. Please try again or contact '+ET_EMAIL);
+        return;
+    }
+
+    try { localStorage.removeItem('noyesboys_checkout_data'); localStorage.removeItem('noyesboys_cart'); } catch(e){}
+    document.getElementById('successTitle').textContent='Order Placed!';
+    document.getElementById('successOrderId').textContent=etOrderId;
+    document.getElementById('successPaid').style.display='none';
+    document.getElementById('successEt').style.display='block';
+    document.getElementById('successEtAmount').textContent=`$${total.toFixed(2)} CAD`;
+    document.getElementById('successEtRef').textContent=etOrderId;
+    document.getElementById('successRedirect').style.display='none';
+    document.getElementById('successHomeBtn').style.display='inline-block';
+    document.getElementById('successOverlay').classList.add('show');
+}
+
+// ══════════════════════════════════════════════════════════
 // EMAIL — Two to you + one to the customer
 // ══════════════════════════════════════════════════════════
 emailjs.init({ publicKey:"ZiDmYogre9hNBY-bI" });
@@ -1039,6 +1197,7 @@ function buildEmailParams(orderId,paymentStatus,paypalTxnId){
     const billing=getBillingAddress();
     return {
         payment_status:   paymentStatus,
+        payment_method:   'PayPal / Card',
         paypal_txn_id:    paypalTxnId||'Not yet completed',
         customer_name:    `${document.getElementById('firstName').value.trim()} ${document.getElementById('lastName').value.trim()}`,
         customer_email:   document.getElementById('email').value.trim(),
